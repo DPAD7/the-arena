@@ -2974,7 +2974,11 @@
                      : (ab(away) + " " + (100 - yard));
   }
   function downText(down, dist, toGoal) {
-    if (!down) return "";
+    /* between plays -- a score, a change of possession, a stoppage -- ESPN
+       publishes down -1 and distance -1 rather than nothing at all, and we
+       printed it: "-1th & Goal" sat on the Clemson card at 14-3
+       (Jose, Sep 19, 2026) */
+    if (!(down >= 1 && down <= 4)) return "";
     var nth = ["", "1st", "2nd", "3rd", "4th"][down] || (down + "th");
     if (dist === undefined || dist === null) return nth;
     /* goal to go is not distance 0 -- it is a distance that reaches the end
@@ -3416,7 +3420,8 @@
        going. Goal to go has no line -- the goal line is the line. */
     var gain = "";
     var dist = end.distance;
-    if (typeof dist === "number" && dist > 0) {
+    var known = end.down >= 1 && end.down <= 4;
+    if (known && typeof dist === "number" && dist > 0) {
       var fd = offLeft ? pos + dist : pos - dist;
       if (fd > 0 && fd < 100) {
         gain = '<i class="drvfd" style="left:' + fd + '%"></i>';
@@ -3424,8 +3429,14 @@
     }
     var held = Math.max(9, Math.min(91, pos));
     /* the far end from the ball is always empty, so that is where it goes */
+    /* between plays ESPN publishes no down at all, and the line went blank
+       for those few seconds. It holds the last one it was given instead: a
+       down that is a moment old reads better than a gap (Jose, Sep 19, 2026:
+       "we should always be able to see it") */
+    var was = box.querySelector(".drvdd");
     var dd = end.shortDownDistanceText ||
-             downText(end.down, end.distance, end.yardsToEndzone);
+             downText(end.down, end.distance, end.yardsToEndzone) ||
+             (was ? was.textContent : "");
     var ddhtml = dd
       ? '<span class="drvdd" style="' + (pos > 50 ? 'left:0' : 'right:0') +
         '">' + dd + '</span>'
@@ -7128,5 +7139,17 @@
   setInterval(formLive, 30000);
   setInterval(function () { refreshVisible(); setTimeout(sinkDone, 1200); }, 30000);
   setInterval(refreshFights, 30000);
+  /* the scores looked after themselves but the prices did not: they were read
+     once at load, so a board left open all afternoon still showed the morning's
+     numbers and only a reload moved them. They are asked for every minute now,
+     and again the moment the tab is looked at, which is when a phone comes back
+     out of a pocket (Jose, Sep 19, 2026: "so I don't have to refresh my page") */
+  setInterval(pullPrices, 60000);
+  document.addEventListener("visibilitychange", function () {
+    if (document.visibilityState !== "visible") return;
+    pullPrices();
+    refreshVisible();
+    refreshFights();
+  });
   document.getElementById("weekbar").addEventListener("click", function () { setTimeout(refreshVisible, 50); });
 </script>
