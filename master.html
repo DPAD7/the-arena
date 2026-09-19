@@ -7186,6 +7186,13 @@
           }
         }
         card.dataset.settledBout = "1";
+        /* A bout that is over is over. Only football was ever marked done, so
+           only football sank to the foot of the day, and a finished fight sat
+           at the top of the board with its result on it (Jose, Sep 19, 2026:
+           "why is this still on the top, it's over?"). Same word, same rule,
+           both sports. */
+        card.classList.add("done");
+        if (typeof sinkDone === "function") sinkDone();
         paidMethods(card, winner, (c.how && c.how.type) || how,
                     (c.how && c.how.round) || (c.status || {}).period,
                     (c.how && c.how.time) || (c.status || {}).displayClock);
@@ -7412,6 +7419,15 @@
          there is no settled card to read. It goes by the same reach the fight
          refresh uses: eight hours after the first bell (Jose, Sep 18, 2026) */
       if (sl.querySelector(".bill")) {
+        /* the bill's own cards answer this wherever it has any. The clock was
+           only ever a stand-in for a bill that folded away without drawing
+           one, and it kept a bout with its result printed on it at the top of
+           the day for eight hours (Jose, Sep 19, 2026: "why is this still on
+           the top, it's over?") */
+        var bc = sl.querySelectorAll(".gcard");
+        if (bc.length) {
+          return [].every.call(bc, function (c) { return c.classList.contains("done"); });
+        }
         var k = sl.dataset.kick ? Date.parse(sl.dataset.kick) : 0;
         return !!k && Date.now() > k + 8 * 3600000;
       }
