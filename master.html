@@ -475,9 +475,9 @@
   /* on the UFC tab the line is what it was: mark, day, date, the bill's name,
      FINAL, arrow -- a column each, the same width on every row, folded until
      it is opened (Jose, Sep 18, 2026: "everything else can stay the same") */
-  .slot-h--bill { display: grid; grid-template-columns: 22px 40px 54px 1fr auto 16px;
+  .slot-h--bill { display: grid; grid-template-columns: 22px 54px 1fr auto 16px;
     align-items: center; gap: 9px; }   /* the game line's own size (Jose, Sep 18, 2026) */
-  .slot-h--bill .slotdow, .slot-h--bill .slotdate { color: var(--ink); white-space: nowrap; }
+  .slot-h--bill .slotdate { color: var(--ink); white-space: nowrap; }
   .slot-h--bill .slotev { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .slotfin { font-size: 11px; letter-spacing: 0.1em; color: var(--muted);
     border: 1px solid var(--edge); border-radius: 5px; padding: 1px 5px; visibility: hidden; }
@@ -4397,8 +4397,9 @@
         };
         var line = (mk ? '<span class="slotlg">' + mk + "</span>" : "") +
           (isCard && !onDay
-            ? '<span class="slotdow">' + p.day.toUpperCase() + '</span>' +
-              '<span class="slotdate">' + pad2(p.date) + '</span>' +
+            /* the date alone: a month of evenings does not need the
+               weekday said twice (Jose, Sep 19, 2026) */
+            ? '<span class="slotdate">' + pad2(p.date) + '</span>' +
               '<span class="slotev">' + slot + '</span>'
             : '<span class="slotday">' + p.day.toUpperCase() + " " + p.date + "</span>" +
               (isCard ? p.time : slot)) +
