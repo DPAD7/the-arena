@@ -1,6 +1,8 @@
 <title>Odds</title>
 <meta name="referrer" content="no-referrer">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500;600&display=swap">
+<!-- the two typefaces are kept in site/font: a reader should not have to
+     ask Google for a font to read a scoreboard (Jose, Sep 18, 2026) -->
+<link rel="stylesheet" href="font/barlow.css">
 <style>
   :root {
     --ground: #0a0a0a;
@@ -2455,7 +2457,7 @@
     function put(key, src, round, alt) { if (key && src && !pic[key]) pic[key] = {src: src, round: !!round, alt: alt || ""}; }
     (typeof SCHED !== "undefined" ? SCHED : []).forEach(function (g) {
       [g[3], g[4]].forEach(function (ab) {
-        put(ab, "https://a.espncdn.com/combiner/i?img=/i/teamlogos/nfl/500/" + String(ab).toLowerCase() + ".png&w=96&h=96");
+        put(ab, clubPic("nfl", String(ab).toLowerCase()), false, clubAway("nfl", String(ab).toLowerCase()));
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
         if (q[0] && /^\d+$/.test(String(q[1]))) put(famName(q[0]), "faces/nfl/" + q[1] + ".png", true);
@@ -2465,8 +2467,8 @@
       [g[3], g[4]].forEach(function (ab) {
         var id = CFBID[ab];
         if (!id) return;
-        var src = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/" + id + ".png&w=96&h=96";
-        put(ab, src); put(CFBNAME[ab], src);
+        var src = clubPic("ncaa", id), away = clubAway("ncaa", id);
+        put(ab, src, false, away); put(CFBNAME[ab], src, false, away);
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
         if (q[0] && /^\d+$/.test(String(q[1]))) put(famName(q[0]), "faces/college-football/" + q[1] + ".png", true);
@@ -2475,11 +2477,13 @@
     (typeof FIGHTS !== "undefined" ? FIGHTS : []).forEach(function (f) {
       [[f[3], f[4], f[12]], [f[5], f[6], f[13]]].forEach(function (m) {
         if (!m[0] || (!m[1] && !m[2])) return;
-        var score = m[2] ? "https://assets-sports-gcp.thescore.com/mma/fighter/" + m[2] + "/w192xh192_headshot.png" : "";
-        var espn = m[1] ? "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/" + m[1] + ".png&w=220&h=220&scale=crop" : score;
+        var score = m[2] ? scorePic(m[2]) : "";
+        var espn = m[1] ? facePic(m[1]) : score;
         /* the card writes a fighter by lastName, so the slip is keyed the same way */
-        put(lastName(m[0]), espn, true, espn === score ? "" : score);
-        put(famName(m[0]).toUpperCase(), espn, true, espn === score ? "" : score);
+        var back = [score, m[1] ? faceAway(m[1]) : "", m[2] ? scoreAway(m[2]) : ""]
+          .filter(function (x) { return x && x !== espn; })[0] || "";
+        put(lastName(m[0]), espn, true, back);
+        put(famName(m[0]).toUpperCase(), espn, true, back);
       });
     });
     SLIPPIC = pic;
@@ -2702,7 +2706,11 @@
         var img = document.createElement("img");
         img.className = "glogo";
         img.alt = ab;
-        img.src = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/ncaa/500/" + id + ".png&w=96&h=96";
+        img.src = clubPic("ncaa", id);
+        img.dataset.away = clubAway("ncaa", id);
+        img.onerror = function () {
+          if (this.dataset.away) { this.src = this.dataset.away; this.dataset.away = ""; }
+        };
         box.appendChild(img);
       }
       var tag = document.createElement("span");
@@ -3000,12 +3008,14 @@
   }
 
   /* NFL.com serves HLS. Safari plays it natively; everything else needs
-     hls.js, fetched once from cdnjs the first time it is wanted. */
+     hls.js, kept in site/lib and fetched once the first time it is wanted:
+     a reader's browser should not have to introduce itself to a CDN to
+     watch a touchdown (Jose, Sep 18, 2026). */
   var hlsLib = null;
   function loadHls() {
     if (!hlsLib) hlsLib = new Promise(function (res, rej) {
       var sc = document.createElement("script");
-      sc.src = "https://cdnjs.cloudflare.com/ajax/libs/hls.js/1.5.13/hls.min.js";
+      sc.src = "lib/hls.min.js";
       sc.onload = res; sc.onerror = rej; document.head.appendChild(sc);
     });
     return hlsLib;
@@ -3301,8 +3311,10 @@
     if (!ab) return "";
     /* the mark with the club's letters under it, the way a college card is
        drawn (Jose, Sep 16, 2026) */
-    return '<span class="gclub"><img class="glogo" alt="' + ab + '" src="https://a.espncdn.com/combiner/i?img=/i/' +
-           'teamlogos/nfl/500/' + ab.toLowerCase() + '.png&w=96&h=96">' +
+    var key = ab.toLowerCase();
+    return '<span class="gclub"><img class="glogo" alt="' + ab + '" src="' + clubPic("nfl", key) +
+           '" data-away="' + clubAway("nfl", key) + '"' +
+           ' onerror="if(this.dataset.away){this.src=this.dataset.away;this.dataset.away=\'\';}">' +
            '<span class="gabbr">' + ab + '</span></span>';
   }
   /* A price where there is one, the empty slot where there is not. The id is
@@ -3870,13 +3882,40 @@
   }
   /* a face where ESPN has one, the empty box where it does not -- a card
      with no picture still has to line up with the one beside it */
+  /* ---- pictures ----
+     Every mark and every face is kept in site/ by mirror.py. The address it
+     came from is left on the tag as the fallback, so a club or a fighter
+     added between mirrors still draws (Jose, Sep 18, 2026). */
+  var ESPN_CLUB = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/";
+  function clubPic(lg, key) {
+    return "logos/" + lg + "/" + key + ".png";
+  }
+  function clubAway(lg, key) {
+    return ESPN_CLUB + lg + "/500/" + key + ".png&w=96&h=96";
+  }
+  function facePic(id) { return "faces/mma/" + id + ".png"; }
+  function faceAway(id) {
+    return "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/" +
+           id + ".png&w=220&h=220&scale=crop";
+  }
+  function scorePic(id) { return "faces/mma/s" + id + ".png"; }
+  function scoreAway(id) {
+    return "https://assets-sports-gcp.thescore.com/mma/fighter/" + id + "/w192xh192_headshot.png";
+  }
   function mug(id, scoreId) {
     if (!id && !scoreId) return '<span class="ffab ffab--none" aria-hidden="true"></span>';
-    var second = scoreId ? "https://assets-sports-gcp.thescore.com/mma/fighter/" + scoreId + "/w192xh192_headshot.png" : "";
-    var first = id ? "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/" + id + ".png&w=220&h=220&scale=crop" : second;
+    /* ours first, then ours of theScore's, then the two addresses themselves */
+    var chain = [];
+    if (id) { chain.push(facePic(id)); }
+    if (scoreId) { chain.push(scorePic(scoreId)); }
+    if (id) { chain.push(faceAway(id)); }
+    if (scoreId) { chain.push(scoreAway(scoreId)); }
+    var first = chain.shift() || "";
+    var second = chain.join("|");
     /* ESPN has no picture of many Contender Series men; theScore does. Neither: the silhouette. */
-    return '<img class="ffab" alt="" src="' + first + '" data-next="' + (first === second ? "" : second) + '"' +
-           ' onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}' +
+    return '<img class="ffab" alt="" src="' + first + '" data-next="' + second + '"' +
+           ' onerror="var q=(this.dataset.next||\'\').split(\'|\').filter(Boolean);' +
+           'if(q.length){this.src=q.shift();this.dataset.next=q.join(\'|\');}' +
            'else{var s=document.createElement(\'span\');s.className=\'ffab ffab--none\';this.replaceWith(s);}">';
   }
   function lastName(n) {
