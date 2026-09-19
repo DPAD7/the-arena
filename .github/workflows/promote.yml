@@ -1,0 +1,66 @@
+# An edit made from the phone goes straight to the board.
+#
+# A session in the cloud pushes to a branch of its own and cannot deploy, so
+# without this a change would wait for somebody to merge it. That is not how
+# he works: on the Mac an edit is made and deployed in the same breath, and it
+# should be the same from a phone (Jose, Sep 19, 2026: "why do I have to do
+# that, we were making edits on the fly").
+#
+# So: any push to a claude/* branch is folded into main and the page is
+# deployed from it at once. The sweep is untouched and keeps its own rhythm.
+name: promote
+
+on:
+  push:
+    branches:
+      - "claude/**"
+
+concurrency:
+  group: sweep          # never deploy while a sweep is mid-run
+  cancel-in-progress: false
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fold it into main
+        run: |
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git checkout main
+          git merge --no-edit "$GITHUB_SHA"
+          git push origin main
+
+      - name: Build the page
+        run: |
+          cd build
+          python -c "import pagefile; pagefile.deployable(open('../master.html').read())"
+
+      - name: Put it on the board
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          cd site
+          npx --yes wrangler@latest pages deploy . \
+            --project-name=the-arenasports --branch=main --commit-dirty=true
+
+      - name: Keep the built page out of the record
+        run: |
+          git checkout -- . || true
+          git status --short
