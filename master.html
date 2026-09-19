@@ -167,27 +167,17 @@
   .mkface { width: 20px; height: 20px; border-radius: 6px; border-width: 1px;
     display: inline-block; vertical-align: -5px; margin: 0 1px; }
   /* the head carries no prices now, so the man gets the width (Jose, Sep 17, 2026) */
-  /* the prices, the weight and how it ended ride a bar across the top, in
-     the places they always held; underneath, the two men take half the card
-     each, so a long name has the room to stand (Jose, Sep 19, 2026) */
-  .ghead.ghead--fight { display: flex; flex-wrap: wrap; align-items: center;
-    column-gap: 6px; row-gap: 9px; }
-  /* .gteam:has(.ffab) sets inline-flex further down and weighs the same, so
-     the box only disappears with both of the head's classes on the front */
-  .ghead.ghead--fight > .gteam { display: contents; }
-  .ghead.ghead--fight::after { content: ""; flex: 0 0 100%; height: 0; order: 6; }
-  .ghead--fight .gteam--flip > .gml { order: 1; margin: 0 auto 0 0; }
-  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0; }
-  .ghead--fight > .gtime, .ghead--fight > .gwhen { order: 3; }
-  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 4; margin: 0; }
-  .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 5; margin: 0 0 0 auto; }
-  .ghead--fight .fman { order: 7; flex: 1 1 0; min-width: 0; gap: 3px; }
+  /* everything on the one line: price, man, how it ended, man, price
+     (Jose, Sep 19, 2026: "all in line"). The name is what has to give, so it
+     is set to fit the room between a price and the middle rather than spill
+     out of the card or break inside a word. */
+  .ghead--fight { gap: 4px; }
+  .ghead--fight .fman { gap: 3px; }
   .ghead--fight .ffab { width: 52px; height: 52px; border-radius: 13px; }
-  .ghead--fight .fname { font-size: clamp(12px, 4.4vw, 18px); letter-spacing: 0; }
-  /* the weight stands over how it ended rather than over the faces */
-  .ghead--fight .gtime { display: flex; flex-direction: column-reverse;
-    align-items: center; line-height: 1.25; }
-  .ghead--fight .fwt { position: static; margin: 0 0 1px; text-align: center; }
+  .ghead--fight .fname { font-size: clamp(11px, 3.4vw, 16px); letter-spacing: 0; }
+  .ghead--fight .gtime { position: relative; }
+  .ghead--fight .fwt { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px);
+    margin: 0; text-align: center; }
   /* moneyline, then the three ways it ends: a price a man, the market between */
   .fways { margin-top: 7px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .mktrow.fway--one {
