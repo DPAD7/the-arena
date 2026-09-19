@@ -4463,11 +4463,15 @@
     if (old) old.remove();
     var id = idOf(card);
     if (!id) return;
-    /* a game already played is not a thing to decide against, so it carries
-       no button. It keeps its mark though: hidden stays hidden while it is on,
-       and the day's marks are all cleared together once the last game and
-       bout are over (Jose, Sep 19, 2026) */
-    if (started(card)) return;
+    /* the eye stays through the game. It used to come off at kickoff, which
+       is exactly when a blowout is worth putting away, and a live game could
+       not be hidden at all. It comes off only once the game is finished --
+       four hours from kickoff, eight from a first bell -- because a card that
+       is over is not a thing to decide against (Jose, Sep 19, 2026: "I just
+       need to hide that one") */
+    var kick = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+    var reach = card.dataset.bout ? 8 * 3600000 : 4 * 3600000;
+    if (card.classList.contains("done") || (kick && Date.now() > kick + reach)) return;
     var b = hideBtn(!!hid[id]);
     b.addEventListener("click", function (e) {
       e.stopPropagation();
