@@ -48,6 +48,7 @@ jobs:
 
       - name: Build the page
         run: |
+          mkdir -p logs cache prices
           cd build
           python -c "import pagefile; pagefile.deployable(open('../master.html').read())"
 

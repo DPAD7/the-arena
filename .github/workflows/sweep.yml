@@ -49,8 +49,12 @@ jobs:
       - name: What the scripts need
         run: pip install --quiet curl_cffi
 
-      - name: The register, as the working database
-        run: cp data/register.db data/qbspy.db
+      - name: The register, and somewhere to write
+        # logs/ is not in the repo -- a runner starts without it, and the first
+        # run with something to say died on the missing folder
+        run: |
+          cp data/register.db data/qbspy.db
+          mkdir -p logs cache prices
 
       - name: Sweep
         env:
