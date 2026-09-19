@@ -4438,11 +4438,17 @@
           Object.keys(saved).forEach(function (k) { delete saved[k]; });
           Object.keys(j.picks).forEach(function (k) { saved[k] = j.picks[k]; });
           try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
-    if (typeof pushState === "function") pushState();
+          /* the store handing this device its picks did not draw them. The
+             legs were held, the bar stayed hidden and the count stayed at
+             nought, so on any device but the one that tapped them the slip
+             looked empty (Jose, Sep 19, 2026: "where is the bet slip").
+             What used to stand here was a push straight back of what had
+             just been read, which is not what was wanted. */
           moved = true;
         }
         if (typeof markSaved === "function") markSaved(document);
         if (typeof placedState === "function") placedState();
+        if (typeof slip === "function") slip();
         if (moved && typeof render === "function") render();
         if (first) pushState();
       })
