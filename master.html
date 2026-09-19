@@ -4334,9 +4334,10 @@
     /* the day runs in clock order across the leagues; the league mark is
        written wherever the league changes (Jose, Sep 16, 2026: "why is 7:30
        after 8:15") */
-    /* a fight card sorts as one block, at its first bell: sorted bout by
-       bout, the college kickoffs fell between the bouts and the one bill
-       came out as nine lines (Jose, Sep 18, 2026) */
+    /* on the UFC tab a card is one block at its first bell. On the day page
+       every bout takes its own line at its own clock, among the kickoffs,
+       the way a game does (Jose, Sep 18, 2026: "on the day page we don't
+       need the UFC all in the same drop down") */
     var firstBell = {};
     items.forEach(function (it) {
       if (it[0] !== "mma") return;
@@ -4344,7 +4345,7 @@
       if (!firstBell[k] || t < firstBell[k]) firstBell[k] = t;
     });
     var when = function (it) {
-      return it[0] === "mma" ? firstBell[it[4] || "Fight card"] : Date.parse(it[2]);
+      return it[0] === "mma" && !showLeague ? firstBell[it[4] || "Fight card"] : Date.parse(it[2]);
     };
     items.sort(function (a, b) {
       var d = when(a) - when(b);
@@ -4371,13 +4372,13 @@
       }
       /* A fight card is one bill, in fight order -- it gets the event's name
          and no clock rows, because every fight already carries its own. */
-      var slot = it[0] === "mma" ? (it[4] || "Fight card") : p.time;
+      var slot = it[0] === "mma" && !showLeague ? (it[4] || "Fight card") : p.time;
       if (slot !== tm) {
         tm = slot;
         var n = items.filter(function (x) {
           var q = etParts(x[2]);
           return x[0] === it[0] && q.day + " " + q.date === key &&
-                 (x[0] === "mma" ? (x[4] || "Fight card") : q.time) === slot;
+                 (x[0] === "mma" && !showLeague ? (x[4] || "Fight card") : q.time) === slot;
         }).length;
         var board = document.createElement("div");
         board.className = "board board--nfl";
