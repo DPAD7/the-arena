@@ -4464,11 +4464,10 @@
     var id = idOf(card);
     if (!id) return;
     /* a game already played is not a thing to decide against, so it carries
-       no button -- and if it was put away before kickoff it comes back */
-    if (started(card)) {
-      if (hid[id]) { delete hid[id]; saveHidden(); }
-      return;
-    }
+       no button. It keeps its mark though: hidden stays hidden while it is on,
+       and the day's marks are all cleared together once the last game and
+       bout are over (Jose, Sep 19, 2026) */
+    if (started(card)) return;
     var b = hideBtn(!!hid[id]);
     b.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -4561,9 +4560,21 @@
       later = later.filter(function (pair) { return !pair[2]; });
     };
     var items = [], away = [], now = Date.now();
-    all.forEach(function (it) {
+    /* A game you put away stays away while it is on: it was hidden because it
+       is a blowout or a card you are not following, and having it walk back
+       onto the board at kickoff is the opposite of what the eye is for. The
+       whole day's marks are cleared at once, when the last game and the last
+       bout are finished -- not at midnight, because a late kick and a main
+       event are still running then. Football is done four hours after
+       kickoff, a fight card eight hours after the first bell, which is the
+       reach the fight refresh already uses (Jose, Sep 19, 2026). */
+    var reach = function (it) { return it[0] === "mma" ? 8 * 3600000 : 4 * 3600000; };
+    var dayOver = all.length > 0 && all.every(function (it) {
       var off = Date.parse(it[2]);
-      var put = hid[it[1]] && !(off && now >= off);
+      return off && now >= off + reach(it);
+    });
+    all.forEach(function (it) {
+      var put = hid[it[1]] && !dayOver;
       if (hid[it[1]] && !put) { delete hid[it[1]]; saveHidden(); }
       (put ? away : items).push(it);
     });
