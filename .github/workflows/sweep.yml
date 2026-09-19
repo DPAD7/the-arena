@@ -16,6 +16,11 @@ name: sweep
 on:
   schedule:
     - cron: "*/10 * * * *"
+  # a change that lands on main goes out at once. A session in the cloud pushes
+  # to its own branch, so merging it is what puts it on the board -- without
+  # this it would have waited for the next sweep (Jose, Sep 19, 2026)
+  push:
+    branches: [main]
   workflow_dispatch:
 
 # two runs must never overlap: they would write the same files at once
