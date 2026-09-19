@@ -1,0 +1,17 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>The Arena</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>body{margin:0;background:#000;color:#fff;font-family:system-ui,sans-serif;padding:32px 16px}a{color:#f5a623}</style>
+</head><body>
+<p>The board moved to <a href="https://the-arenasports.pages.dev/">the-arenasports.pages.dev</a>.</p>
+<script>
+/* hand this browser's picks and hidden list to the new address, once */
+(function () {
+  var keys = ["ww-picks-2026-09-12", "odds.hidden.v1"], out = {}, any = false;
+  try { keys.forEach(function (k) { var v = localStorage.getItem(k); if (v != null) { out[k] = v; any = true; } }); } catch (e) {}
+  var to = "https://the-arenasports.pages.dev/";
+  try { if (any) to += "#carry=" + btoa(unescape(encodeURIComponent(JSON.stringify(out)))); } catch (e) {}
+  location.replace(to);
+})();
+</script>
+</body></html>

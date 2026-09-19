@@ -1803,6 +1803,26 @@
   </button>
 </div>
 <script>
+  /* carried in from the old address: sports-odds.pages.dev reads its own
+     browser's picks and hidden list, sends them here on the hash once, and
+     they are folded into this browser's before anything reads them. What is
+     already here wins; the hash is dropped so a reload does not do it twice
+     (Jose, Sep 18, 2026: "why would I open the old when I don't want to use
+     the old") */
+  try {
+    var carry = /^#carry=(.+)$/.exec(location.hash);
+    if (carry) {
+      var got = JSON.parse(decodeURIComponent(escape(atob(carry[1]))));
+      Object.keys(got).forEach(function (k) {
+        var mine = {}, theirs = {};
+        try { mine = JSON.parse(localStorage.getItem(k)) || {}; } catch (e) {}
+        try { theirs = JSON.parse(got[k]) || {}; } catch (e) {}
+        Object.keys(mine).forEach(function (kk) { theirs[kk] = mine[kk]; });
+        localStorage.setItem(k, JSON.stringify(theirs));
+      });
+      history.replaceState(null, "", location.pathname + location.search);
+    }
+  } catch (e) {}
   // Tapping a price marks it; the marks stay on this device.
   var KEY = "ww-picks-2026-09-12";
   var saved = {};
