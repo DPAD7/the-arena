@@ -4457,6 +4457,12 @@
           if (!e.isIntersecting) return;
           watch.unobserve(e.target);
           later.forEach(function (pair) { if (pair[0] === e.target) pair[1](); });
+          /* a row filled in late had its offset put back while it was still
+             empty, so it clamped to nought: hide the third of four and the
+             row snapped to the first. Put back once the cards stand
+             (Jose, Sep 18, 2026: "it should go to 4") */
+          var was = scrolled[rowKey(e.target)];
+          if (was) e.target.scrollLeft = was;
         });
       }, { rootMargin: "600px 0px" });
       later.forEach(function (pair) { watch.observe(pair[0]); });
