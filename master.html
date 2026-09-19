@@ -190,7 +190,12 @@
   .ghead--fight .gteam:not(.gteam--flip) .ffab { order: 5; }
   .ghead--fight .gteam:not(.gteam--flip) .fname { order: 6; }
   .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 7; margin: 0; }
-  .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 9; }
+  /* the eye, the clock and the play mark hold one line; the class stands
+     on its own above the three of them (Jose, Sep 19, 2026) */
+  .ghead--fight .fwt { order: 9; flex: 0 0 100%; text-align: center; }
+  /* the class and the clock line belong together under the men, so the gap
+     between them is the small one */
+  .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 10; margin-top: -4px; }
   /* the faces sit against each other with the mark on the seam */
   .ghead--fight .ffab { width: 42px; height: 42px; border-radius: 12px; }
   .ghead--fight .gteam--flip .ffab { margin-right: -4px; }
@@ -205,7 +210,14 @@
      (Jose, Sep 19, 2026) */
   .ghead--fight .fname { flex: 1 1 0; min-width: 0; text-align: center;
     font-size: clamp(10px, 3.1vw, 15px); letter-spacing: 0;
-    overflow: hidden; text-overflow: ellipsis; }
+    overflow: hidden; text-overflow: ellipsis;
+    /* the name and what he has done stand together, the height of his own
+       picture (Jose, Sep 19, 2026) */
+    display: flex; flex-direction: column; justify-content: center;
+    min-height: 42px; }
+  .ghead--fight .frec { font-size: 11px; font-weight: 700; letter-spacing: 0.04em;
+    color: var(--muted); font-style: normal; font-variant-numeric: tabular-nums;
+    margin-top: 2px; }
   /* the face says the result before the tile does: grey until the bout is
      settled, then green round the winner and red round the loser. A draw or
      a no contest stays grey (Jose, Sep 19, 2026) */
@@ -223,12 +235,8 @@
      face a thicker one reads as a slab (Jose, Sep 19, 2026) */
   .ghead--fight .gteam > .mk .wl { border: 2px solid var(--ground);
     width: 18px; height: 18px; border-radius: 5px; font-size: 12px; }
-  /* written out, the class is too wide to hang over the clock without
-     running under the two tiles, so it stands on its own above it
-     (Jose, Sep 19, 2026) */
-  .ghead--fight .gtime { position: relative; display: flex;
-    flex-direction: column-reverse; align-items: center; line-height: 1.3; }
-  .ghead--fight .fwt { position: static; margin: 0 0 1px; text-align: center; }
+  .ghead--fight .gtime { position: relative; }
+  .ghead--fight .fwt { position: static; margin: 0; }
   /* moneyline, then the three ways it ends: a price a man, the market between */
   .fways { margin-top: 7px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .mktrow.fway--one {
@@ -3955,14 +3963,15 @@
     var p = etParts(f[2]);
     return '<div class="gcard" data-bout="' + f[1] + '" data-event="' + f[0] + '" data-sport="mma"' +
       ' data-lf="' + f[3] + '" data-rf="' + f[5] + '"' +
+      ' data-lfid="' + (f[4] || "") + '" data-rfid="' + (f[6] || "") + '"' +
       ' data-kick="' + f[2] + '">' +
       '<div class="ghead ghead--fight"><span class="gteam gteam--flip"><span class="gml">' +
       priceSlot(f[8], f[9]) + '</span>' +
       '<span class="fman">' + mug(f[4], f[12]) +
       '<span class="fname">' + lastName(f[3]) + '</span></span></span>' +
       '<i class="fvs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>' +
-      '<span class="gtime">' + p.time +
-      (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + esc(wtFull(f[7])) + '</span>' : "") + '</span>' +
+      (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + esc(wtFull(f[7])) + '</span>' : "") +
+      '<span class="gtime">' + p.time + '</span>' +
       '<span class="gteam"><span class="fman">' + mug(f[6], f[13]) +
       '<span class="fname">' + lastName(f[5]) + '</span></span>' +
       '<span class="gml">' + priceSlot(f[10], f[11]) + '</span></span></div>' +
@@ -4514,6 +4523,7 @@
         lockOne(card);
         armHide(card);
         seatWatch(card);
+        fightRec(card);
         nameUnder(card);
         cfbOnce(card);
         slotRow.appendChild(card);
@@ -4589,6 +4599,7 @@
         lockOne(card);
         armHide(card);
         seatWatch(card);
+        fightRec(card);
         nameUnder(card);
         cfbOnce(card);
         box.appendChild(card);
@@ -5033,6 +5044,32 @@
     }).join("");
     BOARD.appendChild(box);
   }
+  /* what each fighter has done: wins-losses, and the draws only where there
+     are any. ESPN keeps it on the athlete, records_mma.py asks once a man
+     and writes site/fighters.json (Jose, Sep 19, 2026) */
+  var FIGHTREC = {};
+  function fightRec(card) {
+    if (!card || !card.dataset.bout) return;
+    var sides = card.querySelectorAll(".ghead--fight .gteam");
+    var ids = [card.dataset.lfid, card.dataset.rfid];
+    for (var i = 0; i < sides.length && i < 2; i++) {
+      var nm = sides[i].querySelector(".fname");
+      if (!nm) continue;
+      var old = nm.querySelector(".frec");
+      var rec = FIGHTREC[ids[i]];
+      if (!rec) { if (old) old.remove(); continue; }
+      var bits = String(rec).split("-");
+      var say = bits.length > 2 && bits[2] !== "0"
+              ? bits[0] + "-" + bits[1] + "-" + bits[2]
+              : bits[0] + "-" + bits[1];
+      if (!old) { old = document.createElement("i"); old.className = "frec"; nm.appendChild(old); }
+      old.textContent = say;
+    }
+  }
+  fetch("fighters.json").then(function (r) { return r.json(); }).then(function (j) {
+    FIGHTREC = j;
+    document.querySelectorAll(".gcard[data-bout]").forEach(fightRec);
+  }).catch(function () {});
   fetch("records.json").then(function (r) { return r.json(); }).then(function (j) {
     RECORDS = j;
     document.querySelectorAll(".gcard[data-lg=nfl], .gcard[data-lg=college-football]").forEach(dressRecords);
