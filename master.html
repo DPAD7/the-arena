@@ -4655,6 +4655,14 @@
     return ((day && day.classList.contains("dayhead") ? day.textContent : "") +
             "|" + (head ? head.textContent : ""));
   }
+  /* a row says when it is being swiped. A scroll on an element does not
+     bubble and the capture listener on the document proved unreliable here,
+     so each row is asked directly as it is built (Jose, Sep 19, 2026) */
+  function watchRow(row) {
+    if (!row || row.dataset.watched) return;
+    row.dataset.watched = "1";
+    row.addEventListener("scroll", function () { LASTTOUCH = Date.now(); }, {passive: true});
+  }
   function rememberScroll() {
     BOARD.querySelectorAll(".caro").forEach(function (row) {
       /* every position, nought as well. Only a row swiped away from its first
@@ -4667,6 +4675,7 @@
   }
   function restoreScroll() {
     BOARD.querySelectorAll(".caro").forEach(function (row) {
+      watchRow(row);
       var was = scrolled[rowKey(row)];
       if (was !== undefined) row.scrollLeft = was;
     });
@@ -6053,12 +6062,51 @@
         var t = kicks[String(row[1])];
         if (t && row[2] !== t) { row[2] = t; moved++; rebuild++; }
       });
+      /* the chips a card already draws are written onto the buttons that are
+         already there: the touchdown rungs, both sides, and the head to head.
+         Deferring a rebuild had left the fight prices and the corrected start
+         times off his board entirely, which is worse than the jumping it was
+         meant to cure (Jose, Sep 19, 2026: "where are the MMA odds") */
+      var chips = function (gid, v) {
+        var card = document.querySelector('.gcard[data-espn="' + gid + '"], .gcard[data-bout="' + gid + '"]');
+        if (!card) return true;
+        var rows = card.querySelectorAll(".ptdrow");
+        var say = function (b, cell) {
+          if (!b) return;
+          var odds = cell && cell[0];
+          if (!odds) return;
+          b.textContent = String(odds).replace("-", "\u2212");
+          b.dataset.odds = odds;
+          if (cell[1]) b.dataset.oid = cell[1];
+        };
+        [["ptd", 0], ["atd", 1]].forEach(function (pair) {
+          var row = rows[pair[1]], got = v[pair[0]];
+          if (!row || !got) return;
+          [0, 1].forEach(function (side) {
+            var box = row.querySelector(side ? ".ptdside--r" : ".ptdside--l");
+            if (!box || !got[side]) return;
+            [0, 1].forEach(function (rung) {
+              say(box.querySelector(".ptdbtn--n" + (rung + 1) + " button.price"), got[side][rung]);
+            });
+          });
+        });
+        if (v.h2h) {
+          var ends = card.querySelectorAll(".h2hside button.price, .h2hend button.price");
+          [0, 1].forEach(function (i) { say(ends[i], v.h2h[i]); });
+        }
+        if (typeof markSaved === "function") markSaved(card);
+        if (typeof placedState === "function") placedState(card);
+        return false;
+      };
       ["PROPS", "FPROPS"].forEach(function (name) {
         var mine = name === "PROPS" ? PROPS : FPROPS;
         var theirs = j[name] || {};
         Object.keys(theirs).forEach(function (k) {
           if (JSON.stringify(mine[k]) === JSON.stringify(theirs[k])) return;
-          mine[k] = theirs[k]; moved++; rebuild++;
+          mine[k] = theirs[k]; moved++;
+          /* only a card that is not on the screen, or one whose chips were
+             never drawn, still needs the board built again */
+          if (chips(k, theirs[k])) rebuild++;
         });
       });
       /* A moneyline that has moved is written straight onto its own button.
@@ -6088,7 +6136,7 @@
          (Jose, Sep 19, 2026: "it never did it before") */
       if (rebuild) {
         var takeIt = function () {
-          if (!document.hidden && Date.now() - LASTTOUCH < 45000) {
+          if (!document.hidden && Date.now() - LASTTOUCH < 12000) {
             clearTimeout(window._buildWait);
             window._buildWait = setTimeout(takeIt, 15000);
             return;
@@ -7156,7 +7204,7 @@
        and the board handed him Carolina. It is done on a board he has just
        been given, or once he has left it alone, never mid-read
        (Jose, Sep 19, 2026) */
-    if (!force && !document.hidden && Date.now() - LASTTOUCH < 45000) {
+    if (!force && !document.hidden && Date.now() - LASTTOUCH < 12000) {
       clearTimeout(window._sinkWait);
       window._sinkWait = setTimeout(sinkDone, 15000);
       return;
@@ -7175,6 +7223,37 @@
              [].every.call(cards, function (c) { return c.classList.contains("done"); });
     };
     slots.forEach(function (sl) { sl.classList.toggle("done", done(sl)); });
+    /* a finished card leaves its row and goes to the foot of the day, with
+       the games it kicked off alongside. A row is only a kickoff time, so
+       Kansas State and Georgia sat at the top of the board, finished, because
+       Clemson in the same row was not (Jose, Sep 19, 2026: "it should be at
+       the bottom of the page") */
+    var tail = BOARD.querySelector(":scope > .hidewrap");
+    slots.forEach(function (sl) {
+      if (sl.dataset.overflow === "1") return;
+      var row = sl.querySelector(":scope > .caro");
+      if (!row) return;
+      var cards = [].slice.call(row.children);
+      var over = cards.filter(function (c) { return c.classList.contains("done"); });
+      if (!over.length || over.length === cards.length) return;
+      var key = "done-" + (sl.dataset.ord || "0");
+      var seat = BOARD.querySelector(':scope > .board[data-overflow="1"][data-of="' + key + '"]');
+      if (!seat) {
+        seat = document.createElement("div");
+        seat.className = "board board--nfl done";
+        seat.dataset.overflow = "1";
+        seat.dataset.of = key;
+        seat.dataset.ord = String(1000 + (+sl.dataset.ord || 0));
+        var head = sl.querySelector(":scope > .slot-h");
+        if (head) seat.appendChild(head.cloneNode(true));
+        var into = document.createElement("div");
+        into.className = "caro";
+        seat.appendChild(into);
+        if (tail) BOARD.insertBefore(seat, tail); else BOARD.appendChild(seat);
+      }
+      var into2 = seat.querySelector(":scope > .caro");
+      over.forEach(function (c) { into2.appendChild(c); });
+    });
     var over = slots.filter(done);
     if (!over.length || over.length === slots.length) {
       // nothing settled, or everything is: the clock order stands
@@ -7279,8 +7358,14 @@
      it, rather than sitting on old code until somebody reloads by hand */
   var BUILT = "__BUILD__";
   var LASTTOUCH = Date.now();
-  ["scroll", "pointerdown", "keydown", "touchstart"].forEach(function (ev) {
-    window.addEventListener(ev, function () { LASTTOUCH = Date.now(); }, {passive: true});
+  /* a swipe along a card row is him using the board as much as a scroll down
+     the page is. A scroll on an element does not reach the window, so it is
+     caught on the way down instead -- without this the board waited out its
+     idle count while he was swiping and then moved the row under him
+     (Jose, Sep 19, 2026: "it's still jumping to Clemson") */
+  ["scroll", "wheel", "pointerdown", "touchstart", "touchmove", "keydown"].forEach(function (ev) {
+    document.addEventListener(ev, function () { LASTTOUCH = Date.now(); },
+                              {passive: true, capture: true});
   });
   function watchBuild() {
     fetch("build.txt", {cache: "no-store"})
@@ -7295,7 +7380,7 @@
            in an hour meant ten jumps (Jose, Sep 19, 2026: "the page is
            jumping, soooo annoying") */
         if (document.querySelector("dialog[open]")) return;
-        var quiet = Date.now() - LASTTOUCH > 300000;
+        var quiet = Date.now() - LASTTOUCH > 12000;   /* twelve seconds of not touching it */
         if (!document.hidden && !quiet) return;
         try { sessionStorage.setItem("arena.at", String(window.scrollY)); } catch (e) {}
         location.reload();
