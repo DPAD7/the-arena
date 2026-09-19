@@ -482,6 +482,16 @@
   .price.on .pct { color: var(--chip-ink); }
   .price.on { background: var(--goldgrad); color: var(--chip-ink); border-color: #ffffff;
     box-shadow: 0 0 14px rgba(255, 255, 255, 0.30); }
+  /* a price actually placed wears a gold edge, so it reads apart from one
+     that is only marked on the slip. Gold of its own: --amber is white in
+     this theme, so it would have read as another white border
+     (Jose, Sep 19, 2026) */
+  .price.placed, .gcard.locked .price.placed { border-color: #e3b341; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 12px rgba(227, 179, 65, 0.40); }
+  .price.on.placed { border-color: #e3b341; }
+  /* a placed price does not grey out when its game locks: it is the one thing
+     on a locked card still worth seeing */
+  .gcard.locked .price.placed { opacity: 1; filter: none; }
   @media (prefers-reduced-motion: reduce) { .price { transition: none; } }
   .na { color: var(--muted); font-style: italic; font-size: 13.5px; padding: 8px 0; }
   .tbl { width: 100%; border-collapse: collapse; }
@@ -1905,6 +1915,14 @@
       });
       history.replaceState(null, "", location.pathname + location.search);
     }
+    /* the key that lets this device read and write the board's own marks. It
+       is given once, by a link, and kept here; it is never in the page
+       (Jose, Sep 19, 2026: "it's just me on the site") */
+    var kk = /[#&]key=([A-Za-z0-9_-]+)/.exec(location.hash);
+    if (kk) {
+      localStorage.setItem("arena.key", kk[1]);
+      history.replaceState(null, "", location.pathname + location.search);
+    }
   } catch (e) {}
   // Tapping a price marks it; the marks stay on this device.
   var KEY = "ww-picks-2026-09-12";
@@ -1941,6 +1959,7 @@
                       gn: card ? gameName(card) : ""}
                    : undefined;
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
     slip();
   }
   /* Delegated, not bound one by one: most cards are drawn after this runs,
@@ -1951,9 +1970,16 @@
     setPick(btn, !btn.classList.contains("on"));
   });
   /* And a freshly drawn button has to remember it was already picked. */
+  /* what has actually been placed, as against what is marked on the slip.
+     Keyed by the book's own selection id, so it survives a rebuild and a
+     price move (Jose, Sep 19, 2026) */
+  var PLACEDKEY = "odds.placed.v1";
+  var placed = {};
+  try { placed = JSON.parse(localStorage.getItem(PLACEDKEY) || "{}") || {}; } catch (e) { placed = {}; }
   function markSaved(root) {
     (root || document).querySelectorAll("button.price[data-oid]").forEach(function (b) {
       if (saved[b.dataset.oid]) b.classList.add("on");
+      if (placed[b.dataset.oid]) b.classList.add("placed");
     });
   }
   window.markSaved = markSaved;
@@ -2298,6 +2324,7 @@
     if (btn) { setPick(btn, false); return; }
     saved[id] = undefined;
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
     slip();
   }
 
@@ -4260,6 +4287,56 @@
   /* ---- what is put away ----
      Cards are remembered by the id they already carry, so a card hidden on
      Sunday is still hidden when Sunday is looked at again. */
+  /* ---- the marks, kept on the site ----
+     Hidden games, placed prices and the slip used to live in each browser, so
+     the phone, the iPad and the desktop each had their own and none agreed.
+     There is one reader, so there is one blob at /state, and whatever a
+     device last wrote is what the others read (Jose, Sep 19, 2026). */
+  var ARENAKEY = "";
+  try { ARENAKEY = localStorage.getItem("arena.key") || ""; } catch (e) {}
+  var pushTimer = null;
+  function pushState() {
+    if (!ARENAKEY) return;
+    clearTimeout(pushTimer);
+    pushTimer = setTimeout(function () {
+      var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {}};
+      try {
+        fetch("state?k=" + encodeURIComponent(ARENAKEY), {
+          method: "POST", headers: {"content-type": "application/json"},
+          body: JSON.stringify(body)
+        }).catch(function () {});
+      } catch (e) {}
+    }, 700);
+  }
+  window.pushState = pushState;
+  function pullState() {
+    if (!ARENAKEY) return;
+    fetch("state?k=" + encodeURIComponent(ARENAKEY), {cache: "no-store"})
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j || !j.at) return;
+        var moved = false;
+        if (j.hidden && JSON.stringify(j.hidden) !== JSON.stringify(hid)) {
+          hid = j.hidden;
+          try { localStorage.setItem(HIDEKEY, JSON.stringify(hid)); } catch (e) {}
+          moved = true;
+        }
+        if (j.placed) {
+          placed = j.placed;
+          try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
+        }
+        if (j.picks && JSON.stringify(j.picks) !== JSON.stringify(saved)) {
+          Object.keys(saved).forEach(function (k) { delete saved[k]; });
+          Object.keys(j.picks).forEach(function (k) { saved[k] = j.picks[k]; });
+          try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
+          moved = true;
+        }
+        if (typeof markSaved === "function") markSaved(document);
+        if (moved && typeof render === "function") render();
+      })
+      .catch(function () {});
+  }
   var HIDEKEY = "odds.hidden.v1";
   var hid = {};
   try { hid = JSON.parse(localStorage.getItem(HIDEKEY) || "{}") || {}; } catch (e) { hid = {}; }
@@ -4268,6 +4345,7 @@
   }
   function saveHidden() {
     try { localStorage.setItem(HIDEKEY, JSON.stringify(hid)); } catch (e) {}
+    pushState();
   }
   /* the eye Jose gave: a solid eye inside a rounded square -- lens filled,
      pupil cut out of it, the catchlight sat in the pupil. It rides the same
@@ -6983,6 +7061,8 @@
   refreshVisible();
   refreshFights();
   settleBoxing();
+  /* what the other devices left (Jose, Sep 19, 2026) */
+  if (typeof pullState === "function") pullState();
   /* One rule, one place. Whatever adds a card -- the first render, a week
      change, a sport change, a card coming back out of the hide shelf -- it
      is colored here, so no two paths can disagree about a club again. */

@@ -1,0 +1,10 @@
+# The board deploys from this folder. The store below holds the one reader's
+# marks -- hidden games, placed prices, the slip -- so the phone, the iPad and
+# the desktop read the same board (Jose, Sep 19, 2026).
+name = "the-arenasports"
+pages_build_output_dir = "."
+compatibility_date = "2026-01-01"
+
+[[kv_namespaces]]
+binding = "ARENA"
+id = "1bdd65972c8f48a2b9650e5f853c9f4f"
