@@ -1,12 +1,22 @@
 # The Arena
 
-sports-odds.pages.dev. A static page and a few JSON files on Cloudflare
+the-arenasports.pages.dev. A static page and a few JSON files on Cloudflare
 Pages: no server, no database in the way of a reader, and the live work done
 in whatever browser is looking at it.
 
 This folder is `~/Desktop/the arena`. Everything the site is built from is
-in it. `~/odds` and `~/Desktop/odds`, its two earlier homes, are symlinks
-here so an older path still resolves.
+in it and nothing it runs reaches outside it. It can be moved; only the
+LaunchAgent below names the path.
+
+    master.html   the page
+    site/         what deploys
+    build/        every script, ours and the ones copied from QB Spy
+    data/         every JSON and CSV the scripts read, and qbspy.db
+    prices/       what each board charged, by league and week
+    cache/        fetched pages, re-readable
+    logs/         agent.log and refresh.log
+    shots/        working screenshots
+    attic/        scripts that ran once while the page was being built
 
     master.html          the page: markup, styles, script and the last known
                          prices, in one file. pagefile.py is the only door
@@ -28,7 +38,7 @@ here so an older path still resolves.
 
 ## What runs, and when
 
-`refresh.py --if-due` every ten minutes, from
+`build/refresh.py --if-due` every ten minutes, from
 `~/Library/LaunchAgents/com.sportsodds.refresh.plist`. It wakes 120, 60 and
 30 minutes before each kickoff and first bell; 3.5 and 5.5 hours after a
 game, 7 and 9 after a fight card; five times a day for the sweep; once at
@@ -38,27 +48,22 @@ every script it calls -- that list is the truth about what is alive here.
 
 ## Deploying
 
-    cd ~/Desktop/the\ arena/site && npx wrangler pages deploy . --project-name=sports-odds --branch=main
+    cd ~/Desktop/the\ arena/site && npx wrangler pages deploy . --project-name=the-arenasports --branch=main
 
 `fill_week.py`, `fill_fights.py` and the rest deploy themselves at the end of
 a run.
 
-## What it borrows from QB Spy
+## What came from QB Spy
 
-Three things, all from `~/qbspy`, all deliberate. `qbspy/` here is a symlink
-to that folder, so the borrowed files can be reached from inside this one.
-They are not copies: the database is six gigabytes and is written by QB
-Spy's own jobs, so a copy would go stale the same afternoon.
+Copied in on Sep 18, 2026 so this folder stands on its own:
 
-    build/read_dk.py     the DraftKings reader. It sits there because it
-                         reads through QB Spy's own store, and one reader is
-                         right where two would drift apart.
+    build/read_dk.py     the DraftKings reader, with store.py and
+                         fetch_preview.py that it needs
+    build/hub_*.py       the thirteen hub readers, run once a day at 10 ET
     data/qbspy.db        the play record, for the head-to-head model and the
-                         props backfill.
-    data/data.js         the passers, for birthdays.
-    build/hub_*.py       the thirteen hub readers, run once a day at 10 ET by
-                         refresh.py from inside `~/qbspy`, logging to
-                         `~/qbspy/hub_sweep.log`.
+                         props backfill. Six gigabytes; git ignores it.
+    data/data.js         the passers, for birthdays
 
-Nothing in QB Spy reaches back this way. Nothing the page itself loads comes
-from QB Spy either: every logo, face and font it shows is under `site/`.
+They are copies. QB Spy keeps its own and the two drift from here on.
+Nothing the page itself loads comes from QB Spy: every logo, face and font
+it shows is under `site/`.

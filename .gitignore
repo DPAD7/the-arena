@@ -11,3 +11,6 @@ node_modules/
 shots/
 *.log
 results.csv
+# six gigabytes, copied from qbspy on Sep 18, 2026; not for the record
+data/qbspy.db
+data/qbspy.db-*
