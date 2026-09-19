@@ -5995,7 +5995,7 @@
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
     return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
-      var moved = 0;
+      var moved = 0, inPlace = [], rebuild = 0;
       [["SCHED", SCHED], ["CFB", CFB], ["FIGHTS", FIGHTS]].forEach(function (pair) {
         var by = j[pair[0]] || {}, col = COL[pair[0]], key = KEY[pair[0]];
         pair[1].forEach(function (row) {
@@ -6005,7 +6005,10 @@
             while (row.length <= col[i]) row.push("");
             if (v[i] !== undefined && v[i] !== null && row[col[i]] !== v[i]) {
               row[col[i]] = v[i];
-              if (i === 0 || i === 2) moved++;
+              if (i === 0 || i === 2) {
+                moved++;
+                inPlace.push([String(row[key]), i === 0 ? 0 : 1, v[i], v[i + 1] || ""]);
+              }
             }
           }
         });
@@ -6016,14 +6019,41 @@
       var kicks = j.KICKS || {};
       FIGHTS.forEach(function (row) {
         var t = kicks[String(row[1])];
-        if (t && row[2] !== t) { row[2] = t; moved++; }
+        if (t && row[2] !== t) { row[2] = t; moved++; rebuild++; }
       });
       ["PROPS", "FPROPS"].forEach(function (name) {
         var mine = name === "PROPS" ? PROPS : FPROPS;
         var theirs = j[name] || {};
-        Object.keys(theirs).forEach(function (k) { mine[k] = theirs[k]; moved++; });
+        Object.keys(theirs).forEach(function (k) {
+          if (JSON.stringify(mine[k]) === JSON.stringify(theirs[k])) return;
+          mine[k] = theirs[k]; moved++; rebuild++;
+        });
       });
-      if (moved) render();
+      /* A moneyline that has moved is written straight onto its own button.
+         Rebuilding the board for it threw him back to the top and every
+         carousel to its first card, once a minute, which is unusable while a
+         game is on (Jose, Sep 19, 2026: "why can't it just update it without
+         doing that jump"). Only a market the board has never drawn -- a new
+         rung, a bout whose clock moved -- still needs the board built again,
+         and then his place is put back. */
+      inPlace.forEach(function (one) {
+        var card = document.querySelector('.gcard[data-espn="' + one[0] + '"], .gcard[data-bout="' + one[0] + '"]');
+        if (!card) return;
+        var slots = card.querySelectorAll(":scope > .ghead .gml");
+        var slot = slots[one[1]];
+        var b = slot ? slot.querySelector("button.price") : null;
+        if (!b) return;
+        b.textContent = String(one[2]).replace("-", "\u2212");
+        b.dataset.odds = one[2];
+        if (one[3]) b.dataset.oid = one[3];
+        if (typeof markSaved === "function") markSaved(card);
+      });
+      if (rebuild) {
+        var wasY = window.scrollY;
+        render();
+        window.scrollTo(0, wasY);
+        setTimeout(function () { window.scrollTo(0, wasY); }, 60);
+      }
     }).catch(function () {});
   }
   window.pullPrices = pullPrices;
@@ -7202,11 +7232,21 @@
         /* not while a sheet is open or a slip is being built: a reload would
            throw away what is in front of him */
         if (document.querySelector("dialog[open]")) return;
+        try { sessionStorage.setItem("arena.at", String(window.scrollY)); } catch (e) {}
         location.reload();
       })
       .catch(function () {});
   }
   setInterval(watchBuild, 60000);
+  /* back to where he was reading, after a version change took the page */
+  (function () {
+    var at = 0;
+    try { at = parseInt(sessionStorage.getItem("arena.at") || "0", 10) || 0; } catch (e) {}
+    if (!at) return;
+    try { sessionStorage.removeItem("arena.at"); } catch (e) {}
+    var put = function () { window.scrollTo(0, at); };
+    setTimeout(put, 400); setTimeout(put, 1200); setTimeout(put, 2500);
+  })();
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState === "visible") watchBuild();
   });
