@@ -211,11 +211,16 @@
      half on it and half off (Jose, Sep 19, 2026) */
   .ghead--fight .gteam > .mk { position: relative; z-index: 2; flex: none;
     align-self: flex-end; transform: translateY(7px); pointer-events: none; }
-  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -14px 0 0; }
-  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -14px; }
-  .ghead--fight .gtime { position: relative; }
-  .ghead--fight .fwt { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px);
-    margin: 0; text-align: center; }
+  /* the row's own 8px gap eats into the pull, so it is set deep enough for
+     the tile to sit half on the picture */
+  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -20px 0 0; }
+  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -20px; }
+  /* written out, the class is too wide to hang over the clock without
+     running under the two tiles, so it stands on its own above it
+     (Jose, Sep 19, 2026) */
+  .ghead--fight .gtime { position: relative; display: flex;
+    flex-direction: column-reverse; align-items: center; line-height: 1.3; }
+  .ghead--fight .fwt { position: static; margin: 0 0 1px; text-align: center; }
   /* moneyline, then the three ways it ends: a price a man, the market between */
   .fways { margin-top: 7px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .mktrow.fway--one {
@@ -3926,6 +3931,17 @@
     if (!ab) return String(w || "").toUpperCase();
     return (fem ? "W" : "") + ab;
   }
+  /* the class written out -- Heavyweight, Light Heavyweight -- with a W in
+     front of the women's (Jose, Sep 19, 2026). The short forms stay where a
+     row has no room for the words. */
+  function wtFull(w) {
+    var t = String(w || "").trim();
+    if (!t) return "";
+    var fem = /^(w|women'?s)\b[\s.]*/i.exec(t);
+    if (fem) t = t.slice(fem[0].length);
+    if (!WTSHORT[t.toLowerCase()]) return String(w || "");
+    return (fem ? "W " : "") + t;
+  }
   function fightFrame(f) {
     FS_BOUT = f[1];          /* the sheet's rows read this bout's prices */
     var p = etParts(f[2]);
@@ -3938,7 +3954,7 @@
       '<span class="fname">' + lastName(f[3]) + '</span></span></span>' +
       '<i class="fvs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>' +
       '<span class="gtime">' + p.time +
-      (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + wtShort(f[7]) + '</span>' : "") + '</span>' +
+      (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + esc(wtFull(f[7])) + '</span>' : "") + '</span>' +
       '<span class="gteam"><span class="fman">' + mug(f[6], f[13]) +
       '<span class="fname">' + lastName(f[5]) + '</span></span>' +
       '<span class="gml">' + priceSlot(f[10], f[11]) + '</span></span></div>' +
