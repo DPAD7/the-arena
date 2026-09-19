@@ -150,11 +150,10 @@
     /* a long surname drops a size rather than losing its letters */
     font-size: clamp(11px, 3.9vw, 15px);
   }
-  /* under a face the name has a column of its own, so a surname of two words
-     -- Machado Garry, Cortes Acosta -- takes a second line rather than
-     running off the card. The nowrap it inherits belongs to the row where a
-     name sits on the price's line (Jose, Sep 19, 2026) */
-  .fman .fname { white-space: normal; overflow-wrap: break-word; }
+  /* under a face the name has half the card, so it breaks at a space and
+     never inside a word -- FERNAN/DES read worse than the spill did
+     (Jose, Sep 19, 2026) */
+  .fman .fname { white-space: normal; overflow-wrap: normal; }
   /* the name may be wider than the face; the column gives it the room */
   .gcard[data-sport="mma"] .gteam { gap: 0 4px; }
   .gcard[data-sport="mma"] .gml { margin: 0; flex: none; }
@@ -168,13 +167,27 @@
   .mkface { width: 20px; height: 20px; border-radius: 6px; border-width: 1px;
     display: inline-block; vertical-align: -5px; margin: 0 1px; }
   /* the head carries no prices now, so the man gets the width (Jose, Sep 17, 2026) */
-  .ghead--fight { gap: 4px; }
-  .ghead--fight .fman { gap: 3px; }
+  /* the prices, the weight and how it ended ride a bar across the top, in
+     the places they always held; underneath, the two men take half the card
+     each, so a long name has the room to stand (Jose, Sep 19, 2026) */
+  .ghead.ghead--fight { display: flex; flex-wrap: wrap; align-items: center;
+    column-gap: 6px; row-gap: 9px; }
+  /* .gteam:has(.ffab) sets inline-flex further down and weighs the same, so
+     the box only disappears with both of the head's classes on the front */
+  .ghead.ghead--fight > .gteam { display: contents; }
+  .ghead.ghead--fight::after { content: ""; flex: 0 0 100%; height: 0; order: 6; }
+  .ghead--fight .gteam--flip > .gml { order: 1; margin: 0 auto 0 0; }
+  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0; }
+  .ghead--fight > .gtime, .ghead--fight > .gwhen { order: 3; }
+  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 4; margin: 0; }
+  .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 5; margin: 0 0 0 auto; }
+  .ghead--fight .fman { order: 7; flex: 1 1 0; min-width: 0; gap: 3px; }
   .ghead--fight .ffab { width: 52px; height: 52px; border-radius: 13px; }
   .ghead--fight .fname { font-size: clamp(12px, 4.4vw, 18px); letter-spacing: 0; }
-  .ghead--fight .gtime { position: relative; }
-  .ghead--fight .fwt { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px);
-    margin: 0; text-align: center; }
+  /* the weight stands over how it ended rather than over the faces */
+  .ghead--fight .gtime { display: flex; flex-direction: column-reverse;
+    align-items: center; line-height: 1.25; }
+  .ghead--fight .fwt { position: static; margin: 0 0 1px; text-align: center; }
   /* moneyline, then the three ways it ends: a price a man, the market between */
   .fways { margin-top: 7px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .mktrow.fway--one {
@@ -985,7 +998,10 @@
   .h2hnm {
     flex: 1 1 50%; min-width: 0; text-align: center;
     font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
-    font-weight: 700; font-size: 19px; letter-spacing: 0.02em;
+    /* a passer's name reads at the fighter's size: at 19px, Del Rio-Wilson,
+       Van Buren Jr. and Grunkemeyer were the three of 142 that lost their
+       ends to an ellipsis (Jose, Sep 19, 2026: "or the size of the font") */
+    font-weight: 700; font-size: 17px; letter-spacing: 0.02em;
     line-height: 1.1; white-space: nowrap;
     overflow: hidden; text-overflow: ellipsis;
   }
@@ -1005,7 +1021,7 @@
     background: var(--ground); border-radius: 5px; padding: 1px;
   }
   .h2hvs svg { width: 15px; height: 13px; display: block; }
-  .h2hside { flex: 1 1 50%; min-width: 0; display: grid; align-items: center; gap: 8px; }
+  .h2hside { flex: 1 1 50%; min-width: 0; display: grid; align-items: center; gap: 6px; }
   .h2hside--l { grid-template-columns: auto 1fr auto; }
   .h2hside--r { grid-template-columns: auto 1fr auto; }
   .h2hside--l .h2hnm, .h2hside--r .h2hnm { text-align: center; }
