@@ -35,7 +35,12 @@
     font-size: 15px;
     line-height: 1.45;
     margin: 0;
-    padding-block: 40px 64px;
+    /* the foot has to clear the tab bar, which is fixed over it. At 64px it
+       cleared it by nothing, so on an iPad the hidden shelf sat under the bar
+       and the page would not scroll any further -- the phone rule below
+       already allowed for this and the wider screens did not
+       (Jose, Sep 19, 2026: "that's as far as I can go down") */
+    padding-block: 40px calc(150px + env(safe-area-inset-bottom));
     padding-inline: 20px;
   }
   .sheet { max-width: 520px; margin: 0 auto; }
