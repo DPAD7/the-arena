@@ -69,12 +69,17 @@ def main():
             have = {}
 
     now = time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime())
+    back = time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime(time.time() - 10 * 86400))
     wanted = {}
     for athlete_id, when in on_the_board():
-        # a man whose bout is still to come is asked again: he may have
-        # fought elsewhere since. One whose bouts are all behind him keeps
-        # what he had, because a settled record does not move.
-        if when > now:
+        # A man whose bout is still to come is asked again: he may have fought
+        # elsewhere since. One who has just fought is asked too -- his record
+        # moved tonight, and it used to be that it never did. Shahbazyan beat
+        # Ferreira on Sep 19, 2026 and the card still read 16-6, because the
+        # only men asked about were the ones who had not fought yet, so a
+        # result could never reach the file (Jose: "SHAHBAZYAN 16-6, what is
+        # this?"). Ten days back is well past the point ESPN has settled it.
+        if when > back:
             wanted[athlete_id] = True
         elif athlete_id not in have:
             wanted[athlete_id] = False

@@ -1980,7 +1980,19 @@
       return nm(t[0]) + " @ " + nm(t[1]);
     }
     var f = card.querySelectorAll(".fname, .gfname");
-    if (f.length === 2) return f[0].textContent.trim() + " v " + f[1].textContent.trim();
+    if (f.length === 2) {
+      /* His record sits inside the name, so reading the element whole gave
+         back "SHAHBAZYAN16-6 v FERREIRA15-4" -- on the slip, and in the box
+         that says what a card paid (Jose, Sep 19, 2026: "why would the record
+         come up from the paid modal"). Take a copy, drop the record from it,
+         and read the name off that. */
+      var bare = function (e) {
+        var c = e.cloneNode(true), r = c.querySelector(".frec");
+        if (r) r.parentNode.removeChild(r);
+        return c.textContent.trim();
+      };
+      return bare(f[0]) + " v " + bare(f[1]);
+    }
     return "";
   }
   /* The bar is drawn a beat after a tap on the board, not on the tap itself.
