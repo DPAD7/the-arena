@@ -2375,7 +2375,7 @@
       picks.forEach(function (b, i) {
         var m = legParts(b.l);
         var who = m ? m[1] : (b.l || "").split(" ")[0];
-        var pic = slipPic(who);
+        var pic = slipPic(who, (m && m[4]) || fromBout(b.g));
         var mk = markFor(m ? m[2] : "");
         /* the earlier circle paints over the later one, so its own badge is
            never hidden by its neighbour (Jose, Sep 17, 2026) */
@@ -6782,7 +6782,7 @@
        guessed at here. */
     var lf = lastName(card.dataset.lf || ""), rf = lastName(card.dataset.rf || "");
     function fightLeg(who, marks, word) {
-      var pic = who ? slipPic(who) : "";
+      var pic = who ? slipPic(who, true) : "";
       var say = fightSay(String(word).replace(/\s*\u00b7\s*OTHER NO ACTION/i, " ONLY")
                                      .replace(/^BY /i, ""));
       return (pic || (who ? '<span class="hitwho">' + esc(who) + "</span>" : "")) +
