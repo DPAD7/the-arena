@@ -307,7 +307,12 @@
   }
   .price--worse { opacity: 0.45; }
   /* the bout sheet's own tabs and chips (Jose, Sep 18, 2026) */
-  .mtabs { display: flex; border-bottom: 1px solid var(--edge); margin: 2px 0 0; overflow-x: auto; scrollbar-width: none; }
+  /* the five ways a fight ends sit in the middle of their strip. "safe"
+     centres them where they fit and falls back to the left edge where they
+     do not, so the first of them can still be reached on a narrow phone
+     (Jose, Sep 19, 2026) */
+  .mtabs { display: flex; justify-content: safe center; border-bottom: 1px solid var(--edge);
+    margin: 2px 0 0; overflow-x: auto; scrollbar-width: none; }
   .mtabs::-webkit-scrollbar { display: none; }
   .mtab { flex: none; appearance: none; background: none; border: 0; cursor: pointer;
     padding: 9px 12px 10px; font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
