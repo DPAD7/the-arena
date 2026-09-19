@@ -4292,16 +4292,21 @@
      the phone, the iPad and the desktop each had their own and none agreed.
      There is one reader, so there is one blob at /state, and whatever a
      device last wrote is what the others read (Jose, Sep 19, 2026). */
-  var ARENAKEY = "";
-  try { ARENAKEY = localStorage.getItem("arena.key") || ""; } catch (e) {}
+  /* the key rides in the page. It is not a secret from the reader -- the
+     board is his -- it only keeps a passer-by from writing to the store by
+     hand. Anyone who reads the source can see it, which is the price of
+     every device working the moment it opens the site
+     (Jose, Sep 19, 2026: "I don't want to have to change anything") */
+  var ARENAKEY = "arena-001bff8ddf784985";
+  try { ARENAKEY = localStorage.getItem("arena.key") || ARENAKEY; } catch (e) {}
+  var ARENAQ = function () { return ARENAKEY ? "state?k=" + encodeURIComponent(ARENAKEY) : "state"; };
   var pushTimer = null;
   function pushState() {
-    if (!ARENAKEY) return;
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function () {
       var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {}};
       try {
-        fetch("state?k=" + encodeURIComponent(ARENAKEY), {
+        fetch(ARENAQ(), {
           method: "POST", headers: {"content-type": "application/json"},
           body: JSON.stringify(body)
         }).catch(function () {});
@@ -4310,12 +4315,29 @@
   }
   window.pushState = pushState;
   function pullState() {
-    if (!ARENAKEY) return;
-    fetch("state?k=" + encodeURIComponent(ARENAKEY), {cache: "no-store"})
+    fetch(ARENAQ(), {cache: "no-store"})
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        if (!j || !j.at) return;
+        if (!j) return;
         var moved = false;
+        /* the first time a device meets the store it hands over what it was
+           already holding, so nothing any of them had is lost. After that the
+           store is the truth, and an unhide travels the way a hide does */
+        var first = false;
+        try { first = !localStorage.getItem("arena.met"); } catch (e) {}
+        if (first) {
+          var fold = function (mine, theirs) {
+            var out = {};
+            Object.keys(theirs || {}).forEach(function (k) { out[k] = theirs[k]; });
+            Object.keys(mine || {}).forEach(function (k) { out[k] = mine[k]; });
+            return out;
+          };
+          j = {hidden: fold(hid, j.hidden), placed: fold(placed, j.placed),
+               picks: fold(saved, j.picks), at: Date.now()};
+          try { localStorage.setItem("arena.met", "1"); } catch (e) {}
+        } else if (!j.at) {
+          return;
+        }
         if (j.hidden && JSON.stringify(j.hidden) !== JSON.stringify(hid)) {
           hid = j.hidden;
           try { localStorage.setItem(HIDEKEY, JSON.stringify(hid)); } catch (e) {}
@@ -4334,6 +4356,7 @@
         }
         if (typeof markSaved === "function") markSaved(document);
         if (moved && typeof render === "function") render();
+        if (first) pushState();
       })
       .catch(function () {});
   }

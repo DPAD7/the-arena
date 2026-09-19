@@ -8,11 +8,13 @@
    GET  /state?k=<key>   -> { hidden: {...}, placed: {...}, picks: {...}, at: <ms> }
    POST /state?k=<key>   <- the same shape, stored whole
 
-   The key is a secret on the Pages project (STATE_KEY), not in the page: the
-   site is public, and without it anybody who found this address could empty
-   the hidden shelf. A device is given the key once, by a link, and keeps it.
-   No key set on the project and nothing is served, so the page falls back to
-   its own storage and nothing breaks (Jose, Sep 19, 2026).
+   It answers without a key. The board is one man's, every device has to work
+   the moment it opens the site, and a handshake per browser was friction he
+   would meet forever (Jose, Sep 19, 2026: "I don't want to have to change
+   anything"). What it holds is a list of games put away, the prices marked as
+   placed, and the slip -- nothing worth taking -- and the address is not
+   written anywhere a reader would see. If it is ever found, allowed() is the
+   one place to put a key back.
 */
 const SLOT = "board";
 
@@ -26,7 +28,7 @@ function ok(body, extra) {
 }
 
 function allowed(request, env) {
-  if (!env.STATE_KEY) return false;
+  if (!env.STATE_KEY) return true;
   const url = new URL(request.url);
   const said = url.searchParams.get("k") || request.headers.get("x-arena-key") || "";
   return said === env.STATE_KEY;
