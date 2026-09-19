@@ -24,6 +24,7 @@
    (Jose, Sep 17, 2026)
 """
 import os
+import time
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(D, "master.html")
@@ -61,6 +62,15 @@ DOC = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
 
 
 def deployable(page):
-    """The page wrapped as site/index.html, written ready to deploy."""
+    """The page wrapped as site/index.html, written ready to deploy.
+
+       It is stamped with the moment it was built, and the same stamp is
+       written to site/build.txt. The page asks for that file every minute and
+       reloads itself when it has changed, so a new version reaches a phone
+       that is already open without anybody pulling to refresh
+       (Jose, Sep 19, 2026: "I don't want to have to refresh the page")."""
+    stamp = time.strftime("%Y%m%d%H%M%S", time.gmtime())
+    page = page.replace("__BUILD__", stamp)
+    open(os.path.join(D, "site", "build.txt"), "w").write(stamp + "\n")
     open(os.path.join(D, "site", "index.html"), "w").write(
         DOC + page + "\n</body>\n</html>\n")
