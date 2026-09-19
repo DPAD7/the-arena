@@ -4986,6 +4986,32 @@
       };
       if (drawn < 10) { drawn++; make(); } else { later.push([slotRow, make]); }
     });
+    /* A folded bill is put away, not struck off -- the same rule as a hidden
+       game. Its bouts were built only when he tapped the row open, so on the
+       UFC tab a whole card carried no records, no results and no method: there
+       was nothing on the page for the refresh to write into
+       (Jose, Sep 19, 2026: "why aren't the UFC fighters updating on the UFC
+       tab?"). They are built on the browser's idle moments now, one at a time,
+       and the row stays folded until he opens it. */
+    (function fillBills() {
+      var idle = function (fn) {
+        if (window.requestIdleCallback) window.requestIdleCallback(fn, {timeout: 400});
+        else window.setTimeout(fn, 24);
+      };
+      var step = function () {
+        var pair = null;
+        for (var i = 0; i < later.length; i++) {
+          if (later[i][0] && later[i][0].classList &&
+              later[i][0].classList.contains("bill") && !later[i][2]) { pair = later[i]; break; }
+        }
+        if (!pair) return;
+        pair[2] = 1;
+        pair[1]();
+        later = later.filter(function (x) { return !x[2]; });
+        idle(step);
+      };
+      idle(step);
+    }());
     /* the results land a moment after the cards, so the first sink waits for
        them rather than running on a board that is still all unsettled */
     sinkDone(true);
@@ -7209,7 +7235,13 @@
     });
   }
   function refreshFights() {
-    var cards = [].slice.call(document.querySelectorAll(".board:not([hidden]) .gcard[data-bout]"));
+    /* the shelf is not a board, so a hidden bout was never in this list at
+       all: three of tonight's fights sat on the UFC tab with a start time and
+       no result, hours after they were over (Jose, Sep 19, 2026: "these are
+       all done, what is going on?"). Hidden means out of sight, not struck
+       off -- the same rule the football sweep already follows. */
+    var cards = [].slice.call(document.querySelectorAll(
+      ".board:not([hidden]) .gcard[data-bout], .hidebox .gcard[data-bout]"));
     if (!cards.length) return;
     var now = Date.now(), live = [], byEvent = {};
     cards.forEach(function (card) {
@@ -7280,8 +7312,17 @@
            W out of the result tile sitting inside it -- WILLIAMSW. The
            fighter's own name is in .fname (Jose, Sep 18, 2026) */
         var fname = side.querySelector(".fname");
+        /* his record is drawn inside the name, so reading the name element
+           whole put it in the leg: "SHAHBAZYAN17-6 ML" in the box that says
+           what the card paid (Jose, Sep 19, 2026: "why the fuck is 17-6 still
+           there?"). Read a copy with the record taken out. */
+        var bareName = function (e) {
+          var c = e.cloneNode(true), r = c.querySelector(".frec");
+          if (r) r.parentNode.removeChild(r);
+          return c.textContent.trim();
+        };
         var club = badge ? (badge.getAttribute("alt") || "")
-                 : fname ? fname.textContent.trim()
+                 : fname ? bareName(fname)
                  : side.textContent.replace(/[^A-Za-z& ]/g, "").trim();
         legs.push([priceOf(b), (club + " ML").trim()]);
       }
