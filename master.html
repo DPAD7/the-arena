@@ -5963,7 +5963,7 @@
           }
           /* whoever is in front, at the edge of his own fill */
           var lead = gap > 0 ? card.dataset.lqbid : (gap < 0 ? card.dataset.rqbid : "");
-          if (lead && card.dataset.lg === "nfl") {
+          if (lead) {
             face.textContent = "+" + Math.abs(gap);
             face.style.color = readable(hue) || (gap > 0 ? GOLD : BLUE);
             /* the tick can sit hard against either end of the bar -- a big
