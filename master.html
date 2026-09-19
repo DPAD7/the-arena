@@ -1983,7 +1983,21 @@
     if (f.length === 2) return f[0].textContent.trim() + " v " + f[1].textContent.trim();
     return "";
   }
-  function setPick(btn, on) {
+  /* The bar is drawn a beat after a tap on the board, not on the tap itself.
+     A double tap runs the slip twice, on and then off, and drawing on each
+     one made the slip slide in and straight back out under his thumb -- which
+     is what he was tapping around (Jose, Sep 19, 2026: "its adding the bet
+     and then removing it quick"). The button still lights on the tap, so the
+     board answers him at once; only the bar waits, and where the two taps
+     cancelled out there is nothing left to draw. Anywhere else -- taking a
+     leg off inside the slip itself -- draws straight away, because there is
+     no second tap coming there. */
+  var slipDraw = null;
+  function slipSoon() {
+    clearTimeout(slipDraw);
+    slipDraw = setTimeout(function () { slipDraw = null; slip(); }, 420);
+  }
+  function setPick(btn, on, soon) {
     var id = btn.dataset.oid;
     btn.classList.toggle("on", on);
     var card = btn.closest(".gcard");
@@ -1993,7 +2007,7 @@
                    : undefined;
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
     if (typeof pushState === "function") pushState();
-    slip();
+    if (soon) slipSoon(); else slip();
   }
   /* Delegated, not bound one by one: most cards are drawn after this runs,
      and a button made later would otherwise have no handler at all. */
@@ -2022,7 +2036,7 @@
     } else {
       TAPAT = now; TAPON = btn;
     }
-    setPick(btn, !btn.classList.contains("on"));
+    setPick(btn, !btn.classList.contains("on"), true);
   });
   /* And a freshly drawn button has to remember it was already picked. */
   /* what has actually been placed, as against what is marked on the slip.
@@ -3745,24 +3759,24 @@
     }
     var R = {
       "KO": [["ko", "BY KO", ["mko"], 2],
-             ["koonly", "BY KO \u00b7 OTHER NO ACTION", ["mko"], 2]]
+             ["koonly", "BY KO ONLY", ["mko"], 2]]
         .concat(byRound("kord", ["mko"]))
         .concat([[null, "", ["mko"], 5, [["ANY KO", "anyko"]].concat(cells("KO", "anykord"))]]),
       "SUB": [["sub", "BY SUB", ["msub"], 2],
-              ["subonly", "BY SUB \u00b7 OTHER NO ACTION", ["msub"], 2]]
+              ["subonly", "BY SUB ONLY", ["msub"], 2]]
         .concat(byRound("subrd", ["msub"]))
         .concat([[null, "", ["msub"], 5, [["ANY SUB", "anysub"]].concat(cells("SUB", "anysubrd"))]]),
       "DEC": [
         ["sdmd", "SD / MD", ["mdec"], 2],
         ["dec", "BY DEC", ["mdec"], 2],
-        ["deconly", "BY DEC \u00b7 OTHER NO ACTION", ["mdec"], 2],
+        ["deconly", "BY DEC ONLY", ["mdec"], 2],
         ["cards", "WINS ON THE CARDS", ["mdec"], 2],
         ["ud", "UD", ["mdec"], 2],
         [null, "", ["mdec"], 5, [["BY DEC", "anydec"], ["BY UD", "anyud"], ["GTD", "dist"]]]
       ],
       "FINISH": [
-        ["rd1only", "RD1 ONLY \u00b7 OTHER NO ACTION", ["mko", "msub"], 2],
-        ["finishonly", "FINISH \u00b7 OTHER NO ACTION", ["mko", "msub"], 2]
+        ["rd1only", "RD1 ONLY", ["mko", "msub"], 2],
+        ["finishonly", "FINISH ONLY", ["mko", "msub"], 2]
       ].concat(byRound("rd", ["mko", "msub"]))
        .concat([[null, "", ["mko", "msub"], 5,
                  [["INSIDE", "nodist"], ["1ST 60 SEC", "first60"], ["LAST 10 SEC ANY RD", "last10"]]]]),
