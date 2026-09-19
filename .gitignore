@@ -20,3 +20,8 @@ data/qbspy.db-*
 # compiled python, written by every run
 __pycache__/
 *.pyc
+
+# the build stamp is written fresh by pagefile.deployable() on every run.
+# Tracked, it was the one file both a sweep and a phone edit always rewrote,
+# so every promote hit a conflict on it and mailed him about it.
+site/build.txt
