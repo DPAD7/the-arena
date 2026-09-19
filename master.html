@@ -5027,8 +5027,17 @@
     var box = document.createElement("div");
     box.className = "hidebox";
     box.hidden = !hideOpen;
-    /* a hidden card is one you chose not to look at -- do not build it until
-       the shelf is actually opened */
+    /* A hidden card used to be left unbuilt until the shelf was opened, which
+       meant sixty-seven games were not on the page at all: nothing asked ESPN
+       about them, they carried no score, and a placed mark on one never went
+       green or red, because the settling reads counts off a card that was
+       never there. Hidden means put out of sight, not struck off
+       (Jose, Sep 19, 2026: "build the hidden in case I want to see it later").
+
+       They are built now and the shelf is still shut. The building is spread
+       over idle moments rather than done in the render, so opening the board
+       is no slower than it was; the shelf opening before they are all done
+       finishes the rest on the spot. */
     var pending = away;
     function fillBox() {
       if (!pending) return;
@@ -5046,7 +5055,35 @@
       });
       pending = null;
     }
+    /* one card at a time, whenever the browser has nothing better to do.
+       requestIdleCallback has to be called on window: handed round as a bare
+       reference it throws "Illegal invocation" in Chrome, and that took the
+       whole shelf down with it (Sep 19, 2026) */
+    var idle = function (fn) {
+      if (window.requestIdleCallback) window.requestIdleCallback(fn, {timeout: 300});
+      else window.setTimeout(fn, 16);
+    };
+    function fillSlowly() {
+      if (!pending) return;
+      if (!pending.length) { pending = null; return; }
+      var it = pending.shift();
+      var card = nodeFor(it[1], it[3]);
+      card.hidden = false;
+      paintSides(card);
+      lockOne(card);
+      armHide(card);
+      seatWatch(card);
+      fightRec(card);
+      nameUnder(card);
+      cfbOnce(card);
+      box.appendChild(card);
+      var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+      if (card.dataset.espn && (!k || k < Date.now() + 8 * 86400000) &&
+          typeof refresh === "function") refresh(card);
+      idle(fillSlowly);
+    }
     if (hideOpen) fillBox();
+    else idle(fillSlowly);
     wrap.appendChild(box);
     bar.addEventListener("click", function () {
       fillBox();
@@ -7423,7 +7460,7 @@
 
   function refreshVisible() {
     var now = Date.now(), soon = now + 8 * 86400000;
-    document.querySelectorAll(".board:not([hidden]) .gcard[data-espn]")
+    document.querySelectorAll(".board:not([hidden]) .gcard[data-espn], .hidebox .gcard[data-espn]")
       .forEach(function (card) {
         var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
         if (k && k > soon) return;
