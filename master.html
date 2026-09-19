@@ -6191,6 +6191,10 @@
          alone, and a moneyline -- which is what actually moves during a game
          -- is written straight onto its button and needs none of this
          (Jose, Sep 19, 2026: "it never did it before") */
+      if (nowPlease && busy()) {
+        rebuild++;                 /* a sheet is open: it goes with the rest */
+        nowPlease = 0;
+      }
       if (nowPlease) {
         var atY = window.scrollY;
         render();
@@ -6198,7 +6202,7 @@
         setTimeout(function () { window.scrollTo(0, atY); }, 60);
       } else if (rebuild) {
         var takeIt = function () {
-          if (!document.hidden && Date.now() - LASTTOUCH < 12000) {
+          if (busy() || (!document.hidden && Date.now() - LASTTOUCH < 12000)) {
             clearTimeout(window._buildWait);
             window._buildWait = setTimeout(takeIt, 15000);
             return;
@@ -7266,6 +7270,11 @@
        and the board handed him Carolina. It is done on a board he has just
        been given, or once he has left it alone, never mid-read
        (Jose, Sep 19, 2026) */
+    if (typeof busy === "function" && busy()) {
+      clearTimeout(window._sinkWait);
+      window._sinkWait = setTimeout(sinkDone, 15000);
+      return;
+    }
     if (!force && !document.hidden && Date.now() - LASTTOUCH < 12000) {
       clearTimeout(window._sinkWait);
       window._sinkWait = setTimeout(sinkDone, 15000);
@@ -7429,22 +7438,73 @@
     document.addEventListener(ev, function () { LASTTOUCH = Date.now(); },
                               {passive: true, capture: true});
   });
+  /* Whether he is in the middle of something the board must not move under.
+     An open sheet is the case that bit: a rebuild takes the card's own dialog
+     out of the document with it, which closes the sheet he was reading, and
+     the version check a moment later then sees no open dialog and reloads.
+     He was in another browser tab, so both gates read the page as idle and
+     both fired (Jose, Sep 19, 2026: "i was in a modal and it reloaded").
+     Being in another tab is not permission to throw his place away. */
+  function busy() {
+    return !!document.querySelector("dialog[open]");
+  }
+  var AWAY = 0;        /* when the page went into the background, 0 while seen */
+  /* Where he was reading, written on the way out. A phone throws away a tab
+     it has not seen for a while and loads the page again by itself when he
+     comes back -- nothing here asked for that and nothing here can stop it,
+     and it is what actually put him back at the top of the home tab. So the
+     place is kept whenever the page is put away, and taken up again by
+     whatever loads next, whether that is this page's doing or the browser's
+     (Jose, Sep 19, 2026: "i was in a modal and it reloaded"). */
+  function keepPlace() {
+    try {
+      sessionStorage.setItem("arena.at", String(window.scrollY));
+      sessionStorage.setItem("arena.sp", String(sport || ""));
+    } catch (e) {}
+  }
+  window.addEventListener("pagehide", keepPlace);
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) keepPlace();
+  });
+  window.busy = busy;
   function watchBuild() {
     fetch("build.txt", {cache: "no-store"})
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (v) {
         if (!v) return;
         v = v.trim();
-        if (!BUILT || BUILT === "__BUILD__" || v === BUILT) return;
+        /* deployable() stamps the page by replacing every __BUILD__ in it,
+           and this line used to compare against one of them -- so once built
+           the test read BUILT === BUILT and the version check returned every
+           single time. It never fired on any deployed build. A stamp is
+           fourteen digits and the placeholder is not, so the shape decides
+           it and nothing here can be rewritten out from under it. */
+        if (!/^\d{14}$/.test(BUILT) || v === BUILT) return;
         /* A new version is never taken while he is reading. It waits for the
            page to be put away, or for five quiet minutes, because a reload in
            the middle of a scroll throws him back up the board -- ten deploys
            in an hour meant ten jumps (Jose, Sep 19, 2026: "the page is
            jumping, soooo annoying") */
-        if (document.querySelector("dialog[open]")) return;
-        var quiet = Date.now() - LASTTOUCH > 12000;   /* twelve seconds of not touching it */
-        if (!document.hidden && !quiet) return;
-        try { sessionStorage.setItem("arena.at", String(window.scrollY)); } catch (e) {}
+        if (busy()) return;
+        /* A page he is looking at never refreshes itself. No scores site or
+           book does that, and it is not needed here: prices, marks, scores,
+           clocks and finished games are all written onto the board where it
+           stands. The only thing a reload buys is new code, which is a thing
+           I ship, not a thing the board learns -- so it waits until the page
+           is not the one in front of him (Jose, Sep 19, 2026: "a rebuild
+           refreshes the page, that doesn't happen on stats sites").
+
+           Five minutes in the background, and then it comes back on the tab
+           and at the place he left, so returning to it looks like nothing
+           happened. */
+        if (!document.hidden) { AWAY = 0; return; }
+        if (!AWAY) { AWAY = Date.now(); return; }
+        if (Date.now() - AWAY < 5 * 60000) return;
+        /* where he was, so the new version opens on it rather than at home */
+        try {
+          sessionStorage.setItem("arena.at", String(window.scrollY));
+          sessionStorage.setItem("arena.sp", String(sport || ""));
+        } catch (e) {}
         location.reload();
       })
       .catch(function () {});
@@ -7452,21 +7512,43 @@
   setInterval(watchBuild, 60000);
   /* back to where he was reading, after a version change took the page */
   (function () {
-    var at = 0;
-    try { at = parseInt(sessionStorage.getItem("arena.at") || "0", 10) || 0; } catch (e) {}
+    var at = 0, sp = "";
+    try {
+      at = parseInt(sessionStorage.getItem("arena.at") || "0", 10) || 0;
+      sp = sessionStorage.getItem("arena.sp") || "";
+    } catch (e) {}
+    try {
+      sessionStorage.removeItem("arena.at");
+      sessionStorage.removeItem("arena.sp");
+    } catch (e) {}
+    /* the pill is pressed rather than the variable set, so the reload goes
+       through the same switch a tap does and nothing is kept in two places */
+    if (sp && sp !== sport) {
+      var pill = document.querySelector('#sportbar .sptab[data-sp="' + sp + '"]');
+      if (pill) pill.click();
+    }
     if (!at) return;
-    try { sessionStorage.removeItem("arena.at"); } catch (e) {}
-    var put = function () { window.scrollTo(0, at); };
-    setTimeout(put, 400); setTimeout(put, 1200); setTimeout(put, 2500);
+    /* the tab he was on is pressed first and that draws its own board, so the
+       place is put back after that render rather than before it -- three
+       tries inside a second and a half all landed while the old board was
+       still up, and he came back to the top (Sep 19, 2026) */
+    var put = function () {
+      if (Math.abs(window.scrollY - at) < 4) return;
+      if (document.body.scrollHeight < at) return;   /* not drawn that far yet */
+      window.scrollTo(0, at);
+    };
+    [300, 900, 1800, 3000, 4500, 6000].forEach(function (ms) { setTimeout(put, ms); });
   })();
   document.addEventListener("visibilitychange", function () {
     /* coming back to the tab is the moment to take a new version: he is not
        mid-scroll, and the page he left is the page he expects to see move */
     if (document.visibilityState !== "visible") return;
+    /* he is back and looking at it, so this is the last moment to reload it:
+       take the fresh numbers, leave the version alone */
+    AWAY = 0;
     LASTTOUCH = 0;
     pullState();
     pullPrices();
-    watchBuild();
     setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
   });
   setInterval(pullPrices, 60000);
