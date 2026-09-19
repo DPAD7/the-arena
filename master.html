@@ -471,7 +471,7 @@
      arrow at the end that folds the bill away. It opens open. It was a
      column grid in its own smaller face, and read as a different page
      (Jose, Sep 18, 2026: "cards need to be universal") */
-  .slot-h--card { cursor: pointer; }
+  .slot-h--bill { cursor: pointer; }
   /* on the UFC tab the line is what it was: mark, day, date, the bill's name,
      FINAL, arrow -- a column each, the same width on every row, folded until
      it is opened (Jose, Sep 18, 2026: "everything else can stay the same") */
@@ -486,8 +486,8 @@
     width: 16px; height: 16px; margin-left: auto; flex: none;
     color: var(--amber); transition: transform 0.15s;
   }
-  .board:not(.open) > .slot-h--card + .bill { display: none; }
-  .board.open > .slot-h--card .slotmore { transform: rotate(180deg); }
+  .board:not(.open) > .slot-h--bill + .bill { display: none; }
+  .board.open > .slot-h--bill .slotmore { transform: rotate(180deg); }
   .slotwhen { color: var(--muted); margin-right: 7px; font-weight: 700; white-space: nowrap; }
   .slot-h--card .slotday { white-space: nowrap; }
   .bill .gcard { width: auto; }
@@ -4404,10 +4404,11 @@
               (isCard ? p.time : slot)) +
           (isCard ? '<span class="slotfin">FINAL</span>' : "") +
           (n > 1 && !isCard ? ' <span class="swipe">swipe &rsaquo;</span>' : "") +
-          (isCard ? '<svg class="slotmore" viewBox="0 0 24 24" aria-hidden="true">' +
-                    '<polygon points="4,9 12,17 20,9" fill="currentColor"/></svg>' : "");
+          (isCard && !onDay
+            ? '<svg class="slotmore" viewBox="0 0 24 24" aria-hidden="true">' +
+              '<polygon points="4,9 12,17 20,9" fill="currentColor"/></svg>' : "");
         var h = head("slot-h" + (isCard ? " slot-h--card" + (onDay ? "" : " slot-h--bill") : ""), line);
-        if (isCard) {
+        if (isCard && !onDay) {
           h.setAttribute("role", "button");
           h.setAttribute("tabindex", "0");
           h.addEventListener("click", function () {
@@ -4415,10 +4416,7 @@
             h.setAttribute("aria-expanded", open ? "true" : "false");
             if (open) flush(board.querySelector(".bill"));
           });
-          /* on the day page it opens open and the arrow folds it; on the
-             UFC tab it stays folded until opened (Jose, Sep 18, 2026) */
-          if (onDay) board.classList.add("open");
-          h.setAttribute("aria-expanded", onDay ? "true" : "false");
+          h.setAttribute("aria-expanded", "false");
         }
         board.appendChild(h);
         row = document.createElement("div");
