@@ -3461,15 +3461,42 @@
         '">' + dd + '</span>'
       : "";
     box.style.setProperty("--drv", ink);
-    box.innerHTML =
-      '<div class="drvwrap">' +
-        ddhtml +
-        '<span class="drvat" style="left:' + held + '%">' +
-          (end.possessionText || spotText(spot, lside, rside, lhome)) + '</span>' +
-        '<div class="drvbar"><i class="drvfill" style="' + fill + '"></i>' +
-          gain + '</div>' +
-        '<div class="drvtick">' + ticks + '</div>' +
-      '</div>';
+    var at = end.possessionText || spotText(spot, lside, rside, lhome);
+    /* the bar was rebuilt every thirty seconds, so it played its fill from
+       empty each time and looked like the card was reloading. It is built
+       once and written to after that (Jose, Sep 19, 2026: "it's reloading
+       the progress bar") */
+    var wrap = box.querySelector(".drvwrap");
+    if (!wrap) {
+      box.innerHTML =
+        '<div class="drvwrap">' +
+          ddhtml +
+          '<span class="drvat" style="left:' + held + '%">' + at + '</span>' +
+          '<div class="drvbar"><i class="drvfill" style="' + fill + '"></i>' +
+            gain + '</div>' +
+          '<div class="drvtick">' + ticks + '</div>' +
+        '</div>';
+    } else {
+      var dds = wrap.querySelector(".drvdd");
+      if (dd && !dds) {
+        wrap.insertAdjacentHTML("afterbegin", ddhtml);
+      } else if (dds) {
+        if (dds.textContent !== dd) dds.textContent = dd;
+        dds.style.left = pos > 50 ? "0" : "";
+        dds.style.right = pos > 50 ? "" : "0";
+      }
+      var atEl = wrap.querySelector(".drvat");
+      if (atEl) {
+        if (atEl.textContent !== at) atEl.textContent = at;
+        atEl.style.left = held + "%";
+      }
+      var fillEl = wrap.querySelector(".drvfill");
+      if (fillEl) fillEl.style.cssText = fill;
+      var fdOld = wrap.querySelector(".drvfd");
+      if (fdOld) fdOld.remove();
+      var bar = wrap.querySelector(".drvbar");
+      if (bar && gain) bar.insertAdjacentHTML("beforeend", gain);
+    }
     card.classList.add("has-drive");
   }
   function paintSides(card) {
