@@ -4860,8 +4860,8 @@
     });
     /* the results land a moment after the cards, so the first sink waits for
        them rather than running on a board that is still all unsettled */
-    sinkDone();
-    setTimeout(sinkDone, 2500);
+    sinkDone(true);
+    setTimeout(function () { sinkDone(true); }, 2500);
     if (later.length) {
       var watch = new IntersectionObserver(function (es) {
         es.forEach(function (e) {
@@ -7130,8 +7130,18 @@
      state -- the class refresh() sets when ESPN says the game is post -- not
      by a guess at how long a game lasts. Nothing is added to the card: FINAL
      stays where it already is (Jose, Sep 18, 2026). */
-  function sinkDone() {
+  function sinkDone(force) {
     if (!BOARD) return;
+    /* A game that ends is moved to the foot of the day, and moving it while
+       he is watching pulls the next card up under his eyes: he was on Georgia
+       and the board handed him Carolina. It is done on a board he has just
+       been given, or once he has left it alone, never mid-read
+       (Jose, Sep 19, 2026) */
+    if (!force && !document.hidden && Date.now() - LASTTOUCH < 45000) {
+      clearTimeout(window._sinkWait);
+      window._sinkWait = setTimeout(sinkDone, 15000);
+      return;
+    }
     var slots = [].slice.call(BOARD.querySelectorAll(":scope > .board"));
     var done = function (sl) {
       /* a fight card folds away, so its bouts may never have been built and
@@ -7249,6 +7259,10 @@
      so a page left open can tell when a new one has been deployed and take
      it, rather than sitting on old code until somebody reloads by hand */
   var BUILT = "__BUILD__";
+  var LASTTOUCH = Date.now();
+  ["scroll", "pointerdown", "keydown", "touchstart"].forEach(function (ev) {
+    window.addEventListener(ev, function () { LASTTOUCH = Date.now(); }, {passive: true});
+  });
   function watchBuild() {
     fetch("build.txt", {cache: "no-store"})
       .then(function (r) { return r.ok ? r.text() : null; })
@@ -7256,9 +7270,14 @@
         if (!v) return;
         v = v.trim();
         if (!BUILT || BUILT === "__BUILD__" || v === BUILT) return;
-        /* not while a sheet is open or a slip is being built: a reload would
-           throw away what is in front of him */
+        /* A new version is never taken while he is reading. It waits for the
+           page to be put away, or for five quiet minutes, because a reload in
+           the middle of a scroll throws him back up the board -- ten deploys
+           in an hour meant ten jumps (Jose, Sep 19, 2026: "the page is
+           jumping, soooo annoying") */
         if (document.querySelector("dialog[open]")) return;
+        var quiet = Date.now() - LASTTOUCH > 300000;
+        if (!document.hidden && !quiet) return;
         try { sessionStorage.setItem("arena.at", String(window.scrollY)); } catch (e) {}
         location.reload();
       })
@@ -7275,7 +7294,12 @@
     setTimeout(put, 400); setTimeout(put, 1200); setTimeout(put, 2500);
   })();
   document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible") watchBuild();
+    /* coming back to the tab is the moment to take a new version: he is not
+       mid-scroll, and the page he left is the page he expects to see move */
+    if (document.visibilityState !== "visible") return;
+    LASTTOUCH = 0;
+    watchBuild();
+    setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
   });
   setInterval(pullPrices, 60000);
   document.addEventListener("visibilitychange", function () {
