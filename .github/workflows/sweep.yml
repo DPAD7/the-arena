@@ -26,6 +26,9 @@ concurrency:
 jobs:
   sweep:
     runs-on: ubuntu-latest
+    # the run writes back what it read: the page, the prices, the settled games
+    permissions:
+      contents: write
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
