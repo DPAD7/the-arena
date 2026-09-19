@@ -216,10 +216,12 @@
      half on it and half off (Jose, Sep 19, 2026) */
   .ghead--fight .gteam > .mk { position: relative; z-index: 2; flex: none;
     align-self: flex-end; transform: translateY(7px); pointer-events: none; }
-  /* the row's own 8px gap eats into the pull, so it is set deep enough for
-     the tile to sit half on the picture */
   .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -17px 0 0; }
   .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -17px; }
+  /* the rim in the card's own colour holds the tile off the photograph and
+     off the face's green or red edge. It went missing when the head was
+     rebuilt, which is what was wrong with it (Jose, Sep 19, 2026) */
+  .ghead--fight .gteam > .mk .wl { border: 3px solid var(--ground); }
   /* written out, the class is too wide to hang over the clock without
      running under the two tiles, so it stands on its own above it
      (Jose, Sep 19, 2026) */
