@@ -206,12 +206,13 @@
      a no contest stays grey (Jose, Sep 19, 2026) */
   .ghead--fight .gteam:has(> .mk.ok) .ffab { border-color: var(--green); }
   .ghead--fight .gteam:has(> .mk.no) .ffab { border-color: #e2564d; }
-  /* the W and the L go outside: the left man's at the bottom left, the right
-     man's at the bottom right */
-  .ghead--fight .gteam > .mk { position: absolute; bottom: 0; margin: 0; z-index: 2;
-    pointer-events: none; }
-  .ghead--fight .gteam--flip > .mk { left: 0; }
-  .ghead--fight .gteam:not(.gteam--flip) > .mk { right: 0; }
+  /* the W and the L ride each face's own outward bottom corner -- the left
+     man's at the left of his picture, the right man's at the right of his --
+     half on it and half off (Jose, Sep 19, 2026) */
+  .ghead--fight .gteam > .mk { position: relative; z-index: 2; flex: none;
+    align-self: flex-end; transform: translateY(7px); pointer-events: none; }
+  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -14px 0 0; }
+  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -14px; }
   .ghead--fight .gtime { position: relative; }
   .ghead--fight .fwt { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px);
     margin: 0; text-align: center; }
