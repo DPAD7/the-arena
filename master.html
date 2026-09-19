@@ -219,9 +219,10 @@
   .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -17px 0 0; }
   .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -17px; }
   /* the rim in the card's own colour holds the tile off the photograph and
-     off the face's green or red edge. It went missing when the head was
-     rebuilt, which is what was wrong with it (Jose, Sep 19, 2026) */
-  .ghead--fight .gteam > .mk .wl { border: 3px solid var(--ground); }
+     off the face's green or red edge. Two pixels, not three: against a 42px
+     face a thicker one reads as a slab (Jose, Sep 19, 2026) */
+  .ghead--fight .gteam > .mk .wl { border: 2px solid var(--ground);
+    width: 18px; height: 18px; border-radius: 5px; font-size: 12px; }
   /* written out, the class is too wide to hang over the clock without
      running under the two tiles, so it stands on its own above it
      (Jose, Sep 19, 2026) */
