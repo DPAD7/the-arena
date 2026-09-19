@@ -466,6 +466,15 @@
   .gcard:not([data-lg]) .ghead .ghost { min-width: 46px; padding: 6px 7px; }
 
   .price {
+    /* two taps on a price mark it placed, and a phone's own answer to two
+       taps is to zoom. "manipulation" tells it this element has no double
+       tap gesture of its own to wait for: the zoom goes, panning and pinch
+       stay, and the tap stops being held up 300ms while the browser waits
+       to see if a second one is coming (Jose, Sep 19, 2026: "maybe double
+       tapping on a web browser does a zoom?"). The text is unselectable for
+       the same reason -- a double click on a desktop selects the number. */
+    touch-action: manipulation;
+    -webkit-user-select: none; user-select: none;
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif;
     font-weight: 600; font-size: 13.5px;
     color: var(--amber);
@@ -1988,9 +1997,31 @@
   }
   /* Delegated, not bound one by one: most cards are drawn after this runs,
      and a button made later would otherwise have no handler at all. */
+  /* Two taps on the same price, inside four hundred milliseconds, is him
+     saying he has that one on: it takes a gold edge, and two taps more take
+     it off. One tap keeps meaning what it always meant, which is the slip.
+
+     The two taps of a double each run the slip as normal, so the leg goes on
+     the slip and straight back off it and the slip ends where it started.
+     That is deliberate: the alternative is to hold every single tap for four
+     hundred milliseconds to see whether a second one is coming, which would
+     make every tap on the board feel slow.
+
+     Nothing here asks whether the game has started. A card that is live or
+     finished has every price on it disabled already, and a disabled button
+     is never clicked, so this only ever reaches a game still to come
+     (Jose, Sep 19, 2026: "it only works for pregame"). */
+  var TAPAT = 0, TAPON = null;
   document.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest("button.price");
     if (!btn || btn.disabled) return;
+    var now = Date.now();
+    if (TAPON === btn && now - TAPAT < 400) {
+      TAPAT = 0; TAPON = null;
+      togglePlaced(btn);
+    } else {
+      TAPAT = now; TAPON = btn;
+    }
     setPick(btn, !btn.classList.contains("on"));
   });
   /* And a freshly drawn button has to remember it was already picked. */
@@ -2006,6 +2037,26 @@
       if (placed[b.dataset.oid]) b.classList.add("placed");
     });
   }
+  /* On or off, and written to every copy of that leg on the page at once:
+     the same price is drawn on the card's own face and again inside the
+     market sheet, and marking one and not the other would read as two
+     different answers to the same question. */
+  function togglePlaced(btn) {
+    var oid = btn.dataset.oid;
+    if (!oid) return;
+    var on = !placed[oid];
+    if (on) placed[oid] = true;
+    else delete placed[oid];
+    document.querySelectorAll("button.price").forEach(function (b) {
+      if (b.dataset.oid !== oid) return;
+      b.classList.toggle("placed", on);
+      if (!on) b.classList.remove("won", "lost", "paid");
+    });
+    try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
+    if (typeof placedState === "function") placedState();
+    if (typeof pushState === "function") pushState();
+  }
+  window.togglePlaced = togglePlaced;
   window.markSaved = markSaved;
   markSaved(document);
   /* ---- Sheets: opening, shutting, and the page held still behind ---- */
@@ -2374,6 +2425,12 @@
     if (window.slipRoom) window.slipRoom();
     if (!on.length) {
       document.getElementById("sliptabs").innerHTML = "";
+      /* the count was left at whatever it last read. The bar is hidden so he
+         never saw it, but it came back wrong for the moment between the bar
+         being shown again and the number being written (Sep 19, 2026) */
+      document.getElementById("slipn").textContent = "0";
+      document.getElementById("slipn2").textContent = "0";
+      document.getElementById("slippay").textContent = "\u2014";
       if (sheet.open) sheet.close();
       return;
     }
