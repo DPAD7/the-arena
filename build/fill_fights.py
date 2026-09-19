@@ -27,6 +27,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
+import whoname
 import prices as pricefile
 from read_dk import ask
 
@@ -87,8 +88,12 @@ def dk_bouts():
             a, b = [ours(x.strip()) for x in name.split(" vs ", 1)]
             when = (e.get("startEventDate") or "")[:16]
             when = (when + "Z") if when else ""
-            out[(a, b)] = (str(e["id"]), when)
-            out[(b, a)] = (str(e["id"]), when)
+            # keyed by what two spellings of a man have in common, so Edgar
+            # Chairez finds Édgar Cháirez and a Jr. finds his own bout
+            # (Jose, Sep 19, 2026)
+            ka, kb = whoname.key(a), whoname.key(b)
+            out[(ka, kb)] = (str(e["id"]), when)
+            out[(kb, ka)] = (str(e["id"]), when)
     return out
 
 
@@ -182,7 +187,7 @@ def main():
     fp, kicks = {}, {}
     for f in due:
         left, right = f[3], f[5]
-        eid, when = bouts.get((left, right)) or (None, "")
+        eid, when = bouts.get((whoname.key(left), whoname.key(right))) or (None, "")
         if not eid:
             print("  %-22s v %-22s not on DraftKings by these names" % (left, right))
             continue

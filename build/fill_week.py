@@ -29,6 +29,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
+import whoname
 import prices as pricefile
 from read_dk import ask
 
@@ -119,6 +120,7 @@ def main():
     new_pins = {}
     props = {}
     unsettled, by_name, flipped, unoffered = [], [], [], []
+    both_ways = []
     sched_new = {}
     for league, var in (("nfl", "SCHED"), ("ncaaf", "CFB")):
         arr = json.loads(re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S).group(1))
@@ -180,13 +182,18 @@ def main():
                     return False
                 # DraftKings tags college men with their club, "Jayden Maiava (USC)";
                 # the tag is not part of the name and the register never saw it
-                written = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", written or "")
-                if person.get(written) == pid or pins.get(written) == pid:
+                bare = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", written or "")
+                if person.get(bare) == pid or pins.get(bare) == pid:
                     return True
-                if written == name:
-                    if league == "ncaaf":
-                        new_pins[written] = pid
-                        by_name.append(written)
+                # a suffix, an accent or a full stop does not make another man:
+                # theirs is Billy Edwards where ours is Billy Edwards Jr., and
+                # the two passers in front of us are the only men it could be
+                # (Jose, Sep 19, 2026: "we shouldn't get hung up on names")
+                if whoname.same(bare, name):
+                    other = qbs[1 - i][0]
+                    if other and whoname.same(bare, other):
+                        both_ways.append(bare)     # said, never guessed
+                        return False
                     return True
                 return False
             ptd = [[None, None], [None, None]]
@@ -238,6 +245,9 @@ def main():
         print("DraftKings offers nothing on (%d): %s" % (len(unoffered), "; ".join(unoffered)))
     if by_name:
         print("pinned on an identical written name on his own card, now in cfb_people.json (%d): %s" % (len(set(by_name)), ", ".join(sorted(set(by_name))[:10])))
+    if both_ways:
+        print("a written name that fits both passers in the same game, so neither took it (%d): %s"
+              % (len(set(both_ways)), ", ".join(sorted(set(both_ways)))))
     if new_pins and not DRY:
         pins.update(new_pins)
         json.dump(pins, open(pins_path, "w"), indent=0, sort_keys=True)

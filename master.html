@@ -2399,7 +2399,7 @@
       var row = document.createElement("div");
       row.className = "slleg";
       var lab = document.createElement("span");
-      lab.innerHTML = slipLabel(b.l);
+      lab.innerHTML = slipLabel(b.l, b.g);
       var odds = document.createElement("span");
       odds.className = "so";
       odds.textContent = b.o;
@@ -2556,8 +2556,13 @@
             Object.keys(CFBNAME || {}).length;
     if (SLIPPIC && SLIPPICN === n) return SLIPPIC;
     SLIPPICN = n;
-    var pic = {};
+    var pic = {}, fpic = {};
     function put(key, src, round, alt) { if (key && src && !pic[key]) pic[key] = {src: src, round: !!round, alt: alt || ""}; }
+    /* the fighters keep a map of their own. Written names collide across the
+       sports -- VAN is Vanderbilt and it is Joshua Van -- and the clubs are
+       laid down first, so on a slip the man wore the school's V
+       (Jose, Sep 19, 2026) */
+    function fput(key, src, round, alt) { if (key && src && !fpic[key]) fpic[key] = {src: src, round: !!round, alt: alt || ""}; }
     (typeof SCHED !== "undefined" ? SCHED : []).forEach(function (g) {
       [g[3], g[4]].forEach(function (ab) {
         put(ab, clubPic("nfl", String(ab).toLowerCase()), false, clubAway("nfl", String(ab).toLowerCase()));
@@ -2587,18 +2592,22 @@
           .filter(function (x) { return x && x !== espn; })[0] || "";
         put(lastName(m[0]), espn, true, back);
         put(famName(m[0]).toUpperCase(), espn, true, back);
+        fput(lastName(m[0]), espn, true, back);
+        fput(famName(m[0]).toUpperCase(), espn, true, back);
       });
     });
-    SLIPPIC = pic;
-    return pic;
+    SLIPPIC = {any: pic, fight: fpic};
+    return SLIPPIC;
   }
-  function slipPic(who) {
+  function slipPic(who, fight) {
     var pair = /^(.+?)\s+vs?\s+(.+)$/i.exec(String(who || ""));
     if (pair) {
-      var both = slipPic(pair[1].trim()) + slipPic(pair[2].trim());
+      var both = slipPic(pair[1].trim(), fight) + slipPic(pair[2].trim(), fight);
       if (both) return '<span class="slpair">' + both + '</span>';
     }
-    var pic = slipPics(), hit = pic[who] || pic[famName(who)] || pic[String(who).toUpperCase()];
+    var maps = slipPics();
+    var look = function (m) { return m[who] || m[famName(who)] || m[String(who).toUpperCase()]; };
+    var hit = (fight ? look(maps.fight) : null) || look(maps.any);
     if (!hit) return "";
     return '<img class="slpic' + (hit.round ? " slpic--face" : "") + '" alt="" loading="lazy" src="' + hit.src +
            '" data-next="' + (hit.alt || "") + '"' +
@@ -2624,7 +2633,19 @@
     }
     return fightSay(what).marks;
   }
-  function slipLabel(text) {
+  /* every bout id on the board. A leg carries the id of the game or bout it
+     came off, so a fighter's picture is looked up as a fighter's rather than
+     by a written name that a school also answers to (Jose, Sep 19, 2026) */
+  var BOUTID = null;
+  function fromBout(id) {
+    if (!id) return false;
+    if (!BOUTID) {
+      BOUTID = {};
+      (typeof FIGHTS === "undefined" ? [] : FIGHTS).forEach(function (f) { BOUTID[String(f[1])] = 1; });
+    }
+    return !!BOUTID[String(id)];
+  }
+  function slipLabel(text, gid) {
     var m = legParts(text);
     if (!m) return esc(text);
     var who = m[1], what = m[2], when = m[3];
@@ -2632,7 +2653,7 @@
     var marks = say.marks;
     if (!marks && !say.words) say.words = what;
     var words = say.words ? '<span class="slwhat">' + esc(say.words) + '</span>' : "";
-    return slipPic(who) + '<span class="slwho">' + esc(who) + '</span>' +
+    return slipPic(who, m[4] || fromBout(gid)) + '<span class="slwho">' + esc(who) + '</span>' +
            (marks ? '<span class="slmks" aria-label="' + esc(what) + '">' + marks + '</span>' : "") +
            words + '<span class="slwhen">\u00b7 ' + esc(when) + '</span>';
   }
