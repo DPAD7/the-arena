@@ -198,7 +198,9 @@ def price_drawn():
     # alt_ptd.py rides straight behind ledger.py: ledger.py writes ledger.json
     # from scratch each run, so the passing-touchdown ladder has to be put back
     # on right after or the money page silently loses it (Jose, Sep 17, 2026)
-    for job in ("settle.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "keep_prices.py", "fill_fights.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py"):
+    # records_mma.py rides with faces.py: both ask ESPN about the men on the
+    # board and write a file of our own for the page (Jose, Sep 19, 2026)
+    for job in ("settle.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "keep_prices.py", "fill_fights.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "records_mma.py"):
         r = subprocess.run([sys.executable, D + "/build/" + job] + (["--dry"] if DRY else []),
                            capture_output=True, text=True)
         for line in (r.stdout + r.stderr).strip().splitlines():
