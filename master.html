@@ -172,32 +172,46 @@
      is set to fit the room between a price and the middle rather than spill
      out of the card or break inside a word. */
   .ghead--fight { gap: 4px; }
-  /* a man is one column: his face, his name under it, his price under that
-     (Jose, Sep 19, 2026: "img with tab, name, the odds stacked in 1 column").
-     The name sets the column's width now, so it has the room it needs.
+  /* a bout reads like a passer card: price, name, the two faces together
+     with the VS between them, name, price -- and under that line the weight,
+     the eye, the clock and the play mark. The W and the L go to the outside
+     bottom corners (Jose, Sep 19, 2026).
      .gteam:has(.ffab) sets inline-flex further down and weighs the same, so
-     this needs both of the head's classes to win it. */
-  .ghead.ghead--fight .gteam { display: grid; grid-template-columns: auto;
-    justify-items: center; align-content: center; row-gap: 6px; }
+     the box only disappears with both of the head's classes on the front. */
+  .ghead.ghead--fight { display: flex; flex-wrap: wrap; align-items: center;
+    justify-content: center; position: relative; column-gap: 8px; row-gap: 7px; }
+  .ghead.ghead--fight > .gteam { display: contents; }
+  .ghead.ghead--fight::after { content: ""; flex: 0 0 100%; height: 0; order: 8; }
   .ghead--fight .fman { display: contents; }
-  .ghead--fight .ffab { grid-row: 1; grid-column: 1;
-    width: 52px; height: 52px; border-radius: 13px; }
+  .ghead--fight .gteam--flip > .gml { order: 1; margin: 0; }
+  .ghead--fight .gteam--flip .fname { order: 2; }
+  .ghead--fight .gteam--flip .ffab { order: 3; }
+  .ghead--fight .fvs { order: 4; }
+  .ghead--fight .gteam:not(.gteam--flip) .ffab { order: 5; }
+  .ghead--fight .gteam:not(.gteam--flip) .fname { order: 6; }
+  .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 7; margin: 0; }
+  .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 9; }
+  /* the faces sit against each other with the mark on the seam */
+  .ghead--fight .ffab { width: 44px; height: 44px; border-radius: 12px; }
+  .ghead--fight .gteam--flip .ffab { margin-right: -4px; }
+  .ghead--fight .gteam:not(.gteam--flip) .ffab { margin-left: -4px; }
+  .ghead--fight .fvs { line-height: 0; color: var(--ink); background: var(--ground);
+    border-radius: 5px; padding: 1px; margin: 0 -7px; z-index: 2; flex: none; }
+  .ghead--fight .fvs svg { width: 15px; height: 13px; display: block; }
+  /* each name takes what is left between its price and the faces */
+  .ghead--fight .fname { flex: 1 1 0; min-width: 0; text-align: center;
+    font-size: clamp(11px, 3.6vw, 17px); letter-spacing: 0; }
   /* the face says the result before the tile does: grey until the bout is
      settled, then green round the winner and red round the loser. A draw or
      a no contest stays grey (Jose, Sep 19, 2026) */
   .ghead--fight .gteam:has(> .mk.ok) .ffab { border-color: var(--green); }
   .ghead--fight .gteam:has(> .mk.no) .ffab { border-color: #e2564d; }
-  .ghead--fight .fname { grid-row: 2; grid-column: 1; text-align: center;
-    font-size: clamp(11px, 3.6vw, 17px); letter-spacing: 0; }
-  .ghead--fight .gteam > .gml { grid-row: 3; grid-column: 1; margin: 0; }
-  /* the W and the L ride the face's own inward bottom corner, half on the
-     picture and half off it. The face is 52px and sits centred in the
-     column, so the tile is carried out to its edge from the middle. */
-  .ghead--fight .gteam > .mk { grid-row: 1; grid-column: 1; align-self: end;
-    justify-self: center; margin: 0; z-index: 2; pointer-events: none; }
-  .ghead--fight .gteam--flip > .mk { transform: translate(23px, 6px); }
-  .ghead--fight .gteam:not(.gteam--flip) > .mk { transform: translate(-23px, 6px); }
-  .ghead--fight .gteam > .mk .wl { border: 2px solid var(--ground); }
+  /* the W and the L go outside: the left man's at the bottom left, the right
+     man's at the bottom right */
+  .ghead--fight .gteam > .mk { position: absolute; bottom: 0; margin: 0; z-index: 2;
+    pointer-events: none; }
+  .ghead--fight .gteam--flip > .mk { left: 0; }
+  .ghead--fight .gteam:not(.gteam--flip) > .mk { right: 0; }
   .ghead--fight .gtime { position: relative; }
   .ghead--fight .fwt { position: absolute; left: 0; right: 0; bottom: calc(100% + 3px);
     margin: 0; text-align: center; }
@@ -3921,6 +3935,7 @@
       priceSlot(f[8], f[9]) + '</span>' +
       '<span class="fman">' + mug(f[4], f[12]) +
       '<span class="fname">' + lastName(f[3]) + '</span></span></span>' +
+      '<i class="fvs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>' +
       '<span class="gtime">' + p.time +
       (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + wtShort(f[7]) + '</span>' : "") + '</span>' +
       '<span class="gteam"><span class="fman">' + mug(f[6], f[13]) +
