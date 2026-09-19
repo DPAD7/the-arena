@@ -494,6 +494,20 @@
   .price.placed, .gcard.locked .price.placed { border-color: #e3b341; border-width: 2px;
     box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 12px rgba(227, 179, 65, 0.40); }
   .price.on.placed { border-color: #e3b341; }
+  /* gold while it is still live, green once it wins, red once it does not.
+     The board already says which: a settled cell wears a tick or a cross, and
+     a fight's method price is marked paid (Jose, Sep 19, 2026) */
+  .gcell:has(> .mk.ok) .price.placed,
+  .gteam:has(> .mk.ok) .price.placed,
+  .price.placed.paid {
+    border-color: var(--green);
+    box-shadow: 0 0 0 1px rgba(23, 194, 87, 0.40), 0 0 12px rgba(23, 194, 87, 0.45);
+  }
+  .gcell:has(> .mk.no) .price.placed,
+  .gteam:has(> .mk.no) .price.placed {
+    border-color: #e2564d;
+    box-shadow: 0 0 0 1px rgba(226, 86, 77, 0.40), 0 0 12px rgba(226, 86, 77, 0.45);
+  }
   /* a placed price does not grey out when its game locks: it is the one thing
      on a locked card still worth seeing */
   .gcard.locked .price.placed { opacity: 1; filter: none; }
