@@ -179,7 +179,7 @@
      .gteam:has(.ffab) sets inline-flex further down and weighs the same, so
      the box only disappears with both of the head's classes on the front. */
   .ghead.ghead--fight { display: flex; flex-wrap: wrap; align-items: center;
-    justify-content: center; position: relative; column-gap: 8px; row-gap: 7px; }
+    justify-content: center; position: relative; column-gap: 5px; row-gap: 7px; }
   .ghead.ghead--fight > .gteam { display: contents; }
   .ghead.ghead--fight::after { content: ""; flex: 0 0 100%; height: 0; order: 8; }
   .ghead--fight .fman { display: contents; }
@@ -192,15 +192,20 @@
   .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 7; margin: 0; }
   .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 9; }
   /* the faces sit against each other with the mark on the seam */
-  .ghead--fight .ffab { width: 44px; height: 44px; border-radius: 12px; }
+  .ghead--fight .ffab { width: 42px; height: 42px; border-radius: 12px; }
   .ghead--fight .gteam--flip .ffab { margin-right: -4px; }
   .ghead--fight .gteam:not(.gteam--flip) .ffab { margin-left: -4px; }
   .ghead--fight .fvs { line-height: 0; color: var(--ink); background: var(--ground);
     border-radius: 5px; padding: 1px; margin: 0 -7px; z-index: 2; flex: none; }
   .ghead--fight .fvs svg { width: 15px; height: 13px; display: block; }
   /* each name takes what is left between its price and the faces */
+  /* the name has only what is left between its price and the faces, and a
+     long one was running over the price. It is set to fit that room, and
+     clipped rather than allowed to leak if a longer one ever turns up
+     (Jose, Sep 19, 2026) */
   .ghead--fight .fname { flex: 1 1 0; min-width: 0; text-align: center;
-    font-size: clamp(11px, 3.6vw, 17px); letter-spacing: 0; }
+    font-size: clamp(10px, 3.1vw, 15px); letter-spacing: 0;
+    overflow: hidden; text-overflow: ellipsis; }
   /* the face says the result before the tile does: grey until the bout is
      settled, then green round the winner and red round the loser. A draw or
      a no contest stays grey (Jose, Sep 19, 2026) */
@@ -213,8 +218,8 @@
     align-self: flex-end; transform: translateY(7px); pointer-events: none; }
   /* the row's own 8px gap eats into the pull, so it is set deep enough for
      the tile to sit half on the picture */
-  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -20px 0 0; }
-  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -20px; }
+  .ghead--fight .gteam--flip > .mk { order: 2; margin: 0 -17px 0 0; }
+  .ghead--fight .gteam:not(.gteam--flip) > .mk { order: 5; margin: 0 0 0 -17px; }
   /* written out, the class is too wide to hang over the clock without
      running under the two tiles, so it stands on its own above it
      (Jose, Sep 19, 2026) */
