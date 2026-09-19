@@ -6062,11 +6062,32 @@
     return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
       var moved = 0, inPlace = [], rebuild = 0, nowPlease = 0;
+      /* A game that is over keeps the price it closed at. prices.json is one
+         file for the whole board and it is still asked for, but what it says
+         about a finished game is some later board's number -- or the last one
+         before the book took the game down -- and writing it onto the card
+         moves a price he already took. Nothing about a final card can change,
+         so nothing writes to one (Jose, Sep 19, 2026: "the ones that are
+         final should not draw a fresh load because they are final").
+
+         The flags come from refresh(), which may not have answered yet on the
+         first pass after a load, so a kickoff well behind us counts too. That
+         is not a guess at how long a game lasts -- six hours is past the end
+         of any of them -- it only decides whether to leave a card alone. */
+      var frozen = function (gid) {
+        var card = document.querySelector('.gcard[data-espn="' + gid + '"], .gcard[data-bout="' + gid + '"]');
+        if (!card) return false;
+        if (card.dataset.settled === "1" || card.dataset.settledBout === "1" ||
+            card.classList.contains("done")) return true;
+        var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+        return !!k && Date.now() > k + 6 * 3600000;
+      };
       [["SCHED", SCHED], ["CFB", CFB], ["FIGHTS", FIGHTS]].forEach(function (pair) {
         var by = j[pair[0]] || {}, col = COL[pair[0]], key = KEY[pair[0]];
         pair[1].forEach(function (row) {
           var v = by[String(row[key])];
           if (!v) return;
+          if (frozen(String(row[key]))) return;
           for (var i = 0; i < 4; i++) {
             while (row.length <= col[i]) row.push("");
             if (v[i] !== undefined && v[i] !== null && row[col[i]] !== v[i]) {
@@ -6084,6 +6105,7 @@
          the rest of the night forward (Jose, Sep 18, 2026) */
       var kicks = j.KICKS || {};
       FIGHTS.forEach(function (row) {
+        if (frozen(String(row[1]))) return;
         var t = kicks[String(row[1])];
         /* our row carries one block time for a whole prelim card -- 5:30 for
            six bouts -- and the book's own clock is the real one. It only
@@ -6101,6 +6123,9 @@
       var chips = function (gid, v) {
         var card = document.querySelector('.gcard[data-espn="' + gid + '"], .gcard[data-bout="' + gid + '"]');
         if (!card) return true;
+        /* drawn and finished: it keeps what it closed at, and it does not
+           need the board built again either */
+        if (frozen(gid)) return false;
         var rows = card.querySelectorAll(".ptdrow");
         var say = function (b, cell) {
           if (!b) return;
@@ -6150,6 +6175,7 @@
       inPlace.forEach(function (one) {
         var card = document.querySelector('.gcard[data-espn="' + one[0] + '"], .gcard[data-bout="' + one[0] + '"]');
         if (!card) return;
+        if (frozen(one[0])) return;
         var slots = card.querySelectorAll(":scope > .ghead .gml");
         var slot = slots[one[1]];
         var b = slot ? slot.querySelector("button.price") : null;
