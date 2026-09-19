@@ -3843,10 +3843,15 @@
   };
   function evShort(n) {
     /* the bill as the row writes it: the long prefix shortened, the fight
-       itself kept -- DWCS Season 10, Week 7 and UFC FN: Rosas Jr. vs.
-       Barcelos (Jose, Sep 18, 2026) */
+       itself kept. Every row wears the octagon, so a numbered card is its
+       number and a fight night is FN -- the UFC in front of them said what
+       the mark already says. DWCS reads S10 Wk 7 (Jose, Sep 19, 2026).
+       Noche UFC keeps its own name: the UFC is part of it. */
     return String(n || "")
       .replace(/^Dana White'?s Contender Series:?\s*/i, "DWCS ")
+      .replace(/\bSeason\s+(\d+),?\s*Week\s+(\d+)\b/i, "S$1 Wk $2")
+      .replace(/^UFC\s+(?=\d)/i, "")
+      .replace(/^UFC Fight Night\b/i, "FN")
       .replace(/\bUFC Fight Night\b/i, "UFC FN")
       .replace(/\bFight Night\b/i, "FN");
   }
