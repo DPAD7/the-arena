@@ -192,10 +192,16 @@
   .ghead--fight .gteam:not(.gteam--flip) > .gml { order: 7; margin: 0; }
   /* the eye, the clock and the play mark hold one line; the class stands
      on its own above the three of them (Jose, Sep 19, 2026) */
-  .ghead--fight .fwt { order: 9; flex: 0 0 100%; text-align: center; }
-  /* the class and the clock line belong together under the men, so the gap
-     between them is the small one */
-  .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 10; margin-top: -4px; }
+  .ghead--fight > .gwhen, .ghead--fight > .gtime { order: 10; }
+  /* the class stands behind the whole card, in initials and pounds, sized so
+     the longest of them fits inside it (Jose, Sep 19, 2026) */
+  .gcard[data-bout] { position: relative; overflow: hidden; container-type: inline-size; }
+  .gcard[data-bout][data-wt]::before { content: attr(data-wt); position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700;
+    font-size: 20cqw; letter-spacing: 0.06em; white-space: nowrap;
+    color: rgba(255, 255, 255, 0.07); pointer-events: none; z-index: 0; }
+  .gcard[data-bout] > * { position: relative; z-index: 1; }
   /* the faces sit against each other with the mark on the seam */
   .ghead--fight .ffab { width: 42px; height: 42px; border-radius: 12px; }
   .ghead--fight .gteam--flip .ffab { margin-right: -4px; }
@@ -236,7 +242,6 @@
   .ghead--fight .gteam > .mk .wl { border: 2px solid var(--ground);
     width: 18px; height: 18px; border-radius: 5px; font-size: 12px; }
   .ghead--fight .gtime { position: relative; }
-  .ghead--fight .fwt { position: static; margin: 0; }
   /* moneyline, then the three ways it ends: a price a man, the market between */
   .fways { margin-top: 7px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; }
   .mktrow.fway--one {
@@ -3938,6 +3943,46 @@
   }
 
 
+  /* the UFC's own limits. A catchweight has none -- it is agreed fight by
+     fight -- so a bout at one is written as the class the two men normally
+     fight at, which their other bouts on the board settle (Jose, Sep 19, 2026) */
+  var WTLBS = {
+    "strawweight": 115, "flyweight": 125, "bantamweight": 135,
+    "featherweight": 145, "lightweight": 155, "welterweight": 170,
+    "middleweight": 185, "light heavyweight": 205, "heavyweight": 265
+  };
+  var USUAL = null;
+  function usualClass(id) {
+    if (!USUAL) {
+      USUAL = {};
+      (typeof FIGHTS === "undefined" ? [] : FIGHTS).forEach(function (g) {
+        var w = String(g[7] || "").replace(/^\s*(w|women'?s)\b[\s.]*/i, "").toLowerCase();
+        if (!WTLBS[w]) return;
+        [g[4], g[6]].forEach(function (a) {
+          if (!a) return;
+          USUAL[a] = USUAL[a] || {};
+          USUAL[a][w] = (USUAL[a][w] || 0) + 1;
+        });
+      });
+    }
+    var seen = USUAL[id];
+    if (!seen) return "";
+    var best = "", n = 0;
+    Object.keys(seen).forEach(function (w) { if (seen[w] > n) { n = seen[w]; best = w; } });
+    return best;
+  }
+  /* what stands behind a bout card: the class in initials and the weight it
+     is fought at -- LHW 205. The W that marks a women's class is left off:
+     the limit is the same number and the men and women's cards read alike. */
+  function wtMark(w, lid, rid) {
+    var t = String(w || "").replace(/^\s*(w|women'?s)\b[\s.]*/i, "").trim().toLowerCase();
+    if (!WTLBS[t]) {
+      var a = usualClass(lid), b = usualClass(rid);
+      t = (a && b) ? (a === b ? a : "") : (a || b);
+    }
+    if (!t || !WTLBS[t]) return "";
+    return (WTSHORT[t] || t.toUpperCase()) + " \u00b7 " + WTLBS[t];
+  }
   function wtShort(w) {
     var t = String(w || "").trim();
     if (!t) return "";
@@ -3962,6 +4007,7 @@
     FS_BOUT = f[1];          /* the sheet's rows read this bout's prices */
     var p = etParts(f[2]);
     return '<div class="gcard" data-bout="' + f[1] + '" data-event="' + f[0] + '" data-sport="mma"' +
+      ' data-wt="' + esc(wtMark(f[7], f[4], f[6])) + '"' +
       ' data-lf="' + f[3] + '" data-rf="' + f[5] + '"' +
       ' data-lfid="' + (f[4] || "") + '" data-rfid="' + (f[6] || "") + '"' +
       ' data-kick="' + f[2] + '">' +
@@ -3970,7 +4016,6 @@
       '<span class="fman">' + mug(f[4], f[12]) +
       '<span class="fname">' + lastName(f[3]) + '</span></span></span>' +
       '<i class="fvs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>' +
-      (f[7] ? '<span class="fwt" title="' + esc(f[7]) + '">' + esc(wtFull(f[7])) + '</span>' : "") +
       '<span class="gtime">' + p.time + '</span>' +
       '<span class="gteam"><span class="fman">' + mug(f[6], f[13]) +
       '<span class="fname">' + lastName(f[5]) + '</span></span>' +
