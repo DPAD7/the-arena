@@ -4359,9 +4359,23 @@
      hand. Anyone who reads the source can see it, which is the price of
      every device working the moment it opens the site
      (Jose, Sep 19, 2026: "I don't want to have to change anything") */
-  var ARENAKEY = "arena-001bff8ddf784985";
-  try { ARENAKEY = localStorage.getItem("arena.key") || ARENAKEY; } catch (e) {}
+  var ARENAOWN = "arena-001bff8ddf784985";
+  var ARENAKEY = ARENAOWN;
+  try { ARENAKEY = localStorage.getItem("arena.key") || ARENAOWN; } catch (e) {}
   var ARENAQ = function () { return ARENAKEY ? "state?k=" + encodeURIComponent(ARENAKEY) : "state"; };
+  /* A key handed to a device by an older link outlives the key the store
+     wants, and then every read comes back refused -- with nothing on the
+     screen to say so. The device sat on its own marks for a whole evening
+     that way (Jose, Sep 19, 2026: "i dont see it"). So a refusal drops the
+     handed key, falls back to the one written in the page, and asks once
+     more. It returns whether there was anything to drop: where the page's
+     own key is the one being refused, there is nothing to retry with. */
+  function arenaRefused() {
+    if (ARENAKEY === ARENAOWN) return false;
+    ARENAKEY = ARENAOWN;
+    try { localStorage.removeItem("arena.key"); } catch (e) {}
+    return true;
+  }
   var pushTimer = null;
   function pushState() {
     clearTimeout(pushTimer);
@@ -4371,14 +4385,25 @@
         fetch(ARENAQ(), {
           method: "POST", headers: {"content-type": "application/json"},
           body: JSON.stringify(body)
+        }).then(function (r) {
+          if (!r.ok && arenaRefused()) {
+            fetch(ARENAQ(), {
+              method: "POST", headers: {"content-type": "application/json"},
+              body: JSON.stringify(body)
+            }).catch(function () {});
+          }
         }).catch(function () {});
       } catch (e) {}
     }, 700);
   }
   window.pushState = pushState;
-  function pullState() {
+  function pullState(again) {
     fetch(ARENAQ(), {cache: "no-store"})
-      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (r) {
+        if (r.ok) return r.json();
+        if (!again && arenaRefused()) pullState(1);
+        return null;
+      })
       .then(function (j) {
         if (!j) return;
         var moved = false;
@@ -6036,12 +6061,33 @@
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
     return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
-      var moved = 0, inPlace = [], rebuild = 0;
+      var moved = 0, inPlace = [], rebuild = 0, nowPlease = 0;
+      /* A game that is over keeps the price it closed at. prices.json is one
+         file for the whole board and it is still asked for, but what it says
+         about a finished game is some later board's number -- or the last one
+         before the book took the game down -- and writing it onto the card
+         moves a price he already took. Nothing about a final card can change,
+         so nothing writes to one (Jose, Sep 19, 2026: "the ones that are
+         final should not draw a fresh load because they are final").
+
+         The flags come from refresh(), which may not have answered yet on the
+         first pass after a load, so a kickoff well behind us counts too. That
+         is not a guess at how long a game lasts -- six hours is past the end
+         of any of them -- it only decides whether to leave a card alone. */
+      var frozen = function (gid) {
+        var card = document.querySelector('.gcard[data-espn="' + gid + '"], .gcard[data-bout="' + gid + '"]');
+        if (!card) return false;
+        if (card.dataset.settled === "1" || card.dataset.settledBout === "1" ||
+            card.classList.contains("done")) return true;
+        var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+        return !!k && Date.now() > k + 6 * 3600000;
+      };
       [["SCHED", SCHED], ["CFB", CFB], ["FIGHTS", FIGHTS]].forEach(function (pair) {
         var by = j[pair[0]] || {}, col = COL[pair[0]], key = KEY[pair[0]];
         pair[1].forEach(function (row) {
           var v = by[String(row[key])];
           if (!v) return;
+          if (frozen(String(row[key]))) return;
           for (var i = 0; i < 4; i++) {
             while (row.length <= col[i]) row.push("");
             if (v[i] !== undefined && v[i] !== null && row[col[i]] !== v[i]) {
@@ -6059,8 +6105,15 @@
          the rest of the night forward (Jose, Sep 18, 2026) */
       var kicks = j.KICKS || {};
       FIGHTS.forEach(function (row) {
+        if (frozen(String(row[1]))) return;
         var t = kicks[String(row[1])];
-        if (t && row[2] !== t) { row[2] = t; moved++; rebuild++; }
+        /* our row carries one block time for a whole prelim card -- 5:30 for
+           six bouts -- and the book's own clock is the real one. It only
+           reaches the headings when the board is built again, so this one is
+           taken at once rather than waiting for him to be still: it happens
+           once a day, not every minute (Jose, Sep 19, 2026: "UFC times are
+           still wrong on the day tab") */
+        if (t && row[2] !== t) { row[2] = t; moved++; nowPlease++; }
       });
       /* the chips a card already draws are written onto the buttons that are
          already there: the touchdown rungs, both sides, and the head to head.
@@ -6070,6 +6123,9 @@
       var chips = function (gid, v) {
         var card = document.querySelector('.gcard[data-espn="' + gid + '"], .gcard[data-bout="' + gid + '"]');
         if (!card) return true;
+        /* drawn and finished: it keeps what it closed at, and it does not
+           need the board built again either */
+        if (frozen(gid)) return false;
         var rows = card.querySelectorAll(".ptdrow");
         var say = function (b, cell) {
           if (!b) return;
@@ -6119,6 +6175,7 @@
       inPlace.forEach(function (one) {
         var card = document.querySelector('.gcard[data-espn="' + one[0] + '"], .gcard[data-bout="' + one[0] + '"]');
         if (!card) return;
+        if (frozen(one[0])) return;
         var slots = card.querySelectorAll(":scope > .ghead .gml");
         var slot = slots[one[1]];
         var b = slot ? slot.querySelector("button.price") : null;
@@ -6134,7 +6191,12 @@
          alone, and a moneyline -- which is what actually moves during a game
          -- is written straight onto its button and needs none of this
          (Jose, Sep 19, 2026: "it never did it before") */
-      if (rebuild) {
+      if (nowPlease) {
+        var atY = window.scrollY;
+        render();
+        window.scrollTo(0, atY);
+        setTimeout(function () { window.scrollTo(0, atY); }, 60);
+      } else if (rebuild) {
         var takeIt = function () {
           if (!document.hidden && Date.now() - LASTTOUCH < 12000) {
             clearTimeout(window._buildWait);
@@ -7402,10 +7464,17 @@
        mid-scroll, and the page he left is the page he expects to see move */
     if (document.visibilityState !== "visible") return;
     LASTTOUCH = 0;
+    pullState();
+    pullPrices();
     watchBuild();
     setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
   });
   setInterval(pullPrices, 60000);
+  /* the marks were only read when the page loaded, so a bet marked from
+     another device never arrived until he reloaded. They are asked for on the
+     same beat as the prices, and the gold lands without a rebuild
+     (Jose, Sep 19, 2026: "I don't see it, so I have to refresh?") */
+  setInterval(function () { pullState(); }, 60000);
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState !== "visible") return;
     pullPrices();
