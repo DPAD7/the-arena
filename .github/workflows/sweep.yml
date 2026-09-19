@@ -1,0 +1,69 @@
+# The board's own sweep, run by GitHub instead of a Mac.
+#
+# Same script the LaunchAgent ran every ten minutes: refresh.py decides for
+# itself whether this moment is due -- five sweeps a day, the hub at 10 ET,
+# 120/60/30 minutes before each kickoff and first bell, and after the whistle.
+#
+# The six-gigabyte record stays on the Mac. The only tables the sweep reads
+# from it are club_name and person_name, so data/register.db carries those and
+# is copied into place as the working database at the start of each run. The
+# copy is thrown away with the runner.
+#
+# Whatever the run changes -- the page, the prices, the settled games -- is
+# committed back here, so the next run starts where this one ended.
+name: sweep
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+# two runs must never overlap: they would write the same files at once
+concurrency:
+  group: sweep
+  cancel-in-progress: false
+
+jobs:
+  sweep:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: What the scripts need
+        run: pip install --quiet curl_cffi
+
+      - name: The register, as the working database
+        run: cp data/register.db data/qbspy.db
+
+      - name: Sweep
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NFL_CLIENT_ID: ${{ secrets.NFL_CLIENT_ID }}
+          NFL_CLIENT_KEY: ${{ secrets.NFL_CLIENT_KEY }}
+          NFL_CLIENT_SECRET: ${{ secrets.NFL_CLIENT_SECRET }}
+          NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
+        run: python build/refresh.py --if-due
+
+      - name: Keep what it wrote
+        run: |
+          rm -f data/qbspy.db
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "nothing moved"
+            exit 0
+          fi
+          git commit -m "sweep $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase --autostash
+          git push

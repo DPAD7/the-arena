@@ -3,7 +3,9 @@ cache/
 # what wrangler ships, built from master.html by pagefile.deployable()
 site/index.html
 # the settled games are large and rebuildable from ESPN
-site/final/
+# the settled games travel with the repo: a deploy replaces the whole
+# site folder, so leaving them behind would wipe them off the board
+# site/final/
 node_modules/
 .DS_Store
 
