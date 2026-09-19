@@ -1,0 +1,16 @@
+# The home-screen app was serving yesterday's JavaScript. The page is small and
+# is rewritten whenever a price moves, so it is never worth caching.
+/*
+  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
+  Pragma: no-cache
+
+# Pictures and icons change by file name or not at all: a month in the phone
+# (Jose, Sep 16, 2026: "they load every time")
+/faces/*
+  ! Pragma
+  ! Cache-Control
+  Cache-Control: public, max-age=2592000, immutable
+/ico/*
+  ! Pragma
+  ! Cache-Control
+  Cache-Control: public, max-age=604800

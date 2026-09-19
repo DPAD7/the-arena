@@ -1,0 +1,8 @@
+# fetched pages and boards, re-readable at any time
+cache/
+# what wrangler ships, built from master.html by pagefile.deployable()
+site/index.html
+# the settled games are large and rebuildable from ESPN
+site/final/
+node_modules/
+.DS_Store

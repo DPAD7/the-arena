@@ -1,0 +1,11 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- the calendar, open at the corner the plus sits in -->
+  <path d="M8.2 13.2V9.2h12.6M20.8 9.2V17c0 1.55-1.25 2.8-2.8 2.8h-6.1"
+        stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M8.2 9.2V7.6c0-1.55 1.25-2.8 2.8-2.8h7c1.55 0 2.8 1.25 2.8 2.8v1.6"
+        stroke="#ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M11.6 3v3.2M17.4 3v3.2" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/>
+  <!-- the plus, its own disc so the calendar reads behind it -->
+  <circle cx="7.4" cy="16.6" r="4.6" fill="#ffffff"/>
+  <path d="M7.4 14.3v4.6M5.1 16.6h4.6" stroke="#0b0d10" stroke-width="1.7" stroke-linecap="round"/>
+</svg>
