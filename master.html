@@ -7167,6 +7167,48 @@
       if (b && FIGHT[m]) b.classList.add("paid");
     });
   }
+  /* How a bout actually ended, from the one ESPN feed that says so.
+     The scoreboard only writes "Unofficial Winner Decision", so every
+     decision read DEC and the unanimous price was never marked -- and a
+     decision has to be unanimous, split or majority, so one of those three
+     paid every time (Jose, Sep 19, 2026: "if he won by dec he had to win by
+     one of these"). The bout's own status carries "Decision - Unanimous",
+     short "U Dec". It is asked once per bout, after it is settled. */
+  var EXACT = { "u dec": "UD", "s dec": "SD", "m dec": "MD", "dec": "DEC",
+                "ko/tko": "TKO", "ko": "KO", "tko": "TKO", "sub": "SUB",
+                "submission": "SUB", "dq": "DQ", "nc": "NC", "draw": "DRAW",
+                "t dec": "TD" };
+  function exactMethod(card) {
+    if (!card || card.dataset.exactMethod || !card.dataset.bout || !card.dataset.event) return;
+    card.dataset.exactMethod = "1";
+    var u = "https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc/events/" +
+            card.dataset.event + "/competitions/" + card.dataset.bout + "/status";
+    fetch(espnUrl(u)).then(function (r) { return r.ok ? r.json() : null; }).then(function (d) {
+      var res = d && d.result;
+      if (!res) return;
+      var lab = EXACT[String(res.shortDisplayName || "").toLowerCase().trim()] ||
+                EXACT[String(res.displayName || "").toLowerCase().trim()];
+      if (!lab) return;
+      var gt = card.querySelector(".gtime");
+      if (gt) {
+        var fw = gt.querySelector(".fwt");
+        gt.innerHTML = '<span class="fhow">' + lab +
+                       (d.period ? " \u00b7 R" + d.period : "") +
+                       (d.displayClock ? " " + d.displayClock : "") + "</span>" +
+                       (fw ? fw.outerHTML : "");
+      }
+      var win = "";
+      card.querySelectorAll(".ghead--fight .gteam").forEach(function (s) {
+        if (s.querySelector(":scope > .mk.ok")) {
+          var n = s.querySelector(".fname");
+          if (n) { var cc = n.cloneNode(true), rr = cc.querySelector(".frec");
+                   if (rr) rr.parentNode.removeChild(rr); win = cc.textContent.trim(); }
+        }
+      });
+      paidMethods(card, win, lab, d.period, d.displayClock);
+      showHits(card);
+    }).catch(function () {});
+  }
   function settleBoutCard(card, c) {
         var st = ((c.status || {}).type) || {};
         if (st.state === "in" || st.state === "post") {
@@ -7212,6 +7254,7 @@
           }
         }
         card.dataset.settledBout = "1";
+        exactMethod(card);
         /* A bout that is over is over. Only football was ever marked done, so
            only football sank to the foot of the day, and a finished fight sat
            at the top of the board with its result on it (Jose, Sep 19, 2026:
