@@ -4657,13 +4657,18 @@
   }
   function rememberScroll() {
     BOARD.querySelectorAll(".caro").forEach(function (row) {
-      if (row.scrollLeft) scrolled[rowKey(row)] = row.scrollLeft;
+      /* every position, nought as well. Only a row swiped away from its first
+         card used to be written down, so swiping back to the first left the
+         old place on file and the next rebuild put him there: he was watching
+         Georgia and the row handed him Carolina, three cards along
+         (Jose, Sep 19, 2026) */
+      if (row.clientWidth) scrolled[rowKey(row)] = row.scrollLeft;
     });
   }
   function restoreScroll() {
     BOARD.querySelectorAll(".caro").forEach(function (row) {
       var was = scrolled[rowKey(row)];
-      if (was) row.scrollLeft = was;
+      if (was !== undefined) row.scrollLeft = was;
     });
   }
   function clearBoard() {
@@ -6075,11 +6080,25 @@
         if (one[3]) b.dataset.oid = one[3];
         if (typeof markSaved === "function") markSaved(card);
       });
+      /* A chip that the board has never drawn needs it built again, and a
+         rebuild moves rows under him: before today prices were read once at
+         load, so this never happened. It waits until he has left the page
+         alone, and a moneyline -- which is what actually moves during a game
+         -- is written straight onto its button and needs none of this
+         (Jose, Sep 19, 2026: "it never did it before") */
       if (rebuild) {
-        var wasY = window.scrollY;
-        render();
-        window.scrollTo(0, wasY);
-        setTimeout(function () { window.scrollTo(0, wasY); }, 60);
+        var takeIt = function () {
+          if (!document.hidden && Date.now() - LASTTOUCH < 45000) {
+            clearTimeout(window._buildWait);
+            window._buildWait = setTimeout(takeIt, 15000);
+            return;
+          }
+          var wasY = window.scrollY;
+          render();
+          window.scrollTo(0, wasY);
+          setTimeout(function () { window.scrollTo(0, wasY); }, 60);
+        };
+        takeIt();
       }
     }).catch(function () {});
   }
