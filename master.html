@@ -475,7 +475,7 @@
   /* on the UFC tab the line is what it was: mark, day, date, the bill's name,
      FINAL, arrow -- a column each, the same width on every row, folded until
      it is opened (Jose, Sep 18, 2026: "everything else can stay the same") */
-  .slot-h--bill { display: grid; grid-template-columns: 22px 54px 1fr auto 16px;
+  .slot-h--bill { display: grid; grid-template-columns: 54px 1fr auto 16px;
     align-items: center; gap: 9px; }   /* the game line's own size (Jose, Sep 18, 2026) */
   .slot-h--bill .slotdate { color: var(--ink); white-space: nowrap; }
   .slot-h--bill .slotev { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -4396,7 +4396,9 @@
            the mark alone, day, date, the bill's name, folded until opened. */
         var onDay = showLeague;
         var mk = LEAGUE_MARK[it[0]] || "";
-        if (isCard && !onDay) mk = mk.replace(/<\/img>|\s*UFC\s*$/, "");
+        /* on the UFC tab the tab itself says which sport it is, so the row
+           carries no mark at all (Jose, Sep 19, 2026) */
+        if (isCard && !onDay) mk = "";
         var pad2 = function (d) {
           return String(d).replace(/^(\d)\//, "0$1/").replace(/\/(\d)$/, "/0$1");
         };
