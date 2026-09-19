@@ -1,96 +1,53 @@
 # The odds board
 
-Live at **https://sports-odds.pages.dev**
+sports-odds.pages.dev. A static page and a few JSON files on Cloudflare
+Pages: no server, no database in the way of a reader, and the live work done
+in whatever browser is looking at it.
 
-Everything for this project now lives here, on the Desktop, rather than in a
-session scratchpad that gets wiped.
+    master.html          the page: markup, styles, script and the last known
+                         prices, in one file. pagefile.py is the only door
+                         into it -- it refuses a write against a copy that
+                         has moved, which is how a scheduled run stopped
+                         eating an edit made by hand.
+    site/                what wrangler ships. index.html is built from
+                         master.html by pagefile.deployable(), so it is never
+                         edited and never committed.
+    site/prices.json     every price on the board, and when each bout starts.
+                         Prices live here rather than in the page so a price
+                         moving and an edit to the page cannot collide.
+    site/final/<id>.json a settled game, written by settle.py. A card that
+                         finds its own file stops asking anybody anything.
+    site/ledger.json     the passers' week, built by ledger.py from those
+                         files, with alt_ptd.py's price ladder hung on it.
+    attic/               scripts that patched the page once while it was
+                         being built. Nothing there runs now.
 
-| File | What it is |
-|---|---|
-| `master.html` | the page, as one file — edit this one |
-| `site/index.html` | the same page wrapped in a full HTML document; this is what deploys |
-| `refresh.py` | reads DraftKings, rewrites only the prices that moved, deploys |
-| `when.py` | prints the wake plan — every moment the refresher will look, and why |
-| `build_sources.py` | works out where each price on the board comes from; writes `sources.json` |
-| `sources.json` | 27 events, which categories to ask for, plus two league-wide requests |
-| `served.json` | which wakes have already been taken, so none fires twice |
-| `refresh.log` | what moved, and when |
-| `cache/` | the original pulls, kept so `build_sources.py` can be rerun |
+## What runs, and when
 
-Any change to `master.html` has to be copied into `site/index.html` wrapped in
-the doctype/head/body — every patch script here does that at the end. The
-viewport meta tag only exists on the wrapped copy, and without it the page is
-not mobile.
+`refresh.py --if-due` every ten minutes, from
+`~/Library/LaunchAgents/com.sportsodds.refresh.plist`. It wakes 120, 60 and
+30 minutes before each kickoff and first bell; 3.5 and 5.5 hours after a
+game, 7 and 9 after a fight card; five times a day for the sweep; once at
+10am for the hub; and on every pass while a fight card is actually running,
+because a knockout moves every bout left on the bill. `refresh.py` names
+every script it calls -- that list is the truth about what is alive here.
 
-## Keeping the prices right
+## Deploying
 
-DraftKings sends **no timestamp, no version and no ETag**, and answers
-`cache-control: no-store`. There is no way to ask whether a price has changed
-short of fetching it and comparing. So that is what `refresh.py` does: it
-fetches, compares against what is on the page, and writes nothing at all
-unless a digit is different.
+    cd ~/odds/site && npx wrangler pages deploy . --project-name=sports-odds --branch=main
 
-It only asks about events that have not kicked off. A game in progress is not
-priced any more and its buttons are already locked by the clock on the page.
+`fill_week.py`, `fill_fights.py` and the rest deploy themselves at the end of
+a run.
 
-**The cadence is two hours, one hour and half an hour before each kickoff.**
-Overlapping games share a wake, so a Sunday with fourteen one-o'clock games
-costs the same as one game. `com.sportsodds.refresh` wakes every ten minutes
-and asks `refresh.py --if-due` whether this is one of those moments; any other
-time it exits without asking DraftKings anything.
+## What it borrows from QB Spy
 
-```
-python3 when.py                  # the plan: what fires, when, and for which games
-python3 refresh.py --dry         # what has moved right now, without writing
-python3 refresh.py               # rewrite what moved and deploy
-launchctl list | grep sportsodds # is the agent loaded
-tail -f refresh.log
-```
+Three things, all from `~/qbspy`, all deliberate:
 
-`ODDS_NOW=2026-09-12T14:00:30+00:00 python3 refresh.py --if-due --dry` stands
-at another moment, to rehearse a wake without waiting for one.
+    build/read_dk.py     the DraftKings reader. It sits there because it
+                         reads through QB Spy's own store, and one reader is
+                         right where two would drift apart.
+    data/qbspy.db        the play record, for the head-to-head model and the
+                         props backfill.
+    data/data.js         the passers, for birthdays.
 
-### The Mac has to be awake
-
-The agent cannot fire on a sleeping machine, and scheduling a `pmset` wake
-needs a password. A `caffeinate -dimsu -t 43200` was started at 2:02 AM on
-Sep 12, so the Mac is up until about 2 PM that day — every wake from 10 AM
-onward is covered. **Sunday and Monday need it renewed**, which is one line:
-
-```
-caffeinate -dimsu -t 43200 &      # twelve more hours
-```
-
-Nothing here runs 24/7 on its own; that was deliberate.
-
-### What can go stale without failing
-
-Two of the 173 prices — the Garcia/Benn KO method — have no source
-`build_sources.py` could find, and DraftKings now returns nothing for that
-event's method categories. They will never refresh. `refresh.py` counts them
-under "market no longer offered" rather than pretending.
-
-Head-to-head passing yards markets get pulled and reposted by DraftKings; six
-of ten were already gone at 2 AM. Those are reported the same way and their
-displayed price is left alone rather than deleted.
-
-## Selection ids hold still
-
-`data-oid` is DraftKings' own selection id, and those ids survive a
-repricing — 206 of 206 checked on the Lions game, with 146 of them carrying a
-different price than an hour earlier. That is what makes "look it up again by
-the same id" work at all.
-
-Two requests are league-wide rather than per-event, because nothing else
-serves them:
-
-- first-quarter receptions — `/leagues/88808/categories/1342/subcategories/18527`
-- head-to-head passing yards — `/leagues/88808/categories/1185/subcategories/11977`
-
-## Reading DraftKings at all
-
-`/Users/joe/qbspy/build/read_dk.py` is the only way in. It uses `curl_cffi`
-with `impersonate="chrome124"`; anything else gets a 403 off the TLS
-handshake. DraftKings also sends no CORS headers, so the browser can never
-fetch them directly — which is why prices are baked into the page and only
-ESPN is asked live.
+Nothing in QB Spy reaches back this way.
