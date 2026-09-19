@@ -16,3 +16,7 @@ results.csv
 # six gigabytes, copied from qbspy on Sep 18, 2026; not for the record
 data/qbspy.db
 data/qbspy.db-*
+
+# compiled python, written by every run
+__pycache__/
+*.pyc
