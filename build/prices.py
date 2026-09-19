@@ -20,6 +20,7 @@
 
    Usage:  python3 prices.py --from-page     lift what the page holds into the
                                              file, once, to start it off
+           python3 prices.py --tidy          take the event-keyed collisions out
            python3 prices.py                 print what the file holds
 
    (Jose, Sep 18, 2026)
@@ -55,7 +56,53 @@ def read():
     return d
 
 
+_EVENTS = None
+
+
+def event_ids():
+    """The ids that stand for a whole fight card rather than for one bout.
+
+       FIGHTS[0] is the event -- every bout on a bill carries the same one --
+       and FIGHTS[1] is the bout. Keying a price on the event made the last
+       bout written stand for the whole card. Nothing has keyed them that way
+       since Sep 18, 2026, but this file is merged into and never pruned, so a
+       day later 172 of those collisions were still sitting in it, one per
+       bout, each holding some other fight's price.
+
+       An id counts as an event where it is some row's field 0 and no row's
+       field 1. That is read off the board, not guessed from how the number
+       looks: nothing here decides anything by the shape of a string.
+    """
+    global _EVENTS
+    if _EVENTS is None:
+        try:
+            page = open(os.path.join(D, "master.html")).read()
+            arr = rows(page, "FIGHTS") or []
+        except Exception:
+            arr = []
+        bouts = set(str(r[1]) for r in arr if len(r) > 1)
+        _EVENTS = set(str(r[0]) for r in arr if r) - bouts
+    return _EVENTS
+
+
+def tidy(d):
+    """Take every event-keyed collision back out. Returns how many went."""
+    gone = 0
+    bad = event_ids()
+    if not bad:
+        return 0
+    for shelf in ("FIGHTS", "FPROPS", "KICKS"):
+        held = d.get(shelf)
+        if not isinstance(held, dict):
+            continue
+        for k in [k for k in held if str(k) in bad]:
+            del held[k]
+            gone += 1
+    return gone
+
+
 def write(d):
+    tidy(d)
     json.dump(d, open(OUT, "w"), separators=(",", ":"))
 
 
@@ -100,6 +147,12 @@ def main():
         write(d)
         print("prices.json: %d priced games and bouts, %d games in PROPS, %d bouts in FPROPS"
               % (n, len(d["PROPS"]), len(d["FPROPS"])))
+        return
+    if "--tidy" in sys.argv:
+        d = read()
+        gone = tidy(d)
+        write(d)
+        print("prices.json: %d event-keyed collisions removed" % gone)
         return
     d = read()
     print("prices.json: %s"
