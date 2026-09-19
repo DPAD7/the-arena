@@ -12,10 +12,11 @@
    Boxing is not wired: ESPN's boxing scoreboard returns no events at all, so
    Garcia v Benn has nothing to read. It stays as it is.
 """
+import os
 import re
 import unicodedata
 
-D = "/Users/joe/Desktop/odds"
+D = os.path.dirname(os.path.abspath(__file__))
 s = open(D + "/master.html").read()
 before = s.count("data-oid")
 

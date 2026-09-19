@@ -1,8 +1,12 @@
-# The odds board
+# The Arena
 
 sports-odds.pages.dev. A static page and a few JSON files on Cloudflare
 Pages: no server, no database in the way of a reader, and the live work done
 in whatever browser is looking at it.
+
+This folder is `~/Desktop/the arena`. Everything the site is built from is
+in it. `~/odds` and `~/Desktop/odds`, its two earlier homes, are symlinks
+here so an older path still resolves.
 
     master.html          the page: markup, styles, script and the last known
                          prices, in one file. pagefile.py is the only door
@@ -34,14 +38,17 @@ every script it calls -- that list is the truth about what is alive here.
 
 ## Deploying
 
-    cd ~/odds/site && npx wrangler pages deploy . --project-name=sports-odds --branch=main
+    cd ~/Desktop/the\ arena/site && npx wrangler pages deploy . --project-name=sports-odds --branch=main
 
 `fill_week.py`, `fill_fights.py` and the rest deploy themselves at the end of
 a run.
 
 ## What it borrows from QB Spy
 
-Three things, all from `~/qbspy`, all deliberate:
+Three things, all from `~/qbspy`, all deliberate. `qbspy/` here is a symlink
+to that folder, so the borrowed files can be reached from inside this one.
+They are not copies: the database is six gigabytes and is written by QB
+Spy's own jobs, so a copy would go stale the same afternoon.
 
     build/read_dk.py     the DraftKings reader. It sits there because it
                          reads through QB Spy's own store, and one reader is
@@ -49,5 +56,9 @@ Three things, all from `~/qbspy`, all deliberate:
     data/qbspy.db        the play record, for the head-to-head model and the
                          props backfill.
     data/data.js         the passers, for birthdays.
+    build/hub_*.py       the thirteen hub readers, run once a day at 10 ET by
+                         refresh.py from inside `~/qbspy`, logging to
+                         `~/qbspy/hub_sweep.log`.
 
-Nothing in QB Spy reaches back this way.
+Nothing in QB Spy reaches back this way. Nothing the page itself loads comes
+from QB Spy either: every logo, face and font it shows is under `site/`.
