@@ -7552,32 +7552,17 @@
        Kansas State and Georgia sat at the top of the board, finished, because
        Clemson in the same row was not (Jose, Sep 19, 2026: "it should be at
        the bottom of the page") */
-    var tail = BOARD.querySelector(":scope > .hidewrap");
-    slots.forEach(function (sl) {
-      if (sl.dataset.overflow === "1") return;
-      var row = sl.querySelector(":scope > .caro");
-      if (!row) return;
-      var cards = [].slice.call(row.children);
-      var over = cards.filter(function (c) { return c.classList.contains("done"); });
-      if (!over.length || over.length === cards.length) return;
-      var key = "done-" + (sl.dataset.ord || "0");
-      var seat = BOARD.querySelector(':scope > .board[data-overflow="1"][data-of="' + key + '"]');
-      if (!seat) {
-        seat = document.createElement("div");
-        seat.className = "board board--nfl done";
-        seat.dataset.overflow = "1";
-        seat.dataset.of = key;
-        seat.dataset.ord = String(1000 + (+sl.dataset.ord || 0));
-        var head = sl.querySelector(":scope > .slot-h");
-        if (head) seat.appendChild(head.cloneNode(true));
-        var into = document.createElement("div");
-        into.className = "caro";
-        seat.appendChild(into);
-        if (tail) BOARD.insertBefore(seat, tail); else BOARD.appendChild(seat);
-      }
-      var into2 = seat.querySelector(":scope > .caro");
-      over.forEach(function (c) { into2.appendChild(c); });
-    });
+    /* A finished card used to be lifted out of its row and seated at the foot
+       under a copy of the row's own heading, so 3:30 PM appeared twice on the
+       day -- once at the top holding the game still being played, once at the
+       bottom holding the two that were over. Two headings for one kickoff
+       reads as the board saying the same thing twice
+       (Jose, Sep 19, 2026: "I have two cards for each, it should just be
+       one"). A row moves whole now, once every card in it is finished, so
+       there is one heading per kickoff and never a copy of it.
+
+       The cost, stated plainly: a finished game sharing a row with one still
+       being played stays up there with it until that one ends too. */
     var over = slots.filter(done);
     if (!over.length || over.length === slots.length) {
       // nothing settled, or everything is: the clock order stands
