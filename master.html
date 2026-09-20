@@ -7311,8 +7311,13 @@
       box.className = "tline";
       head.parentNode.insertBefore(box, head.nextSibling);
     }
+    /* ESPN's fight clock is time LEFT in the round, not time gone: the log
+       shows it walking 4:07, 3:36, 3:04 inside one round and then starting
+       again at the top of the next. Read as elapsed, the fill ran backwards
+       through every round (Sep 19, 2026, caught in data/fight_log.jsonl). */
     var whole = rounds * each;
-    var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + secs));
+    var left = Math.max(0, Math.min(each, secs));
+    var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + (each - left)));
     var pct = whole ? (gone / whole) * 100 : 0;
     var wrap = box.querySelector(".tlwrap");
     if (!wrap) {
@@ -7352,6 +7357,7 @@
        which is where a guess would do real damage. */
     card._tl = {gone: gone, at: Date.now(), rd: rd, rounds: rounds,
                 each: each, whole: whole, live: state === "in" && rd >= 1};
+    card._tl.left = left;
     var fill = wrap.querySelector(".tlfill");
     if (fill) fill.style.width = pct + "%";
     /* the running clock rides over the head of the fill, kept off both ends
@@ -7359,7 +7365,7 @@
     var at = wrap.querySelector(".tlat");
     var said = state === "post"
       ? (label || "FINAL")
-      : "R" + rd + (st.displayClock ? " " + st.displayClock : "");
+      : "R" + rd + (st.displayClock ? " " + st.displayClock : "");   /* as given: time left */
     if (at) {
       at.style.left = Math.max(10, Math.min(90, pct)) + "%";
       if (at.textContent !== said) at.textContent = said;
@@ -7386,12 +7392,13 @@
       if (fill) fill.style.width = pct + "%";
       if (at) {
         at.style.left = Math.max(10, Math.min(90, pct)) + "%";
-        var say = "R" + t.rd + " " + mmss(on - (t.rd - 1) * t.each);
+        /* the cage clock counts down, so that is what the card says */
+        var say = "R" + t.rd + " " + mmss(t.each - (on - (t.rd - 1) * t.each));
         if (at.textContent !== say) at.textContent = say;
       }
       var gt = card.querySelector(".gtime .fhow");
       if (gt) {
-        var g = "R" + t.rd + " " + mmss(on - (t.rd - 1) * t.each);
+        var g = "R" + t.rd + " " + mmss(t.each - (on - (t.rd - 1) * t.each));
         if (gt.textContent !== g) gt.textContent = g;
       }
     });
