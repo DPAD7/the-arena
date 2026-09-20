@@ -7211,7 +7211,14 @@
   }
   function settleBoutCard(card, c) {
         var st = ((c.status || {}).type) || {};
-        if (st.state === "in" || st.state === "post") {
+        /* ESPN calls a bout "in" from the walkouts, with round 0 and the word
+           Pre-fight on it. Locking on that killed every price on the card
+           before a punch was thrown -- forty minutes before, in the Tuivasa
+           bout (Jose, Sep 19, 2026: "why can't I bet Despaigne, buttons
+           aren't working"). A bout is under way when it has a round. */
+        var rd = parseInt((c.status || {}).period, 10) || 0;
+        var going = st.state === "post" || (st.state === "in" && rd >= 1);
+        if (going) {
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) { b.disabled = true; });
         }
