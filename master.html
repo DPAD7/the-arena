@@ -4776,6 +4776,19 @@
     if (mark) seat.appendChild(mark);
   }
 
+  /* whether a card has nothing left to say */
+  function isOver(card) {
+    return !!card && (card.classList.contains("done") ||
+                      card.dataset.settled === "1" ||
+                      card.dataset.settledBout === "1");
+  }
+  window.isOver = isOver;
+  /* and the eye comes off the moment it is */
+  function dropHide(card) {
+    var b = card && card.querySelector(".ghide");
+    if (b) b.parentNode.removeChild(b);
+  }
+  window.dropHide = dropHide;
   function armHide(card) {
     /* the eye rides in the head beside the time now, so it is no longer a
        child of the card -- looked for anywhere (Jose, Sep 18, 2026) */
@@ -4783,12 +4796,13 @@
     if (old) old.remove();
     var id = idOf(card);
     if (!id) return;
-    /* no button once it has kicked off: a game under way is not a thing to
-       decide against. It keeps its mark though -- hidden stays hidden while it
-       is on, and the day's marks are cleared together once the last game and
-       bout are over (Jose, Sep 19, 2026: "I don't want to add the button
-       back") */
-    if (started(card)) return;
+    /* the eye stays on a card for as long as the card can still change: not
+       to come, kicked off, being played. It goes when the thing is over,
+       because a finished game is not something to decide about any more
+       (Jose, Sep 19, 2026: "the hidden should always be an icon on the card,
+       live or pregame, so before the end of the day I can swap them between
+       lists -- no final card will have an eye icon"). */
+    if (isOver(card)) return;
     var b = hideBtn(!!hid[id]);
     b.addEventListener("click", function (e) {
       e.stopPropagation();
@@ -4989,7 +5003,10 @@
               '<span class="slotev">' + slot + '</span>'
             : '<span class="slotday">' + p.day.toUpperCase() + " " + p.date + "</span>" +
               (isCard ? p.time : slot)) +
-          (isCard ? '<span class="slotfin">FINAL</span>' : "") +
+          /* every row can say FINAL, not only a fight card's. It shows only
+             on a row that is over -- the rule is on .board.done -- and it is
+             what tells a seated row apart from the one it came from */
+          '<span class="slotfin">FINAL</span>' +
           (n > 1 && !isCard ? ' <span class="swipe">swipe &rsaquo;</span>' : "") +
           (isCard && !onDay
             ? '<svg class="slotmore" viewBox="0 0 24 24" aria-hidden="true">' +
@@ -6617,7 +6634,11 @@
            same finished summary every thirty seconds for as long as the tab
            stayed open, because only the final file ever set this flag and the
            file is not written until hours later (Jose, Sep 18, 2026) */
-        if (done) { card.classList.add("done"); card.dataset.settled = "1"; }
+        if (done) {
+          card.classList.add("done");
+          card.dataset.settled = "1";
+          dropHide(card);
+        }
         if (live || done) {
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) {
@@ -7460,6 +7481,7 @@
            "why is this still on the top, it's over?"). Same word, same rule,
            both sports. */
         card.classList.add("done");
+        dropHide(card);
         if (typeof sinkDone === "function") sinkDone();
         paidMethods(card, winner, (c.how && c.how.type) || how,
                     (c.how && c.how.round) || (c.status || {}).period,
@@ -7724,17 +7746,54 @@
        Kansas State and Georgia sat at the top of the board, finished, because
        Clemson in the same row was not (Jose, Sep 19, 2026: "it should be at
        the bottom of the page") */
-    /* A finished card used to be lifted out of its row and seated at the foot
-       under a copy of the row's own heading, so 3:30 PM appeared twice on the
-       day -- once at the top holding the game still being played, once at the
-       bottom holding the two that were over. Two headings for one kickoff
-       reads as the board saying the same thing twice
-       (Jose, Sep 19, 2026: "I have two cards for each, it should just be
-       one"). A row moves whole now, once every card in it is finished, so
-       there is one heading per kickoff and never a copy of it.
+    /* A card that is over goes to the back of the line on its own, whatever
+       else shares its kickoff: that is the rule for the whole board, not for
+       whole rows (Jose, Sep 19, 2026: "it's like an order -- when it says
+       final it goes to the back of the line").
 
-       The cost, stated plainly: a finished game sharing a row with one still
-       being played stays up there with it until that one ends too. */
+       It was doing this before and the heading was the problem: the row at
+       the foot copied the row at the top word for word, so 3:30 PM appeared
+       twice and read as the board saying the same thing over. The seated row
+       says FINAL now, the way the finished fight rows already do, so the two
+       can never be mistaken for each other. */
+    var tail = BOARD.querySelector(":scope > .hidewrap");
+    slots.forEach(function (sl) {
+      if (sl.dataset.overflow === "1") return;
+      var row = sl.querySelector(":scope > .caro");
+      if (!row) return;
+      var cards = [].slice.call(row.children);
+      var over = cards.filter(function (c) { return c.classList.contains("done"); });
+      if (!over.length || over.length === cards.length) return;
+      var key = "done-" + (sl.dataset.ord || "0");
+      var seat = BOARD.querySelector(':scope > .board[data-overflow="1"][data-of="' + key + '"]');
+      if (!seat) {
+        seat = document.createElement("div");
+        seat.className = "board board--nfl done";
+        seat.dataset.overflow = "1";
+        seat.dataset.of = key;
+        seat.dataset.ord = String(1000 + (+sl.dataset.ord || 0));
+        var head = sl.querySelector(":scope > .slot-h");
+        if (head) {
+          var copy = head.cloneNode(true);
+          /* the one thing that must differ from the row it came from */
+          var sw = copy.querySelector(".swipe");
+          if (sw) sw.parentNode.removeChild(sw);
+          if (!copy.querySelector(".slotfin")) {
+            var fin = document.createElement("span");
+            fin.className = "slotfin";
+            fin.textContent = "FINAL";
+            copy.appendChild(fin);
+          }
+          seat.appendChild(copy);
+        }
+        var into = document.createElement("div");
+        into.className = "caro";
+        seat.appendChild(into);
+        if (tail) BOARD.insertBefore(seat, tail); else BOARD.appendChild(seat);
+      }
+      var into2 = seat.querySelector(":scope > .caro");
+      over.forEach(function (c) { into2.appendChild(c); });
+    });
     var over = slots.filter(done);
     if (!over.length || over.length === slots.length) {
       // nothing settled, or everything is: the clock order stands
