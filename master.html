@@ -5512,11 +5512,19 @@
     }
     return null;
   }
+  /* ---- what counts, and when ----
+     A touchdown cannot be taken back by the rest of the game: a man on two
+     has won 2+ whatever happens next, and the week's ladder stops at 2, so
+     the week's touchdown legs are settled the moment they land. The season's
+     ladder runs to 5+, so it keeps climbing as he throws, which is the same
+     thing said louder.
+
+     The club result and the head to head are the two that can still turn, so
+     they wait for the whistle -- and they do that by themselves, because
+     neither is ever "W" until the game is post (Jose, Sep 20, 2026: "it can
+     happen as the game is going, then 30 seconds after"). */
   function cardFor(r, capped) {
     var legs = [], dec = 1, any = false;
-    /* the same rule the money page follows: nothing a game has done counts
-       until the game is over */
-    if (!r.fin) return { legs: [], dec: 0, priced: hasPrice(r) };
     var ladder = !capped && r.rungs && r.rungs.some(function (x) { return x; });
     var ptd = rungPrice(ladder ? r.rungs : (r.odds[0] || []), r.ptd, ladder ? 5 : 2);
     if (ptd) { legs.push({ what: ptd.rung + "+ PTD", odds: ptd.odds }); dec *= toDecOdds(ptd.odds); any = true; }
@@ -5749,11 +5757,8 @@
       };
       var paid = function (r) {
         var legs = [];
-        /* a game still being played has done nothing yet: its touchdowns are
-           on the board as they happen, but no leg of it is paid until the
-           whistle (Jose, Sep 20, 2026: "why is Watson 2 TD being checked as
-           paid... it pays no matter the result of the game") */
-        if (!r.fin) return "";
+        /* touchdowns as they land, the club and the head to head at the
+           whistle -- see cardFor */
         var a = best(r.odds[0], r.ptd); if (a) legs.push(a);
         var b2 = best(r.odds[1], r.atd); if (b2) legs.push(b2);
         if (r.h2h === "W" && r.odds[2]) legs.push(r.odds[2]);
