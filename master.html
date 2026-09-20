@@ -655,6 +655,40 @@
              height: 5px; overflow: hidden; }
   .drvtick i { width: 1px; height: 5px; background: rgba(255, 255, 255, 0.22); }
   .drvtick i.big { height: 5px; background: rgba(255, 255, 255, 0.42); }
+  /* A bout's own timeline, read the way the drive bar on a game card reads:
+     one rail, a section per round, filling as the fight runs. Where football
+     writes the down and distance, a fight writes how it ended once it has
+     (Jose, Sep 19, 2026: "call this timeline... 3 sections sorted equally for
+     the round, and it'll be the time counting"). */
+  .tline { display: none; padding: 27px 2px 3px; }
+  .gcard.has-tline .tline { display: block; }
+  .tlwrap { position: relative; }
+  .tlat { position: absolute; bottom: 100%; transform: translateX(-50%);
+          margin-bottom: 4px; white-space: nowrap;
+          font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+          font-weight: 700; font-size: 11.5px; letter-spacing: 0.05em;
+          color: #ffffff; font-variant-numeric: tabular-nums; }
+  .tlbar { position: relative; height: 3px; border-radius: 2px;
+           background: rgba(255, 255, 255, 0.16); }
+  .tlfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px;
+            background: #ffffff; transition: width 0.4s linear; }
+  .gcard.done .tlfill { background: var(--muted); }
+  /* where one round ends and the next begins */
+  /* a round mark stands over the fill, not under it: drawn beneath, each one
+     disappeared the moment the fight passed it, which is exactly when it
+     starts meaning something */
+  .tlcut { position: absolute; top: -3px; bottom: -3px; width: 2px; z-index: 2;
+           background: var(--ground, #0b0b0b); border-radius: 1px;
+           box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35); }
+  .tltick { display: flex; justify-content: space-between; margin-top: 3px;
+            height: 5px; overflow: hidden; }
+  .tltick i { width: 1px; height: 5px; background: rgba(255, 255, 255, 0.22); }
+  .tltick i.big { height: 5px; background: rgba(255, 255, 255, 0.42); }
+  /* while a bout is on, the mark and the clock stand on one line together
+     (Jose, Sep 19, 2026: "live icon, time, in line, 1 row") */
+  .gtime--live { display: flex; align-items: center; justify-content: center;
+                 gap: 8px; }
+  .gtime--live .glivebar { margin-top: 0; }
   .gcard {
     /* min-width:0, or the card grows to whatever its widest row needs and
        runs off the side of a phone -- a flex item will not shrink below its
@@ -7197,13 +7231,15 @@
       var lab = EXACT[String(res.shortDisplayName || "").toLowerCase().trim()] ||
                 EXACT[String(res.displayName || "").toLowerCase().trim()];
       if (!lab) return;
+      /* the method rides on the timeline, where a game card carries its down
+         and distance. The clock row says FINAL, the same word a finished game
+         says, instead of printing the method a second time an inch above it
+         (Sep 19, 2026) */
       var gt = card.querySelector(".gtime");
       if (gt) {
         var fw = gt.querySelector(".fwt");
-        gt.innerHTML = '<span class="fhow">' + lab +
-                       (d.period ? " \u00b7 R" + d.period : "") +
-                       (d.displayClock ? " " + d.displayClock : "") + "</span>" +
-                       (fw ? fw.outerHTML : "");
+        gt.classList.remove("gtime--live");
+        gt.innerHTML = '<span class="fhow">FINAL</span>' + (fw ? fw.outerHTML : "");
       }
       var win = "";
       card.querySelectorAll(".ghead--fight .gteam").forEach(function (s) {
@@ -7214,8 +7250,72 @@
         }
       });
       paidMethods(card, win, lab, d.period, d.displayClock);
+      /* the timeline stops where the bout stopped and says how it ended,
+         which is the fight's answer to down and distance */
+      drawTimeline(card, {format: card._fmt || {}}, d, d.period,
+                   lab + (d.period ? " \u00b7 R" + d.period : "") +
+                   (d.displayClock ? " " + d.displayClock : ""));
       showHits(card);
     }).catch(function () {});
+  }
+  /* How far through the bout we are, drawn once and written to after that.
+     ESPN gives the round and the seconds elapsed inside it, and the format
+     says how many rounds there are, so the whole fight is rounds x five
+     minutes and the fill is simply where we have got to. A bout that is over
+     stops at the moment it ended and says how. */
+  function drawTimeline(card, c, st, rd, label) {
+    var rounds = (((c.format || {}).regulation || {}).periods) || 3;
+    var each = (((c.format || {}).regulation || {}).clock) || 300;
+    var state = ((st.type || {}).state) || "";
+    var secs = typeof st.clock === "number" ? st.clock : 0;
+    var on = (state === "in" && rd >= 1) || state === "post";
+    var box = card.querySelector(".tline");
+    if (!on) {
+      card.classList.remove("has-tline");
+      if (box) box.innerHTML = "";
+      return;
+    }
+    if (!box) {
+      var head = card.querySelector(".ghead");
+      if (!head) return;
+      box = document.createElement("div");
+      box.className = "tline";
+      head.parentNode.insertBefore(box, head.nextSibling);
+    }
+    var whole = rounds * each;
+    var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + secs));
+    var pct = whole ? (gone / whole) * 100 : 0;
+    var wrap = box.querySelector(".tlwrap");
+    if (!wrap) {
+      var cuts = "";
+      for (var r = 1; r < rounds; r++) {
+        cuts += '<i class="tlcut" style="left:' + ((r / rounds) * 100) + '%"></i>';
+      }
+      var ticks = "";
+      for (var t = 0; t < 50; t++) {
+        ticks += "<i" + (t % 5 === 0 ? ' class="big"' : "") + "></i>";
+      }
+      box.innerHTML =
+        '<div class="tlwrap">' +
+          '<span class="tlat"></span>' +
+          '<div class="tlbar"><i class="tlfill"></i>' + cuts + "</div>" +
+          '<div class="tltick">' + ticks + "</div>" +
+        "</div>";
+      wrap = box.querySelector(".tlwrap");
+    }
+    card.classList.add("has-tline");
+    var fill = wrap.querySelector(".tlfill");
+    if (fill) fill.style.width = pct + "%";
+    /* the running clock rides over the head of the fill, kept off both ends
+       so it never hangs off the card */
+    var at = wrap.querySelector(".tlat");
+    var said = state === "post"
+      ? (label || "FINAL")
+      : "R" + rd + (st.displayClock ? " " + st.displayClock : "");
+    if (at) {
+      at.style.left = Math.max(10, Math.min(90, pct)) + "%";
+      if (at.textContent !== said) at.textContent = said;
+    }
   }
   function settleBoutCard(card, c) {
         var st = ((c.status || {}).type) || {};
@@ -7240,6 +7340,7 @@
         if (gtl) {
           var onAir = st.state === "in" && rd >= 1;
           var bar = gtl.querySelector(".glivebar");
+          gtl.classList.toggle("gtime--live", onAir);
           if (onAir && !bar) {
             bar = document.createElement("span");
             bar.className = "glivebar";
@@ -7250,6 +7351,7 @@
             bar.parentNode.removeChild(bar);
           }
         }
+        drawTimeline(card, c, c.status || {}, rd, "");
         if (st.state !== "post") return;
         var winner = "";
         (c.competitors || []).forEach(function (x) {
@@ -7269,16 +7371,20 @@
           var COARSE = { "Decision": "DEC", "Kotko": "TKO", "KO/TKO": "TKO", "Submission": "SUB", "Draw": "DRAW", "No Contest": "NC" };
           c.how = { type: COARSE[how] || how.toUpperCase(), round: (c.status || {}).period || "", time: (c.status || {}).displayClock || "" };
         }
+        card._fmt = c.format || card._fmt;
         if (c.how && c.how.type) {
           var SHORT = { "Unanimous Decision": "UD", "Majority Decision": "MD", "Split Decision": "SD",
                         "Submission": "SUB", "KO/TKO": "TKO", "TKO": "TKO", "KO": "KO", "Knockout": "KO", "Technical Knockout": "TKO", "Technical Decision": "TD",
                         "Disqualification": "DQ", "DQ": "DQ", "Draw": "DRAW", "No Contest": "NC" };
           var lab = SHORT[c.how.type] || c.how.type;
+          drawTimeline(card, c, c.status || {}, (c.how.round || rd),
+                       lab + (c.how.round ? " \u00b7 R" + c.how.round : "") +
+                       (c.how.time ? " " + c.how.time : ""));
           var gt = card.querySelector(".gtime");
           if (gt) {
             var fw = gt.querySelector(".fwt");
-            gt.innerHTML = '<span class="fhow">' + lab + (c.how.round ? " \u00b7 R" + c.how.round : "") +
-                           (c.how.time ? " " + c.how.time : "") + "</span>" + (fw ? fw.outerHTML : "");
+            gt.classList.remove("gtime--live");
+            gt.innerHTML = '<span class="fhow">FINAL</span>' + (fw ? fw.outerHTML : "");
           }
         }
         if (!card.dataset.toldPrices) {
