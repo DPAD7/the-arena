@@ -145,8 +145,10 @@ def stub(out, g):
                 [(x or [None])[0] for x in (mine.get("atd") or [None, None])],
                 ((pz.get("h2h") or [None, None])[i] or [None])[0],
                 g[9 if i == 0 else 11] or None]
+        # the same length as a played row, so nothing that reads by position
+        # falls off the end of a fixture nobody has played yet
         out.setdefault(str(g[0]), []).append([nm, g[3] if i == 0 else g[4], str(pid), 0, 0,
-                                              "", "", 0, str(g[1]), i, None, odds, 1])
+                                              "", "", 0, str(g[1]), i, None, odds, 1, None, 0])
 
 
 def main():
