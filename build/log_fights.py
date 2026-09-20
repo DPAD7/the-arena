@@ -159,10 +159,14 @@ def log_plays(bout, fh, have):
     return wrote
 
 
-def one_pass(bouts, fh):
-    """A reading of every bout being fought. Returns how many are still on."""
-    live = 0
+def one_pass(bouts, fh, done):
+    """A reading of every bout being fought. Returns how many are still on,
+       and how many are still to come. A bout in `done` has had its result
+       written and is not asked about again."""
+    live, ahead = 0, 0
     for b in bouts:
+        if b["bout"] in done:
+            continue
         st = ask(b["status"].replace("https://", "http://")) if b["status"] else {}
         t = (st.get("type") or {})
         state = t.get("state")
@@ -171,7 +175,10 @@ def one_pass(bouts, fh):
         # nothing to say; one that is over is written once and then left
         if state == "in" and rd >= 1:
             live += 1
-        elif state != "post":
+        elif state == "post":
+            done.add(b["bout"])
+        else:
+            ahead += 1
             continue
         row = {"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                "bout": b["bout"], "state": state, "round": rd,
@@ -185,7 +192,7 @@ def one_pass(bouts, fh):
             continue
         fh.write(json.dumps(row, separators=(",", ":")) + "\n")
         fh.flush()
-    return live
+    return live, ahead
 
 
 def main():
@@ -205,20 +212,26 @@ def main():
     have = seen_plays()
     print("plays already on file: %d" % len(have))
     started = time.time()
-    quiet = 0
+    done = set()
     while True:
-        live = one_pass(bouts, fh)
+        live, ahead = one_pass(bouts, fh, done)
         for b in bouts:
-            log_plays(b, ph, have)
+            if b["bout"] not in done or live:
+                log_plays(b, ph, have)
         if "--once" in sys.argv:
             break
-        # the card is over when nothing has been live for a long stretch, or
-        # after nine hours, whichever comes first -- a bill does not run longer
-        quiet = 0 if live else quiet + 1
-        if quiet > int(3600 / every) or time.time() - started > 9 * 3600:
-            print("card finished; %d readings on file" % sum(1 for _ in open(OUT)))
+        # The card is over the moment its last bout is: nothing on, nothing
+        # still to come. It used to wait an hour of quiet after that, asking
+        # ESPN about every finished bout every six seconds the whole time,
+        # and ran until five in the morning on a card that ended at one
+        # (Jose, Sep 20, 2026: "it needs to stop polling after the last fight
+        # goes final"). Nine hours is the backstop for a card that never says.
+        if (not live and not ahead) or time.time() - started > 9 * 3600:
+            print("card finished: %d of %d bouts final; %d readings on file"
+                  % (len(done), len(bouts), sum(1 for _ in open(OUT))))
             break
-        time.sleep(every)
+        # nothing on yet: no need to look every few seconds for the walkouts
+        time.sleep(every if live else max(every, 60))
     fh.close()
     ph.close()
 

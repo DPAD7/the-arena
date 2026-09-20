@@ -8497,6 +8497,29 @@
     window._sinkAsk = setTimeout(function () { sinkDone(); }, 1200);
   }
   window.askSink = askSink;
+  /* ---- when to look again ----
+     Only while something on the board is on or about to be. Thirty seconds
+     while any game or bout is live (five for a bout, below). Otherwise the
+     next look waits for the next kickoff on the board -- twenty minutes
+     before it -- and never comes sooner than a minute. Once the last thing
+     on the board is over there is nothing left to ask about, and nothing is
+     asked: 0 means stop. A college Saturday looks after college, a Sunday
+     after the NFL, because the board is what is on the tab (Jose, Sep 20,
+     2026: "no more polling for non-live events after they are done -- thin
+     for CFB on CFB days and NFL on NFL days"). */
+  function nextLook() {
+    var now = Date.now(), soonest = Infinity, live = false;
+    document.querySelectorAll(".board:not([hidden]) .gcard, .hidebox .gcard").forEach(function (c) {
+      if (c.classList.contains("done") || c.dataset.settled === "1" ||
+          c.dataset.settledBout === "1") return;
+      var k = c.dataset.kick ? Date.parse(c.dataset.kick) : 0;
+      if (c.classList.contains("live") || c.querySelector(".glivebar") || (k && k <= now)) { live = true; return; }
+      if (k) soonest = Math.min(soonest, k);
+    });
+    if (live) return 30000;
+    if (soonest === Infinity) return 0;
+    return Math.max(60000, Math.min(soonest - 20 * 60000 - now, 5 * 60000));
+  }
   function refreshVisible() {
     var now = Date.now(), soon = now + 8 * 86400000;
     document.querySelectorAll(".board:not([hidden]) .gcard[data-espn], .hidebox .gcard[data-espn]")
@@ -8546,7 +8569,22 @@
     });
   }
   setInterval(formLive, 30000);
-  setInterval(function () { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); }, 30000);
+  /* the games' beat: as often as nextLook() says, and when it says stop, a
+     look at the board every five minutes with no reading behind it, so a tab
+     change or a new day picks the beat back up */
+  (function gameTicking() {
+    var at = 0;
+    var beat = function () {
+      var want = nextLook();
+      clearTimeout(at);
+      at = setTimeout(function () {
+        if (nextLook()) { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); }
+        beat();
+      }, want || 5 * 60000);
+    };
+    beat();
+    window.lookAgain = beat;
+  })();
   /* While a bout is actually being fought the board asks every five seconds
      instead of every thirty. ESPN's feed is entered cageside, so it runs
      ahead of a stream, which is half a minute or more behind; on a thirty
@@ -8560,10 +8598,14 @@
       return !![].slice.call(document.querySelectorAll(".gcard[data-bout]"))
         .filter(function (c) { return c.classList.contains("live"); }).length;
     };
+    /* five seconds while a bout is on; otherwise the games' rule: wait for
+       the next first bell, and once the last bout is over, nothing -- a look
+       at the board every five minutes and no reading behind it */
     var beat = function () {
-      var want = anyLive() ? 5000 : 30000;
+      var look = nextLook();
+      var want = anyLive() ? 5000 : (look || 5 * 60000);
       clearTimeout(at);
-      at = setTimeout(function () { refreshFights(); beat(); }, want);
+      at = setTimeout(function () { if (anyLive() || nextLook()) refreshFights(); beat(); }, want);
     };
     beat();
     document.addEventListener("visibilitychange", function () {
