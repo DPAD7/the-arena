@@ -669,7 +669,7 @@
           font-weight: 700; font-size: 11.5px; letter-spacing: 0.05em;
           color: #ffffff; font-variant-numeric: tabular-nums; }
   .tlbar { position: relative; height: 3px; border-radius: 2px;
-           background: rgba(255, 255, 255, 0.16); }
+           background: rgba(255, 255, 255, 0.16); margin: 6px 0; }
   .tlfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px;
             background: #ffffff; transition: width 0.4s linear; }
   .gcard.done .tlfill { background: var(--muted); }
@@ -684,12 +684,14 @@
      is: a tall bright one at every round end, a shorter one at the half of
      each round, and the fine ones between them kept faint
      (Jose, Sep 19, 2026: "3 equal ticks then one in each, like the .5") */
-  .tltick { position: relative; margin-top: 3px; height: 11px; }
-  .tltick i { position: absolute; top: 0; transform: translateX(-50%); }
-  .tltick i.half { height: 7px; width: 2px; border-radius: 1px;
-                   background: rgba(255, 255, 255, 0.45); }
-  .tltick i.rnd { height: 11px; width: 2px; border-radius: 1px;
-                  background: rgba(255, 255, 255, 0.85); }
+  /* the marks stand on the rail itself, crossing it, rather than in a row
+     underneath it (Jose, Sep 19, 2026: "it needs to be on the line") */
+  .tltick { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+  .tltick i { position: absolute; top: 50%; width: 2px; border-radius: 1px;
+              transform: translate(-50%, -50%); }
+  .tltick i.half { height: 9px; background: rgba(255, 255, 255, 0.50); }
+  .tltick i.rnd { height: 15px; background: #ffffff;
+                  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.55); }
   /* while a bout is on, the mark and the clock stand on one line together
      (Jose, Sep 19, 2026: "live icon, time, in line, 1 row") */
   .gtime--live { display: flex; align-items: center; justify-content: center;
@@ -7313,8 +7315,8 @@
       box.innerHTML =
         '<div class="tlwrap">' +
           '<span class="tlat"></span>' +
-          '<div class="tlbar"><i class="tlfill"></i>' + cuts + "</div>" +
-          '<div class="tltick">' + ticks + "</div>" +
+          '<div class="tlbar"><i class="tlfill"></i>' + cuts +
+            '<div class="tltick">' + ticks + "</div></div>" +
         "</div>";
       wrap = box.querySelector(".tlwrap");
     }
