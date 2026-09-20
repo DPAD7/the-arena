@@ -677,13 +677,19 @@
   /* a round mark stands over the fill, not under it: drawn beneath, each one
      disappeared the moment the fight passed it, which is exactly when it
      starts meaning something */
-  .tlcut { position: absolute; top: -3px; bottom: -3px; width: 2px; z-index: 2;
-           background: var(--ground, #0b0b0b); border-radius: 1px;
-           box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35); }
-  .tltick { display: flex; justify-content: space-between; margin-top: 3px;
-            height: 5px; overflow: hidden; }
-  .tltick i { width: 1px; height: 5px; background: rgba(255, 255, 255, 0.22); }
-  .tltick i.big { height: 5px; background: rgba(255, 255, 255, 0.42); }
+  .tlcut { position: absolute; top: -5px; bottom: -5px; width: 3px; z-index: 2;
+           background: var(--ground, #0b0b0b); border-radius: 2px;
+           box-shadow: 0 0 0 1.5px rgba(255, 255, 255, 0.75); }
+  /* the ticks under a bout say where the rounds are, not how long the rail
+     is: a tall bright one at every round end, a shorter one at the half of
+     each round, and the fine ones between them kept faint
+     (Jose, Sep 19, 2026: "3 equal ticks then one in each, like the .5") */
+  .tltick { position: relative; margin-top: 3px; height: 11px; }
+  .tltick i { position: absolute; top: 0; transform: translateX(-50%); }
+  .tltick i.half { height: 7px; width: 2px; border-radius: 1px;
+                   background: rgba(255, 255, 255, 0.45); }
+  .tltick i.rnd { height: 11px; width: 2px; border-radius: 1px;
+                  background: rgba(255, 255, 255, 0.85); }
   /* while a bout is on, the mark and the clock stand on one line together
      (Jose, Sep 19, 2026: "live icon, time, in line, 1 row") */
   .gtime--live { display: flex; align-items: center; justify-content: center;
@@ -7287,13 +7293,22 @@
     var pct = whole ? (gone / whole) * 100 : 0;
     var wrap = box.querySelector(".tlwrap");
     if (!wrap) {
+      /* the round line is marked once, by the tall tick under the rail. It
+         used to be marked twice -- a cut on the rail and a tick beneath it at
+         the same place, one directly over the other
+         (Jose, Sep 19, 2026: "you have 2 ticks on top of each other") */
       var cuts = "";
-      for (var r = 1; r < rounds; r++) {
-        cuts += '<i class="tlcut" style="left:' + ((r / rounds) * 100) + '%"></i>';
-      }
-      var ticks = "";
-      for (var t = 0; t < 50; t++) {
-        ticks += "<i" + (t % 5 === 0 ? ' class="big"' : "") + "></i>";
+      /* one tall mark where each round ends, one shorter at each round's
+         half, and eight faint ones spread through every round */
+      /* seven marks for a three round fight and nothing else: the two ends,
+         the two round breaks, and the half of each round. The faint hairlines
+         between them were the rail measuring itself, which is not something
+         anybody reads (Jose, Sep 19, 2026: "drop em") */
+      var ticks = '<i class="rnd" style="left:0"></i>';
+      for (var r2 = 0; r2 < rounds; r2++) {
+        var from = (r2 / rounds) * 100, span = (1 / rounds) * 100;
+        ticks += '<i class="half" style="left:' + (from + span / 2) + '%"></i>';
+        ticks += '<i class="rnd" style="left:' + (from + span) + '%"></i>';
       }
       box.innerHTML =
         '<div class="tlwrap">' +
@@ -7304,6 +7319,16 @@
       wrap = box.querySelector(".tlwrap");
     }
     card.classList.add("has-tline");
+    /* ESPN's clock jumps: it sits still for fifteen or thirty seconds and
+       then moves by that much at once, because it is written cageside when
+       something is logged. So the card holds the last reading and walks it
+       forward a second at a time, and every fresh reading resets it
+       (Jose, Sep 19, 2026: "it should tick, no?"). The seconds between two
+       readings are ours, not the cage's, and a correction can pull the clock
+       back a little; it is never allowed past the end of the round it is in,
+       which is where a guess would do real damage. */
+    card._tl = {gone: gone, at: Date.now(), rd: rd, rounds: rounds,
+                each: each, whole: whole, live: state === "in" && rd >= 1};
     var fill = wrap.querySelector(".tlfill");
     if (fill) fill.style.width = pct + "%";
     /* the running clock rides over the head of the fill, kept off both ends
@@ -7317,6 +7342,37 @@
       if (at.textContent !== said) at.textContent = said;
     }
   }
+  /* one clock for every bout on the board, a beat a second */
+  function mmss(n) {
+    n = Math.max(0, Math.round(n));
+    var m = Math.floor(n / 60), s = n % 60;
+    return m + ":" + (s < 10 ? "0" : "") + s;
+  }
+  setInterval(function () {
+    document.querySelectorAll(".gcard[data-bout].live").forEach(function (card) {
+      var t = card._tl;
+      if (!t || !t.live) return;
+      var on = t.gone + (Date.now() - t.at) / 1000;
+      /* never past the end of the round we were told we are in */
+      on = Math.min(on, t.rd * t.each);
+      var wrap = card.querySelector(".tlwrap");
+      if (!wrap) return;
+      var at = wrap.querySelector(".tlat");
+      var fill = wrap.querySelector(".tlfill");
+      var pct = t.whole ? (on / t.whole) * 100 : 0;
+      if (fill) fill.style.width = pct + "%";
+      if (at) {
+        at.style.left = Math.max(10, Math.min(90, pct)) + "%";
+        var say = "R" + t.rd + " " + mmss(on - (t.rd - 1) * t.each);
+        if (at.textContent !== say) at.textContent = say;
+      }
+      var gt = card.querySelector(".gtime .fhow");
+      if (gt) {
+        var g = "R" + t.rd + " " + mmss(on - (t.rd - 1) * t.each);
+        if (gt.textContent !== g) gt.textContent = g;
+      }
+    });
+  }, 1000);
   function settleBoutCard(card, c) {
         var st = ((c.status || {}).type) || {};
         /* ESPN calls a bout "in" from the walkouts, with round 0 and the word
