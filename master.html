@@ -4430,12 +4430,14 @@
   function clubAway(lg, key) {
     return ESPN_CLUB + lg + "/500/" + key + ".png&w=96&h=96";
   }
-  function facePic(id) { return "faces/mma/" + id + ".png"; }
+  /* through the face function, like a passer's: a fighter we have not
+     mirrored yet is a 404, never the web page cached for a month */
+  function facePic(id) { return "face/mma/" + id + ".png"; }
   function faceAway(id) {
     return "https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/" +
            id + ".png&w=220&h=220&scale=crop";
   }
-  function scorePic(id) { return "faces/mma/s" + id + ".png"; }
+  function scorePic(id) { return "face/mma/s" + id + ".png"; }
   function scoreAway(id) {
     return "https://assets-sports-gcp.thescore.com/mma/fighter/" + id + "/w192xh192_headshot.png";
   }
