@@ -31,6 +31,10 @@ import urllib.request
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "data", "fight_log.jsonl")
+# the moments, as against the running totals: round start and end, takedowns
+# and attempts, knockdowns, a pause and why, the result. Each carries the time
+# it happened, which a total never can (Jose, Sep 19, 2026)
+PLAYS = os.path.join(D, "data", "fight_plays.jsonl")
 # plain http on purpose: this core host answers either way, and https through
 # urllib fails on a Mac without a certificate bundle, which is where this runs
 CORE = "http://sports.core.api.espn.com/v2/sports/mma/leagues/ufc"
@@ -92,7 +96,7 @@ def bouts_of(event_id):
             aid = str((c.get("athlete") or {}).get("$ref", "")).split("/athletes/")[-1].split("?")[0]
             men.append({"id": aid, "stats": (c.get("statistics") or {}).get("$ref", ""),
                         "order": c.get("order")})
-        out.append({"bout": str(comp.get("id")), "men": men,
+        out.append({"bout": str(comp.get("id")), "men": men, "event": str(event_id),
                     "status": (comp.get("status") or {}).get("$ref", "")})
     return out
 
@@ -116,6 +120,43 @@ def read_stats(ref):
             if st.get("name") in KEEP:
                 out[st["name"]] = st.get("value", st.get("displayValue"))
     return out
+
+
+def seen_plays():
+    """Every play already on file, so a re-run adds and never repeats."""
+    have = set()
+    if os.path.exists(PLAYS):
+        for line in open(PLAYS):
+            try:
+                have.add(json.loads(line)["id"])
+            except Exception:
+                pass
+    return have
+
+
+def log_plays(bout, fh, have):
+    """The moments of one bout, each written once."""
+    d = ask("%s/events/%s/competitions/%s/plays?limit=300"
+            % (CORE, bout.get("event", ""), bout["bout"])) if bout.get("event") else {}
+    if not d.get("items"):
+        return 0
+    wrote = 0
+    for it in d["items"]:
+        play = ask(it["$ref"].replace("https://", "http://")) if "$ref" in it else it
+        pid = str(play.get("id") or "")
+        if not pid or pid in have:
+            continue
+        have.add(pid)
+        fh.write(json.dumps({
+            "id": pid, "bout": bout["bout"], "seq": play.get("sequenceNumber"),
+            "what": ((play.get("type") or {}).get("text")),
+            "round": ((play.get("period") or {}).get("number")),
+            "clock": ((play.get("clock") or {}).get("displayValue")),
+            "wallclock": play.get("wallclock"),
+        }, separators=(",", ":")) + "\n")
+        wrote += 1
+    fh.flush()
+    return wrote
 
 
 def one_pass(bouts, fh):
@@ -160,10 +201,15 @@ def main():
         return
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
     fh = open(OUT, "a")
+    ph = open(PLAYS, "a")
+    have = seen_plays()
+    print("plays already on file: %d" % len(have))
     started = time.time()
     quiet = 0
     while True:
         live = one_pass(bouts, fh)
+        for b in bouts:
+            log_plays(b, ph, have)
         if "--once" in sys.argv:
             break
         # the card is over when nothing has been live for a long stretch, or
@@ -174,6 +220,7 @@ def main():
             break
         time.sleep(every)
     fh.close()
+    ph.close()
 
 
 if __name__ == "__main__":
