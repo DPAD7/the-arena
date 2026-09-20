@@ -3040,8 +3040,20 @@
   /* when our copy is missing, the silhouette. The page never asks ESPN for a
      picture: faces.py fetches them on the sweep, and the page's only ESPN
      call is the live-game refresh (Jose, Sep 16, 2026). */
+  /* One retry, past the cache, before the silhouette. A face asked for
+     before the sweep had mirrored it came back as the web page with a
+     200 and a month's immutable caching on it, so the browser held that
+     page under the man's name and drew the silhouette on every load after --
+     Daniels and Prescott on a phone while the site itself served both
+     (Jose, Sep 20, 2026: "the most recent screenshot says otherwise"). The
+     retry carries a query the cache has never seen. */
   function faceChain(img) {
-    img.onerror = function () { img.onerror = null; img.src = NOFACE; };
+    img.onerror = function () {
+      img.onerror = function () { img.onerror = null; img.src = NOFACE; };
+      var src = img.getAttribute("src") || "";
+      if (!src || src.indexOf("data:") === 0 || src.indexOf("?") >= 0) { img.onerror = null; img.src = NOFACE; return; }
+      img.src = src + "?r=" + Date.now();
+    };
   }
   function dressFaces(card) {
     if (!card || card.dataset.lg !== "college-football") return;
@@ -3493,9 +3505,37 @@
           playHls(vid, j.accessUrl);
         })
         .catch(function () {
-          now.textContent = clips.length ? "Could not load that clip \u2014 here is the rest of the game"
-                                         : "Could not load that clip";
-          list.hidden = false;
+          /* The NFL resolver needs client credentials the project does not
+             carry, so it can never hand back a playable address. ESPN often
+             has the very same play as a plain mp4 -- "Joe Burrow connects
+             with Mike Gesicki for a Bengals TD" was sitting in the list under
+             the failure. If a clip in the list is about the same men, play
+             that instead of dumping the whole game on him
+             (Jose, Sep 20, 2026: "one gives me tons of other clips and I only
+             need the one that it goes to"). */
+          var want = String((only && only.name) || "").toLowerCase()
+            .split(/[^a-z']+/).filter(function (w) { return w.length > 2 && w !== "the" && w !== "to"; });
+          var at = -1;
+          if (want.length) {
+            clips.forEach(function (c, i) {
+              if (at >= 0) return;
+              var h = (c.headline || "").toLowerCase();
+              if (want.every(function (w) { return h.indexOf(w) >= 0; })) at = i;
+            });
+          }
+          if (at >= 0) {
+            if (vid._hls) { try { vid._hls.destroy(); } catch (e) {} vid._hls = null; }
+            vid.src = clips[at].links.source.href;
+            vid.load();
+            now.textContent = "";
+            vid.play().catch(function () {});
+            return;
+          }
+          /* One play was asked for, so one play is what the sheet is. Handing
+             him the rest of the game instead served Burrow's pick-six when
+             the touchdown was wanted (Jose, Sep 20, 2026: "make sure it's
+             just the one clip and not a list of any other"). */
+          now.textContent = "Could not load that clip";
         });
       return;
     }
@@ -4759,10 +4799,15 @@
      corner: it is built at the end of the card, so it is seated here once the
      node exists (Jose, Sep 17, 2026) */
   function seatWatch(card) {
-    var when = card.querySelector(":scope > .ghead > .gtime");
+    /* the seat may already be built: a card is kept between renders now, so
+       the clock is inside it the second time round and looking for a clock
+       that is a direct child of the head found nothing, which left the eye
+       down in the corner instead of on the row */
+    var seat = card.querySelector(":scope > .ghead > .gwhen");
+    var when = seat ? seat.querySelector(":scope > .gtime")
+                    : card.querySelector(":scope > .ghead > .gtime");
     var mark = card.querySelector(":scope > .gwatch");
     if (!when) return;
-    var seat = when.parentNode.querySelector(":scope > .gwhen");
     if (!seat) {
       seat = document.createElement("span");
       seat.className = "gwhen";
@@ -4778,12 +4823,18 @@
 
   /* whether a card has nothing left to say */
   /* which ids have actually finished, however we came to know it */
+  /* What has finished is remembered on the device, not for the session. The
+     order is worked out from this before any card is drawn, so a fresh tab
+     that had forgotten everything would hand him plain clock order and then
+     move it once the results came in -- the jump he is not supposed to see
+     (Jose, Sep 20, 2026: "it should not need to load"). An id is one game
+     for ever, so remembering it is over can never be wrong later. */
   var OVER = {};
-  try { OVER = JSON.parse(sessionStorage.getItem("arena.over") || "{}") || {}; } catch (e) { OVER = {}; }
+  try { OVER = JSON.parse(localStorage.getItem("arena.over") || "{}") || {}; } catch (e) { OVER = {}; }
   function markOver(id) {
     if (!id || OVER[id]) return;
     OVER[id] = 1;
-    try { sessionStorage.setItem("arena.over", JSON.stringify(OVER)); } catch (e) {}
+    try { localStorage.setItem("arena.over", JSON.stringify(OVER)); } catch (e) {}
     /* A card settles after the board has already been drawn, so a hidden one
        that has just finished would sit in the shelf until something else
        caused a render. It asks for one -- once he has left the board alone,
@@ -4816,6 +4867,33 @@
     if (b) b.parentNode.removeChild(b);
   }
   window.dropHide = dropHide;
+  /* The eye, the LIVE mark and the play button are one row, on every card,
+     on the board and inside the shelf alike, and they stay there for as long
+     as the thing can still change. When it is final all three go and the card
+     is just a result. Three places used to seat the eye and each one only
+     handled the card it knew about, so a card that went live while folded
+     away came back without it (Jose, Sep 20, 2026: "the eye icon still needs
+     to be on the hidden ones... eye, live, play button until final. That's
+     standard across all pages"). This is the one rule; everything calls it. */
+  function seatEye(card) {
+    if (!card) return;
+    if (isOver(card)) { dropHide(card); return; }
+    if (!card.querySelector(".ghide")) armHide(card);
+    var eye = card.querySelector(".ghide");
+    if (!eye) return;
+    /* a live card has a bar of its own -- football builds one inside the
+       clock, a bout turns the clock itself into one -- and the eye leads it */
+    var bar = card.querySelector(".glivebar") ||
+              card.querySelector(".gtime--live");
+    if (bar) {
+      if (eye.parentNode !== bar) bar.insertBefore(eye, bar.firstChild);
+      var wat = card.querySelector(".gwatch");
+      if (wat && wat.parentNode !== bar) bar.appendChild(wat);
+      return;
+    }
+    seatWatch(card);
+  }
+  window.seatEye = seatEye;
   function armHide(card) {
     /* the eye rides in the head beside the time now, so it is no longer a
        child of the card -- looked for anywhere (Jose, Sep 18, 2026) */
@@ -4894,11 +4972,22 @@
     });
   }
 
+  /* Every card the page draws is kept and handed back next time it is asked
+     for. It used to be drawn fresh from its own HTML on every render, which
+     threw away everything the settler had written -- the score, the FINAL,
+     the class that says it is over -- so after each tab change the board knew
+     nothing until the reads came back, and the order could not be right until
+     they did (Jose, Sep 20, 2026: "it needs to be instant... if it has a
+     FINAL badge it should not be above a live"). */
+  var MADE = {};
   function nodeFor(id, html) {
     if (STATIC[id]) return STATIC[id];
+    if (MADE[id]) return MADE[id];
     var box = document.createElement("div");
     box.innerHTML = html;
     var card = box.firstElementChild;
+    MADE[id] = card;
+    card.dataset.pooled = "1";
     card.querySelectorAll(".gmorebtn").forEach(function (b) {
       b.addEventListener("click", function () {
         var sheet = b.nextElementSibling;
@@ -4949,18 +5038,30 @@
        event are still running then. Football is done four hours after
        kickoff, a fight card eight hours after the first bell, which is the
        reach the fight refresh already uses (Jose, Sep 19, 2026). */
-    var reach = function (it) { return it[0] === "mma" ? 8 * 3600000 : 4 * 3600000; };
+    /* Eight hours was the reach of a whole fight card, from the first bell.
+       Every item here is one bout with its own start time, though, so it was
+       holding a bout that finished at nine o'clock at the top of the day
+       until five in the morning. A bout is twenty-five minutes at the most;
+       two hours covers a delayed one and nothing longer. */
+    var reach = function (it) { return it[0] === "mma" ? 2 * 3600000 : 4 * 3600000; };
     /* A thing is over when it says it is over. The clock was the only test,
        so six fights that had all finished sat in the shelf waiting out eight
        hours from the first bell (Jose, Sep 20, 2026: "why are these still in
        hidden, the others are over"). The cards mark themselves done as they
        settle, and OVER remembers which -- the clock is only the fallback for
        something we have never had a card for. */
-    var dayOver = all.length > 0 && all.every(function (it) {
+    /* Over, in order of what we actually know: the card itself if we have
+       drawn one, then what has finished on this device, then the clock. The
+       card is read first because it is the thing he is looking at -- a row of
+       FINAL badges can never sit above a live one again. */
+    var finished = function (it) {
+      var card = STATIC[it[1]] || MADE[it[1]];
+      if (card) return card.classList.contains("done");
       if (OVER[String(it[1])]) return true;
       var off = Date.parse(it[2]);
-      return off && now >= off + reach(it);
-    });
+      return !!off && now >= off + reach(it);
+    };
+    var dayOver = all.length > 0 && all.every(finished);
     all.forEach(function (it) {
       /* A card that has finished comes back out and takes its place in the
          order, on its own. Waiting for the whole list to be over never fired
@@ -4987,7 +5088,23 @@
     var when = function (it) {
       return it[0] === "mma" && !showLeague ? firstBell[it[4] || "Fight card"] : Date.parse(it[2]);
     };
-    items.sort(function (a, b) {
+    /* ---- the order ----
+       Whatever is still to come or on now leads, in clock order. Whatever is
+       over follows, in clock order behind it. So the one being played sits at
+       the top, and the moment it is over the next one takes its place and it
+       goes to the back -- and when the last of them is over the two groups
+       are one group and the list reads straight through by time.
+
+       This is worked out from the list, here, before a single card is drawn.
+       It used to be worked out from the cards after they had loaded, so the
+       board he was handed was in plain clock order and then jumped under him
+       (Jose, Sep 20, 2026: "it should not need to load... I see it jump from
+       the original first event to the 5th"). The same rule runs on every
+       tab and over both lists -- the day, the NFL week, the college week,
+       the fight card, and the shelf under each. */
+    var byOrder = function (a, b) {
+      var fa = finished(a) ? 1 : 0, fb = finished(b) ? 1 : 0;
+      if (fa !== fb) return fa - fb;
       var d = when(a) - when(b);
       if (d) return d;
       if (a[0] === "mma" && b[0] === "mma") {
@@ -4996,35 +5113,49 @@
       }
       var o = ["nfl", "college-football", "mma"];
       return o.indexOf(a[0]) - o.indexOf(b[0]);
-    });
-    var lg = "", dy = "", tm = "", row = null;
+    };
+    items.sort(byOrder);
+    var lg = "", dy = "", tm = "", fy = null, row = null;
     items.forEach(function (it) {
       var p = etParts(it[2]), key = p.day + " " + p.date;
       /* the league rides the clock now -- "CFB 7:30 PM" on one line, on every
          slot, rather than a heading of its own above them (Jose, Sep 17, 2026) */
       if (showLeague && it[0] !== lg) {
-        lg = it[0]; dy = ""; tm = ""; row = null;
+        lg = it[0]; dy = ""; tm = ""; fy = null; row = null;
       }
       /* no date heading: the rail names the day, and one under each league
          read as a repeat (Jose, Sep 16, 2026) */
       if (key !== dy) {
-        dy = key; tm = ""; row = null;
+        dy = key; tm = ""; fy = null; row = null;
       }
       /* A fight card is one bill, in fight order -- it gets the event's name
          and no clock rows, because every fight already carries its own. */
       var slot = it[0] === "mma" && !showLeague ? (it[4] || "Fight card") : p.time;
-      if (slot !== tm) {
-        tm = slot;
+      /* the same kickoff can stand in both groups -- one game of the 3:30s
+         over, another still on -- so the row is keyed by the group as well as
+         the clock, and the two never merge */
+      var fin = finished(it);
+      if (slot !== tm || fin !== fy) {
+        tm = slot; fy = fin;
         var n = items.filter(function (x) {
           var q = etParts(x[2]);
           return x[0] === it[0] && q.day + " " + q.date === key &&
                  (x[0] === "mma" && !showLeague ? (x[4] || "Fight card") : q.time) === slot;
         }).length;
         var board = document.createElement("div");
-        board.className = "board board--nfl";
+        board.className = "board board--nfl" + (fin ? " done" : "");
         board.dataset.ord = String(slotN++);
         board.dataset.kick = it[2] || "";
+        board.dataset.lg = it[0];
         var isCard = it[0] === "mma";
+        /* how long after its clock this row cannot still be running. One bout
+           on the day page is its own row, so it is the bout's two hours; a
+           whole bill on the UFC tab is one row at its first bell, so it is
+           the card's eight. Written here because this is the only place that
+           knows which of the two it is -- worked out again further down, it
+           was got wrong, and the second guess turned off the marks the first
+           had just put on. */
+        board.dataset.far = String(isCard && !showLeague ? 8 * 3600000 : reach(it));
         /* on the day page a fight card's line is the game's line -- icon,
            UFC, day, clock -- and the bill opens open (Jose, Sep 18, 2026:
            "icon UFC SAT 9/19 then time"). On the UFC tab it is what it was:
@@ -5077,7 +5208,7 @@
         card.hidden = false;
         lockOne(card);
         armHide(card);
-        seatWatch(card);
+        seatEye(card);
         fightRec(card);
         nameUnder(card);
         cfbOnce(card);
@@ -5143,7 +5274,7 @@
     } else if (!items.length) {
       BOARD.appendChild(head("wkempty", "Everything here is hidden."));
     }
-    if (away.length) putAway(away);
+    if (away.length) putAway(away, byOrder);
     /* one sweep over whatever ended up on the board, so a hand-built
        card and one the page drew itself get the same treatment */
     BOARD.querySelectorAll(".gcard").forEach(paintSides);
@@ -5154,8 +5285,8 @@
 
   /* the dashed line, the count, and the cards folded behind it */
   var hideOpen = false;
-  function putAway(away) {
-    away.sort(function (a, b) { return Date.parse(a[2]) - Date.parse(b[2]); });
+  function putAway(away, order) {
+    away.sort(order);
     var wrap = document.createElement("div");
     wrap.className = "hidewrap";
     var rule = document.createElement("hr");
@@ -5191,7 +5322,7 @@
         paintSides(card);
         lockOne(card);
         armHide(card);
-        seatWatch(card);
+        seatEye(card);
         fightRec(card);
         nameUnder(card);
         cfbOnce(card);
@@ -5216,7 +5347,7 @@
       paintSides(card);
       lockOne(card);
       armHide(card);
-      seatWatch(card);
+      seatEye(card);
       fightRec(card);
       nameUnder(card);
       cfbOnce(card);
@@ -6678,6 +6809,7 @@
           card.dataset.settled = "1";
           markOver(card.dataset.espn);
           dropHide(card);
+          askSink();
         }
         if (live || done) {
           card.classList.add("locked");
@@ -6731,10 +6863,8 @@
              three of them stopped being one row
              (Jose, Sep 20, 2026: "the eye button needs to be [with] the live
              and play button in line, 1 row") */
-          var bar = when.querySelector(".glivebar");
-          var eye = card.querySelector(".ghide");
-          if (eye) bar.insertBefore(eye, bar.firstChild);
-          if (mark) bar.appendChild(mark);
+          if (mark) when.querySelector(".glivebar").appendChild(mark);
+          seatEye(card);
         } else if (when && done) when.innerHTML = "FINAL<br>" + score;
 
         /* the field, under the score */
@@ -7365,7 +7495,17 @@
        through every round (Sep 19, 2026, caught in data/fight_log.jsonl). */
     var whole = rounds * each;
     var left = Math.max(0, Math.min(each, secs));
-    var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + (each - left)));
+    /* Two different clocks wear the same name. While a bout is on, ESPN's is
+       the time LEFT in the round. On a bout that is over, it is the official
+       finish time -- how far INTO the round it ended, which is what the
+       result reads: TKO R1 1:57 is one minute fifty-seven gone, not left.
+       Read as time left, every finished bout was marked in the wrong place:
+       a decision that went the full three rounds stopped two thirds along
+       the rail, and a first-round knockout at 0:12 was marked a third of the
+       way through the fight (Jose, Sep 20, 2026: "why is the settling as dec
+       in the second round?"). */
+    var into = state === "post" ? left : each - left;
+    var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + into));
     var pct = whole ? (gone / whole) * 100 : 0;
     var wrap = box.querySelector(".tlwrap");
     if (!wrap) {
@@ -7475,12 +7615,7 @@
           var onAir = st.state === "in" && rd >= 1;
           var bar = gtl.querySelector(".glivebar");
           gtl.classList.toggle("gtime--live", onAir);
-          if (onAir) {
-            var eyeB = card.querySelector(".ghide");
-            if (eyeB && eyeB.parentNode !== gtl) gtl.insertBefore(eyeB, gtl.firstChild);
-            var wat = card.querySelector(".gwatch");
-            if (wat && wat.parentNode !== gtl) gtl.appendChild(wat);
-          }
+          if (onAir) seatEye(card);
           if (onAir && !bar) {
             bar = document.createElement("span");
             bar.className = "glivebar";
@@ -7544,6 +7679,7 @@
         card.classList.add("done");
         markOver(card.dataset.bout);
         dropHide(card);
+        askSink();
         if (typeof sinkDone === "function") sinkDone();
         paidMethods(card, winner, (c.how && c.how.type) || how,
                     (c.how && c.how.round) || (c.status || {}).period,
@@ -7579,13 +7715,43 @@
         live.push(card);
       }
     });
+    /* Putting them back in the live list was no use: the live list had
+       already been read and sent by the time this answer came back, so a
+       card whose results file is not written yet was asked about by nobody
+       and sat there with a start time and no result on it -- Chikadze and
+       O'Neill, nine hours after they fought (Jose, Sep 20, 2026: "what's
+       missing with these"). They are asked about here instead. */
     Object.keys(byEvent).forEach(function (eid) {
       fetch("final/mma-" + eid + ".json").then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
         .then(function (d) { applyBoard(byEvent[eid], d); byEvent[eid].forEach(function (c) { c.dataset.settledBout = "1"; }); })
-        .catch(function () { live.push.apply(live, byEvent[eid]); });
+        .catch(function () { askNight(byEvent[eid]); });
     });
-    if (!live.length) return;
-    fetch(espnUrl(MMA)).then(function (r) { return r.json(); }).then(function (d) { applyBoard(live, d); }).catch(function () {});
+    askNight(live);
+  }
+  /* the scoreboard for the night each bout was on, one read per night */
+  function askNight(cards) {
+    if (!cards || !cards.length) return;
+    /* The scoreboard answers for today, and only today. A bout that finished
+       last night is neither today's nor eight hours old yet -- the window
+       between the last bell and the results file being written -- so nothing
+       carried it and every bout on that card sat at the top of the day with
+       a start time and no result on it, which held the whole row up in the
+       order (Jose, Sep 20, 2026: "it's actually annoying"). The scoreboard
+       takes a date, so it is asked for the night the bout was on. */
+    var byNight = {};
+    cards.forEach(function (card) {
+      var t = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+      var k = t ? new Date(t).toLocaleDateString("en-CA", { timeZone: "America/New_York" })
+                    .replace(/-/g, "")
+                : "";
+      (byNight[k] = byNight[k] || []).push(card);
+    });
+    Object.keys(byNight).forEach(function (k) {
+      fetch(espnUrl(MMA + (k ? "?dates=" + k : "")))
+        .then(function (r) { return r.json(); })
+        .then(function (d) { applyBoard(byNight[k], d); })
+        .catch(function () {});
+    });
   }
 
   /* ---- what the card paid ----
@@ -7781,28 +7947,38 @@
       return;
     }
     var slots = [].slice.call(BOARD.querySelectorAll(":scope > .board"));
+    /* ---- what "over" means for a row ----
+       Two questions, and either one settles it. Was it long enough ago that
+       it cannot still be on -- four hours for football, eight for a fight
+       card, the same reach the refreshes use. Or does every card drawn in it
+       say FINAL.
+
+       It used to be one question, asked of the cards, and the cards are the
+       one thing that is not always there to ask: a row is drawn as it is
+       scrolled to, a bill folds away undrawn, a bout that never settled sits
+       there saying nothing. So a row with no cards could not be judged and a
+       row holding one unsettled bout was judged still running -- eight hours
+       after the card was over. Either way it stayed at the top of the day
+       with the afternoon's results beneath it (Jose, Sep 20, 2026: "it's just
+       an order, why are we struggling to keep order"). The clock never waits
+       on a fetch, so it is asked first and nothing can hold a finished row up
+       any more. */
     var done = function (sl) {
-      /* a fight card folds away, so its bouts may never have been built and
-         there is no settled card to read. It goes by the same reach the fight
-         refresh uses: eight hours after the first bell (Jose, Sep 18, 2026) */
-      if (sl.querySelector(".bill")) {
-        /* the bill's own cards answer this wherever it has any. The clock was
-           only ever a stand-in for a bill that folded away without drawing
-           one, and it kept a bout with its result printed on it at the top of
-           the day for eight hours (Jose, Sep 19, 2026: "why is this still on
-           the top, it's over?") */
-        var bc = sl.querySelectorAll(".gcard");
-        if (bc.length) {
-          return [].every.call(bc, function (c) { return c.classList.contains("done"); });
-        }
-        var k = sl.dataset.kick ? Date.parse(sl.dataset.kick) : 0;
-        return !!k && Date.now() > k + 8 * 3600000;
-      }
+      var k = sl.dataset.kick ? Date.parse(sl.dataset.kick) : 0;
+      var far = +sl.dataset.far || 4 * 3600000;
+      if (k && Date.now() > k + far) return true;
       var cards = sl.querySelectorAll(".gcard");
       return cards.length > 0 &&
              [].every.call(cards, function (c) { return c.classList.contains("done"); });
     };
-    slots.forEach(function (sl) { sl.classList.toggle("done", done(sl)); });
+    /* A row only ever becomes over; it never goes back. This used to toggle,
+       and a row the build had already marked FINAL was un-marked half a
+       second later because its cards are drawn as they are scrolled to and
+       were not in it yet -- so a finished 11:00 PM row jumped up beside the
+       live 11:00 PM row and then went back down (Jose, Sep 20, 2026: "please
+       tell me why MONT vs ORST is there"). Nothing that has finished can
+       start again, so the mark is put on and left on. */
+    slots.forEach(function (sl) { if (done(sl)) sl.classList.add("done"); });
     /* a finished card leaves its row and goes to the foot of the day, with
        the games it kicked off alongside. A row is only a kickoff time, so
        Kansas State and Georgia sat at the top of the board, finished, because
@@ -7834,6 +8010,9 @@
         seat.dataset.overflow = "1";
         seat.dataset.of = key;
         seat.dataset.ord = String(1000 + (+sl.dataset.ord || 0));
+        seat.dataset.kick = sl.dataset.kick || "";
+        seat.dataset.lg = sl.dataset.lg || "";
+        seat.dataset.far = sl.dataset.far || "";
         var head = sl.querySelector(":scope > .slot-h");
         if (head) {
           var copy = head.cloneNode(true);
@@ -7856,14 +8035,33 @@
       var into2 = seat.querySelector(":scope > .caro");
       over.forEach(function (c) { into2.appendChild(c); });
     });
-    var over = slots.filter(done);
+    /* The rows that were just seated are rows too. They were made after this
+       list was taken, so they took no part in the ordering -- and since every
+       other row is then moved in front of the shelf, the seated one ended up
+       above all of them: a FINAL 11:00 PM at the very top with the live
+       11:00 PM under it, which is what he was watching happen as he switched
+       cards on and off (Jose, Sep 20, 2026). The list is taken again. */
+    slots = [].slice.call(BOARD.querySelectorAll(":scope > .board"));
+    var over = slots.filter(function (sl) { return sl.classList.contains("done"); });
     if (!over.length || over.length === slots.length) {
       // nothing settled, or everything is: the clock order stands
       over = [];
     }
+    /* Both groups run by the clock. Sorting the back of the line by the order
+       the rows were built in was right only while nothing moved between the
+       groups -- and the whole point is that rows move. A row that finished
+       while he watched was built near the front, so when it went to the back
+       it went to the front of the back: 10:30 PM sat above 11:30 AM
+       (Jose, Sep 20, 2026: "what, doesn't this make sense"). */
+    var tick = function (sl) {
+      var t = sl.dataset.kick ? Date.parse(sl.dataset.kick) : NaN;
+      return isNaN(t) ? (+sl.dataset.ord || 0) : t;
+    };
     var order = slots.slice().sort(function (a, b) {
       var ga = over.indexOf(a) >= 0 ? 1 : 0, gb = over.indexOf(b) >= 0 ? 1 : 0;
       if (ga !== gb) return ga - gb;
+      var d = tick(a) - tick(b);
+      if (d) return d;
       return (+a.dataset.ord || 0) - (+b.dataset.ord || 0);
     });
     var same = order.every(function (sl, i) { return sl === slots[i]; });
@@ -7875,6 +8073,16 @@
     });
   }
 
+  /* The board was put in order once, when it was built, and again two and a
+     half seconds later. Anything that finished after that stayed where it
+     was: the cards said FINAL and the row above them did not move. A card
+     that settles asks for the order now, and sinkDone stands down by itself
+     while he is reading, so nothing moves under his eyes. */
+  function askSink() {
+    clearTimeout(window._sinkAsk);
+    window._sinkAsk = setTimeout(function () { sinkDone(); }, 1200);
+  }
+  window.askSink = askSink;
   function refreshVisible() {
     var now = Date.now(), soon = now + 8 * 86400000;
     document.querySelectorAll(".board:not([hidden]) .gcard[data-espn], .hidebox .gcard[data-espn]")
