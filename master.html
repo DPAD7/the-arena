@@ -5925,7 +5925,14 @@
       return gameFeed(g, "nfl")
         .then(function (d) {
           var st = ((((d.header || {}).competitions || [{}])[0].status || {}).type || {});
-          if (st.state !== "in") return;
+          /* and a game that is over, not only one being played. It stopped
+             reading at the whistle, which is the one moment everything the
+             money page wants is finally true, so the page sat on the last
+             live figures until a rebuild came round hours later
+             (Jose, Sep 20, 2026: "once we get a stat on the page from the
+             NFL card it can take it there... it's not that hard to connect
+             them") */
+          if (st.state !== "in" && st.state !== "post") return;
           var by = {};
           ((d.boxscore || {}).players || []).forEach(function (t) {
             (t.statistics || []).forEach(function (c) {
@@ -5953,10 +5960,66 @@
             if (ab) sc[ab] = parseInt(x.score, 10);
           });
           by._sc = sc;
+          /* who won, and whether it is over: the two things the head to head
+             and the moneyline wait for */
+          var won = {};
+          ((((d.header || {}).competitions || [{}])[0]).competitors || []).forEach(function (x) {
+            var ab = ((x.team || {}).abbreviation) || "";
+            if (ab) won[ab] = !!x.winner;
+          });
+          by._won = won;
+          by._fin = st.state === "post";
           LIVEROWS[g] = by;
         }).catch(function () {});
     })).then(after);
   }
+  /* The same read, wherever it comes from: the week's poll or a card that has
+     just settled. A card's refresh already holds the whole summary the moment
+     the game goes final, so the ledger settles off that read rather than
+     waiting for the next minute to come round (Jose, Sep 20, 2026: "as soon
+     as it settles on the card it can settle in the ledger immediately"). */
+  function takeBox(gid, d) {
+    var st = ((((d.header || {}).competitions || [{}])[0].status || {}).type || {});
+    if (st.state !== "in" && st.state !== "post") return false;
+    var by = {};
+    ((d.boxscore || {}).players || []).forEach(function (t) {
+      (t.statistics || []).forEach(function (c) {
+        if (c.name !== "passing" && c.name !== "rushing") return;
+        (c.athletes || []).forEach(function (a) {
+          var id = String(((a.athlete || {}).id) || "");
+          if (!id) return;
+          var line = {};
+          (c.labels || []).forEach(function (L, i) { line[L] = (a.stats || [])[i]; });
+          by[id] = by[id] || {};
+          if (c.name === "passing") {
+            by[id].ptd = parseInt(line.TD, 10);
+            by[id].yds = parseInt(line.YDS, 10);
+          } else {
+            by[id].atd = parseInt(line.TD, 10);
+          }
+        });
+      });
+    });
+    var sc = {}, won = {};
+    ((((d.header || {}).competitions || [{}])[0]).competitors || []).forEach(function (x) {
+      var ab = ((x.team || {}).abbreviation) || "";
+      if (!ab) return;
+      sc[ab] = parseInt(x.score, 10);
+      won[ab] = !!x.winner;
+    });
+    by._sc = sc; by._won = won; by._fin = st.state === "post";
+    LIVEROWS[String(gid)] = by;
+    return true;
+  }
+  /* and the money page is redrawn there and then if he is looking at it */
+  function ledgerNow(gid, d) {
+    if (!takeBox(gid, d)) return;
+    if (sport !== "form" || !LEDGER) return;
+    var at = window.scrollY;
+    if (formWeek === "season") renderMoney(); else renderForm();
+    window.scrollTo(0, at);
+  }
+  window.ledgerNow = ledgerNow;
   function layLive(rows) {
     rows.forEach(function (r) {
       var by = LIVEROWS[r.game];
@@ -5966,6 +6029,21 @@
       if (!isNaN(mine.ptd)) r.ptd = mine.ptd;
       if (!isNaN(mine.atd)) r.atd = mine.atd;
       if (!isNaN(mine.yds)) r.yds = mine.yds;
+      /* and at the whistle the rest of it settles here, off the same read,
+         rather than waiting for the ledger to be built again: the club result
+         from who ESPN says won, the head to head from the two men's yards.
+         The prices were already on the row before the game (Jose, Sep 20,
+         2026) */
+      if (!by._fin) return;
+      r.fin = true;
+      if (by._won && r.club && (r.club in by._won)) r.ml = by._won[r.club] ? "W" : "L";
+      var him = rows.filter(function (o) {
+        return o.game === r.game && String(o.id) !== String(r.id);
+      })[0];
+      var his = him && LIVEROWS[r.game] && LIVEROWS[r.game][String(him.id)];
+      if (his && !isNaN(his.yds) && !isNaN(mine.yds) && his.yds !== mine.yds) {
+        r.h2h = mine.yds > his.yds ? "W" : "L";
+      }
     });
   }
   function loadLedger(then) {
@@ -6897,6 +6975,7 @@
           markOver(card.dataset.espn);
           dropHide(card);
           askSink();
+          ledgerNow(card.dataset.espn, d);
         }
         if (live || done) {
           card.classList.add("locked");
