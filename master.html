@@ -7218,6 +7218,7 @@
            aren't working"). A bout is under way when it has a round. */
         var rd = parseInt((c.status || {}).period, 10) || 0;
         var going = st.state === "post" || (st.state === "in" && rd >= 1);
+        card.classList.toggle("live", st.state === "in" && rd >= 1);
         if (going) {
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) { b.disabled = true; });
@@ -7627,7 +7628,29 @@
   }
   setInterval(formLive, 30000);
   setInterval(function () { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); }, 30000);
-  setInterval(refreshFights, 30000);
+  /* While a bout is actually being fought the board asks every five seconds
+     instead of every thirty. ESPN's feed is entered cageside, so it runs
+     ahead of a stream, which is half a minute or more behind; on a thirty
+     second tick the board threw that lead away (Jose, Sep 19, 2026: "can we
+     get the speed on the site?"). Nothing else changes: between fights, and
+     on a tab he is not looking at, it goes back to thirty. */
+  (function fightTicking() {
+    var at = 0;
+    var anyLive = function () {
+      if (document.hidden) return false;
+      return !![].slice.call(document.querySelectorAll(".gcard[data-bout]"))
+        .filter(function (c) { return c.classList.contains("live"); }).length;
+    };
+    var beat = function () {
+      var want = anyLive() ? 5000 : 30000;
+      clearTimeout(at);
+      at = setTimeout(function () { refreshFights(); beat(); }, want);
+    };
+    beat();
+    document.addEventListener("visibilitychange", function () {
+      if (!document.hidden) { refreshFights(); beat(); }
+    });
+  })();
   /* the scores looked after themselves but the prices did not: they were read
      once at load, so a board left open all afternoon still showed the morning's
      numbers and only a reload moved them. They are asked for every minute now,
