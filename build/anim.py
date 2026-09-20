@@ -75,11 +75,13 @@ def cards():
     out = {}
     for f in json.loads(s[i + len("  var FIGHTS = "):j + 1]):
         out[str(f[1])] = {"L": (f[3], str(f[4])), "R": (f[5], str(f[6]))}
-    # the market says how many rounds the bout was for
+    # the market says how many rounds the bout was for. site/prices.json, not
+    # the copy baked into the page: the baked one is the thin eleven-market
+    # read and carries no "rounds", which is how Tsarukyan's five-round bout
+    # was drawn with three (Sep 20, 2026)
     try:
-        k = s.index("  var FPROPS = ")
-        fp = json.loads(s[k + len("  var FPROPS = "):s.index("};", k) + 1])
-    except (ValueError, KeyError):
+        fp = json.load(open(os.path.join(D, "site", "prices.json"))).get("FPROPS") or {}
+    except (ValueError, OSError):
         fp = {}
     for b in out:
         out[b]["rounds"] = (fp.get(b) or {}).get("rounds")
