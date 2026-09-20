@@ -7223,6 +7223,25 @@
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) { b.disabled = true; });
         }
+        /* the live mark goes into the clock that is already there. Writing a
+           new one built a second line under the first (Jose, Sep 19, 2026:
+           "you added a second one... it should just be on the original one"),
+           so this only adds the badge, and only once, and takes it off again
+           when the bout is over. */
+        var gtl = card.querySelector(".gtime");
+        if (gtl) {
+          var onAir = st.state === "in" && rd >= 1;
+          var bar = gtl.querySelector(".glivebar");
+          if (onAir && !bar) {
+            bar = document.createElement("span");
+            bar.className = "glivebar";
+            bar.innerHTML = '<img class="glive" src="ico/live-1.svg" alt="Live" ' +
+                            'width="34" height="34">';
+            gtl.appendChild(bar);
+          } else if (!onAir && bar) {
+            bar.parentNode.removeChild(bar);
+          }
+        }
         if (st.state !== "post") return;
         var winner = "";
         (c.competitors || []).forEach(function (x) {
