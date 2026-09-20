@@ -17,6 +17,30 @@ msg="${1:-ship $(date -u '+%Y-%m-%d %H:%M UTC')}"
 # 1. the sweep's commits first, with ours stashed over them
 git pull --rebase --autostash -q origin main
 
+# 1a. an autostash that could not merge leaves both sides in the file with
+#     <<<<<<< around them. That is not a warning anywhere -- it is written,
+#     committed and deployed, and a price file with conflict markers in it is
+#     not JSON, so the board reads nothing at all. On Sep 20, 2026 it went out
+#     in prices.json, ledger.json and ufc_markets.json at once. Nothing ships
+#     until they are gone.
+if git grep -lI --no-index -e '^<<<<<<< ' -e '^>>>>>>> ' -- . ':!.git' >/tmp/arena_conflicts 2>/dev/null \
+   && [ -s /tmp/arena_conflicts ]; then
+  echo "STOPPED: conflict markers left in:" >&2
+  cat /tmp/arena_conflicts >&2
+  echo "Resolve them, then run ship.sh again." >&2
+  exit 1
+fi
+
+# 1b. and every file the board reads has to parse before it goes anywhere
+for f in site/prices.json site/ledger.json site/anim/index.json; do
+  [ -f "$f" ] || continue
+  /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -c "
+import json,sys
+try: json.load(open('$f'))
+except Exception as e: sys.exit('STOPPED: $f is not valid JSON -- %s' % e)
+" || exit 1
+done
+
 # 2. the deployable page, stamped
 /Library/Frameworks/Python.framework/Versions/3.12/bin/python3 -c "
 import sys; sys.path.insert(0, 'build')
