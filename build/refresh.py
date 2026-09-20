@@ -286,6 +286,44 @@ def settle_late(fight):
         else "after the whistle: DEPLOY FAILED " + (out.stderr or "")[-200:])
 
 
+def unsettled():
+    """Games and bouts ESPN calls final that we have written no result for.
+
+       The wakes behind a game were a clock: three and a half hours after
+       kickoff, then five and a half. A clock does not know anything. Six
+       games on Sep 20, 2026 were final for the best part of an hour with no
+       result, no ladder and no money page, because the clock had not come
+       round yet (Jose: "it's not computing the final scores -- and fix it so
+       I don't have to tell you"). This asks instead. One scoreboard read a
+       sweep, and if anything is over that we have not written down, the
+       settling runs whatever the clock says."""
+    want = []
+    for lg, path in (("nfl", "football/nfl"),
+                     ("college-football", "football/college-football"),
+                     ("mma", "mma/ufc")):
+        # curl_cffi, like every other reader here: this Mac's own Python
+        # cannot open an https socket, so urllib answers nothing at all
+        try:
+            from curl_cffi import requests as rq
+            u = "https://site.api.espn.com/apis/site/v2/sports/" + path + "/scoreboard"
+            d = rq.get(u, impersonate="chrome124", timeout=30).json()
+        except Exception as e:
+            log("unsettled: %s did not answer (%s)" % (lg, type(e).__name__))
+            continue
+        for e in d.get("events") or []:
+            for c in (e.get("competitions") or [{}]):
+                st = ((c.get("status") or {}).get("type") or {})
+                if st.get("state") != "post":
+                    continue
+                gid = str(c.get("id") or e.get("id"))
+                name = "mma-" + str(e.get("id")) if lg == "mma" else gid
+                if not os.path.exists(D + "/site/final/%s.json" % name):
+                    want.append((lg, gid, e.get("shortName") or e.get("name") or gid))
+                if lg == "mma":
+                    break
+    return want
+
+
 def due_now(events):
     """The wakes this run is standing in for, or an empty list. A wake already
        served is not served twice, which is what served.json remembers."""
@@ -332,6 +370,14 @@ if "--if-due" in sys.argv:
         games = [x for x in late if not x[3]][:1]
         cards = [x for x in late if x[3]][:1]
         late = games + cards
+    # anything over that we have not written down settles now, whatever the
+    # clock says -- and a wake the clock was still holding is spent here
+    owed = unsettled()
+    if owed and not [x for x in late if not x[3]]:
+        for lg, gid, nm in owed[:6]:
+            log("unsettled: %s %s is final and has no result" % (lg, nm))
+        late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
+                        owed[0][0] == "mma")]
     if not hit and not drawn and not late and not hub and not running:
         os._exit(0)          # no interpreter shutdown to get stuck in
     log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
