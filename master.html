@@ -5452,7 +5452,7 @@
   function formRows() {
     if (!LEDGER) return [];
     if (formWeek !== "season") return (LEDGER[formWeek] || []).map(function (r) {
-      return { name: r[0], club: r[1], id: r[2], ptd: r[3], atd: r[4], h2h: r[5], ml: r[6], yds: r[7] || 0, game: r[8] || "", side: r[9] || 0, score: r[10], odds: r[11] || [[null, null], [null, null], null, null], carded: r[12] !== 0, games: 1 };
+      return { name: r[0], club: r[1], id: r[2], ptd: r[3], atd: r[4], h2h: r[5], ml: r[6], yds: r[7] || 0, game: r[8] || "", side: r[9] || 0, score: r[10], odds: r[11] || [[null, null], [null, null], null, null], carded: r[12] !== 0, games: 1, fin: r[14] === 1 };
     });
     var by = {};
     Object.keys(LEDGER).forEach(function (w) {
@@ -5514,6 +5514,9 @@
   }
   function cardFor(r, capped) {
     var legs = [], dec = 1, any = false;
+    /* the same rule the money page follows: nothing a game has done counts
+       until the game is over */
+    if (!r.fin) return { legs: [], dec: 0, priced: hasPrice(r) };
     var ladder = !capped && r.rungs && r.rungs.some(function (x) { return x; });
     var ptd = rungPrice(ladder ? r.rungs : (r.odds[0] || []), r.ptd, ladder ? 5 : 2);
     if (ptd) { legs.push({ what: ptd.rung + "+ PTD", odds: ptd.odds }); dec *= toDecOdds(ptd.odds); any = true; }
@@ -5535,7 +5538,7 @@
                h2hw: r[5] === "W" ? 1 : 0, mlw: r[6] === "W" ? 1 : 0,
                yds: r[7] || 0, game: r[8] || "",
                odds: r[11] || [[null, null], [null, null], null, null],
-               carded: r[12] !== 0, rungs: r[13] || [] };
+               carded: r[12] !== 0, rungs: r[13] || [], fin: r[14] === 1 };
     };
     if (formWeek !== "season") {
       var wk = (LEDGER[formWeek] || []).map(read);
@@ -5746,6 +5749,11 @@
       };
       var paid = function (r) {
         var legs = [];
+        /* a game still being played has done nothing yet: its touchdowns are
+           on the board as they happen, but no leg of it is paid until the
+           whistle (Jose, Sep 20, 2026: "why is Watson 2 TD being checked as
+           paid... it pays no matter the result of the game") */
+        if (!r.fin) return "";
         var a = best(r.odds[0], r.ptd); if (a) legs.push(a);
         var b2 = best(r.odds[1], r.atd); if (b2) legs.push(b2);
         if (r.h2h === "W" && r.odds[2]) legs.push(r.odds[2]);

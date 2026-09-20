@@ -80,13 +80,36 @@ def num(x):
         return 0
 
 
+_LIVE_PROPS = None
+
+
+def live_props(eid):
+    """What the board is charging right now, out of site/prices.json.
+
+       The saved copy is taken when the sweep runs, and DraftKings posts a
+       head-to-head on the morning of the game -- so a game whose copy was
+       frozen the night before has no head-to-head in it for ever, and Hurts
+       and Young read two legs on a week they won three (Jose, Sep 20, 2026).
+       The saved copy is still the closing price; this only fills a hole."""
+    global _LIVE_PROPS
+    if _LIVE_PROPS is None:
+        try:
+            _LIVE_PROPS = json.load(open(D + "/site/prices.json")).get("PROPS") or {}
+        except Exception:
+            _LIVE_PROPS = {}
+    return _LIVE_PROPS.get(str(eid)) or {}
+
+
 def priced(league, week, eid):
     """What DraftKings charged on this game, as keep_prices.py saved it."""
     f = D + "/prices/%s/wk%s/%s.json" % (league, week, eid)
     if not os.path.exists(f):
         return {}
     d = json.load(open(f))
-    out = {"h2h": d.get("h2h") or [None, None], "by": {}, "side": {}}
+    h2h = d.get("h2h") or [None, None]
+    if not any(h2h):
+        h2h = (live_props(eid).get("h2h") or [None, None])
+    out = {"h2h": h2h, "by": {}, "side": {}}
     for man in d.get("passers") or []:
         row = {"ptd": man.get("ptd") or [None, None], "atd": man.get("atd") or [None, None], "name": man.get("name")}
         out["by"][str(man.get("id"))] = row
@@ -204,9 +227,15 @@ def main():
                         [(x or [None])[0] for x in (mine.get("atd") or [None, None])],
                         ((pz.get("h2h") or [None, None])[i] or [None])[0] if is_card else None,
                         (g[9 if i == 0 else 11] or None) if is_card else None]
+                # and whether the whistle has gone. A game belongs on the board
+                # as it goes, but nothing it has done is paid until it is over:
+                # Watson's second touchdown was counted as a winning leg while
+                # Cleveland at Tampa was still delayed (Jose, Sep 20, 2026:
+                # "why is Watson 2 TD being checked as paid")
                 out.setdefault(str(g[0]), []).append([nm, clubs[i], str(pid), num(line.get("TD")), num(r.get("TD")),
                                                       h2h, ml, yds, str(g[1]), i, score.get(clubs[i], 0), odds,
-                                                      1 if is_card else 0])
+                                                      1 if is_card else 0, None,
+                                                      1 if state == "post" else 0])
     # each club's record entering each week, from the finals we hold, for the
     # NFL and college cards (Jose, Sep 17, 2026)
     def records_for(rows):
