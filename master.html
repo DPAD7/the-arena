@@ -5791,7 +5791,14 @@
         return '<div class="fcard">' +
                     '<div class="fhead">' + who(L, false) +
           /* the score with each man's result beside it (Jose, Sep 16, 2026) */
-          '<span class="fscore">' + (L.side === 1 ? HOUSE : PLANE) + wl(L.ml) + '<b>' + (L.score === undefined || L.score === null ? "" : L.score + "\u2013" + R.score) + '</b>' + wl(R.ml) + (R.side === 1 ? HOUSE : PLANE) + '</span>' +
+          /* both sides or neither: a game still being played can have one
+             man's score and not the other's, and half a score reads
+             "0-undefined" (Jose, Sep 20, 2026) */
+          '<span class="fscore">' + (L.side === 1 ? HOUSE : PLANE) + wl(L.ml) + '<b>' +
+            (L.score === undefined || L.score === null ||
+             R.score === undefined || R.score === null
+               ? "" : L.score + "\u2013" + R.score) +
+          '</b>' + wl(R.ml) + (R.side === 1 ? HOUSE : PLANE) + '</span>' +
           who(R, true) + '</div>' +
           (function () {
             var lw = L.h2h === "W", rw = R.h2h === "W";
@@ -6899,7 +6906,10 @@
         var lside = lhome ? sides.home : sides.away;
         var rside = lhome ? sides.away : sides.home;
         var when = card.querySelector(".gtime");
-        var score = (lside || {}).score + "–" + (rside || {}).score;
+        /* both sides or neither, the same rule the ledger follows */
+        var ls = (lside || {}).score, rs = (rside || {}).score;
+        var score = (ls === undefined || ls === null || rs === undefined || rs === null)
+                    ? "" : ls + "–" + rs;
         /* a game being played says so under the clock (Jose, Sep 17, 2026) */
         var mark = card.querySelector(".gwatch");
         if (when && live) {
