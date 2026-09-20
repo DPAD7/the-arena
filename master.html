@@ -6546,9 +6546,14 @@
            need the board built again either */
         if (frozen(gid)) return false;
         var rows = card.querySelectorAll(".ptdrow");
+        /* a price for a slot the card never drew a button for -- the
+           head-to-head DraftKings posted after the card was built -- cannot
+           be written on; the card is forgotten and drawn again with it
+           (Jose, Sep 20, 2026, 12:40 PM: "H2H are not on the board") */
+        var missing = false;
         var say = function (b, cell) {
-          if (!b) return;
           var odds = cell && cell[0];
+          if (!b) { if (odds) missing = true; return; }
           if (!odds) return;
           b.textContent = String(odds).replace("-", "\u2212");
           b.dataset.odds = odds;
@@ -6571,6 +6576,7 @@
         }
         if (typeof markSaved === "function") markSaved(card);
         if (typeof placedState === "function") placedState(card);
+        if (missing) { delete MADE[gid]; return true; }
         return false;
       };
       ["PROPS", "FPROPS"].forEach(function (name) {
