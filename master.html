@@ -2101,17 +2101,31 @@
      finished has every price on it disabled already, and a disabled button
      is never clicked, so this only ever reaches a game still to come
      (Jose, Sep 19, 2026: "it only works for pregame"). */
+  /* A price on a game that has kicked off is shut, not disabled: a disabled
+     button hears no tap at all, so once a game was on nothing could be
+     marked placed or unplaced on it. Shut, it still hears the double tap
+     and ignores the single one -- the slip is for games still to come, the
+     gold edge is for any time (Jose, Sep 20, 2026: "the double tap should
+     work at all times, to select, unselect"). */
+  function shutPrice(b) {
+    b.dataset.shut = "1";
+    b.setAttribute("aria-disabled", "true");
+    b.disabled = false;
+  }
   var TAPAT = 0, TAPON = null;
   document.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest("button.price");
-    if (!btn || btn.disabled) return;
+    if (!btn) return;
+    var shut = btn.dataset.shut === "1";
     var now = Date.now();
     if (TAPON === btn && now - TAPAT < 400) {
       TAPAT = 0; TAPON = null;
       togglePlaced(btn);
+      if (shut) { e.preventDefault(); return; }
     } else {
       TAPAT = now; TAPON = btn;
     }
+    if (shut) { e.preventDefault(); return; }
     setPick(btn, !btn.classList.contains("on"), true);
   });
   /* And a freshly drawn button has to remember it was already picked. */
@@ -2147,6 +2161,7 @@
     if (typeof pushState === "function") pushState();
   }
   window.togglePlaced = togglePlaced;
+  window.shutPrice = shutPrice;
   window.markSaved = markSaved;
   markSaved(document);
   /* ---- Sheets: opening, shutting, and the page held still behind ---- */
@@ -4993,7 +5008,7 @@
     if (!card.dataset.kick || Date.now() < Date.parse(card.dataset.kick)) return;
     card.classList.add("locked");
     card.querySelectorAll("button.price").forEach(function (b) {
-      b.disabled = true;
+      shutPrice(b);
       b.classList.remove("on");
     });
   }
@@ -6850,7 +6865,7 @@
         if (live || done) {
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) {
-            b.disabled = true;
+            shutPrice(b);
             b.classList.remove("on");
           });
         }
@@ -7341,7 +7356,7 @@
       var r = BOXING[card.dataset.fight];
       if (!r || !r.winner) return;
       card.classList.add("locked");
-      card.querySelectorAll("button.price").forEach(function (b) { b.disabled = true; });
+      card.querySelectorAll("button.price").forEach(function (b) { shutPrice(b); });
       settleFight(card, r.winner, r.method);
     });
   }
@@ -8022,7 +8037,7 @@
         card.classList.toggle("live", st.state === "in" && rd >= 1);
         if (going) {
           card.classList.add("locked");
-          card.querySelectorAll("button.price").forEach(function (b) { b.disabled = true; });
+          card.querySelectorAll("button.price").forEach(function (b) { shutPrice(b); });
         }
         /* the live mark goes into the clock that is already there. Writing a
            new one built a second line under the first (Jose, Sep 19, 2026:
