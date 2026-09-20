@@ -1588,12 +1588,12 @@
   /* and beside the LIVE badge once the game is on, the pair centered together */
   .glivebar { display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 5px; }
   .glivebar .glive { margin: 0; }
-  .gwhen .ghide {
+  .gwhen .ghide, .glivebar .ghide, .gtime--live .ghide {
     position: static; bottom: auto; right: auto; opacity: 0.55;
     /* the reach stays 40px; the negative margins keep the head its own height */
     padding: 10px; margin: -10px -5px -10px -7px;
   }
-  .gwhen .gwatch, .glivebar .gwatch {
+  .gwhen .gwatch, .glivebar .gwatch, .gtime--live .gwatch {
     position: static; bottom: auto; left: auto; padding: 0; z-index: auto;
   }
   .gwhen .gwatch .tvplay, .glivebar .gwatch .tvplay { width: 22px; height: 22px; }
@@ -4777,6 +4777,33 @@
   }
 
   /* whether a card has nothing left to say */
+  /* which ids have actually finished, however we came to know it */
+  var OVER = {};
+  try { OVER = JSON.parse(sessionStorage.getItem("arena.over") || "{}") || {}; } catch (e) { OVER = {}; }
+  function markOver(id) {
+    if (!id || OVER[id]) return;
+    OVER[id] = 1;
+    try { sessionStorage.setItem("arena.over", JSON.stringify(OVER)); } catch (e) {}
+    /* A card settles after the board has already been drawn, so a hidden one
+       that has just finished would sit in the shelf until something else
+       caused a render. It asks for one -- once he has left the board alone,
+       so nothing moves under him (Jose, Sep 20, 2026: "hidden things get
+       added later, fall back into order"). */
+    if (hid && hid[id]) {
+      clearTimeout(window._freeWait);
+      window._freeWait = setTimeout(function again() {
+        if (!document.hidden && Date.now() - LASTTOUCH < 12000) {
+          clearTimeout(window._freeWait);
+          window._freeWait = setTimeout(again, 6000);
+          return;
+        }
+        var at = window.scrollY;
+        if (typeof render === "function") render();
+        window.scrollTo(0, at);
+      }, 1500);
+    }
+  }
+  window.markOver = markOver;
   function isOver(card) {
     return !!card && (card.classList.contains("done") ||
                       card.dataset.settled === "1" ||
@@ -4923,12 +4950,24 @@
        kickoff, a fight card eight hours after the first bell, which is the
        reach the fight refresh already uses (Jose, Sep 19, 2026). */
     var reach = function (it) { return it[0] === "mma" ? 8 * 3600000 : 4 * 3600000; };
+    /* A thing is over when it says it is over. The clock was the only test,
+       so six fights that had all finished sat in the shelf waiting out eight
+       hours from the first bell (Jose, Sep 20, 2026: "why are these still in
+       hidden, the others are over"). The cards mark themselves done as they
+       settle, and OVER remembers which -- the clock is only the fallback for
+       something we have never had a card for. */
     var dayOver = all.length > 0 && all.every(function (it) {
+      if (OVER[String(it[1])]) return true;
       var off = Date.parse(it[2]);
       return off && now >= off + reach(it);
     });
     all.forEach(function (it) {
-      var put = hid[it[1]] && !dayOver;
+      /* A card that has finished comes back out and takes its place in the
+         order, on its own. Waiting for the whole list to be over never fired
+         on the UFC tab, where the list is a month and there are always fights
+         still to come (Jose, Sep 20, 2026: "they get placed back in the order
+         of events"). */
+      var put = hid[it[1]] && !OVER[String(it[1])] && !dayOver;
       if (hid[it[1]] && !put) { delete hid[it[1]]; saveHidden(); }
       (put ? away : items).push(it);
     });
@@ -6637,6 +6676,7 @@
         if (done) {
           card.classList.add("done");
           card.dataset.settled = "1";
+          markOver(card.dataset.espn);
           dropHide(card);
         }
         if (live || done) {
@@ -6686,7 +6726,15 @@
           when.innerHTML = st.shortDetail + "<br>" + score +
             '<span class="glivebar"><img class="glive" src="ico/live-1.svg" alt="Live" ' +
             'width="34" height="34"></span>';
-          if (mark) when.querySelector(".glivebar").appendChild(mark);
+          /* the eye rides the live bar too. Rebuilding the bar left it behind
+             and it fell back to the corner, so once a game kicked off the
+             three of them stopped being one row
+             (Jose, Sep 20, 2026: "the eye button needs to be [with] the live
+             and play button in line, 1 row") */
+          var bar = when.querySelector(".glivebar");
+          var eye = card.querySelector(".ghide");
+          if (eye) bar.insertBefore(eye, bar.firstChild);
+          if (mark) bar.appendChild(mark);
         } else if (when && done) when.innerHTML = "FINAL<br>" + score;
 
         /* the field, under the score */
@@ -7427,6 +7475,12 @@
           var onAir = st.state === "in" && rd >= 1;
           var bar = gtl.querySelector(".glivebar");
           gtl.classList.toggle("gtime--live", onAir);
+          if (onAir) {
+            var eyeB = card.querySelector(".ghide");
+            if (eyeB && eyeB.parentNode !== gtl) gtl.insertBefore(eyeB, gtl.firstChild);
+            var wat = card.querySelector(".gwatch");
+            if (wat && wat.parentNode !== gtl) gtl.appendChild(wat);
+          }
           if (onAir && !bar) {
             bar = document.createElement("span");
             bar.className = "glivebar";
@@ -7488,6 +7542,7 @@
            "why is this still on the top, it's over?"). Same word, same rule,
            both sports. */
         card.classList.add("done");
+        markOver(card.dataset.bout);
         dropHide(card);
         if (typeof sinkDone === "function") sinkDone();
         paidMethods(card, winner, (c.how && c.how.type) || how,
