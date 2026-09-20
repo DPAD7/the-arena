@@ -5973,6 +5973,27 @@
     fetch("ledger.json").then(function (r) { return r.json(); }).then(function (j) { LEDGER = j; then(); })
       .catch(function () { LEDGER = {}; then(); });
   }
+  /* The ledger was read once, when the tab was opened, and never again -- so
+     the cards moved with the games and the money page sat at whatever it said
+     an hour ago. It is asked for on the same beat as the prices now, and the
+     page is drawn again only when a digit of it has actually changed, so
+     nothing moves under him for nothing (Jose, Sep 20, 2026: "when one
+     updates they all should"). */
+  var LEDGERAT = "";
+  function pullLedger() {
+    if (document.hidden) return;
+    fetch("ledger.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.text() : null; })
+      .then(function (t) {
+        if (!t || t === LEDGERAT) return;
+        var j;
+        try { j = JSON.parse(t); } catch (e) { return; }
+        LEDGERAT = t;
+        LEDGER = j;
+        if (sport === "form") { var at = window.scrollY; render(); window.scrollTo(0, at); }
+      })
+      .catch(function () {});
+  }
   function render() {
     if (sport === "form") {
       loadLedger(function () {
@@ -8808,6 +8829,7 @@
     setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
   });
   setInterval(pullPrices, 60000);
+  setInterval(pullLedger, 60000);
   /* the marks were only read when the page loaded, so a bet marked from
      another device never arrived until he reloaded. They are asked for on the
      same beat as the prices, and the gold lands without a rebuild
@@ -8816,6 +8838,7 @@
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState !== "visible") return;
     pullPrices();
+    pullLedger();
     refreshVisible();
     refreshFights();
   });
