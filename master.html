@@ -4848,8 +4848,13 @@
        its fights are never built. Opening one builds them then and there
        (Jose, Sep 18, 2026) */
     var flush = function (row) {
-      later.filter(function (pair) { return pair[0] === row; })
-           .forEach(function (pair) { pair[1](); pair[2] = 1; });
+      /* a pair already built is skipped, and marked before it is built rather
+         than after: three paths build these -- opening a row, scrolling one
+         into view, and the idle pass that fills folded bills -- and each one
+         made a fresh card, so the same bout was drawn twice in one row
+         (Jose, Sep 19, 2026, two Menifield cards under one 9:15 PM) */
+      later.filter(function (pair) { return pair[0] === row && !pair[2]; })
+           .forEach(function (pair) { pair[2] = 1; pair[1](); });
       later = later.filter(function (pair) { return !pair[2]; });
     };
     var items = [], away = [], now = Date.now();
@@ -5007,7 +5012,6 @@
         if (!pair) return;
         pair[2] = 1;
         pair[1]();
-        later = later.filter(function (x) { return !x[2]; });
         idle(step);
       };
       idle(step);
@@ -5021,7 +5025,11 @@
         es.forEach(function (e) {
           if (!e.isIntersecting) return;
           watch.unobserve(e.target);
-          later.forEach(function (pair) { if (pair[0] === e.target) pair[1](); });
+          later.forEach(function (pair) {
+            if (pair[0] !== e.target || pair[2]) return;
+            pair[2] = 1;
+            pair[1]();
+          });
           /* a row filled in late had its offset put back while it was still
              empty, so it clamped to nought: hide the third of four and the
              row snapped to the first. Put back once the cards stand
