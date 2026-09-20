@@ -140,6 +140,21 @@
     min-width: 0; flex: 1 1 auto;
   }
   .fhow { color: var(--green); font-weight: 700; letter-spacing: 0.04em; }
+  /* the rewind beside FINAL on a bout we hold the moments for: press it and
+     the fight plays back on the card, under FINAL and above the rail; press
+     it again and it folds away (Jose, Sep 20, 2026) */
+  .frewind { appearance: none; background: none; border: 0; padding: 4px 6px; margin-left: 4px;
+             cursor: pointer; color: var(--green); line-height: 0; vertical-align: middle;
+             border-radius: 6px; }
+  .frewind svg { width: 16px; height: 16px; display: block; }
+  .frewind[aria-pressed="true"] { background: rgba(57,255,136,0.14); }
+  .fanim { margin: 8px 0 2px; }
+  .fanim svg { display: block; width: 100%; height: 330px; touch-action: none; cursor: ns-resize; }
+  .fanim .again { display: block; margin: 2px auto 2px; background: none; color: #6f6f6f;
+                  border: 0; padding: 4px 10px; cursor: pointer;
+                  font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700;
+                  font-size: 10px; letter-spacing: 0.2em; }
+  .fanim .again:hover { color: #fff; }
   .glive { display: block; width: 34px; height: auto; margin: 5px auto 0; }
   .fwt {
     display: block; margin-top: 22px;
@@ -668,6 +683,13 @@
           font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
           font-weight: 700; font-size: 11.5px; letter-spacing: 0.05em;
           color: #ffffff; font-variant-numeric: tabular-nums; }
+  /* on a finished bout the label is the board's own marks -- the glove, the
+     hold, UD, R1 -- with the clock after them, instead of the words
+     (Jose, Sep 20, 2026: "use the icon from the UD page, TKO is the KO
+     icon, then the icon for R5") */
+  .tlat { display: inline-flex; align-items: center; gap: 3px; }
+  .tlat svg { width: 21px; height: 18px; display: block; flex: none; }
+  .tlat svg.mk--ko { width: 20px; height: 20px; }
   .tlbar { position: relative; height: 3px; border-radius: 2px;
            background: rgba(255, 255, 255, 0.16); margin: 6px 0; }
   .tlfill { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 2px;
@@ -6370,7 +6392,11 @@
     anchor = anchor ? new Date(anchor).toISOString() : new Date().toISOString();
     if (want === "week") day = weekKeyOf(anchor) || openingWeek();
     else if (want === "month") day = monthKeyOf(anchor);
-    else day = dayKeyOf(anchor);
+    /* the calendar opens on today, not on the first day of the week he was
+       just looking at: coming off Week 2 it landed on Thursday 9/17, the
+       week's first kickoff, three days behind (Jose, Sep 20, 2026: "it needs
+       to take me to today, it's been taking me to 9/17") */
+    else day = (openingDay(DAYS) || [dayKeyOf(anchor)])[0];
     if (sport === "mma") {
       mmaMonth = day;
       monthTabs();
@@ -7425,6 +7451,367 @@
      paid every time (Jose, Sep 19, 2026: "if he won by dec he had to win by
      one of these"). The bout's own status carries "Decision - Unanimous",
      short "U Dec". It is asked once per bout, after it is settled. */
+  /* ---- the fight, played back on the card ----
+     Every strike ESPN logged, laid where it landed: red field for the man on
+     the left, blue for the right, head at the top and legs at the bottom, a
+     dot for the head, a square for the body, a diamond for the legs. A clinch
+     slides the seam toward whoever has hold; a takedown turns the whole
+     thing a quarter turn; a knockdown drops the downed man's field and only
+     his. The clock runs down the middle, round bars across it, and the finish
+     is one line from the clock to the mark. Drag to scrub; let go and it
+     plays on; it plays once and REPLAY starts it over. The moments come from
+     data/fight_plays.jsonl by way of site/anim/<bout>.json, so a card that
+     has a file gets the rewind and one that does not gets nothing
+     (Jose, Sep 20, 2026, built card by card through the night). */
+  function fightAnim(svg, d, againBtn) {
+    var NS = "http://www.w3.org/2000/svg";
+    var W = 400, FH = 292, CX = 200, CY = 146, TOTAL = d.rounds * 300, SPEED = 30;
+    var FL = 46, FR = 354;
+    var RED = "#e04e3c", BLUE = "#567ae0";
+    var HIT = {a: {1: "#b5392a", 0: "#e09183"}, b: {1: "#2f57b5", 0: "#8fabe8"}};
+    var BAND = {head: [12, 84], body: [108, 184], leg: [206, 282]};
+    var NEAR = {g: [0.04, 0.20], c: [0.18, 0.44], d: [0.42, 0.96]};
+    var CLIP = "clipF" + d.bout;
+    var el = function (n, at) { var e = document.createElementNS(NS, n); for (var k in at) e.setAttribute(k, at[k]); return e; };
+    var y = function (t) { return (t / TOTAL) * FH; };
+
+    var spin, redF, blueF, marksA, marksB, ctrl, nowL, tally, tallyG = [], foot, voidA, voidB;
+    var laid = [], lastSeam = -1;
+    var count = {}, placed = {}, i = 0, seam = CX, wantSeam = CX, turn = 0, wantTurn = 0, ground = false;
+    var t0 = performance.now(), held = false, heldT = 0, shownT = 0, over = false, dead = false;
+    var shakeUntil = 0, shakeSide = 0, subUntil = 0, subSide = 0, pauseUntil = 0, pauseInk = "#39ff88";
+    var kdUntil = 0, kdDown = "", dropA = 0, dropB = 0, momAt = 0;
+
+    function build() {
+      svg.innerHTML = "";
+      var defs = el("defs", {}), cp = el("clipPath", {id: CLIP});
+      cp.appendChild(el("rect", {x: FL, y: 0, width: FR - FL, height: FH})); defs.appendChild(cp); svg.appendChild(defs);
+      var holder = el("g", {"clip-path": "url(#" + CLIP + ")"});
+      spin = el("g", {transform: "rotate(0 " + CX + " " + CY + ")"});
+      redF = el("rect", {x: FL, y: -260, width: CX - FL, height: 820, fill: RED, "fill-opacity": 0.16});
+      blueF = el("rect", {x: CX, y: -260, width: FR - CX, height: 820, fill: BLUE, "fill-opacity": 0.16});
+      marksA = el("g", {}); marksB = el("g", {});
+      spin.appendChild(redF); spin.appendChild(blueF); spin.appendChild(marksA); spin.appendChild(marksB);
+      holder.appendChild(spin); svg.appendChild(holder);
+      voidA = el("rect", {x: 0, y: 0, width: 0, height: 0, fill: "#0d0d0d"});
+      voidB = el("rect", {x: 0, y: 0, width: 0, height: 0, fill: "#0d0d0d"});
+      holder.appendChild(voidA); holder.appendChild(voidB);
+      ctrl = el("g", {}); svg.appendChild(ctrl);
+      svg.appendChild(el("line", {x1: CX, y1: 0, x2: CX, y2: FH, stroke: "#fff", "stroke-width": 3}));
+      for (var r = 0; r <= d.rounds; r++) {
+        var yy = Math.max(4, Math.min(FH, y(r * 300))), w = (r === 0 || r === d.rounds) ? 24 : 16;
+        svg.appendChild(el("line", {x1: CX - w, y1: yy, x2: CX + w, y2: yy, stroke: "#fff", "stroke-width": 4}));
+        if (r < d.rounds)
+          svg.appendChild(el("line", {x1: 190, y1: y(r * 300 + 150), x2: 210, y2: y(r * 300 + 150),
+            stroke: "#fff", "stroke-opacity": 0.55, "stroke-width": 2.5}));
+      }
+      nowL = el("line", {x1: 148, y1: 0, x2: 252, y2: 0, stroke: "#fff", "stroke-opacity": 0.75, "stroke-width": 1.5});
+      svg.appendChild(nowL);
+      foot = el("text", {x: CX, y: 318, "text-anchor": "middle", fill: "#9a9a9a",
+        "font-family": "Barlow Condensed, Arial Narrow, sans-serif", "font-size": 12, "font-weight": 700, "letter-spacing": 2.2});
+      foot.textContent = "R1 5:00"; svg.appendChild(foot);
+      tally = {}; tallyG = []; count = {ahead: 0, abody: 0, aleg: 0, bhead: 0, bbody: 0, bleg: 0};
+      var R = 15;
+      [["a", "head", 21, 32], ["a", "body", 21, 130], ["a", "leg", 21, 228],
+       ["b", "head", 379, 32], ["b", "body", 379, 130], ["b", "leg", 379, 228]].forEach(function (q) {
+        var wv = q[0], k = q[1], x = q[2], yy2 = q[3];
+        var g = el("g", {});
+        g.appendChild(el("circle", {cx: x, cy: yy2, r: R + 3, fill: "#0b0b0b", "fill-opacity": 0.72}));
+        var shape;
+        if (k === "head") shape = el("circle", {cx: x, cy: yy2, r: R, fill: "none", stroke: "#fff", "stroke-opacity": 0.30, "stroke-width": 1.5});
+        else if (k === "body") shape = el("rect", {x: x - R, y: yy2 - R, width: R * 2, height: R * 2, rx: 2, fill: "none", stroke: "#fff", "stroke-opacity": 0.30, "stroke-width": 1.5});
+        else shape = el("polygon", {points: x + "," + (yy2 - R * 1.25) + " " + (x + R) + "," + yy2 + " " + x + "," + (yy2 + R * 1.25) + " " + (x - R) + "," + yy2,
+          fill: "none", stroke: "#fff", "stroke-opacity": 0.30, "stroke-width": 1.5});
+        var e = el("text", {x: x, y: yy2 + 6, "text-anchor": "middle", fill: "#fff", "fill-opacity": 1,
+          "font-family": "Barlow Condensed, Arial Narrow, sans-serif", "font-size": 18, "font-weight": 700, "letter-spacing": 0.5});
+        e.textContent = "0";
+        g.appendChild(shape); g.appendChild(e); svg.appendChild(g); tally[wv + k] = e; tallyG.push(g);
+      });
+    }
+
+    function diamond(cx, cy, r) {
+      return cx + "," + (cy - r * 1.25) + " " + (cx + r) + "," + cy + " " + cx + "," + (cy + r * 1.25) + " " + (cx - r) + "," + cy;
+    }
+    function addMark(e, live) {
+      var onRed = (e.w === "b");
+      var x, c;
+      if (e.grey) {
+        x = onRed ? FL + 8 + Math.random() * (seam - FL - 16) : seam + 8 + Math.random() * (FR - seam - 16);
+        c = el("circle", {cx: x, cy: 10 + Math.random() * (FH - 20), r: 2.6, fill: "#9a9a9a", "fill-opacity": 0.34});
+        (onRed ? marksA : marksB).appendChild(c);
+        laid.push({el: c, side: onRed ? "a" : "b", kind: "head", r: 2.6, cy: +c.getAttribute("cy"),
+                   frac: onRed ? (x - FL) / (CX - FL) : (x - CX) / (FR - CX)});
+        return;
+      }
+      if (e.miss) {
+        x = onRed ? FL + 8 + Math.random() * (seam - FL - 16) : seam + 8 + Math.random() * (FR - seam - 16);
+        c = el("circle", {cx: x, cy: 10 + Math.random() * (FH - 20), r: 3.4, fill: "none",
+                          stroke: "#9a9a9a", "stroke-opacity": 0.22, "stroke-width": 1.2});
+        (onRed ? marksA : marksB).appendChild(c);
+        laid.push({el: c, side: onRed ? "a" : "b", kind: "head", r: 3.4, cy: +c.getAttribute("cy"),
+                   frac: onRed ? (x - FL) / (CX - FL) : (x - CX) / (FR - CX)});
+        return;
+      }
+      var ink = HIT[e.w][e.sig ? 1 : 0], b = BAND[e.k];
+      var zone = NEAR[e.p || "d"], reach = onRed ? CX - FL - 14 : FR - CX - 14;
+      var key = (onRed ? "a" : "b") + e.k; placed[key] = placed[key] || [];
+      var cx = 0, cy = 0, far = -1;
+      for (var k = 0; k < 12; k++) {
+        var off = (zone[0] + Math.random() * (zone[1] - zone[0])) * reach;
+        var px = onRed ? CX - 10 - off : CX + 10 + off, py = b[0] + Math.random() * (b[1] - b[0]);
+        var near = 1e9, seen = placed[key];
+        for (var j = Math.max(0, seen.length - 70); j < seen.length; j++) {
+          var dx = seen[j][0] - px, dy = seen[j][1] - py, dd = dx * dx + dy * dy;
+          if (dd < near) near = dd;
+        }
+        if (near > far) { far = near; cx = px; cy = py; }
+        if (far > 150) break;
+      }
+      placed[key].push([cx, cy]);
+      var end = e.kd ? 12 : 4;
+      if (e.k === "head") c = el("circle", {cx: cx, cy: cy, r: end, fill: ink});
+      else if (e.k === "body") c = el("rect", {x: cx - end, y: cy - end, width: end * 2, height: end * 2, rx: 1, fill: ink});
+      else c = el("polygon", {points: diamond(cx, cy, end), fill: ink});
+      if (e.kd) {
+        c.setAttribute("stroke", "#fff"); c.setAttribute("stroke-width", 2);
+        var ended = Math.abs(e.t - d.stop) < 12 && (d.how === "TKO" || d.how === "KO");
+        kdUntil = ended ? Infinity : performance.now() + 1100;
+        kdDown = (e.w === "a") ? "b" : "a";
+      }
+      (onRed ? marksA : marksB).appendChild(c);
+      laid.push({el: c, side: onRed ? "a" : "b", kind: e.k, r: end, cy: cy,
+                 frac: onRed ? (cx - FL) / (CX - FL) : (cx - CX) / (FR - CX)});
+      if (live) {
+        var born = performance.now();
+        (function pop(now) {
+          var kk = Math.min(1, (now - born) / 300);
+          var r = end * (0.25 + 0.75 * (1 - Math.pow(1 - kk, 3)) + 0.9 * kk * (1 - kk));
+          if (e.k === "head") c.setAttribute("r", r);
+          else if (e.k === "body") { c.setAttribute("x", cx - r); c.setAttribute("y", cy - r); c.setAttribute("width", r * 2); c.setAttribute("height", r * 2); }
+          else c.setAttribute("points", diamond(cx, cy, r));
+          if (kk < 1 && !dead) requestAnimationFrame(pop);
+        })(born);
+      }
+      var side = e.w === "b" ? "a" : "b";
+      count[side + e.k] += 1; tally[side + e.k].textContent = count[side + e.k];
+    }
+
+    function applyState(e) {
+      var td = d.moments.some(function (m) { return m.what === "Takedown" && Math.abs(m.t - e.t) < 34; });
+      var holding = (e.ac > 0 || e.bc > 0);
+      if (e.gr > 0) ground = true;
+      else if (e.cl > 0) ground = false;
+      else if (holding && td) ground = true;
+      else if (!holding) ground = false;
+      var clinch = !ground && e.cl > 0;
+      wantTurn = ground ? (e.ac >= e.bc ? 90 : -90) : 0;
+      wantSeam = ground ? CX : (clinch ? (e.ac >= e.bc ? FL + (FR - FL) * 0.80 : FL + (FR - FL) * 0.20) : CX);
+      [["a", 189, e.ac], ["b", 205, e.bc]].forEach(function (q) {
+        var got = q[2];
+        if (!(got > 0)) return;
+        var h2 = Math.max(3, (got / TOTAL) * FH * 1.6);
+        ctrl.appendChild(el("rect", {x: q[1], y: Math.max(0, y(e.t) - h2), width: 6, height: h2, rx: 3, fill: "#f0913c", "fill-opacity": 0.9}));
+      });
+    }
+
+    function paint() {
+      var want = performance.now() < kdUntil ? FH * 0.20 : 0;
+      var tA = (kdDown === "a") ? want : 0, tB = (kdDown === "b") ? want : 0;
+      dropA += (tA - dropA) * 0.24;
+      dropB += (tB - dropB) * 0.24;
+      redF.setAttribute("width", Math.max(0, seam - FL));
+      redF.setAttribute("y", -260 + dropA);
+      blueF.setAttribute("x", seam);
+      blueF.setAttribute("y", -260 + dropB);
+      blueF.setAttribute("width", Math.max(0, FR - seam));
+      marksA.setAttribute("transform", "translate(0 " + dropA.toFixed(1) + ")");
+      marksB.setAttribute("transform", "translate(0 " + dropB.toFixed(1) + ")");
+      voidA.setAttribute("x", FL); voidA.setAttribute("width", Math.max(0, seam - FL)); voidA.setAttribute("height", dropA);
+      voidB.setAttribute("x", seam); voidB.setAttribute("width", Math.max(0, FR - seam)); voidB.setAttribute("height", dropB);
+      spin.setAttribute("transform", "rotate(" + turn + " " + CX + " " + CY + ")");
+      if (Math.abs(seam - lastSeam) > 0.3) {
+        lastSeam = seam;
+        for (var j = 0; j < laid.length; j++) {
+          var m = laid[j];
+          var x = m.side === "a" ? FL + m.frac * (seam - FL) : seam + m.frac * (FR - seam);
+          if (m.kind === "head") m.el.setAttribute("cx", x.toFixed(1));
+          else if (m.kind === "body") m.el.setAttribute("x", (x - m.r).toFixed(1));
+          else m.el.setAttribute("points", diamond(x, m.cy, m.r));
+        }
+      }
+    }
+    function sayClock(t) {
+      var rd = Math.min(d.rounds, Math.floor(t / 300) + 1), left = 300 - (t - (rd - 1) * 300);
+      foot.textContent = "R" + rd + " " + Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2);
+      foot.setAttribute("fill", "#9a9a9a");
+      nowL.setAttribute("y1", y(t)); nowL.setAttribute("y2", y(t));
+    }
+    function drawFinish() {
+      if (d.won === null || d.won === undefined) return;
+      if (d.how === "UD" || d.how === "SD" || d.how === "MD") return;
+      var loser = (d.won === 0) ? "b" : "a";
+      var band = BAND[d.fb || "head"];
+      var sx = loser === "a" ? FL + (seam - FL) * 0.55 : seam + (FR - seam) * 0.55;
+      var sy = (band[0] + band[1]) / 2;
+      var yy = y(d.stop);
+      var g = el("g", {});
+      g.appendChild(el("line", {x1: CX, y1: yy, x2: sx, y2: sy, stroke: "#fff", "stroke-opacity": 0.85, "stroke-width": 1.5}));
+      var sym = (d.how === "SUB") ? "msub" : "mko", size = 40;
+      var u = document.createElementNS(NS, "use");
+      u.setAttribute("href", "#" + sym);
+      u.setAttribute("x", sx - size / 2); u.setAttribute("y", sy - size / 2);
+      u.setAttribute("width", size); u.setAttribute("height", size);
+      g.appendChild(u);
+      svg.appendChild(g);
+      tallyG.forEach(function (t) { svg.appendChild(t); });
+    }
+    function sayDone() {
+      foot.textContent = d.how + (d.fr ? " · R" + d.fr : "") + (d.fc ? " " + d.fc : "");
+      foot.setAttribute("fill", "#ffffff");
+      nowL.setAttribute("y1", y(d.stop)); nowL.setAttribute("y2", y(d.stop));
+      nowL.setAttribute("stroke-opacity", 1); nowL.setAttribute("stroke-width", 3);
+      drawFinish();
+    }
+    function reset() {
+      build(); placed = {}; laid = []; lastSeam = -1; i = 0; momAt = 0;
+      shakeUntil = subUntil = pauseUntil = kdUntil = 0; kdDown = ""; dropA = dropB = 0;
+      svg.style.background = "";
+      seam = wantSeam = CX; turn = wantTurn = 0;
+      ground = false; shownT = 0; over = false;
+    }
+    function seek(target) {
+      if (target < shownT) reset();
+      runMoments(target);
+      while (i < d.ev.length && d.ev[i].t <= target) {
+        var e = d.ev[i++];
+        if (e.state) applyState(e); else addMark(e, false);
+      }
+      seam = wantSeam; turn = wantTurn; paint();
+      shownT = target; sayClock(target);
+    }
+    function runMoments(t) {
+      while (momAt < d.moments.length && d.moments[momAt].t <= t) {
+        var m = d.moments[momAt++], w = m.what;
+        if (w === "Takedown Attempt") { shakeUntil = performance.now() + 900; shakeSide = (Math.random() < 0.5) ? -1 : 1; }
+        else if (w === "Submission Attempt") { subUntil = performance.now() + 2600; subSide = ground ? (turn >= 0 ? 1 : -1) : 1; }
+        else if (w === "Round Pause" || w.indexOf("Pause Reason") === 0) { pauseUntil = performance.now() + 2200; pauseInk = w.indexOf("Eye Poke") > -1 ? "#f0913c" : "#39ff88"; }
+        else if (w === "Round Unpause") { pauseUntil = 0; }
+        else if (w === "Reversal") { if (ground) wantTurn = -wantTurn; }
+      }
+    }
+    function frame(now) {
+      if (held || dead) return;
+      var t = ((now - t0) / 1000) * SPEED;
+      if (t > d.stop) { over = true; seam = wantSeam; turn = wantTurn; paint(); sayDone(); return; }
+      sayClock(t);
+      while (i < d.ev.length && d.ev[i].t <= t) {
+        var e = d.ev[i++];
+        if (e.state) applyState(e); else addMark(e, true);
+      }
+      runMoments(t);
+      var now2 = performance.now();
+      var seamWant = wantSeam, turnWant = wantTurn;
+      if (now2 < subUntil) {
+        seamWant = ground ? CX : (subSide > 0 ? FL + (FR - FL) * 0.80 : FL + (FR - FL) * 0.20);
+        if (ground) turnWant = wantTurn;
+      }
+      if (now2 < shakeUntil) {
+        var kk = (shakeUntil - now2) / 900;
+        seamWant = CX + shakeSide * 52 * Math.sin(kk * Math.PI * 3) * kk;
+      }
+      seam += (seamWant - seam) * 0.12;
+      turn += (turnWant - turn) * 0.035;
+      svg.style.background = now2 < pauseUntil
+        ? (pauseInk === "#f0913c" ? "rgba(240,145,60,0.13)" : "rgba(57,255,136,0.13)") : "";
+      paint(); shownT = t;
+      requestAnimationFrame(frame);
+    }
+    var atY = function (ev) {
+      var r = svg.getBoundingClientRect();
+      var vy = ((ev.clientY - r.top) / r.height) * 330;
+      return Math.max(0, Math.min(d.stop, (vy / FH) * TOTAL));
+    };
+    svg.addEventListener("pointerdown", function (ev) {
+      held = true; over = false;
+      try { svg.setPointerCapture(ev.pointerId); } catch (x) {}
+      heldT = atY(ev); seek(heldT);
+    });
+    svg.addEventListener("pointermove", function (ev) { if (held) { heldT = atY(ev); seek(heldT); } });
+    function letGo() {
+      if (!held) return;
+      held = false;
+      t0 = performance.now() - (heldT / SPEED) * 1000;
+      requestAnimationFrame(frame);
+    }
+    ["pointerup", "pointercancel", "pointerleave"].forEach(function (k) { svg.addEventListener(k, letGo); });
+    if (againBtn) againBtn.addEventListener("click", function () {
+      if (dead) return;
+      reset(); t0 = performance.now(); requestAnimationFrame(frame);
+    });
+    reset();
+    requestAnimationFrame(frame);
+    return { kill: function () { dead = true; held = false; } };
+  }
+
+  /* which bouts we hold the moments for, read once from the site */
+  var ANIMS = null, ANIMWAIT = [];
+  function animList(then) {
+    if (ANIMS) return then(ANIMS);
+    ANIMWAIT.push(then);
+    if (ANIMWAIT.length > 1) return;
+    fetch("anim/index.json").then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { ANIMS = j || {}; })
+      .catch(function () { ANIMS = {}; })
+      .then(function () { var w = ANIMWAIT; ANIMWAIT = []; w.forEach(function (f) { f(ANIMS); }); });
+  }
+  var REWIND = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="2.6" height="12" rx="0.8" fill="currentColor"/>' +
+               '<polygon points="19,6 9,12 19,18" fill="currentColor"/></svg>';
+  /* the rewind, beside FINAL, on a bout that has a file; and what it opens */
+  function armRewind(card) {
+    if (!card || !card.dataset.bout) return;
+    var gt = card.querySelector(".gtime");
+    if (!gt || !gt.querySelector(".fhow") || gt.querySelector(".frewind")) return;
+    animList(function (list) {
+      if (!list[card.dataset.bout]) return;
+      var fh = gt.querySelector(".fhow");
+      if (!fh || gt.querySelector(".frewind")) return;
+      var b = document.createElement("button");
+      b.className = "frewind"; b.type = "button";
+      b.setAttribute("aria-label", "Play the fight back");
+      b.setAttribute("aria-pressed", "false");
+      b.innerHTML = REWIND;
+      b.addEventListener("click", function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var open = card.querySelector(":scope > .fanim");
+        if (open) {
+          if (open._anim) open._anim.kill();
+          open.parentNode.removeChild(open);
+          b.setAttribute("aria-pressed", "false");
+          return;
+        }
+        b.setAttribute("aria-pressed", "true");
+        var box = document.createElement("div");
+        box.className = "fanim";
+        box.innerHTML = '<svg viewBox="0 0 400 330"></svg><button class="again" type="button">REPLAY</button>';
+        /* under FINAL, above the rail: the head is the first child and the
+           rail is the next, so it goes between them */
+        var head = card.querySelector(":scope > .ghead");
+        if (head && head.nextSibling) head.parentNode.insertBefore(box, head.nextSibling); else card.appendChild(box);
+        fetch("anim/" + card.dataset.bout + ".json").then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d || !card.contains(box)) return;
+            /* the card knows how many rounds the bout was for; the file may
+               have been cut with the default */
+            var nr = (FPROPS[card.dataset.bout] || {}).rounds;
+            if (nr) d.rounds = nr;
+            box._anim = fightAnim(box.querySelector("svg"), d, box.querySelector(".again"));
+          })
+          .catch(function () {});
+      });
+      fh.parentNode.insertBefore(b, fh.nextSibling);
+    });
+  }
+  window.armRewind = armRewind;
   var EXACT = { "u dec": "UD", "s dec": "SD", "m dec": "MD", "dec": "DEC",
                 "ko/tko": "TKO", "ko": "KO", "tko": "TKO", "sub": "SUB",
                 "submission": "SUB", "dq": "DQ", "nc": "NC", "draw": "DRAW",
@@ -7449,6 +7836,7 @@
         var fw = gt.querySelector(".fwt");
         gt.classList.remove("gtime--live");
         gt.innerHTML = '<span class="fhow">FINAL</span>' + (fw ? fw.outerHTML : "");
+        armRewind(card);
       }
       var win = "";
       card.querySelectorAll(".ghead--fight .gteam").forEach(function (s) {
@@ -7558,7 +7946,28 @@
       : "R" + rd + (st.displayClock ? " " + st.displayClock : "");   /* as given: time left */
     if (at) {
       at.style.left = Math.max(10, Math.min(90, pct)) + "%";
-      if (at.textContent !== said) at.textContent = said;
+      if (at.dataset.said !== said) {
+        at.dataset.said = said;
+        /* a finished bout wears the board's own marks: the glove for a
+           knockout, the hold for a submission, UD / SD / MD for a decision,
+           then the round's mark, then the official time. The words stay for
+           anything the board has no mark for (Jose, Sep 20, 2026: "use the
+           icon from the UD page, TKO is the KO icon, then R5") */
+        var MK = {TKO: "mko", KO: "mko", SUB: "msub", UD: "mud", SD: "msd", MD: "mmd", DEC: "mdec"};
+        var m = state === "post" ? /^([A-Z]+)(?:\s*·\s*R(\d))?(?:\s+(\d+:\d\d))?$/.exec(said) : null;
+        if (m && MK[m[1]]) {
+          var use = function (id, cls) {
+            return '<svg class="' + (cls || "") + '" aria-hidden="true"><use href="#' + id + '"/></svg>';
+          };
+          at.innerHTML = use(MK[m[1]], MK[m[1]] === "mko" ? "mk--ko" : "") +
+                         (m[2] && +m[2] >= 1 && +m[2] <= 5 ? use("r" + m[2]) : "") +
+                         (m[3] ? "<span>" + m[3] + "</span>" : "");
+          at.setAttribute("aria-label", said);
+        } else {
+          at.textContent = said;
+          at.removeAttribute("aria-label");
+        }
+      }
     }
   }
   /* one clock for every bout on the board, a beat a second */
@@ -7662,6 +8071,7 @@
             var fw = gt.querySelector(".fwt");
             gt.classList.remove("gtime--live");
             gt.innerHTML = '<span class="fhow">FINAL</span>' + (fw ? fw.outerHTML : "");
+            armRewind(card);
           }
         }
         if (!card.dataset.toldPrices) {
