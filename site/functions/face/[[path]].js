@@ -8,7 +8,13 @@
    behind it, so every request comes through here: a picture we hold is
    served with the month's caching set on it; one we do not is a 404, which
    no browser keeps (Jose, Sep 20, 2026). */
-export async function onRequestGet({ request, env }) {
+/* onRequest, not onRequestGet: a HEAD has no handler of its own and would
+   fall through to the static layer, which answers with the web page -- which
+   is exactly what every curl -I probe saw and why the route looked dead */
+export async function onRequest({ request, env }) {
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    return new Response("", { status: 405 });
+  }
   const u = new URL(request.url);
   const path = u.pathname.replace(/^\/face\//, "");
   if (!/^(nfl|college-football|mma)\/[A-Za-z0-9_-]+\.png$/.test(path)) {

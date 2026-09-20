@@ -3035,7 +3035,9 @@
   function faceSrc(card, side) {
     var id = side === "l" ? card.dataset.lqbid : card.dataset.rqbid;
     if (!id || !/^\d+$/.test(id)) return NOFACE;
-    return "faces/" + (card.dataset.lg === "college-football" ? "college-football" : "nfl") + "/" + id + ".png";
+    /* /face/, not /faces/: the function behind it answers a missing man
+       with a 404 the browser will not keep -- see functions/face */
+    return "face/" + (card.dataset.lg === "college-football" ? "college-football" : "nfl") + "/" + id + ".png";
   }
   /* when our copy is missing, the silhouette. The page never asks ESPN for a
      picture: faces.py fetches them on the sweep, and the page's only ESPN
