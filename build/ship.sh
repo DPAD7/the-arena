@@ -14,8 +14,31 @@ set -e
 cd "$(dirname "$0")/.."
 msg="${1:-ship $(date -u '+%Y-%m-%d %H:%M UTC')}"
 
-# 1. the sweep's commits first, with ours stashed over them
-git pull --rebase --autostash -q origin main
+# 1. ours committed first, then the sweep's replayed under them. An autostash
+#    was leaving <<<<<<< in every generated file the sweep had also touched,
+#    every single run, because two writers of the same generated file can
+#    never merge. Committing first turns that into a rebase conflict, and a
+#    rebase conflict in a file we have just generated has one right answer:
+#    the copy we just generated (Sep 20, 2026).
+git add -A
+git diff --cached --quiet || git commit -q -m "${1:-ship $(date -u '+%Y-%m-%d %H:%M UTC')}"
+
+if ! git pull --rebase -q origin main 2>/dev/null; then
+  while [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; do
+    for f in $(git diff --name-only --diff-filter=U); do
+      case "$f" in
+        site/prices.json|site/ledger.json|site/anim/*|data/*.json|site/index.html|site/build.txt)
+          git checkout --theirs -- "$f" 2>/dev/null || git checkout --ours -- "$f"
+          git add "$f"
+          echo "  kept our freshly written $f" ;;
+        *)
+          echo "STOPPED: $f conflicts and is not a generated file. Resolve it by hand." >&2
+          exit 1 ;;
+      esac
+    done
+    GIT_EDITOR=true git rebase --continue -q 2>/dev/null || break
+  done
+fi
 
 # 1a. an autostash that could not merge leaves both sides in the file with
 #     <<<<<<< around them. That is not a warning anywhere -- it is written,

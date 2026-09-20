@@ -2788,7 +2788,7 @@
         put("nfl", ab, clubPic("nfl", String(ab).toLowerCase()), false, clubAway("nfl", String(ab).toLowerCase()));
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
-        if (q[0] && /^\d+$/.test(String(q[1]))) put("nfl", famName(q[0]), "faces/nfl/" + q[1] + ".png", true);
+        if (q[0] && /^\d+$/.test(String(q[1]))) put("nfl", famName(q[0]), "face/nfl/" + q[1] + ".png", true);
       });
     });
     (typeof CFB !== "undefined" ? CFB : []).forEach(function (g) {
@@ -2799,7 +2799,7 @@
         put("ncaaf", ab, src, false, away); put("ncaaf", CFBNAME[ab], src, false, away);
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
-        if (q[0] && /^\d+$/.test(String(q[1]))) put("ncaaf", famName(q[0]), "faces/college-football/" + q[1] + ".png", true);
+        if (q[0] && /^\d+$/.test(String(q[1]))) put("ncaaf", famName(q[0]), "face/college-football/" + q[1] + ".png", true);
       });
     });
     (typeof FIGHTS !== "undefined" ? FIGHTS : []).forEach(function (f) {
@@ -2880,7 +2880,7 @@
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
         if (q[0] && /^\d+$/.test(String(q[1])))
-          add(g[1], [famName(q[0]), lastName(q[0]), q[0]], "faces/nfl/" + q[1] + ".png", true);
+          add(g[1], [famName(q[0]), lastName(q[0]), q[0]], "face/nfl/" + q[1] + ".png", true);
       });
     });
     (typeof CFB === "undefined" || !CFB ? [] : CFB).forEach(function (g) {
@@ -2890,7 +2890,7 @@
       });
       [[g[5], g[6]], [g[7], g[8]]].forEach(function (q) {
         if (q[0] && /^\d+$/.test(String(q[1])))
-          add(g[1], [famName(q[0]), lastName(q[0]), q[0]], "faces/college-football/" + q[1] + ".png", true);
+          add(g[1], [famName(q[0]), lastName(q[0]), q[0]], "face/college-football/" + q[1] + ".png", true);
       });
     });
     (typeof FIGHTS === "undefined" || !FIGHTS ? [] : FIGHTS).forEach(function (f) {
@@ -5597,7 +5597,7 @@
     var season = formWeek === "season";
     box.innerHTML = rows.map(function (r, i) {
       var face = /^\d+$/.test(r.id)
-        ? '<img class="qbface" alt="" loading="lazy" src="faces/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
+        ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
         : '<img class="qbface" alt="" src="' + NOFACE + '">';
       var marks = season ? MTIMES(MBALL, r.ptd) + MTIMES(MRUN, r.atd) +
                            MTIMES(MVS, r.h2hw) + MTIMES(MML, r.mlw) : "";
@@ -5696,7 +5696,7 @@
         return Math.min.apply(null, games[a].map(function (r) { return r.rank; })) - Math.min.apply(null, games[b].map(function (r) { return r.rank; }));
       });
       var faceOf = function (r) {
-        return /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="faces/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
+        return /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
       };
       /* STATSCORE's own marks, from their icon font: the house by the home
          man's club, the plane by the man who travelled (Jose, Sep 16, 2026) */
@@ -5820,7 +5820,7 @@
     /* the season writes all four, x0 included, so the rows read as four even columns */
     var times = function (mark, n) { return '<span class="fgrp' + (n ? "" : " fgrp--zero") + '">' + mark + '<em>\u00d7' + n + '</em></span>'; };
     box.innerHTML = rows.map(function (r, i) {
-      var face = /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="faces/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
+      var face = /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
       var marks;
       if (r.agg) {
         marks = times(BALL, r.ptd) + times(RUN, r.atd) + times(W("H2H"), r.h2hw) + times(W("ML"), r.mlw);
