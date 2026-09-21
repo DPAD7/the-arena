@@ -5720,18 +5720,17 @@
       var marks = season ? MTIMES(MBALL, r.ptd) + MTIMES(MRUN, r.atd) +
                            MTIMES(MVS, r.h2hw) + MTIMES(MML, r.mlw) : "";
       var n = (r.legs || []).length;
-      var paid = !r.priced ? '<span class="mnone">no price</span>'
-        : !r.units ? '<span class="mzero">–</span>'
-        : season ? '<span class="mpay">' + (r.units > 0 ? "+" : "") + Math.floor(r.units) + '<em>u</em></span>'
-                 : '<span class="mpay">' + toUsOdds(r.units) + '</span>';
+      /* what the week or the season was worth is off the row: the ticket
+         still says how many legs he cleared, and the number itself stays in
+         the file (Jose, Sep 21, 2026: "remove the units, leave the ticket") */
       var tick = '<span class="mtick' + (n ? "" : " mtick--none") + '" title="' +
         n + (n === 1 ? ' leg' : ' legs') + '">' +
         '<svg viewBox="0 0 26 18" aria-hidden="true"><use href="#ticket"/></svg></span>';
       return '<div class="frow mrow"><span class="frank">' + (i + 1) + '</span>' +
         '<span class="fwho">' + face + '<span class="fname">' + nameMark(r) +
         '<small>' + esc(r.club) + '</small></span></span>' +
-        (marks ? '<span class="mmks">' + marks + tick + paid + '</span>'
-               : tick + paid) + '</div>';
+        (marks ? '<span class="mmks">' + marks + tick + '</span>'
+               : tick) + '</div>';
     }).join("");
     BOARD.appendChild(box);
   }
