@@ -835,7 +835,7 @@
   .gcard--v3 .gstack { display: flex; flex-direction: column; gap: 0; }
   .gcard--v3 .gline,
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdrow {
-    display: grid !important; grid-template-columns: 1fr 46px 1fr !important;
+    display: grid !important; grid-template-columns: 1fr 34px 1fr !important;
     align-items: center; justify-items: center; gap: 3px; padding: 3px 0;
     border-top: 1px dashed rgba(255,255,255,.10); }
   .gcard--v3 .gstack > :first-child .ptdrow,
@@ -860,15 +860,12 @@
   .gcard--v3 .gvmid { grid-column: 2; grid-row: 1; display: flex; flex-direction: column;
     gap: 2px; align-items: center; justify-content: center; }
   .gcard--v3 .gmk { position: relative; display: flex; align-items: center;
-    justify-content: center; width: 46px; height: 18px; color: var(--ink); --fb-skin: #fff; --fb-edge: #0c1a12; --fb-seam: #0c1a12; }
+    justify-content: center; gap: 2px; width: 34px; height: 18px; color: var(--ink); --fb-skin: #fff; --fb-edge: #0c1a12; --fb-seam: #0c1a12; }
   .gcard--v3 .gmk svg { width: 15px; height: 14px; }
   .gcard--v3 .gmk img { width: 21px; height: auto; display: block; }
-  /* the rung hangs off the mark rather than shifting it, so every icon sits
-     on the card's own centre line (Jose, Sep 21, 2026) */
-  .gcard--v3 .grn { position: absolute; font-style: normal; font-size: 8.5px;
-    font-weight: 800; color: var(--muted); }
-  .gcard--v3 .grn--l { right: 50%; margin-right: 11px; }
-  .gcard--v3 .grn--r { left: 50%; margin-left: 11px; }
+  /* the rung stands beside its mark, once, the way the mock writes it */
+  .gcard--v3 .grn { font-style: normal; font-size: 8px; font-weight: 800;
+    color: var(--muted); line-height: 1; }
   /* the club price sits in the same column as every other chip and fills it,
      so no row is narrower than the one under it (Jose, Sep 21, 2026: "they
      all should be the same size... it needs to be uniform") */
@@ -910,7 +907,8 @@
   .gcard.gcard--v3 > .gbody .h2hend { display: flex !important; align-items: center;
     justify-content: center; }
   .gcard.gcard--v3 > .gbody .h2hodds .price,
-  .gcard.gcard--v3 > .gbody .price { width: auto; min-width: 52px; max-width: none;
+  .gcard.gcard--v3 > .gbody .price,
+  .gcard.gcard--v3 > .gbody .ghost { width: auto; min-width: 52px; max-width: none;
     height: 28px; padding: 0 8px; border-radius: 9px; font-size: 13px; }
   .gcard.gcard--v3 .h2hbar { position: relative; overflow: visible; height: 7px;
     border-radius: 4px; background: rgba(255,255,255,.16); }
@@ -5166,6 +5164,9 @@
       if (clock) clock.parentNode.insertBefore(when, clock);
     }
     when.classList.add("gtop");
+    /* the card does not say when it kicks off -- the row's own heading does
+       (the design note, Sep 21, 2026: "No kickoff time -- it is already at
+       the top of the day") */
     var eye = card.querySelector(".ghide"), clock2 = card.querySelector(".gtime");
     var watch = card.querySelector(".gwatch");
     if (eye) when.insertBefore(eye, when.firstChild);
@@ -5224,9 +5225,8 @@
       for (var i = 1; i <= rungs; i++) {
         /* the rung reads either side of its mark, so the row is even
            (Jose, Sep 21, 2026) */
-        out += '<i class="gmk"><em class="grn grn--l">' + i + '+</em>' +
-               (runrow ? RUSHSVG : BALLSVG) +
-               '<em class="grn grn--r">' + i + '+</em></i>';
+        out += '<i class="gmk">' + (runrow ? RUSHSVG : BALLSVG) +
+               '<em class="grn">' + i + '+</em></i>';
       }
       mid.innerHTML = out;
       prow.insertBefore(mid, prow.querySelector(".ptdside--r"));
@@ -5299,6 +5299,10 @@
     card.classList.toggle("gcard--on", on);
     var stack = card.querySelector(".gmid > .gstack");
     if (!stack) return;
+    /* the clock is never read off the card itself: before kickoff the row's
+       heading carries it, and once the game is on the score row does */
+    var clk0 = card.querySelector(".gtime");
+    if (clk0) clk0.hidden = true;
     if (!on) { card.querySelectorAll(".pnum, .gyds").forEach(function (n) { n.remove(); }); return; }
     var done = isOver(card);
 
@@ -5308,7 +5312,6 @@
     var when = card.querySelector(".gwhen"), gt = card.querySelector(".gtime");
     var lbar = gt && gt.querySelector(".glivebar");
     if (lbar && when && lbar.parentNode !== when) when.appendChild(lbar);
-    if (gt) gt.hidden = true;
 
     /* the score, the clock or FINAL between the two of them */
     var line = stack.querySelector(".gline"), ends = line ? line.querySelectorAll(".gh2h") : [];
