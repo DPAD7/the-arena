@@ -846,7 +846,9 @@
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside--l { grid-column: 1; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside--r { grid-column: 3; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdbtn { display: flex !important;
-    align-items: center; justify-content: center; padding: 0 !important; margin: 0 !important; }
+    align-items: center; justify-content: center; width: 100%;
+    padding: 0 !important; margin: 0 !important; }
+  .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside { width: 100%; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ntick,
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdline,
   .gcard.gcard--v3 .trkbox, .gcard.gcard--v3 .h2hzero, .gcard.gcard--v3 .h2htick,
@@ -855,8 +857,8 @@
   .gcard--v3 .gvmid { grid-column: 2; grid-row: 1; display: flex; flex-direction: column;
     gap: 2px; align-items: center; justify-content: center; }
   .gcard--v3 .gmk { position: relative; display: flex; align-items: center;
-    justify-content: center; width: 46px; height: 34px; color: var(--ink); --fb-skin: #fff; --fb-edge: #0c1a12; --fb-seam: #0c1a12; }
-  .gcard--v3 .gmk svg { width: 17px; height: 16px; }
+    justify-content: center; width: 46px; height: 18px; color: var(--ink); --fb-skin: #fff; --fb-edge: #0c1a12; --fb-seam: #0c1a12; }
+  .gcard--v3 .gmk svg { width: 15px; height: 14px; }
   .gcard--v3 .gmk img { width: 21px; height: auto; display: block; }
   /* the rung hangs off the mark rather than shifting it, so every icon sits
      on the card's own centre line (Jose, Sep 21, 2026) */
@@ -864,17 +866,40 @@
     font-weight: 800; color: var(--muted); }
   .gcard--v3 .grn--l { right: 50%; margin-right: 11px; }
   .gcard--v3 .grn--r { left: 50%; margin-left: 11px; }
-  .gcard--v3 .gml { margin: 0; display: flex; justify-content: center; }
+  /* the club price sits in the same column as every other chip and fills it,
+     so no row is narrower than the one under it (Jose, Sep 21, 2026: "they
+     all should be the same size... it needs to be uniform") */
+  .gcard--v3 .gml { margin: 0; display: flex; justify-content: center; width: 100%; }
+  /* the row centres its items, which shrinks them to their text -- the chip
+     columns are told to stretch so every chip is one width */
+  .gcard--v3 .gline > .gh2h { justify-self: stretch; width: 100%; }
+  .gcard--v3 .gline > .gh2h > * { width: 100%; }
   /* the chip, at the mock's size, and the empty chip that says nobody priced it */
+  /* every chip on the card is the same chip: the club price, the rungs, the
+     head to head (Jose, Sep 21, 2026: "they all should be the same size") */
   .gcard.gcard--v3 .price { display: inline-flex; align-items: center; justify-content: center;
-    min-width: 0; width: 100%; max-width: 62px; height: 20px; padding: 0 4px;
+    box-sizing: border-box; width: 100%; min-width: 0; max-width: none;
+    height: 18px; padding: 0 3px;
     border: 1px solid rgba(255,255,255,.14); border-radius: 6px;
     background: rgba(255,255,255,.04); font-size: 11px; font-weight: 800;
     font-variant-numeric: tabular-nums; }
-  .gcard.gcard--v3 .ghost { display: inline-flex; width: 100%; max-width: 62px; height: 20px;
+  /* a chip he has picked keeps the board's own marks: the gold fill on the
+     slip, the gold edge when it is placed, green or red once it settles. The
+     card's own chip rule is more specific than those, so they are restated
+     here rather than being lost (Jose, Sep 21, 2026) */
+  .gcard.gcard--v3 .price.on { background: var(--goldgrad); color: var(--chip-ink);
+    border-color: #ffffff; box-shadow: 0 0 14px rgba(255,255,255,.30); }
+  .gcard.gcard--v3 .price.on .pct { color: var(--chip-ink); }
+  .gcard.gcard--v3 .price.placed { border-color: #e3b341; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40); }
+  .gcard.gcard--v3 .price.won { border-color: var(--green); color: var(--green); }
+  .gcard.gcard--v3 .price.lost { border-color: #e2564d; color: #e2564d; }
+  .gcard.gcard--v3 .ghost { display: inline-flex; align-items: center;
+    justify-content: center; box-sizing: border-box;
+    width: 100%; min-width: 0; height: 18px; padding: 0 3px;
     border: 1px dashed rgba(255,255,255,.18); border-radius: 6px; background: none; }
-  .gcard.gcard--v3 .ghost::after { content: "\2013"; margin: auto; color: #6e6e73;
-    font-size: 11px; font-weight: 800; }
+  .gcard.gcard--v3 .ghost::after { content: "\2013"; color: #6e6e73;
+    font-size: 11px; font-weight: 800; line-height: 1; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
   .gcard.gcard--v3 > .gbody .h2hrow { display: grid !important;
@@ -882,11 +907,51 @@
   .gcard.gcard--v3 > .gbody .h2hend { display: flex !important; align-items: center;
     justify-content: center; }
   .gcard.gcard--v3 > .gbody .h2hodds .price,
-  .gcard.gcard--v3 > .gbody .price { max-width: none; min-width: 52px; height: 28px;
-    padding: 0 8px; border-radius: 9px; font-size: 13px; }
+  .gcard.gcard--v3 > .gbody .price { width: auto; min-width: 52px; max-width: none;
+    height: 28px; padding: 0 8px; border-radius: 9px; font-size: 13px; }
   .gcard.gcard--v3 .h2hbar { position: relative; overflow: visible; height: 7px;
     border-radius: 4px; background: rgba(255,255,255,.16); }
-  .gcard--v3 .gvs { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  /* --- once the game is on: the mock's live and final rows --- */
+  /* the prices come off the strip and the numbers take their seats */
+  .gcard.gcard--v3.gcard--on .gline > .gh2h > .gml,
+  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdside,
+  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdbtn { display: none !important; }
+  .gcard.gcard--v3 .pnum { display: inline-flex; align-items: center; justify-content: center;
+    gap: 5px; box-sizing: border-box; width: 100%; min-width: 0; height: 18px;
+    border: 1px solid transparent; border-radius: 6px; background: none;
+    color: var(--muted); font-size: 12px; font-weight: 800;
+    font-variant-numeric: tabular-nums; }
+  .gcard.gcard--v3 .gyds .gh2h, .gcard.gcard--v3 .gline .gh2h { display: flex; justify-content: center; }
+  /* the man in front is white; the other stays grey */
+  .gcard.gcard--v3 .pnum.on { color: var(--ink); }
+  /* the gold box he put on the price carries over to what he did, and settles */
+  .gcard.gcard--v3 .pnum.placed { border-color: #e3b341; border-width: 2px;
+    background: rgba(227,179,65,.10); color: var(--ink); }
+  .gcard.gcard--v3 .pnum.won { border-color: var(--green); color: var(--green);
+    box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
+  .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;
+    box-shadow: 0 0 0 1px rgba(226,86,77,.35), 0 0 10px rgba(226,86,77,.30); }
+  /* the clip rides the count: tap the number and every touchdown he threw plays */
+  /* the rushing row sizes its own play mark, so the card says it louder */
+  .gcard.gcard--v3 .pnum .ptdplay { display: inline-flex !important; align-items: center;
+    justify-content: center; width: 15px !important; height: 15px !important;
+    padding: 0 !important; margin: 0 !important; flex: none;
+    border: 0; border-radius: 50%; background: var(--green); color: #04240f; }
+  .gcard.gcard--v3 .pnum .ptdplay svg { width: 8px !important; height: 8px !important;
+    fill: currentColor; }
+  /* one count answers every rung, so the second mark and both rung labels go
+     -- the mark's own display rule outranks [hidden], so it is said here */
+  .gcard--v3 .gmk[hidden], .gcard--v3 .grn[hidden] { display: none !important; }
+  .gcard--v3 .gclk { font-style: normal; font-size: 9.5px; font-weight: 800;
+    letter-spacing: .06em; color: var(--muted); white-space: nowrap; }
+  .gcard--v3 .gclk--fin { color: #c9ccd2; }
+  /* the foot keeps its prices, shut, the way the mock has them */
+  .gcard.gcard--v3.gcard--on > .gbody .price { opacity: .45; }
+  /* the margin sits under the bar, centred on the half of whoever is up */
+  .gcard.gcard--v3 .h2hchip.gyd { position: absolute; top: 100%; left: auto;
+    margin-top: 4px; padding: 0; border: 0; background: none;
+    box-shadow: none; font-size: 13px; font-weight: 800; color: var(--ink) !important; }
+  .gcard.gcard--v3 .gvs { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
     width: 26px; height: 22px; color: var(--ink); }
   .gcard--v3 .gvs svg { width: 100%; height: 100%; }
   .gcard--v3 .gmorebtn { margin: 0 auto 6px; }
@@ -5133,16 +5198,18 @@
     }
     /* each section keeps its own .ptdside -- everything that reads a rung
        expects that -- and the mark is drawn once a rung, down the middle */
-    card.querySelectorAll(".ptdx").forEach(function (sec) {
+    var secs = [].slice.call(card.querySelectorAll(".ptdx"));
+    secs.sort(function (a, b) {
+      return (a.classList.contains("ptdx--run") ? 1 : 0) -
+             (b.classList.contains("ptdx--run") ? 1 : 0);
+    });
+    secs.forEach(function (sec) {
       stack.appendChild(sec);
       var prow = sec.querySelector(".ptdrow");
       if (!prow || prow.querySelector(".gvmid")) return;
       var runrow = sec.classList.contains("ptdx--run");
       var left = prow.querySelector(".ptdside--l");
-      var rungs = 0;
-      (left ? left.querySelectorAll(".ptdbtn") : []).forEach(function (btn, i) {
-        if (btn.querySelector("button.price")) rungs = i + 1;
-      });
+      var rungs = left ? left.querySelectorAll(".ptdbtn").length : 0;
       if (!rungs) rungs = 1;
       var mid = document.createElement("span");
       mid.className = "gvmid";
@@ -5193,11 +5260,150 @@
         rail.appendChild(vs);
       }
     }
+    stateV3(card);
   }
 
   function started(card) {
     return !!card.dataset.kick && Date.now() >= Date.parse(card.dataset.kick);
   }
+
+  /* Once the game is on, the card stops being prices and becomes what he has
+     done -- exactly the rows the mock draws (notes/mocks/mock_game.py, the
+     `under_way` half): the score with the clock between it, the passing yards
+     over the VS, his passing touchdowns with the clip on the count, and his
+     rushing touchdowns. The 2+ rung and the club price come off; one count
+     answers both rungs. A leg he had double tapped keeps its gold box and
+     turns green or red when it settles; a leg he never touched stays plain
+     (Jose, Sep 21, 2026: "we marked the pregame live final").
+
+     Every number is MIRRORED out of the node the live pass already writes --
+     the .trkbox counts, the yard boxes -- so nothing upstream had to change
+     and no count can go missing because this rewrote its seat. */
+  function numChip(v, on, placed, won) {
+    var b = document.createElement("b");
+    b.className = "pnum" + (on ? " on" : "") + (placed ? " placed" : "") +
+      (won === true ? " won" : won === false ? " lost" : "");
+    b.appendChild(document.createTextNode(v === "" || v === null ? "\u2013" : String(v)));
+    return b;
+  }
+  function stateV3(card) {
+    if (!card || card.dataset.v3 !== "1") return;
+    var on = isOver(card) || started(card);
+    card.classList.toggle("gcard--on", on);
+    var stack = card.querySelector(".gmid > .gstack");
+    if (!stack) return;
+    if (!on) { card.querySelectorAll(".pnum, .gyds").forEach(function (n) { n.remove(); }); return; }
+    var done = isOver(card);
+
+    /* the eye, LIVE and the play mark stay one row at the top: the live pass
+       rebuilds them inside the clock, so they are lifted back out before the
+       clock itself goes down into the score row */
+    var when = card.querySelector(".gwhen"), gt = card.querySelector(".gtime");
+    var lbar = gt && gt.querySelector(".glivebar");
+    if (lbar && when && lbar.parentNode !== when) when.appendChild(lbar);
+    if (gt) gt.hidden = true;
+
+    /* the score, the clock or FINAL between the two of them */
+    var line = stack.querySelector(".gline"), ends = line ? line.querySelectorAll(".gh2h") : [];
+    if (line && ends.length === 2) {
+      line.querySelectorAll(".pnum").forEach(function (n) { n.remove(); });
+      var mk = line.querySelector(".gmk");
+      if (mk) {
+        mk.innerHTML = "";
+        var clk = document.createElement("i");
+        clk.className = "gclk" + (done ? " gclk--fin" : "");
+        clk.textContent = card.dataset.clk || (done ? "FINAL" : "");
+        mk.appendChild(clk);
+      }
+      var ls = card.dataset.ls, rs = card.dataset.rs;
+      if (ls !== undefined && rs !== undefined) {
+        var l = parseInt(ls, 10), r = parseInt(rs, 10);
+        ends[0].appendChild(numChip(l, l > r));
+        ends[1].appendChild(numChip(r, r > l));
+      }
+    }
+
+    /* the passing yards, over the VS mark, above the touchdown rows */
+    var yb = card.querySelectorAll(".gbody .h2hrow .h2hend > .trkbox");
+    var yrow = stack.querySelector(".gyds");
+    if (yb.length === 2) {
+      if (!yrow) {
+        yrow = document.createElement("div");
+        yrow.className = "gline gyds";
+        yrow.innerHTML = '<span class="gh2h"></span><i class="gmk">' +
+          '<svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg>' +
+          '</i><span class="gh2h"></span>';
+        stack.insertBefore(yrow, line ? line.nextSibling : stack.firstChild);
+      }
+      var ye = yrow.querySelectorAll(".gh2h");
+      ye[0].innerHTML = ""; ye[1].innerHTML = "";
+      var ly = parseInt(yb[0].textContent, 10) || 0, ry = parseInt(yb[1].textContent, 10) || 0;
+      ye[0].appendChild(numChip(ly, ly > ry));
+      ye[1].appendChild(numChip(ry, ry > ly));
+    }
+
+    /* his touchdowns, in the seat the price sat in, and the clip on the count */
+    card.querySelectorAll(".ptdx").forEach(function (sec) {
+      var prow = sec.querySelector(".ptdrow");
+      if (!prow) return;
+      prow.querySelectorAll(".pnum").forEach(function (n) { n.remove(); });
+      var counts = sec.querySelectorAll(".ptdcount");
+      [["l", 0], ["r", 1]].forEach(function (sd) {
+        var side = prow.querySelector(".ptdside--" + sd[0]);
+        var box = counts[sd[1]];
+        if (!side || !box) return;
+        var v = parseInt(box.textContent, 10);
+        if (isNaN(v)) v = 0;
+        /* the gold he put on the first rung carries over to the count */
+        var first = side.querySelector(".ptdbtn button.price");
+        var placed = !!(first && (first.classList.contains("on") ||
+                                  first.classList.contains("placed")));
+        var oth = counts[sd[1] ? 0 : 1];
+        var ov = oth ? parseInt(oth.textContent, 10) : 0;
+        if (isNaN(ov)) ov = 0;
+        var chip = numChip(v, v > ov, placed, placed && done ? v >= 1 : null);
+        var play = side.querySelector(".ptdplay");
+        if (play) chip.appendChild(play);
+        chip.classList.toggle("has-clip", !!play);
+        side.parentNode.insertBefore(chip, sd[0] === "l" ? side : side.nextSibling);
+      });
+      /* one count answers every rung, so only the first mark is drawn */
+      var marks = sec.querySelectorAll(".gvmid .gmk");
+      marks.forEach(function (m, i) { m.hidden = i > 0; });
+      sec.querySelectorAll(".grn").forEach(function (r) { r.hidden = true; });
+    });
+
+    /* The foot, the way the mock draws it: the bar grows OUT OF the VS toward
+       whoever is up on passing yards, how far it reaches being the margin as a
+       share of the two totals, and it wears that club's own colour. The margin
+       is written under the bar, centred on his half. The old bar filled a whole
+       half and hung the margin off the tick, which is not what we drew. */
+    var bar = card.querySelector(".h2hbar");
+    if (bar && yb.length === 2) {
+      var a = parseInt(yb[0].textContent, 10) || 0, b2 = parseInt(yb[1].textContent, 10) || 0;
+      var tot = a + b2, lead = a - b2;
+      var fill = bar.querySelector(".h2hfill"), chip2 = bar.querySelector(".h2hchip");
+      var reach = tot ? Math.min(50, Math.abs(lead) / tot * 50) : 0;
+      var teams = card.querySelectorAll(".gteam"), up = lead >= 0 ? teams[0] : teams[1];
+      var ab = up ? ((up.querySelector("img.glogo") || {}).alt || "") : "";
+      if (fill) {
+        fill.style.background = HUE[ab] || "#8e8e93";
+        fill.style.width = reach.toFixed(2) + "%";
+        if (lead >= 0) { fill.style.left = "auto"; fill.style.right = "50%"; }
+        else { fill.style.right = "auto"; fill.style.left = "50%"; }
+      }
+      if (chip2) {
+        chip2.classList.add("gyd");
+        chip2.textContent = (lead >= 0 ? "+" : "+") + Math.abs(lead);
+        chip2.style.opacity = tot ? "" : "0";
+        chip2.style.color = "";
+        chip2.style.right = "auto";
+        chip2.style.left = (lead >= 0 ? 25 : 75) + "%";
+        chip2.style.transform = "translateX(-50%)";
+      }
+    }
+  }
+  window.stateV3 = stateV3;
   /* A college card carries two sections and each was repeating the same two
      names and a label. The names go up once, above both, and the labels come
      off -- the football says one thing and the bolt says the other. */
@@ -7660,6 +7866,11 @@
           if (mark) when.querySelector(".glivebar").appendChild(mark);
           seatEye(card);
         } else if (when && done) when.innerHTML = "FINAL<br>" + score;
+        /* the card's own state reads these back rather than the clock's
+           innerHTML, so the strip can say what the mock says it says */
+        if (ls !== undefined && ls !== null) card.dataset.ls = ls;
+        if (rs !== undefined && rs !== null) card.dataset.rs = rs;
+        card.dataset.clk = live ? (st.shortDetail || "LIVE") : (done ? "FINAL" : "");
 
         /* the field, under the score */
         drawDrive(card, d, lside, rside, live);
@@ -8018,6 +8229,9 @@
             else if (done) mark(cells[side[1]], false);
           });
         });
+        /* last, so it seats the numbers the pass has just written and the bar
+           it has just painted, rather than being painted over */
+        stateV3(card);
       })
       .catch(function () { /* a board that cannot reach ESPN still shows its prices */ });
   }
