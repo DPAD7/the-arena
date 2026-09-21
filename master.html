@@ -122,6 +122,16 @@
   .sptab[aria-selected="true"] > .allmk {
     border-color: var(--amber); background-color: rgba(255, 255, 255, 0.07);
   }
+  /* the middle tab stands in its own circle, proud of the bar */
+  .tabbar { overflow: visible; }
+  .sptab--hero > .daycal, .sptab--hero > img {
+    width: 30px; height: 30px; padding: 11px; border-radius: 16px;
+    margin-top: -30px; box-sizing: content-box;
+    background: #101114; border: 1.5px solid var(--edge);
+    box-shadow: 0 -8px 20px rgba(0, 0, 0, 0.55); }
+  .sptab--hero[aria-selected="true"] > .daycal,
+  .sptab--hero[aria-selected="true"] > img {
+    border-color: var(--amber); background-color: #17181c; }
   .sptab:focus-visible { outline: 2px solid var(--amber); outline-offset: -3px; }
   .lgmk {
     margin: 16px 0 -4px; display: flex; align-items: center; gap: 7px;
@@ -3841,11 +3851,14 @@
       '<text x="12" y="17.6" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, Helvetica, sans-serif"' +
       ' font-weight="800" font-size="8.6" letter-spacing="-0.3" fill="currentColor">' + m + "</text></svg>";
   }
+  /* the day sits in the middle and rides above the bar, the way the NFL app
+     keeps its own home there: it is the page he opens on, so it is the one his
+     thumb should never have to aim for (Jose, Sep 21, 2026) */
   var SPORTS = [
-    {key: "all", label: "All", ico: "ico/cal-3.svg"},
-    {key: "nfl", label: "NFL", ico: "ico/nfl.svg"},
-    {key: "college-football", label: "CFB", ico: "ico/cfp-trophy-3.svg"},
     {key: "mma", label: "UFC", ico: "ico/octagon-2.svg"},
+    {key: "college-football", label: "CFB", ico: "ico/cfp-trophy-3.svg"},
+    {key: "all", label: "All", ico: "ico/cal-3.svg", hero: true},
+    {key: "nfl", label: "NFL", ico: "ico/nfl.svg"},
     {key: "form", label: "Form", ico: "ico/money-coin-1.svg"}
   ];
   var sport = "all";
@@ -6761,7 +6774,7 @@
   var sbar = document.getElementById("sportbar");
   SPORTS.forEach(function (sp) {
     var t = document.createElement("button");
-    t.className = "sptab";
+    t.className = "sptab" + (sp.hero ? " sptab--hero" : "");
     t.type = "button";
     t.setAttribute("role", "tab");
     t.dataset.sp = sp.key;
