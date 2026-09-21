@@ -800,8 +800,13 @@
   .qcard { position: relative; display: grid; grid-template-columns: 75% 25%;
     background: var(--panel); border: 1px solid var(--edge); border-radius: 14px;
     overflow: hidden; height: 150px; }
-  .qcard--gold { border-color: #e3b341;
-    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 14px rgba(227, 179, 65, 0.30); }
+  /* the gold goes round his picture, the way it did before the card: the whole
+     card in gold read as twenty-two lit cards rather than as a mark
+     (Jose, Sep 21, 2026) */
+  .qcard--gold::before { content: ""; position: absolute; z-index: 4; pointer-events: none;
+    left: 6px; top: 6px; bottom: 6px; width: calc(75% - 12px);
+    border: 2px solid #e3b341; border-radius: 10px;
+    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.30), 0 0 12px rgba(227, 179, 65, 0.35); }
   .qface { position: relative; overflow: hidden; background: var(--hue);
     -webkit-mask: linear-gradient(90deg, #000 74%, rgba(0,0,0,0) 100%),
       linear-gradient(180deg, rgba(0,0,0,0) 0, #000 14%, #000 86%, rgba(0,0,0,0) 100%);
