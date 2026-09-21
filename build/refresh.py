@@ -206,7 +206,12 @@ def price_drawn():
     # on right after or the money page silently loses it (Jose, Sep 17, 2026)
     # records_mma.py rides with faces.py: both ask ESPN about the men on the
     # board and write a file of our own for the page (Jose, Sep 19, 2026)
-    for job in ("settle.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "keep_prices.py", "fill_fights.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "records_mma.py"):
+    # ptd10.py rides at the back and touches nothing the board reads: it takes
+    # the ledger and the prices the jobs above have just written and leaves one
+    # note behind, notes/ptd10-week-N.md -- who to take for one passing
+    # touchdown and why (Jose, Sep 20, 2026: "do not change how we do the site,
+    # just make a separate note")
+    for job in ("settle.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "keep_prices.py", "fill_fights.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "records_mma.py", "ptd10.py"):
         r = subprocess.run([sys.executable, D + "/build/" + job] + (["--dry"] if DRY else []),
                            capture_output=True, text=True)
         for line in (r.stdout + r.stderr).strip().splitlines():
