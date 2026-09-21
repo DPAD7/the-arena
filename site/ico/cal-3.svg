@@ -1,0 +1,10 @@
+<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" fill="none">
+  <!-- the schedule page, as the NFL app draws it: a rounded square with two
+       tabs on the head and the date written inside (Jose, Sep 21, 2026) -->
+  <rect x="3.1" y="5.2" width="17.8" height="16" rx="3.4"
+        stroke="#ffffff" stroke-width="1.9"/>
+  <path d="M8 3v3.4M16 3v3.4" stroke="#ffffff" stroke-width="1.9" stroke-linecap="round"/>
+  <text x="12" y="17.6" text-anchor="middle"
+        font-family="Barlow Condensed, Arial Narrow, Helvetica, sans-serif"
+        font-weight="800" font-size="8.6" letter-spacing="-0.3" fill="#ffffff">07</text>
+</svg>
