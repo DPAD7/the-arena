@@ -778,6 +778,10 @@
     width: 28px; height: 28px; border-radius: 7px; object-fit: cover; object-position: top;
     background: rgba(255,255,255,0.08); border: 1px solid var(--edge); display: block;
   }
+  /* the same gold a placed price wears, so a man marked on the ledger reads as
+     marked rather than as one more white edge (Jose, Sep 20, 2026) */
+  .qbface--ring { border-color: #e3b341; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 10px rgba(227, 179, 65, 0.40); }
   .ptdhead--bare { grid-template-columns: 1fr auto 1fr; }
   .ptdhead--bare::before, .ptdhead--bare::after { content: ""; }
   .ptdrow { display: flex; align-items: flex-start; gap: 8px; }
@@ -5438,6 +5442,20 @@
      the moneyline. Read from site/ledger.json (ledger.py, on the sweep).
      (Jose, Sep 16, 2026) */
   var LEDGER = null, formWeek = "season";
+  /* Men wearing a gold ring on the ledger, by ESPN id -- never by the written
+     name, since two men answer to J.Allen (Jose, Sep 20, 2026). One place to
+     add or drop a name. */
+  var RINGED = { "3918298": 1 };          /* Josh Allen */
+  function ringOn(id) { return RINGED[String(id)] ? " qbface--ring" : ""; }
+  /* one img, every ledger face, so the ring cannot be on one page and off
+     another */
+  function ledgerFace(r) {
+    var cls = "qbface" + ringOn(r.id);
+    return /^\d+$/.test(r.id)
+      ? '<img class="' + cls + '" alt="" loading="lazy" src="face/nfl/' + r.id +
+        '.png" onerror="this.onerror=null;this.src=NOFACE">'
+      : '<img class="' + cls + '" alt="" src="' + NOFACE + '">';
+  }
   function formTabs() {
     var weeks = LEDGER ? Object.keys(LEDGER).sort(function (a, b) { return a - b; }) : [];
     wbar.innerHTML = "";
@@ -5607,9 +5625,7 @@
     }
     var season = formWeek === "season";
     box.innerHTML = rows.map(function (r, i) {
-      var face = /^\d+$/.test(r.id)
-        ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
-        : '<img class="qbface" alt="" src="' + NOFACE + '">';
+      var face = ledgerFace(r);
       var marks = season ? MTIMES(MBALL, r.ptd) + MTIMES(MRUN, r.atd) +
                            MTIMES(MVS, r.h2hw) + MTIMES(MML, r.mlw) : "";
       var n = (r.legs || []).length;
@@ -5707,7 +5723,7 @@
         return Math.min.apply(null, games[a].map(function (r) { return r.rank; })) - Math.min.apply(null, games[b].map(function (r) { return r.rank; }));
       });
       var faceOf = function (r) {
-        return /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
+        return ledgerFace(r);
       };
       /* STATSCORE's own marks, from their icon font: the house by the home
          man's club, the plane by the man who travelled (Jose, Sep 16, 2026) */
@@ -5840,7 +5856,7 @@
     /* the season writes all four, x0 included, so the rows read as four even columns */
     var times = function (mark, n) { return '<span class="fgrp' + (n ? "" : " fgrp--zero") + '">' + mark + '<em>\u00d7' + n + '</em></span>'; };
     box.innerHTML = rows.map(function (r, i) {
-      var face = /^\d+$/.test(r.id) ? '<img class="qbface" alt="" loading="lazy" src="face/nfl/' + r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">' : '<img class="qbface" alt="" src="' + NOFACE + '">';
+      var face = ledgerFace(r);
       var marks;
       if (r.agg) {
         marks = times(BALL, r.ptd) + times(RUN, r.atd) + times(W("H2H"), r.h2hw) + times(W("ML"), r.mlw);

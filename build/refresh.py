@@ -169,7 +169,13 @@ def read_hub():
        of fetching apiece and this run has nine for everything, so waiting on
        them would kill the wake that is actually pricing games."""
     log_path = HUB + "/hub_sweep.log"
-    script = "; ".join("%s %s/build/%s.py" % (sys.executable, HUB, j) for j in HUB_JOBS)
+    # quoted: the folder is "the arena", so unquoted the shell reads
+    # /Users/joe/Desktop/the and every one of the thirteen readers dies on the
+    # space before it opens anything. They have never once run (Sep 20, 2026)
+    import shlex
+    script = "; ".join("%s %s" % (shlex.quote(sys.executable),
+                                  shlex.quote("%s/build/%s.py" % (HUB, j)))
+                       for j in HUB_JOBS)
     with open(log_path, "a") as f:
         f.write("\n===== %s\n" % NOW.isoformat())
         subprocess.Popen(["/bin/sh", "-c", script], cwd=HUB, stdout=f, stderr=f,
