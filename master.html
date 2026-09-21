@@ -4651,6 +4651,13 @@
         }
         /* a man ringed on the phone is ringed on the desktop: the store is the
            truth here as it is for the rest (Jose, Sep 20, 2026) */
+        /* the rings predate the store, so a device holding some and a store
+           holding none means the store has never been told -- hand them over
+           rather than wiping them */
+        if (!j.ring || !Object.keys(j.ring).length) {
+          if (Object.keys(RINGED).length) pushState();
+          j.ring = null;
+        }
         if (j.ring && JSON.stringify(j.ring) !== JSON.stringify(RINGED)) {
           RINGED = j.ring;
           try { localStorage.setItem(RINGKEY, JSON.stringify(RINGED)); } catch (e) {}
