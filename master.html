@@ -792,6 +792,10 @@
   .hurt svg { width: 100%; height: 100%; display: block; }
   /* ---- the week's card: two passers, everything down the middle ----
      (Jose, Sep 21, 2026) */
+  /* the week's cards sit in from the edges: the gold frame is drawn two pixels
+     outside the card, and against the screen edge it was being cut in half
+     (Jose, Sep 21, 2026) */
+  .form:has(.mcard) { padding: 2px 12px 18px; }
   .mcard { position: relative; display: grid; grid-template-columns: 1fr 152px 1fr;
     background: var(--panel); border: 1px solid var(--edge); border-radius: 14px;
     height: 156px; margin: 0 0 12px; }
