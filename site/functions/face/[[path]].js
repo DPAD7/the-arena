@@ -20,8 +20,16 @@ export async function onRequest({ request, env }) {
   if (!/^(nfl|college-football|mma)\/[A-Za-z0-9_-]+\.png$/.test(path)) {
     return new Response("", { status: 404, headers: { "cache-control": "no-store" } });
   }
-  const r = await env.ASSETS.fetch(new URL("/faces/" + path, u.origin));
-  const type = r.headers.get("content-type") || "";
+  /* the same picture, a fifth of the bytes: every face is kept as webp beside
+     its png and served in its place, under the png's own address so nothing
+     that asks for a face has to know (Jose, Sep 21, 2026: "loads faster").
+     A man we only hold as a png still answers. */
+  let r = await env.ASSETS.fetch(new URL("/faces/" + path.replace(/\.png$/, ".webp"), u.origin));
+  let type = r.headers.get("content-type") || "";
+  if (!r.ok || !/^image\//i.test(type)) {
+    r = await env.ASSETS.fetch(new URL("/faces/" + path, u.origin));
+    type = r.headers.get("content-type") || "";
+  }
   if (!r.ok || !/^image\//i.test(type)) {
     return new Response("", { status: 404, headers: { "cache-control": "no-store" } });
   }

@@ -43,7 +43,16 @@ def main():
         try:
             r = rq.get(URL % (lg, pid), impersonate="chrome124", timeout=30)
             if r.status_code == 200 and r.headers.get("content-type", "").startswith("image") and len(r.content) > 500:
-                open(D + "/site/faces/%s/%s.png" % (lg, pid), "wb").write(r.content)
+                png = D + "/site/faces/%s/%s.png" % (lg, pid)
+                open(png, "wb").write(r.content)
+                # and the same picture as webp, which is what the board is
+                # served: a fifth of the bytes for the same face
+                try:
+                    from PIL import Image
+                    Image.open(png).convert("RGBA").save(png[:-4] + ".webp", "WEBP",
+                                                        quality=82, method=6)
+                except Exception as e:
+                    print("   %s stayed a png: %s" % (pid, e))
                 return True
         except Exception:
             pass
