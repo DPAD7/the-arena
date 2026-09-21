@@ -5833,7 +5833,13 @@
        clubs won without them (Jose, Sep 21, 2026). */
     var rec = clubRec();
     var ofClub = function (r) { return rec[String(r.club || "")] || [0, 0]; };
+    /* a man on the wire sinks to the foot whatever he has scored, and comes
+       back into the order the moment ESPN lifts him -- nothing about the sort
+       is remembered, so a clearance restores him by itself (Jose, Sep 21,
+       2026: "once they are lifted they fall into the sorted") */
     rows.sort(function (a, b) {
+      var ha = WIRE[String(a.id)] ? 1 : 0, hb = WIRE[String(b.id)] ? 1 : 0;
+      if (ha !== hb) return ha - hb;
       var ta = (a.ptd || 0) + (a.atd || 0), tb = (b.ptd || 0) + (b.atd || 0);
       if (tb !== ta) return tb - ta;
       var ra = ofClub(a), rb = ofClub(b);
