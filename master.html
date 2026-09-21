@@ -3816,8 +3816,12 @@
       function f(x) { return x <= 0.03928 ? x / 12.92 : Math.pow((x + 0.055) / 1.055, 2.4); }
       return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
     }
+    /* the floor was 0.20, which is a colour you can find but not read: Miami's
+       green and Texas Tech's red both landed there and the passer's name all
+       but vanished into the card, and the yard bars with it, since they take
+       the same ink (Jose, Sep 21, 2026) */
     var c = back(h, sat, val), guard = 0;
-    while (lum(c) < 0.20 && guard++ < 60) {
+    while (lum(c) < 0.34 && guard++ < 80) {
       val = Math.min(1, val + 0.03);
       if (val >= 1) sat = Math.max(0.3, sat - 0.04);
       c = back(h, sat, val);
@@ -5770,7 +5774,7 @@
     var n = parseInt(hex.slice(1), 16);
     return (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
   }
-  function clubHue(club) {
+  function cardHue(club) {
     var h = HUE[club] || "#1a1d22";
     /* a club whose colour is all but black leaves the mark nothing to sit on */
     if (lumOf(h) < 0.07) {
@@ -5810,7 +5814,7 @@
         r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
       : '<img class="qbface qbface--card" alt="" src="' + NOFACE + '">';
     return '<article class="qcard' + (RINGED[String(r.id)] ? " qcard--gold" : "") + '">' +
-      '<div class="qface" style="--hue:' + clubHue(club) + ';--mark:url(logos/nfl/' +
+      '<div class="qface" style="--hue:' + cardHue(club) + ';--mark:url(logos/nfl/' +
         club.toLowerCase() + '.png)">' + face +
         '<span class="qrank">' + rank + "</span></div>" +
       '<div class="qside">' +
@@ -6803,7 +6807,12 @@
           ? Date.parse(was + "-15T18:00:00Z")
           : (DAYS.filter(function (d2) { return d2[0] === was; })[0] || [])[1]);
     anchor = anchor ? new Date(anchor).toISOString() : new Date().toISOString();
-    if (want === "week") day = weekKeyOf(anchor) || openingWeek();
+    /* a league tab opens on the week being played, not on the week holding
+       whatever day he was last looking at: reading Sunday's cards and then
+       tapping NFL was landing him back in week one (Jose, Sep 21, 2026) */
+    if (want === "week") {
+      day = "W" + (sport === "nfl" ? weekOf(SCHED, WEEKS) : weekOf(CFB, CFB_WEEKS));
+    }
     else if (want === "month") day = monthKeyOf(anchor);
     /* the calendar opens on today, not on the first day of the week he was
        just looking at: coming off Week 2 it landed on Thursday 9/17, the
@@ -6816,9 +6825,8 @@
     }
     if (weekly) {
       /* open on the week holding the day already chosen, if it holds one */
-      var list = sport === "nfl" ? SCHED : CFB;
-      var hit = list.filter(function (g) { return dayKeyOf(g[2]) === day; })[0];
-      if (hit) { if (sport === "nfl") { week = hit[0]; } else { cfbWeek = hit[0]; } }
+      if (sport === "nfl") week = weekOf(SCHED, WEEKS);
+      else cfbWeek = weekOf(CFB, CFB_WEEKS);
       weekTabs(sport === "nfl" ? WEEKS : CFB_WEEKS,
                sport === "nfl" ? week : cfbWeek);
     }
