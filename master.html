@@ -778,6 +778,10 @@
     width: 28px; height: 28px; border-radius: 7px; object-fit: cover; object-position: top;
     background: rgba(255,255,255,0.08); border: 1px solid var(--edge); display: block;
   }
+  /* a face that answers a double tap: no text selection under his thumb, and
+     no callout on a long press */
+  .qbface[data-ring] { cursor: pointer; -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none; }
   /* the same gold a placed price wears, so a man marked on the ledger reads as
      marked rather than as one more white edge (Jose, Sep 20, 2026) */
   .qbface--ring { border-color: #e3b341; border-width: 2px;
@@ -5442,17 +5446,43 @@
      the moneyline. Read from site/ledger.json (ledger.py, on the sweep).
      (Jose, Sep 16, 2026) */
   var LEDGER = null, formWeek = "season";
-  /* Men wearing a gold ring on the ledger, by ESPN id -- never by the written
-     name, since two men answer to J.Allen (Jose, Sep 20, 2026). One place to
-     add or drop a name. */
-  var RINGED = { "3918298": 1 };          /* Josh Allen */
+  /* Men wearing a gold ring on the ledger. Two taps on a face put it on, two
+     more take it off -- the same two taps that place a price, so the board
+     answers a double tap the same way wherever he makes it (Jose, Sep 20,
+     2026: "allow a double click to turn it on and off"). Kept by ESPN id,
+     never by the written name, since two men answer to J.Allen. */
+  var RINGKEY = "arena.ring.v1";
+  var RINGED = {};
+  try { RINGED = JSON.parse(localStorage.getItem(RINGKEY) || "{}") || {}; } catch (e) { RINGED = {}; }
   function ringOn(id) { return RINGED[String(id)] ? " qbface--ring" : ""; }
+  function toggleRing(id) {
+    id = String(id);
+    var on = !RINGED[id];
+    if (on) RINGED[id] = 1; else delete RINGED[id];
+    /* every copy of his face at once: he is one man on the season list and
+       again on the week's rail, and ringing one and not the other would read
+       as two answers to the same question */
+    document.querySelectorAll('img.qbface[data-ring="' + id + '"]').forEach(function (im) {
+      im.classList.toggle("qbface--ring", on);
+    });
+    try { localStorage.setItem(RINGKEY, JSON.stringify(RINGED)); } catch (e) {}
+  }
+  /* the id, not the element: the ledger redraws on its own beat, and a redraw
+     between the two taps would otherwise lose the second one */
+  var RINGAT = 0, RINGWHO = null;
+  document.addEventListener("click", function (e) {
+    var im = e.target.closest && e.target.closest("img.qbface[data-ring]");
+    if (!im) return;
+    var who = im.dataset.ring, now = Date.now();
+    if (RINGWHO === who && now - RINGAT < 400) { RINGAT = 0; RINGWHO = null; toggleRing(who); }
+    else { RINGAT = now; RINGWHO = who; }
+  });
   /* one img, every ledger face, so the ring cannot be on one page and off
      another */
   function ledgerFace(r) {
     var cls = "qbface" + ringOn(r.id);
     return /^\d+$/.test(r.id)
-      ? '<img class="' + cls + '" alt="" loading="lazy" src="face/nfl/' + r.id +
+      ? '<img class="' + cls + '" data-ring="' + r.id + '" alt="" loading="lazy" src="face/nfl/' + r.id +
         '.png" onerror="this.onerror=null;this.src=NOFACE">'
       : '<img class="' + cls + '" alt="" src="' + NOFACE + '">';
   }
