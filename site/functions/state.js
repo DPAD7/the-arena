@@ -40,7 +40,7 @@ export async function onRequest({ request, env }) {
 
   if (request.method === "GET") {
     const held = await env.ARENA.get(SLOT);
-    return ok(held ? JSON.parse(held) : { hidden: {}, placed: {}, picks: {}, at: 0 });
+    return ok(held ? JSON.parse(held) : { hidden: {}, placed: {}, picks: {}, ring: {}, at: 0 });
   }
 
   if (request.method === "POST" || request.method === "PUT") {
@@ -54,6 +54,10 @@ export async function onRequest({ request, env }) {
       hidden: body && body.hidden && typeof body.hidden === "object" ? body.hidden : {},
       placed: body && body.placed && typeof body.placed === "object" ? body.placed : {},
       picks: body && body.picks && typeof body.picks === "object" ? body.picks : {},
+      /* the men ringed gold on the ledger, by ESPN id. A field left out here
+         is a field thrown away on the next write, so anything the board keeps
+         has to be named (Jose, Sep 20, 2026) */
+      ring: body && body.ring && typeof body.ring === "object" ? body.ring : {},
       at: Date.now()
     };
     await env.ARENA.put(SLOT, JSON.stringify(keep));

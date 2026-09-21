@@ -4594,7 +4594,8 @@
   function pushState() {
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function () {
-      var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {}};
+      var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {},
+                  ring: (typeof RINGED === "object" && RINGED) || {}};
       try {
         fetch(ARENAQ(), {
           method: "POST", headers: {"content-type": "application/json"},
@@ -4634,7 +4635,7 @@
             return out;
           };
           j = {hidden: fold(hid, j.hidden), placed: fold(placed, j.placed),
-               picks: fold(saved, j.picks), at: Date.now()};
+               picks: fold(saved, j.picks), ring: fold(RINGED, j.ring), at: Date.now()};
           try { localStorage.setItem("arena.met", "1"); } catch (e) {}
         } else if (!j.at) {
           return;
@@ -4647,6 +4648,13 @@
         if (j.placed) {
           placed = j.placed;
           try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
+        }
+        /* a man ringed on the phone is ringed on the desktop: the store is the
+           truth here as it is for the rest (Jose, Sep 20, 2026) */
+        if (j.ring && JSON.stringify(j.ring) !== JSON.stringify(RINGED)) {
+          RINGED = j.ring;
+          try { localStorage.setItem(RINGKEY, JSON.stringify(RINGED)); } catch (e) {}
+          moved = true;
         }
         if (j.picks && JSON.stringify(j.picks) !== JSON.stringify(saved)) {
           Object.keys(saved).forEach(function (k) { delete saved[k]; });
@@ -5466,6 +5474,7 @@
       im.classList.toggle("qbface--ring", on);
     });
     try { localStorage.setItem(RINGKEY, JSON.stringify(RINGED)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
   }
   /* the id, not the element: the ledger redraws on its own beat, and a redraw
      between the two taps would otherwise lose the second one */
