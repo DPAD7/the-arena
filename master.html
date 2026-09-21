@@ -836,7 +836,10 @@
   .gcard--v3 .gline,
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdrow {
     display: grid !important; grid-template-columns: 1fr 46px 1fr !important;
-    align-items: center; justify-items: center; gap: 3px; padding: 1px 0; }
+    align-items: center; justify-items: center; gap: 3px; padding: 3px 0;
+    border-top: 1px dashed rgba(255,255,255,.10); }
+  .gcard--v3 .gstack > :first-child .ptdrow,
+  .gcard--v3 .gstack > .gline:first-child { border-top: 0; }
   .gcard--v3 .gh2h { display: flex; justify-content: center; }
   .gcard.gcard--v3 .ptdx, .gcard.gcard--v3 .ptdx--balls + .ptdx--balls {
     border: 0 !important; margin: 0 !important; padding: 0 !important; }
@@ -931,13 +934,14 @@
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
   .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;
     box-shadow: 0 0 0 1px rgba(226,86,77,.35), 0 0 10px rgba(226,86,77,.30); }
-  /* the clip rides the count: tap the number and every touchdown he threw plays */
-  /* the rushing row sizes its own play mark, so the card says it louder */
+  /* the clip rides the count: tap the number and every touchdown he threw
+     plays. It is the mock's own mark -- a white play, no disc behind it */
   .gcard.gcard--v3 .pnum .ptdplay { display: inline-flex !important; align-items: center;
     justify-content: center; width: 15px !important; height: 15px !important;
     padding: 0 !important; margin: 0 !important; flex: none;
-    border: 0; border-radius: 50%; background: var(--green); color: #04240f; }
-  .gcard.gcard--v3 .pnum .ptdplay svg { width: 8px !important; height: 8px !important;
+    border: 0 !important; border-radius: 0 !important;
+    background: none !important; color: var(--ink) !important; }
+  .gcard.gcard--v3 .pnum .ptdplay svg { width: 100% !important; height: 100% !important;
     fill: currentColor; }
   /* one count answers every rung, so the second mark and both rung labels go
      -- the mark's own display rule outranks [hidden], so it is said here */
@@ -5362,7 +5366,9 @@
         var ov = oth ? parseInt(oth.textContent, 10) : 0;
         if (isNaN(ov)) ov = 0;
         var chip = numChip(v, v > ov, placed, placed && done ? v >= 1 : null);
-        var play = side.querySelector(".ptdplay");
+        /* the clip belongs to the passing count only -- the mock hands the
+           rushing row a plain number (Jose, Sep 21, 2026) */
+        var play = sec.classList.contains("ptdx--run") ? null : side.querySelector(".ptdplay");
         if (play) chip.appendChild(play);
         chip.classList.toggle("has-clip", !!play);
         side.parentNode.insertBefore(chip, sd[0] === "l" ? side : side.nextSibling);
