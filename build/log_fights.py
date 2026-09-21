@@ -40,12 +40,15 @@ PLAYS = os.path.join(D, "data", "fight_plays.jsonl")
 CORE = "http://sports.core.api.espn.com/v2/sports/mma/leagues/ufc"
 UA = {"User-Agent": "Mozilla/5.0"}
 
-KEEP = ("sigStrikesLanded", "sigStrikesAttempted", "totalStrikesLanded",
-        "totalStrikesAttempted", "takedownsLanded", "takedownsAttempted",
-        "knockDowns", "submissions", "timeInControl", "controlTime",
-        "sigDistanceHeadStrikesLanded", "sigDistanceBodyStrikesLanded",
-        "sigDistanceLegStrikesLanded", "sigGroundStrikesLanded",
-        "sigClinchHeadStrikesLanded", "reversals")
+# Everything, not a chosen dozen. ESPN publishes forty-three numbers a man and
+# this kept twelve of them, which threw away the whole grid: where a strike was
+# thrown from crossed with what it was aimed at -- distance, clinch and ground
+# against head, body and leg, landed and attempted -- and the grappling with it
+# (half guard, side, mount, back, slams). A reading is a fact about a moment
+# and we cannot go back for the rest of it, so the log keeps all of it and
+# whoever reads it later decides what matters (Jose, Sep 20, 2026: "can we tell
+# where the strike came from?" -- we can, but only from the night we kept it).
+KEEP = None      # None means keep every number the feed carries
 
 
 def ask(url, tries=3):
@@ -117,7 +120,7 @@ def read_stats(ref):
     out = {}
     for cat in s.get("splits", {}).get("categories", []):
         for st in cat.get("stats", []):
-            if st.get("name") in KEEP:
+            if KEEP is None or st.get("name") in KEEP:
                 out[st["name"]] = st.get("value", st.get("displayValue"))
     return out
 
