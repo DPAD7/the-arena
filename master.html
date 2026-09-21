@@ -819,8 +819,14 @@
   .mname em { font-style: normal; font-weight: 800; font-size: 13px; color: #fff;
     opacity: .8; margin-right: 6px; vertical-align: 1px; }
   .mname .hurt, .mname .cold { width: 16px; height: 16px; margin: 0 0 0 5px; }
-  .mtrav { position: absolute; z-index: 3; top: 8px; width: 17px; height: 15px;
-    color: rgba(255,255,255,.72); filter: drop-shadow(0 1px 3px rgba(0,0,0,.8)); }
+  /* the plane and the house sit on their own disc: at seventeen pixels and
+     three-quarter white they were lost in the jersey behind them
+     (Jose, Sep 21, 2026) */
+  .mtrav { position: absolute; z-index: 3; top: 7px; width: 20px; height: 18px;
+    padding: 5px; box-sizing: content-box; border-radius: 9px;
+    color: #fff; background: rgba(0,0,0,.45);
+    -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+    box-shadow: 0 1px 4px rgba(0,0,0,.5); }
   .mtrav svg { width: 100%; height: 100%; }
   .mside--l .mtrav { left: 9px; }
   .mside--r .mtrav { right: 9px; }
