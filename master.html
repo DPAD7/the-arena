@@ -850,14 +850,18 @@
     border-radius: 0 15px 15px 0; }
   .mmid { display: flex; flex-direction: column; justify-content: center; gap: 1px;
     padding: 7px 6px; }
-  .mrow { display: grid; grid-template-columns: 1fr 26px 1fr; align-items: center; gap: 4px;
+  .wrow { display: grid; grid-template-columns: 1fr 26px 1fr; align-items: center; gap: 4px;
     padding: 4px 0; border-top: 1px dashed rgba(255,255,255,.10); }
-  .mrow:first-child { border-top: 0; }
-  .mrow b { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
+  .wrow:first-child { border-top: 0; }
+  .wrow b { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
     text-align: center; color: var(--muted);
     font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }
-  .mrow--big b { font-size: 17px; }
-  .mrow b.mv--on { color: var(--ink); }
+  .wrow--big b { font-size: 17px; }
+  /* FINAL is wider than a mark, so that row lets the middle size itself --
+     otherwise it pushed both scores off their own centres (Jose, Sep 21, 2026) */
+  .wrow--score { grid-template-columns: 1fr auto 1fr; }
+  .wrow--score .mmk { width: auto; min-width: 26px; padding: 0 4px; }
+  .wrow b.mv--on { color: var(--ink); }
   .msc { font-size: 21px !important; color: var(--muted) !important; }
   .msc--won { color: var(--ink) !important; }
   .mmk { display: inline-flex; width: 22px; height: 19px; align-items: center;
@@ -6169,7 +6173,7 @@
         };
         var line = function (mark, a, b, big) {
           var cls = function (mine, his) { return mine > his ? " mv--on" : ""; };
-          return '<div class="mrow' + (big ? " mrow--big" : "") + '">' +
+          return '<div class="wrow' + (big ? " wrow--big" : "") + '">' +
             '<b class="mv' + cls(a, b) + '">' + a + "</b>" +
             '<i class="mmk">' + mark + "</i>" +
             '<b class="mv' + cls(b, a) + '">' + b + "</b></div>";
@@ -6178,7 +6182,7 @@
                      R.score === undefined || R.score === null);
         return '<div class="mcard">' + side(L, "l") +
           '<div class="mmid">' +
-            '<div class="mrow mrow--score"><b class="msc' +
+            '<div class="wrow wrow--score"><b class="msc' +
               ((L.score || 0) > (R.score || 0) ? " msc--won" : "") + '">' +
               (shown ? "\u2013" : L.score) + "</b>" +
               '<i class="mmk"><span class="myd">' + (shown ? "" : "FINAL") + "</span></i>" +
