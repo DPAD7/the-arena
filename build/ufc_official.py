@@ -64,6 +64,10 @@ def bout(fmid):
         "event": ((d.get("Event") or {}).get("Name")),
         "event_id": ((d.get("Event") or {}).get("EventId")),
         "status": d.get("Status"),
+        "start": ((d.get("Event") or {}).get("StartTime")),
+        "segment_start": d.get("CardSegmentStartTime"),
+        "broadcaster": d.get("CardSegmentBroadcaster"),
+        "order": d.get("FightOrder"),
         "official": d.get("OfficialStats"),
         "segment": d.get("CardSegment"),
         "weight": d.get("WeightClass"),
@@ -81,7 +85,96 @@ def bout(fmid):
     }
 
 
+def announced():
+    """Their matchmaking: every card ufc.com is showing and every bout already
+       made on it. A bout that has not been fought carries no stats, but it
+       carries both men, their corner, record, stance and reach, the weight it
+       is made at, which part of the card it sits on and when that part starts
+       -- which is the whole of what has been announced (Jose, Sep 20, 2026)."""
+    r = rq.get("https://www.ufc.com/events", impersonate="chrome", timeout=30)
+    slugs = [s for s in dict.fromkeys(re.findall(r"/event/([a-z0-9-]+)", r.text))
+             if not s.isdigit()]
+    out = []
+    for slug in slugs:
+        ids = fmids(slug)
+        if not ids:
+            # a card can be announced before a single bout is made; that is a
+            # fact about their matchmaking, not a fault, so it is said
+            print("%-34s nothing made yet" % slug)
+            continue
+        with ThreadPoolExecutor(6) as ex:
+            got = [b for b in ex.map(bout, ids) if b]
+        if not got:
+            continue
+        mine = collections.Counter(b["event_id"] for b in got).most_common(1)[0][0]
+        got = [b for b in got if b["event_id"] == mine]
+        made = [b for b in got if (b.get("status") or "").lower() != "final"]
+        if not made:
+            continue
+        out.append({"slug": slug, "event": got[0]["event"], "event_id": mine,
+                    "start": (got[0].get("start") or ""),
+                    "bouts": [{"fmid": b["fmid"], "segment": b["segment"],
+                               "starts": b.get("segment_start"),
+                               "weight": ((b.get("weight") or {}).get("Description")),
+                               "men": [{"name": " ".join(
+                                            x for x in [(m["name"] or {}).get("FirstName"),
+                                                        (m["name"] or {}).get("LastName")] if x),
+                                        "corner": m["corner"], "stance": m["stance"],
+                                        "reach": m["reach"],
+                                        "record": m["record"]} for b2 in [b] for m in b2["men"]]}
+                              for b in made]})
+        print("%-34s %-38s %d made" % (slug, got[0]["event"], len(made)))
+    # --- and the part of their matchmaking the page does not show yet -------
+    # The fight ids run in order, so the ids just past the last one published
+    # answer for cards that have been made and not announced. On Sep 20, 2026
+    # this found all twelve bouts of UFC 334 -- Gane v Hokit, Harrison v Nunes
+    # -- with nothing at all on ufc.com/event/ufc-334, and it finds bouts that
+    # were pulled from a page as well, which stay in the feed marked Canceled.
+    # A bounded walk, not a crawl: a hundred and sixty ids either side of what
+    # is published (Jose, Sep 20, 2026: "anything there not visible").
+    seen_ids = {b["fmid"] for c in out for b in c["bouts"]}
+    high = max((int(i) for i in seen_ids if i.isdigit()), default=0)
+    if high:
+        walk = [str(i) for i in range(high - 120, high + 140) if str(i) not in seen_ids]
+        with ThreadPoolExecutor(12) as ex:
+            more = [b for b in ex.map(bout, walk) if b]
+        quiet = collections.defaultdict(list)
+        for b in more:
+            if (b.get("status") or "").lower() == "final":
+                continue          # already fought; this is about what is to come
+            quiet[(b["event_id"], b["event"], b.get("start"))].append(b)
+        for (eid, name, start), rows in sorted(quiet.items(), key=lambda kv: str(kv[0][2])):
+            print("not on ufc.com: %-40s %s  %d bouts"
+                  % (name, (start or "")[:10], len(rows)))
+            for b in rows:
+                print("      %-22s %s  [%s]" % (
+                    ((b.get("weight") or {}).get("Description") or "?"),
+                    " v ".join(" ".join(x for x in [(m["name"] or {}).get("FirstName"),
+                                                    (m["name"] or {}).get("LastName")] if x)
+                               for m in b["men"]),
+                    b.get("status")))
+            out.append({"slug": None, "event": name, "event_id": eid,
+                        "start": start, "on_page": False,
+                        "bouts": [{"fmid": b["fmid"], "segment": b["segment"],
+                                   "status": b.get("status"),
+                                   "weight": ((b.get("weight") or {}).get("Description")),
+                                   "men": [{"name": " ".join(
+                                                x for x in [(m["name"] or {}).get("FirstName"),
+                                                            (m["name"] or {}).get("LastName")] if x),
+                                            "corner": m["corner"], "stance": m["stance"],
+                                            "reach": m["reach"], "record": m["record"]}
+                                           for m in b["men"]]}
+                                  for b in rows]})
+    path = os.path.join(D, "data", "ufc_matchmaking.json")
+    json.dump(out, open(path, "w"), indent=1)
+    print("%d cards, %d bouts written to %s"
+          % (len(out), sum(len(c["bouts"]) for c in out), path))
+
+
 def main():
+    if "--events" in sys.argv:
+        announced()
+        return
     args = [a for a in sys.argv[1:] if not a.startswith("--")]
     if "--fight" in sys.argv:
         ids = [sys.argv[sys.argv.index("--fight") + 1]]
