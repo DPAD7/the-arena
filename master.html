@@ -5482,7 +5482,10 @@
    snowflake, and it goes the moment he rings him (Jose, Sep 21, 2026:
    "for cold QBs ... anyone who doesn't have the yellow gold around it") */
   function coldMark(id) {
-    if (RINGED[String(id)]) return "";
+    /* a man on the wire is hurt, not cold: the plaster says everything the
+       snowflake would and two marks on one name says neither clearly
+       (Jose, Sep 21, 2026: "if you're injured you don't get it") */
+    if (RINGED[String(id)] || WIRE[String(id)]) return "";
     return '<i class="cold" title="Cold" aria-label="Cold">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cold"/></svg></i>';
   }
