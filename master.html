@@ -790,6 +790,66 @@
   .hurt { display: inline-flex; width: 17px; height: 17px; margin: 0 0 0 5px;
     vertical-align: -3px; color: #e2564d; }
   .hurt svg { width: 100%; height: 100%; display: block; }
+  /* ---- the week's card: two passers, everything down the middle ----
+     (Jose, Sep 21, 2026) */
+  .mcard { position: relative; display: grid; grid-template-columns: 1fr 152px 1fr;
+    background: var(--panel); border: 1px solid var(--edge); border-radius: 14px;
+    height: 156px; margin: 0 0 12px; }
+  .mside { position: relative; overflow: hidden; background: var(--hue); }
+  .mside--l { border-radius: 14px 0 0 14px;
+    -webkit-mask: linear-gradient(90deg, #000 72%, rgba(0,0,0,0) 100%);
+    mask: linear-gradient(90deg, #000 72%, rgba(0,0,0,0) 100%); }
+  .mside--r { border-radius: 0 14px 14px 0;
+    -webkit-mask: linear-gradient(270deg, #000 72%, rgba(0,0,0,0) 100%);
+    mask: linear-gradient(270deg, #000 72%, rgba(0,0,0,0) 100%); }
+  .mside::before { content: ""; position: absolute; inset: 0;
+    background: var(--mark) no-repeat 50% 36%/auto 150%;
+    opacity: 0.30; filter: grayscale(1) brightness(1.9) contrast(0.85); }
+  /* the name reads over any jersey, on a foot of shade */
+  .mside::after { content: ""; position: absolute; z-index: 2; left: 0; right: 0; bottom: 0;
+    height: 58px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0, rgba(0,0,0,.72) 78%, rgba(0,0,0,.82) 100%); }
+  .mface { position: relative; z-index: 1; width: 100%; height: 100%; border: 0;
+    border-radius: 0; background: none; object-fit: cover; object-position: 50% 8%; }
+  .mface.qbface--ring { border: 0; box-shadow: none; }
+  .mname { position: absolute; z-index: 3; left: 0; right: 0; bottom: 7px; text-align: center;
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif;
+    font-size: 18px; font-weight: 700; line-height: 1;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+  .mname em { font-style: normal; font-weight: 800; font-size: 13px; color: #fff;
+    opacity: .8; margin-right: 6px; vertical-align: 1px; }
+  .mname .hurt, .mname .cold { width: 16px; height: 16px; margin: 0 0 0 5px; }
+  .mtrav { position: absolute; z-index: 3; top: 8px; width: 17px; height: 15px;
+    color: rgba(255,255,255,.72); filter: drop-shadow(0 1px 3px rgba(0,0,0,.8)); }
+  .mtrav svg { width: 100%; height: 100%; }
+  .mside--l .mtrav { left: 9px; }
+  .mside--r .mtrav { right: 9px; }
+  /* a man he has ringed takes the gold around the outside of his own half */
+  .mcard:has(.mside--l.mside--gold)::before,
+  .mcard:has(.mside--r.mside--gold)::after { content: ""; position: absolute; z-index: 6;
+    top: -2px; bottom: -2px; width: calc((100% - 152px)/2 + 12px);
+    border: 2px solid #e3b341; pointer-events: none; }
+  .mcard:has(.mside--l.mside--gold)::before { left: -2px; border-right: 0;
+    border-radius: 15px 0 0 15px; }
+  .mcard:has(.mside--r.mside--gold)::after { right: -2px; border-left: 0;
+    border-radius: 0 15px 15px 0; }
+  .mmid { display: flex; flex-direction: column; justify-content: center; gap: 1px;
+    padding: 7px 6px; }
+  .mrow { display: grid; grid-template-columns: 1fr 26px 1fr; align-items: center; gap: 4px;
+    padding: 4px 0; border-top: 1px dashed rgba(255,255,255,.10); }
+  .mrow:first-child { border-top: 0; }
+  .mrow b { font-size: 15px; font-weight: 800; font-variant-numeric: tabular-nums;
+    text-align: center; color: var(--muted);
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .mrow--big b { font-size: 17px; }
+  .mrow b.mv--on { color: var(--ink); }
+  .msc { font-size: 21px !important; color: var(--muted) !important; }
+  .msc--won { color: var(--ink) !important; }
+  .mmk { display: inline-flex; width: 22px; height: 19px; align-items: center;
+    justify-content: center; color: var(--ink);
+    --fb-skin: #fff; --fb-edge: #0c1a12; --fb-seam: #0c1a12; }
+  .mmk svg { width: 100%; height: 100%; }
+  .myd { font-size: 9px; letter-spacing: .1em; color: var(--muted); font-weight: 700; }
   /* ---- the season card: his picture, his marks, his name over the foot ----
      Two to a row. The picture sits on the club's own colour, taken down toward
      the board's black, with the club's mark behind him as a grey ghost. There
@@ -5808,7 +5868,15 @@
            '<b class="lnum' + dim + '">' + n + "</b>";
   }
   function qcard(r, rank, rec) {
-    var club = String(r.club || ""), w = (rec[club] || [0, 0])[0], l = (rec[club] || [0, 0])[1];
+    var club = String(r.club || ""), w, l;
+    if (rec) {
+      w = (rec[club] || [0, 0])[0];
+      l = (rec[club] || [0, 0])[1];
+    } else {
+      /* one week: the club's own result that week, not the season's record */
+      w = r.ml === "W" ? 1 : 0;
+      l = r.ml === "L" ? 1 : 0;
+    }
     var face = /^\d+$/.test(r.id)
       ? '<img class="qbface qbface--card" data-ring="' + r.id + '" alt="" loading="lazy" src="face/nfl/' +
         r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
@@ -5862,6 +5930,9 @@
       box.innerHTML = '<p class="formnote">Nothing settled yet.</p>';
       BOARD.appendChild(box); return;
     }
+    /* the season is the passers' cards; a week keeps its own matchup card,
+       which is a different thing and reads better as it is (Jose, Sep 21,
+       2026: "no week 1 ledger") */
     var season = formWeek === "season";
     if (season) {
       box.className = "form qcards";
@@ -6061,35 +6132,47 @@
         if (pair.length < 2) pair = all.slice(0, 2);
         var L = pair[0], R = pair[1] || { name: "", club: "", id: "", ptd: 0, atd: 0, h2h: "", ml: "", yds: 0, rank: "", odds: [[null, null], [null, null], null, null] };
         var gap = Math.abs(L.yds - R.yds);
-        return '<div class="fcard">' +
-                    '<div class="fhead">' + who(L, false) +
-          /* the score with each man's result beside it (Jose, Sep 16, 2026) */
-          /* both sides or neither: a game still being played can have one
-             man's score and not the other's, and half a score reads
-             "0-undefined" (Jose, Sep 20, 2026) */
-          '<span class="fscore">' + (L.side === 1 ? HOUSE : PLANE) + wl(L.ml) + '<b>' +
-            (L.score === undefined || L.score === null ||
-             R.score === undefined || R.score === null
-               ? "" : L.score + "\u2013" + R.score) +
-          '</b>' + wl(R.ml) + (R.side === 1 ? HOUSE : PLANE) + '</span>' +
-          who(R, true) + '</div>' +
-          (function () {
-            var lw = L.h2h === "W", rw = R.h2h === "W";
-            if (!lw && !rw && gap) { lw = L.yds > R.yds; rw = !lw; }
-            var by = gap ? '<i class="fgap">(+' + gap + ')</i>' : "";
-            var yd = function (m, win, ring) {
-              return '<span class="fyds' + (win ? " fyds--w" : "") + (win && ring ? " fyds--pz" : "") + '">' + m.yds + '</span>';
-            };
-            return '<div class="fline"><span class="fydsw">' + (lw ? by : "") + yd(L, L.h2h === "W", L.odds[2]) +
-                   '</span><span class="fmid">' + VS + '</span><span class="fydsw">' + yd(R, R.h2h === "W", R.odds[2]) +
-                   (rw ? by : "") + '</span></div>';
-          })() +
-          '<div class="fline"><span class="fmks fmks--l">' + marks(BALL, L.ptd, L.odds[0], true, bestAt(L.odds[0], L.ptd)) + '</span><span class="fmid">' + BALL + '</span><span class="fmks fmks--r">' + marks(BALL, R.ptd, R.odds[0], false, bestAt(R.odds[0], R.ptd)) + '</span></div>' +
-          '<div class="fline"><span class="fmks fmks--l">' + marks(RUN, L.atd, L.odds[1], true, bestAt(L.odds[1], L.atd)) + '</span><span class="fmid">' + RUN + '</span><span class="fmks fmks--r">' + marks(RUN, R.atd, R.odds[1], false, bestAt(R.odds[1], R.atd)) + '</span></div>' +
-          '<div class="fline fline--paid"><span class="fpaid--flip">' + paid(L) + '</span><span class="fmid">' +
-          '<svg class="fbets fbets--tick" viewBox="0 0 26 18" aria-hidden="true"><use href="#ticket"/></svg>' +
-          '</span><span>' + paid(R) + '</span></div>' +
-          '</div>';
+        /* The week's card, Sep 21, 2026: the two passers on the outside on
+           their club's own colour with the club mark behind them, and
+           everything counted down the middle -- the score, the yards under
+           the VS mark, the passing touchdowns, the rushing ones. The travel
+           mark sits in the outer corner, his rank before his name, and a man
+           he has ringed takes the gold around the outside of his own half. */
+        var hueOfClub = function (club) { return cardHue(String(club || "")); };
+        var side = function (m, which) {
+          var face = /^\d+$/.test(m.id)
+            ? '<img class="qbface mface" data-ring="' + m.id + '" alt="" loading="lazy" src="face/nfl/' +
+              m.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
+            : '<img class="qbface mface" alt="" src="' + NOFACE + '">';
+          return '<div class="mside mside--' + which +
+            (RINGED[String(m.id)] ? " mside--gold" : "") +
+            '" style="--hue:' + hueOfClub(m.club) + ';--mark:url(logos/nfl/' +
+            String(m.club || "").toLowerCase() + '.png)">' + face +
+            '<span class="mname"><em>' + (m.rank || "") + "</em>" +
+            esc(famName(m.name)) + hurtMark(m.id) + coldMark(m.id) + "</span>" +
+            '<i class="mtrav">' + (m.side === 1 ? HOUSE : PLANE) + "</i></div>";
+        };
+        var line = function (mark, a, b, big) {
+          var cls = function (mine, his) { return mine > his ? " mv--on" : ""; };
+          return '<div class="mrow' + (big ? " mrow--big" : "") + '">' +
+            '<b class="mv' + cls(a, b) + '">' + a + "</b>" +
+            '<i class="mmk">' + mark + "</i>" +
+            '<b class="mv' + cls(b, a) + '">' + b + "</b></div>";
+        };
+        var shown = (L.score === undefined || L.score === null ||
+                     R.score === undefined || R.score === null);
+        return '<div class="mcard">' + side(L, "l") +
+          '<div class="mmid">' +
+            '<div class="mrow mrow--score"><b class="msc' +
+              ((L.score || 0) > (R.score || 0) ? " msc--won" : "") + '">' +
+              (shown ? "\u2013" : L.score) + "</b>" +
+              '<i class="mmk"><span class="myd">' + (shown ? "" : "FINAL") + "</span></i>" +
+              '<b class="msc' + ((R.score || 0) > (L.score || 0) ? " msc--won" : "") + '">' +
+              (shown ? "\u2013" : R.score) + "</b></div>" +
+            line(VSMARK, L.yds, R.yds, true) +
+            line(BALLSVG, L.ptd, R.ptd) +
+            line(RUSHSVG, L.atd, R.atd) +
+          "</div>" + side(R, "r") + "</div>";
       }).join("");
       BOARD.appendChild(box); return;
     }
