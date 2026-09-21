@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-URL = "https://a.espncdn.com/combiner/i?img=/i/headshots/%s/players/full/%s.png&w=168&h=168&scale=crop"
+URL = "https://a.espncdn.com/combiner/i?img=/i/headshots/%s/players/full/%s.png&w=336&h=336&scale=crop"
 
 
 def main():
