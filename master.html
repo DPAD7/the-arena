@@ -991,11 +991,13 @@
      the school, which is where the mock puts it (Jose, Sep 22, 2026: "what's
      behind his head?") */
   .gcard.gcard--v3 > .ghead > .gteam > .grank { display: none !important; }
-  /* his record beside his name, his club or school on the line under it */
-  .gcard.gcard--v3 .h2hnm .grec { display: inline; margin-left: 6px;
-    font-size: 12px; font-weight: 800; color: var(--muted); }
+  /* his club under his name, his record in brackets after it */
   .gcard.gcard--v3 .h2hnm .gschool { display: block; margin-top: 1px;
     font-size: 11px; font-weight: 800; letter-spacing: .04em; color: var(--muted); }
+  .gcard.gcard--v3 .h2hnm .gschool .grec { display: inline; margin: 0;
+    font-size: inherit; font-weight: inherit; color: inherit; }
+  .gcard.gcard--v3 .h2hnm .gschool .grec::before { content: "("; }
+  .gcard.gcard--v3 .h2hnm .gschool .grec::after { content: ")"; }
   .gcard.gcard--v3 .h2hnm .grank { font-style: normal; font-size: inherit;
     font-weight: inherit; line-height: inherit; vertical-align: baseline;
     color: #e3b341; }
@@ -1007,8 +1009,14 @@
   .gcard--v3 .gclk { font-style: normal; font-size: 9.5px; font-weight: 800;
     letter-spacing: .06em; color: var(--muted); white-space: nowrap; }
   .gcard--v3 .gclk--fin { color: #c9ccd2; }
-  /* the foot keeps its prices, shut, the way the mock has them */
+  /* the foot keeps its prices, shut, the way the mock has them -- but a leg
+     he marked is not shut to him: it keeps its gold at full strength
+     (Jose, Sep 22, 2026: "I have Stafford head to head") */
   .gcard.gcard--v3.gcard--on > .gbody .price { opacity: .45; }
+  .gcard.gcard--v3.gcard--on > .gbody .price.on,
+  .gcard.gcard--v3.gcard--on > .gbody .price.placed,
+  .gcard.gcard--v3.gcard--on > .gbody .price.won,
+  .gcard.gcard--v3.gcard--on > .gbody .price.lost { opacity: 1; }
   /* the margin sits under the bar, centred on the half of whoever is up */
   .gcard.gcard--v3 .h2hchip.gyd { position: absolute; top: 100%; left: auto;
     margin-top: 4px; padding: 0; border: 0; background: none;
@@ -3458,12 +3466,29 @@
      (Jose, Sep 20, 2026: "the most recent screenshot says otherwise"). The
      retry carries a query the cache has never seen. */
   function faceChain(img) {
+    /* the silhouette is the end of the chain; on a fixture card his letters
+       stand there instead (Jose, Sep 22, 2026) */
+    function give(i) {
+      i.onerror = null;
+      if (typeof lettersHere === "function" && lettersHere(i)) return;
+      i.src = NOFACE;
+    }
     img.onerror = function () {
-      img.onerror = function () { img.onerror = null; img.src = NOFACE; };
+      img.onerror = function () { give(img); };
       var src = img.getAttribute("src") || "";
-      if (!src || src.indexOf("data:") === 0 || src.indexOf("?") >= 0) { img.onerror = null; img.src = NOFACE; return; }
+      if (!src || src.indexOf("data:") === 0 || src.indexOf("?") >= 0) { give(img); return; }
       img.src = src + "?r=" + Date.now();
     };
+  }
+  /* the card this picture belongs to, and whose letters to write */
+  function lettersHere(img) {
+    var card = img.closest && img.closest(".gcard");
+    if (!card || card.dataset.v3 !== "1") return false;
+    var side = img.closest(".gside--l") ? "l" : img.closest(".gside--r") ? "r" : null;
+    if (!side) return false;
+    var team = card.querySelector(".gside--" + side + " img.glogo");
+    lettersIfNoFace(img, card, side, (team || {}).alt || "", true);
+    return true;
   }
   function dressFaces(card) {
     if (!card || card.dataset.lg !== "college-football") return;
@@ -5426,16 +5451,20 @@
          and left the NFL card with no club at all
          (Jose, Sep 22, 2026: "I don't see team underneath the name and then
          add their record next to the name to the right of the name") */
+      /* his name, and under it his club with his record in brackets after it:
+         Purdie / LIB (1-0). A college side ranked by the AP carries its number
+         in gold in front of the school (Jose, Sep 22, 2026) */
       var rec = p[1].querySelector(".grec");
       var nm = mine && mine.querySelector(".h2hnm");
-      if (rec && nm && !nm.querySelector(".grec")) nm.appendChild(rec);
       if (nm && ab && !nm.querySelector(".gschool")) {
         var r = card.dataset.lg === "college-football" ? RANK[ab] : 0;
         var sch = document.createElement("small");
         sch.className = "gschool";
-        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
+        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab + " ";
         nm.appendChild(sch);
       }
+      var sch0 = nm && nm.querySelector(".gschool");
+      if (rec && sch0 && rec.parentNode !== sch0) sch0.appendChild(rec);
       p[1].style.setProperty("--hue", cardHue(ab));
       /* the side's own mark, whichever league it came from -- a club's sits in
          logos/nfl, a school's in logos/ncaa under its ESPN id */
@@ -5446,15 +5475,9 @@
       p[1].classList.add("gside", "gside--" + p[0]);
       var home = (card.dataset.lhome === "1") === (p[0] === "l");
       var face = mine && mine.querySelector("img.qbface");
-      if (face) {
-        lettersIfNoFace(face, card, p[0], ab);
-        if (!face.dataset.fallback) {
-          face.dataset.fallback = "1";
-          face.addEventListener("error", function () {
-            lettersIfNoFace(face, card, p[0], ab, true);
-          });
-        }
-      }
+      /* only once the chain has given up -- faceChain retries past the cache
+         first, and that retry is what usually wins */
+      if (face) lettersIfNoFace(face, card, p[0], ab);
       var trav = document.createElement("i");
       trav.className = "gtrav";
       trav.innerHTML = '<svg viewBox="0 0 1024 1024" aria-hidden="true"><use href="#' +
@@ -5547,8 +5570,16 @@
       var ls = card.dataset.ls, rs = card.dataset.rs;
       if (ls !== undefined && rs !== undefined) {
         var l = parseInt(ls, 10), r = parseInt(rs, 10);
-        ends[0].appendChild(numChip(l, l > r));
-        ends[1].appendChild(numChip(r, r > l));
+        /* a club price he had marked keeps its gold on the score that
+           answered it (Jose, Sep 22, 2026: "where is the gold box around the
+           stuff I checked off") */
+        [[ends[0], l, r], [ends[1], r, l]].forEach(function (e) {
+          var ml = e[0].querySelector(".gml button.price");
+          var mk = !!(ml && (ml.classList.contains("on") ||
+                             ml.classList.contains("placed")));
+          e[0].appendChild(numChip(e[1], e[1] > e[2], mk,
+            mk && done ? e[1] > e[2] : null));
+        });
       }
     }
 
@@ -5593,13 +5624,23 @@
         var v = parseInt(box.textContent, 10);
         if (isNaN(v)) v = 0;
         /* the gold he put on the first rung carries over to the count */
-        var first = side.querySelector(".ptdbtn button.price");
-        var placed = !!(first && (first.classList.contains("on") ||
-                                  first.classList.contains("placed")));
+        /* he may have marked the 2+ rung rather than the 1+, and that rung's
+           chip is not drawn once the game is on -- so the count answers for
+           any rung of his he had marked */
+        var placed = false, wonAt = 0;
+        side.querySelectorAll(".ptdbtn button.price").forEach(function (b0, i0) {
+          if (b0.classList.contains("on") || b0.classList.contains("placed")) {
+            placed = true;
+            var ln0 = b0.closest(".ptdbtn").querySelector(".ptdline");
+            var n0 = ln0 ? parseInt(ln0.textContent, 10) : i0 + 1;
+            if (!isNaN(n0)) wonAt = Math.max(wonAt, n0);
+          }
+        });
         var oth = counts[sd[1] ? 0 : 1];
         var ov = oth ? parseInt(oth.textContent, 10) : 0;
         if (isNaN(ov)) ov = 0;
-        var chip = numChip(v, v > ov, placed, placed && done ? v >= 1 : null);
+        var chip = numChip(v, v > ov, placed,
+          placed && done ? v >= (wonAt || 1) : null);
         chip.classList.add("pnum--" + sd[0]);
         /* each count opens its own kind: the passing count every touchdown he
            threw, the rushing count every one he ran in
