@@ -984,14 +984,58 @@
     margin: 1px 0 2px; }
   /* the fight's own rail: a stretch a round, every round it was scheduled for */
   /* room under the rail for the round chips, so the card's arrow clears them */
-  .gcard.gcard--v3.gcard--bout > .frail { padding: 12px 10px 32px !important; }
-  .gcard.gcard--bout .frail__bar { position: relative; height: 7px;
-    border-radius: 4px; background: rgba(255,255,255,.16); }
-  .gcard.gcard--bout .rtick { position: absolute; top: -2px; width: 1px;
-    height: 11px; background: rgba(255,255,255,.34); }
-  .gcard.gcard--bout .rnum { position: absolute; top: 12px;
-    transform: translateX(-50%); width: 20px; height: 17px; color: var(--muted); }
+  /* room above the rail for the clock over the finish, and below it for the
+     round chips (Jose, Sep 22, 2026: mock-mma2.png) */
+  .gcard.gcard--v3.gcard--bout > .frail { padding: 30px 10px 32px !important; }
+  /* the rail, copied from the mock's own measurements -- no box round the
+     method, and the decision IS the end cap (Jose, Sep 22, 2026: "did I have
+     a border around the dec? no... I said it was the final tick") */
+  .gcard.gcard--bout .frail__bar { position: relative; height: 5px;
+    border-radius: 3px; background: rgba(255,255,255,.22); }
+  .gcard.gcard--bout .frail__bar::before,
+  .gcard.gcard--bout .frail__bar::after { content: ""; position: absolute;
+    top: -6px; bottom: -6px; width: 3px; background: #fff; border-radius: 2px; }
+  .gcard.gcard--bout .frail__bar::before { left: 0; }
+  .gcard.gcard--bout .frail__bar::after { right: 0; }
+  .gcard.gcard--bout .frail__bar--dec::after { display: none; }
+  .gcard.gcard--bout .frail__fill { position: absolute; left: 0; top: 0; bottom: 0;
+    border-radius: 3px; background: rgba(255,255,255,.75); }
+  .gcard.gcard--bout .frail__fill--live { background: var(--green); }
+  .gcard.gcard--bout .rtick { position: absolute; top: -4px; bottom: -4px;
+    width: 2px; background: rgba(255,255,255,.45); border-radius: 2px; height: auto; }
+  .gcard.gcard--bout .rnum { position: absolute; top: 100%; margin-top: 5px;
+    transform: translateX(-50%); display: block; width: 24px; height: 20px;
+    color: var(--muted); }
   .gcard.gcard--bout .rnum svg { width: 100%; height: 100%; }
+  .gcard.gcard--bout .fend { position: absolute; left: 0; top: 50%;
+    transform: translate(-50%, -50%); display: flex; flex-direction: column;
+    align-items: center; gap: 2px; z-index: 2; }
+  .gcard.gcard--bout .fend--end { left: auto; right: 0; transform: translate(50%, -50%); }
+  .gcard.gcard--bout .fmethod { display: inline-flex; width: 26px; height: 22px;
+    filter: drop-shadow(0 1px 3px rgba(0,0,0,.9)); }
+  .gcard.gcard--bout .fend .fmethod svg { background: #141518; border-radius: 6px; }
+  .gcard.gcard--bout .fmethod svg { width: 100%; height: 100%; }
+  .gcard.gcard--bout .fmethod--rnd { width: 26px; height: 22px; color: var(--ink); }
+  .gcard.gcard--bout .fclock { position: absolute; bottom: 100%; margin-bottom: 3px;
+    font-size: 12px; font-weight: 800; font-variant-numeric: tabular-nums;
+    white-space: nowrap; text-shadow: 0 1px 3px rgba(0,0,0,.9); color: var(--ink); }
+  /* The frame round each half, over his picture and rounded at the card's own
+     outer corner. Before the result it is the corner he fights out of, red on
+     the left and blue on the right; settled it is green on the winner and red
+     on the loser; a draw frames both amber and a no contest both grey
+     (Jose, Sep 22, 2026). */
+  .gcard.gcard--bout .gside--won::before,
+  .gcard.gcard--bout .gside--lost::before,
+  .gcard.gcard--bout .gside--drew::before,
+  .gcard.gcard--bout .gside--nc::before { content: ""; position: absolute;
+    z-index: 4; inset: 0; border: 2px solid currentColor; pointer-events: none; }
+  .gcard.gcard--bout .gside--l::before { border-right: 0; border-radius: 14px 0 0 0; }
+  .gcard.gcard--bout .gside--r::before { border-left: 0; border-radius: 0 14px 0 0; }
+  .gcard.gcard--bout .gside--won { color: var(--green); }
+  .gcard.gcard--bout .gside--lost { color: #e2564d; }
+  .gcard.gcard--bout .gside--drew { color: #e3b341; }
+  .gcard.gcard--bout .gside--nc { color: #8e8e93; }
+  .gcard.gcard--bout .gside--lost { color: #e2564d; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
   .gcard.gcard--v3 > .gbody .h2hrow { display: grid !important;
@@ -8853,6 +8897,19 @@
     if (clubs.length === 2) {
       stamp(clubs[0], nc ? "nc" : drawn ? "draw" : leftWon, false);
       stamp(clubs[1], nc ? "nc" : drawn ? "draw" : rightWon, true);
+      /* the frame the mock puts round the half that won, and the one that
+         lost -- a draw or a no contest frames neither */
+      /* the settle can land before the card has been laid out, so the classes
+         go on regardless -- the frame itself is scoped to a bout card in CSS
+         (Jose, Sep 22, 2026) */
+      {
+        [[clubs[0], leftWon], [clubs[1], rightWon]].forEach(function (q) {
+          q[0].classList.toggle("gside--drew", !!drawn);
+          q[0].classList.toggle("gside--nc", !!nc);
+          q[0].classList.toggle("gside--won", !drawn && !nc && !!w && !!q[1]);
+          q[0].classList.toggle("gside--lost", !drawn && !nc && !!w && !q[1]);
+        });
+      }
     }
     card.querySelectorAll(".grow").forEach(function (row) {
       var lab = row.querySelector(".gmk");
@@ -9340,6 +9397,37 @@
      says how many rounds there are, so the whole fight is rounds x five
      minutes and the fill is simply where we have got to. A bout that is over
      stops at the moment it ended and says how. */
+  var RMARK = { KO: "mko", TKO: "mko", DQ: "mko", SUB: "msub" };
+  var DMARK = { UD: "mud", SD: "msd", MD: "mmd", TD: "mud", DEC: "mud" };
+  /* The fight's own rail, filled to where it stands. A stoppage puts the
+     glove or the submission mark on the line with the clock above it; a
+     decision has no clock and its chip stands where the end cap would, so
+     nothing straddles the last tick; a bout still on carries the round chip
+     on the line with the clock above (Jose, Sep 21, 2026). */
+  function fillRail(bar, c, state, rd, pct) {
+    bar.querySelectorAll(".frail__fill, .fend").forEach(function (n) { n.remove(); });
+    var how = c.how || {};
+    var kind = String(how.type || "").toUpperCase();
+    var dec = !!DMARK[kind] && state === "post";
+    var fill = document.createElement("i");
+    fill.className = "frail__fill" + (state === "in" ? " frail__fill--live" : "");
+    fill.style.width = (dec ? 100 : Math.max(0, Math.min(100, pct))).toFixed(2) + "%";
+    bar.insertBefore(fill, bar.firstChild);
+    bar.classList.toggle("frail__bar--dec", dec);
+
+    var end = document.createElement("span");
+    end.className = "fend" + (dec ? " fend--end" : "");
+    if (!dec) end.style.left = Math.max(0, Math.min(97, pct)).toFixed(2) + "%";
+    var mark = dec ? DMARK[kind]
+             : state === "post" ? (RMARK[kind] || "mko")
+             : ("r" + Math.max(1, rd));
+    var clock = state === "post" ? (dec ? "" : (how.time || ""))
+                                 : (c.status && c.status.displayClock) || "";
+    if (clock) end.innerHTML = '<b class="fclock">' + clock + "</b>";
+    end.innerHTML += '<i class="fmethod' + (state === "in" ? " fmethod--rnd" : "") +
+      '"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#' + mark + '"/></svg></i>';
+    bar.appendChild(end);
+  }
   function drawTimeline(card, c, st, rd, label) {
     var rounds = (((c.format || {}).regulation || {}).periods) || 3;
     var each = (((c.format || {}).regulation || {}).clock) || 300;
@@ -9377,6 +9465,17 @@
     var into = state === "post" ? left : each - left;
     var gone = Math.max(0, Math.min(whole, (Math.max(1, rd) - 1) * each + into));
     var pct = whole ? (gone / whole) * 100 : 0;
+    /* the bout card draws its own rail -- a stretch a round, the finish marked
+       ON the line with the clock above it, a decision standing where the end
+       cap would (notes/mocks/mock_mma.py). The old timeline stays for cards
+       that have not been re-laid. */
+    var fbar = card.querySelector(".frail__bar");
+    if (fbar) {
+      fillRail(fbar, c, state, rd, pct);
+      card.classList.remove("has-tline");
+      if (box) box.innerHTML = "";
+      return;
+    }
     var wrap = box.querySelector(".tlwrap");
     if (!wrap) {
       /* the round line is marked once, by the tall tick under the rail. It
