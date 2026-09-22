@@ -10447,14 +10447,13 @@
            Five minutes in the background, and then it comes back on the tab
            and at the place he left, so returning to it looks like nothing
            happened. */
-        /* The five quiet minutes never came. On a night of deploys every few
-           minutes, with the board in front of him the whole time, the page
-           never reached them and he reviewed builds two behind for hours
-           (Jose, Sep 22, 2026: "remove it if it's not going to be effective").
-           The rule it protects still stands -- a page he is looking at never
-           refreshes itself -- but the moment he puts it away it takes the new
-           one, and comes back where he left it. */
-        if (!document.hidden) { AWAY = 0; return; }
+        /* A new build is taken the moment it lands, open or not. Holding it
+           back meant he pushed a deploy and then looked at the old page --
+           for hours, on a night of deploys every few minutes
+           (Jose, Sep 22, 2026: "why am I pushing deployments if it takes so
+           long to see it?"). He is put back exactly where he was reading, so
+           the board does not jump; that was the worry the hold was for. */
+        AWAY = 0;
         /* where he was, so the new version opens on it rather than at home */
         try {
           sessionStorage.setItem("arena.at", String(window.scrollY));
