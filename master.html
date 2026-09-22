@@ -8162,6 +8162,9 @@
      (Jose, Sep 18, 2026) */
   /* read again when a fight ends: the rest of the bill moves with it, and
      the new times are in the same file (Jose, Sep 18, 2026) */
+  /* which bouts and games have had their prop prices off the file at least
+     once, so a finished one can be frozen after that and not before */
+  var TOOK = {};
   function pullPrices() {
     var COL = { SCHED: [9, 10, 11, 12], CFB: [10, 11, 12, 13], FIGHTS: [8, 9, 10, 11] };
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
@@ -8203,8 +8206,15 @@
         var got = j[name], into = name === "PROPS" ? PROPS : FPROPS;
         if (!got || !into) return;
         Object.keys(got).forEach(function (id) {
-          if (frozen(id) && into[id]) return;
+          /* A finished game or bout is frozen -- but frozen at what the FILE
+             says, taken once, not at whatever was baked into the page when it
+             was built. Freezing before the first read left Van v Pantoja on
+             the page's own ANY KO +120 with three rounds and its round
+             markets empty, while the file held +115, five rounds and every
+             one of them priced (Jose, Sep 22, 2026). */
+          if (frozen(id) && TOOK[name + id]) return;
           into[id] = got[id];
+          TOOK[name + id] = 1;
         });
       });
       [["SCHED", SCHED], ["CFB", CFB], ["FIGHTS", FIGHTS]].forEach(function (pair) {
