@@ -963,6 +963,7 @@
   .gcard.gcard--v3 .gyds .gh2h, .gcard.gcard--v3 .gline .gh2h { display: flex; justify-content: center; }
   /* the man in front is white; the other stays grey */
   .gcard.gcard--v3 .pnum.on { color: var(--ink); }
+  .gcard.gcard--v3 .pnum--tap { cursor: pointer; }
   /* the gold box he put on the price carries over to what he did, and settles */
   .gcard.gcard--v3 .pnum.placed { border-color: #e3b341; border-width: 2px;
     background: rgba(227,179,65,.10); color: var(--ink); }
@@ -2498,6 +2499,16 @@
   document.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest("button.price");
     if (!btn) return;
+    /* a game that is over cannot be marked or unmarked -- the card is a
+       result by then. Before it kicks off and while it is on, every leg on it
+       still answers: the head to head, the club, the passing and the rushing
+       (Jose, Sep 22, 2026: "I shouldn't be able to double check on anything
+       that old... but I can do live and pre game") */
+    var onCard = btn.closest && btn.closest(".gcard");
+    if (onCard && typeof isOver === "function" && isOver(onCard)) {
+      e.preventDefault();
+      return;
+    }
     var shut = btn.dataset.shut === "1";
     var now = Date.now();
     if (TAPON === btn && now - TAPAT < 400) {
@@ -5652,6 +5663,19 @@
         var play = side.querySelector(".ptdplay");
         if (play) chip.appendChild(play);
         chip.classList.toggle("has-clip", !!play);
+        if (!done) {
+          var rungs0 = [].slice.call(side.querySelectorAll(".ptdbtn button.price"));
+          var live0 = rungs0.filter(function (b1) { return b1.classList.contains("on"); })[0];
+          var want0 = live0 || rungs0[0];
+          if (want0) {
+            chip.classList.add("pnum--tap");
+            chip.addEventListener("click", function (ev) {
+              ev.stopPropagation();
+              want0.click();
+              stateV3(card);
+            });
+          }
+        }
         var seat = side.querySelector(".ptdbtn:not([hidden])");
         if (seat) seat.appendChild(chip);
         else side.appendChild(chip);
