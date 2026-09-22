@@ -1148,6 +1148,9 @@
     text-shadow: 0 1px 4px rgba(0,0,0,0.85), 0 0 12px rgba(0,0,0,0.6); }
   .qname h3 { margin: 0; font-size: 17px; font-weight: 700; line-height: 1;
     font-family: "Barlow Condensed", "Arial Narrow", sans-serif; }
+  /* his club's season record, beside his name (Jose, Sep 22, 2026) */
+  .qname .qrec { font-size: 12px; font-weight: 800; letter-spacing: .02em;
+    color: var(--muted); font-variant-numeric: tabular-nums; }
   .qname .hurt, .qname .cold { width: 17px; height: 17px; margin: 0; }
   .qbface[data-ring] { cursor: pointer; -webkit-user-select: none; user-select: none;
     -webkit-touch-callout: none; }
@@ -6638,6 +6641,7 @@
         qline(VSMARK, "Head to head", r.h2hw === undefined ? (r.h2h === "W" ? 1 : 0) : r.h2hw) +
       "</div>" +
       '<footer class="qname"><h3>' + esc(famName(r.name)) + "</h3>" +
+        '<small class="qrec">' + w + "-" + l + "</small>" +
         hurtMark(r.id) + coldMark(r.id) + "</footer>" +
       "</article>";
   }
