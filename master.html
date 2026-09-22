@@ -1062,17 +1062,39 @@
      the left and blue on the right; settled it is green on the winner and red
      on the loser; a draw frames both amber and a no contest both grey
      (Jose, Sep 22, 2026). */
-  .gcard.gcard--bout .gside--won::before,
-  .gcard.gcard--bout .gside--lost::before,
-  .gcard.gcard--bout .gside--drew::before,
-  .gcard.gcard--bout .gside--nc::before { content: ""; position: absolute;
-    z-index: 4; inset: 0; border: 2px solid currentColor; pointer-events: none; }
-  .gcard.gcard--bout .gside--l::before { border-right: 0; border-radius: 14px 0 0 0; }
-  .gcard.gcard--bout .gside--r::before { border-left: 0; border-radius: 0 14px 0 0; }
-  .gcard.gcard--bout .gside--won { color: var(--green); }
-  .gcard.gcard--bout .gside--lost { color: #e2564d; }
-  .gcard.gcard--bout .gside--drew { color: #e3b341; }
-  .gcard.gcard--bout .gside--nc { color: #8e8e93; }
+  /* The frame belongs to the HEAD, not to his panel: mock_mma.py draws it with
+     :has() at z-index 6 across the head, because .gside is overflow:hidden and
+     masked at its inner edge -- a border on the panel is clipped and faded out,
+     which is why it never showed (Jose, Sep 22, 2026). Copied from the mock. */
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after {
+    content: ""; position: absolute; z-index: 6; top: 0; bottom: 0;
+    width: calc((100% - 132px) / 2 + 10px); border: 2px solid;
+    pointer-events: none; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before {
+    left: 0; border-right: 0; border-radius: 14px 0 0 0; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after {
+    right: 0; border-left: 0; border-radius: 0 14px 0 0; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before { border-color: #17c257; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after { border-color: #17c257; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before { border-color: #e2564d; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after { border-color: #e2564d; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before { border-color: #e3b341; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after { border-color: #e3b341; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before { border-color: #8e8e93; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after { border-color: #8e8e93; }
   .gcard.gcard--bout .gside--lost { color: #e2564d; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
