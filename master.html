@@ -986,6 +986,11 @@
   /* no W or L tile on a fixture card: the mock puts nothing over his picture
      but the travel mark. The tile still stands on the ledger and the bouts */
   .gcard.gcard--v3 > .ghead > .gteam > .mk { display: none !important; }
+  /* the card's older rank badge sat over his head, clipped by the card's own
+     edge, and read as a stray number. The rank rides under his name now, with
+     the school, which is where the mock puts it (Jose, Sep 22, 2026: "what's
+     behind his head?") */
+  .gcard.gcard--v3 > .ghead > .gteam > .grank { display: none !important; }
   /* the school under his name, its AP number in gold before it */
   .gcard.gcard--v3 .h2hnm .gschool { display: block; font-size: 11px;
     font-weight: 800; letter-spacing: .04em; color: var(--muted); }
