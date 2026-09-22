@@ -4675,6 +4675,12 @@
       rest.map(draw).join("") + '</div>';
   }
   function fightSheet(f) {
+    /* the rows below read FS_BOUT, and every card overwrote it as the bill was
+       built -- so a sheet could show another fight's prices under its own two
+       names: Tsarukyan's card, titled Pantoja v Van, carrying Pitbull's KO
+       price (Jose, Sep 22, 2026). It is set here, for this sheet, and again
+       when one is opened. */
+    FS_BOUT = f[1];
     /* one strip, no second row of chips: the five ways a fight ends and the
        two stat markets, each its own tab (Jose, Sep 18, 2026). The strip
        scrolls sideways rather than wrapping. */
@@ -5631,6 +5637,14 @@
     var swapped = false;
     if (rr && rr.r === "C" && !(lr && lr.r === "C")) {
       swapped = true;
+      /* the sheet is titled the way the card reads, and the way the promotion
+         names the bout -- UFC 331 is Van vs. Pantoja 2, and the title was
+         built from the order the data arrived in (Jose, Sep 22, 2026) */
+      var ttl = card.querySelector(".sheet__title");
+      if (ttl && ttl.textContent.indexOf(" v ") > 0) {
+        var two = ttl.textContent.split(" v ");
+        ttl.textContent = two[1].trim() + " v " + two[0].trim();
+      }
       head.insertBefore(sides[1], sides[0]);
       sides[0].classList.remove("gteam--flip");
       sides[1].classList.add("gteam--flip");
@@ -6349,6 +6363,9 @@
     card.querySelectorAll(".gmorebtn").forEach(function (b) {
       b.addEventListener("click", function () {
         var sheet = b.nextElementSibling;
+        /* whose sheet this is, taken off the card it hangs on */
+        var own = b.closest(".gcard");
+        if (own && own.dataset.bout) FS_BOUT = own.dataset.bout;
         if (sheet && sheet.tagName === "DIALOG") openSheet(sheet);
       });
     });
