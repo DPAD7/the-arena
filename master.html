@@ -6365,7 +6365,42 @@
         var sheet = b.nextElementSibling;
         /* whose sheet this is, taken off the card it hangs on */
         var own = b.closest(".gcard");
-        if (own && own.dataset.bout) FS_BOUT = own.dataset.bout;
+        if (own && own.dataset.bout) {
+          FS_BOUT = own.dataset.bout;
+          /* the rows are written once, when the card is built, so a price that
+             lands after that never reaches them: the numbers in memory were
+             right while the panel still showed what it was made with
+             (Jose, Sep 22, 2026). They are written again on every open. */
+          var row = null;
+          for (var i = 0; i < FIGHTS.length; i++) {
+            if (String(FIGHTS[i][1]) === own.dataset.bout) { row = FIGHTS[i]; break; }
+          }
+          var scroll = sheet && sheet.querySelector(".sheet__scroll");
+          if (row && scroll) {
+            var hits = scroll.querySelector(".hits");
+            scroll.innerHTML = "";
+            if (hits) scroll.appendChild(hits);
+            scroll.insertAdjacentHTML("beforeend", fightSheet(row));
+            if (typeof markSaved === "function") markSaved(scroll);
+          }
+          /* The sheet's rows are written once, when the card is built, and a
+             price that lands after that never reaches them -- the numbers in
+             memory were right while the modal still showed what it was made
+             with (Jose, Sep 22, 2026). They are written again each time it is
+             opened, off whatever the page holds now. */
+          var row = null;
+          for (var i = 0; i < FIGHTS.length; i++) {
+            if (String(FIGHTS[i][1]) === own.dataset.bout) { row = FIGHTS[i]; break; }
+          }
+          var scroll = sheet && sheet.querySelector(".sheet__scroll");
+          if (row && scroll) {
+            var hits = scroll.querySelector(".hits");
+            scroll.innerHTML = "";
+            if (hits) scroll.appendChild(hits);
+            scroll.insertAdjacentHTML("beforeend", fightSheet(row));
+            if (typeof markSaved === "function") markSaved(scroll);
+          }
+        }
         if (sheet && sheet.tagName === "DIALOG") openSheet(sheet);
       });
     });
@@ -8165,6 +8200,55 @@
   /* which bouts and games have had their prop prices off the file at least
      once, so a finished one can be frozen after that and not before */
   var TOOK = {};
+  /* One card, one file. The board used to pull the whole price file every
+     minute -- every game and bout on it, finished or not. A card asks for its
+     own prices now, from prices/<id>.json, and a finished one asks once and is
+     never asked for again (Jose, Sep 22, 2026: "it needs per card and once
+     it's final it doesn't keep fetching, it's done and never starts again for
+     that event"). */
+  var CARDDONE = {};     /* events settled and already read: never asked again */
+  function pullCard(card) {
+    if (!card) return Promise.resolve();
+    var id = card.dataset.espn || card.dataset.bout;
+    if (!id || CARDDONE[id]) return Promise.resolve();
+    var over = card.dataset.settled === "1" || card.dataset.settledBout === "1" ||
+               card.classList.contains("done");
+    return fetch("prices/" + id + ".json", {cache: "no-store"})
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (!j) return;
+        if (j.props) {
+          var into = card.dataset.bout ? FPROPS : PROPS;
+          into[id] = j.props;
+        }
+        if (j.ml) {
+          var shelf = card.dataset.bout ? FIGHTS : (card.dataset.lg === "college-football" ? CFB : SCHED);
+          var col = card.dataset.bout ? 8 : (card.dataset.lg === "college-football" ? 10 : 9);
+          for (var i = 0; i < shelf.length; i++) {
+            if (String(shelf[i][1]) !== String(id)) continue;
+            for (var k = 0; k < 4; k++) shelf[i][col + k] = j.ml[k];
+            break;
+          }
+        }
+        /* read once, and that is that. A finished event can never change; an
+           upcoming one moves on the sweep's own schedule, and the page takes
+           the new build when it lands. */
+        CARDDONE[id] = 1;
+      })
+      .catch(function () {});
+  }
+  /* every card on the board that still has something to learn */
+  function pullCards() {
+    var seen = {};
+    document.querySelectorAll(".gcard[data-espn], .gcard[data-bout]").forEach(function (c) {
+      var id = c.dataset.espn || c.dataset.bout;
+      if (!id || seen[id] || CARDDONE[id]) return;
+      seen[id] = 1;
+      pullCard(c);
+    });
+  }
+  window.pullCard = pullCard;
+  window.pullCards = pullCards;
   function pullPrices() {
     var COL = { SCHED: [9, 10, 11, 12], CFB: [10, 11, 12, 13], FIGHTS: [8, 9, 10, 11] };
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
@@ -10372,6 +10456,7 @@
     (root || document).querySelectorAll(".gcard").forEach(function (c) {
       dressClub(c); dressFaces(c); paintSides(c); layoutV3(c); layoutBout(c);
       seatRecord(c);
+      if (typeof pullCard === "function") pullCard(c);
     });
   }
   paintAll();
@@ -10604,7 +10689,11 @@
     pullPrices();
     setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
   });
-  setInterval(pullPrices, 60000);
+  /* No timer. A card's prices are read once, when it is drawn, and that is
+     the end of it -- the sweep is what moves them, and it is scheduled. The
+     board was re-fetching every event on it every sixty seconds, nearly all of
+     them finished and unable to change (Jose, Sep 22, 2026: "this one min
+     shit is dumb"). */
   setInterval(pullLedger, 60000);
   /* the marks were only read when the page loaded, so a bet marked from
      another device never arrived until he reloaded. They are asked for on the

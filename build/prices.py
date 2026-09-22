@@ -104,6 +104,48 @@ def tidy(d):
 def write(d):
     tidy(d)
     json.dump(d, open(OUT, "w"), separators=(",", ":"))
+    split(d)
+
+
+def split(d):
+    """One file an event, in site/prices/<id>.json.
+
+       The board used to pull the whole 159 KB of prices every minute, for
+       every card on it, whether the game had finished in February or had not
+       started. A card asks for its own prices now, and a finished one asks
+       once and never again (Jose, Sep 22, 2026: "it needs per card and once
+       it's final it doesn't keep fetching").
+
+       Each file holds what that one event has:
+
+           {"ml": [price, oid, price, oid], "props": {...}}
+    """
+    out = os.path.join(os.path.dirname(OUT), "prices")
+    os.makedirs(out, exist_ok=True)
+    ids = set()
+    for shelf in ("SCHED", "CFB", "FIGHTS"):
+        ids |= set((d.get(shelf) or {}).keys())
+    for shelf in ("PROPS", "FPROPS"):
+        ids |= set((d.get(shelf) or {}).keys())
+    kept = 0
+    for eid in ids:
+        one = {}
+        for shelf in ("SCHED", "CFB", "FIGHTS"):
+            v = (d.get(shelf) or {}).get(eid)
+            if v:
+                one["ml"] = v
+                break
+        for shelf in ("PROPS", "FPROPS"):
+            v = (d.get(shelf) or {}).get(eid)
+            if v:
+                one["props"] = v
+                break
+        if not one:
+            continue
+        json.dump(one, open(os.path.join(out, "%s.json" % eid), "w"),
+                  separators=(",", ":"))
+        kept += 1
+    print("prices/: %d events, one file each" % kept)
 
 
 def rows(page, var):
