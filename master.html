@@ -8150,18 +8150,6 @@
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
     return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
-      /* The sheet's own prices come from PROPS and FPROPS, and nothing was
-         reading them again after the page had loaded -- only the moneyline
-         columns below were. A tab open from before a sweep kept showing the
-         prop prices it started with, and the markets the book had since put
-         up read as empty rows (Jose, Sep 22, 2026: "those odds should be
-         fixed there and should not move"). They are merged in on every pass,
-         so a sheet opened at any point shows what the file says. */
-      ["PROPS", "FPROPS"].forEach(function (name) {
-        var got = j[name], into = name === "PROPS" ? PROPS : FPROPS;
-        if (!got || !into) return;
-        Object.keys(got).forEach(function (id) { into[id] = got[id]; });
-      });
       var moved = 0, inPlace = [], rebuild = 0, nowPlease = 0;
       /* A game that is over keeps the price it closed at. prices.json is one
          file for the whole board and it is still asked for, but what it says
@@ -8183,6 +8171,25 @@
         var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
         return !!k && Date.now() > k + 6 * 3600000;
       };
+      /* The sheet's own prices come from PROPS and FPROPS, and nothing read
+         them again after the page had loaded -- only the moneyline columns
+         below. A tab open from before a sweep kept the prop prices it started
+         with, and markets the book had since put up read as empty rows:
+         Pantoja v Van sat on ANY KO +120 with its rounds blank while the file
+         held +115 and every one priced.
+
+         A game or a bout that is over is left exactly as it closed. Its
+         numbers are taken once and never written again, the same rule the
+         moneyline follows above (Jose, Sep 22, 2026: "once we get it and it's
+         final they shouldn't be fetching them anymore"). */
+      ["PROPS", "FPROPS"].forEach(function (name) {
+        var got = j[name], into = name === "PROPS" ? PROPS : FPROPS;
+        if (!got || !into) return;
+        Object.keys(got).forEach(function (id) {
+          if (frozen(id) && into[id]) return;
+          into[id] = got[id];
+        });
+      });
       [["SCHED", SCHED], ["CFB", CFB], ["FIGHTS", FIGHTS]].forEach(function (pair) {
         var by = j[pair[0]] || {}, col = COL[pair[0]], key = KEY[pair[0]];
         pair[1].forEach(function (row) {
