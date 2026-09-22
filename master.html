@@ -5573,6 +5573,27 @@
   var MSUB = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#msub"/></svg>';
   var MDEC = '<svg viewBox="0 0 66 32" aria-hidden="true"><use href="#mdec"/></svg>';
   var MLMK = '<img src="ico/moneyline.svg?v=2" alt="" width="21" height="9">';
+  /* His record, once, on the head. The board re-renders a card's name block
+     after it has been laid out -- the next event's cards most of all -- and
+     each pass puts a fresh copy back beside his surname, so this runs on
+     every paint rather than once (Jose, Sep 22, 2026). */
+  function seatRecord(card) {
+    if (!card || !card.classList.contains("gcard--bout")) return;
+    var head = card.querySelector(".ghead--fight");
+    if (!head) return;
+    ["l", "r"].forEach(function (w) {
+      var side = head.querySelector(".gside--" + w);
+      if (!side) return;
+      var recs = [].slice.call(side.querySelectorAll(".frec"));
+      var held = head.querySelector(":scope > .frec--" + w);
+      var keep = held || recs.shift();
+      recs.forEach(function (x) { x.remove(); });
+      if (!keep) return;
+      keep.classList.add("frec--" + w);
+      if (keep.parentNode !== head) head.appendChild(keep);
+    });
+  }
+  window.seatRecord = seatRecord;
   function layoutBout(card) {
     if (!card || !card.dataset.bout || card.dataset.v3 === "1") return;
     var head = card.querySelector(".ghead--fight");
@@ -5654,8 +5675,13 @@
       /* the head, not his half: his half is masked at its inner edge and the
          record sits in that fade, which washed it out
          (Jose, Sep 22, 2026: "make sure its above the blur") */
-      var rec0 = side.querySelector(".frec") ||
-                 head.querySelector(":scope > .frec--" + p[0]);
+      /* a card can carry his record twice -- once on the club line and once
+         beside his name -- and moving only the first left the other sitting
+         on his surname: MONTENEGRO6-3 (Jose, Sep 22, 2026). One is kept and
+         seated on the head; every other copy goes. */
+      var recs = [].slice.call(side.querySelectorAll(".frec"));
+      var rec0 = head.querySelector(":scope > .frec--" + p[0]) || recs.shift();
+      recs.forEach(function (x) { x.remove(); });
       if (rec0) {
         rec0.classList.add("frec--" + p[0]);
         if (rec0.parentNode !== head) head.appendChild(rec0);
@@ -10273,6 +10299,7 @@
   function paintAll(root) {
     (root || document).querySelectorAll(".gcard").forEach(function (c) {
       dressClub(c); dressFaces(c); paintSides(c); layoutV3(c); layoutBout(c);
+      seatRecord(c);
     });
   }
   paintAll();
