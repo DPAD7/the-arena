@@ -985,7 +985,9 @@
   .gcard.gcard--bout .gtime { display: none !important; }
   /* a finished bout still carries its top line -- the mock puts the rewind
      between the eye and the play mark there */
-  .gcard.gcard--bout .gtop { min-height: 22px; }
+  .gcard.gcard--bout .gtop { min-height: 22px; gap: 10px; }
+  .gcard.gcard--bout .gtop .bfin { font-size: 9.5px; font-weight: 800;
+    letter-spacing: .1em; color: #c9ccd2; white-space: nowrap; }
   .gcard.gcard--bout .gtop .frewind { margin: 0; padding: 0; color: var(--green); }
   .gcard.gcard--bout .gtop .frewind svg { width: 18px; height: 18px; }
   .gcard.gcard--bout .gside .fman { position: absolute; inset: 0; margin: 0; }
@@ -5685,6 +5687,9 @@
 
     var when = card.querySelector(".gwhen");
     if (when) { when.classList.add("gtop"); strip.appendChild(when); }
+    /* a finished bout says so on its top line, evenly spaced with the eye, the
+       rewind and the play mark -- where there is no rewind it simply stands in
+       its place (Jose, Sep 22, 2026) */
     var wt = document.createElement("div");
     wt.className = "gweight";
     wt.textContent = boutDiv(card);
@@ -9255,6 +9260,8 @@
        the green on the prices that paid has to go back on with it
        (Jose, Sep 22, 2026: "highlight the buttons in there that won") */
     card._paid = [winner, how, round, clock];
+    if (typeof markBoutWay === "function") markBoutWay(card);
+    if (typeof markBoutWay === "function") markBoutWay(card);
     var k = (how || "").toLowerCase();
     var ko = k.indexOf("ko") >= 0 || k.indexOf("knockout") >= 0;
     var sub = k.indexOf("sub") >= 0;
@@ -10171,6 +10178,51 @@
     ["dist",   "GOES THE DISTANCE", 0],
     ["nodist", "NO DISTANCE",   0]
   ];
+  /* On the card itself: of KO, SUB and DEC, the one that happened, on the man
+     it happened to. And a finished bout says FINAL on its top line, evenly
+     spaced with the eye, the rewind and the play mark -- where there is no
+     rewind it stands in its place. Both go on here rather than at layout,
+     because a card is laid out before its result lands
+     (Jose, Sep 22, 2026). */
+  function markBoutWay(card) {
+    if (!card || !card.classList.contains("gcard--bout")) return;
+    var top = card.querySelector(".gwhen");
+    if (top && isOver(card) && !top.querySelector(".bfin")) {
+      var fin = document.createElement("span");
+      fin.className = "bfin";
+      fin.textContent = "FINAL";
+      var rw = top.querySelector(".frewind");
+      if (rw) top.insertBefore(fin, rw); else top.appendChild(fin);
+    }
+    var how = card._how || {};
+    var kind = String(how.type || "").toUpperCase();
+    var want = kind.indexOf("SUB") >= 0 ? "SUB"
+             : (kind.indexOf("DEC") >= 0 || kind === "UD" || kind === "SD" || kind === "MD") ? "DEC"
+             : (kind.indexOf("KO") >= 0 || kind.indexOf("KNOCKOUT") >= 0 || kind.indexOf("DQ") >= 0) ? "KO"
+             : "";
+    var win = card._paid && card._paid[0];
+    if (!win) return;
+    var wsur = surnameKey(win);
+    var seat = wsur === surnameKey(card.dataset.lf) ? 0
+             : wsur === surnameKey(card.dataset.rf) ? 1 : -1;
+    if (seat < 0) return;
+    /* the club price is his too: he won the fight (Jose, Sep 22, 2026) */
+    var mlrow = card.querySelector(".gstack .gline");
+    if (mlrow && !mlrow.querySelector(".grn")) {
+      var mlcell = mlrow.querySelectorAll(".gh2h")[seat];
+      var mlchip = mlcell && mlcell.querySelector(".price");
+      if (mlchip) mlchip.classList.add("paid");
+    }
+    if (!want) return;
+    card.querySelectorAll(".gstack .gline").forEach(function (ln) {
+      var tag = ln.querySelector(".grn");
+      if (!tag || tag.textContent.trim().toUpperCase() !== want) return;
+      var chip = (ln.querySelectorAll(".gh2h")[seat] || {}).querySelector
+               ? ln.querySelectorAll(".gh2h")[seat].querySelector(".price") : null;
+      if (chip) chip.classList.add("paid");
+    });
+  }
+  window.markBoutWay = markBoutWay;
   function boutPaid(card) {
     var how = card._how || {};
     var kind = String(how.type || "").toUpperCase();
@@ -10560,6 +10612,7 @@
     (root || document).querySelectorAll(".gcard").forEach(function (c) {
       dressClub(c); dressFaces(c); paintSides(c); layoutV3(c); layoutBout(c);
       seatRecord(c);
+      if (typeof markBoutWay === "function") markBoutWay(c);
       if (typeof pullCard === "function") pullCard(c);
     });
   }
