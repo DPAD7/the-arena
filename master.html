@@ -5925,9 +5925,21 @@
          plane, the way a fighter's does. His name stands alone at the foot of
          his half; a college card keeps the school under it, an NFL card does
          not (Jose, Sep 22, 2026). */
-      var rec = p[1].querySelector(".grec");
+      var rec = p[1].querySelector(".grec") ||
+                head.querySelector(":scope > .grec--" + p[0]);
       var nm = mine && mine.querySelector(".h2hnm");
       var college = card.dataset.lg === "college-football";
+      /* not every card carries a record to move -- one is made from the club's
+         own, so every side has it (Jose, Sep 22, 2026: "it didn't appear for
+         all the teams") */
+      if (!rec && ab) {
+        var wl = (typeof clubRec === "function" ? clubRec() : {})[ab];
+        if (wl) {
+          rec = document.createElement("small");
+          rec.className = "grec";
+          rec.textContent = wl[0] + "-" + wl[1];
+        }
+      }
       if (rec) {
         rec.classList.add("grec--top", "grec--" + p[0]);
         if (rec.parentNode !== head) head.appendChild(rec);
