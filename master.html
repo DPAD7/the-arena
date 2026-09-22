@@ -5530,6 +5530,10 @@
                   LHW: "LIGHT HEAVYWEIGHT", HW: "HEAVYWEIGHT",
                   SW: "STRAWWEIGHT", CW: "CATCHWEIGHT" };
   function boutRanked(name) { return FRANK[String(name || "").trim().toLowerCase()]; }
+  /* "TBA", "TBD", "Opponent TBA" -- a side the promotion has not named */
+  function isTBA(name) {
+    return /\bTB[AD]\b/i.test(String(name || "")) || !String(name || "").trim();
+  }
   function boutRank(name) {
     var f = boutRanked(name);
     if (!f) return "NR";
@@ -5593,7 +5597,14 @@
       var held = head.querySelector(":scope > .frec--" + w);
       var keep = held || recs.shift();
       recs.forEach(function (x) { x.remove(); });
-      if (!keep) return;
+      /* the slot stands even where there is no record to put in it, so a bout
+         still to be confirmed is laid out like every other one */
+      if (!keep) {
+        keep = document.createElement("i");
+        keep.className = "frec";
+      }
+      var who1 = w === "l" ? card.dataset.lf : card.dataset.rf;
+      if (isTBA(who1)) keep.textContent = "";
       keep.classList.add("frec--" + w);
       if (keep.parentNode !== head) head.appendChild(keep);
     });
@@ -5692,9 +5703,12 @@
         if (rec0.parentNode !== head) head.appendChild(rec0);
       }
       if (!side.querySelector(".gdiv")) {
+        var who0 = p[0] === "l" ? card.dataset.lf : card.dataset.rf;
         var rk = document.createElement("i");
         rk.className = "gdiv";
-        rk.textContent = boutRank(p[0] === "l" ? card.dataset.lf : card.dataset.rf);
+        /* a bout with nobody named yet keeps both corners, and says nothing in
+           them until the fight is confirmed (Jose, Sep 22, 2026) */
+        rk.textContent = isTBA(who0) ? "" : boutRank(who0);
         side.appendChild(rk);
       }
     });
