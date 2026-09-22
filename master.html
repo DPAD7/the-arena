@@ -1015,9 +1015,13 @@
   .gcard.gcard--bout .gside--l .gdiv { left: 10px; }
   .gcard.gcard--bout .gside--r .gdiv { right: 10px; }
   /* the division in full, under the eye and the play mark */
+  /* the division stays on one line: LIGHT HEAVYWEIGHT was taking two at phone
+     width and pushing the rows down (Jose, Sep 22, 2026) */
   .gcard.gcard--bout .gweight { text-align: center; font-size: 10px;
     font-weight: 800; letter-spacing: .12em; color: var(--muted);
-    margin: 0; }
+    margin: 0; white-space: nowrap; overflow: hidden;
+    text-overflow: clip; line-height: 1.3; }
+  .gcard.gcard--bout .gweight[data-long="1"] { font-size: 8.5px; letter-spacing: .06em; }
   /* the fight's own rail: a stretch a round, every round it was scheduled for */
   /* room under the rail for the round chips, so the card's arrow clears them */
   /* room above the rail for the clock over the finish, and below it for the
@@ -5605,6 +5609,7 @@
     var wt = document.createElement("div");
     wt.className = "gweight";
     wt.textContent = boutDiv(card);
+    if (wt.textContent.length > 12) wt.dataset.long = "1";
     strip.appendChild(wt);
 
     var stack = document.createElement("div");
