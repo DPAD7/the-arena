@@ -4699,8 +4699,10 @@
   }
 
 
+  /* when the card is re-ordered, so are the sheet's two columns */
+  var FS_FLIP = false;
   function fs(k, i) {
-    var pr = FPROPS[FS_BOUT] || {}, slot = (pr[k] || [])[i];
+    var pr = FPROPS[FS_BOUT] || {}, slot = (pr[k] || [])[FS_FLIP ? 1 - i : i];
     return slot && slot[0] ? priceSlot(slot[0], slot[1]) : GHOST;
   }
   var FS_BOUT = "";
@@ -5659,6 +5661,7 @@
     var swapped = false;
     if (titleWantsRight) {
       swapped = true;
+      card.dataset.flip = "1";
       /* the sheet is titled the way the card reads, and the way the promotion
          names the bout -- UFC 331 is Van vs. Pantoja 2, and the title was
          built from the order the data arrived in (Jose, Sep 22, 2026) */
@@ -6389,30 +6392,22 @@
         var own = b.closest(".gcard");
         if (own && own.dataset.bout) {
           FS_BOUT = own.dataset.bout;
-          /* the rows are written once, when the card is built, so a price that
-             lands after that never reaches them: the numbers in memory were
-             right while the panel still showed what it was made with
-             (Jose, Sep 22, 2026). They are written again on every open. */
+          /* The rows are written once, when the card is built, so a price
+             landing after that never reaches them: the numbers in memory were
+             right while the panel still showed what it was made with. They are
+             written again on every open, off whatever the page holds now.
+             And where the card was re-ordered to the promotion's own naming,
+             the two columns and the prices under them follow it
+             (Jose, Sep 22, 2026: "are you changing it in the modal?"). */
           var row = null;
           for (var i = 0; i < FIGHTS.length; i++) {
             if (String(FIGHTS[i][1]) === own.dataset.bout) { row = FIGHTS[i]; break; }
           }
-          var scroll = sheet && sheet.querySelector(".sheet__scroll");
-          if (row && scroll) {
-            var hits = scroll.querySelector(".hits");
-            scroll.innerHTML = "";
-            if (hits) scroll.appendChild(hits);
-            scroll.insertAdjacentHTML("beforeend", fightSheet(row));
-            if (typeof markSaved === "function") markSaved(scroll);
-          }
-          /* The sheet's rows are written once, when the card is built, and a
-             price that lands after that never reaches them -- the numbers in
-             memory were right while the modal still showed what it was made
-             with (Jose, Sep 22, 2026). They are written again each time it is
-             opened, off whatever the page holds now. */
-          var row = null;
-          for (var i = 0; i < FIGHTS.length; i++) {
-            if (String(FIGHTS[i][1]) === own.dataset.bout) { row = FIGHTS[i]; break; }
+          FS_FLIP = own.dataset.flip === "1";
+          if (row && FS_FLIP) {
+            row = row.slice();
+            var sw = function (a, bi) { var t = row[a]; row[a] = row[bi]; row[bi] = t; };
+            sw(3, 5); sw(4, 6); sw(8, 10); sw(9, 11); sw(12, 13);
           }
           var scroll = sheet && sheet.querySelector(".sheet__scroll");
           if (row && scroll) {
