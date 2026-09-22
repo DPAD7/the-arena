@@ -938,9 +938,16 @@
     width: auto !important; min-width: 52px !important; max-width: none !important;
     height: 28px !important; padding: 0 8px !important; border-radius: 9px !important; }
   /* ---- the bout card: the same card, what a fight has to say ---- */
+  /* the mock's own head: 146px tall, 132px of strip between the two men. Ours
+     had grown to 158 because the strip was, and a 220px picture covering a
+     taller panel swallows the transparent margin that lets his corner show
+     (Jose, Sep 22, 2026) */
   .gcard.gcard--bout > .ghead--fight { display: grid !important;
-    grid-template-columns: 1fr 132px 1fr !important; height: 146px;
+    grid-template-columns: 1fr 132px 1fr !important;
+    height: 146px; grid-template-rows: 146px; overflow: hidden;
     position: relative; }
+  .gcard.gcard--bout .gmid { padding: 3px 3px !important; gap: 2px !important; }
+  .gcard.gcard--bout .gweight { margin: 0 0 1px !important; }
   .gcard.gcard--bout .fvs { display: none !important; }
   /* his corner behind him, and his picture filling his half */
   .gcard.gcard--bout .gside { position: relative; overflow: hidden;
@@ -961,9 +968,12 @@
   /* the card does not say when it starts: the event's own heading does */
   .gcard.gcard--bout .gtime { display: none !important; }
   .gcard.gcard--bout .gside .fman { position: absolute; inset: 0; margin: 0; }
+  /* the avatar carried its own #1c1c1e behind it from when it was a small
+     round picture, and that grey was painting over his corner through the
+     transparent half of the cutout (Jose, Sep 22, 2026) */
   .gcard.gcard--bout .gside img.ffab { position: relative; z-index: 1;
     width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%;
-    border-radius: 0; border: 0; }
+    border-radius: 0; border: 0; background: none !important; }
   /* his name over the foot of his own half, his record under it */
   .gcard.gcard--bout .gside .fname { position: absolute; z-index: 3;
     left: 0; right: 0; bottom: 6px; display: block; text-align: center;
@@ -5560,6 +5570,20 @@
       var side = p[1];
       side.classList.add("gside", "gside--" + p[0]);
       side.style.setProperty("--hue", p[0] === "l" ? "#3a1418" : "#0e1c33");
+      /* our own picture of him, which is a cutout on a transparent ground --
+         the /face/ function answers with ESPN's square photograph, and that
+         covers the whole half and hides the corner he is fighting out of
+         (Jose, Sep 22, 2026: mock-mma-states.png) */
+      var pic = side.querySelector("img.ffab");
+      var fid = p[0] === "l" ? card.dataset.lfid : card.dataset.rfid;
+      if (pic && /^\d+$/.test(String(fid || ""))) {
+        var mine = "faces/mma/" + fid + ".png";
+        if ((pic.getAttribute("src") || "").indexOf(mine) < 0) {
+          var was = pic.getAttribute("src") || "";
+          pic.dataset.next = [was, pic.dataset.next || ""].filter(Boolean).join("|");
+          pic.setAttribute("src", mine);
+        }
+      }
       if (!side.querySelector(".gdiv")) {
         var rk = document.createElement("i");
         rk.className = "gdiv";
