@@ -1083,8 +1083,13 @@
   .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after,
   .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after {
     content: ""; position: absolute; z-index: 6; top: 0; bottom: 0;
+    /* the head already carries an ::after of its own, and its height pinned
+       this one to nothing -- only the top border painted, so the winner's
+       frame showed as a line across the top and no right or bottom edge
+       (Jose, Sep 22, 2026) */
+    height: auto !important; left: auto;
     width: calc((100% - 132px) / 2 + 10px); border: 2px solid;
-    pointer-events: none; }
+    background: none; pointer-events: none; }
   .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before,
   .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before,
   .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before,
