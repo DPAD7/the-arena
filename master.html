@@ -962,6 +962,9 @@
   .gcard.gcard--bout .gstack .gmk svg { width: 16px !important; height: 15px !important; }
   .gcard.gcard--bout .gstack .grn { font-size: 7.5px; }
   .gcard.gcard--bout .fvs { display: none !important; }
+  /* no dashed box where a picture is missing: his corner stands on its own
+     (Jose, Sep 22, 2026: "there shouldn't be a box container showing") */
+  .gcard.gcard--bout .ffab--none { display: none !important; }
   /* his corner behind him, and his picture filling his half */
   .gcard.gcard--bout .gside { position: relative; overflow: hidden;
     background: var(--hue); min-height: 146px; }
