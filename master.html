@@ -9397,8 +9397,26 @@
      says how many rounds there are, so the whole fight is rounds x five
      minutes and the fill is simply where we have got to. A bout that is over
      stops at the moment it ended and says how. */
-  var RMARK = { KO: "mko", TKO: "mko", DQ: "mko", SUB: "msub" };
-  var DMARK = { UD: "mud", SD: "msd", MD: "mmd", TD: "mud", DEC: "mud" };
+  /* The method arrives either shortened (UD, SUB, TKO) or as the words the
+     source wrote ("Unanimous Decision", "Submission", "KO/TKO"), depending on
+     which of the two settles the bout. Reading only the short form put the
+     glove on forty-eight of fifty-four finishes, because everything it did
+     not recognise fell through to it (Jose, Sep 22, 2026: "why did you do KO
+     icon for all them?"). Both forms are read here, and a method neither
+     names draws no mark at all rather than a wrong one. */
+  function railMark(type) {
+    var t = String(type || "").toUpperCase();
+    if (!t) return null;
+    if (t.indexOf("SUB") >= 0) return { m: "msub", dec: false };
+    if (t.indexOf("DEC") >= 0 || t === "UD" || t === "SD" || t === "MD" || t === "TD") {
+      return { m: t.indexOf("SPLIT") >= 0 || t === "SD" ? "msd"
+                : t.indexOf("MAJORITY") >= 0 || t === "MD" ? "mmd" : "mud",
+               dec: true };
+    }
+    if (t.indexOf("KO") >= 0 || t.indexOf("KNOCKOUT") >= 0 || t.indexOf("DQ") >= 0 ||
+        t.indexOf("DISQUALIF") >= 0) return { m: "mko", dec: false };
+    return null;
+  }
   /* The fight's own rail, filled to where it stands. A stoppage puts the
      glove or the submission mark on the line with the clock above it; a
      decision has no clock and its chip stands where the end cap would, so
@@ -9407,8 +9425,8 @@
   function fillRail(bar, c, state, rd, pct) {
     bar.querySelectorAll(".frail__fill, .fend").forEach(function (n) { n.remove(); });
     var how = c.how || {};
-    var kind = String(how.type || "").toUpperCase();
-    var dec = !!DMARK[kind] && state === "post";
+    var got = railMark(how.type);
+    var dec = !!(got && got.dec) && state === "post";
     var fill = document.createElement("i");
     fill.className = "frail__fill" + (state === "in" ? " frail__fill--live" : "");
     fill.style.width = (dec ? 100 : Math.max(0, Math.min(100, pct))).toFixed(2) + "%";
@@ -9418,9 +9436,9 @@
     var end = document.createElement("span");
     end.className = "fend" + (dec ? " fend--end" : "");
     if (!dec) end.style.left = Math.max(0, Math.min(97, pct)).toFixed(2) + "%";
-    var mark = dec ? DMARK[kind]
-             : state === "post" ? (RMARK[kind] || "mko")
-             : ("r" + Math.max(1, rd));
+    var mark = state === "post" ? (got && got.m) : ("r" + Math.max(1, rd));
+    /* nothing to say, nothing drawn */
+    if (!mark) { bar.classList.remove("frail__bar--dec"); return; }
     var clock = state === "post" ? (dec ? "" : (how.time || ""))
                                  : (c.status && c.status.displayClock) || "";
     if (clock) end.innerHTML = '<b class="fclock">' + clock + "</b>";
