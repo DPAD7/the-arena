@@ -992,6 +992,9 @@
   /* a finished bout still carries its top line -- the mock puts the rewind
      between the eye and the play mark there */
   .gcard.gcard--bout .gtop { min-height: 22px; gap: 10px; }
+  /* the market, as the book writes it */
+  .hits .hitmkt { display: block; margin-top: 3px; font-size: 11px;
+    font-weight: 700; letter-spacing: .02em; color: var(--muted); }
   .gcard.gcard--bout .gtop .bfin { font-size: 9.5px; font-weight: 800;
     letter-spacing: .1em; color: #c9ccd2; white-space: nowrap; }
   .gcard.gcard--bout .gtop .frewind { margin: 0; padding: 0; color: var(--green); }
@@ -9264,6 +9267,45 @@
      The round and the clock settle the rest -- which round it ended in, and
      whether it ended inside the first minute or the last ten seconds of a
      round (Jose, Sep 18, 2026). */
+  /* What a result won, market by market, for EVERY market the bout's file
+     holds -- not a list picked by hand. paidMethods uses it to colour the
+     sheet and boutPaid to find the best price, so the two can never disagree
+     (Jose, Sep 22, 2026: "it should be automated based on what the results
+     were and what is in the modal"). */
+  function boutWon(card, winner, how, round, clock) {
+    var k = (how || "").toLowerCase();
+    var ko = k.indexOf("ko") >= 0 || k.indexOf("knockout") >= 0 || k.indexOf("dq") >= 0;
+    var sub = k.indexOf("sub") >= 0;
+    var dec = k.indexOf("dec") >= 0 || k === "ud" || k === "md" || k === "sd";
+    var ud = dec && (k.indexOf("unanimous") >= 0 || k === "ud");
+    var sdmd = dec && (k.indexOf("split") >= 0 || k.indexOf("majority") >= 0 || k === "sd" || k === "md");
+    var rn = parseInt(round, 10) || 0;
+    var secs = -1, mm = /^(\d+):(\d\d)$/.exec(String(clock || "").trim());
+    if (mm) secs = parseInt(mm[1], 10) * 60 + parseInt(mm[2], 10);
+    var fin = ko || sub;
+    var w = surname(winner);
+    var side = w && w === surname(card.dataset.lf) ? 0
+             : w && w === surname(card.dataset.rf) ? 1 : -1;
+    var MAN = { ml: 1, ko: ko, sub: sub, dec: dec, kosub: fin, finish: fin,
+                kodec: ko || dec, subdec: sub || dec, koonly: ko, subonly: sub,
+                deconly: dec, finishonly: fin, cards: dec, ud: ud, sdmd: sdmd,
+                rd1only: rn === 1 && fin, rd12: fin && rn > 0 && rn <= 2,
+                rd34: fin && (rn === 3 || rn === 4) };
+    var FIGHT = { dist: dec, nodist: fin, anyko: ko, anysub: sub, anydec: dec,
+                  anyud: ud, anysdmd: sdmd,
+                  first60: fin && rn === 1 && secs >= 0 && secs <= 60,
+                  last10: fin && secs >= 290 };
+    for (var n = 1; n <= 5; n++) {
+      MAN["rd" + n] = fin && rn === n;
+      MAN["kord" + n] = ko && rn === n;
+      MAN["subrd" + n] = sub && rn === n;
+      FIGHT["anykord" + n] = ko && rn === n;
+      FIGHT["anysubrd" + n] = sub && rn === n;
+    }
+    var nr = (FPROPS[card.dataset.bout] || {}).rounds || 3;
+    MAN.rdlastdec = dec || (fin && rn === nr);
+    return { MAN: MAN, FIGHT: FIGHT, side: side };
+  }
   function paidMethods(card, winner, how, round, clock) {
     /* kept on the card: the sheet is written again whenever it is opened, and
        the green on the prices that paid has to go back on with it
@@ -10205,113 +10247,89 @@
      belongs to three other fights and to no market in this one
      (Jose, Sep 22, 2026). One button: the price, his picture, and the marks
      for the market that paid it. */
-  var BOUTWIN = [
-    /* key, the words the marks are read from, per fighter */
-    ["ml",   "ML",              1],
-    ["ko",   "BY KO",           1],
-    ["sub",  "BY SUB",          1],
-    ["dec",  "BY DEC",          1],
-    ["ud",   "BY UD",           1],
-    ["sdmd", "BY SD / MD",      1],
-    ["kosub", "BY KO OR SUB",   1],
-    ["finish", "BY FINISH",     1],
-    ["kodec", "BY KO OR DEC",   1],
-    ["subdec", "BY SUB OR DEC", 1],
-    ["koonly", "BY KO ONLY",    1],
-    ["subonly", "BY SUB ONLY",  1],
-    ["deconly", "BY DEC ONLY",  1],
-    ["finishonly", "BY FINISH ONLY", 1],
-    ["anyko",  "ANY KO",        0],
-    ["anysub", "ANY SUB",       0],
-    ["anydec", "ANY DEC",       0],
-    ["anyud",  "ANY UD",        0],
-    ["anysdmd", "ANY SD / MD",  0],
-    ["dist",   "GOES THE DISTANCE", 0],
-    ["nodist", "NO DISTANCE",   0]
-  ];
-  /* On the card itself: of KO, SUB and DEC, the one that happened, on the man
-     it happened to. And a finished bout says FINAL on its top line, evenly
-     spaced with the eye, the rewind and the play mark -- where there is no
-     rewind it stands in its place. Both go on here rather than at layout,
-     because a card is laid out before its result lands
-     (Jose, Sep 22, 2026). */
-  function markBoutWay(card) {
-    if (!card || !card.classList.contains("gcard--bout")) return;
-    var top = card.querySelector(".gwhen");
-    if (top && isOver(card) && !top.querySelector(".bfin")) {
-      var fin = document.createElement("span");
-      fin.className = "bfin";
-      fin.textContent = "FINAL";
-      var rw = top.querySelector(".frewind");
-      if (rw) top.insertBefore(fin, rw); else top.appendChild(fin);
+  /* DraftKings' own name for each market, so the chip says what the bet was
+     (Jose, Sep 22, 2026: "give me the right market... how DraftKings has it") */
+  var DKNAME = {
+    ml: "$1 to Win", ko: "$1 to Win by KO/TKO/DQ", sub: "$1 to Win by Submission",
+    dec: "$1 to Win by Decision", ud: "$1 to Win by Unanimous Decision",
+    sdmd: "$1 to Win by Split or Majority Decision",
+    kosub: "$1 to Win by Any Knockout, Submission or DQ",
+    finish: "$1 to Win by Any Knockout, Submission or DQ",
+    kodec: "$1 to Win by KO/TKO/DQ or Decision",
+    subdec: "$1 to Win by Submission or Decision",
+    koonly: "$1 to Win by KO/TKO/DQ Only", subonly: "$1 to Win by Submission Only",
+    deconly: "$1 to Win by Decision Only", finishonly: "$1 to Win by Finish Only",
+    cards: "$1 to Win by Decision", rd1only: "$1 to Win in Round 1 Only",
+    rd12: "$1 to Win in Rounds 1-2", rd34: "$1 to Win in Rounds 3-4",
+    rdlastdec: "$1 to Win in the Final Round or on Decision",
+    anyko: "Fight to End by KO/TKO/DQ", anysub: "Fight to End by Submission",
+    anydec: "Fight to Go to Decision", anyud: "Fight to Be Won by Unanimous Decision",
+    anysdmd: "Fight to Be Won by Split or Majority Decision",
+    dist: "Fight to Go the Distance", nodist: "Fight Not to Go the Distance",
+    first60: "Fight to End in the 1st 60 Seconds of Round 1",
+    last10: "Fight to End in the Last 10 Seconds of Any Round"
+  };
+  function dkName(key, who) {
+    var t = DKNAME[key];
+    if (!t) {
+      var m = /^(ko|sub|)rd(\d)$/.exec(key);
+      if (m) {
+        t = m[1] === "ko" ? "$1 to Win by KO/TKO/DQ in Round " + m[2]
+          : m[1] === "sub" ? "$1 to Win by Submission in Round " + m[2]
+          : "$1 to Win in Round " + m[2];
+      }
+      var a = /^any(ko|sub)rd(\d)$/.exec(key);
+      if (a) t = a[1] === "ko" ? "Fight to End by KO/TKO/DQ in Round " + a[2]
+                               : "Fight to End by Submission in Round " + a[2];
     }
-    var how = card._how || {};
-    var kind = String(how.type || "").toUpperCase();
-    var want = kind.indexOf("SUB") >= 0 ? "SUB"
-             : (kind.indexOf("DEC") >= 0 || kind === "UD" || kind === "SD" || kind === "MD") ? "DEC"
-             : (kind.indexOf("KO") >= 0 || kind.indexOf("KNOCKOUT") >= 0 || kind.indexOf("DQ") >= 0) ? "KO"
-             : "";
-    var win = card._paid && card._paid[0];
-    if (!win) return;
-    var wsur = surnameKey(win);
-    var seat = wsur === surnameKey(card.dataset.lf) ? 0
-             : wsur === surnameKey(card.dataset.rf) ? 1 : -1;
-    if (seat < 0) return;
-    /* the club price is his too: he won the fight (Jose, Sep 22, 2026) */
-    var mlrow = card.querySelector(".gstack .gline");
-    if (mlrow && !mlrow.querySelector(".grn")) {
-      var mlcell = mlrow.querySelectorAll(".gh2h")[seat];
-      var mlchip = mlcell && mlcell.querySelector(".price");
-      if (mlchip) mlchip.classList.add("paid");
-    }
-    if (!want) return;
-    card.querySelectorAll(".gstack .gline").forEach(function (ln) {
-      var tag = ln.querySelector(".grn");
-      if (!tag || tag.textContent.trim().toUpperCase() !== want) return;
-      var chip = (ln.querySelectorAll(".gh2h")[seat] || {}).querySelector
-               ? ln.querySelectorAll(".gh2h")[seat].querySelector(".price") : null;
-      if (chip) chip.classList.add("paid");
-    });
+    if (!t) return key.toUpperCase();
+    return t.replace("$1", who || "");
   }
-  window.markBoutWay = markBoutWay;
+  /* the words the marks are read from, so a market gets its own icons */
+  var MKWORD = {
+    ml: "ML", ko: "BY KO", sub: "BY SUB", dec: "BY DEC", ud: "BY UD",
+    sdmd: "BY SD / MD", kosub: "BY KO OR SUB", finish: "BY FINISH",
+    kodec: "BY KO OR DEC", subdec: "BY SUB OR DEC", koonly: "BY KO ONLY",
+    subonly: "BY SUB ONLY", deconly: "BY DEC ONLY", finishonly: "BY FINISH ONLY",
+    cards: "BY DEC", rd1only: "RD1", rd12: "RD1 RD2", rd34: "RD3 RD4",
+    rdlastdec: "BY DEC", anyko: "ANY KO", anysub: "ANY SUB", anydec: "ANY DEC",
+    anyud: "BY UD", anysdmd: "BY SD / MD", dist: "BY DEC", nodist: "BY FINISH",
+    first60: "RD1", last10: "BY FINISH"
+  };
+  function mkWord(key) {
+    if (MKWORD[key]) return MKWORD[key];
+    var m = /^(ko|sub|)rd(\d)$/.exec(key);
+    if (m) return (m[1] === "ko" ? "BY KO RD" : m[1] === "sub" ? "BY SUB RD" : "RD") + m[2];
+    var a = /^any(ko|sub)rd(\d)$/.exec(key);
+    if (a) return (a[1] === "ko" ? "ANY KO RD" : "ANY SUB RD") + a[2];
+    return key.toUpperCase();
+  }
+  /* The best price this bout actually paid, out of EVERY market in its own
+     file -- no hand-picked list (Jose, Sep 22, 2026). */
   function boutPaid(card) {
-    var how = card._how || {};
-    var kind = String(how.type || "").toUpperCase();
-    var ko = kind.indexOf("KO") >= 0 || kind.indexOf("KNOCKOUT") >= 0 || kind.indexOf("DQ") >= 0;
-    var sub = kind.indexOf("SUB") >= 0;
-    var dec = kind.indexOf("DEC") >= 0 || kind === "UD" || kind === "SD" || kind === "MD";
-    if (!ko && !sub && !dec) return null;
-    var ud = dec && (kind.indexOf("UD") >= 0 || kind.indexOf("UNANIMOUS") >= 0);
-    var sdmd = dec && !ud;
-    var win = card._paid && card._paid[0];
-    if (!win) return null;
-    var lsur = surnameKey(card.dataset.lf), rsur = surnameKey(card.dataset.rf);
-    var wsur = surnameKey(win);
-    var seat = wsur === lsur ? 0 : wsur === rsur ? 1 : -1;
-    if (seat < 0) return null;
-    /* the sheet's seats follow the card, and the card may have been re-ordered */
-    var flip = card.dataset.flip === "1";
+    if (!card._paid) return null;
+    var res = boutWon(card, card._paid[0], card._paid[1], card._paid[2], card._paid[3]);
+    if (res.side < 0) return null;
     var pr = FPROPS[card.dataset.bout] || {};
-    var won = {
-      ml: 1, ko: ko, sub: sub, dec: dec, ud: ud, sdmd: sdmd,
-      kosub: ko || sub, finish: ko || sub, kodec: ko || dec, subdec: sub || dec,
-      koonly: ko, subonly: sub, deconly: dec, finishonly: ko || sub,
-      anyko: ko, anysub: sub, anydec: dec, anyud: ud, anysdmd: sdmd,
-      dist: dec, nodist: ko || sub
-    };
+    var flip = card.dataset.flip === "1";
     var best = null;
-    BOUTWIN.forEach(function (row) {
-      if (!won[row[0]]) return;
-      var v = pr[row[0]];
-      if (!v) return;
-      var slot = row[2] ? v[flip ? 1 - seat : seat] : v[0];
+    Object.keys(pr).forEach(function (key) {
+      var v = pr[key];
+      if (key === "rounds" || !v || !v.length) return;
+      var mine = key in res.MAN, fight = key in res.FIGHT;
+      if (!mine && !fight) return;
+      if (mine && !res.MAN[key]) return;
+      if (fight && !res.FIGHT[key]) return;
+      var slot = mine ? v[flip ? 1 - res.side : res.side] : v[0];
       if (!slot || !slot[0]) return;
       var d = toDec(slot[0]);
       if (d === null) return;
-      if (!best || d > best.d) best = { d: d, price: slot[0], word: row[1] };
+      if (!best || d > best.d) best = { d: d, price: slot[0], key: key };
     });
     if (!best) return null;
-    best.who = seat === 0 ? card.dataset.lf : card.dataset.rf;
+    best.who = res.side === 0 ? card.dataset.lf : card.dataset.rf;
+    best.word = mkWord(best.key);
+    best.name = dkName(best.key, best.who);
     return best;
   }
   function showHitsLater(card) { setTimeout(function () { showHits(card); }, 0); }
@@ -10421,7 +10439,9 @@
     /* a bout works its own out, off its own prices and its own result */
     if (card.dataset.bout) {
       var own = boutPaid(card);
-      legs = own ? [[own.price, "", fightLeg(own.who, "", own.word)]] : [];
+      legs = own ? [[own.price, "",
+        fightLeg(own.who, "", own.word) +
+        '<span class="hitmkt">' + esc(own.name) + "</span>"]] : [];
     }
     legs = legs.filter(function (l) { return !tooShort(l[0]); });
     if (!legs.length) { box.hidden = true; box.innerHTML = ""; return; }
