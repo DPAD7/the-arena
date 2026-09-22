@@ -5514,6 +5514,22 @@
     card.dataset.v3 = "1";
     card.classList.add("gcard--v3", "gcard--bout");
 
+    /* The champion takes the left, the way the promotion names the bout: UFC
+       331 is Van vs. Pantoja 2, and ESPN handed the challenger first
+       (Jose, Sep 22, 2026). The names and the ids move with the pictures so
+       everything that reads them after -- the settle, the faces, the ranks --
+       still agrees. */
+    var lr = boutRanked(card.dataset.lf), rr = boutRanked(card.dataset.rf);
+    if (rr && rr.r === "C" && !(lr && lr.r === "C")) {
+      head.insertBefore(sides[1], sides[0]);
+      sides[0].classList.remove("gteam--flip");
+      sides[1].classList.add("gteam--flip");
+      var swap = [card.dataset.lf, card.dataset.rf, card.dataset.lfid, card.dataset.rfid];
+      card.dataset.lf = swap[1]; card.dataset.rf = swap[0];
+      card.dataset.lfid = swap[3]; card.dataset.rfid = swap[2];
+      sides = head.querySelectorAll(":scope > .gteam");
+    }
+
     var strip = document.createElement("div");
     strip.className = "gmid";
     head.insertBefore(strip, sides[1]);
@@ -8911,6 +8927,14 @@
         });
       }
     }
+    /* the rail is drawn again once the result is known: another path may have
+       flagged the bout settled before the one carrying the method ran, which
+       left the fill standing with no mark on it (Jose, Sep 22, 2026) */
+    var bar0 = card.querySelector(".frail__bar");
+    if (bar0 && card._how) {
+      var pct0 = card._railPct;
+      if (typeof pct0 === "number") fillRail(bar0, { how: card._how }, "post", card._how.round || 1, pct0);
+    }
     card.querySelectorAll(".grow").forEach(function (row) {
       var lab = row.querySelector(".gmk");
       if (!lab) return;
@@ -9424,7 +9448,9 @@
      on the line with the clock above (Jose, Sep 21, 2026). */
   function fillRail(bar, c, state, rd, pct) {
     bar.querySelectorAll(".frail__fill, .fend").forEach(function (n) { n.remove(); });
-    var how = c.how || {};
+    var card0 = bar.closest(".gcard");
+    var how = (c && c.how) || (card0 && card0._how) || {};
+    if (card0 && c && c.how) card0._how = c.how;
     var got = railMark(how.type);
     var dec = !!(got && got.dec) && state === "post";
     var fill = document.createElement("i");
@@ -9489,6 +9515,8 @@
        that have not been re-laid. */
     var fbar = card.querySelector(".frail__bar");
     if (fbar) {
+      card._railPct = pct;
+      if (c && c.how) card._how = c.how;
       fillRail(fbar, c, state, rd, pct);
       card.classList.remove("has-tline");
       if (box) box.innerHTML = "";
