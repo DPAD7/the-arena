@@ -989,6 +989,9 @@
   .gcard.gcard--bout .gside--l .gdiv { left: 10px; }
   .gcard.gcard--bout .gside--r .gdiv { right: 10px; }
   /* the division in full, under the eye and the play mark */
+  /* the mark stands the mock's own 14px on a bout card, not the football
+     card's 18 (Jose, Sep 22, 2026: "the icons are too big") */
+  .gcard.gcard--bout .gstack .gmk { height: 14px; }
   .gcard.gcard--bout .gweight { text-align: center; font-size: 9.5px;
     font-weight: 800; letter-spacing: .09em; color: var(--muted);
     margin: 1px 0 2px; }
@@ -996,7 +999,10 @@
   /* room under the rail for the round chips, so the card's arrow clears them */
   /* room above the rail for the clock over the finish, and below it for the
      round chips (Jose, Sep 22, 2026: mock-mma2.png) */
-  .gcard.gcard--v3.gcard--bout > .frail { padding: 30px 10px 32px !important; }
+  /* the decision chip stands half outside the rail's end, so the rail keeps
+     enough room either side for it to sit whole inside the card
+     (Jose, Sep 22, 2026: "the UD is falling off the page") */
+  .gcard.gcard--v3.gcard--bout > .frail { padding: 30px 18px 32px !important; }
   /* the rail, copied from the mock's own measurements -- no box round the
      method, and the decision IS the end cap (Jose, Sep 22, 2026: "did I have
      a border around the dec? no... I said it was the final tick") */
@@ -5530,7 +5536,9 @@
        everything that reads them after -- the settle, the faces, the ranks --
        still agrees. */
     var lr = boutRanked(card.dataset.lf), rr = boutRanked(card.dataset.rf);
+    var swapped = false;
     if (rr && rr.r === "C" && !(lr && lr.r === "C")) {
+      swapped = true;
       head.insertBefore(sides[1], sides[0]);
       sides[0].classList.remove("gteam--flip");
       sides[1].classList.add("gteam--flip");
@@ -5560,9 +5568,14 @@
     var mls = head.querySelectorAll(":scope > .gteam > .gml");
     if (mls.length === 2) stack.appendChild(boutRow(mls[0], MLMK, mls[1]));
     var pr = (typeof FPROPS === "object" && FPROPS[card.dataset.bout]) || {};
+    /* the prices are seated in the order the data names the two men, so when
+       the champion is moved to the left his prices move with him -- otherwise
+       every swapped bout wears the other man's numbers
+       (Jose, Sep 22, 2026: "the odds are wrong") */
+    var A = swapped ? 1 : 0, B = swapped ? 0 : 1;
     [["ko", MKO, "KO"], ["sub", MSUB, "SUB"], ["dec", MDEC, "DEC"]].forEach(function (k) {
       var got = pr[k[0]] || [];
-      stack.appendChild(boutRow(fchip(got[0]), k[1], fchip(got[1]), k[2]));
+      stack.appendChild(boutRow(fchip(got[A]), k[1], fchip(got[B]), k[2]));
     });
 
     /* his corner, his number, his name over the foot with his record under it */
