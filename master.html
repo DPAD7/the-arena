@@ -937,6 +937,61 @@
   .gcard.gcard--v3 > .gbody .ghost {
     width: auto !important; min-width: 52px !important; max-width: none !important;
     height: 28px !important; padding: 0 8px !important; border-radius: 9px !important; }
+  /* ---- the bout card: the same card, what a fight has to say ---- */
+  .gcard.gcard--bout > .ghead--fight { display: grid !important;
+    grid-template-columns: 1fr 132px 1fr !important; height: 146px;
+    position: relative; }
+  .gcard.gcard--bout .fvs { display: none !important; }
+  /* his corner behind him, and his picture filling his half */
+  .gcard.gcard--bout .gside { position: relative; overflow: hidden;
+    background: var(--hue); min-height: 146px; }
+  /* the weight is written under the eye, not painted across the card */
+  .gcard.gcard--bout[data-wt]::before { content: none !important; }
+  /* no line down the middle: his half is solid to 70% and then fades, the way
+     a club's colour does on a football card */
+  .gcard.gcard--bout .gside--l { -webkit-mask: linear-gradient(90deg, #000 70%, rgba(0,0,0,0) 100%);
+    mask: linear-gradient(90deg, #000 70%, rgba(0,0,0,0) 100%); }
+  .gcard.gcard--bout .gside--r { -webkit-mask: linear-gradient(270deg, #000 70%, rgba(0,0,0,0) 100%);
+    mask: linear-gradient(270deg, #000 70%, rgba(0,0,0,0) 100%); }
+  /* a band of shade under his name so it reads off any picture */
+  .gcard.gcard--bout .gside::after { content: ""; position: absolute; z-index: 2;
+    left: 0; right: 0; bottom: 0; height: 52px; pointer-events: none;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0, rgba(0,0,0,.72) 78%,
+      rgba(0,0,0,.84) 100%); }
+  /* the card does not say when it starts: the event's own heading does */
+  .gcard.gcard--bout .gtime { display: none !important; }
+  .gcard.gcard--bout .gside .fman { position: absolute; inset: 0; margin: 0; }
+  .gcard.gcard--bout .gside img.ffab { position: relative; z-index: 1;
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%;
+    border-radius: 0; border: 0; }
+  /* his name over the foot of his own half, his record under it */
+  .gcard.gcard--bout .gside .fname { position: absolute; z-index: 3;
+    left: 0; right: 0; bottom: 6px; display: block; text-align: center;
+    font-size: 17px; font-weight: 700; line-height: 1;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+  .gcard.gcard--bout .gside .fname .frec { display: block; margin-top: 3px;
+    font-style: normal; font-size: 11px; font-weight: 700; letter-spacing: .06em;
+    color: #c9ccd2; font-variant-numeric: tabular-nums; }
+  /* his number in the outer corner, where the travel mark rides on football */
+  .gcard.gcard--bout .gdiv { position: absolute; z-index: 3; top: 8px;
+    font-style: normal; font-size: 12px; letter-spacing: .09em; font-weight: 800;
+    color: rgba(255,255,255,.8); text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+  .gcard.gcard--bout .gside--l .gdiv { left: 10px; }
+  .gcard.gcard--bout .gside--r .gdiv { right: 10px; }
+  /* the division in full, under the eye and the play mark */
+  .gcard.gcard--bout .gweight { text-align: center; font-size: 9.5px;
+    font-weight: 800; letter-spacing: .09em; color: var(--muted);
+    margin: 1px 0 2px; }
+  /* the fight's own rail: a stretch a round, every round it was scheduled for */
+  /* room under the rail for the round chips, so the card's arrow clears them */
+  .gcard.gcard--v3.gcard--bout > .frail { padding: 12px 10px 32px !important; }
+  .gcard.gcard--bout .frail__bar { position: relative; height: 7px;
+    border-radius: 4px; background: rgba(255,255,255,.16); }
+  .gcard.gcard--bout .rtick { position: absolute; top: -2px; width: 1px;
+    height: 11px; background: rgba(255,255,255,.34); }
+  .gcard.gcard--bout .rnum { position: absolute; top: 12px;
+    transform: translateX(-50%); width: 20px; height: 17px; color: var(--muted); }
+  .gcard.gcard--bout .rnum svg { width: 100%; height: 100%; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
   .gcard.gcard--v3 > .gbody .h2hrow { display: grid !important;
@@ -5342,6 +5397,137 @@
     face.parentNode.insertBefore(box, face);
     face.remove();
   }
+  /* ---- the bout card, in the same shape as a fixture card ----
+     No clubs, so the sides take the corners, red and blue. His number rides
+     the outer corner, or NR where the panel ranks him nowhere; his record
+     goes under his name; the division stands in full under the eye and the
+     play mark; and the strip counts the price to win, then KO, SUB and DEC.
+     The foot is the fight's own rail rather than a yard bar
+     (notes/mocks/mock_mma.py; the design note, Sep 21, 2026). */
+  var FRANK = {};
+  fetch("fighter_ranks.json").then(function (r) { return r.json(); })
+    .then(function (j) { FRANK = j || {}; if (typeof paintAll === "function") paintAll(); })
+    .catch(function () { FRANK = {}; });
+  var DIVNAME = { FLW: "FLYWEIGHT", BW: "BANTAMWEIGHT", FW: "FEATHERWEIGHT",
+                  LW: "LIGHTWEIGHT", WW: "WELTERWEIGHT", MW: "MIDDLEWEIGHT",
+                  LHW: "LIGHT HEAVYWEIGHT", HW: "HEAVYWEIGHT",
+                  SW: "STRAWWEIGHT", CW: "CATCHWEIGHT" };
+  function boutRanked(name) { return FRANK[String(name || "").trim().toLowerCase()]; }
+  function boutRank(name) {
+    var f = boutRanked(name);
+    if (!f) return "NR";
+    return f.r === "C" ? "C" : "#" + f.r;
+  }
+  function boutDiv(card) {
+    var ab = String(card.dataset.wt || "").split("\u00b7")[0].trim().toUpperCase();
+    var full = DIVNAME[ab] || ab;
+    if (!full) return "";
+    /* a women's bout says so, and the panel's own division is what says it --
+       there is no flag on the card to read (Jose, Sep 21, 2026) */
+    var a = boutRanked(card.dataset.lf), b = boutRanked(card.dataset.rf);
+    var women = (a && a.w) || (b && b.w) || ab === "SW";
+    return (women ? "W-" : "") + full;
+  }
+  /* a price from the fight's own props, with the book's id on it so a tap
+     sticks the way every other chip's does */
+  function fchip(pair) {
+    var v = pair && pair[0], oid = pair && pair[1];
+    if (!v) {
+      var g = document.createElement("span");
+      g.className = "ghost";
+      return g;
+    }
+    var b = document.createElement("button");
+    b.className = "price";
+    b.type = "button";
+    if (oid) b.dataset.oid = oid;
+    b.dataset.odds = v;
+    b.textContent = v;
+    return b;
+  }
+  function boutRow(left, markHtml, right, tag) {
+    var row = document.createElement("div");
+    row.className = "gline";
+    var a = document.createElement("span"); a.className = "gh2h";
+    var m = document.createElement("i"); m.className = "gmk";
+    m.innerHTML = markHtml + (tag ? '<em class="grn">' + tag + "</em>" : "");
+    var b = document.createElement("span"); b.className = "gh2h";
+    if (left) a.appendChild(left);
+    if (right) b.appendChild(right);
+    row.appendChild(a); row.appendChild(m); row.appendChild(b);
+    return row;
+  }
+  var MKO = '<svg viewBox="0 0 50 50" aria-hidden="true"><use href="#mko"/></svg>';
+  var MSUB = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#msub"/></svg>';
+  var MDEC = '<svg viewBox="0 0 66 32" aria-hidden="true"><use href="#mdec"/></svg>';
+  var MLMK = '<img src="ico/moneyline.svg?v=2" alt="" width="21" height="9">';
+  function layoutBout(card) {
+    if (!card || !card.dataset.bout || card.dataset.v3 === "1") return;
+    var head = card.querySelector(".ghead--fight");
+    if (!head) return;
+    var sides = head.querySelectorAll(":scope > .gteam");
+    if (sides.length !== 2) return;
+    card.dataset.v3 = "1";
+    card.classList.add("gcard--v3", "gcard--bout");
+
+    var strip = document.createElement("div");
+    strip.className = "gmid";
+    head.insertBefore(strip, sides[1]);
+
+    var when = card.querySelector(".gwhen");
+    if (when) { when.classList.add("gtop"); strip.appendChild(when); }
+
+    var wt = document.createElement("div");
+    wt.className = "gweight";
+    wt.textContent = boutDiv(card);
+    strip.appendChild(wt);
+
+    var stack = document.createElement("div");
+    stack.className = "gstack";
+    strip.appendChild(stack);
+
+    /* the price to win keeps the nodes it already had, so a mark on it holds */
+    var mls = head.querySelectorAll(":scope > .gteam > .gml");
+    if (mls.length === 2) stack.appendChild(boutRow(mls[0], MLMK, mls[1]));
+    var pr = (typeof FPROPS === "object" && FPROPS[card.dataset.bout]) || {};
+    [["ko", MKO, "KO"], ["sub", MSUB, "SUB"], ["dec", MDEC, "DEC"]].forEach(function (k) {
+      var got = pr[k[0]] || [];
+      stack.appendChild(boutRow(fchip(got[0]), k[1], fchip(got[1]), k[2]));
+    });
+
+    /* his corner, his number, his name over the foot with his record under it */
+    [["l", sides[0]], ["r", sides[1]]].forEach(function (p) {
+      var side = p[1];
+      side.classList.add("gside", "gside--" + p[0]);
+      side.style.setProperty("--hue", p[0] === "l" ? "#3a1418" : "#0e1c33");
+      if (!side.querySelector(".gdiv")) {
+        var rk = document.createElement("i");
+        rk.className = "gdiv";
+        rk.textContent = boutRank(p[0] === "l" ? card.dataset.lf : card.dataset.rf);
+        side.appendChild(rk);
+      }
+    });
+
+    /* the fight's own rail across the foot, a stretch a round */
+    if (!card.querySelector(".frail")) {
+      var rounds = parseInt(pr.rounds, 10) || 3;
+      var rail = document.createElement("div");
+      rail.className = "gbody frail";
+      var bar = '<div class="frail__bar">';
+      for (var k = 1; k < rounds; k++) {
+        bar += '<i class="rtick" style="left:' + (100 * k / rounds).toFixed(2) + '%"></i>';
+      }
+      for (var n = 1; n <= rounds; n++) {
+        bar += '<em class="rnum" style="left:' + (100 * (n - 0.5) / rounds).toFixed(2) + '%">' +
+               '<svg viewBox="0 0 26 22" aria-hidden="true"><use href="#r' + n + '"/></svg></em>';
+      }
+      rail.innerHTML = bar + "</div>";
+      head.parentNode.insertBefore(rail, head.nextSibling);
+    }
+    if (typeof markSaved === "function") markSaved(card);
+    seatEye(card);
+  }
+  window.layoutBout = layoutBout;
   function layoutV3(card) {
     if (!card || card.dataset.v3 === "1") return;
     if (card.dataset.lg !== "nfl" && card.dataset.lg !== "college-football") return;
@@ -9831,7 +10017,7 @@
      is colored here, so no two paths can disagree about a club again. */
   function paintAll(root) {
     (root || document).querySelectorAll(".gcard").forEach(function (c) {
-      dressClub(c); dressFaces(c); paintSides(c); layoutV3(c);
+      dressClub(c); dressFaces(c); paintSides(c); layoutV3(c); layoutBout(c);
     });
   }
   paintAll();
@@ -9840,7 +10026,7 @@
     recs.forEach(function (r) {
       [].forEach.call(r.addedNodes, function (n) {
         if (n.nodeType !== 1) return;
-        if (n.classList && n.classList.contains("gcard")) { dressClub(n); dressFaces(n); paintSides(n); layoutV3(n); touched = true; }
+        if (n.classList && n.classList.contains("gcard")) { dressClub(n); dressFaces(n); paintSides(n); layoutV3(n); layoutBout(n); touched = true; }
         else if (n.querySelector && n.querySelector(".gcard")) { paintAll(n); touched = true; }
       });
     });
