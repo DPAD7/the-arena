@@ -836,16 +836,40 @@
   .gcard--v3 .gline,
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdrow {
     display: grid !important; grid-template-columns: 1fr 34px 1fr !important;
-    align-items: center; justify-items: center; gap: 3px; padding: 3px 0;
+    align-items: center; justify-items: center;
+    column-gap: 3px; row-gap: 0; padding: 0; }
+  .gcard--v3 .gline { padding: 3px 0; border-top: 1px dashed rgba(255,255,255,.10); }
+  /* Each rung is its own row, so the mark sits on the middle of the chips
+     beside it rather than in a column of its own that never lined up
+     (Jose, Sep 21, 2026: "it should be centered with the height"). The side
+     and the mark column hand their children straight to the row's grid. */
+  .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside,
+  .gcard.gcard--v3 .gvmid { display: contents !important; }
+  .gcard.gcard--v3 .ptdrow > .ptdside--l > .ptdbtn,
+  .gcard.gcard--v3 .ptdrow > .pnum--l { grid-column: 1; }
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk { grid-column: 2; }
+  .gcard.gcard--v3 .ptdrow > .ptdside--r > .ptdbtn,
+  .gcard.gcard--v3 .ptdrow > .pnum--r { grid-column: 3; }
+  .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn:nth-of-type(1),
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk:nth-of-type(1),
+  .gcard.gcard--v3 .ptdrow > .pnum { grid-row: 1; }
+  .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn:nth-of-type(2),
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk:nth-of-type(2) { grid-row: 2; }
+  /* every row is ruled off the same, whatever it holds */
+  .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn,
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk,
+  .gcard.gcard--v3 .ptdrow > .pnum {
+    align-self: stretch; padding: 3px 0 !important;
     border-top: 1px dashed rgba(255,255,255,.10); }
-  .gcard--v3 .gstack > :first-child .ptdrow,
+  /* the mark takes the row's own height so the icon sits on its middle and
+     the rule under it meets the rules either side */
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk { height: auto !important; }
   .gcard--v3 .gstack > .gline:first-child { border-top: 0; }
   .gcard--v3 .gh2h { display: flex; justify-content: center; }
   .gcard.gcard--v3 .ptdx, .gcard.gcard--v3 .ptdx--balls + .ptdx--balls {
     border: 0 !important; margin: 0 !important; padding: 0 !important; }
-  .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside { display: flex !important;
-    flex-direction: column; gap: 2px; align-items: center; padding: 0 !important;
-    flex: none; grid-row: 1; }
+  /* the side hands its chips straight to the row's grid, one rung a row */
+  .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside { display: contents !important; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside--l { grid-column: 1; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside--r { grid-column: 3; }
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdbtn { display: flex !important;
@@ -900,6 +924,23 @@
     border: 1px dashed rgba(255,255,255,.18); border-radius: 6px; background: none; }
   .gcard.gcard--v3 .ghost::after { content: "\2013"; color: #6e6e73;
     font-size: 11px; font-weight: 800; line-height: 1; }
+  /* One chip, one size, priced or not, on every row of the strip. The old
+     card's own rule (.ptdx--v2.ptdx--balls button.price) carries an element
+     on the end and outranked the card's, which is why the club price kept
+     coming out smaller than the rungs (Jose, Sep 21, 2026: "even if they're
+     not there, they need to be the same size buttons"). */
+  .gcard.gcard--v3 .gstack .price,
+  .gcard.gcard--v3 .gstack button.price,
+  .gcard.gcard--v3 .gstack .ghost,
+  .gcard.gcard--v3 .gstack .pnum {
+    width: 100% !important; min-width: 0 !important; max-width: none !important;
+    height: 18px !important; padding: 0 3px !important; border-radius: 6px !important; }
+  /* the foot's pair are one size too, the mock's own bigger chip */
+  .gcard.gcard--v3 > .gbody .price,
+  .gcard.gcard--v3 > .gbody button.price,
+  .gcard.gcard--v3 > .gbody .ghost {
+    width: auto !important; min-width: 52px !important; max-width: none !important;
+    height: 28px !important; padding: 0 8px !important; border-radius: 9px !important; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
   .gcard.gcard--v3 > .gbody .h2hrow { display: grid !important;
@@ -943,7 +984,8 @@
     fill: currentColor; }
   /* one count answers every rung, so the second mark and both rung labels go
      -- the mark's own display rule outranks [hidden], so it is said here */
-  .gcard--v3 .gmk[hidden], .gcard--v3 .grn[hidden] { display: none !important; }
+  .gcard--v3 .gmk[hidden], .gcard--v3 .grn[hidden],
+  .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdbtn[hidden] { display: none !important; }
   /* no W or L tile on a fixture card: the mock puts nothing over his picture
      but the travel mark. The tile still stands on the ledger and the bouts */
   .gcard.gcard--v3 > .ghead > .gteam > .mk { display: none !important; }
@@ -5217,7 +5259,15 @@
       if (!prow || prow.querySelector(".gvmid")) return;
       var runrow = sec.classList.contains("ptdx--run");
       var left = prow.querySelector(".ptdside--l");
-      var rungs = left ? left.querySelectorAll(".ptdbtn").length : 0;
+      /* the rushing row is one rung and only ever one: a board that prices a
+         second one is not drawn (Jose, Sep 21, 2026: "we don't do two rushing
+         touchdowns"). Passing takes as many rungs as it has chips. */
+      if (runrow) {
+        prow.querySelectorAll(".ptdside").forEach(function (sd) {
+          sd.querySelectorAll(".ptdbtn").forEach(function (btn, i) { btn.hidden = i > 0; });
+        });
+      }
+      var rungs = left ? left.querySelectorAll(".ptdbtn:not([hidden])").length : 0;
       if (!rungs) rungs = 1;
       var mid = document.createElement("span");
       mid.className = "gvmid";
@@ -5372,6 +5422,7 @@
         var ov = oth ? parseInt(oth.textContent, 10) : 0;
         if (isNaN(ov)) ov = 0;
         var chip = numChip(v, v > ov, placed, placed && done ? v >= 1 : null);
+        chip.classList.add("pnum--" + sd[0]);
         /* the clip belongs to the passing count only -- the mock hands the
            rushing row a plain number (Jose, Sep 21, 2026) */
         var play = sec.classList.contains("ptdx--run") ? null : side.querySelector(".ptdplay");
