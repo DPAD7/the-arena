@@ -9107,6 +9107,7 @@
         /* last, so it seats the numbers the pass has just written and the bar
            it has just painted, rather than being painted over */
         stateV3(card);
+        if (typeof placedState === "function") placedState(card);
       })
       .catch(function () { /* a board that cannot reach ESPN still shows its prices */ });
   }
@@ -10784,7 +10785,9 @@
       });
     });
   }
-  setInterval(placedState, 5000);
+  /* it ran every five seconds all day for something that only changes when a
+     count does. It is called where the counts are written instead
+     (Jose, Sep 22, 2026) */
   placedState();
   /* the build this page was served as. site/build.txt carries the same stamp,
      so a page left open can tell when a new one has been deployed and take
