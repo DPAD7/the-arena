@@ -1079,11 +1079,17 @@
      :has() at z-index 6 across the head, because .gside is overflow:hidden and
      masked at its inner edge -- a border on the panel is clipped and faded out,
      which is why it never showed (Jose, Sep 22, 2026). Copied from the mock. */
-  /* only the winner is framed, and only in green: the loser's red read as a
-     second result (Jose, Sep 22, 2026: "just green on the ML winner, not a
-     red") */
+  /* the frame stands round both halves -- green on the winner, red on the
+     loser, amber on a draw, grey on a no contest. Only the CHIP is green
+     alone (Jose, Sep 22, 2026) */
   .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before,
-  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after {
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after {
     content: ""; position: absolute; z-index: 6; top: 0; bottom: 0;
     /* the head already carries an ::after of its own, and its height pinned
        this one to nothing -- only the top border painted, so the winner's
@@ -1092,12 +1098,24 @@
     height: auto !important; left: auto;
     width: calc((100% - 132px) / 2 + 10px); border: 2px solid;
     background: none; pointer-events: none; }
-  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before {
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before {
     left: 0; border-right: 0; border-radius: 14px 0 0 0; }
-  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after {
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after,
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after {
     right: 0; border-left: 0; border-radius: 0 14px 0 0; }
   .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--won)::before { border-color: #17c257; }
   .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--won)::after { border-color: #17c257; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--lost)::before { border-color: #e2564d; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--lost)::after { border-color: #e2564d; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--drew)::before { border-color: #e3b341; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--drew)::after { border-color: #e3b341; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--l.gside--nc)::before { border-color: #8e8e93; }
+  .gcard.gcard--bout > .ghead--fight:has(.gside--r.gside--nc)::after { border-color: #8e8e93; }
   .gcard.gcard--bout .gside--lost { color: #e2564d; }
   /* the foot: his price, the bar with the VS on it, his price */
   .gcard.gcard--v3 > .gbody { padding: 8px 10px 6px !important; margin: 0 !important; }
