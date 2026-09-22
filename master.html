@@ -946,8 +946,21 @@
     grid-template-columns: 1fr 132px 1fr !important;
     height: 146px; grid-template-rows: 146px; overflow: hidden;
     position: relative; }
-  .gcard.gcard--bout .gmid { padding: 3px 3px !important; gap: 2px !important; }
-  .gcard.gcard--bout .gweight { margin: 0 0 1px !important; }
+  /* the bout strip, value for value out of mock_mma.py (lines 294-299):
+     the rows are 1px padded and 3px gapped on a 38px mark column, the chips
+     18px tall at 10px, the mark 15px with a 16x15 svg, the rung 7.5px */
+  .gcard.gcard--bout .gmid { padding: 6px 3px !important; gap: 4px !important; }
+  .gcard.gcard--bout .gstack .gline {
+    padding: 1px 0 !important; column-gap: 3px !important;
+    grid-template-columns: 1fr 38px 1fr !important; }
+  .gcard.gcard--bout .gstack .price,
+  .gcard.gcard--bout .gstack .ghost {
+    width: 100% !important; min-width: 0 !important; height: 18px !important;
+    padding: 0 3px !important; font-size: 10px !important;
+    border-radius: 6px !important; }
+  .gcard.gcard--bout .gstack .gmk { height: 15px !important; gap: 2px; width: 38px; }
+  .gcard.gcard--bout .gstack .gmk svg { width: 16px !important; height: 15px !important; }
+  .gcard.gcard--bout .gstack .grn { font-size: 7.5px; }
   .gcard.gcard--bout .fvs { display: none !important; }
   /* his corner behind him, and his picture filling his half */
   .gcard.gcard--bout .gside { position: relative; overflow: hidden;
@@ -989,12 +1002,9 @@
   .gcard.gcard--bout .gside--l .gdiv { left: 10px; }
   .gcard.gcard--bout .gside--r .gdiv { right: 10px; }
   /* the division in full, under the eye and the play mark */
-  /* the mark stands the mock's own 14px on a bout card, not the football
-     card's 18 (Jose, Sep 22, 2026: "the icons are too big") */
-  .gcard.gcard--bout .gstack .gmk { height: 14px; }
-  .gcard.gcard--bout .gweight { text-align: center; font-size: 9.5px;
-    font-weight: 800; letter-spacing: .09em; color: var(--muted);
-    margin: 1px 0 2px; }
+  .gcard.gcard--bout .gweight { text-align: center; font-size: 10px;
+    font-weight: 800; letter-spacing: .12em; color: var(--muted);
+    margin: 0; }
   /* the fight's own rail: a stretch a round, every round it was scheduled for */
   /* room under the rail for the round chips, so the card's arrow clears them */
   /* room above the rail for the clock over the finish, and below it for the
