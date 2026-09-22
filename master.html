@@ -5633,9 +5633,31 @@
        (Jose, Sep 22, 2026). The names and the ids move with the pictures so
        everything that reads them after -- the settle, the faces, the ranks --
        still agrees. */
+    /* The promotion names its own main event, and that naming is the order:
+       "331: Van vs. Pantoja 2" puts Van on the left, "FN: Rosas Jr. vs.
+       Barcelos" puts Rosas there, whoever holds the belt. The bill's heading
+       carries the name, so it is read off the board itself (Jose, Sep 22,
+       2026: "ESPN has him on the left too, he's the A side"). Any bout the
+       title does not name keeps the order it came in. */
+    var evName = "";
+    var bill0 = card.closest(".bill");
+    var hd0 = bill0 && bill0.previousElementSibling;
+    var ev0 = hd0 && hd0.querySelector(".slotev");
+    if (ev0) evName = ev0.textContent || "";
+    var namedFirst = "";
+    var mm = /(?::\s*)?([^:]+?)\s+vs\.?\s+/i.exec(evName);
+    if (mm) namedFirst = mm[1].trim().toLowerCase();
+    var surn = function (n) {
+      return String(n || "").trim().split(/\s+/).filter(function (w) {
+        return !/^(jr\.?|sr\.?|ii|iii|iv)$/i.test(w);
+      }).pop() || "";
+    };
+    var lsur = surn(card.dataset.lf).toLowerCase(), rsur = surn(card.dataset.rf).toLowerCase();
+    var titleWantsRight = !!namedFirst && rsur && namedFirst.indexOf(rsur) >= 0 &&
+                          !(lsur && namedFirst.indexOf(lsur) >= 0);
     var lr = boutRanked(card.dataset.lf), rr = boutRanked(card.dataset.rf);
     var swapped = false;
-    if (rr && rr.r === "C" && !(lr && lr.r === "C")) {
+    if (titleWantsRight) {
       swapped = true;
       /* the sheet is titled the way the card reads, and the way the promotion
          names the bout -- UFC 331 is Van vs. Pantoja 2, and the title was
