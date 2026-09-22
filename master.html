@@ -1184,10 +1184,13 @@
   /* his club under his name, his record in brackets after it */
   .gcard.gcard--v3 .h2hnm .gschool { display: block; margin-top: 1px;
     font-size: 11px; font-weight: 800; letter-spacing: .04em; color: var(--muted); }
-  .gcard.gcard--v3 .h2hnm .gschool .grec { display: inline; margin: 0;
-    font-size: inherit; font-weight: inherit; color: inherit; }
-  .gcard.gcard--v3 .h2hnm .gschool .grec::before { content: "("; }
-  .gcard.gcard--v3 .h2hnm .gschool .grec::after { content: ")"; }
+  /* the record in the top corner, across from the travel mark */
+  .gcard.gcard--v3 > .ghead > .grec--top { position: absolute; z-index: 7;
+    top: 7px; margin: 0; font-size: 12px; font-weight: 800; letter-spacing: .04em;
+    color: rgba(255,255,255,.85); font-variant-numeric: tabular-nums;
+    text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+  .gcard.gcard--v3 > .ghead > .grec--l { right: calc(50% + 76px); }
+  .gcard.gcard--v3 > .ghead > .grec--r { left: calc(50% + 76px); }
   .gcard.gcard--v3 .h2hnm .grank { font-style: normal; font-size: inherit;
     font-weight: inherit; line-height: inherit; vertical-align: baseline;
     color: #e3b341; }
@@ -5918,17 +5921,28 @@
       /* his name, and under it his club with his record in brackets after it:
          Purdie / LIB (1-0). A college side ranked by the AP carries its number
          in gold in front of the school (Jose, Sep 22, 2026) */
+      /* His club's record rides the top corner, across from the house or the
+         plane, the way a fighter's does. His name stands alone at the foot of
+         his half; a college card keeps the school under it, an NFL card does
+         not (Jose, Sep 22, 2026). */
       var rec = p[1].querySelector(".grec");
       var nm = mine && mine.querySelector(".h2hnm");
-      if (nm && ab && !nm.querySelector(".gschool")) {
-        var r = card.dataset.lg === "college-football" ? RANK[ab] : 0;
+      var college = card.dataset.lg === "college-football";
+      if (rec) {
+        rec.classList.add("grec--top", "grec--" + p[0]);
+        if (rec.parentNode !== head) head.appendChild(rec);
+      }
+      if (college && nm && ab && !nm.querySelector(".gschool")) {
+        var r = RANK[ab];
         var sch = document.createElement("small");
         sch.className = "gschool";
-        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab + " ";
+        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
         nm.appendChild(sch);
       }
-      var sch0 = nm && nm.querySelector(".gschool");
-      if (rec && sch0 && rec.parentNode !== sch0) sch0.appendChild(rec);
+      if (!college && nm) {
+        var drop = nm.querySelector(".gschool");
+        if (drop) drop.remove();
+      }
       p[1].style.setProperty("--hue", cardHue(ab));
       /* the side's own mark, whichever league it came from -- a club's sits in
          logos/nfl, a school's in logos/ncaa under its ESPN id */
