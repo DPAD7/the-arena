@@ -36,7 +36,22 @@ def main():
     want = sorted(set(want))
     os.makedirs(D + "/site/faces/nfl", exist_ok=True)
     os.makedirs(D + "/site/faces/college-football", exist_ok=True)
-    todo = [(lg, pid) for lg, pid in want if not os.path.exists(D + "/site/faces/%s/%s.png" % (lg, pid))]
+    # A face already on disk may be an old 168px copy -- the college ones all
+    # were, and they read as blurry on a phone at the size the card draws them
+    # (Jose, Sep 22, 2026). Anything under 336 wide is fetched again.
+    def small(png):
+        try:
+            from PIL import Image
+            with Image.open(png) as im:
+                return im.width < 336
+        except Exception:
+            return False
+
+    todo = []
+    for lg, pid in want:
+        png = D + "/site/faces/%s/%s.png" % (lg, pid)
+        if not os.path.exists(png) or small(png):
+            todo.append((lg, pid))
 
     def fetch(item):
         lg, pid = item

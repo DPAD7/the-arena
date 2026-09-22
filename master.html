@@ -994,7 +994,9 @@
   /* the school under his name, its AP number in gold before it */
   .gcard.gcard--v3 .h2hnm .gschool { display: block; font-size: 11px;
     font-weight: 800; letter-spacing: .04em; color: var(--muted); }
-  .gcard.gcard--v3 .h2hnm .grank { font-style: normal; color: #e3b341; }
+  .gcard.gcard--v3 .h2hnm .grank { font-style: normal; font-size: inherit;
+    font-weight: inherit; line-height: inherit; vertical-align: baseline;
+    color: #e3b341; }
   /* no headshot: his initials stand over the school's own colour and mark */
   .gcard.gcard--v3 .gnoface { display: flex; align-items: center;
     justify-content: center; width: 100%; min-height: 140px; flex: 1;
@@ -5489,7 +5491,14 @@
        heading carries it, and once the game is on the score row does */
     var clk0 = card.querySelector(".gtime");
     if (clk0) clk0.hidden = true;
-    if (!on) { card.querySelectorAll(".pnum, .gyds").forEach(function (n) { n.remove(); }); return; }
+    if (!on) {
+      card.querySelectorAll(".pnum, .gyds").forEach(function (n) {
+        var keep0 = n.querySelector(".ptdplay");
+        if (keep0) { var st = n.closest(".ptdbtn"); if (st) st.appendChild(keep0); }
+        n.remove();
+      });
+      return;
+    }
     var done = isOver(card);
 
     /* the eye, LIVE and the play mark stay one row at the top: the live pass
@@ -5546,7 +5555,16 @@
     card.querySelectorAll(".ptdx").forEach(function (sec) {
       var prow = sec.querySelector(".ptdrow");
       if (!prow) return;
-      prow.querySelectorAll(".pnum").forEach(function (n) { n.remove(); });
+      prow.querySelectorAll(".pnum").forEach(function (n) {
+        /* the play mark is the card's, not the chip's: put it back in its seat
+           before the chip goes, or it is destroyed with it */
+        var keep = n.querySelector(".ptdplay");
+        if (keep) {
+          var seat0 = n.closest(".ptdbtn");
+          if (seat0) seat0.appendChild(keep);
+        }
+        n.remove();
+      });
       var counts = sec.querySelectorAll(".ptdcount");
       [["l", 0], ["r", 1]].forEach(function (sd) {
         var side = prow.querySelector(".ptdside--" + sd[0]);
