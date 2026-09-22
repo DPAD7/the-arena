@@ -991,9 +991,8 @@
      transparent half of the cutout (Jose, Sep 22, 2026) */
   /* his name and his record sit below his picture, not across his chin
      (Jose, Sep 22, 2026: "names and record are still on the fucking chin") */
-  .gcard.gcard--bout .gside img.ffab { position: absolute; z-index: 1;
-    left: 0; right: 0; top: 0; width: 100%; height: calc(100% - 34px);
-    object-fit: cover; object-position: 50% 4%;
+  .gcard.gcard--bout .gside img.ffab { position: relative; z-index: 1;
+    width: 100%; height: 100%; object-fit: cover; object-position: 50% 8%;
     border-radius: 0; border: 0; background: none !important; }
   .gcard.gcard--bout .gside .fman { position: absolute; inset: 0; margin: 0; }
   /* his name over the foot of his own half, his record under it */
@@ -5598,7 +5597,6 @@
 
     var when = card.querySelector(".gwhen");
     if (when) { when.classList.add("gtop"); strip.appendChild(when); }
-
     var wt = document.createElement("div");
     wt.className = "gweight";
     wt.textContent = boutDiv(card);
