@@ -1001,12 +1001,12 @@
     font-size: 17px; font-weight: 700; line-height: 1;
     text-shadow: 0 1px 3px rgba(0,0,0,.9); }
   /* his record stands in the top corner of his own half, opposite his number */
-  .gcard.gcard--bout .gside > .frec { position: absolute; z-index: 3; top: 8px;
-    display: block; margin: 0; font-style: normal; font-size: 12px;
+  .gcard.gcard--bout > .ghead--fight > .frec { position: absolute; z-index: 7;
+    top: 8px; display: block; margin: 0; font-style: normal; font-size: 12px;
     font-weight: 800; letter-spacing: .06em; color: rgba(255,255,255,.8);
     font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px rgba(0,0,0,.9); }
-  .gcard.gcard--bout .gside--l > .frec { right: 10px; }
-  .gcard.gcard--bout .gside--r > .frec { left: 10px; }
+  .gcard.gcard--bout > .ghead--fight > .frec--l { right: calc(50% + 76px); }
+  .gcard.gcard--bout > .ghead--fight > .frec--r { left: calc(50% + 76px); }
   /* his number in the outer corner, where the travel mark rides on football */
   .gcard.gcard--bout .gdiv { position: absolute; z-index: 3; top: 8px;
     font-style: normal; font-size: 12px; letter-spacing: .09em; font-weight: 800;
@@ -5645,8 +5645,15 @@
       }
       /* his record rides the top of his own half, opposite his number
          (Jose, Sep 22, 2026) */
-      var rec0 = side.querySelector(".frec");
-      if (rec0 && rec0.parentNode !== side) side.appendChild(rec0);
+      /* the head, not his half: his half is masked at its inner edge and the
+         record sits in that fade, which washed it out
+         (Jose, Sep 22, 2026: "make sure its above the blur") */
+      var rec0 = side.querySelector(".frec") ||
+                 head.querySelector(":scope > .frec--" + p[0]);
+      if (rec0) {
+        rec0.classList.add("frec--" + p[0]);
+        if (rec0.parentNode !== head) head.appendChild(rec0);
+      }
       if (!side.querySelector(".gdiv")) {
         var rk = document.createElement("i");
         rk.className = "gdiv";
