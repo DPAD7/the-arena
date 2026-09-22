@@ -1423,7 +1423,9 @@
             border-top: 1px dashed var(--edge); color: var(--muted);
             font-family: Barlow, "Helvetica Neue", Arial, sans-serif;
             font-size: 13px; text-align: left; }
-  .vidone[aria-current="true"] { color: var(--ink); }
+  /* the one playing is marked green, the way the note has it */
+  .vidone[aria-current="true"] { color: var(--green); }
+  .vidone[aria-current="true"] svg { color: var(--green); fill: currentColor; }
   .vidone svg { width: 17px; height: 17px; flex: none; }
   .vidone .vidsec { margin-left: auto; font-variant-numeric: tabular-nums;
                     font-size: 12px; color: var(--muted); }
@@ -3576,6 +3578,39 @@
     var t = String(full || "").trim().split(" ").filter(function (w) { return !/^(Jr\.?|Sr\.?|II|III|IV)$/.test(w); });
     return (t.pop() || "").toLowerCase();
   }
+  /* a surname, with the particles that belong to it: St. Brown, not Brown */
+  function surnameOf(full) {
+    var t = String(full || "").trim().split(" ")
+      .filter(function (w) { return !/^(Jr\.?|Sr\.?|II|III|IV)$/.test(w); });
+    var last = t.pop() || "";
+    while (t.length && /^[A-Z][a-z]+\.$/.test(t[t.length - 1])) last = t.pop() + " " + last;
+    return last;
+  }
+  /* Every touchdown he threw, in the order he threw them, read off the
+     scoring plays the game already handed us -- the same list clipForTd
+     counts through, so line n here is clip n there. */
+  function tdRows(card, who, kind) {
+    var last = surnameKey(who), out = [], n = 0;
+    (card._scoring || []).forEach(function (p) {
+      var t = scoreLine(p.text, last, kind);
+      if (!t) return;
+      n += 1;
+      out.push({ n: n, kind: kind, yds: t.yds,
+                 name: t.run ? surnameOf(t.scorer) + " " + t.yds + "-yd run"
+                             : surnameOf(t.passer) + " to " + surnameOf(t.scorer) });
+    });
+    return out;
+  }
+  /* the count is the button: it opens all of them, and plays the first */
+  function openTdSheet(card, who, kind) {
+    var rows = tdRows(card, who, kind);
+    if (!rows.length) { openClips(card, who, null); return; }
+    rows.cur = 1;
+    clipForTd(card, who, 1, function (hit) {
+      openClips(card, who, hit || { none: 1, name: rows[0].name }, rows);
+    }, kind);
+  }
+  window.openTdSheet = openTdSheet;
   function scoreLine(text, last, kind) {
     /* ESPN writes a rushing score as "Rush" on some feeds and "Run" on others;
        matching only "Run" meant no rushing touchdown ever found its clip
@@ -3829,7 +3864,12 @@
       else { vid.src = url; vid.play().catch(function () {}); }
     }).catch(function () { vid.src = url; });
   }
-  function openClips(card, who, only) {
+  /* The count is the button, and what it opens is every touchdown he threw,
+     not one of them: his name on top, the list under the player, the one
+     playing marked, tap any line to jump to it (the design note, Sep 21,
+     2026; Jose, Sep 22, 2026: "all the videos to be there too").
+     `rows` is that list. Without it the sheet is what it always was. */
+  function openClips(card, who, only, rows) {
     var box = document.getElementById("vidsheet");
     var vid = document.getElementById("vidplay");
     var list = document.getElementById("vidlist");
@@ -3850,9 +3890,10 @@
     var teams = [];
     card.querySelectorAll(".ghead .gteam img.glogo").forEach(function (i) { teams.push(i.alt); });
     title.textContent = teams.length === 2 ? teams[0] + " v " + teams[1] : "Highlights";
+    if (rows && rows.length) title.textContent = surnameOf(who).toUpperCase();
     list.innerHTML = "";
     var pinned = !!(only && (only.src || only.mcp || only.nfl));
-    if (!clips.length && !pinned) {
+    if (!clips.length && !pinned && !(rows && rows.length)) {
       now.textContent = "No clips yet for this game.";
       vid.removeAttribute("src");
       box.showModal();
@@ -3868,27 +3909,52 @@
         b.setAttribute("aria-current", n === i ? "true" : "false");
       });
     }
-    clips.forEach(function (c, i) {
-      var b = document.createElement("button");
-      b.className = "vidone";
-      b.type = "button";
-      var mins = c.duration ? Math.floor(c.duration / 60) + ":" +
-                 ("0" + (c.duration % 60)).slice(-2) : "";
-      b.innerHTML = '<svg aria-hidden="true"><use href="#play"/></svg><span>' +
-        (c.headline || "Clip") + '</span><span class="vidsec">' + mins + '</span>';
-      b.addEventListener("click", function () { play(i); });
-      list.appendChild(b);
-    });
+    if (rows && rows.length) {
+      /* one line a touchdown, in the order he threw them */
+      rows.forEach(function (r) {
+        var b = document.createElement("button");
+        b.className = "vidone vidone--td";
+        b.type = "button";
+        b.setAttribute("aria-current", r.n === rows.cur ? "true" : "false");
+        b.innerHTML = '<svg aria-hidden="true"><use href="#play"/></svg><span>' +
+          r.name + '</span><span class="vidsec">' + r.yds + ' yd</span>';
+        b.addEventListener("click", function () {
+          if (r.n === rows.cur) return;
+          rows.cur = r.n;
+          clipForTd(card, who, r.n, function (hit) {
+            openClips(card, who, hit || { none: 1, name: r.name }, rows);
+          }, r.kind);
+        });
+        list.appendChild(b);
+      });
+    } else {
+      clips.forEach(function (c, i) {
+        var b = document.createElement("button");
+        b.className = "vidone";
+        b.type = "button";
+        var mins = c.duration ? Math.floor(c.duration / 60) + ":" +
+                   ("0" + (c.duration % 60)).slice(-2) : "";
+        b.innerHTML = '<svg aria-hidden="true"><use href="#play"/></svg><span>' +
+          (c.headline || "Clip") + '</span><span class="vidsec">' + mins + '</span>';
+        b.addEventListener("click", function () { play(i); });
+        list.appendChild(b);
+      });
+    }
     /* if the touchdown was pinned to a clip, that clip is the whole sheet --
        the rest of the game's highlights are not what was asked for. The list
        is only there when nothing could be pinned. */
     /* a pinned clip is named for its play at the top and carries no caption */
-    if (only && only.name) { title.textContent = only.name; now.textContent = ""; }
+    if (only && only.name) {
+      if (rows && rows.length) now.textContent = only.name;
+      else { title.textContent = only.name; now.textContent = ""; }
+    }
     if (only && only.poster) vid.poster = only.poster; else vid.removeAttribute("poster");
     if (only && (only.nfl || only.mcp)) {
-      list.hidden = true;
+      list.hidden = !!rows ? false : true;
       now.textContent = "Loading\u2026";
-      vid.addEventListener("playing", function () { now.textContent = ""; }, { once: true });
+      vid.addEventListener("playing", function () {
+        now.textContent = (rows && only && only.name) ? only.name : "";
+      }, { once: true });
       box.showModal();
       fetch(only.mcp ? "/clip?mcp=" + encodeURIComponent(only.mcp)
                      : "/clip?game=" + card.dataset.espn + "&ext=" + encodeURIComponent(only.nfl))
@@ -3933,7 +3999,7 @@
       return;
     }
     if (only && only.src) {
-      list.hidden = true;
+      list.hidden = !!rows ? false : true;
       box.showModal();
       if (vid._hls) { try { vid._hls.destroy(); } catch (e) {} vid._hls = null; }
       vid.src = only.src;
@@ -3941,10 +4007,18 @@
       vid.play().catch(function () {});
       return;
     }
+    if (only && only.none) {
+      /* nothing could be pinned for that one -- say so and leave the list up */
+      now.textContent = "No clip of that touchdown";
+      if (vid._hls) { try { vid._hls.destroy(); } catch (e) {} vid._hls = null; }
+      vid.pause(); vid.removeAttribute("src"); vid.load();
+      if (!box.open) box.showModal();
+      return;
+    }
     if (only) {
       var at = 0;
       clips.forEach(function (c, i) { if (c.id === only.id) at = i; });
-      list.hidden = true;
+      list.hidden = !!rows ? false : true;
       box.showModal();
       play(at);
       return;
@@ -5423,9 +5497,11 @@
         if (isNaN(ov)) ov = 0;
         var chip = numChip(v, v > ov, placed, placed && done ? v >= 1 : null);
         chip.classList.add("pnum--" + sd[0]);
-        /* the clip belongs to the passing count only -- the mock hands the
-           rushing row a plain number (Jose, Sep 21, 2026) */
-        var play = sec.classList.contains("ptdx--run") ? null : side.querySelector(".ptdplay");
+        /* each count opens its own kind: the passing count every touchdown he
+           threw, the rushing count every one he ran in
+           (Jose, Sep 22, 2026: "if we hit rushing play button, it should be
+           the rushing") */
+        var play = side.querySelector(".ptdplay");
         if (play) chip.appendChild(play);
         chip.classList.toggle("has-clip", !!play);
         side.parentNode.insertBefore(chip, sd[0] === "l" ? side : side.nextSibling);
@@ -8211,9 +8287,7 @@
               e.preventDefault();
               e.stopPropagation();
               var qb = sd[0] === "l" ? card.dataset.lqb : card.dataset.rqb;
-              clipForTd(card, qb, need, function (hit) {
-                openClips(card, qb, hit);
-              }, kind);
+              openTdSheet(card, qb, kind);
             });
             btn.appendChild(go);
           });
