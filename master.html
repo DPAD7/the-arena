@@ -991,9 +991,11 @@
      the school, which is where the mock puts it (Jose, Sep 22, 2026: "what's
      behind his head?") */
   .gcard.gcard--v3 > .ghead > .gteam > .grank { display: none !important; }
-  /* the school under his name, its AP number in gold before it */
-  .gcard.gcard--v3 .h2hnm .gschool { display: block; font-size: 11px;
-    font-weight: 800; letter-spacing: .04em; color: var(--muted); }
+  /* his record beside his name, his club or school on the line under it */
+  .gcard.gcard--v3 .h2hnm .grec { display: inline; margin-left: 6px;
+    font-size: 12px; font-weight: 800; color: var(--muted); }
+  .gcard.gcard--v3 .h2hnm .gschool { display: block; margin-top: 1px;
+    font-size: 11px; font-weight: 800; letter-spacing: .04em; color: var(--muted); }
   .gcard.gcard--v3 .h2hnm .grank { font-style: normal; font-size: inherit;
     font-weight: inherit; line-height: inherit; vertical-align: baseline;
     color: #e3b341; }
@@ -5280,6 +5282,27 @@
      into that shape. Every node the live code holds -- .gml, .ptdside,
      .ptdbtn, .trkbox, .h2hqb, .h2hbar -- is the same node it was, so nothing
      downstream has to know (Jose, Sep 21, 2026). */
+  /* A man the board has no picture of reads as the man, not as a hole: his
+     initials over his club's own colour and mark. The silhouette is a data:
+     URI served with a 200, so waiting for an error never fired -- the source
+     itself is what is asked (Jose, Sep 22, 2026: "if the image is not there
+     we're putting initials"). A side with no passer named carries the club's
+     letters, which is the only name that side has. */
+  function lettersIfNoFace(face, card, which, ab, forced) {
+    if (!face || !face.parentNode) return;
+    var src = face.getAttribute("src") || "";
+    if (!forced && src.indexOf("data:") !== 0) return;
+    if (face.parentNode.querySelector(".gnoface")) { face.remove(); return; }
+    var who = which === "l" ? card.dataset.lqb : card.dataset.rqb;
+    var bits = String(who || "").trim().split(/\s+/).filter(Boolean);
+    var ini = bits.slice(0, 2).map(function (w) { return w.charAt(0); })
+                  .join("").toUpperCase();
+    var box = document.createElement("span");
+    box.className = "gnoface";
+    box.textContent = ini || String(ab || "").toUpperCase() || "?";
+    face.parentNode.insertBefore(box, face);
+    face.remove();
+  }
   function layoutV3(card) {
     if (!card || card.dataset.v3 === "1") return;
     if (card.dataset.lg !== "nfl" && card.dataset.lg !== "college-football") return;
@@ -5397,18 +5420,21 @@
       if (odds && end) end.appendChild(odds);
       var lg0 = p[1].querySelector("img.glogo");
       var ab = (lg0 || {}).alt || "";
+      /* his record sits beside his name; his club or school goes under it, and
+         on a college card the AP number rides in front of the school in gold.
+         The school used to be written OVER the record, which lost the record
+         and left the NFL card with no club at all
+         (Jose, Sep 22, 2026: "I don't see team underneath the name and then
+         add their record next to the name to the right of the name") */
       var rec = p[1].querySelector(".grec");
       var nm = mine && mine.querySelector(".h2hnm");
       if (rec && nm && !nm.querySelector(".grec")) nm.appendChild(rec);
-      if (card.dataset.lg === "college-football" && nm) {
-        /* the school under his name, its AP number before it in gold; a side
-           nobody ranks carries the school alone */
-        var own = nm.querySelector(".grec");
-        if (own) {
-          var r = RANK[ab];
-          own.classList.add("gschool");
-          own.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
-        }
+      if (nm && ab && !nm.querySelector(".gschool")) {
+        var r = card.dataset.lg === "college-football" ? RANK[ab] : 0;
+        var sch = document.createElement("small");
+        sch.className = "gschool";
+        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
+        nm.appendChild(sch);
       }
       p[1].style.setProperty("--hue", cardHue(ab));
       /* the side's own mark, whichever league it came from -- a club's sits in
@@ -5420,20 +5446,14 @@
       p[1].classList.add("gside", "gside--" + p[0]);
       var home = (card.dataset.lhome === "1") === (p[0] === "l");
       var face = mine && mine.querySelector("img.qbface");
-      if (face && !face.dataset.fallback) {
-        face.dataset.fallback = "1";
-        face.addEventListener("error", function () {
-          if (face.parentNode && face.parentNode.querySelector(".gnoface")) return;
-          var who = p[0] === "l" ? card.dataset.lqb : card.dataset.rqb;
-          var bits = String(who || "").trim().split(/\s+/);
-          var ini = bits.slice(0, 2).map(function (w) { return w.charAt(0); })
-                        .join("").toUpperCase() || "?";
-          var box = document.createElement("span");
-          box.className = "gnoface";
-          box.textContent = ini;
-          face.parentNode.insertBefore(box, face);
-          face.remove();
-        });
+      if (face) {
+        lettersIfNoFace(face, card, p[0], ab);
+        if (!face.dataset.fallback) {
+          face.dataset.fallback = "1";
+          face.addEventListener("error", function () {
+            lettersIfNoFace(face, card, p[0], ab, true);
+          });
+        }
       }
       var trav = document.createElement("i");
       trav.className = "gtrav";
