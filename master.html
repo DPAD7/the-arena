@@ -10263,12 +10263,9 @@
        card paid" was the fallback and it only ever showed on a single-leg
        card, which is exactly where the number matters most
        (Jose, Sep 18, 2026) */
-    var head = '<span>' + legs.length + (legs.length > 1 ? " leg parlay" : " leg") + "</span>";
-    if (ok) {
-      var a = dec >= 2 ? Math.round((dec - 1) * 100) : -Math.round(100 / (dec - 1));
-      head += "<b>" + (a > 0 ? "+" : "\u2212") + Math.abs(a) + "</b>";
-    }
-    var html = '<div class="hitshead hitshead--pay">' + head + '</div><div class="hitrow">';
+    /* no heading: the chip is the whole of it, and it is the one that paid
+       most (Jose, Sep 22, 2026: "we don't need 1 LEG, don't include that") */
+    var html = '<div class="hitrow">';
     legs.forEach(function (l) {
       html += '<div class="hitleg"><span class="odds">' + l[0] +
               '</span><span class="mkt">' +
