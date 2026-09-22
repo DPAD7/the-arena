@@ -6416,6 +6416,9 @@
             if (hits) scroll.appendChild(hits);
             scroll.insertAdjacentHTML("beforeend", fightSheet(row));
             if (typeof markSaved === "function") markSaved(scroll);
+            if (own._paid && typeof paidMethods === "function") {
+              paidMethods(own, own._paid[0], own._paid[1], own._paid[2], own._paid[3]);
+            }
           }
         }
         if (sheet && sheet.tagName === "DIALOG") openSheet(sheet);
@@ -9248,6 +9251,10 @@
      whether it ended inside the first minute or the last ten seconds of a
      round (Jose, Sep 18, 2026). */
   function paidMethods(card, winner, how, round, clock) {
+    /* kept on the card: the sheet is written again whenever it is opened, and
+       the green on the prices that paid has to go back on with it
+       (Jose, Sep 22, 2026: "highlight the buttons in there that won") */
+    card._paid = [winner, how, round, clock];
     var k = (how || "").toLowerCase();
     var ko = k.indexOf("ko") >= 0 || k.indexOf("knockout") >= 0;
     var sub = k.indexOf("sub") >= 0;
@@ -10240,6 +10247,14 @@
 
     legs = legs.filter(function (l) { return !tooShort(l[0]); });
     if (!legs.length) { box.hidden = true; box.innerHTML = ""; return; }
+    /* the best of them, not the run: a fight that paid four ways was read as
+       a four leg parlay nobody took (Jose, Sep 22, 2026: "just place the
+       highest paying one") */
+    legs.sort(function (a, b2) {
+      var da = toDec(a[0]), db = toDec(b2[0]);
+      return (db === null ? -1 : db) - (da === null ? -1 : da);
+    });
+    legs = legs.slice(0, 1);
 
     /* the heading is the payout itself: "4 leg parlay +620" (Jose, Sep 17, 2026) */
     var dec = 1, ok = true;
