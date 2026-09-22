@@ -9479,11 +9479,15 @@
   function armRewind(card) {
     if (!card || !card.dataset.bout) return;
     var gt = card.querySelector(".gtime");
-    if (!gt || !gt.querySelector(".fhow") || gt.querySelector(".frewind")) return;
+    /* the button is looked for on the CARD, not inside the clock: on a bout
+       card it rides the top line instead, so a guard that only searched the
+       clock never saw the one already made and built a second every pass
+       (Jose, Sep 22, 2026: "why are there two rewind buttons?") */
+    if (!gt || !gt.querySelector(".fhow") || card.querySelector(".frewind")) return;
     animList(function (list) {
       if (!list[card.dataset.bout]) return;
       var fh = gt.querySelector(".fhow");
-      if (!fh || gt.querySelector(".frewind")) return;
+      if (!fh || card.querySelector(".frewind")) return;
       var b = document.createElement("button");
       b.className = "frewind"; b.type = "button";
       b.setAttribute("aria-label", "Play the fight back");
