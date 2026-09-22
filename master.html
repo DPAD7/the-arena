@@ -845,20 +845,16 @@
      and the mark column hand their children straight to the row's grid. */
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdside,
   .gcard.gcard--v3 .gvmid { display: contents !important; }
-  .gcard.gcard--v3 .ptdrow > .ptdside--l > .ptdbtn,
-  .gcard.gcard--v3 .ptdrow > .pnum--l { grid-column: 1; }
+  .gcard.gcard--v3 .ptdrow > .ptdside--l > .ptdbtn { grid-column: 1; }
   .gcard.gcard--v3 .ptdrow > .gvmid > .gmk { grid-column: 2; }
-  .gcard.gcard--v3 .ptdrow > .ptdside--r > .ptdbtn,
-  .gcard.gcard--v3 .ptdrow > .pnum--r { grid-column: 3; }
+  .gcard.gcard--v3 .ptdrow > .ptdside--r > .ptdbtn { grid-column: 3; }
   .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn:nth-of-type(1),
-  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk:nth-of-type(1),
-  .gcard.gcard--v3 .ptdrow > .pnum { grid-row: 1; }
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk:nth-of-type(1) { grid-row: 1; }
   .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn:nth-of-type(2),
   .gcard.gcard--v3 .ptdrow > .gvmid > .gmk:nth-of-type(2) { grid-row: 2; }
   /* every row is ruled off the same, whatever it holds */
   .gcard.gcard--v3 .ptdrow > .ptdside > .ptdbtn,
-  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk,
-  .gcard.gcard--v3 .ptdrow > .pnum {
+  .gcard.gcard--v3 .ptdrow > .gvmid > .gmk {
     align-self: stretch; padding: 3px 0 !important;
     border-top: 1px dashed rgba(255,255,255,.10); }
   /* the mark takes the row's own height so the icon sits on its middle and
@@ -956,8 +952,9 @@
   /* --- once the game is on: the mock's live and final rows --- */
   /* the prices come off the strip and the numbers take their seats */
   .gcard.gcard--v3.gcard--on .gline > .gh2h > .gml,
-  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdside,
-  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdbtn { display: none !important; }
+  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdbtn > button.price,
+  .gcard.gcard--v3.gcard--on .ptdx.ptdx--v2.ptdx--balls .ptdbtn > .ghost {
+    display: none !important; }
   .gcard.gcard--v3 .pnum { display: inline-flex; align-items: center; justify-content: center;
     gap: 5px; box-sizing: border-box; width: 100%; min-width: 0; height: 18px;
     border: 1px solid transparent; border-radius: 6px; background: none;
@@ -989,6 +986,15 @@
   /* no W or L tile on a fixture card: the mock puts nothing over his picture
      but the travel mark. The tile still stands on the ledger and the bouts */
   .gcard.gcard--v3 > .ghead > .gteam > .mk { display: none !important; }
+  /* the school under his name, its AP number in gold before it */
+  .gcard.gcard--v3 .h2hnm .gschool { display: block; font-size: 11px;
+    font-weight: 800; letter-spacing: .04em; color: var(--muted); }
+  .gcard.gcard--v3 .h2hnm .grank { font-style: normal; color: #e3b341; }
+  /* no headshot: his initials stand over the school's own colour and mark */
+  .gcard.gcard--v3 .gnoface { display: flex; align-items: center;
+    justify-content: center; width: 100%; min-height: 140px; flex: 1;
+    font-size: 34px; font-weight: 800; letter-spacing: .04em;
+    color: rgba(255,255,255,.34); }
   .gcard--v3 .gclk { font-style: normal; font-size: 9.5px; font-weight: 800;
     letter-spacing: .06em; color: var(--muted); white-space: nowrap; }
   .gcard--v3 .gclk--fin { color: #c9ccd2; }
@@ -3627,6 +3633,12 @@
   }
   /* College clips are cut only for the programs in cfb_cover.json (79 of the
      136, chosen conference by conference); a side outside it gets no button. */
+  /* the AP poll, written by build/cfb_rank.py. A school nobody ranks is
+     simply absent from it (Jose, Sep 21, 2026) */
+  var RANK = {};
+  fetch("ranks.json").then(function (r) { return r.json(); })
+    .then(function (j) { RANK = j || {}; if (typeof paintAll === "function") paintAll(); })
+    .catch(function () { RANK = {}; });
   var CFBCOVER = null;
   fetch("cfb_cover.json").then(function (r) { return r.json(); })
     .then(function (j) { CFBCOVER = {}; Object.keys(j || {}).forEach(function (k) { CFBCOVER[String(j[k].id)] = 1; }); if (typeof paintAll === "function") paintAll(); })
@@ -4057,7 +4069,13 @@
     pos = Math.max(0, Math.min(100, pos));
     var leftId = ((lside || {}).team || {}).id || "";
     var offLeft = String(offId) === String(leftId);
-    var ink = clubInk(card)[offLeft ? 0 : 1];
+    /* the field wears the colour of the club that has the ball -- its OWN,
+       not the alternate the card hands a side when both clubs share a hue.
+       The Giants driving on the Rams turned the strip pink, which is nobody
+       (Jose, Sep 22, 2026: "what team is pink?") */
+    var offSide = card.querySelectorAll(".ghead .gteam")[offLeft ? 0 : 1];
+    var offAb = offSide ? ((offSide.querySelector("img.glogo") || {}).alt || "").trim() : "";
+    var ink = readable(clubHue(offAb)) || clubInk(card)[offLeft ? 0 : 1];
 
     var ticks = "";
     for (var t = 0; t < 50; t++) {
@@ -5256,7 +5274,8 @@
      .ptdbtn, .trkbox, .h2hqb, .h2hbar -- is the same node it was, so nothing
      downstream has to know (Jose, Sep 21, 2026). */
   function layoutV3(card) {
-    if (!card || card.dataset.lg !== "nfl" || card.dataset.v3 === "1") return;
+    if (!card || card.dataset.v3 === "1") return;
+    if (card.dataset.lg !== "nfl" && card.dataset.lg !== "college-football") return;
     var head = card.querySelector(":scope > .ghead");
     var sides = head ? head.querySelectorAll(":scope > .gteam") : [];
     var names = card.querySelector(".h2hnames");
@@ -5303,12 +5322,18 @@
       row.className = "gline";
       var a = document.createElement("span"); a.className = "gh2h"; a.appendChild(mls[0]);
       var m = document.createElement("i"); m.className = "gmk";
-      m.innerHTML = '<img src="ico/moneyline.svg" alt="" width="21" height="9">';
+      m.innerHTML = '<img src="ico/moneyline.svg?v=2" alt="" width="21" height="9">';
       var b = document.createElement("span"); b.className = "gh2h"; b.appendChild(mls[1]);
       row.appendChild(a); row.appendChild(m); row.appendChild(b);
       stack.appendChild(row);
     }
 
+    /* a college card already carries its rushing section, marked ATD rather
+       than by class -- taking it for a second passing pair drew four ball
+       rows where the mock draws two (Jose, Sep 22, 2026) */
+    card.querySelectorAll('.ptdx[data-kind="ATD"]').forEach(function (sec) {
+      sec.classList.add("ptdx--run");
+    });
     /* the rushing row stands whether a board has priced it or not */
     if (!card.querySelector(".ptdx--run")) {
       var run = document.createElement("div");
@@ -5363,14 +5388,46 @@
       var odds = mine && mine.querySelector(".h2hodds");
       var end = bar && bar.querySelectorAll(".h2hend")[p[0] === "l" ? 0 : 1];
       if (odds && end) end.appendChild(odds);
+      var lg0 = p[1].querySelector("img.glogo");
+      var ab = (lg0 || {}).alt || "";
       var rec = p[1].querySelector(".grec");
       var nm = mine && mine.querySelector(".h2hnm");
       if (rec && nm && !nm.querySelector(".grec")) nm.appendChild(rec);
-      var ab = (p[1].querySelector("img.glogo") || {}).alt || "";
+      if (card.dataset.lg === "college-football" && nm) {
+        /* the school under his name, its AP number before it in gold; a side
+           nobody ranks carries the school alone */
+        var own = nm.querySelector(".grec");
+        if (own) {
+          var r = RANK[ab];
+          own.classList.add("gschool");
+          own.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
+        }
+      }
       p[1].style.setProperty("--hue", cardHue(ab));
-      p[1].style.setProperty("--mark", "url(logos/nfl/" + ab.toLowerCase() + ".png)");
+      /* the side's own mark, whichever league it came from -- a club's sits in
+         logos/nfl, a school's in logos/ncaa under its ESPN id */
+      var src = lg0 && lg0.getAttribute("src");
+      p[1].style.setProperty("--mark",
+        "url(" + (src || "logos/nfl/" + ab.toLowerCase() + ".png") + ")");
+      if (card.dataset.lg === "college-football") p[1].dataset.school = ab;
       p[1].classList.add("gside", "gside--" + p[0]);
       var home = (card.dataset.lhome === "1") === (p[0] === "l");
+      var face = mine && mine.querySelector("img.qbface");
+      if (face && !face.dataset.fallback) {
+        face.dataset.fallback = "1";
+        face.addEventListener("error", function () {
+          if (face.parentNode && face.parentNode.querySelector(".gnoface")) return;
+          var who = p[0] === "l" ? card.dataset.lqb : card.dataset.rqb;
+          var bits = String(who || "").trim().split(/\s+/);
+          var ini = bits.slice(0, 2).map(function (w) { return w.charAt(0); })
+                        .join("").toUpperCase() || "?";
+          var box = document.createElement("span");
+          box.className = "gnoface";
+          box.textContent = ini;
+          face.parentNode.insertBefore(box, face);
+          face.remove();
+        });
+      }
       var trav = document.createElement("i");
       trav.className = "gtrav";
       trav.innerHTML = '<svg viewBox="0 0 1024 1024" aria-hidden="true"><use href="#' +
@@ -5435,7 +5492,11 @@
        clock itself goes down into the score row */
     var when = card.querySelector(".gwhen"), gt = card.querySelector(".gtime");
     var lbar = gt && gt.querySelector(".glivebar");
-    if (lbar && when && lbar.parentNode !== when) when.appendChild(lbar);
+    if (lbar && when && lbar.parentNode !== when) {
+      /* only ever one: the older bars go before the new one is seated */
+      when.querySelectorAll(".glivebar").forEach(function (old0) { old0.remove(); });
+      when.appendChild(lbar);
+    }
 
     /* the score, the clock or FINAL between the two of them */
     var line = stack.querySelector(".gline"), ends = line ? line.querySelectorAll(".gh2h") : [];
@@ -5504,7 +5565,9 @@
         var play = side.querySelector(".ptdplay");
         if (play) chip.appendChild(play);
         chip.classList.toggle("has-clip", !!play);
-        side.parentNode.insertBefore(chip, sd[0] === "l" ? side : side.nextSibling);
+        var seat = side.querySelector(".ptdbtn:not([hidden])");
+        if (seat) seat.appendChild(chip);
+        else side.appendChild(chip);
       });
       /* one count answers every rung, so only the first mark is drawn */
       var marks = sec.querySelectorAll(".gvmid .gmk");
@@ -6432,7 +6495,9 @@
     return (0.2126 * (n >> 16) + 0.7152 * ((n >> 8) & 255) + 0.0722 * (n & 255)) / 255;
   }
   function cardHue(club) {
-    var h = HUE[club] || "#1a1d22";
+    /* NFL first, then every school ESPN gives a colour for, so a college card
+       is painted by the same rule as a club's (Jose, Sep 22, 2026) */
+    var h = HUE[club] || (typeof clubHue === "function" ? clubHue(club) : "") || "#1a1d22";
     /* a club whose colour is all but black leaves the mark nothing to sit on */
     if (lumOf(h) < 0.07) {
       var n = parseInt(h.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
