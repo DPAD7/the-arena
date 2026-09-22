@@ -910,6 +910,12 @@
   .gcard.gcard--v3 .price.on { background: var(--goldgrad); color: var(--chip-ink);
     border-color: #ffffff; box-shadow: 0 0 14px rgba(255,255,255,.30); }
   .gcard.gcard--v3 .price.on .pct { color: var(--chip-ink); }
+  /* a placed leg settles: the gold border turns green if it came in, red if it
+     did not (Jose, Sep 22, 2026) */
+  .price.placed.won { border-color: var(--green) !important;
+    box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30) !important; }
+  .price.placed.lost { border-color: #e2564d !important;
+    box-shadow: 0 0 0 1px rgba(226,86,77,.35), 0 0 10px rgba(226,86,77,.30) !important; }
   .gcard.gcard--v3 .price.placed { border-color: #e3b341; border-width: 2px;
     box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40); }
   .gcard.gcard--v3 .price.won { border-color: var(--green); color: var(--green); }
@@ -9264,7 +9270,6 @@
        (Jose, Sep 22, 2026: "highlight the buttons in there that won") */
     card._paid = [winner, how, round, clock];
     if (typeof markBoutWay === "function") markBoutWay(card);
-    if (typeof markBoutWay === "function") markBoutWay(card);
     var k = (how || "").toLowerCase();
     var ko = k.indexOf("ko") >= 0 || k.indexOf("knockout") >= 0;
     var sub = k.indexOf("sub") >= 0;
@@ -9315,6 +9320,49 @@
     card.querySelectorAll(".mkt .fs5cell[data-mkt]").forEach(function (cell) {
       var m = cell.dataset.mkt, b = cell.querySelector(".price");
       if (b && FIGHT[m]) b.classList.add("paid");
+    });
+
+    /* And his own. The marks above say which prices the fight paid; nothing
+       said what HIS bets did, so a gold border sat on a leg for ever and
+       settled nothing (Jose, Sep 22, 2026: "why would I want that without it
+       settling?"). Every placed leg on the card turns green if it came in and
+       red if it did not -- the round markets with the rest. */
+    var settleLeg = function (b, m, side2) {
+      if (!b || !b.classList.contains("placed")) return;
+      var won = (m in FIGHT) ? !!FIGHT[m]
+              : (m in MAN) ? (side2 >= 0 && side2 === side && !!MAN[m])
+              : null;
+      if (won === null) return;
+      b.classList.toggle("won", !!won);
+      b.classList.toggle("lost", !won);
+    };
+    card.querySelectorAll(".mkt .mktrow[data-mkt]").forEach(function (row) {
+      var m = row.dataset.mkt;
+      if (m in FIGHT) {
+        settleLeg(row.querySelector(".mktcell .price") || row.querySelector(".price"), m, -1);
+        return;
+      }
+      [0, 2].forEach(function (i) {
+        var slot = row.children[i];
+        if (slot && slot.classList.contains("price")) settleLeg(slot, m, i === 0 ? 0 : 1);
+      });
+    });
+    card.querySelectorAll(".mkt .fs5cell[data-mkt]").forEach(function (cell) {
+      settleLeg(cell.querySelector(".price"), cell.dataset.mkt, -1);
+    });
+    /* the card's own four rows: the club price and the way it ended */
+    var rowKey = { KO: "ko", SUB: "sub", DEC: "dec" };
+    card.querySelectorAll(".gstack .gline").forEach(function (ln) {
+      var tag = ln.querySelector(".grn");
+      var m = tag ? rowKey[tag.textContent.trim().toUpperCase()] : "ml";
+      if (!m) return;
+      ln.querySelectorAll(".gh2h").forEach(function (cell, i) {
+        var b = cell.querySelector(".price");
+        if (!b || !b.classList.contains("placed")) return;
+        var won = m === "ml" ? (i === side) : (i === side && !!MAN[m]);
+        b.classList.toggle("won", !!won);
+        b.classList.toggle("lost", !won);
+      });
     });
   }
   /* How a bout actually ended, from the one ESPN feed that says so.
