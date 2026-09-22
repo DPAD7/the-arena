@@ -10141,6 +10141,76 @@
                   : '<span class="hitwhat">' + esc(what === "H2H" ? "H2H" : what) + "</span>") +
            (pic ? '<span class="hitalt">' + esc(who) + "</span>" : "");
   }
+  /* What a finished bout paid, worked out from its OWN prices and its own
+     result -- not by scanning the page for prices marked green, which picked
+     up other cards' numbers: Van v Pantoja was headed +425, a price that
+     belongs to three other fights and to no market in this one
+     (Jose, Sep 22, 2026). One button: the price, his picture, and the marks
+     for the market that paid it. */
+  var BOUTWIN = [
+    /* key, the words the marks are read from, per fighter */
+    ["ml",   "ML",              1],
+    ["ko",   "BY KO",           1],
+    ["sub",  "BY SUB",          1],
+    ["dec",  "BY DEC",          1],
+    ["ud",   "BY UD",           1],
+    ["sdmd", "BY SD / MD",      1],
+    ["kosub", "BY KO OR SUB",   1],
+    ["finish", "BY FINISH",     1],
+    ["kodec", "BY KO OR DEC",   1],
+    ["subdec", "BY SUB OR DEC", 1],
+    ["koonly", "BY KO ONLY",    1],
+    ["subonly", "BY SUB ONLY",  1],
+    ["deconly", "BY DEC ONLY",  1],
+    ["finishonly", "BY FINISH ONLY", 1],
+    ["anyko",  "ANY KO",        0],
+    ["anysub", "ANY SUB",       0],
+    ["anydec", "ANY DEC",       0],
+    ["anyud",  "ANY UD",        0],
+    ["anysdmd", "ANY SD / MD",  0],
+    ["dist",   "GOES THE DISTANCE", 0],
+    ["nodist", "NO DISTANCE",   0]
+  ];
+  function boutPaid(card) {
+    var how = card._how || {};
+    var kind = String(how.type || "").toUpperCase();
+    var ko = kind.indexOf("KO") >= 0 || kind.indexOf("KNOCKOUT") >= 0 || kind.indexOf("DQ") >= 0;
+    var sub = kind.indexOf("SUB") >= 0;
+    var dec = kind.indexOf("DEC") >= 0 || kind === "UD" || kind === "SD" || kind === "MD";
+    if (!ko && !sub && !dec) return null;
+    var ud = dec && (kind.indexOf("UD") >= 0 || kind.indexOf("UNANIMOUS") >= 0);
+    var sdmd = dec && !ud;
+    var win = card._paid && card._paid[0];
+    if (!win) return null;
+    var lsur = surnameKey(card.dataset.lf), rsur = surnameKey(card.dataset.rf);
+    var wsur = surnameKey(win);
+    var seat = wsur === lsur ? 0 : wsur === rsur ? 1 : -1;
+    if (seat < 0) return null;
+    /* the sheet's seats follow the card, and the card may have been re-ordered */
+    var flip = card.dataset.flip === "1";
+    var pr = FPROPS[card.dataset.bout] || {};
+    var won = {
+      ml: 1, ko: ko, sub: sub, dec: dec, ud: ud, sdmd: sdmd,
+      kosub: ko || sub, finish: ko || sub, kodec: ko || dec, subdec: sub || dec,
+      koonly: ko, subonly: sub, deconly: dec, finishonly: ko || sub,
+      anyko: ko, anysub: sub, anydec: dec, anyud: ud, anysdmd: sdmd,
+      dist: dec, nodist: ko || sub
+    };
+    var best = null;
+    BOUTWIN.forEach(function (row) {
+      if (!won[row[0]]) return;
+      var v = pr[row[0]];
+      if (!v) return;
+      var slot = row[2] ? v[flip ? 1 - seat : seat] : v[0];
+      if (!slot || !slot[0]) return;
+      var d = toDec(slot[0]);
+      if (d === null) return;
+      if (!best || d > best.d) best = { d: d, price: slot[0], word: row[1] };
+    });
+    if (!best) return null;
+    best.who = seat === 0 ? card.dataset.lf : card.dataset.rf;
+    return best;
+  }
   function showHitsLater(card) { setTimeout(function () { showHits(card); }, 0); }
   function showHits(card) {
     var box = card.querySelector(".hits");
@@ -10245,6 +10315,11 @@
                                           lab ? lab.textContent.trim() : "")]);
     });
 
+    /* a bout works its own out, off its own prices and its own result */
+    if (card.dataset.bout) {
+      var own = boutPaid(card);
+      legs = own ? [[own.price, "", fightLeg(own.who, "", own.word)]] : [];
+    }
     legs = legs.filter(function (l) { return !tooShort(l[0]); });
     if (!legs.length) { box.hidden = true; box.innerHTML = ""; return; }
     /* the best of them, not the run: a fight that paid four ways was read as
