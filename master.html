@@ -7163,7 +7163,7 @@
        had scored nothing above the best passer in the league, because their
        clubs won without them (Jose, Sep 21, 2026). */
     var rec = clubRec();
-    var ofClub = function (r) { return rec[String(r.club || "")] || [0, 0]; };
+    var ofClub = clubRecOf;
     /* a man on the wire sinks to the foot whatever he has scored, and comes
        back into the order the moment ESPN lifts him -- nothing about the sort
        is remembered, so a clearance restores him by itself (Jose, Sep 21,
@@ -7216,6 +7216,12 @@
     }).join("");
     BOARD.appendChild(box);
   }
+  /* a club's record, wherever it is wanted: the season ranks on it and so does
+     every week (Jose, Sep 22, 2026) */
+  function clubRecOf(r) {
+    var rec = clubRec();
+    return rec[String((r && r.club) || "")] || [0, 0];
+  }
   function renderForm() {
     clearBoard();
     var rows = formRows();
@@ -7227,18 +7233,20 @@
        is first: Allen's two and two with both wins beat Lawrence's four
        passing and no run, and it was the other way round. (Jose, Sep 17, 2026)
        Then: passing, rushing, the head to head. */
+    /* One rule for the season and for every week: combined touchdowns, then
+       the club's record, then its wins, then the head to heads, then the name.
+       A week used to be scored differently -- a head-to-head and a club win
+       counting a touchdown each, then how many of the four columns he showed
+       up in -- so the same man read one way on the season and another on the
+       week (Jose, Sep 22, 2026: "that's the way we rank them, season and all
+       the weeks"). */
     var wins = function (r, k) { return r.agg ? r[k + "w"] : (r[k] === "W" ? 1 : 0); };
-    var boxes = function (r) {
-      return (r.ptd > 0 ? 1 : 0) + (r.atd > 0 ? 1 : 0) +
-             (wins(r, "h2h") > 0 ? 1 : 0) + (wins(r, "ml") > 0 ? 1 : 0);
-    };
     rows.sort(function (a, b) {
-      var ta = a.ptd + a.atd + wins(a, "h2h") + wins(a, "ml"), tb = b.ptd + b.atd + wins(b, "h2h") + wins(b, "ml");
+      var ta = (a.ptd || 0) + (a.atd || 0), tb = (b.ptd || 0) + (b.atd || 0);
       if (tb !== ta) return tb - ta;
-      var ba = boxes(a), bb = boxes(b);
-      if (bb !== ba) return bb - ba;
-      if (b.ptd !== a.ptd) return b.ptd - a.ptd;
-      if (b.atd !== a.atd) return b.atd - a.atd;
+      var ra = clubRecOf(a), rb = clubRecOf(b);
+      if ((rb[0] - rb[1]) !== (ra[0] - ra[1])) return (rb[0] - rb[1]) - (ra[0] - ra[1]);
+      if (rb[0] !== ra[0]) return rb[0] - ra[0];
       if (wins(b, "h2h") !== wins(a, "h2h")) return wins(b, "h2h") - wins(a, "h2h");
       return a.name < b.name ? -1 : 1;
     });
@@ -7283,9 +7291,20 @@
         if (r.ml === "W" && r.odds[3]) { dec *= toD(r.odds[3]); any = true; }
         return any ? dec : 0;
       };
+      /* the same rule the season uses: combined touchdowns, the club's record,
+         its wins, the head to heads, the name. It used to rank on what the
+         legs would have paid, so the card's number one was whoever priced
+         longest rather than whoever did the most
+         (Jose, Sep 22, 2026: "that's the way we rank them, season and all
+         the weeks") */
+      var hw = function (r) { return r.h2hw === undefined ? (r.h2h === "W" ? 1 : 0) : r.h2hw; };
       rows.sort(function (a, b) {
-        var pa = payDec(a), pb = payDec(b);
-        if (pb !== pa) return pb - pa;
+        var ta = (a.ptd || 0) + (a.atd || 0), tb = (b.ptd || 0) + (b.atd || 0);
+        if (tb !== ta) return tb - ta;
+        var ra = clubRecOf(a), rb = clubRecOf(b);
+        if ((rb[0] - rb[1]) !== (ra[0] - ra[1])) return (rb[0] - rb[1]) - (ra[0] - ra[1]);
+        if (rb[0] !== ra[0]) return rb[0] - ra[0];
+        if (hw(b) !== hw(a)) return hw(b) - hw(a);
         return a.name < b.name ? -1 : 1;
       });
       rows.forEach(function (r, i) { r.rank = i + 1; });
