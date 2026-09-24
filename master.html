@@ -7949,6 +7949,19 @@
       zone.classList.remove("gcorner--pulling", "gcorner--armed");
       card.style.opacity = "";
       try { zone.releasePointerCapture(e.pointerId); } catch (err) {}
+      /* a tap, not a swipe: it was meant for what lies under the corner --
+         the head to head's right price sits in it, and could not be pressed
+         (Jose, Sep 24, 2026: "why can't I click it?") */
+      if (e.type === "pointerup" && Math.abs(e.clientX - x0) < 10 && Math.abs(e.clientY - y0) < 10) {
+        zone.style.pointerEvents = "none";
+        var under = document.elementFromPoint(e.clientX, e.clientY);
+        zone.style.pointerEvents = "";
+        if (under && under !== zone) {
+          var hit = under.closest("button, a, [role=button]") || under;
+          if (typeof hit.click === "function") hit.click();
+        }
+        return;
+      }
       if (!armed) return;                    /* short of red: nothing happened */
       if (hid[id]) { delete hid[id]; } else { hid[id] = 1; }
       saveHidden();
