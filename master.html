@@ -6049,7 +6049,7 @@
       '<i class="h2htick" style="left:50%"><b></b></i></div>' +
       '<span class="h2hend"><span class="trkbox">0</span>' +
       '<span class="h2hodds">' + h2h(1) + '</span></span></div></div>' +
-      '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2">' +
+      '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2" data-kind="PTD">' +
       '<div class="ptdrow">' + side("l") +
       '<span class="trkbox ptdcount">0</span><span class="trkbox ptdcount">0</span>' +
       side("r") + '</div></div>' + anyRow() +
@@ -11543,7 +11543,13 @@
     [["ptd", "PTD"], ["atd", "ATD"]].forEach(function (pair) {
       var rows = pr[pair[0]];
       if (!rows) return;
-      var box = card.querySelector('.ptdx[data-kind="' + pair[1] + '"]');
+      /* every button knows its price: the row is found by its kind, and a
+         passing row drawn without one is still the row that is not the
+         rushing one -- the NFL card was built without the label, so its
+         passing prices never found their buttons (Jose, Sep 23, 2026: "each
+         button should be matched with the odds... they won't change") */
+      var box = card.querySelector('.ptdx[data-kind="' + pair[1] + '"]') ||
+                (pair[1] === "PTD" ? card.querySelector('.ptdx--balls:not([data-kind="ATD"])') : null);
       if (!box) return;
       ["l", "r"].forEach(function (w, i) {
         var side = box.querySelector(".ptdside--" + w);
