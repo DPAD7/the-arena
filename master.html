@@ -8855,7 +8855,9 @@
   /* ---- the picks: who was dragged into the eight, and how ---- */
   var PICKKEY = "arena.picks.v1";
   function loadPicks() { try { return JSON.parse(localStorage.getItem(PICKKEY) || "[]"); } catch (e) { return []; } }
-  function savePicks(p) { try { localStorage.setItem(PICKKEY, JSON.stringify(p.slice(0, 8))); } catch (e) {} }
+  /* six picks, not eight (Jose, Sep 23, 2026: "move the QBs from 8 to 6") */
+  var MAXPICK = 6;
+  function savePicks(p) { try { localStorage.setItem(PICKKEY, JSON.stringify(p.slice(0, MAXPICK))); } catch (e) {} }
   /* where the chips go, in the row's own coordinates: centered as a group on
      the squares' pitch, in the order they were picked */
   function pickSpots(slots, n) {
@@ -8867,7 +8869,7 @@
        (Jose, Sep 23, 2026: "the 8 looks awkward falling out of the end
        zone") */
     var pitch = b2.left - a.left, gap = 8;
-    var rows = n > 4 ? [Math.min(4, n), n - 4] : [n];
+    var rows = n > 4 ? [3, n - 3] : [n];          /* five or six: two rows of three */
     var H = row.height, t0 = (H - (rows.length * h + (rows.length - 1) * gap)) / 2;
     var out = [];
     rows.forEach(function (m, r) {
@@ -9087,7 +9089,7 @@
       out.addEventListener("click", function (e) { e.stopPropagation(); eightToSlip(out); });
       slots.appendChild(out);
     }
-    var mine = picks.slice(0, 8);
+    var mine = picks.slice(0, MAXPICK);
     /* one argument only: .map hands the index along too, and a second
        argument asks pickPrice for the whole rung -- every pick after the
        first came back an object and fell out of the sum (Jose, Sep 23,
@@ -9110,8 +9112,8 @@
   function drawPicks(slots, picks, box) {
     var layer = slots.querySelector(".fpicks");
     if (!layer) { layer = document.createElement("div"); layer.className = "fpicks"; slots.appendChild(layer); }
-    var spots = pickSpots(slots, Math.min(8, picks.length));
-    layer.innerHTML = picks.slice(0, 8).map(function (p, i) {
+    var spots = pickSpots(slots, Math.min(MAXPICK, picks.length));
+    layer.innerHTML = picks.slice(0, MAXPICK).map(function (p, i) {
       var sp = spots[i];
       return '<span class="fpick" data-id="' + p.id + '" style="' + (p.look || "") + ';left:' + sp.left.toFixed(1) + 'px;top:' + sp.top.toFixed(1) +
              'px;width:' + sp.w + 'px;height:' + sp.h + 'px"><img src="face/nfl/' + p.id +
@@ -9127,7 +9129,7 @@
     if (box) loopRow(box);
     /* eight picked: the row goes grey and takes no more until one is tapped
        off the top (Jose, Sep 23, 2026) */
-    if (box) box.classList.toggle("qcards--full", picks.length >= 8);
+    if (box) box.classList.toggle("qcards--full", picks.length >= MAXPICK);
     pricePicks(slots, picks);
   }
   /* The white line, in page coordinates, as the fork stands now: the post's
@@ -9455,7 +9457,7 @@
       })(t0);
     }
     function takeIn(g, c, tier) {
-      if (picks.length >= 8 || picks.some(function (p) { return String(p.id) === String(g.dataset.id); })) { sendHome(g); return; }
+      if (picks.length >= MAXPICK || picks.some(function (p) { return String(p.id) === String(g.dataset.id); })) { sendHome(g); return; }
       var gr = g.getBoundingClientRect();
       throwTo(tier, [gr.left + gr.width / 2, gr.top + gr.height / 2]);
       var qf = c.querySelector(".qface");
