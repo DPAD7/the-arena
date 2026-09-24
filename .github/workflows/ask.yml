@@ -5,9 +5,9 @@
 # same code the sweep prices them by, and posts what it found back to the
 # site, which keeps it and hands it to the page (Jose, Sep 23, 2026).
 #
-# It writes no file, commits nothing and deploys nothing, so it does not wait
-# behind the sweep: it has a concurrency group of its own. The next sweep folds
-# what it read into site/prices (build/ask_fold.py).
+# The reading writes no file, so it does not wait
+# behind the sweep: it has a concurrency group of its own. The save job below
+# folds what it read into site/prices at once (build/ask_fold.py).
 name: ask
 # the site finds this run by its name when GitHub does not hand back its number
 run-name: ask ${{ inputs.key }}
@@ -59,3 +59,49 @@ jobs:
           GAMES: ${{ inputs.games }}
           KEY: ${{ inputs.key }}
         run: python build/ask_dk.py --games "$GAMES" --key "$KEY"
+
+  # and what it read is saved there and then: folded into the price files,
+  # deployed, and kept in the repo, so a price a tap fetched is still on the
+  # card after a reload -- not only after the next full sweep (Jose, Sep 23,
+  # 2026: "why isn't it instant save after I get it... I shouldn't have to do
+  # anything else"). It writes the same files the sweep does, so it queues
+  # behind a running sweep rather than beside it.
+  save:
+    needs: ask
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    concurrency:
+      group: sweep
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Fold the tap into the files, and deploy
+        env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: python build/ask_fold.py
+
+      - name: Keep what it wrote
+        run: |
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git add site/prices.json site/prices
+          if git diff --cached --quiet; then
+            echo "nothing new"
+            exit 0
+          fi
+          git commit -m "tap $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase --autostash
+          git push
