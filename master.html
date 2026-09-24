@@ -1770,7 +1770,7 @@
      it (Jose, Sep 23, 2026) */
   .fslots { display: flex; justify-content: center; gap: 8px; padding: 2px 14px 40px; overflow: visible; }
   /* deep enough for two rows of four; the price has left for the billboard */
-  .fturf .fslots { padding: 10px 14px 75px; }
+  .fturf .fslots { padding: 12px 14px 16px; }
   /* the eight are not drawn: the row keeps its places so the picks lay out
      on its pitch, centered and mirrored, but there is nothing to see until
      someone is in it (Jose, Sep 23, 2026: "we don't need the actual 8 box,
@@ -8864,19 +8864,17 @@
     var sq = slots.querySelectorAll("i"), row = slots.getBoundingClientRect();
     var a = sq[0].getBoundingClientRect(), b2 = sq[1].getBoundingClientRect();
     var w = a.width, h = a.height;
-    /* the indicator's size always, and never wider than the back of the end
-       zone: past four they stand in two rows of four, both inside it
-       (Jose, Sep 23, 2026: "the 8 looks awkward falling out of the end
-       zone") */
-    var pitch = b2.left - a.left, gap = 8;
-    var rows = n > 4 ? [3, n - 3] : [n];          /* five or six: two rows of three */
-    var H = row.height, t0 = (H - (rows.length * h + (rows.length - 1) * gap)) / 2;
+    /* six in one row, full size, all inside the back of the end zone: the
+       pitch closes up until the row fits the far line, so on a phone they
+       overlap a little rather than shrink or spill (Jose, Sep 23, 2026: "6
+       inline") */
+    var far = row.width * 0.84 - 8;                 /* the end zone's back line */
+    var pitch = Math.min(b2.left - a.left, n > 1 ? (far - w) / (n - 1) : 0);
+    var t0 = (row.height - h) / 2;
     var out = [];
-    rows.forEach(function (m, r) {
-      for (var i = 0; i < m; i++) {
-        out.push({ left: row.width / 2 + (i - (m - 1) / 2) * pitch - w / 2, top: t0 + r * (h + gap), w: w, h: h });
-      }
-    });
+    for (var i = 0; i < n; i++) {
+      out.push({ left: row.width / 2 + (i - (n - 1) / 2) * pitch - w / 2, top: t0, w: w, h: h });
+    }
     return out;
   }
   /* the chips already in the row slide to their new places as the new one
@@ -8897,7 +8895,7 @@
     var W = wrap.clientWidth, H = wrap.clientHeight;
     if (!W || !H) return;
     var ez = Math.max(40, slots.offsetHeight);
-    var cx = W / 2, farH = W * 0.34, nearH = W * 0.66;
+    var cx = W / 2, farH = W * 0.42, nearH = W * 0.66;   /* a wider far end: six picks stand in it */
     var half = function (y) { return farH + (nearH - farH) * (y / H); };
     /* yards from the back of the end zone: 0-10 is the end zone, 10-50 the field */
     var yAt = function (d) {
