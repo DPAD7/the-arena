@@ -8912,16 +8912,16 @@
       o.push('<line x1="' + x1.toFixed(1) + '" y1="' + y1.toFixed(1) + '" x2="' + x2.toFixed(1) + '" y2="' +
              y2.toFixed(1) + '" stroke="#fff" stroke-opacity="' + op + '" stroke-width="' + (sw || 1) + '"/>');
     };
-    o.push('<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#26272d"/>' +
-           '<stop offset="1" stop-color="#2d2f35"/></linearGradient>' +
+    o.push('<defs><linearGradient id="tg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1d5a2b"/>' +
+           '<stop offset="1" stop-color="#247034"/></linearGradient>' +
            '<linearGradient id="tf" x1="0" y1="0" x2="0" y2="1"><stop offset=".93" stop-color="#000" stop-opacity="0"/>' +
            '<stop offset="1" stop-color="#000" stop-opacity="1"/></linearGradient></defs>');
     poly(0, H, "url(#tg)");
-    poly(0, ez, "#33353c");                          /* the end zone, a shade up */
+    poly(0, ez, "#1a5026");                          /* the end zone, a shade down (Jose, Sep 23, 2026: "make the field green") */
     /* the sidelines, a band either side */
     [-1, 1].forEach(function (sd) {
       o.push('<polygon points="' + (cx + sd * farH).toFixed(1) + ',0 ' + (cx + sd * (farH + 10)).toFixed(1) + ',0 ' +
-             (cx + sd * (nearH + 22)).toFixed(1) + ',' + H + ' ' + (cx + sd * nearH).toFixed(1) + ',' + H + '" fill="#3c3f47"/>');
+             (cx + sd * (nearH + 22)).toFixed(1) + ',' + H + ' ' + (cx + sd * nearH).toFixed(1) + ',' + H + '" fill="#153f1f"/>');
     });
     line(cx - half(0), 0, cx + half(0), 0, .35, 1.4);       /* the end line */
     line(cx - half(ez), ez, cx + half(ez), ez, .55, 2);     /* the goal line */
@@ -8964,9 +8964,9 @@
       [-2, -1, 0, 1, 2].forEach(function (k) {
         var x = cx + k * gap;
         if (k === 0) o.push('<rect x="' + (x - r0).toFixed(1) + '" y="' + (los - r0).toFixed(1) + '" width="' + (2 * r0) +
-                            '" height="' + (2 * r0) + '" fill="#2a2b31" stroke="#fff" stroke-opacity=".75" stroke-width="1.6"/>');
+                            '" height="' + (2 * r0) + '" fill="#1f5f2e" stroke="#fff" stroke-opacity=".75" stroke-width="1.6"/>');
         else o.push('<circle cx="' + x.toFixed(1) + '" cy="' + los.toFixed(1) + '" r="' + r0 +
-                    '" fill="#2a2b31" stroke="#fff" stroke-opacity=".75" stroke-width="1.6"/>');
+                    '" fill="#1f5f2e" stroke="#fff" stroke-opacity=".75" stroke-width="1.6"/>');
       });
     }
     o.push('<rect width="' + W + '" height="' + H + '" fill="url(#tf)"/>');
