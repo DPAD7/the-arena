@@ -1,0 +1,61 @@
+# The double tap: the prices a card is missing, asked for there and then.
+#
+# site/functions/ask.js starts this when the board is double tapped, with the
+# games in front of him. It reads only those games from DraftKings, with the
+# same code the sweep prices them by, and posts what it found back to the
+# site, which keeps it and hands it to the page (Jose, Sep 23, 2026).
+#
+# It writes no file, commits nothing and deploys nothing, so it does not wait
+# behind the sweep: it has a concurrency group of its own. The next sweep folds
+# what it read into site/prices (build/ask_fold.py).
+name: ask
+# the site finds this run by its name when GitHub does not hand back its number
+run-name: ask ${{ inputs.key }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      games:
+        description: "ESPN game or bout ids, comma separated"
+        required: true
+      key:
+        description: "the tap's key, which the page polls /ask by"
+        required: true
+
+concurrency:
+  group: ask-${{ inputs.key }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  ask:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # only what the reading needs: the scripts, the register and the pins,
+      # and the page at the root for its schedule. site/ is two hundred
+      # megabytes and nothing here reads it
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            .github
+            build
+            data
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: .github/workflows/ask.yml
+
+      - name: What the script needs
+        run: pip install --quiet curl_cffi
+
+      - name: Ask
+        env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          GAMES: ${{ inputs.games }}
+          KEY: ${{ inputs.key }}
+        run: python build/ask_dk.py --games "$GAMES" --key "$KEY"

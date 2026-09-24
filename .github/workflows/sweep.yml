@@ -64,6 +64,8 @@ jobs:
           NFL_CLIENT_KEY: ${{ secrets.NFL_CLIENT_KEY }}
           NFL_CLIENT_SECRET: ${{ secrets.NFL_CLIENT_SECRET }}
           NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
+          # what the double taps read is fetched back from the site with it
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
         run: python build/refresh.py --if-due
 
       - name: Keep what it wrote

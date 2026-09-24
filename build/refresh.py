@@ -98,27 +98,52 @@ def plain(american):
 src = json.load(open(D + "/data/sources.json"))
 
 BEFORE = (120, 60, 30)     # minutes before a kickoff that a price is worth reading
-# and after the whistle: a game is final by three and a half hours, and an
-# overtime or a long review is caught by the second look. Nothing else wakes
-# between kickoff and 9 the next morning, so without these the result, the
-# ladder and the touchdown clips all sat until somebody asked (Jose, Sep 18, 2026)
-AFTER = (210, 330)
-# a card is not a game: the prelims start the clock and the main event lands
-# five or six hours later, so the fights are looked at long after the football
-# would be finished (Jose, Sep 18, 2026)
-AFTER_MMA = (420, 540)
+# and after the whistle -- for the football, nothing. watch.py is awake while
+# a game is being played and settles it the second ESPN says final, so a fixed
+# look three and a half hours after kickoff is both late and, for a college
+# game that ran long, wrong (Jose, Sep 22, 2026: "no 3 1/2 and 5 1/2 either").
+# The fights keep theirs: a card is a night, not a game, and watch.py does not
+# read them.
+AFTER = ()
+# and nothing after a card either. watch.py is awake from the first bell,
+# asks ESPN every ten seconds, and writes each bout down the moment it reads
+# final -- so looking again seven and nine hours later is looking at what is
+# already settled (Jose, Sep 22, 2026: "we don't need to settle hours after,
+# if ESPN says it's final then it's final")
+AFTER_MMA = ()
 SLOT = 11                  # the agent wakes every ten, so a window a shade wider
 # DraftKings posts a game's passing props days after its moneyline, with no
 # notice. These are the hours (Eastern) the drawn weeks are swept for anything
 # newly posted, on top of the kickoff wakes above. Jose asked for this on
 # Sep 15, 2026 after telling us by hand, again, that the props were up.
-SWEEP_ET = (9, 12, 15, 18, 21)
+# Three a day now, not five: the noon and six o'clock sweeps asked nobody for
+# a price -- fill_week.py sat them out -- and the kickoff wakes already stand
+# in front of every game, so they were the rest of the list read again for
+# nothing (Jose, Sep 23, 2026: "five sweeps is overkill").
+SWEEP_ET = (9, 15, 21)
+# the three of those that ask DraftKings for prices. A week is a hundred and
+# twenty-eight prices -- a moneyline each club, 1+ and 2+ passing touchdowns
+# and an anytime touchdown each passer, across sixteen games -- and fill_week.py
+# now skips any game whose eight are already held. So the asking empties itself
+# out over the week, and three times a day is enough to catch each market the
+# morning, afternoon or evening it goes up (Jose, Sep 22, 2026: "no that
+# overkill ... three times a day until its full, then stop"). The kickoff wakes
+# still run it regardless: a late starter swap makes a price we hold the wrong
+# man's, and that cannot wait for the next sweep.
+PRICE_ET = (9, 15, 21)
 # the hub's own reading, once a day before the football starts. Its thirteen
 # pages are slow and none of them price anything, so they are kept off the
 # kickoff wakes and never compete with a board that is about to lock. Left at
 # hand-run they went two weeks stale: the sheets, splits, teasers and team
 # spreads were still reading Sep 4 on Sep 18 (Jose, Sep 18, 2026)
 HUB_ET = (10,)
+# the rankings, once a day, on the nine o'clock sweep: the AP poll for the
+# college cards, then the UFC's own table and the flattened copy a bout card
+# reads its number from. A vote moves once a week, so asking more often only
+# asks. Left hand-run, nothing on the schedule had ever refreshed them
+# (Jose, Sep 23, 2026: "put the rankings on the schedule, once a day").
+RANKS_ET = (9,)
+RANK_JOBS = ("cfb_rank.py", "ufc_rankings.py", "fighter_ranks.py")
 HUB = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HUB_JOBS = ("hub_props", "hub_sheets", "hub_sheet_games", "hub_team_sheets",
             "hub_splits", "hub_team_splits", "hub_streaks", "hub_consistency",
@@ -162,6 +187,47 @@ def hub_due(seen):
         if key not in seen and 0 <= late < SLOT:
             out.append((key, "hub read %d:00 ET" % h, 0))
     return out
+
+
+def ranks_due(seen):
+    """The daily rankings read, if this is the hour for it."""
+    from zoneinfo import ZoneInfo
+    et = NOW.astimezone(ZoneInfo("America/New_York"))
+    out = []
+    for h in RANKS_ET:
+        wake = et.replace(hour=h, minute=0, second=0, microsecond=0)
+        key = "ranks@" + wake.strftime("%Y-%m-%d %H")
+        late = (et - wake).total_seconds() / 60.0
+        if key not in seen and 0 <= late < SLOT:
+            out.append((key, "rankings %d:00 ET" % h, 0))
+    return out
+
+
+def read_ranks():
+    """The three ranking jobs, in order. Each is a second of fetching, so they
+       run in line rather than being let go of. One failing never stops the
+       rest -- except that fighter_ranks.py only flattens what ufc_rankings.py
+       just wrote, so it is held back when that read failed or came back with
+       no divisions: flattening an empty table would wipe every number off
+       the bout cards."""
+    ufc_ok = False
+    for job in RANK_JOBS:
+        if job == "fighter_ranks.py" and not ufc_ok:
+            log("   fighter_ranks: ufc_rankings did not read, the old numbers kept")
+            continue
+        try:
+            r = subprocess.run([sys.executable, D + "/build/" + job],
+                               capture_output=True, text=True, cwd=D, timeout=90)
+        except Exception as e:
+            log("   %s: did not run (%s)" % (job[:-3], type(e).__name__))
+            continue
+        for line in (r.stdout + r.stderr).strip().splitlines()[-3:]:
+            log("   %s: %s" % (job[:-3], line))
+        if job == "ufc_rankings.py" and r.returncode == 0:
+            try:
+                ufc_ok = bool(json.load(open(D + "/data/ufc_rankings.json")))
+            except Exception:
+                ufc_ok = False
 
 
 def read_hub():
@@ -209,12 +275,69 @@ def price_drawn():
     # wire.py rides with them: who is hurt, by ESPN id, written to
     # site/wire.json so the ledger can put a plaster by his name -- the wire
     # outranks the record (Jose, Sep 21, 2026)
+    # kicks.py goes early, because everything after it reads the clock: a
+    # college week is drawn before its kickoffs are set, and the networks
+    # pick them six to twelve days out. Until they do ESPN files the game
+    # at 04:00Z, and left unread the board printed midnight as a real slot
+    # -- thirty-three of week four's games under one heading. By the time
+    # anybody looked the times were long since posted and nothing was
+    # asking (Jose, Sep 22, 2026: "who in the fuck is playing at 12 am").
+    # It never moves a game that has already started.
+    # depth.py rides directly behind wire.py, which is the order the rule
+    # needs: the chart names each club's starter and the wire can veto him.
+    # Left hand-run it went seventeen days stale and the board drew Cooper
+    # Rush for Atlanta while ESPN's chart said Michael Penix Jr. (Jose,
+    # Sep 22, 2026: "fix the ledger for injuries and depth charts weekly")
+    # and starters.py behind that, which is why these three moved to the front
+    # of the list: it decides who each card draws, and both ledger.py and
+    # fill_week.py build on that answer. Run after them, as they first were,
+    # the ledger's own week is a preview of men who are not playing and the
+    # prices under a swapped card are the other man's
+    # (Jose, Sep 22, 2026: "a swap changes whose props we draw")
+    # dk_sitemap.py runs ahead of it and does the same job the other way
+    # round: DraftKings publishes a page for every NFL player it has ever
+    # held, with the id written on the address, so a starter is pinned the
+    # day his club is drawn instead of the night somebody prices him. Five
+    # days out from week three that was the difference between eight of the
+    # thirty-two and all thirty-two. College is not in that file, so college
+    # still waits for a price.
+    # dk_people.py runs before anything is priced, because everything after
+    # it places a price by the number it writes down. DraftKings prices only
+    # the men who are playing -- of the six quarterbacks on Atlanta's and
+    # Green Bay's charts it prices the two starters and nobody else -- so a
+    # backup has no id until the week he starts. That is the week this has
+    # to run: Michael Penix Jr. was a backup until Tua went out, and a man
+    # who is not pinned is not priced at all (Jose, Sep 22, 2026).
+    # cfb_ml.py rides behind fill_week.py, which is the only order that
+    # works: fill_week prices a college game while it is still to kick, and
+    # cfb_ml fills what is left from ESPN's stored closing line -- never
+    # over a price the board already holds. Left hand-run, a college
+    # Saturday that passed before anybody looked kept its empty slots
+    # for good (Jose, Sep 22, 2026: "is it wired so i dont have to tell you
+    # again?").
+    # covered.py is last and fetches nothing. It reads what the sweep has
+    # just written and says, per league, how much of the week in front of
+    # us has a kickoff, a starter, a price and a price on the men -- naming
+    # what is missing rather than counting it. Every script above reports
+    # its own success, which is how college week four came to draw midnight
+    # for thirty-three games and the Dolphins' record on every college card
+    # while every line of the log read fine (Jose, Sep 22, 2026: "wire it so
+    # it runs and updates and we never have to ask again").
     # ptd10.py rides at the back and touches nothing the board reads: it takes
     # the ledger and the prices the jobs above have just written and leaves one
     # note behind, notes/ptd10-week-N.md -- who to take for one passing
     # touchdown and why (Jose, Sep 20, 2026: "do not change how we do the site,
     # just make a separate note")
-    for job in ("settle.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "keep_prices.py", "fill_fights.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "records_mma.py", "wire.py", "ptd10.py"):
+    # ask_fold.py rides behind the two pricers: whatever a double tap read
+    # between sweeps is kept on the site, and this lays it into the price
+    # files -- only where a slot is empty, never over a price the sweep just
+    # read (Jose, Sep 23, 2026: double tap fetches the missing prices).
+    from zoneinfo import ZoneInfo
+    hour = NOW.astimezone(ZoneInfo("America/New_York")).hour
+    for job in ("settle.py", "played_qb.py", "kicks.py", "wire.py", "depth.py", "starters.py", "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "ask_fold.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "mirror.py", "records_mma.py", "ptd10.py", "covered.py"):
+        if job == "fill_week.py" and hour in SWEEP_ET and hour not in PRICE_ET:
+            log("   fill_week: not a pricing hour (%d:00 ET), nothing asked" % hour)
+            continue
         r = subprocess.run([sys.executable, D + "/build/" + job] + (["--dry"] if DRY else []),
                            capture_output=True, text=True)
         for line in (r.stdout + r.stderr).strip().splitlines():
@@ -374,6 +497,7 @@ if "--if-due" in sys.argv:
     else:
         drawn = sweeps_due(seen)
     hub = hub_due(seen)
+    ranks = ranks_due(seen)
     late = after_due(board_events(), seen)
     running = card_running()
     if late:
@@ -392,14 +516,14 @@ if "--if-due" in sys.argv:
             log("unsettled: %s %s is final and has no result" % (lg, nm))
         late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
                         owed[0][0] == "mma")]
-    if not hit and not drawn and not late and not hub and not running:
+    if not hit and not drawn and not late and not hub and not ranks and not running:
         os._exit(0)          # no interpreter shutdown to get stuck in
     log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
         "".join("%s, %d min after" % (n or "?", m) for _, n, m, _f in late) +
-        "".join(n for _, n, _ in hub))
+        "".join(n for _, n, _ in hub + ranks))
     # a rehearsal must not spend a real wake
     if not DRY:
-        for key, _, _ in hit + drawn + hub:
+        for key, _, _ in hit + drawn + hub + ranks:
             seen[key] = NOW.isoformat()
         for key, _, _, _f in late:
             seen[key] = NOW.isoformat()
@@ -413,11 +537,33 @@ if "--if-due" in sys.argv:
             for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
                 log("   fill_fights: " + line)
     if drawn:
+        # The league posts its inactives ninety minutes before kickoff, so the
+        # sixty-minute wake is the first one that can read that list instead of
+        # guessing at it, and the thirty is the confirm. Both ask ESPN again
+        # and settle this one game's passer before the prices are read for him
+        # (Jose, Sep 22, 2026: "60-minute wake for injury per game ... the
+        # biggest thing is that I don't want to have to do it").
+        for _key, _name, _mins in drawn:
+            if _mins not in (60, 30) or not _key.startswith("SCHED:"):
+                continue
+            gid = _key.split(":", 1)[1].split("@")[0]
+            log("inactives wake (%d min out): %s" % (_mins, _name))
+            for job in ("wire.py", "depth.py"):
+                r = subprocess.run([sys.executable, D + "/build/" + job],
+                                   capture_output=True, text=True, cwd=D)
+                for line in (r.stdout + r.stderr).strip().splitlines()[-3:]:
+                    log("   %s: %s" % (job[:-3], line))
+            r = subprocess.run([sys.executable, D + "/build/starters.py",
+                                "--game", gid], capture_output=True, text=True, cwd=D)
+            for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
+                log("   starters: " + line)
         price_drawn()
     for _k, _n, _m, _fight in late:
         settle_late(_fight)
     if hub and not DRY:
         read_hub()
+    if ranks and not DRY:
+        read_ranks()
     if not hit:
         sys.exit(0)
 live = [e for e in src["events"]

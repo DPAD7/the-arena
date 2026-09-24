@@ -19,11 +19,13 @@
            python3 fill_fights.py --dry
 """
 import datetime as dt
+import fcntl
 import json
 import os
 import re
 import subprocess
 import sys
+import unicodedata
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
@@ -55,6 +57,48 @@ def ours(text):
     for theirs, mine in FN.items():
         text = text.replace(theirs, mine)
     return text
+
+
+def fold(text):
+    """The same name without its accents. DraftKings writes Norbert Novenyi
+       Jr. where the board writes Norbert Novenyi Jr. with the accents on, and
+       matched as written those are two men -- his whole side of the bout came
+       back empty, no moneyline, no KO, no SUB, no DEC, while Theo Haig's
+       landed (Jose, Sep 22, 2026, with the card in front of him).
+
+       This is not a guess about who somebody meant: stripping the marks off
+       a letter is a rule, and the two spellings are the same letters either
+       way. Anything that is genuinely a different name still misses, and
+       fighter_names.json is still where a real difference is written down."""
+    return "".join(c for c in unicodedata.normalize("NFD", text or "")
+                   if unicodedata.category(c) != "Mn")
+
+
+def dig(mkts, market):
+    """A market by name, then by the same name folded."""
+    got = mkts.get(market)
+    if got is not None:
+        return got
+    want = fold(market)
+    for k, v in mkts.items():
+        if fold(k) == want:
+            return v
+    return None
+
+
+def pick(mkts, market, label):
+    """One selection: by label, then by the same label folded."""
+    by = dig(mkts, market)
+    if not by:
+        return None
+    got = by.get(label)
+    if got:
+        return got
+    want = fold(label)
+    for k, v in by.items():
+        if fold(k) == want:
+            return v
+    return None
 
 
 def pull(eid):
@@ -100,7 +144,7 @@ def dk_bouts():
 def rounds_of(mkts):
     """How far the bout can go, read off the rounds the book prices."""
     top = 3
-    for lab in (mkts.get("Winning Round") or {}):
+    for lab in (dig(mkts, "Winning Round") or {}):
         m = re.match(r"Round (\d)$", lab)
         if m:
             top = max(top, int(m.group(1)))
@@ -112,7 +156,7 @@ def rounds_of(mkts):
 
 def one(mkts, market, label):
     """One selection, or None -- the book does not price every one."""
-    got = (mkts.get(market) or {}).get(label)
+    got = pick(mkts, market, label)
     return list(got) if got and got[0] else None
 
 
@@ -176,7 +220,64 @@ def sheet(mkts, left, right, nr):
     return e
 
 
+# Two things run this now: the sweep, and watch.py every five minutes while a
+# card is live, to follow the bell times DraftKings moves as the card runs. Two
+# at once would race each other over prices.json, so the second one waits its
+# turn rather than overlapping (Jose, Sep 22, 2026: "is the watcher going to
+# affect anything where we're pulling odds").
+LOCK = os.path.join(D, "logs", "fill_fights.lock")
+
+
+def only_one():
+    os.makedirs(os.path.dirname(LOCK), exist_ok=True)
+    fh = open(LOCK, "w")
+    fcntl.flock(fh, fcntl.LOCK_EX)
+    return fh
+
+
+def times_only():
+    """Their clock, and nothing else.
+
+       While a card is running the thing that goes stale is not the price, it
+       is the bell: a man knocked out in the first round moves everything
+       behind him, and the board would still be saying half past seven (Jose,
+       Sep 22, 2026: "we aren't looking for odds, we are looking for a time").
+
+       Two calls, one a league, against the forty-odd an event's categories
+       cost -- so this can run every few minutes all night without asking
+       DraftKings for a single price."""
+    held = only_one()
+    s = pagefile.read()
+    m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", s, re.S)
+    fights = json.loads(m.group(1))
+    theirs = dk_bouts()
+    kicks, moved = {}, []
+    for f in fights:
+        key = (whoname.key(f[3]), whoname.key(f[5]))
+        got = theirs.get(key)
+        if not got or not got[1]:
+            continue
+        if got[1] != f[2]:
+            moved.append((f[3], f[5], f[2][11:16], got[1][11:16]))
+        kicks[str(f[1])] = got[1]
+    book = pricefile.read()
+    book.setdefault("KICKS", {}).update(kicks)
+    pricefile.write(book)
+    print("their clock: %d bouts, %d moved" % (len(kicks), len(moved)))
+    for a, b, was, now in moved[:10]:
+        print("   %-20s v %-20s %s -> %s" % (a, b, was, now))
+    if moved:
+        subprocess.run(["npx", "wrangler", "pages", "deploy", ".",
+                        "--project-name=the-arenasports", "--branch=main"],
+                       cwd=D + "/site", capture_output=True, text=True, timeout=300)
+        print("deployed")
+    return 0
+
+
 def main():
+    if "--times" in sys.argv:
+        return times_only()
+    held = only_one()          # released when this run ends
     s = pagefile.read()
     m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", s, re.S)
     fights = json.loads(m.group(1))
@@ -195,10 +296,10 @@ def main():
         if not mkts:
             print("  %-22s v %-22s nothing came back" % (left, right))
             continue
-        for lab, got in (mkts.get("Moneyline") or {}).items():
-            if lab == left:
+        for lab, got in (dig(mkts, "Moneyline") or {}).items():
+            if fold(lab) == fold(left):
                 f[8], f[9] = got
-            elif lab == right:
+            elif fold(lab) == fold(right):
                 f[10], f[11] = got
         if when and when != f[2]:
             # logged, never quietly swapped: the row keeps ESPN's time and the

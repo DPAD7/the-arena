@@ -55,7 +55,12 @@ def write(new, was=None):
 
 
 DOC = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-       '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
+       # it is opened from the home screen and used as an app, and an app
+       # does not pinch-zoom (Jose, Sep 22, 2026: "I can still zoom in when
+       # you normally can't zoom in on apps"). viewport-fit=cover is what
+       # lets the safe-area insets the two bars are placed with mean anything
+       '<meta name="viewport" content="width=device-width, initial-scale=1, '
+       'maximum-scale=1, user-scalable=no, viewport-fit=cover">\n'
        '<meta name="robots" content="noindex">\n'
        # video.twimg.com answers 403 to any request that names another site as its referer
        '<meta name="referrer" content="no-referrer">\n</head>\n<body>\n')

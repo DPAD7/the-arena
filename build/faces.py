@@ -33,6 +33,18 @@ def main():
             for r in rows:
                 if str(r[2]).isdigit():
                     want.append(("nfl", str(r[2])))     # anybody who threw, not just the named two
+    # The first three of every club's quarterback room, whether or not a card
+    # draws them. A swap is settled sixty minutes before kickoff and there is
+    # no time to go fetching a picture then: Michael Penix Jr. took Atlanta's
+    # card and the board had no face for him, because nothing had ever drawn
+    # him (Jose, Sep 22, 2026: "lets get the pictures for top 3 qb for each
+    # team we dont have to place it but just incase of injury").
+    dep = D + "/site/depth.json"
+    if os.path.exists(dep):
+        for room in json.load(open(dep)).values():
+            for q in (room.get("qbs") or [])[:3]:
+                if str(q.get("id")).isdigit():
+                    want.append(("nfl", str(q["id"])))
     want = sorted(set(want))
     os.makedirs(D + "/site/faces/nfl", exist_ok=True)
     os.makedirs(D + "/site/faces/college-football", exist_ok=True)
@@ -62,11 +74,27 @@ def main():
                 open(png, "wb").write(r.content)
                 # and the same picture as webp, which is what the board is
                 # served: a fifth of the bytes for the same face
+                # built in memory and written whole, never saved straight to
+                # its own name: a conversion that threw half way left a
+                # zero-byte .webp behind, and the face route serves the webp
+                # before the png, so the man drew nothing at all. Michael
+                # Penix Jr. took Atlanta's card with an empty one
+                # (Jose, Sep 22, 2026: "why dont we have an img for penix jr")
+                webp = png[:-4] + ".webp"
                 try:
+                    import io
                     from PIL import Image
-                    Image.open(png).convert("RGBA").save(png[:-4] + ".webp", "WEBP",
+                    buf = io.BytesIO()
+                    Image.open(png).convert("RGBA").save(buf, "WEBP",
                                                         quality=82, method=6)
+                    if buf.tell() < 500:
+                        raise ValueError("wrote %d bytes" % buf.tell())
+                    open(webp, "wb").write(buf.getvalue())
                 except Exception as e:
+                    # and an old empty one is taken away rather than left to
+                    # be served in the png's place
+                    if os.path.exists(webp) and os.path.getsize(webp) < 500:
+                        os.remove(webp)
                     print("   %s stayed a png: %s" % (pid, e))
                 return True
         except Exception:

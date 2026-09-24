@@ -24,13 +24,25 @@ export async function onRequest({ request, env }) {
      its png and served in its place, under the png's own address so nothing
      that asks for a face has to know (Jose, Sep 21, 2026: "loads faster").
      A man we only hold as a png still answers. */
+  /* An empty file is not a picture. A webp conversion that threw half way
+     left a zero-byte file behind and this served it, 200 and all, so the man
+     drew nothing where his face should be -- Michael Penix Jr. took Atlanta's
+     card with one (Jose, Sep 22, 2026: "why dont we have an img for penix
+     jr"). A face is 12KB at the smallest, so anything under 500 bytes is a
+     failure, not a picture. */
+  const real = (res) => {
+    const t = res.headers.get("content-type") || "";
+    const n = parseInt(res.headers.get("content-length") || "", 10);
+    if (!res.ok || !/^image\//i.test(t)) return false;
+    return isNaN(n) || n >= 500;
+  };
   let r = await env.ASSETS.fetch(new URL("/faces/" + path.replace(/\.png$/, ".webp"), u.origin));
   let type = r.headers.get("content-type") || "";
-  if (!r.ok || !/^image\//i.test(type)) {
+  if (!real(r)) {
     r = await env.ASSETS.fetch(new URL("/faces/" + path, u.origin));
     type = r.headers.get("content-type") || "";
   }
-  if (!r.ok || !/^image\//i.test(type)) {
+  if (!real(r)) {
     return new Response("", { status: 404, headers: { "cache-control": "no-store" } });
   }
   return new Response(r.body, {

@@ -99,7 +99,16 @@ def slim(d, v, qbids):
 def one(g):
     lg, eid, kick, aq, hq = g
     path = os.path.join(OUT, eid + ".json")
-    if T(kick) > NOW - dt.timedelta(hours=3) or (os.path.exists(path) and not FORCE):
+    # a game is asked about the moment it has kicked off, not three hours
+    # later. The old guard was there because nothing watched a game while it
+    # was being played, so the first sensible moment to ask was long after the
+    # whistle -- which is why a Thursday night game read final on the page and
+    # not in our own record until the small hours (Jose, Sep 22, 2026: "why
+    # the fuck are we asking again 3 1/2 and 5 1/2"). watch.py now asks every
+    # thirty seconds while a game is live, so the answer arrives at the
+    # whistle; a game that is not over yet answers "not final" and costs one
+    # call. A game already written is never asked about again.
+    if T(kick) > NOW or (os.path.exists(path) and not FORCE):
         return None
     d = get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, eid))
     if not d:

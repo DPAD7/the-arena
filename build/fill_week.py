@@ -41,6 +41,41 @@ HORIZON = NOW + dt.timedelta(days=8)
 LEAGUE = {"nfl": 88808, "ncaaf": 87637}
 
 
+def full(eid):
+    """The eight a game is worth: a moneyline each club, 1+ and 2+ passing
+       touchdowns each passer, an anytime touchdown each passer. Once all
+       eight are held there is nothing left to ask DraftKings about that
+       game, so it is not asked about again (Jose, Sep 22, 2026: "so we stop
+       running to fetch the ones we have already... if we only get 1 we would
+       have to search for 127").
+
+       A week is a hundred and twenty-eight of these across sixteen games.
+       Early in the week almost none are held and every game is asked about;
+       by Saturday the asking has stopped on its own."""
+    f = os.path.join(D, "site", "prices", "%s.json" % eid)
+    if not os.path.exists(f):
+        return False
+    try:
+        d = json.load(open(f))
+    except ValueError:
+        return False
+    ml = d.get("ml") or []
+    if len(ml) < 4 or not ml[0] or not ml[2]:
+        return False
+    pr = d.get("props") or {}
+    for k, rungs in (("ptd", (0, 1)), ("atd", (0,))):
+        v = pr.get(k) or []
+        if len(v) < 2:
+            return False
+        for side in v:
+            if not isinstance(side, list):
+                return False
+            for r in rungs:
+                if len(side) <= r or not side[r]:
+                    return False
+    return True
+
+
 def T(x):
     return dt.datetime.fromisoformat(x.replace("Z", "+00:00"))
 
@@ -61,7 +96,16 @@ def pull(path):
         who = (sel.get("participants") or [{}])[0]
         rows.append({"market": m.get("name") or "", "label": sel.get("label") or "",
                      "odds": (sel.get("displayOdds") or {}).get("american") or "",
-                     "oid": sel.get("id") or "", "who": who.get("name") or ""})
+                     "oid": sel.get("id") or "", "who": who.get("name") or "",
+                     # the handicap on a selection: the rung a touchdown market
+                     # is set at, and nothing else -- spread and total are not kept
+                     "points": sel.get("points"),
+                     # his DraftKings number, and which half of the fixture he
+                     # is on. The name is not read at all now: a man is his id
+                     # (Jose, Sep 22, 2026: "why are we guessing name they wont
+                     # fucking change")
+                     "pid": str(who.get("id") or ""),
+                     "role": who.get("venueRole") or ""})
     return rows
 
 
@@ -109,6 +153,130 @@ def side_of(label, away_w, home_w):
     return None
 
 
+# The three steps below were the body of main() until the double tap needed
+# them one game at a time. ask_dk.py prices the games the board asks about
+# with exactly these, so a price read on a tap and a price read by the sweep
+# are the same reading of the same thing (Jose, Sep 23, 2026).
+
+def tie_events(league, events, club, cfb, unsettled=None):
+    """DraftKings' events keyed by (away, home, day) in the board's own
+       abbreviations, through the register -- never by a guess."""
+    keyed = {}
+    for e in events:
+        # college first: DraftKings' "Pittsburgh" is PITT on a Saturday, and the NFL
+        # register answering PIT left twelve games unpriced on Sep 16, 2026
+        a = (cfb.get(e["away"]) or club.get(e["away"])) if league == "ncaaf" else (club.get(e["away"]) or cfb.get(e["away"]))
+        h = (cfb.get(e["home"]) or club.get(e["home"])) if league == "ncaaf" else (club.get(e["home"]) or cfb.get(e["home"]))
+        if a and h:
+            keyed[(a, h, e["start"][:10])] = e
+        elif league == "nfl" and unsettled is not None:
+            unsettled.append(e["away"] + " @ " + e["home"])
+    return keyed
+
+
+def event_for(g, league, keyed, events, club, cfb, loose=True):
+    """The DraftKings event a schedule row stands for.
+
+       Returns (event, how). how is None for a straight tie, "flipped" for a
+       neutral site DraftKings lists the other way round, "by_name" for the
+       college prefix fallback (only when loose); with no event it is
+       "unoffered" (neither club is on their board) or "unsettled"."""
+    away, home, kick = g[3], g[4], T(g[2])
+    e = keyed.get((away, home, g[2][:10])) or keyed.get((away, home, (kick - dt.timedelta(days=1)).strftime("%Y-%m-%d")))
+    if e:
+        return e, None
+    # a neutral-site game DraftKings lists the other way round from ESPN
+    # (Kansas @ Arizona State at Wembley, Sep 19, 2026). Taken, and said.
+    r = keyed.get((home, away, g[2][:10]))
+    if r:
+        return dict(r, away=r["home"], home=r["away"]), "flipped"
+    if loose and league == "ncaaf":
+        # the register may not hold the college spelling: same day, same abbreviation prefix
+        cands = [x for x in events if x["start"][:10] == g[2][:10]
+                 and x["away"].split()[0].upper() == away and x["home"].split()[0].upper() == home]
+        if len(cands) == 1:
+            return cands[0], "by_name"
+    offered = {x for ev in events for x in (cfb.get(ev["away"]) or club.get(ev["away"]), cfb.get(ev["home"]) or club.get(ev["home"]))}
+    if away not in offered and home not in offered:
+        return None, "unoffered"
+    return None, "unsettled"
+
+
+def price_event(e, qbs_id, league, dkpeople):
+    """One DraftKings event, read: the moneyline as {side: (price, oid)},
+       and the PROPS entry -- ptd, atd, h2h -- for the two passers named."""
+    qbs_id = [str(x) for x in qbs_id]
+    ml, entry = {}, {}
+    # who a price belongs to, by number. dk_people.json pins a
+    # DraftKings id to ours, once, under a rule that cannot pick the
+    # wrong man -- see build/dk_people.py. An id that is not pinned is
+    # not priced: an unknown man draws nothing rather than somebody
+    # else's price.
+    def his_side(r):
+        who = dkpeople.get(r.get("pid") or "")
+        if not who:
+            return None
+        for i in (0, 1):
+            if str(qbs_id[i]) == str(who["espn"]):
+                return i
+        return None
+    # the game lines: the moneyline is the only one we keep. The board
+    # is about the passer, and spread and total are game numbers nobody
+    # on the card is asked about (Jose, Sep 22, 2026: "spread / total
+    # dont do this ... just in general"). The one-passing-touchdown rule
+    # still reads both, from ESPN, in ptd10.py.
+    lines = pull("/sportscontent/dkusmd/v1/events/%s/categories/492" % e["id"])
+    for r in lines:
+        if r["market"] != "Moneyline":
+            continue
+        i = side_of(r["label"], e["away"], e["home"])
+        if i is not None:
+            ml[i] = (american(r["odds"]), r["oid"])
+    # 1+, 2+ and 3+ passing touchdowns, the man found by his number
+    ptd = [[None, None, None], [None, None, None]]
+    for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1000" % e["id"]):
+        if not r["market"].endswith("Passing Touchdowns") or r["label"] not in ("1+", "2+", "3+"):
+            continue
+        i = his_side(r)
+        if i is not None:
+            ptd[i][int(r["label"][0]) - 1] = [american(r["odds"]), r["oid"]]
+    entry["ptd"] = ptd
+    # anytime touchdowns for both leagues: the college card draws them, the
+    # NFL card does not, but the ledger tracks them (Jose, Sep 16, 2026:
+    # "I want all the ptd and atd that are available and we will just track them all")
+    # anytime, 2+ and 3+ touchdowns. The market name is matched whole:
+    # "Anytime TD Scorer - 1st Half" begins the same way, and taking it
+    # put a first-half price on the card as if it were the game's
+    # (Jose, Sep 22, 2026 -- Chambliss read +255, which is his first
+    # half; anytime is +125).
+    RUNGS = {"Anytime TD Scorer": 0, "2+ TDs": 1, "3+ TDs": 2}
+    atd = [[None, None, None], [None, None, None]]
+    for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1003" % e["id"]):
+        slot = RUNGS.get(r["market"])
+        if slot is None:
+            continue
+        i = his_side(r)
+        if i is not None:
+            atd[i][slot] = [american(r["odds"]), r["oid"]]
+    entry["atd"] = atd
+    # the head to head, both leagues (Jose, Sep 17, 2026: college carries it
+    # too, so the two boards read the same). College's 1185 also holds the
+    # receivers and the spread version, so only the passers' moneyline counts.
+    h2h = [None, None]
+    # served under the event, or league-wide (where it sat last week)
+    rows = pull("/sportscontent/dkusmd/v1/events/%s/categories/1185" % e["id"])
+    if not rows and league == "nfl":
+        rows = [r for r in league_h2h(e["id"])]
+    for r in rows:
+        if "Passing Yards Moneyline" not in (r["market"] or ""):
+            continue
+        i = his_side(r)
+        if i is not None:
+            h2h[i] = [american(r["odds"]), r["oid"]]
+    entry["h2h"] = h2h
+    return ml, entry
+
+
 def main():
     s = pagefile.read()
     club, person = register()
@@ -120,62 +288,45 @@ def main():
     new_pins = {}
     props = {}
     unsettled, by_name, flipped, unoffered = [], [], [], []
+    held = []
     both_ways = []
     sched_new = {}
+    # DraftKings' number for a man, pinned to ours by build/dk_people.py
+    dkp = os.path.join(D, "data", "dk_people.json")
+    dkpeople = json.load(open(dkp)) if os.path.exists(dkp) else {}
+    print("dk_people.json: %d men pinned" % len(dkpeople))
+
     for league, var in (("nfl", "SCHED"), ("ncaaf", "CFB")):
         arr = json.loads(re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S).group(1))
         games = [g for g in arr if NOW < T(g[2]) <= HORIZON]
         if not games:
             continue
         events = dk_events(league)
-        keyed = {}
         # college spellings come from ESPN's own scoreboard (cfb_names.json), the
         # same source the board's abbreviations come from
         cfb = json.load(open(D + "/data/cfb_names.json")) if league == "ncaaf" else {}
-        for e in events:
-            # college first: DraftKings' "Pittsburgh" is PITT on a Saturday, and the NFL
-            # register answering PIT left twelve games unpriced on Sep 16, 2026
-            a = (cfb.get(e["away"]) or club.get(e["away"])) if league == "ncaaf" else (club.get(e["away"]) or cfb.get(e["away"]))
-            h = (cfb.get(e["home"]) or club.get(e["home"])) if league == "ncaaf" else (club.get(e["home"]) or cfb.get(e["home"]))
-            if a and h:
-                keyed[(a, h, e["start"][:10])] = e
-            elif league == "nfl":
-                unsettled.append(e["away"] + " @ " + e["home"])
+        keyed = tie_events(league, events, club, cfb, unsettled)
         print("%s: %d games to kick, %d DraftKings events, %d tied by the register"
               % (league.upper(), len(games), len(events), len(keyed)))
         for g in games:
             eid, kick, away, home = g[1], T(g[2]), g[3], g[4]
-            e = keyed.get((away, home, g[2][:10])) or keyed.get((away, home, (kick - dt.timedelta(days=1)).strftime("%Y-%m-%d")))
-            if not e:
-                # a neutral-site game DraftKings lists the other way round from ESPN
-                # (Kansas @ Arizona State at Wembley, Sep 19, 2026). Taken, and said.
-                r = keyed.get((home, away, g[2][:10]))
-                if r:
-                    e = dict(r, away=r["home"], home=r["away"])
-                    flipped.append("%s/%s (DraftKings writes %s @ %s)" % (away, home, r["away"], r["home"]))
-            if not e and league == "ncaaf":
-                # the register may not hold the college spelling: same day, same abbreviation prefix
-                cands = [x for x in events if x["start"][:10] == g[2][:10]
-                         and x["away"].split()[0].upper() == away and x["home"].split()[0].upper() == home]
-                e = cands[0] if len(cands) == 1 else None
-                if e:
-                    by_name.append(away + "/" + home)
-            if not e:
-                offered = {x for ev in events for x in (cfb.get(ev["away"]) or club.get(ev["away"]), cfb.get(ev["home"]) or club.get(ev["home"]))}
-                if away not in offered and home not in offered:
-                    unoffered.append("%s/%s" % (away, home))
-                else:
-                    unsettled.append("%s/%s (%s)" % (away, home, league))
+            e, how = event_for(g, league, keyed, events, club, cfb)
+            if how == "flipped":
+                flipped.append("%s/%s (DraftKings writes %s @ %s)" % (away, home, e["home"], e["away"]))
+            elif how == "by_name":
+                by_name.append(away + "/" + home)
+            elif how == "unoffered":
+                unoffered.append("%s/%s" % (away, home))
                 continue
-            entry = {}
-            # moneyline
-            ml = [r for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/492" % e["id"]) if r["market"] == "Moneyline"]
-            for r in ml:
-                i = side_of(r["label"], e["away"], e["home"])
-                if i is not None:
-                    sched_new[(var, eid, i)] = (american(r["odds"]), r["oid"])
+            elif how == "unsettled":
+                unsettled.append("%s/%s (%s)" % (away, home, league))
+                continue
+            if full(str(eid)):
+                held.append("%s/%s" % (away, home))
+                continue
             # the two passers, by id through person_name; else the identical written name
             qbs = [(g[5], str(g[6])), (g[7], str(g[8]))]
+            qbs_id = [str(g[6]), str(g[8])]
             def is_him(written, i):
                 name, pid = qbs[i]
                 if not name:
@@ -185,6 +336,16 @@ def main():
                 bare = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", written or "")
                 if person.get(bare) == pid or pins.get(bare) == pid:
                     return True
+                # A written name is enough in the NFL, where there are thirty-two
+                # rosters and the two passers in front of us are the only men it
+                # could be. It is not enough in college. Matched by name there,
+                # a third of the anytime-touchdown prices we took were shorter
+                # than -150 -- running back prices on a quarterback's card,
+                # against one in seventy-two in the NFL. College is matched by
+                # id or not at all (Jose, Sep 22, 2026: "we should have NFL and
+                # CFB in different").
+                if league == "ncaaf":
+                    return False
                 # a suffix, an accent or a full stop does not make another man:
                 # theirs is Billy Edwards where ours is Billy Edwards Jr., and
                 # the two passers in front of us are the only men it could be
@@ -196,41 +357,10 @@ def main():
                         return False
                     return True
                 return False
-            ptd = [[None, None], [None, None]]
-            for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1000" % e["id"]):
-                if not r["market"].endswith("Passing Touchdowns") or r["label"] not in ("1+", "2+"):
-                    continue
-                for i in (0, 1):
-                    if is_him(r["who"], i):
-                        ptd[i][int(r["label"][0]) - 1] = [american(r["odds"]), r["oid"]]
-            entry["ptd"] = ptd
-            # anytime touchdowns for both leagues: the college card draws them, the
-            # NFL card does not, but the ledger tracks them (Jose, Sep 16, 2026:
-            # "I want all the ptd and atd that are available and we will just track them all")
-            atd = [[None, None], [None, None]]
-            for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1003" % e["id"]):
-                slot = 0 if r["market"] == "Anytime TD Scorer" else 1 if r["market"] == "2+ TDs" else None
-                if slot is None:
-                    continue
-                for i in (0, 1):
-                    if is_him(r["label"], i) or is_him(r["who"], i):
-                        atd[i][slot] = [american(r["odds"]), r["oid"]]
-            entry["atd"] = atd
-            # the head to head, both leagues (Jose, Sep 17, 2026: college carries it
-            # too, so the two boards read the same). College's 1185 also holds the
-            # receivers and the spread version, so only the passers' moneyline counts.
-            h2h = [None, None]
-            # served under the event, or league-wide (where it sat last week)
-            rows = pull("/sportscontent/dkusmd/v1/events/%s/categories/1185" % e["id"])
-            if not rows and league == "nfl":
-                rows = [r for r in league_h2h(e["id"])]
-            for r in rows:
-                if "Passing Yards Moneyline" not in (r["market"] or ""):
-                    continue
-                for i in (0, 1):
-                    if is_him(r["label"], i) or is_him(r["who"], i):
-                        h2h[i] = [american(r["odds"]), r["oid"]]
-            entry["h2h"] = h2h
+            ml, entry = price_event(e, qbs_id, league, dkpeople)
+            for i, v in ml.items():
+                sched_new[(var, eid, i)] = v
+            ptd = entry["ptd"]
             props[eid] = entry
             got = sum(1 for side in ptd for x in side if x)
             print("  %-9s dk %-9s ML %s  PTD %d/4  ATD %d/4%s" % (away + "/" + home, e["id"],
@@ -239,6 +369,9 @@ def main():
                   "  H2H %d/2" % sum(1 for x in entry.get("h2h", []) if x)))
     if unsettled:
         print("not tied to a DraftKings event (%d): %s" % (len(unsettled), "; ".join(sorted(set(unsettled))[:12])))
+    if held:
+        print("already complete, not asked about again (%d games, %d prices held): %s"
+              % (len(held), len(held) * 8, ", ".join(held[:10]) + (" ..." if len(held) > 10 else "")))
     if flipped:
         print("home and away disagree with DraftKings, board order kept (%d): %s" % (len(flipped), "; ".join(flipped)))
     if unoffered:

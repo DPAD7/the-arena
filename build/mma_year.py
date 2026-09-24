@@ -132,7 +132,14 @@ def main():
         if not comps:
             continue
         cards.append([week_of(sched, e["date"]), eid, e["date"], e.get("name") or e.get("shortName") or ""])
-        done = all((((c.get("status") or {}).get("type") or {}).get("state") == "post") for c in comps)
+        # any, not all. A card was only written down once every bout on it had
+        # finished, so a knockout at seven fifteen reached our own record at
+        # midnight with the main event -- and the board showed nothing settled
+        # all night (Jose, Sep 22, 2026: "whenever the KO happens it settles
+        # there"). The file is rewritten each time another bout ends, so a card
+        # fills in through the night. Bouts still to come carry their own
+        # status and are drawn as such.
+        done = any((((c.get("status") or {}).get("type") or {}).get("state") == "post") for c in comps)
         if done:
             finals[eid] = {"events": [{"id": eid, "name": e.get("name"), "date": e["date"],
                                        "competitions": [{"id": str(c["id"]), "status": c.get("status"), "details": [d for d in (c.get("details") or []) if str(((d.get("type") or {}).get("text") or "")).startswith("Unofficial Winner")],

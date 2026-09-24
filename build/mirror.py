@@ -30,8 +30,13 @@ ALL = "--all" in sys.argv
 H = {"accept": "image/png,image/*;q=0.8"}
 
 ESPN_CLUB = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/%s/500/%s.png&w=96&h=96"
+# 336, not 220: the bout card draws a fighter across his whole half of the
+# head -- about 300 real pixels on a phone -- and a 220px picture blurs at
+# that size. The passers were moved to 336 for the same reason; the fighters
+# were missed (Jose, Sep 22, 2026: "make sure that none of the images are
+# blurry for all 3 sports"). ESPN's combiner will serve any width asked for.
 ESPN_MAN = ("https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/"
-            "%s.png&w=220&h=220&scale=crop")
+            "%s.png&w=336&h=336&scale=crop")
 SCORE_MAN = "https://assets-sports-gcp.thescore.com/mma/fighter/%s/w192xh192_headshot.png"
 
 
@@ -59,6 +64,26 @@ def keep(url, path):
     if r.status_code != 200 or len(r.content) < 200:
         return False
     open(full, "wb").write(r.content)
+    # and the same picture as webp, which is what the face route reaches for
+    # first. Left to faces.py this drifted: the pngs here were refetched at 336
+    # and the old 220px webps stayed beside them, so the route went on serving
+    # the small one and the card stayed blurry (Jose, Sep 22, 2026). Built in
+    # memory and written whole, so a conversion that throws leaves no empty
+    # file behind to be served in the png's place.
+    if full.endswith(".png") and "/faces/" in full:
+        webp = full[:-4] + ".webp"
+        try:
+            import io
+            from PIL import Image
+            buf = io.BytesIO()
+            Image.open(full).convert("RGBA").save(buf, "WEBP", quality=82, method=6)
+            if buf.tell() < 500:
+                raise ValueError("wrote %d bytes" % buf.tell())
+            open(webp, "wb").write(buf.getvalue())
+        except Exception as e:
+            if os.path.exists(webp) and os.path.getsize(webp) < 500:
+                os.remove(webp)
+            print("   %s stayed a png: %s" % (os.path.basename(full), e))
     return True
 
 
@@ -81,9 +106,16 @@ def main():
                          (f[6], f[13] if len(f) > 13 else "")):
             if eid:
                 want.append((ESPN_MAN % eid, "faces/mma/%s.png" % eid))
-            if sid:
+            # theScore's copy only where ESPN has none. The page reaches for
+            # ESPN's first and never gets past it, so mirroring both held 402
+            # pictures that could not be drawn -- 18.8MB and 587 files, on
+            # every deploy, for nothing. Not one of them was the only picture
+            # we had of anybody (Jose, Sep 22, 2026: "so we don't need that?").
+            if sid and not (eid and os.path.exists(
+                    D + "/site/faces/mma/%s.png" % eid)):
                 want.append((SCORE_MAN % sid, "faces/mma/s%s.png" % sid))
     got = miss = had = 0
+    gone = []
     for url, path in want:
         r = keep(url, path)
         if r is None:
@@ -92,8 +124,19 @@ def main():
             got += 1
         else:
             miss += 1
+            gone.append(path)
             print("  no picture: %s" % path)
+    # A man neither ESPN nor theScore has a picture of was still asked for by
+    # every reader's browser, on every card, and answered 404 -- an outside
+    # request that could never succeed. The names are written down so the page
+    # skips straight to the silhouette and calls nobody (Jose, Sep 22, 2026:
+    # "wire it so that it gets the new first and saves them").
+    nopic = sorted({os.path.basename(p)[:-4] for p in gone
+                    if p.startswith("faces/mma/")})
+    json.dump(nopic, open(D + "/site/nopic.json", "w"),
+              separators=(",", ":"))
     print("mirrored %d, already held %d, none to be had %d (of %d)" % (got, had, miss, len(want)))
+    print("no picture anywhere: %d fighters, written to site/nopic.json" % len(nopic))
 
 
 if __name__ == "__main__":

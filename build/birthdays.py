@@ -62,11 +62,15 @@ def et_day(iso):
 
 
 def birthday_game(dob, games, weeks):
-    """The game in the NFL week the birthday falls in. A week runs from its
-       first game day through the Tuesday after its last, so a Monday or
-       Tuesday birthday belongs to the game just played and a Wednesday one to
-       the game coming (Jose, Sep 16, 2026: the hangover is over by the next
-       week). A bye week takes the man's next game. None out of season."""
+    """The first game he plays on or after his birthday. A bye pushes it to
+       the next game he plays, and the rule never looks back, so there are no
+       ties and no man is marked for a day that has not come.
+
+       It used to take the game in the week his birthday fell in, which is not
+       the same thing: the week runs past the Sunday, so six men were marked
+       on a game played before their birthday. Tyler Shough was carded a
+       birthday on the 27th and turned 27 on the 28th (Jose, Sep 22, 2026).
+       None out of season."""
     if not dob or not games:
         return None
     b = dt.date.fromisoformat(dob[:10])
@@ -79,10 +83,7 @@ def birthday_game(dob, games, weeks):
             this = b.replace(year=year, day=28)
         if this < first or this > last:
             continue
-        week = next((w for w, (a, z) in weeks.items() if a <= this <= z), None)
-        hit = next((g for d, g in mine if g[0] == week), None)
-        if not hit:
-            hit = next((g for d, g in mine if d >= this), None)
+        hit = next((g for d, g in mine if d >= this), None)
         if hit:
             return {"on": this.isoformat(), "age": year - b.year, "game": hit[1], "day": et_day(hit[2]) == this}
     return None
