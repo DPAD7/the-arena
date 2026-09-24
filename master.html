@@ -8921,7 +8921,7 @@
     /* the sidelines, a band either side */
     [-1, 1].forEach(function (sd) {
       o.push('<polygon points="' + (cx + sd * farH).toFixed(1) + ',0 ' + (cx + sd * (farH + 10)).toFixed(1) + ',0 ' +
-             (cx + sd * (nearH + 22)).toFixed(1) + ',' + H + ' ' + (cx + sd * nearH).toFixed(1) + ',' + H + '" fill="#153f1f"/>');
+             (cx + sd * (nearH + 22)).toFixed(1) + ',' + H + ' ' + (cx + sd * nearH).toFixed(1) + ',' + H + '" fill="#ffffff"/>');   /* white sidelines (Jose, Sep 23, 2026) */
     });
     line(cx - half(0), 0, cx + half(0), 0, .35, 1.4);       /* the end line */
     line(cx - half(ez), ez, cx + half(ez), ez, .55, 2);     /* the goal line */
