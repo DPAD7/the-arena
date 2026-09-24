@@ -10984,6 +10984,50 @@
       return { ml: ml, props: !!(PROPS[id] || FPROPS[id]) };
     }
     /* every card on the open day that is still short of a price */
+    /* every price a card carries. A game is whole only when each one is on
+       the card, or DraftKings itself has been asked and does not offer it
+       (Jose, Sep 23, 2026: "for each card what do we get?" and "some can be
+       not offered, how will that be determined?").
+         NFL and college, both sides: moneyline, 1+ and 2+ passing TD,
+           1+ rushing TD, head-to-head -- fourteen.
+         UFC, both fighters: moneyline, KO/TKO, submission, decision on the
+           card, and every market on the fight sheet. */
+    var BOUTKEYS = ["ko", "sub", "dec", "koonly", "subonly", "deconly", "finishonly", "rd1only",
+      "ud", "sdmd", "kosub", "finish", "kodec", "subdec", "cards", "rd1", "kord1", "subrd1",
+      "anykord1", "anysubrd1", "rd2", "kord2", "subrd2", "anykord2", "anysubrd2", "rd3", "kord3",
+      "subrd3", "anykord3", "anysubrd3", "rd12", "rdlastdec", "anyko", "anysub", "anydec", "dist",
+      "nodist", "anyud", "anysdmd", "first60", "last10"];
+    var ASKED = {};                 /* events DraftKings has answered for this visit */
+    function mlRow(id) {
+      var got = null;
+      [[SCHED, 9], [CFB, 10], [FIGHTS, 8]].forEach(function (pair) {
+        (pair[0] || []).forEach(function (row) {
+          if (String(row[1]) === String(id)) got = [row[pair[1]], row[pair[1] + 2]];
+        });
+      });
+      return got || [null, null];
+    }
+    function isWhole(c, id) {
+      var has = function (x) { return !!(x && (typeof x === "string" ? x : x[0])); };
+      var ml = mlRow(id);
+      if (!ml[0] || !ml[1]) return false;
+      if (c.dataset.bout) {
+        var f = FPROPS[id];
+        if (!f) return false;
+        for (var k = 0; k < BOUTKEYS.length; k++) {
+          var v = f[BOUTKEYS[k]];
+          if (!v) return false;
+          for (var m = 0; m < v.length; m++) if (!has(v[m])) return false;
+        }
+        return true;
+      }
+      var p = PROPS[id];
+      if (!p) return false;
+      var at = function (rows, side, n) { return has(rows && rows[side] && rows[side][n]); };
+      return at(p.ptd, 0, 0) && at(p.ptd, 1, 0) && at(p.ptd, 0, 1) && at(p.ptd, 1, 1) &&
+             at(p.atd, 0, 0) && at(p.atd, 1, 0) &&
+             has(p.h2h && p.h2h[0]) && has(p.h2h && p.h2h[1]);
+    }
     function shortOfPrice() {
       var out = [], seen = {};
       document.querySelectorAll(".gcard[data-espn], .gcard[data-bout]").forEach(function (c) {
@@ -10991,21 +11035,7 @@
         if (!id || seen[id]) return;
         if (c.dataset.settled === "1" || c.dataset.settledBout === "1" ||
             c.classList.contains("done")) return;
-        var h = heldFor(id);
-        /* a game is whole only when both passers carry a 1+ passing and a
-           1+ rushing price -- having some props is not having them all. The
-           Falcons and Packers had their rushing prices, so the tap called the
-           game complete while both passing rows read dashes
-           (Jose, Sep 23, 2026) */
-        var whole = h.ml && h.props;
-        if (whole && !c.dataset.bout) {
-          var p = PROPS[id] || {}, first = function (rows, side) {
-            var r = rows && rows[side];
-            return !!(r && r[0] && r[0][0]);
-          };
-          whole = first(p.ptd, 0) && first(p.ptd, 1) && first(p.atd, 0) && first(p.atd, 1);
-        }
-        if (whole) return;
+        if (ASKED[id] || isWhole(c, id)) return;
         seen[id] = 1;
         out.push(c);
       });
@@ -11054,6 +11084,7 @@
               .then(function (r) { return r.ok ? r.json() : null; })
               .then(function (st) {
                 if (st && st.prices) Object.keys(st.prices).forEach(function (id) { window._seatAsked(id, st.prices[id]); });
+                if (st && st.state === "done" && st.prices) Object.keys(st.prices).forEach(function (id) { ASKED[id] = 1; });
                 if (st && st.state === "done") { fillDone(shortOfPrice().length ? "none" : "ok"); return; }
                 if (st && st.state === "failed") { fillDone("bad"); return; }
                 if (Date.now() - t0 > LIMIT) { fillDone("bad"); return; }
