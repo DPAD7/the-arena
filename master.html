@@ -8923,6 +8923,9 @@
       o.push('<polygon points="' + (cx + sd * farH).toFixed(1) + ',0 ' + (cx + sd * (farH + 10)).toFixed(1) + ',0 ' +
              (cx + sd * (nearH + 22)).toFixed(1) + ',' + H + ' ' + (cx + sd * nearH).toFixed(1) + ',' + H + '" fill="#ffffff"/>');   /* white sidelines (Jose, Sep 23, 2026) */
     });
+    /* and the end line across the back, white to meet them (Jose, Sep 23, 2026) */
+    o.push('<polygon points="' + (cx - farH - 10).toFixed(1) + ',0 ' + (cx + farH + 10).toFixed(1) + ',0 ' +
+           (cx + farH + 10.6).toFixed(1) + ',6 ' + (cx - farH - 10.6).toFixed(1) + ',6" fill="#ffffff"/>');
     line(cx - half(0), 0, cx + half(0), 0, .35, 1.4);       /* the end line */
     line(cx - half(ez), ez, cx + half(ez), ez, .55, 2);     /* the goal line */
     for (var d = 11; d <= 50; d++) {
