@@ -10992,7 +10992,20 @@
         if (c.dataset.settled === "1" || c.dataset.settledBout === "1" ||
             c.classList.contains("done")) return;
         var h = heldFor(id);
-        if (h.ml && h.props) return;
+        /* a game is whole only when both passers carry a 1+ passing and a
+           1+ rushing price -- having some props is not having them all. The
+           Falcons and Packers had their rushing prices, so the tap called the
+           game complete while both passing rows read dashes
+           (Jose, Sep 23, 2026) */
+        var whole = h.ml && h.props;
+        if (whole && !c.dataset.bout) {
+          var p = PROPS[id] || {}, first = function (rows, side) {
+            var r = rows && rows[side];
+            return !!(r && r[0] && r[0][0]);
+          };
+          whole = first(p.ptd, 0) && first(p.ptd, 1) && first(p.atd, 0) && first(p.atd, 1);
+        }
+        if (whole) return;
         seen[id] = 1;
         out.push(c);
       });
