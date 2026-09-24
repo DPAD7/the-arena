@@ -1780,6 +1780,9 @@
   .fslots[hidden] { display: none; }
   .fturf { margin: 8px -2px 0; background-repeat: no-repeat; background-size: 100% 100%; }
   .fturf[hidden] { display: none; }
+  .fturf { position: relative; }
+  .fstadium { position: absolute; left: 0; right: 0; top: -120px; height: 120px; z-index: 0; pointer-events: none; }
+  .fstadium svg { display: block; width: 100%; height: 100%; }
   .fturf .forkbox.fork-on { margin-bottom: 18px; }
   .fturf .fview--ptd button, .fturf .fpay { background: transparent !important; }
   /* the words stand outside their uprights, clear of the line */
@@ -8916,6 +8919,8 @@
            '<stop offset="1" stop-color="#247034"/></linearGradient>' +
            '<linearGradient id="tf" x1="0" y1="0" x2="0" y2="1"><stop offset=".93" stop-color="#000" stop-opacity="0"/>' +
            '<stop offset="1" stop-color="#000" stop-opacity="1"/></linearGradient></defs>');
+    /* grass all round the field, as a stadium has it */
+    o.push('<rect width="' + W + '" height="' + H + '" fill="#1b4a22"/>');
     poly(0, H, "url(#tg)");
     poly(0, ez, "#1a5026");                          /* the end zone, a shade down (Jose, Sep 23, 2026: "make the field green") */
     /* the sidelines, a band either side */
@@ -8975,6 +8980,24 @@
     o.push('<rect width="' + W + '" height="' + H + '" fill="url(#tf)"/>');
     var svg = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '">' + o.join("") + '</svg>';
     wrap.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(svg) + '")';
+    /* the stadium behind the end zone: grass, a blue wall, the dark stands
+       and a light sky over the rim -- no goalpost, no blimp (Jose, Sep 23,
+       2026, from abcteach's end zone picture) */
+    var SH = 120, st = wrap.querySelector(":scope > .fstadium");
+    if (!st) {
+      st = document.createElement("div");
+      st.className = "fstadium";
+      wrap.insertBefore(st, wrap.firstChild);
+    }
+    var rim = 'M0,' + (SH * 0.42) + ' Q' + (W / 2) + ',' + (SH * 0.08) + ' ' + W + ',' + (SH * 0.42) + ' L' + W + ',0 L0,0 Z';
+    st.innerHTML = '<svg width="' + W + '" height="' + SH + '" viewBox="0 0 ' + W + ' ' + SH + '" preserveAspectRatio="none">' +
+      '<defs><linearGradient id="skyf" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000"/>' +
+      '<stop offset="1" stop-color="#000" stop-opacity="0"/></linearGradient></defs>' +
+      '<rect width="' + W + '" height="' + SH + '" fill="#080a2c"/>' +             /* the stands */
+      '<path d="' + rim + '" fill="#7fcfd6"/>' +                                    /* the sky over the rim */
+      '<rect y="' + (SH * 0.72) + '" width="' + W + '" height="' + (SH * 0.2) + '" fill="#0c2c72"/>' +   /* the wall */
+      '<rect y="' + (SH * 0.92) + '" width="' + W + '" height="' + (SH * 0.08 + 1) + '" fill="#1b4a22"/>' + /* grass to the line */
+      '<rect width="' + W + '" height="' + (SH * 0.35) + '" fill="url(#skyf)"/></svg>';
   }
   /* ---- HOT loops ----
      The gold row has no ends: a copy of it stands either side, and when a
