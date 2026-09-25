@@ -7957,6 +7957,11 @@
       top.insertBefore(lit, b);
     }
     if (b !== top.lastElementChild) top.appendChild(b);
+    /* the play mark first, LIVE in the middle, the trend last
+       (Jose, Sep 25, 2026: "play button then live then trend") */
+    var pbar = top.querySelector(":scope > .glivebar");
+    var badge = top.querySelector(":scope > .glive");
+    if (pbar && badge && pbar.nextElementSibling !== badge) top.insertBefore(pbar, badge);
   }
   window.orderTop = orderTop;
 
