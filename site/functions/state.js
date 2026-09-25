@@ -58,6 +58,9 @@ export async function onRequest({ request, env }) {
          is a field thrown away on the next write, so anything the board keeps
          has to be named (Jose, Sep 20, 2026) */
       ring: body && body.ring && typeof body.ring === "object" ? body.ring : {},
+      /* the balance behind the dollar button: what it stands at, the legs it
+         has seen, and which runs of legs it has already settled */
+      bank: body && body.bank && typeof body.bank === "object" ? body.bank : null,
       at: Date.now()
     };
     await env.ARENA.put(SLOT, JSON.stringify(keep));

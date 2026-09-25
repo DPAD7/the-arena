@@ -181,6 +181,21 @@
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
   }
   .cashsheet[hidden] { display: none; }
+  /* centered on the screen, wherever the button sits (Jose, Sep 25, 2026) */
+  .cashsheet { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%);
+    width: min(360px, calc(100vw - 32px)); text-align: center; padding: 18px 16px 14px; }
+  .cashsheet .cashamt { font-size: 36px; margin: 2px 0 12px; }
+  .cashsheet .slipcard { text-align: left; margin: 0; }
+  .cashsheet .cashnone { color: #8e8e93; font-size: 14px; padding: 6px 0 2px; }
+  .cashsheet .cashunit { margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    color: #8e8e93; text-transform: uppercase; }
+  /* a leg's edge: gold while it is live, green once it lands, red once it
+     cannot -- the same colors a placed price wears on its card */
+  .slav.slav--live { border: 2px solid #e3b341; }
+  .slav.slav--won { border: 2px solid var(--green); }
+  .slav.slav--lost { border: 2px solid #e2564d; }
+  .slipcard.slipcard--won { border-color: var(--green); }
+  .slipcard.slipcard--lost { border-color: #e2564d; }
   .cashsheet .cashlbl { font-size: 12px; font-weight: 700; letter-spacing: .08em;
     color: #8e8e93; text-transform: uppercase; }
   .cashsheet .cashamt { margin-top: 4px; font-size: 30px; font-weight: 800;
@@ -3432,7 +3447,7 @@
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v19M16.8 6.6c-.9-1.3-2.6-2.1-4.8-2.1-2.8 0-4.6 1.4-4.6 3.4 0 4.9 9.6 2.6 9.6 7.9 0 2.1-2 3.7-5 3.7-2.4 0-4.2-.9-5.1-2.4"/></svg></button>
-<div class="cashsheet" id="cashsheet" hidden><div class="cashlbl">Balance</div><div class="cashamt" id="cashamt">&mdash;</div></div>
+<div class="cashsheet" id="cashsheet" hidden><div class="cashlbl">Balance</div><div class="cashamt" id="cashamt">&mdash;</div><div id="cashlegs"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -4128,6 +4143,31 @@
   }
 
   var slipTab = "parlay";
+  function slipAvatars(all) {
+    var out = "", picks = all.slice(0, 20), rest = all.length - picks.length;
+    picks.forEach(function (b, i) {
+      var m = legParts(b.l);
+      var who = m ? m[1] : (b.l || "").split(" ")[0];
+      var pic = slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
+      var mk = markFor(m ? m[2] : "");
+      /* the earlier circle paints over the later one, so its own badge is
+         never hidden by its neighbour (Jose, Sep 17, 2026) */
+      out += '<i class="slav' + (b.st ? " slav--" + b.st : "") + '" style="z-index:' + (picks.length - i) + '">' +
+             (pic || "<b>" + esc(who.slice(0, 3)) + "</b>") +
+             (mk ? '<u class="slavmk">' + mk + "</u>" : "") + "</i>";
+    });
+    return '<div class="slavs">' + out +
+           (rest > 0 ? '<b class="slavmore">+' + rest + "</b>" : "") + "</div>";
+  }
+  function slipNames(picks) {
+    var seen = {}, names = [];
+    picks.forEach(function (b) {
+      var m = legParts(b.l);
+      var who = m ? m[1] : (b.l || "").split(" ")[0];
+      if (!seen[who]) { seen[who] = 1; names.push(who); }
+    });
+    return names.join(", ");
+  }
   function slip() {
     /* Every pick that has been made, whether or not its card is on the board.
        A pick kept from an older visit may have been written before the price
@@ -4203,31 +4243,7 @@
 
     /* each circle wears the market it stands for, small, on its lower corner
        (Jose, Sep 17, 2026) */
-    var avatars = function (all) {
-      var out = "", picks = all.slice(0, 20), rest = all.length - picks.length;
-      picks.forEach(function (b, i) {
-        var m = legParts(b.l);
-        var who = m ? m[1] : (b.l || "").split(" ")[0];
-        var pic = slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
-        var mk = markFor(m ? m[2] : "");
-        /* the earlier circle paints over the later one, so its own badge is
-           never hidden by its neighbour (Jose, Sep 17, 2026) */
-        out += '<i class="slav" style="z-index:' + (picks.length - i) + '">' +
-               (pic || "<b>" + esc(who.slice(0, 3)) + "</b>") +
-               (mk ? '<u class="slavmk">' + mk + "</u>" : "") + "</i>";
-      });
-      return '<div class="slavs">' + out +
-             (rest > 0 ? '<b class="slavmore">+' + rest + "</b>" : "") + "</div>";
-    };
-    var nameList = function (picks) {
-      var seen = {}, names = [];
-      picks.forEach(function (b) {
-        var m = legParts(b.l);
-        var who = m ? m[1] : (b.l || "").split(" ")[0];
-        if (!seen[who]) { seen[who] = 1; names.push(who); }
-      });
-      return names.join(", ");
-    };
+    var avatars = slipAvatars, nameList = slipNames;
     var legRow = function (b) {
       var row = document.createElement("div");
       row.className = "slleg";
@@ -6618,7 +6634,8 @@
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function () {
       var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {},
-                  ring: (typeof RINGED === "object" && RINGED) || {}};
+                  ring: (typeof RINGED === "object" && RINGED) || {},
+                  bank: (typeof BANK === "object" && BANK) || null};
       try {
         fetch(ARENAQ(), {
           method: "POST", headers: {"content-type": "application/json"},
@@ -6667,6 +6684,13 @@
           hid = j.hidden;
           try { localStorage.setItem(HIDEKEY, JSON.stringify(hid)); } catch (e) {}
           moved = true;
+        }
+        /* the balance is one number on every device; a store that has never
+           held it is handed this device's */
+        if (typeof BANK === "object") {
+          if (j.bank && j.bank.bal != null) {
+            if (JSON.stringify(j.bank) !== JSON.stringify(BANK)) { BANK = j.bank; bankKeep(); bankDraw(); }
+          } else pushState();
         }
         if (j.placed) {
           placed = j.placed;
@@ -14557,6 +14581,67 @@
     refreshFights();
   });
   document.getElementById("weekbar").addEventListener("click", function () { setTimeout(refreshVisible, 50); });
+  /* ---- the balance behind the dollar button ----
+     It starts at $300, the account as it stands with the $100 unit already
+     out, the way DraftKings keeps it. The legs are the prices wearing a gold
+     edge, drawn as the slip draws its parlay card; each tile goes green as
+     its leg lands and red if it cannot. When every leg has landed the whole
+     return goes on -- the unit back and what it won -- and a miss changes
+     nothing, the unit being gone already. Once per run of legs, kept in the
+     store so every device agrees
+     (Jose, Sep 25, 2026). */
+  var BANKKEY = "arena.bank.v1", UNIT = 100;
+  var BANK = null;
+  try { BANK = JSON.parse(localStorage.getItem(BANKKEY) || "null"); } catch (e) { BANK = null; }
+  if (!BANK || BANK.bal == null) BANK = {bal: 300, legs: {}, paid: {}};
+  BANK.legs = BANK.legs || {}; BANK.paid = BANK.paid || {};
+  function bankKeep() { try { localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (e) {} }
+  function money(n) { return "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+  function bankDraw() {
+    var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
+    if (!box || !amt) return;
+    var moved = false;
+    /* what the page shows of each gold leg is kept, so a leg on another tab
+       or a finished card is still drawn */
+    document.querySelectorAll("button.price.placed[data-oid]").forEach(function (b) {
+      var card = cardOf(b), id = b.dataset.oid;
+      var st = b.classList.contains("won") ? "won" : b.classList.contains("lost") ? "lost" : "live";
+      var was = BANK.legs[id] || {};
+      var now = {o: priceOf(b), l: was.l || labelFor(b),
+                 g: card ? (card.dataset.espn || card.dataset.bout || "") : (was.g || ""), st: st};
+      if (JSON.stringify(now) !== JSON.stringify(was)) { BANK.legs[id] = now; moved = true; }
+    });
+    Object.keys(BANK.legs).forEach(function (id) { if (!placed[id]) { delete BANK.legs[id]; moved = true; } });
+    var legs = Object.keys(placed).filter(function (id) { return BANK.legs[id]; }).sort()
+      .map(function (id) { var v = BANK.legs[id]; return {id: id, o: v.o, l: v.l, g: v.g, st: v.st}; });
+    var state = "";
+    if (legs.length) {
+      var key = legs.map(function (b) { return b.id; }).join("+");
+      var lost = legs.some(function (b) { return b.st === "lost"; });
+      var won = legs.every(function (b) { return b.st === "won"; });
+      state = lost ? "lost" : won ? "won" : "";
+      if (state && !BANK.paid[key]) {
+        var dec = 1;
+        legs.forEach(function (b) { dec *= toDec(b.o) || 1; });
+        BANK.bal = Math.round((BANK.bal + (won ? UNIT * dec : 0)) * 100) / 100;
+        BANK.paid[key] = state;
+        moved = true;
+      }
+    }
+    amt.textContent = money(BANK.bal);
+    if (!legs.length) {
+      box.innerHTML = '<div class="cashnone">No gold legs on the board</div>';
+    } else {
+      box.innerHTML = '<div class="slipcard' + (state ? " slipcard--" + state : "") + '">' +
+        slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
+        '<div class="slfoot"><b>' + legs.length + (legs.length > 1 ? " legs" : " leg") +
+        '</b><span class="slpay">' + parlay(legs) + '</span></div></div>' +
+        '<div class="cashunit">' + money(UNIT) + ' unit</div>';
+    }
+    if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
+  }
+  window.bankDraw = bankDraw;
+  setInterval(function () { if (document.visibilityState === "visible") bankDraw(); }, 15000);
   /* the dollar button: dragged, it follows the finger and settles on the
      nearer side; tapped, it opens the balance beside it. Where it rests is
      this device's own, kept in the browser. */
@@ -14582,13 +14667,7 @@
       var at = JSON.parse(localStorage.getItem(KEY) || "null");
       if (at) place(at.side === "l" ? M : innerWidth - 52 - M, at.y * innerHeight);
     } catch (e) {}
-    function openSheet() {
-      sheet.hidden = false;
-      var r = fab.getBoundingClientRect(), sw = sheet.offsetWidth, sh = sheet.offsetHeight;
-      var onLeft = r.left + r.width / 2 < innerWidth / 2;
-      sheet.style.left = (onLeft ? r.right + 10 : r.left - sw - 10) + "px";
-      sheet.style.top = clamp(r.top + r.height / 2 - sh / 2, M, innerHeight - sh - M) + "px";
-    }
+    function openSheet() { bankDraw(); sheet.hidden = false; }
     var sx = 0, sy = 0, ox = 0, oy = 0, moved = false, down = false;
     fab.addEventListener("pointerdown", function (e) {
       down = true; moved = false; sx = e.clientX; sy = e.clientY;
