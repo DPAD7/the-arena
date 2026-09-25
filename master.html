@@ -5415,23 +5415,43 @@
      every x is a percentage and only the stroke has to be told not to
      stretch with it. The clip ids carry a number of their own: two cards on
      one screen sharing an id means the second one is clipped by the first. */
+  /* a club's color for the drive and the win graph. One whose own color is
+     near black (Army) shows in its second color, so it is still theirs and
+     still seen on the dark card (Jose, Sep 25, 2026) */
+  function driveHue(ab, lg) {
+    var hue = clubHue(ab, lg);
+    var lumOf = function (h) {
+      var m = /^#?([0-9a-f]{6})$/i.exec(h || "");
+      if (!m) return 1;
+      var n = parseInt(m[1], 16);
+      return (0.2126 * (n >> 16 & 255) + 0.7152 * (n >> 8 & 255) + 0.0722 * (n & 255)) / 255;
+    };
+    var alt = typeof ALTCOLOR === "object" ? ALTCOLOR[ab] : "";
+    if (lumOf(hue) < 0.12 && alt && lumOf(alt) > 0.25 && lumOf(alt) < 0.95) return alt;
+    return hue;
+  }
   function drvSvg(card, lAb, rAb, sink) {
     var k = "dg" + (++wpn), lg = lgOf(card);
     /* the fill wears the club's own colour, the way a field does. The lifted
        ink is for letters, which have to be read rather than recognised. */
-    var lc = clubHue(lAb, lg) || sink[0], rc = clubHue(rAb, lg) || sink[1];
+    var lc = driveHue(lAb, lg) || sink[0], rc = driveHue(rAb, lg) || sink[1];
+    /* the line wears whoever is ahead, over a soft wash of the same color,
+       the way the broadcast graphs draw it (Jose, Sep 25, 2026) */
     return '<svg viewBox="0 0 100 128" preserveAspectRatio="none" aria-hidden="true">' +
       '<defs><clipPath id="' + k + '-u"><rect x="0" y="' + DRVTOP +
       '" width="100" height="' + (DRVMID - DRVTOP) + '"/></clipPath>' +
       '<clipPath id="' + k + '-d"><rect x="0" y="' + DRVMID +
       '" width="100" height="' + (DRVTOP + DRVPLOT - DRVMID) + '"/></clipPath></defs>' +
-      '<path class="drvar" d="" fill="' + lc + '" fill-opacity="0.85" ' +
+      '<path class="drvar" d="" fill="' + lc + '" fill-opacity="0.22" ' +
       'clip-path="url(#' + k + '-u)"/>' +
-      '<path class="drvar" d="" fill="' + rc + '" fill-opacity="0.9" ' +
+      '<path class="drvar" d="" fill="' + rc + '" fill-opacity="0.22" ' +
       'clip-path="url(#' + k + '-d)"/>' +
-      '<path class="drvln" d="" fill="none" stroke="#ffffff" stroke-width="2" ' +
+      '<path class="drvln" d="" fill="none" stroke="' + lc + '" stroke-width="2.2" ' +
       'vector-effect="non-scaling-stroke" stroke-linejoin="round" ' +
-      'stroke-linecap="round"/></svg>';
+      'stroke-linecap="round" clip-path="url(#' + k + '-u)"/>' +
+      '<path class="drvln" d="" fill="none" stroke="' + rc + '" stroke-width="2.2" ' +
+      'vector-effect="non-scaling-stroke" stroke-linejoin="round" ' +
+      'stroke-linecap="round" clip-path="url(#' + k + '-d)"/></svg>';
   }
   function drvCurve(card, pts) {
     var svg = card.querySelector(".drive .drvg > svg");
@@ -5444,8 +5464,7 @@
        is allowed to show in, so the colour says who without being told */
     var area = line + " L100," + DRVMID + " L0," + DRVMID + " Z";
     svg.querySelectorAll(".drvar").forEach(function (a) { a.setAttribute("d", area); });
-    var ln = svg.querySelector(".drvln");
-    if (ln) ln.setAttribute("d", line);
+    svg.querySelectorAll(".drvln").forEach(function (ln) { ln.setAttribute("d", line); });
   }
   /* the yard the ball is on, written the way the card writes it. Same rule
      as spotText, from what the strip has already been told about its sides,
@@ -5640,16 +5659,7 @@
     /* a club whose own color is near black (Army) drives in its second
        color, not a grey made out of the black, so the fill is still theirs
        (Jose, Sep 25, 2026) */
-    var drvAb = offLeft ? lAb : rAb, drvHue = clubHue(drvAb, lgOf(card));
-    var lumOf = function (h) {
-      var m = /^#?([0-9a-f]{6})$/i.exec(h || "");
-      if (!m) return 1;
-      var n = parseInt(m[1], 16);
-      return (0.2126 * (n >> 16 & 255) + 0.7152 * (n >> 8 & 255) + 0.0722 * (n & 255)) / 255;
-    };
-    var alt = typeof ALTCOLOR === "object" ? ALTCOLOR[drvAb] : "";
-    if (lumOf(drvHue) < 0.12 && alt && lumOf(alt) > 0.25 && lumOf(alt) < 0.95) drvHue = alt;
-    var ink = readable(drvHue) || sink[offLeft ? 0 : 1];
+    var ink = readable(driveHue(offLeft ? lAb : rAb, lgOf(card))) || sink[offLeft ? 0 : 1];
     card._drvab = [lAb, rAb];
 
     /* a live game with a curve behind it draws the graph; anything else --
