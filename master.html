@@ -5637,7 +5637,19 @@
     };
     var lAb = abOf(0), rAb = abOf(1);
     var sink = clubInk(card);
-    var ink = readable(clubHue(offLeft ? lAb : rAb, lgOf(card))) || sink[offLeft ? 0 : 1];
+    /* a club whose own color is near black (Army) drives in its second
+       color, not a grey made out of the black, so the fill is still theirs
+       (Jose, Sep 25, 2026) */
+    var drvAb = offLeft ? lAb : rAb, drvHue = clubHue(drvAb, lgOf(card));
+    var lumOf = function (h) {
+      var m = /^#?([0-9a-f]{6})$/i.exec(h || "");
+      if (!m) return 1;
+      var n = parseInt(m[1], 16);
+      return (0.2126 * (n >> 16 & 255) + 0.7152 * (n >> 8 & 255) + 0.0722 * (n & 255)) / 255;
+    };
+    var alt = typeof ALTCOLOR === "object" ? ALTCOLOR[drvAb] : "";
+    if (lumOf(drvHue) < 0.12 && alt && lumOf(alt) > 0.25 && lumOf(alt) < 0.95) drvHue = alt;
+    var ink = readable(drvHue) || sink[offLeft ? 0 : 1];
     card._drvab = [lAb, rAb];
 
     /* a live game with a curve behind it draws the graph; anything else --
