@@ -1825,6 +1825,13 @@
     transition: transform .42s cubic-bezier(.3, .6, .4, 1); }
   .fball svg { width: 18px; height: 18px; display: block; }
   html.hotlock, html.hotlock body { overflow: hidden; overscroll-behavior: none; }
+  /* HOT stands in FOX's stadium: the field he picked fills the page behind
+     the picks, and the drawn stadium and turf step aside (Jose, Sep 25, 2026) */
+  html.hotlock body { background: transparent; }
+  html.hotlock body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: #07080c url(img/fox-field.jpg) center / cover no-repeat; }
+  html.hotlock .fstadium { display: none; }
+  html.hotlock .fturf { background-image: none !important; }
   /* the centering space stays inside the board, so the billboard above the
      field is not clipped by the pager */
   html.hotlock #board { display: flow-root; }
