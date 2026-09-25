@@ -6743,7 +6743,9 @@
           if (j.bank && j.bank.bal != null) {
             if (JSON.stringify(j.bank) !== JSON.stringify(BANK)) { BANK = j.bank; BANK.legs = BANK.legs || {}; BANK.paid = BANK.paid || {}; bankKeep(); }
             BANKMET = true;
-            bankDraw();
+            /* after the marks below are read: drawn first, it saw no gold
+               and dropped every leg's placed price (Sep 25, 2026) */
+            setTimeout(bankDraw, 0);
           } else { BANKMET = true; pushState(); }
         }
         if (j.placed) {
