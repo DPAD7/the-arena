@@ -937,7 +937,10 @@
      curve, so the field itself goes white: a navy bar on a navy band is
      nothing at all */
   .drive--g .drvbar { background: rgba(255, 255, 255, 0.22); }
-  .drive--g .drvfill { background: #ffffff; }
+  /* the fill wears the club driving, as it does on the plain strip, so it
+     reads who has the ball; the bar rides over the curve, so it stays seen
+     (Jose, Sep 25, 2026: "it would be the army color driving") */
+  .drive--g .drvfill { background: var(--drv, #ffffff); }
   /* the yard label drops under the bar. Above it, it is written across the
      left club's own number */
   .drive--g .drvat { bottom: auto; top: 100%; margin-bottom: 0; margin-top: 5px;
