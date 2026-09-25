@@ -11150,6 +11150,22 @@
       });
       return out;
     }
+    /* every card on the open day whose game is not over: a double tap reads
+       all of them again, so a price that has moved since the sweep is
+       brought up to date, not only one that was never there
+       (Jose, Sep 25, 2026: "if there are changes re seed those changes") */
+    function stillOpen() {
+      var out = [], seen = {};
+      document.querySelectorAll(".gcard[data-espn], .gcard[data-bout]").forEach(function (c) {
+        var id = c.dataset.espn || c.dataset.bout;
+        if (!id || seen[id]) return;
+        if (c.dataset.settled === "1" || c.dataset.settledBout === "1" ||
+            c.classList.contains("done")) return;
+        seen[id] = 1;
+        out.push(c);
+      });
+      return out;
+    }
     /* the next slot on the rail, whatever the rail is counting in */
     function stepDay() {
       var tabs = [].slice.call(dbar.querySelectorAll(".dtab"));
@@ -11231,8 +11247,8 @@
       /* nothing to ask with: grey, and no red, because nothing failed
          (Jose, Sep 23, 2026: "if offiline grey") */
       if (navigator.onLine === false) { fillDone("none"); return; }
-      var cards = shortOfPrice(), hops = 0;
-      while (!cards.length && hops < 6 && stepDay()) { cards = shortOfPrice(); hops++; }
+      var cards = stillOpen(), hops = 0;
+      while (!cards.length && hops < 6 && stepDay()) { cards = stillOpen(); hops++; }
       /* nothing short of a price: the day is complete, and that is green */
       if (!cards.length) {
         fillDone(document.querySelector(".gcard[data-espn], .gcard[data-bout]") ? "ok" : "none");
@@ -11257,9 +11273,7 @@
            missing after the asking, red is a fetch that failed
            (Jose, Sep 23, 2026: "once we get 128 out of 128... if not grey,
            if failing red") */
-        var still = shortOfPrice();
-        if (!still.length) { fillDone("ok"); return; }
-        askDK(still);
+        askDK(stillOpen());
       });
     }
 
@@ -11756,20 +11770,40 @@
     }
     return had;
   }
+  /* a fresh reading laid over what the card held: where DraftKings gave a
+     price it stands, moved or not, and where it gave none the old one stays */
+  function layOver(had, got) {
+    if (got === null || got === undefined || got === "") return had;
+    if (Array.isArray(got) && got.length === 2 && typeof got[0] === "string" && typeof got[1] === "string")
+      return got[0] ? got : had;
+    if (Array.isArray(had) && Array.isArray(got)) {
+      var out = had.slice();
+      for (var i = 0; i < got.length; i++) out[i] = layOver(had[i], got[i]);
+      return out;
+    }
+    if (typeof had === "object" && had && got && typeof got === "object") {
+      var o = {};
+      Object.keys(had).forEach(function (k) { o[k] = had[k]; });
+      Object.keys(got).forEach(function (k) { o[k] = layOver(had[k], got[k]); });
+      return o;
+    }
+    return got;
+  }
   window._seatAsked = function (id, j) {
     if (!j) return;
     var cards = document.querySelectorAll('.gcard[data-espn="' + id + '"], .gcard[data-bout="' + id + '"]');
     if (!cards.length) return;
     var bout = !!cards[0].dataset.bout, lg = cards[0].dataset.lg;
     var into = bout ? FPROPS : PROPS;
-    if (j.props) into[id] = fillIn(into[id], j.props);
+    if (j.props) into[id] = layOver(into[id], j.props);
     var ml = null;
     if (j.ml) {
       var shelf = bout ? FIGHTS : (lg === "college-football" ? CFB : SCHED);
       var col = bout ? 8 : (lg === "college-football" ? 10 : 9);
       for (var i = 0; i < shelf.length; i++) {
         if (String(shelf[i][1]) !== String(id)) continue;
-        for (var k = 0; k < 4; k++) if (!shelf[i][col + k] && j.ml[k]) shelf[i][col + k] = j.ml[k];
+        /* each side whole, price and id together, wherever DraftKings gave one */
+        for (var k = 0; k < 4; k += 2) if (j.ml[k]) { shelf[i][col + k] = j.ml[k]; shelf[i][col + k + 1] = j.ml[k + 1]; }
         ml = shelf[i].slice(col, col + 4);
         break;
       }
@@ -11782,6 +11816,23 @@
         if (into[id] && bout) seatBout(card, into[id]);
       } catch (e) {}
     });
+    /* a leg on the slip carries the price it was picked at; one that has
+       moved is written again, so the slip and the balance pay what the card
+       now says */
+    var moved = false;
+    Object.keys(saved).forEach(function (oid) {
+      var v = saved[oid];
+      if (!v || String(v.g) !== String(id)) return;
+      var b = document.querySelector('button.price[data-oid="' + oid.replace(/"/g, '\\"') + '"]');
+      var now = b && priceOf(b);
+      if (now && now !== v.o) { v.o = now; moved = true; }
+    });
+    if (moved) {
+      try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+      if (typeof pushState === "function") pushState();
+      if (typeof slip === "function") slip();
+    }
+    if (typeof bankDraw === "function") bankDraw();
   };
   function pullCard(card) {
     if (!card) return Promise.resolve("none");
