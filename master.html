@@ -152,6 +152,39 @@
     overflow: visible;
     touch-action: none;
   }
+  /* the dollar button: a floating square like the phone's own assistive
+     button -- drag it anywhere, it settles on the nearer side, a tap opens the
+     balance (Jose, Sep 25, 2026) */
+  .cashfab {
+    position: fixed; z-index: 45; right: 12px;
+    bottom: calc(100px + env(safe-area-inset-bottom));
+    width: 52px; height: 52px; padding: 0; margin: 0;
+    display: grid; place-items: center;
+    background: rgba(28, 28, 30, 0.72); color: #e3b341;
+    -webkit-backdrop-filter: blur(22px) saturate(1.6);
+    backdrop-filter: blur(22px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 16px;
+    box-shadow: 0 10px 26px rgba(0, 0, 0, 0.6);
+    touch-action: none; cursor: grab; -webkit-tap-highlight-color: transparent;
+    transition: left .22s ease-out, top .22s ease-out, opacity .2s;
+  }
+  .cashfab.drag { transition: none; cursor: grabbing; }
+  .cashfab svg { width: 26px; height: 26px; display: block; pointer-events: none; }
+  .cashsheet {
+    position: fixed; z-index: 46; width: 220px; box-sizing: border-box;
+    padding: 14px 16px; border-radius: 16px;
+    background: rgba(28, 28, 30, 0.92);
+    -webkit-backdrop-filter: blur(22px) saturate(1.6);
+    backdrop-filter: blur(22px) saturate(1.6);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6);
+    font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
+  }
+  .cashsheet[hidden] { display: none; }
+  .cashsheet .cashlbl { font-size: 12px; font-weight: 700; letter-spacing: .08em;
+    color: #8e8e93; text-transform: uppercase; }
+  .cashsheet .cashamt { margin-top: 4px; font-size: 30px; font-weight: 800;
+    font-variant-numeric: tabular-nums; color: #e3b341; }
   /* the mark that says which sport is open. It is one element that slides,
      rather than a state on each pill, so it can travel with a finger. */
   .spmark {
@@ -3398,6 +3431,8 @@
   </div></div>
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
+<button class="cashfab" id="cashfab" type="button" aria-label="Balance"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" d="M12 2.5v19M16.8 6.6c-.9-1.3-2.6-2.1-4.8-2.1-2.8 0-4.6 1.4-4.6 3.4 0 4.9 9.6 2.6 9.6 7.9 0 2.1-2 3.7-5 3.7-2.4 0-4.2-.9-5.1-2.4"/></svg></button>
+<div class="cashsheet" id="cashsheet" hidden><div class="cashlbl">Balance</div><div class="cashamt" id="cashamt">&mdash;</div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -14521,6 +14556,64 @@
     refreshFights();
   });
   document.getElementById("weekbar").addEventListener("click", function () { setTimeout(refreshVisible, 50); });
+  /* the dollar button: dragged, it follows the finger and settles on the
+     nearer side; tapped, it opens the balance beside it. Where it rests is
+     this device's own, kept in the browser. */
+  (function () {
+    var fab = document.getElementById("cashfab"), sheet = document.getElementById("cashsheet");
+    if (!fab || !sheet) return;
+    var KEY = "arena.cashfab.v1", M = 12;
+    function clamp(v, lo, hi) { return Math.max(lo, Math.min(hi, v)); }
+    function place(x, y) {
+      var w = fab.offsetWidth, h = fab.offsetHeight;
+      fab.style.right = "auto"; fab.style.bottom = "auto";
+      fab.style.left = clamp(x, M, innerWidth - w - M) + "px";
+      fab.style.top = clamp(y, M + 40, innerHeight - h - 96) + "px";
+    }
+    function settle() {
+      var r = fab.getBoundingClientRect();
+      var left = r.left + r.width / 2 < innerWidth / 2;
+      place(left ? M : innerWidth - r.width - M, r.top);
+      try { localStorage.setItem(KEY, JSON.stringify({ side: left ? "l" : "r", y: r.top / innerHeight })); } catch (e) {}
+      if (!sheet.hidden) openSheet();
+    }
+    try {
+      var at = JSON.parse(localStorage.getItem(KEY) || "null");
+      if (at) place(at.side === "l" ? M : innerWidth - 52 - M, at.y * innerHeight);
+    } catch (e) {}
+    function openSheet() {
+      sheet.hidden = false;
+      var r = fab.getBoundingClientRect(), sw = sheet.offsetWidth, sh = sheet.offsetHeight;
+      var onLeft = r.left + r.width / 2 < innerWidth / 2;
+      sheet.style.left = (onLeft ? r.right + 10 : r.left - sw - 10) + "px";
+      sheet.style.top = clamp(r.top + r.height / 2 - sh / 2, M, innerHeight - sh - M) + "px";
+    }
+    var sx = 0, sy = 0, ox = 0, oy = 0, moved = false, down = false;
+    fab.addEventListener("pointerdown", function (e) {
+      down = true; moved = false; sx = e.clientX; sy = e.clientY;
+      var r = fab.getBoundingClientRect(); ox = r.left; oy = r.top;
+      fab.setPointerCapture(e.pointerId);
+    });
+    fab.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - sx, dy = e.clientY - sy;
+      if (!moved && Math.abs(dx) + Math.abs(dy) < 6) return;
+      moved = true; fab.classList.add("drag"); sheet.hidden = true;
+      place(ox + dx, oy + dy);
+    });
+    function up() {
+      if (!down) return;
+      down = false; fab.classList.remove("drag");
+      if (moved) settle();
+      else if (sheet.hidden) openSheet(); else sheet.hidden = true;
+    }
+    fab.addEventListener("pointerup", up);
+    fab.addEventListener("pointercancel", up);
+    document.addEventListener("pointerdown", function (e) {
+      if (!sheet.hidden && !fab.contains(e.target) && !sheet.contains(e.target)) sheet.hidden = true;
+    });
+    addEventListener("resize", function () { if (fab.style.left) settle(); });
+  })();
 </script>
 
 <!-- a push from a phone lands on the board by itself (tested Sep 19, 2026) -->
