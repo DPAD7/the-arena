@@ -14652,8 +14652,8 @@
   });
   document.getElementById("weekbar").addEventListener("click", function () { setTimeout(refreshVisible, 50); });
   /* ---- the balance behind the dollar button ----
-     It starts at $300, the account as it stands with the $100 unit already
-     out, the way DraftKings keeps it. The legs are the prices wearing a gold
+     It starts at $300, and the $100 unit comes out of it when the day's legs
+     go gold, the way DraftKings keeps it. The legs are the prices wearing a gold
      edge, drawn as the slip draws its parlay card; each tile goes green as
      its leg lands and red if it cannot. When every leg has landed the whole
      return goes on -- the unit back and what it won -- and a miss changes
@@ -14687,22 +14687,43 @@
        yesterday's gold is still on the board until the day's marks clear,
        and it is not part of today's run (Jose, Sep 25, 2026) */
     var today = dayKeyOf(new Date().toISOString());
-    var legs = Object.keys(placed).filter(function (id) {
-      var v = BANK.legs[id];
-      return v && v.k && dayKeyOf(v.k) === today;
-    }).sort()
+    var legsOn = function (d) {
+      return Object.keys(placed).filter(function (id) {
+        var v = BANK.legs[id];
+        return v && v.k && dayKeyOf(v.k) === d;
+      });
+    };
+    /* the day's run is today's; a night game still going past midnight keeps
+       its own day until it settles */
+    var dayk = today;
+    if (!legsOn(today).length) {
+      Object.keys(placed).forEach(function (id) {
+        var v = BANK.legs[id], d = v && v.k ? dayKeyOf(v.k) : "";
+        if (d && d !== today && !BANK.paid[d] && Date.now() - Date.parse(v.k) < 20 * 3600000) dayk = d;
+      });
+    }
+    var legs = legsOn(dayk).sort()
       .map(function (id) { var v = BANK.legs[id]; return {id: id, o: v.o, l: v.l, g: v.g, st: v.st}; });
     var state = "";
+    /* the unit comes off the balance the moment the day has gold on it, the
+       way DraftKings takes it when the slip is placed, and goes back if every
+       leg is taken off before anything settles (Jose, Sep 25, 2026) */
+    BANK.out = BANK.out || {};
+    if (legs.length && !BANK.out[dayk]) {
+      BANK.bal = Math.round((BANK.bal - UNIT) * 100) / 100; BANK.out[dayk] = 1; moved = true;
+    } else if (!legs.length && BANK.out[dayk] && !BANK.paid[dayk]) {
+      BANK.bal = Math.round((BANK.bal + UNIT) * 100) / 100; delete BANK.out[dayk]; moved = true;
+    }
     if (legs.length) {
-      var key = legs.map(function (b) { return b.id; }).join("+");
       var lost = legs.some(function (b) { return b.st === "lost"; });
       var won = legs.every(function (b) { return b.st === "won"; });
       state = lost ? "lost" : won ? "won" : "";
-      if (state && !BANK.paid[key]) {
+      /* once a day: the whole payout on a cash, nothing on a miss */
+      if (state && !BANK.paid[dayk]) {
         var dec = 1;
         legs.forEach(function (b) { dec *= toDec(b.o) || 1; });
         BANK.bal = Math.round((BANK.bal + (won ? UNIT * dec : 0)) * 100) / 100;
-        BANK.paid[key] = state;
+        BANK.paid[dayk] = state;
         moved = true;
       }
     }
