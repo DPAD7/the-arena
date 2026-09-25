@@ -1179,6 +1179,12 @@
     gap: 9px; margin: 0 auto; width: auto; padding: 3px 10px;
     border: 1px solid rgba(255, 255, 255, 0.14); border-radius: 13px;
     background: rgba(255, 255, 255, 0.04); }
+  /* every icon on the bar's own middle, and the bar the same height live as
+     before the kick: the bar under the play mark carried a 5px top margin,
+     and the LIVE picture is a 34px square with air above and below its
+     mark (Jose, Sep 25, 2026: "the icons need to be centered in their row") */
+  .gcard--v3 .gtop > .glivebar { margin: 0; }
+  .gcard--v3 .gtop > .glive { margin: -4px 0 !important; }
   /* it is a row on its own line, centred, whatever the stack around it does */
   .gcard--v3 .gmid > .gtop, .gcard--v3 .ghead .gtop { align-self: center; }
   .gcard--v3 .gstack { display: flex; flex-direction: column; gap: 0; }
