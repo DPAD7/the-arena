@@ -6687,7 +6687,7 @@
     pushTimer = setTimeout(function () {
       var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {},
                   ring: (typeof RINGED === "object" && RINGED) || {},
-                  bank: (typeof BANK === "object" && BANK) || null};
+                  bank: (typeof BANKMET !== "undefined" && BANKMET && typeof BANK === "object" && BANK) || null};
       try {
         fetch(ARENAQ(), {
           method: "POST", headers: {"content-type": "application/json"},
@@ -6727,7 +6727,7 @@
             return out;
           };
           j = {hidden: fold(hid, j.hidden), placed: fold(placed, j.placed),
-               picks: fold(saved, j.picks), ring: fold(RINGED, j.ring), at: Date.now()};
+               picks: fold(saved, j.picks), ring: fold(RINGED, j.ring), bank: j.bank, at: Date.now()};
           try { localStorage.setItem("arena.met", "1"); } catch (e) {}
         } else if (!j.at) {
           return;
@@ -6741,8 +6741,10 @@
            held it is handed this device's */
         if (typeof BANK === "object") {
           if (j.bank && j.bank.bal != null) {
-            if (JSON.stringify(j.bank) !== JSON.stringify(BANK)) { BANK = j.bank; bankKeep(); bankDraw(); }
-          } else pushState();
+            if (JSON.stringify(j.bank) !== JSON.stringify(BANK)) { BANK = j.bank; BANK.legs = BANK.legs || {}; BANK.paid = BANK.paid || {}; bankKeep(); }
+            BANKMET = true;
+            bankDraw();
+          } else { BANKMET = true; pushState(); }
         }
         if (j.placed) {
           placed = j.placed;
@@ -14730,6 +14732,9 @@
      store so every device agrees
      (Jose, Sep 25, 2026). */
   var BANKKEY = "arena.bank.v1", UNIT = 100;
+  /* false until this device has read the store once: a new browser starts
+     at $300 and must never push that over the real balance (Sep 25, 2026) */
+  var BANKMET = false;
   var BANK = null;
   try { BANK = JSON.parse(localStorage.getItem(BANKKEY) || "null"); } catch (e) { BANK = null; }
   if (!BANK || BANK.bal == null) BANK = {bal: 300, legs: {}, paid: {}};
@@ -14738,15 +14743,39 @@
   function money(n) { return "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
-    if (!box || !amt) return;
+    if (!box || !amt || !BANKMET) return;
     var moved = false;
     /* what the page shows of each gold leg is kept, so a leg on another tab
        or a finished card is still drawn */
     document.querySelectorAll("button.price.placed[data-oid]").forEach(function (b) {
       var card = cardOf(b), id = b.dataset.oid;
+      /* a moneyline settles on the final score: nothing else on a football
+         card marks it, so a club that won stayed gold (Jose, Sep 25, 2026:
+         Army won 21-17 and its leg never went green) */
+      if (card && /^0ML/.test(id) && !b.classList.contains("won") && !b.classList.contains("lost") &&
+          typeof isOver === "function" && isOver(card) && card.dataset.ls !== undefined) {
+        var gid = card.dataset.espn, row = null;
+        [[SCHED, 9], [CFB, 10]].forEach(function (pair) {
+          (pair[0] || []).forEach(function (r) { if (String(r[1]) === String(gid)) row = [r, pair[1]]; });
+        });
+        if (row) {
+          var ls = parseInt(card.dataset.ls, 10), rs = parseInt(card.dataset.rs, 10);
+          var left = row[0][row[1] + 1] === id, right = row[0][row[1] + 3] === id;
+          if ((left || right) && !isNaN(ls) && !isNaN(rs) && ls !== rs) {
+            var won0 = left ? ls > rs : rs > ls;
+            b.classList.add(won0 ? "won" : "lost");
+          }
+        }
+      }
       var st = b.classList.contains("won") ? "won" : b.classList.contains("lost") ? "lost" : "live";
       var was = BANK.legs[id] || {};
-      var now = {o: priceOf(b), l: was.l || labelFor(b),
+      /* the leg keeps the price it was placed at and the slip's own label:
+         read off a live card the label took the clock for its market, and
+         the tiles wore "20:26" where ML belongs */
+      var pick = saved[id] && saved[id].l ? saved[id] : null;
+      var lab = was.l && !/ \u00b7 (\d+:\d\d|FINAL|LIVE)/.test(was.l) ? was.l
+              : pick ? pick.l : labelFor(b).replace(/ \u00b7 .*$/, "");
+      var now = {o: was.o || (pick && pick.o) || priceOf(b), l: lab,
                  g: card ? (card.dataset.espn || card.dataset.bout || "") : (was.g || ""), st: st,
                  k: (card && card.dataset.kick) || was.k || ""};
       if (JSON.stringify(now) !== JSON.stringify(was)) { BANK.legs[id] = now; moved = true; }
@@ -14778,10 +14807,10 @@
        way DraftKings takes it when the slip is placed, and goes back if every
        leg is taken off before anything settles (Jose, Sep 25, 2026) */
     BANK.out = BANK.out || {};
+    /* never handed back on its own: a page drawn before its cards sees no
+       gold at all, and read that as the legs taken off (Sep 25, 2026) */
     if (legs.length && !BANK.out[dayk]) {
       BANK.bal = Math.round((BANK.bal - UNIT) * 100) / 100; BANK.out[dayk] = 1; moved = true;
-    } else if (!legs.length && BANK.out[dayk] && !BANK.paid[dayk]) {
-      BANK.bal = Math.round((BANK.bal + UNIT) * 100) / 100; delete BANK.out[dayk]; moved = true;
     }
     if (legs.length) {
       var lost = legs.some(function (b) { return b.st === "lost"; });

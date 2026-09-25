@@ -34,6 +34,12 @@ function allowed(request, env) {
   return said === env.STATE_KEY;
 }
 
+/* a write that carries no balance keeps the one already held: a device that
+   has not read the store yet must never wipe it (Sep 25, 2026) */
+async function heldBank(env) {
+  try { const held = JSON.parse((await env.ARENA.get(SLOT)) || "null"); return (held && held.bank) || null; }
+  catch (e) { return null; }
+}
 export async function onRequest({ request, env }) {
   if (!env.ARENA) return ok({ error: "no store" }, { "x-arena": "unbound" });
   if (!allowed(request, env)) return new Response("no", { status: 403 });
@@ -60,7 +66,7 @@ export async function onRequest({ request, env }) {
       ring: body && body.ring && typeof body.ring === "object" ? body.ring : {},
       /* the balance behind the dollar button: what it stands at, the legs it
          has seen, and which runs of legs it has already settled */
-      bank: body && body.bank && typeof body.bank === "object" ? body.bank : null,
+      bank: body && body.bank && typeof body.bank === "object" ? body.bank : await heldBank(env),
       at: Date.now()
     };
     await env.ARENA.put(SLOT, JSON.stringify(keep));
