@@ -7906,7 +7906,14 @@
         card.dataset.settled === "1") {
       card.querySelectorAll(".glive").forEach(function (x) { x.remove(); });
     }
-    var lit = card.querySelector(".glive");
+    /* one badge only: every live refresh builds a new one under the clock,
+       and the one already lifted into the top row was left there, so a game
+       wore two (Jose, Sep 25, 2026: "why am I getting two live icons") */
+    var all = [].slice.call(card.querySelectorAll(".glive"));
+    var fresh = all.filter(function (x) { return x.parentNode !== top; })[0];
+    all.forEach(function (x) { if (x.parentNode === top && fresh) x.remove(); });
+    all.filter(function (x) { return x.parentNode === top; }).slice(1).forEach(function (x) { x.remove(); });
+    var lit = fresh || card.querySelector(".glive");
     if (lit && lit.parentNode !== top) {
       lit.style.margin = "0";
       top.insertBefore(lit, b);
