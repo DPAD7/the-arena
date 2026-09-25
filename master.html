@@ -191,6 +191,12 @@
   .cashsheet .cashamt { font-size: 36px; margin: 2px 0 12px; }
   .cashsheet .slipcard { text-align: left; margin: 0; }
   .cashsheet .cashnone { color: #8e8e93; font-size: 14px; padding: 6px 0 2px; }
+  .cashsheet .cashrcpt { margin-top: 12px; padding-top: 10px; text-align: left;
+    border-top: 1px dashed rgba(255,255,255,.18); }
+  .cashsheet .cashrcpt > div { display: flex; justify-content: space-between; align-items: baseline;
+    padding: 3px 2px; font-size: 15px; color: #8e8e93; }
+  .cashsheet .cashrcpt b { color: #fff; font-weight: 800; font-variant-numeric: tabular-nums; }
+  .cashsheet .cashrcpt b.cashpay { color: var(--green); }
   .cashsheet .cashunit { margin-top: 8px; font-size: 12px; font-weight: 700; letter-spacing: .08em;
     color: #8e8e93; text-transform: uppercase; }
   /* a leg's edge: gold while it is live, green once it lands, red once it
@@ -14708,9 +14714,11 @@
         slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
         '<div class="slfoot"><b>' + legs.length + (legs.length > 1 ? " legs" : " leg") +
         '</b><span class="slpay">' + parlay(legs) + '</span></div></div>' +
-        /* what the unit wins if every leg lands, where the unit used to be
-           written (Jose, Sep 25, 2026) */
-        '<div class="cashunit">To win ' + money(UNIT * (legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1) - 1)) + '</div>';
+        /* the foot of a receipt: what went in, and what comes back if every
+           leg lands, the unit included (Jose, Sep 25, 2026) */
+        '<div class="cashrcpt"><div><span>Amount</span><b>' + money(UNIT) + '</b></div>' +
+        '<div><span>Total payout</span><b class="cashpay">' +
+        money(UNIT * legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1)) + '</b></div></div>';
     }
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
   }
