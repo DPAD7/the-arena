@@ -648,12 +648,16 @@
      2026: "I should be able to double click boxes without odds in
      anticipation") */
   .ghost { cursor: pointer; transition: border-color .15s, color .15s; }
+  /* a marked box wears the same gold edge as a placed price, price or not:
+     a white dash read as something else (Jose, Sep 25, 2026) */
   .ghost--want {
-    border-color: var(--amber) !important;
-    border-style: dashed !important;
-    color: var(--amber) !important;
+    border-color: #e3b341 !important;
+    border-style: solid !important; border-width: 2px !important;
+    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40) !important;
+    color: #e3b341 !important;
   }
   .ghost--want::after { content: "\2014"; }
+  .gcard.gcard--v3 .ghost--want::after { color: #e3b341 !important; }
   .ptdx--v2 .ptdbtn .ghost { min-width: 48px; padding: 6px 7px; }
   .gcard:not([data-lg]) .ghead .ghost { min-width: 46px; padding: 6px 7px; }
 
