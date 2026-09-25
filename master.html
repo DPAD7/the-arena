@@ -7550,23 +7550,28 @@
         chip2.classList.add("gjersey");
         /* Kalshi's own jersey with the margin as its number; they stop at 99,
            and a college club has none, so past that it is drawn here */
-        var n2 = Math.abs(lead), kab = ({ JAX: "JAC", WSH: "WAS" })[ab] || ab;
-        var drawn = jerseySvg(clubHue(ab, lgOf(card)) || "#8e8e93", String(n2));
+        var n2 = Math.abs(lead);
         /* one jersey for every margin: Kalshi's shirt with its number taken
            off, and the margin printed on it here, so 7 and 201 look alike
-           (Jose, Sep 23, 2026) */
+           (Jose, Sep 23, 2026). Only ever a Kalshi jersey: the shirt drawn
+           here is gone for good, so a picture that has not come is no shirt
+           at all, never a stand-in (Jose, Sep 25, 2026) */
         var numEm = '<em' + (String(n2).length > 2 ? ' class="n3"' : '') + '>' + n2 + '</em>';
-        if (lgOf(card) === "nfl" && ab) {
-          chip2.innerHTML = '<img alt="" src="ico/jersey/' + ab.toLowerCase() + '.png">' + numEm;
-          chip2.querySelector("img").onerror = function () { chip2.innerHTML = drawn; };
-        } else if (ab) {
-          /* a college club: the same Kalshi shirt, dyed in its own two
-             colours -- body the first, sleeves the second (Jose, Sep 23, 2026) */
-          chip2.innerHTML = drawn;
-          dyeJersey(CFBCOLOR[ab] || clubHue(ab, lgOf(card)) || "#8e8e93", ALTCOLOR[ab] || "#c7cbd1", function (url) {
-            if (url) chip2.innerHTML = '<img alt="" src="' + url + '">' + numEm;
-          });
-        } else chip2.innerHTML = drawn;
+        var key = ab + "|" + n2;
+        if (chip2.dataset.jersey !== key) {
+          chip2.dataset.jersey = key;
+          chip2.innerHTML = "";
+          if (lgOf(card) === "nfl" && ab) {
+            chip2.innerHTML = '<img alt="" src="ico/jersey/' + ab.toLowerCase() + '.png">' + numEm;
+            chip2.querySelector("img").onerror = function () { chip2.innerHTML = ""; chip2.dataset.jersey = ""; };
+          } else if (ab) {
+            /* a college club: the same Kalshi shirt, dyed in its own two
+               colours -- body the first, sleeves the second (Jose, Sep 23, 2026) */
+            dyeJersey(CFBCOLOR[ab] || clubHue(ab, lgOf(card)) || "#8e8e93", ALTCOLOR[ab] || "#c7cbd1", function (url) {
+              if (url && chip2.dataset.jersey === key) chip2.innerHTML = '<img alt="" src="' + url + '">' + numEm;
+            });
+          }
+        }
         chip2.style.opacity = (tot && lead !== 0) ? "" : "0";
         chip2.style.color = "";
         /* the middle of the winner's own half of the bar -- a quarter in from
@@ -7605,16 +7610,6 @@
       try { DYED[key] = out.toDataURL("image/png"); } catch (e) { DYED[key] = null; }
       done(DYED[key]);
     });
-  }
-  /* a jersey drawn, not fetched: any number, any colour, nothing stretched */
-  function jerseySvg(col, num) {
-    var fs = String(num).length > 3 ? 13 : String(num).length > 2 ? 15 : 17;
-    return '<svg viewBox="0 0 48 44" aria-hidden="true">' +
-      '<path d="M16 3 L4 9 L1 19 L9 22 L10 41 L38 41 L39 22 L47 19 L44 9 L32 3 Q24 9 16 3 Z" fill="' + col +
-      '" stroke="rgba(0,0,0,.35)" stroke-width="1"/>' +
-      '<path d="M4 9 L1 19 L9 22 L10 13 Z M44 9 L47 19 L39 22 L38 13 Z" fill="#c7cbd1"/>' +
-      '<text x="24" y="31" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" ' +
-      'font-weight="800" font-size="' + fs + '" fill="#fff">' + num + '</text></svg>';
   }
   /* A college card carries two sections and each was repeating the same two
      names and a label. The names go up once, above both, and the labels come
