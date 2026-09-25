@@ -2984,9 +2984,12 @@
   .gwatch svg { display: block; }
   .gwatch:has(.tvplay) { opacity: 1; }
   .gwatch .tvplay { width: 30px; height: 30px; }
-  /* blue, whoever is showing it (Jose, Sep 22, 2026: "play button must be
-     blue") -- it used to be the broadcaster's own red or blue */
-  .gwatch--red, .gwatch--blue { --tv: #0A7CFF; --tvdark: #0a4fa8; }
+  /* the app it opens decides the color: Paramount+ (every UFC and DWCS
+     fight) and Prime Video blue; Netflix red; everything else is YouTube TV,
+     red, whatever the network (Jose, Sep 18, 2026, and again Sep 25: "why
+     is the play button blue, I told you the colors and networks") */
+  .gwatch--red { --tv: #FF0033; --tvdark: #b3001f; }
+  .gwatch--blue { --tv: #0A7CFF; --tvdark: #0a4fa8; }
   /* locked is put on at the bell, not at the end, so this hid the watch link
      the moment a card started -- which is exactly when it is wanted. A bout
      that is actually over is covered by .gcard.done .gwatch just below
