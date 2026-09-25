@@ -14644,7 +14644,9 @@
         slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
         '<div class="slfoot"><b>' + legs.length + (legs.length > 1 ? " legs" : " leg") +
         '</b><span class="slpay">' + parlay(legs) + '</span></div></div>' +
-        '<div class="cashunit">' + money(UNIT) + ' unit</div>';
+        /* what the unit wins if every leg lands, where the unit used to be
+           written (Jose, Sep 25, 2026) */
+        '<div class="cashunit">To win ' + money(UNIT * (legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1) - 1)) + '</div>';
     }
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
   }
