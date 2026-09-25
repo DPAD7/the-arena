@@ -4036,6 +4036,7 @@
     }
     return "";
   }
+  var GTAPAT = 0, GTAPON = null;
   document.addEventListener("click", function (e) {
     var g = e.target.closest && e.target.closest(".ghost");
     if (!g) return;
@@ -4044,6 +4045,13 @@
     if (!k) return;
     e.preventDefault();
     e.stopPropagation();
+    /* the same double tap as a price, and the same rule: a game that is over
+       cannot be marked. One tap did it before, on finished games too, and a
+       stray thumb left Purdie's empty box marked (Jose, Sep 25, 2026) */
+    if (typeof isOver === "function" && isOver(card)) return;
+    var now = Date.now();
+    if (!(GTAPON === k && now - GTAPAT < 400)) { GTAPAT = now; GTAPON = k; return; }
+    GTAPAT = 0; GTAPON = null;
     if (want[k]) { delete want[k]; g.classList.remove("ghost--want"); }
     else { want[k] = 1; g.classList.add("ghost--want"); }
     saveWant();
@@ -4055,10 +4063,13 @@
     var id = card.dataset.espn || card.dataset.bout;
     if (!id) return;
     var all = card.querySelectorAll("button.price, .ghost");
+    /* a game that is over will never get the price it was waiting on */
+    var over = typeof isOver === "function" && isOver(card);
     for (var i = 0; i < all.length; i++) {
       var k = id + "#" + i;
       if (!want[k]) continue;
       var el = all[i];
+      if (over) { delete want[k]; saveWant(); el.classList.remove("ghost--want"); continue; }
       if (el.classList.contains("ghost")) { el.classList.add("ghost--want"); continue; }
       /* the price arrived: make it a real pick and stop waiting on it */
       delete want[k];
