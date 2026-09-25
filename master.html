@@ -1587,6 +1587,9 @@
     letter-spacing: .06em; color: var(--muted); white-space: nowrap;
     padding: 0 10px; }
   .gcard--v3 .gclk--fin { color: #c9ccd2; }
+  .gcard--v3 .gclk--two { display: inline-flex; flex-direction: column; align-items: center;
+    line-height: 1.15; padding: 0 6px; }
+  .gcard--v3 .gclk--two b { font-weight: 800; }
   /* the foot keeps its prices, shut, the way the mock has them -- but a leg
      he marked is not shut to him: it keeps its gold at full strength
      (Jose, Sep 22, 2026: "I have Stafford head to head") */
@@ -7492,7 +7495,14 @@
         mk.innerHTML = "";
         var clk = document.createElement("i");
         clk.className = "gclk" + (done ? " gclk--fin" : "");
-        clk.textContent = card.dataset.clk || (done ? "FINAL" : "");
+        /* the time over the quarter, stacked, so "3:51 - 1ST" never runs
+           into the score beside it (Jose, Sep 25, 2026) */
+        var said = card.dataset.clk || (done ? "FINAL" : "");
+        var two = said.split(/\s+-\s+/);
+        if (two.length === 2) {
+          clk.classList.add("gclk--two");
+          two.forEach(function (x) { var b = document.createElement("b"); b.textContent = x; clk.appendChild(b); });
+        } else clk.textContent = said;
         mk.appendChild(clk);
       }
       var ls = card.dataset.ls, rs = card.dataset.rs;
