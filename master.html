@@ -927,12 +927,12 @@
           touch-action: none; }
   .drvg > svg { display: block; width: 100%; height: 128px; }
   /* the middle of the plot -- 26 + 76/2 -- less the bar's own half-height */
-  .drive--g .drvwrap { position: absolute; left: 0; right: 0; top: 62.5px; z-index: 0; }
-  /* the yard bar lies behind the win line, so the curve reads across it
-     rather than being cut by it (Jose, Sep 25, 2026) */
+  /* the yard bar is drawn over the win line and its fill, never under
+     them (Jose, Sep 25, 2026: "yard bar over not under") */
+  .drive--g .drvwrap { position: absolute; left: 0; right: 0; top: 62.5px; z-index: 2; }
   .drive--g .drvg > svg { position: relative; z-index: 1; pointer-events: none; }
   .drive--g .drvwin, .drive--g .drvdd, .drive--g .drvcur, .drive--g .drvdot,
-  .drive--g .drvpan { z-index: 2; }
+  .drive--g .drvpan { z-index: 3; }
   /* the club that has the ball now owns a whole band and the fill under the
      curve, so the field itself goes white: a navy bar on a navy band is
      nothing at all */
