@@ -7024,17 +7024,87 @@
   "left": "Norma Dumont",
   "right": "Ailin Perez",
   "rounds": 3,
-  "start": "2026-09-26T21:45Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-27T01:45Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Norma Dumont": [
+     "-130",
+     "0QA372741197#2296288593_13L9034Q11Q21"
+    ],
+    "Ailin Perez": [
+     "-105",
+     "0QA372741197#2296288759_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Norma Dumont": [
+     "+130",
+     "0QA372741198#2296288601_13L9034Q11Q21"
+    ],
+    "Ailin Perez": [
+     "-180",
+     "0QA372741198#2296288756_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Norma Dumont": [
+     "-130",
+     "0QA372741222#2296288694_13L9034Q10Q21"
+    ],
+    "Ailin Perez": [
+     "+100",
+     "0QA372741222#2296288732_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Norma Dumont": [
+     "-145",
+     "0QA372741221#2296288690_13L9034Q10Q21"
+    ],
+    "Ailin Perez": [
+     "+110",
+     "0QA372741221#2296288735_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Norma Dumont": [
-     "+120",
+     "+124",
      "0ML86375395_1"
     ],
     "Ailin Perez": [
-     "-142",
+     "-148",
      "0ML86375395_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Norma Dumont": [
+     "-110",
+     "0QA372741220#2296288682_13L9034Q10Q21"
+    ],
+    "Ailin Perez": [
+     "-120",
+     "0QA372741220#2296288741_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Norma Dumont": [
+     "-225",
+     "0HC86439357P350_1"
+    ],
+    "Ailin Perez": [
+     "+165",
+     "0HC86439357N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Norma Dumont": [
+     "-500",
+     "0HC86439358P750_1"
+    ],
+    "Ailin Perez": [
+     "+330",
+     "0HC86439358N750_3"
     ]
    },
    "Total Rounds": {
@@ -7046,6 +7116,438 @@
      "+360",
      "0OU86404834U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-1100",
+     "0OU86439356O150_1"
+    ],
+    "Under": [
+     "+550",
+     "0OU86439356U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+3000",
+     "0QA372741201#2296288609_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372741184#2296288541_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+9000",
+     "0QA372741223#2296288698_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-175",
+     "0QA372741191#2296288569_13L9034Q11Q22"
+    ],
+    "No": [
+     "+135",
+     "0QA372741191#2296288777_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+275",
+     "0QA372741192#2296288573_13L9034Q11Q22"
+    ],
+    "No": [
+     "-400",
+     "0QA372741192#2296288774_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-450",
+     "0QA372741177#2296288517_13L9034Q10Q20"
+    ],
+    "No": [
+     "+300",
+     "0QA372741177#2296288813_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+1200",
+     "0QA372741199#2296288597_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1400",
+     "0QA372741199#2296288717_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+1600",
+     "0QA372741199#2296288849_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1800",
+     "0QA372741199#2296288864_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+2500",
+     "0QA372741199#2296288912_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2500",
+     "0QA372741199#2296288921_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-450",
+     "0QA372741199#2296289022_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Norma Dumont to Win in Rounds 1-2": [
+     "+750",
+     "0QA372741180#2296288529_13L9034Q11Q21"
+    ],
+    "Norma Dumont to Win in Round 3 or on Decision": [
+     "+150",
+     "0QA372741180#2296288828_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741180#2296288996_13L9034Q19Q29"
+    ],
+    "Ailin Perez to Win in Rounds 1-2": [
+     "+900",
+     "0QA372741180#2296288897_15L9034Q15Q25"
+    ],
+    "Ailin Perez to Win in Round 3 or on Decision": [
+     "-125",
+     "0QA372741180#2296288951_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Norma Dumont to Win by KO/TKO/DQ in Round 1": [
+     "+2200",
+     "0QA372741182#2296288525_13L9034Q11Q21"
+    ],
+    "Norma Dumont to Win by KO/TKO/DQ in Round 2": [
+     "+3000",
+     "0QA372741182#2296288807_13L9034Q12Q22"
+    ],
+    "Norma Dumont to Win by KO/TKO/DQ in Round 3": [
+     "+4500",
+     "0QA372741182#2296288825_13L9034Q13Q23"
+    ],
+    "Norma Dumont to Win by Submission in Round 1": [
+     "+2200",
+     "0QA372741182#2296288939_13L9034Q16Q26"
+    ],
+    "Norma Dumont to Win by Submission in Round 2": [
+     "+2800",
+     "0QA372741182#2296288948_13L9034Q17Q27"
+    ],
+    "Norma Dumont to Win by Submission in Round 3": [
+     "+4000",
+     "0QA372741182#2296288984_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-450",
+     "0QA372741182#2296289046_13L9034Q121Q221"
+    ],
+    "Ailin Perez to Win by KO/TKO/DQ in Round 1": [
+     "+2200",
+     "0QA372741182#2296289020_15L9034Q111Q211"
+    ],
+    "Ailin Perez to Win by KO/TKO/DQ in Round 2": [
+     "+3000",
+     "0QA372741182#2296289024_15L9034Q112Q212"
+    ],
+    "Ailin Perez to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA372741182#2296289030_15L9034Q113Q213"
+    ],
+    "Ailin Perez to Win by Submission in Round 1": [
+     "+2800",
+     "0QA372741182#2296289036_15L9034Q116Q216"
+    ],
+    "Ailin Perez to Win by Submission in Round 2": [
+     "+3500",
+     "0QA372741182#2296289038_15L9034Q117Q217"
+    ],
+    "Ailin Perez to Win by Submission in Round 3": [
+     "+5000",
+     "0QA372741182#2296289040_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Norma Dumont To Win And Under 0.5": [
+     "+2800",
+     "0QA372741187#2296288549_13L9034Q11Q21"
+    ],
+    "Norma Dumont To Win And Under 1.5": [
+     "+900",
+     "0QA372741187#2296288840_13L9034Q11Q23"
+    ],
+    "Ailin Perez To Win And Under 0.5": [
+     "+3000",
+     "0QA372741187#2296288792_14L9034Q12Q22"
+    ],
+    "Ailin Perez To Win And Under 1.5": [
+     "+1100",
+     "0QA372741187#2296288870_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Norma Dumont To Win And Over 1.5": [
+     "+125",
+     "0QA372741188#2296288846_13L9034Q11Q23"
+    ],
+    "Norma Dumont To Win And Over 2.5": [
+     "+150",
+     "0QA372741188#2296288909_13L9034Q11Q25"
+    ],
+    "Ailin Perez To Win And Over 1.5": [
+     "-135",
+     "0QA372741188#2296288867_14L9034Q12Q24"
+    ],
+    "Ailin Perez To Win And Over 2.5": [
+     "-125",
+     "0QA372741188#2296288924_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-2000",
+     "0QA372741189#2296288561_13L9034Q11Q22"
+    ],
+    "No": [
+     "+800",
+     "0QA372741189#2296288783_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-700",
+     "0QA372741190#2296288565_13L9034Q11Q22"
+    ],
+    "No": [
+     "+425",
+     "0QA372741190#2296288780_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Norma Dumont Round 1": [
+     "+1200",
+     "0QA372741178#2296288508_13L9034Q11Q20"
+    ],
+    "Norma Dumont Round 2": [
+     "+1600",
+     "0QA372741178#2296288819_13L9034Q11Q22"
+    ],
+    "Norma Dumont Round 3": [
+     "+2500",
+     "0QA372741178#2296288891_13L9034Q11Q24"
+    ],
+    "Norma Dumont By Decision": [
+     "+175",
+     "0QA372741178#2296289018_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741178#2296289028_15L9034Q10Q212"
+    ],
+    "Ailin Perez Round 1": [
+     "+1400",
+     "0QA372741178#2296288816_14L9034Q12Q21"
+    ],
+    "Ailin Perez Round 2": [
+     "+1800",
+     "0QA372741178#2296288888_14L9034Q12Q23"
+    ],
+    "Ailin Perez Round 3": [
+     "+2500",
+     "0QA372741178#2296288942_14L9034Q12Q25"
+    ],
+    "Ailin Perez By Decision": [
+     "-110",
+     "0QA372741178#2296289026_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+800",
+     "0QA372741183#2296288537_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+900",
+     "0QA372741183#2296288798_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+1200",
+     "0QA372741183#2296288834_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741183#2296288930_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-450",
+     "0QA372741183#2296288954_13L9034Q11Q25"
+    ]
+   },
+   "Ailin Perez to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+700",
+     "0QA372741202#2296288613_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1600",
+     "0QA372741202#2296288747_13L9034Q13Q24"
+    ]
+   },
+   "Norma Dumont to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+600",
+     "0QA372741203#2296288686_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA372741203#2296288738_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Norma Dumont to Win by KO/TKO/DQ or Decision": [
+     "+130",
+     "0QA372741181#2296288533_13L9034Q11Q21"
+    ],
+    "Norma Dumont to Win by KO/TKO/DQ or Submission": [
+     "+600",
+     "0QA372741181#2296288801_13L9034Q12Q22"
+    ],
+    "Norma Dumont to Win by Submission or Decision": [
+     "+125",
+     "0QA372741181#2296288831_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741181#2296288957_13L9034Q17Q27"
+    ],
+    "Ailin Perez to Win by KO/TKO/DQ or Decision": [
+     "-135",
+     "0QA372741181#2296288876_15L9034Q14Q24"
+    ],
+    "Ailin Perez to Win by KO/TKO/DQ or Submission": [
+     "+700",
+     "0QA372741181#2296288900_15L9034Q15Q25"
+    ],
+    "Ailin Perez to Win by Submission or Decision": [
+     "-125",
+     "0QA372741181#2296288933_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Norma Dumont to Win By KO/TKO/DQ or Ailin Perez to Win by Submission": [
+     "+600",
+     "0QA372741204#2296288617_13L9034Q10Q21"
+    ],
+    "Norma Dumont to Win By KO/TKO/DQ or Ailin Perez to Win by Decision": [
+     "-145",
+     "0QA372741204#2296288744_13L9034Q10Q22"
+    ],
+    "Norma Dumont to Win By Submission or Ailin Perez to Win by KO/TKO/DQ": [
+     "+500",
+     "0QA372741204#2296288852_13L9034Q10Q23"
+    ],
+    "Norma Dumont to Win By Submission or Ailin Perez to Win by Decision": [
+     "-150",
+     "0QA372741204#2296288861_13L9034Q10Q24"
+    ],
+    "Norma Dumont to Win By Decision or Ailin Perez to Win by KO/TKO/DQ": [
+     "+125",
+     "0QA372741204#2296288915_13L9034Q10Q25"
+    ],
+    "Norma Dumont to Win By Decision or Ailin Perez to Win by Submission": [
+     "+130",
+     "0QA372741204#2296288918_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741204#2296288969_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+600",
+     "0QA372741179#2296288521_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+650",
+     "0QA372741179#2296288810_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-450",
+     "0QA372741179#2296288822_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741179#2296288885_15L9034Q14Q24"
+    ]
+   },
+   "Norma Dumont to Win by Unanimous Decision": {
+    "Yes": [
+     "+240",
+     "0QA372741193#2296288577_13L9034Q11Q22"
+    ]
+   },
+   "Ailin Perez to Win by Unanimous Decision": {
+    "Yes": [
+     "+130",
+     "0QA372741194#2296288581_13L9034Q11Q22"
+    ]
+   },
+   "Norma Dumont to Win by Split or Majority Decision": {
+    "Yes": [
+     "+700",
+     "0QA372741195#2296288585_13L9034Q11Q22"
+    ]
+   },
+   "Ailin Perez to Win by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA372741196#2296288589_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Norma Dumont": [
+     "+1200",
+     "0QA372741230#2296288705_13L9034Q11Q22"
+    ],
+    "Ailin Perez": [
+     "+1100",
+     "0QA372741230#2296288723_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Norma Dumont": [
+     "+1100",
+     "0QA372741231#2296288708_13L9034Q11Q22"
+    ],
+    "Ailin Perez": [
+     "+1400",
+     "0QA372741231#2296288720_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Norma Dumont": [
+     "+175",
+     "0QA372741232#2296288711_13L9034Q11Q22"
+    ],
+    "Ailin Perez": [
+     "-110",
+     "0QA372741232#2296288714_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -7054,27 +7556,529 @@
   "left": "Ricky Simon",
   "right": "Montel Jackson",
   "rounds": 3,
-  "start": "2026-09-26T22:45Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-26T22:15Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Montel Jackson": [
+     "-380",
+     "0QA372741312#2296289426_13L9034Q11Q21"
+    ],
+    "Ricky Simon": [
+     "+250",
+     "0QA372741312#2296289472_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Montel Jackson": [
+     "-175",
+     "0QA372741313#2296289428_13L9034Q11Q21"
+    ],
+    "Ricky Simon": [
+     "+125",
+     "0QA372741313#2296289471_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Montel Jackson": [
+     "-450",
+     "0QA372741337#2296289451_13L9034Q10Q21"
+    ],
+    "Ricky Simon": [
+     "+300",
+     "0QA372741337#2296289463_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Montel Jackson": [
+     "-185",
+     "0QA372741336#2296289450_13L9034Q10Q21"
+    ],
+    "Ricky Simon": [
+     "+140",
+     "0QA372741336#2296289464_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Montel Jackson": [
-     "-198",
+     "-218",
      "0ML86375391_1"
     ],
     "Ricky Simon": [
-     "+164",
+     "+180",
      "0ML86375391_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Montel Jackson": [
+     "-475",
+     "0QA372741335#2296289448_13L9034Q10Q21"
+    ],
+    "Ricky Simon": [
+     "+320",
+     "0QA372741335#2296289466_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Montel Jackson": [
+     "-105",
+     "0HC86439351N350_1"
+    ],
+    "Ricky Simon": [
+     "-130",
+     "0HC86439351P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Montel Jackson": [
+     "-750",
+     "0HC86439352P750_1"
+    ],
+    "Ricky Simon": [
+     "+450",
+     "0HC86439352N750_3"
     ]
    },
    "Total Rounds": {
     "Over": [
-     "-188",
+     "-210",
      "0OU86404830O250_1"
     ],
     "Under": [
-     "+145",
+     "+160",
      "0OU86404830U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-425",
+     "0OU86439350O150_1"
+    ],
+    "Under": [
+     "+275",
+     "0OU86439350U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1800",
+     "0QA372741316#2296289430_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372741299#2296289413_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+6000",
+     "0QA372741338#2296289452_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+100",
+     "0QA372741306#2296289420_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA372741306#2296289478_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+380",
+     "0QA372741307#2296289421_13L9034Q11Q22"
+    ],
+    "No": [
+     "-600",
+     "0QA372741307#2296289477_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-175",
+     "0QA372741292#2296289407_13L9034Q10Q20"
+    ],
+    "No": [
+     "+130",
+     "0QA372741292#2296289490_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+450",
+     "0QA372741314#2296289427_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1400",
+     "0QA372741314#2296289458_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+700",
+     "0QA372741314#2296289502_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+2200",
+     "0QA372741314#2296289507_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+900",
+     "0QA372741314#2296289523_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+3000",
+     "0QA372741314#2296289526_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-175",
+     "0QA372741314#2296289562_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Montel Jackson to Win in Rounds 1-2": [
+     "+260",
+     "0QA372741295#2296289410_13L9034Q11Q21"
+    ],
+    "Montel Jackson to Win in Round 3 or on Decision": [
+     "+110",
+     "0QA372741295#2296289495_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741295#2296289551_13L9034Q19Q29"
+    ],
+    "Ricky Simon to Win in Rounds 1-2": [
+     "+900",
+     "0QA372741295#2296289518_15L9034Q15Q25"
+    ],
+    "Ricky Simon to Win in Round 3 or on Decision": [
+     "+215",
+     "0QA372741295#2296289536_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Montel Jackson to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA372741297#2296289409_13L9034Q11Q21"
+    ],
+    "Montel Jackson to Win by KO/TKO/DQ in Round 2": [
+     "+800",
+     "0QA372741297#2296289488_13L9034Q12Q22"
+    ],
+    "Montel Jackson to Win by KO/TKO/DQ in Round 3": [
+     "+1100",
+     "0QA372741297#2296289494_13L9034Q13Q23"
+    ],
+    "Montel Jackson to Win by Submission in Round 1": [
+     "+2000",
+     "0QA372741297#2296289532_13L9034Q16Q26"
+    ],
+    "Montel Jackson to Win by Submission in Round 2": [
+     "+3000",
+     "0QA372741297#2296289535_13L9034Q17Q27"
+    ],
+    "Montel Jackson to Win by Submission in Round 3": [
+     "+4000",
+     "0QA372741297#2296289547_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-175",
+     "0QA372741297#2296289574_13L9034Q121Q221"
+    ],
+    "Ricky Simon to Win by KO/TKO/DQ in Round 1": [
+     "+2200",
+     "0QA372741297#2296289561_15L9034Q111Q211"
+    ],
+    "Ricky Simon to Win by KO/TKO/DQ in Round 2": [
+     "+2800",
+     "0QA372741297#2296289563_15L9034Q112Q212"
+    ],
+    "Ricky Simon to Win by KO/TKO/DQ in Round 3": [
+     "+3500",
+     "0QA372741297#2296289566_15L9034Q113Q213"
+    ],
+    "Ricky Simon to Win by Submission in Round 1": [
+     "+3500",
+     "0QA372741297#2296289569_15L9034Q116Q216"
+    ],
+    "Ricky Simon to Win by Submission in Round 2": [
+     "+4500",
+     "0QA372741297#2296289570_15L9034Q117Q217"
+    ],
+    "Ricky Simon to Win by Submission in Round 3": [
+     "+5500",
+     "0QA372741297#2296289571_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Montel Jackson To Win And Under 0.5": [
+     "+1000",
+     "0QA372741302#2296289415_13L9034Q11Q21"
+    ],
+    "Montel Jackson To Win And Under 1.5": [
+     "+330",
+     "0QA372741302#2296289499_13L9034Q11Q23"
+    ],
+    "Ricky Simon To Win And Under 0.5": [
+     "+3500",
+     "0QA372741302#2296289483_14L9034Q12Q22"
+    ],
+    "Ricky Simon To Win And Under 1.5": [
+     "+1200",
+     "0QA372741302#2296289509_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Montel Jackson To Win And Over 1.5": [
+     "-130",
+     "0QA372741303#2296289501_13L9034Q11Q23"
+    ],
+    "Montel Jackson To Win And Over 2.5": [
+     "+120",
+     "0QA372741303#2296289522_13L9034Q11Q25"
+    ],
+    "Ricky Simon To Win And Over 1.5": [
+     "+180",
+     "0QA372741303#2296289508_14L9034Q12Q24"
+    ],
+    "Ricky Simon To Win And Over 2.5": [
+     "+215",
+     "0QA372741303#2296289527_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-650",
+     "0QA372741304#2296289418_13L9034Q11Q22"
+    ],
+    "No": [
+     "+400",
+     "0QA372741304#2296289480_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-275",
+     "0QA372741305#2296289419_13L9034Q11Q22"
+    ],
+    "No": [
+     "+200",
+     "0QA372741305#2296289479_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Montel Jackson Round 1": [
+     "+450",
+     "0QA372741293#2296289406_13L9034Q11Q20"
+    ],
+    "Montel Jackson Round 2": [
+     "+700",
+     "0QA372741293#2296289492_13L9034Q11Q22"
+    ],
+    "Montel Jackson Round 3": [
+     "+1000",
+     "0QA372741293#2296289516_13L9034Q11Q24"
+    ],
+    "Montel Jackson By Decision": [
+     "+150",
+     "0QA372741293#2296289560_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741293#2296289565_15L9034Q10Q212"
+    ],
+    "Ricky Simon Round 1": [
+     "+1600",
+     "0QA372741293#2296289491_14L9034Q12Q21"
+    ],
+    "Ricky Simon Round 2": [
+     "+2000",
+     "0QA372741293#2296289515_14L9034Q12Q23"
+    ],
+    "Ricky Simon Round 3": [
+     "+2500",
+     "0QA372741293#2296289533_14L9034Q12Q25"
+    ],
+    "Ricky Simon By Decision": [
+     "+250",
+     "0QA372741293#2296289564_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+400",
+     "0QA372741298#2296289412_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+550",
+     "0QA372741298#2296289485_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+700",
+     "0QA372741298#2296289497_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741298#2296289529_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-175",
+     "0QA372741298#2296289537_13L9034Q11Q25"
+    ]
+   },
+   "Ricky Simon to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+700",
+     "0QA372741317#2296289431_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1600",
+     "0QA372741317#2296289468_13L9034Q13Q24"
+    ]
+   },
+   "Montel Jackson to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+200",
+     "0QA372741318#2296289449_13L9034Q11Q22"
+    ],
+    "No": [
+     "-275",
+     "0QA372741318#2296289465_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Montel Jackson to Win by KO/TKO/DQ or Decision": [
+     "-200",
+     "0QA372741296#2296289411_13L9034Q11Q21"
+    ],
+    "Montel Jackson to Win by KO/TKO/DQ or Submission": [
+     "+200",
+     "0QA372741296#2296289486_13L9034Q12Q22"
+    ],
+    "Montel Jackson to Win by Submission or Decision": [
+     "+110",
+     "0QA372741296#2296289496_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741296#2296289538_13L9034Q17Q27"
+    ],
+    "Ricky Simon to Win by KO/TKO/DQ or Decision": [
+     "+175",
+     "0QA372741296#2296289511_15L9034Q14Q24"
+    ],
+    "Ricky Simon to Win by KO/TKO/DQ or Submission": [
+     "+700",
+     "0QA372741296#2296289519_15L9034Q15Q25"
+    ],
+    "Ricky Simon to Win by Submission or Decision": [
+     "+200",
+     "0QA372741296#2296289530_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Montel Jackson to Win By KO/TKO/DQ or Ricky Simon to Win by Submission": [
+     "+185",
+     "0QA372741319#2296289432_13L9034Q10Q21"
+    ],
+    "Montel Jackson to Win By KO/TKO/DQ or Ricky Simon to Win by Decision": [
+     "-135",
+     "0QA372741319#2296289467_13L9034Q10Q22"
+    ],
+    "Montel Jackson to Win By Submission or Ricky Simon to Win by KO/TKO/DQ": [
+     "+475",
+     "0QA372741319#2296289503_13L9034Q10Q23"
+    ],
+    "Montel Jackson to Win By Submission or Ricky Simon to Win by Decision": [
+     "+175",
+     "0QA372741319#2296289506_13L9034Q10Q24"
+    ],
+    "Montel Jackson to Win By Decision or Ricky Simon to Win by KO/TKO/DQ": [
+     "+105",
+     "0QA372741319#2296289524_13L9034Q10Q25"
+    ],
+    "Montel Jackson to Win By Decision or Ricky Simon to Win by Submission": [
+     "+120",
+     "0QA372741319#2296289525_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741319#2296289542_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+180",
+     "0QA372741294#2296289408_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+700",
+     "0QA372741294#2296289489_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-175",
+     "0QA372741294#2296289493_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741294#2296289514_15L9034Q14Q24"
+    ]
+   },
+   "Montel Jackson to Win by Unanimous Decision": {
+    "Yes": [
+     "+200",
+     "0QA372741308#2296289422_13L9034Q11Q22"
+    ]
+   },
+   "Ricky Simon to Win by Unanimous Decision": {
+    "Yes": [
+     "+330",
+     "0QA372741309#2296289423_13L9034Q11Q22"
+    ]
+   },
+   "Montel Jackson to Win by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA372741310#2296289424_13L9034Q11Q22"
+    ]
+   },
+   "Ricky Simon to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA372741311#2296289425_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Montel Jackson": [
+     "+240",
+     "0QA372741345#2296289454_13L9034Q11Q22"
+    ],
+    "Ricky Simon": [
+     "+1000",
+     "0QA372741345#2296289460_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Montel Jackson": [
+     "+1100",
+     "0QA372741346#2296289455_13L9034Q11Q22"
+    ],
+    "Ricky Simon": [
+     "+1800",
+     "0QA372741346#2296289459_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Montel Jackson": [
+     "+150",
+     "0QA372741347#2296289456_13L9034Q11Q22"
+    ],
+    "Ricky Simon": [
+     "+250",
+     "0QA372741347#2296289457_13L9034Q13Q24"
     ]
    }
   }
@@ -7084,9 +8088,49 @@
   "left": "Christian Edwards",
   "right": "Rodolfo Bellato",
   "rounds": 3,
-  "start": "2026-09-26T23:45Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-26T23:15Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Rodolfo Bellato": [
+     "-235",
+     "0QA372741368#2296289595_13L9034Q11Q21"
+    ],
+    "Christian Edwards": [
+     "+165",
+     "0QA372741368#2296289641_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Rodolfo Bellato": [
+     "-150",
+     "0QA372741369#2296289597_13L9034Q11Q21"
+    ],
+    "Christian Edwards": [
+     "+110",
+     "0QA372741369#2296289640_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Rodolfo Bellato": [
+     "-265",
+     "0QA372741393#2296289620_13L9034Q10Q21"
+    ],
+    "Christian Edwards": [
+     "+195",
+     "0QA372741393#2296289632_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Rodolfo Bellato": [
+     "-450",
+     "0QA372741392#2296289619_13L9034Q10Q21"
+    ],
+    "Christian Edwards": [
+     "+300",
+     "0QA372741392#2296289633_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Rodolfo Bellato": [
      "-180",
@@ -7095,6 +8139,36 @@
     "Christian Edwards": [
      "+150",
      "0ML86375393_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Rodolfo Bellato": [
+     "-185",
+     "0QA372741391#2296289617_13L9034Q10Q21"
+    ],
+    "Christian Edwards": [
+     "+140",
+     "0QA372741391#2296289635_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Rodolfo Bellato": [
+     "-120",
+     "0HC86439354N350_1"
+    ],
+    "Christian Edwards": [
+     "-110",
+     "0HC86439354P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Rodolfo Bellato": [
+     "-400",
+     "0HC86439355P750_1"
+    ],
+    "Christian Edwards": [
+     "+275",
+     "0HC86439355N750_3"
     ]
    },
    "Total Rounds": {
@@ -7106,6 +8180,442 @@
      "+130",
      "0OU86404836U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+110",
+     "0OU86439353O250_1"
+    ],
+    "Under": [
+     "-145",
+     "0OU86439353U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA372741372#2296289599_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA372741372#2296289638_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372741355#2296289582_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3500",
+     "0QA372741394#2296289621_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+215",
+     "0QA372741362#2296289589_13L9034Q11Q22"
+    ],
+    "No": [
+     "-295",
+     "0QA372741362#2296289647_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA372741363#2296289590_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA372741363#2296289646_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+140",
+     "0QA372741348#2296289576_13L9034Q10Q20"
+    ],
+    "No": [
+     "-185",
+     "0QA372741348#2296289659_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+225",
+     "0QA372741370#2296289596_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+750",
+     "0QA372741370#2296289627_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+450",
+     "0QA372741370#2296289671_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1400",
+     "0QA372741370#2296289676_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+800",
+     "0QA372741370#2296289692_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2200",
+     "0QA372741370#2296289695_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+140",
+     "0QA372741370#2296289731_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Rodolfo Bellato to Win in Rounds 1-2": [
+     "+155",
+     "0QA372741351#2296289579_13L9034Q11Q21"
+    ],
+    "Rodolfo Bellato to Win in Round 3 or on Decision": [
+     "+205",
+     "0QA372741351#2296289664_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741351#2296289720_13L9034Q19Q29"
+    ],
+    "Christian Edwards to Win in Rounds 1-2": [
+     "+400",
+     "0QA372741351#2296289687_15L9034Q15Q25"
+    ],
+    "Christian Edwards to Win in Round 3 or on Decision": [
+     "+300",
+     "0QA372741351#2296289705_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Rodolfo Bellato to Win by KO/TKO/DQ in Round 1": [
+     "+350",
+     "0QA372741353#2296289578_13L9034Q11Q21"
+    ],
+    "Rodolfo Bellato to Win by KO/TKO/DQ in Round 2": [
+     "+750",
+     "0QA372741353#2296289657_13L9034Q12Q22"
+    ],
+    "Rodolfo Bellato to Win by KO/TKO/DQ in Round 3": [
+     "+1200",
+     "0QA372741353#2296289663_13L9034Q13Q23"
+    ],
+    "Rodolfo Bellato to Win by Submission in Round 1": [
+     "+800",
+     "0QA372741353#2296289701_13L9034Q16Q26"
+    ],
+    "Rodolfo Bellato to Win by Submission in Round 2": [
+     "+1600",
+     "0QA372741353#2296289704_13L9034Q17Q27"
+    ],
+    "Rodolfo Bellato to Win by Submission in Round 3": [
+     "+2800",
+     "0QA372741353#2296289716_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+140",
+     "0QA372741353#2296289743_13L9034Q121Q221"
+    ],
+    "Christian Edwards to Win by KO/TKO/DQ in Round 1": [
+     "+700",
+     "0QA372741353#2296289730_15L9034Q111Q211"
+    ],
+    "Christian Edwards to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA372741353#2296289732_15L9034Q112Q212"
+    ],
+    "Christian Edwards to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA372741353#2296289735_15L9034Q113Q213"
+    ],
+    "Christian Edwards to Win by Submission in Round 1": [
+     "+3500",
+     "0QA372741353#2296289738_15L9034Q116Q216"
+    ],
+    "Christian Edwards to Win by Submission in Round 2": [
+     "+5000",
+     "0QA372741353#2296289739_15L9034Q117Q217"
+    ],
+    "Christian Edwards to Win by Submission in Round 3": [
+     "+8000",
+     "0QA372741353#2296289740_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Rodolfo Bellato To Win And Under 0.5": [
+     "+650",
+     "0QA372741358#2296289584_13L9034Q11Q21"
+    ],
+    "Rodolfo Bellato To Win And Under 1.5": [
+     "+200",
+     "0QA372741358#2296289668_13L9034Q11Q23"
+    ],
+    "Christian Edwards To Win And Under 0.5": [
+     "+1400",
+     "0QA372741358#2296289652_14L9034Q12Q22"
+    ],
+    "Christian Edwards To Win And Under 1.5": [
+     "+500",
+     "0QA372741358#2296289678_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Rodolfo Bellato To Win And Over 1.5": [
+     "+140",
+     "0QA372741359#2296289670_13L9034Q11Q23"
+    ],
+    "Rodolfo Bellato To Win And Over 2.5": [
+     "+225",
+     "0QA372741359#2296289691_13L9034Q11Q25"
+    ],
+    "Christian Edwards To Win And Over 1.5": [
+     "+225",
+     "0QA372741359#2296289677_14L9034Q12Q24"
+    ],
+    "Christian Edwards To Win And Over 2.5": [
+     "+330",
+     "0QA372741359#2296289696_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-275",
+     "0QA372741360#2296289587_13L9034Q11Q22"
+    ],
+    "No": [
+     "+200",
+     "0QA372741360#2296289649_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-115",
+     "0QA372741361#2296289588_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA372741361#2296289648_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Rodolfo Bellato Round 1": [
+     "+275",
+     "0QA372741349#2296289575_13L9034Q11Q20"
+    ],
+    "Rodolfo Bellato Round 2": [
+     "+550",
+     "0QA372741349#2296289661_13L9034Q11Q22"
+    ],
+    "Rodolfo Bellato Round 3": [
+     "+900",
+     "0QA372741349#2296289685_13L9034Q11Q24"
+    ],
+    "Rodolfo Bellato By Decision": [
+     "+300",
+     "0QA372741349#2296289729_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741349#2296289734_15L9034Q10Q212"
+    ],
+    "Christian Edwards Round 1": [
+     "+650",
+     "0QA372741349#2296289660_14L9034Q12Q21"
+    ],
+    "Christian Edwards Round 2": [
+     "+900",
+     "0QA372741349#2296289684_14L9034Q12Q23"
+    ],
+    "Christian Edwards Round 3": [
+     "+1600",
+     "0QA372741349#2296289702_14L9034Q12Q25"
+    ],
+    "Christian Edwards By Decision": [
+     "+400",
+     "0QA372741349#2296289733_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+200",
+     "0QA372741354#2296289581_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+330",
+     "0QA372741354#2296289654_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+600",
+     "0QA372741354#2296289666_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741354#2296289698_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+140",
+     "0QA372741354#2296289706_13L9034Q11Q25"
+    ]
+   },
+   "Christian Edwards to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+320",
+     "0QA372741373#2296289600_13L9034Q11Q22"
+    ],
+    "No": [
+     "-475",
+     "0QA372741373#2296289637_13L9034Q13Q24"
+    ]
+   },
+   "Rodolfo Bellato to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+125",
+     "0QA372741374#2296289618_13L9034Q11Q22"
+    ],
+    "No": [
+     "-165",
+     "0QA372741374#2296289634_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Rodolfo Bellato to Win by KO/TKO/DQ or Decision": [
+     "-125",
+     "0QA372741352#2296289580_13L9034Q11Q21"
+    ],
+    "Rodolfo Bellato to Win by KO/TKO/DQ or Submission": [
+     "+125",
+     "0QA372741352#2296289655_13L9034Q12Q22"
+    ],
+    "Rodolfo Bellato to Win by Submission or Decision": [
+     "+150",
+     "0QA372741352#2296289665_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741352#2296289707_13L9034Q17Q27"
+    ],
+    "Christian Edwards to Win by KO/TKO/DQ or Decision": [
+     "+155",
+     "0QA372741352#2296289680_15L9034Q14Q24"
+    ],
+    "Christian Edwards to Win by KO/TKO/DQ or Submission": [
+     "+320",
+     "0QA372741352#2296289688_15L9034Q15Q25"
+    ],
+    "Christian Edwards to Win by Submission or Decision": [
+     "+330",
+     "0QA372741352#2296289699_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Rodolfo Bellato to Win By KO/TKO/DQ or Christian Edwards to Win by Submission": [
+     "+165",
+     "0QA372741375#2296289601_13L9034Q10Q21"
+    ],
+    "Rodolfo Bellato to Win By KO/TKO/DQ or Christian Edwards to Win by Decision": [
+     "-115",
+     "0QA372741375#2296289636_13L9034Q10Q22"
+    ],
+    "Rodolfo Bellato to Win By Submission or Christian Edwards to Win by KO/TKO/DQ": [
+     "+155",
+     "0QA372741375#2296289672_13L9034Q10Q23"
+    ],
+    "Rodolfo Bellato to Win By Submission or Christian Edwards to Win by Decision": [
+     "+175",
+     "0QA372741375#2296289675_13L9034Q10Q24"
+    ],
+    "Rodolfo Bellato to Win By Decision or Christian Edwards to Win by KO/TKO/DQ": [
+     "+115",
+     "0QA372741375#2296289693_13L9034Q10Q25"
+    ],
+    "Rodolfo Bellato to Win By Decision or Christian Edwards to Win by Submission": [
+     "+240",
+     "0QA372741375#2296289694_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741375#2296289711_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-105",
+     "0QA372741350#2296289577_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+400",
+     "0QA372741350#2296289658_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+140",
+     "0QA372741350#2296289662_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741350#2296289683_15L9034Q14Q24"
+    ]
+   },
+   "Rodolfo Bellato to Win by Unanimous Decision": {
+    "Yes": [
+     "+380",
+     "0QA372741364#2296289591_13L9034Q11Q22"
+    ]
+   },
+   "Christian Edwards to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA372741365#2296289592_13L9034Q11Q22"
+    ]
+   },
+   "Rodolfo Bellato to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA372741366#2296289593_13L9034Q11Q22"
+    ]
+   },
+   "Christian Edwards to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA372741367#2296289594_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Rodolfo Bellato": [
+     "+200",
+     "0QA372741401#2296289623_13L9034Q11Q22"
+    ],
+    "Christian Edwards": [
+     "+350",
+     "0QA372741401#2296289629_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Rodolfo Bellato": [
+     "+500",
+     "0QA372741402#2296289624_13L9034Q11Q22"
+    ],
+    "Christian Edwards": [
+     "+2000",
+     "0QA372741402#2296289628_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Rodolfo Bellato": [
+     "+300",
+     "0QA372741403#2296289625_13L9034Q11Q22"
+    ],
+    "Christian Edwards": [
+     "+400",
+     "0QA372741403#2296289626_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -7114,9 +8624,49 @@
   "left": "Robert Bryczek",
   "right": "Rodolfo Vieira",
   "rounds": 3,
-  "start": "2026-09-27T02:15Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-26T23:30Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Rodolfo Vieira": [
+     "-165",
+     "0QA372584818#2295721811_13L9034Q11Q21"
+    ],
+    "Robert Bryczek": [
+     "+120",
+     "0QA372584818#2295721843_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Rodolfo Vieira": [
+     "-210",
+     "0QA372584819#2295721813_13L9034Q11Q21"
+    ],
+    "Robert Bryczek": [
+     "+150",
+     "0QA372584819#2295721841_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Rodolfo Vieira": [
+     "-185",
+     "0QA372584831#2295721820_13L9034Q10Q21"
+    ],
+    "Robert Bryczek": [
+     "+140",
+     "0QA372584831#2295721834_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Rodolfo Vieira": [
+     "-8000",
+     "0QA372584830#2295721819_13L9034Q10Q21"
+    ],
+    "Robert Bryczek": [
+     "+1200",
+     "0QA372584830#2295721835_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Rodolfo Vieira": [
      "-162",
@@ -7127,14 +8677,480 @@
      "0ML86375400_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Rodolfo Vieira": [
+     "+275",
+     "0QA372584829#2295721818_13L9034Q10Q21"
+    ],
+    "Robert Bryczek": [
+     "-400",
+     "0QA372584829#2295721836_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Rodolfo Vieira": [
+     "-115",
+     "0HC86432014N350_1"
+    ],
+    "Robert Bryczek": [
+     "-115",
+     "0HC86432014P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Rodolfo Vieira": [
+     "-265",
+     "0HC86432015P750_1"
+    ],
+    "Robert Bryczek": [
+     "+195",
+     "0HC86432015N750_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "-115",
+     "-135",
      "0OU86404835O150_1"
     ],
     "Under": [
-     "-115",
+     "+105",
      "0OU86404835U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+150",
+     "0OU86432013O250_1"
+    ],
+    "Under": [
+     "-205",
+     "0OU86432013U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+900",
+     "0QA372584821#2295721814_13L9034Q11Q22"
+    ],
+    "No": [
+     "-3000",
+     "0QA372584821#2295721840_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372584805#2295721798_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA372584832#2295721821_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+300",
+     "0QA372584812#2295721805_13L9034Q11Q22"
+    ],
+    "No": [
+     "-450",
+     "0QA372584812#2295721849_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA372584813#2295721806_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA372584813#2295721848_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+200",
+     "0QA372584798#2295721792_13L9034Q10Q20"
+    ],
+    "No": [
+     "-275",
+     "0QA372584798#2295721860_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+300",
+     "0QA372584820#2295721812_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+300",
+     "0QA372584820#2295721829_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+600",
+     "0QA372584820#2295721872_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+600",
+     "0QA372584820#2295721879_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1100",
+     "0QA372584820#2295721895_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1200",
+     "0QA372584820#2295721902_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+200",
+     "0QA372584820#2295721946_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Rodolfo Vieira to Win in Rounds 1-2": [
+     "+150",
+     "0QA372584801#2295721794_13L9034Q11Q21"
+    ],
+    "Rodolfo Vieira to Win in Round 3 or on Decision": [
+     "+250",
+     "0QA372584801#2295721864_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584801#2295721929_13L9034Q19Q29"
+    ],
+    "Robert Bryczek to Win in Rounds 1-2": [
+     "+275",
+     "0QA372584801#2295721889_15L9034Q15Q25"
+    ],
+    "Robert Bryczek to Win in Round 3 or on Decision": [
+     "+400",
+     "0QA372584801#2295721910_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Rodolfo Vieira to Win by KO/TKO/DQ in Round 1": [
+     "+1200",
+     "0QA372584803#2295721796_13L9034Q11Q21"
+    ],
+    "Rodolfo Vieira to Win by KO/TKO/DQ in Round 2": [
+     "+2200",
+     "0QA372584803#2295721856_13L9034Q12Q22"
+    ],
+    "Rodolfo Vieira to Win by KO/TKO/DQ in Round 3": [
+     "+4500",
+     "0QA372584803#2295721866_13L9034Q13Q23"
+    ],
+    "Rodolfo Vieira to Win by Submission in Round 1": [
+     "+330",
+     "0QA372584803#2295721907_13L9034Q16Q26"
+    ],
+    "Rodolfo Vieira to Win by Submission in Round 2": [
+     "+650",
+     "0QA372584803#2295721913_13L9034Q17Q27"
+    ],
+    "Rodolfo Vieira to Win by Submission in Round 3": [
+     "+1400",
+     "0QA372584803#2295721926_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+200",
+     "0QA372584803#2295721976_13L9034Q121Q221"
+    ],
+    "Robert Bryczek to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA372584803#2295721945_15L9034Q111Q211"
+    ],
+    "Robert Bryczek to Win by KO/TKO/DQ in Round 2": [
+     "+800",
+     "0QA372584803#2295721951_15L9034Q112Q212"
+    ],
+    "Robert Bryczek to Win by KO/TKO/DQ in Round 3": [
+     "+1200",
+     "0QA372584803#2295721954_15L9034Q113Q213"
+    ],
+    "Robert Bryczek to Win by Submission in Round 1": [
+     "+5500",
+     "0QA372584803#2295721965_15L9034Q116Q216"
+    ],
+    "Robert Bryczek to Win by Submission in Round 2": [
+     "+9000",
+     "0QA372584803#2295721966_15L9034Q117Q217"
+    ],
+    "Robert Bryczek to Win by Submission in Round 3": [
+     "+13000",
+     "0QA372584803#2295721971_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Rodolfo Vieira To Win And Under 0.5": [
+     "+600",
+     "0QA372584808#2295721801_13L9034Q11Q21"
+    ],
+    "Rodolfo Vieira To Win And Under 1.5": [
+     "+185",
+     "0QA372584808#2295721870_13L9034Q11Q23"
+    ],
+    "Robert Bryczek To Win And Under 0.5": [
+     "+1000",
+     "0QA372584808#2295721853_14L9034Q12Q22"
+    ],
+    "Robert Bryczek To Win And Under 1.5": [
+     "+330",
+     "0QA372584808#2295721881_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Rodolfo Vieira To Win And Over 1.5": [
+     "+165",
+     "0QA372584809#2295721871_13L9034Q11Q23"
+    ],
+    "Rodolfo Vieira To Win And Over 2.5": [
+     "+275",
+     "0QA372584809#2295721894_13L9034Q11Q25"
+    ],
+    "Robert Bryczek To Win And Over 1.5": [
+     "+275",
+     "0QA372584809#2295721880_14L9034Q12Q24"
+    ],
+    "Robert Bryczek To Win And Over 2.5": [
+     "+475",
+     "0QA372584809#2295721904_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-220",
+     "0QA372584810#2295721803_13L9034Q11Q22"
+    ],
+    "No": [
+     "+165",
+     "0QA372584810#2295721851_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+120",
+     "0QA372584811#2295721804_13L9034Q11Q22"
+    ],
+    "No": [
+     "-160",
+     "0QA372584811#2295721850_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Rodolfo Vieira Round 1": [
+     "+250",
+     "0QA372584799#2295721791_13L9034Q11Q20"
+    ],
+    "Rodolfo Vieira Round 2": [
+     "+550",
+     "0QA372584799#2295721862_13L9034Q11Q22"
+    ],
+    "Rodolfo Vieira Round 3": [
+     "+1100",
+     "0QA372584799#2295721888_13L9034Q11Q24"
+    ],
+    "Rodolfo Vieira By Decision": [
+     "+350",
+     "0QA372584799#2295721944_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584799#2295721953_15L9034Q10Q212"
+    ],
+    "Robert Bryczek Round 1": [
+     "+450",
+     "0QA372584799#2295721861_14L9034Q12Q21"
+    ],
+    "Robert Bryczek Round 2": [
+     "+750",
+     "0QA372584799#2295721884_14L9034Q12Q23"
+    ],
+    "Robert Bryczek Round 3": [
+     "+1100",
+     "0QA372584799#2295721905_14L9034Q12Q25"
+    ],
+    "Robert Bryczek By Decision": [
+     "+650",
+     "0QA372584799#2295721952_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+165",
+     "0QA372584804#2295721797_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+300",
+     "0QA372584804#2295721855_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA372584804#2295721867_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584804#2295721906_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+200",
+     "0QA372584804#2295721914_13L9034Q11Q25"
+    ]
+   },
+   "Robert Bryczek to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+215",
+     "0QA372584822#2295721815_13L9034Q11Q22"
+    ],
+    "No": [
+     "-295",
+     "0QA372584822#2295721839_13L9034Q13Q24"
+    ]
+   },
+   "Rodolfo Vieira to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+130",
+     "0QA372584823#2295721817_13L9034Q11Q22"
+    ],
+    "No": [
+     "-170",
+     "0QA372584823#2295721837_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Rodolfo Vieira to Win by KO/TKO/DQ or Decision": [
+     "+205",
+     "0QA372584802#2295721795_13L9034Q11Q21"
+    ],
+    "Rodolfo Vieira to Win by KO/TKO/DQ or Submission": [
+     "+130",
+     "0QA372584802#2295721857_13L9034Q12Q22"
+    ],
+    "Rodolfo Vieira to Win by Submission or Decision": [
+     "-140",
+     "0QA372584802#2295721865_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584802#2295721911_13L9034Q17Q27"
+    ],
+    "Robert Bryczek to Win by KO/TKO/DQ or Decision": [
+     "+140",
+     "0QA372584802#2295721885_15L9034Q14Q24"
+    ],
+    "Robert Bryczek to Win by KO/TKO/DQ or Submission": [
+     "+215",
+     "0QA372584802#2295721890_15L9034Q15Q25"
+    ],
+    "Robert Bryczek to Win by Submission or Decision": [
+     "+500",
+     "0QA372584802#2295721908_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Rodolfo Vieira to Win By KO/TKO/DQ or Robert Bryczek to Win by Submission": [
+     "+600",
+     "0QA372584828#2295721816_13L9034Q10Q21"
+    ],
+    "Rodolfo Vieira to Win By KO/TKO/DQ or Robert Bryczek to Win by Decision": [
+     "+300",
+     "0QA372584828#2295721838_13L9034Q10Q22"
+    ],
+    "Rodolfo Vieira to Win By Submission or Robert Bryczek to Win by KO/TKO/DQ": [
+     "-225",
+     "0QA372584828#2295721873_13L9034Q10Q23"
+    ],
+    "Rodolfo Vieira to Win By Submission or Robert Bryczek to Win by Decision": [
+     "-105",
+     "0QA372584828#2295721878_13L9034Q10Q24"
+    ],
+    "Rodolfo Vieira to Win By Decision or Robert Bryczek to Win by KO/TKO/DQ": [
+     "-110",
+     "0QA372584828#2295721896_13L9034Q10Q25"
+    ],
+    "Rodolfo Vieira to Win By Decision or Robert Bryczek to Win by Submission": [
+     "+300",
+     "0QA372584828#2295721901_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584828#2295721918_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+140",
+     "0QA372584800#2295721793_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+150",
+     "0QA372584800#2295721859_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+200",
+     "0QA372584800#2295721863_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372584800#2295721887_15L9034Q14Q24"
+    ]
+   },
+   "Rodolfo Vieira to Win by Unanimous Decision": {
+    "Yes": [
+     "+450",
+     "0QA372584814#2295721807_13L9034Q11Q22"
+    ]
+   },
+   "Robert Bryczek to Win by Unanimous Decision": {
+    "Yes": [
+     "+900",
+     "0QA372584815#2295721808_13L9034Q11Q22"
+    ]
+   },
+   "Rodolfo Vieira to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA372584816#2295721809_13L9034Q11Q22"
+    ]
+   },
+   "Robert Bryczek to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA372584817#2295721810_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Rodolfo Vieira": [
+     "+800",
+     "0QA372584838#2295721822_13L9034Q11Q22"
+    ],
+    "Robert Bryczek": [
+     "+225",
+     "0QA372584838#2295721832_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Rodolfo Vieira": [
+     "+165",
+     "0QA372584839#2295721823_13L9034Q11Q22"
+    ],
+    "Robert Bryczek": [
+     "+3500",
+     "0QA372584839#2295721831_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Rodolfo Vieira": [
+     "+350",
+     "0QA372584840#2295721824_13L9034Q11Q22"
+    ],
+    "Robert Bryczek": [
+     "+650",
+     "0QA372584840#2295721830_13L9034Q13Q24"
     ]
    }
   }
@@ -7143,18 +9159,88 @@
   "dk": "34693997",
   "left": "Raoni Barcelos",
   "right": "Raul Rosas Jr.",
-  "rounds": 3,
-  "start": "2026-09-27T02:45Z",
-  "read": "2026-09-23T00:25Z",
+  "rounds": 5,
+  "start": "2026-09-27T02:15Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Raul Rosas Jr.": [
+     "-210",
+     "0QA372551899#2295581049_13L9034Q11Q21"
+    ],
+    "Raoni Barcelos": [
+     "+150",
+     "0QA372551899#2295581081_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Raul Rosas Jr.": [
+     "-150",
+     "0QA372551900#2295581051_13L9034Q11Q21"
+    ],
+    "Raoni Barcelos": [
+     "+110",
+     "0QA372551900#2295581079_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Raul Rosas Jr.": [
+     "-280",
+     "0QA372551912#2295581058_13L9034Q10Q21"
+    ],
+    "Raoni Barcelos": [
+     "+205",
+     "0QA372551912#2295581071_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Raul Rosas Jr.": [
+     "-500",
+     "0QA372551911#2295581057_13L9034Q10Q21"
+    ],
+    "Raoni Barcelos": [
+     "+330",
+     "0QA372551911#2295581072_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Raul Rosas Jr.": [
-     "-170",
+     "-155",
      "0ML86375401_1"
     ],
     "Raoni Barcelos": [
-     "+142",
+     "+130",
      "0ML86375401_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Raul Rosas Jr.": [
+     "-105",
+     "0QA372551910#2295581056_13L9034Q10Q21"
+    ],
+    "Raoni Barcelos": [
+     "-125",
+     "0QA372551910#2295581073_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Raul Rosas Jr.": [
+     "+105",
+     "0HC86431376N550_1"
+    ],
+    "Raoni Barcelos": [
+     "-140",
+     "0HC86431376P550_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Raul Rosas Jr.": [
+     "-450",
+     "0HC86431377P1350_1"
+    ],
+    "Raoni Barcelos": [
+     "+300",
+     "0HC86431377N1350_3"
     ]
    },
    "Total Rounds": {
@@ -7165,6 +9251,570 @@
     "Under": [
      "+140",
      "0OU86404832U350_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-140",
+     "0OU86431375O450_1"
+    ],
+    "Under": [
+     "+105",
+     "0OU86431375U450_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2500",
+     "0QA372551902#2295581052_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372551884#2295581033_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+5000",
+     "0QA372551913#2295581059_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+130",
+     "0QA372551893#2295581043_13L9034Q11Q22"
+    ],
+    "No": [
+     "-170",
+     "0QA372551893#2295581087_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+475",
+     "0QA372551894#2295581044_13L9034Q11Q22"
+    ],
+    "No": [
+     "-800",
+     "0QA372551894#2295581086_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-125",
+     "0QA372551877#2295581027_13L9034Q10Q20"
+    ],
+    "No": [
+     "-105",
+     "0QA372551877#2295581100_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+900",
+     "0QA372551901#2295581050_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+850",
+     "0QA372551901#2295581078_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+1200",
+     "0QA372551901#2295581112_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1100",
+     "0QA372551901#2295581119_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1400",
+     "0QA372551901#2295581135_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1400",
+     "0QA372551901#2295581142_14L9034Q12Q23"
+    ],
+    "Round 4 - KO/TKO/DQ": [
+     "+1800",
+     "0QA372551901#2295581157_13L9034Q11Q24"
+    ],
+    "Round 4 \u2013 Submission": [
+     "+1800",
+     "0QA372551901#2295581163_14L9034Q12Q24"
+    ],
+    "Round 5 - KO/TKO/DQ": [
+     "+2500",
+     "0QA372551901#2295581174_13L9034Q11Q25"
+    ],
+    "Round 5 \u2013 Submission": [
+     "+2500",
+     "0QA372551901#2295581179_14L9034Q12Q25"
+    ],
+    "Fight to go the Distance": [
+     "-125",
+     "0QA372551901#2295581186_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Raul Rosas Jr. to Win in Rounds 1-2": [
+     "+380",
+     "0QA372551880#2295581031_13L9034Q11Q21"
+    ],
+    "Raul Rosas Jr. to Win in Rounds 3-4": [
+     "+700",
+     "0QA372551880#2295581097_13L9034Q12Q22"
+    ],
+    "Raul Rosas Jr. to Win in Round 5 or on Decision": [
+     "+175",
+     "0QA372551880#2295581124_13L9034Q14Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551880#2295581171_13L9034Q19Q29"
+    ],
+    "Raoni Barcelos to Win in Rounds 1-2": [
+     "+900",
+     "0QA372551880#2295581130_15L9034Q15Q25"
+    ],
+    "Raoni Barcelos to Win in Rounds 3-4": [
+     "+1100",
+     "0QA372551880#2295581147_15L9034Q16Q26"
+    ],
+    "Raoni Barcelos to Win in Round 5 or on Decision": [
+     "+225",
+     "0QA372551880#2295581166_15L9034Q18Q28"
+    ]
+   },
+   "Round and Method Betting": {
+    "Raul Rosas Jr. to Win by KO/TKO/DQ in Round 1": [
+     "+1600",
+     "0QA372551882#2295581030_13L9034Q11Q21"
+    ],
+    "Raul Rosas Jr. to Win by KO/TKO/DQ in Round 2": [
+     "+2200",
+     "0QA372551882#2295581098_13L9034Q12Q22"
+    ],
+    "Raul Rosas Jr. to Win by KO/TKO/DQ in Round 3": [
+     "+2800",
+     "0QA372551882#2295581104_13L9034Q13Q23"
+    ],
+    "Raul Rosas Jr. to Win by KO/TKO/DQ in Round 4": [
+     "+4000",
+     "0QA372551882#2295581125_13L9034Q14Q24"
+    ],
+    "Raul Rosas Jr. to Win by KO/TKO/DQ in Round 5": [
+     "+6000",
+     "0QA372551882#2295581129_13L9034Q15Q25"
+    ],
+    "Raul Rosas Jr. to Win by Submission in Round 1": [
+     "+900",
+     "0QA372551882#2295581148_13L9034Q16Q26"
+    ],
+    "Raul Rosas Jr. to Win by Submission in Round 2": [
+     "+1200",
+     "0QA372551882#2295581151_13L9034Q17Q27"
+    ],
+    "Raul Rosas Jr. to Win by Submission in Round 3": [
+     "+1600",
+     "0QA372551882#2295581167_13L9034Q18Q28"
+    ],
+    "Raul Rosas Jr. to Win by Submission in Round 4": [
+     "+2200",
+     "0QA372551882#2295581170_13L9034Q19Q29"
+    ],
+    "Raul Rosas Jr. to Win by Submission in Round 5": [
+     "+3500",
+     "0QA372551882#2295581182_13L9034Q110Q210"
+    ],
+    "To Go the Distance": [
+     "-125",
+     "0QA372551882#2295581216_13L9034Q121Q221"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ in Round 1": [
+     "+2000",
+     "0QA372551882#2295581185_15L9034Q111Q211"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ in Round 2": [
+     "+2200",
+     "0QA372551882#2295581191_15L9034Q112Q212"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ in Round 3": [
+     "+2500",
+     "0QA372551882#2295581194_15L9034Q113Q213"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ in Round 4": [
+     "+2800",
+     "0QA372551882#2295581199_15L9034Q114Q214"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ in Round 5": [
+     "+3000",
+     "0QA372551882#2295581200_15L9034Q115Q215"
+    ],
+    "Raoni Barcelos to Win by Submission in Round 1": [
+     "+4500",
+     "0QA372551882#2295581205_15L9034Q116Q216"
+    ],
+    "Raoni Barcelos to Win by Submission in Round 2": [
+     "+5500",
+     "0QA372551882#2295581206_15L9034Q117Q217"
+    ],
+    "Raoni Barcelos to Win by Submission in Round 3": [
+     "+6000",
+     "0QA372551882#2295581211_15L9034Q118Q218"
+    ],
+    "Raoni Barcelos to Win by Submission in Round 4": [
+     "+6500",
+     "0QA372551882#2295581212_15L9034Q119Q219"
+    ],
+    "Raoni Barcelos to Win by Submission in Round 5": [
+     "+7500",
+     "0QA372551882#2295581215_15L9034Q120Q220"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Raul Rosas Jr. To Win And Under 0.5": [
+     "+1400",
+     "0QA372551887#2295581037_13L9034Q11Q21"
+    ],
+    "Raul Rosas Jr. To Win And Under 1.5": [
+     "+475",
+     "0QA372551887#2295581110_13L9034Q11Q23"
+    ],
+    "Raul Rosas Jr. To Win And Under 2.5": [
+     "+300",
+     "0QA372551887#2295581133_13L9034Q11Q25"
+    ],
+    "Raul Rosas Jr. To Win And Under 3.5": [
+     "+215",
+     "0QA372551887#2295581154_13L9034Q11Q27"
+    ],
+    "Raoni Barcelos To Win And Under 0.5": [
+     "+3500",
+     "0QA372551887#2295581092_14L9034Q12Q22"
+    ],
+    "Raoni Barcelos To Win And Under 1.5": [
+     "+1100",
+     "0QA372551887#2295581121_14L9034Q12Q24"
+    ],
+    "Raoni Barcelos To Win And Under 2.5": [
+     "+700",
+     "0QA372551887#2295581144_14L9034Q12Q26"
+    ],
+    "Raoni Barcelos To Win And Under 3.5": [
+     "+500",
+     "0QA372551887#2295581165_14L9034Q12Q28"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Raul Rosas Jr. To Win And Over 1.5": [
+     "-125",
+     "0QA372551888#2295581111_13L9034Q11Q23"
+    ],
+    "Raul Rosas Jr. To Win And Over 2.5": [
+     "+110",
+     "0QA372551888#2295581134_13L9034Q11Q25"
+    ],
+    "Raul Rosas Jr. To Win And Over 3.5": [
+     "+140",
+     "0QA372551888#2295581156_13L9034Q11Q27"
+    ],
+    "Raul Rosas Jr. To Win And Over 4.5": [
+     "+180",
+     "0QA372551888#2295581173_13L9034Q11Q29"
+    ],
+    "Raoni Barcelos To Win And Over 1.5": [
+     "+140",
+     "0QA372551888#2295581120_14L9034Q12Q24"
+    ],
+    "Raoni Barcelos To Win And Over 2.5": [
+     "+165",
+     "0QA372551888#2295581143_14L9034Q12Q26"
+    ],
+    "Raoni Barcelos To Win And Over 3.5": [
+     "+200",
+     "0QA372551888#2295581164_14L9034Q12Q28"
+    ],
+    "Raoni Barcelos To Win And Over 4.5": [
+     "+240",
+     "0QA372551888#2295581180_14L9034Q12Q210"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-1000",
+     "0QA372551889#2295581039_13L9034Q11Q22"
+    ],
+    "No": [
+     "+550",
+     "0QA372551889#2295581091_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-400",
+     "0QA372551890#2295581040_13L9034Q11Q22"
+    ],
+    "No": [
+     "+270",
+     "0QA372551890#2295581090_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 4": {
+    "Yes": [
+     "-225",
+     "0QA372551891#2295581041_13L9034Q11Q22"
+    ],
+    "No": [
+     "+165",
+     "0QA372551891#2295581089_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 5": {
+    "Yes": [
+     "-160",
+     "0QA372551892#2295581042_13L9034Q11Q22"
+    ],
+    "No": [
+     "+120",
+     "0QA372551892#2295581088_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Raul Rosas Jr. Round 1": [
+     "+650",
+     "0QA372551878#2295581028_13L9034Q11Q20"
+    ],
+    "Raul Rosas Jr. Round 2": [
+     "+850",
+     "0QA372551878#2295581102_13L9034Q11Q22"
+    ],
+    "Raul Rosas Jr. Round 3": [
+     "+1100",
+     "0QA372551878#2295581128_13L9034Q11Q24"
+    ],
+    "Raul Rosas Jr. Round 4": [
+     "+1600",
+     "0QA372551878#2295581150_13L9034Q11Q26"
+    ],
+    "Raul Rosas Jr. Round 5": [
+     "+2500",
+     "0QA372551878#2295581169_13L9034Q11Q28"
+    ],
+    "Raul Rosas Jr. By Decision": [
+     "+200",
+     "0QA372551878#2295581184_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551878#2295581193_15L9034Q10Q212"
+    ],
+    "Raoni Barcelos Round 1": [
+     "+1600",
+     "0QA372551878#2295581101_14L9034Q12Q21"
+    ],
+    "Raoni Barcelos Round 2": [
+     "+1800",
+     "0QA372551878#2295581127_14L9034Q12Q23"
+    ],
+    "Raoni Barcelos Round 3": [
+     "+2000",
+     "0QA372551878#2295581149_14L9034Q12Q25"
+    ],
+    "Raoni Barcelos Round 4": [
+     "+2200",
+     "0QA372551878#2295581168_14L9034Q12Q27"
+    ],
+    "Raoni Barcelos Round 5": [
+     "+2500",
+     "0QA372551878#2295581183_14L9034Q12Q29"
+    ],
+    "Raoni Barcelos By Decision": [
+     "+275",
+     "0QA372551878#2295581192_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+550",
+     "0QA372551883#2295581032_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+600",
+     "0QA372551883#2295581096_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+750",
+     "0QA372551883#2295581106_13L9034Q11Q22"
+    ],
+    "Round 4": [
+     "+900",
+     "0QA372551883#2295581123_13L9034Q11Q23"
+    ],
+    "Round 5": [
+     "+1200",
+     "0QA372551883#2295581131_13L9034Q11Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551883#2295581146_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-125",
+     "0QA372551883#2295581153_13L9034Q11Q25"
+    ]
+   },
+   "Raoni Barcelos to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+400",
+     "0QA372551903#2295581053_13L9034Q11Q22"
+    ],
+    "No": [
+     "-650",
+     "0QA372551903#2295581076_13L9034Q13Q24"
+    ]
+   },
+   "Raul Rosas Jr. to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+200",
+     "0QA372551904#2295581055_13L9034Q11Q22"
+    ],
+    "No": [
+     "-275",
+     "0QA372551904#2295581074_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Raul Rosas Jr. to Win by KO/TKO/DQ or Decision": [
+     "+115",
+     "0QA372551881#2295581035_13L9034Q11Q21"
+    ],
+    "Raul Rosas Jr. to Win by KO/TKO/DQ or Submission": [
+     "+200",
+     "0QA372551881#2295581094_13L9034Q12Q22"
+    ],
+    "Raul Rosas Jr. to Win by Submission or Decision": [
+     "-125",
+     "0QA372551881#2295581107_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551881#2295581155_13L9034Q17Q27"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ or Decision": [
+     "+145",
+     "0QA372551881#2295581122_15L9034Q14Q24"
+    ],
+    "Raoni Barcelos to Win by KO/TKO/DQ or Submission": [
+     "+400",
+     "0QA372551881#2295581132_15L9034Q15Q25"
+    ],
+    "Raoni Barcelos to Win by Submission or Decision": [
+     "+205",
+     "0QA372551881#2295581145_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Raul Rosas Jr. to Win By KO/TKO/DQ or Raoni Barcelos to Win by Submission": [
+     "+380",
+     "0QA372551909#2295581054_13L9034Q10Q21"
+    ],
+    "Raul Rosas Jr. to Win By KO/TKO/DQ or Raoni Barcelos to Win by Decision": [
+     "+145",
+     "0QA372551909#2295581075_13L9034Q10Q22"
+    ],
+    "Raul Rosas Jr. to Win By Submission or Raoni Barcelos to Win by KO/TKO/DQ": [
+     "+150",
+     "0QA372551909#2295581113_13L9034Q10Q23"
+    ],
+    "Raul Rosas Jr. to Win By Submission or Raoni Barcelos to Win by Decision": [
+     "+100",
+     "0QA372551909#2295581118_13L9034Q10Q24"
+    ],
+    "Raul Rosas Jr. to Win By Decision or Raoni Barcelos to Win by KO/TKO/DQ": [
+     "+100",
+     "0QA372551909#2295581136_13L9034Q10Q25"
+    ],
+    "Raul Rosas Jr. to Win By Decision or Raoni Barcelos to Win by Submission": [
+     "+150",
+     "0QA372551909#2295581141_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551909#2295581158_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+255",
+     "0QA372551879#2295581029_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+250",
+     "0QA372551879#2295581099_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-125",
+     "0QA372551879#2295581103_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372551879#2295581126_15L9034Q14Q24"
+    ]
+   },
+   "Raul Rosas Jr. to Win by Unanimous Decision": {
+    "Yes": [
+     "+250",
+     "0QA372551895#2295581045_13L9034Q11Q22"
+    ]
+   },
+   "Raoni Barcelos to Win by Unanimous Decision": {
+    "Yes": [
+     "+350",
+     "0QA372551896#2295581046_13L9034Q11Q22"
+    ]
+   },
+   "Raul Rosas Jr. to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA372551897#2295581047_13L9034Q11Q22"
+    ]
+   },
+   "Raoni Barcelos to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA372551898#2295581048_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Raul Rosas Jr.": [
+     "+600",
+     "0QA372551919#2295581060_13L9034Q11Q22"
+    ],
+    "Raoni Barcelos": [
+     "+500",
+     "0QA372551919#2295581069_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Raul Rosas Jr.": [
+     "+330",
+     "0QA372551920#2295581063_13L9034Q11Q22"
+    ],
+    "Raoni Barcelos": [
+     "+1400",
+     "0QA372551920#2295581066_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Raul Rosas Jr.": [
+     "+200",
+     "0QA372551921#2295581064_13L9034Q11Q22"
+    ],
+    "Raoni Barcelos": [
+     "+275",
+     "0QA372551921#2295581065_13L9034Q13Q24"
     ]
    }
   }
@@ -8778,9 +11428,49 @@
   "left": "Vanessa Demopoulos",
   "right": "Yazmin Jauregui",
   "rounds": 3,
-  "start": "2026-09-26T20:00Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-26T21:15Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Vanessa Demopoulos": [
+     "+475",
+     "0QA372740845#2296287440_13L9034Q11Q21"
+    ],
+    "Yazmin Jauregui": [
+     "-900",
+     "0QA372740845#2296287507_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Vanessa Demopoulos": [
+     "+750",
+     "0QA372740846#2296287444_13L9034Q11Q21"
+    ],
+    "Yazmin Jauregui": [
+     "-2500",
+     "0QA372740846#2296287506_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Vanessa Demopoulos": [
+     "+500",
+     "0QA372740870#2296287486_13L9034Q10Q21"
+    ],
+    "Yazmin Jauregui": [
+     "-1000",
+     "0QA372740870#2296287498_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Vanessa Demopoulos": [
+     "+145",
+     "0QA372740869#2296287485_13L9034Q10Q21"
+    ],
+    "Yazmin Jauregui": [
+     "-190",
+     "0QA372740869#2296287499_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Vanessa Demopoulos": [
      "+675",
@@ -8791,44 +11481,1002 @@
      "0ML86404826_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Vanessa Demopoulos": [
+     "+800",
+     "0QA372740868#2296287483_13L9034Q10Q21"
+    ],
+    "Yazmin Jauregui": [
+     "-2000",
+     "0QA372740868#2296287501_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Vanessa Demopoulos": [
+     "+115",
+     "0HC86439332P750_1"
+    ],
+    "Yazmin Jauregui": [
+     "-155",
+     "0HC86439332N750_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "-220",
+     "-195",
      "0OU86404833O250_1"
     ],
     "Under": [
-     "+170",
+     "+150",
      "0OU86404833U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-450",
+     "0OU86439331O150_1"
+    ],
+    "Under": [
+     "+290",
+     "0OU86439331U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2000",
+     "0QA372740849#2296287448_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372740832#2296287414_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+7000",
+     "0QA372740871#2296287487_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-115",
+     "0QA372740839#2296287428_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA372740839#2296287513_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+450",
+     "0QA372740840#2296287430_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA372740840#2296287512_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-185",
+     "0QA372740825#2296287402_13L9034Q10Q20"
+    ],
+    "No": [
+     "+140",
+     "0QA372740825#2296287525_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+450",
+     "0QA372740847#2296287442_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1800",
+     "0QA372740847#2296287493_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+650",
+     "0QA372740847#2296287537_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+2500",
+     "0QA372740847#2296287542_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+950",
+     "0QA372740847#2296287558_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+3500",
+     "0QA372740847#2296287561_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-185",
+     "0QA372740847#2296287597_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Vanessa Demopoulos to Win in Rounds 1-2": [
+     "+1700",
+     "0QA372740828#2296287408_13L9034Q11Q21"
+    ],
+    "Vanessa Demopoulos to Win in Round 3 or on Decision": [
+     "+950",
+     "0QA372740828#2296287530_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740828#2296287586_13L9034Q19Q29"
+    ],
+    "Yazmin Jauregui to Win in Rounds 1-2": [
+     "+230",
+     "0QA372740828#2296287553_15L9034Q15Q25"
+    ],
+    "Yazmin Jauregui to Win in Round 3 or on Decision": [
+     "-245",
+     "0QA372740828#2296287571_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Vanessa Demopoulos to Win by KO/TKO/DQ in Round 1": [
+     "+5000",
+     "0QA372740830#2296287406_13L9034Q11Q21"
+    ],
+    "Vanessa Demopoulos to Win by KO/TKO/DQ in Round 2": [
+     "+6000",
+     "0QA372740830#2296287523_13L9034Q12Q22"
+    ],
+    "Vanessa Demopoulos to Win by KO/TKO/DQ in Round 3": [
+     "+7000",
+     "0QA372740830#2296287529_13L9034Q13Q23"
+    ],
+    "Vanessa Demopoulos to Win by Submission in Round 1": [
+     "+5000",
+     "0QA372740830#2296287567_13L9034Q16Q26"
+    ],
+    "Vanessa Demopoulos to Win by Submission in Round 2": [
+     "+6000",
+     "0QA372740830#2296287570_13L9034Q17Q27"
+    ],
+    "Vanessa Demopoulos to Win by Submission in Round 3": [
+     "+7000",
+     "0QA372740830#2296287582_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-185",
+     "0QA372740830#2296287609_13L9034Q121Q221"
+    ],
+    "Yazmin Jauregui to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA372740830#2296287596_15L9034Q111Q211"
+    ],
+    "Yazmin Jauregui to Win by KO/TKO/DQ in Round 2": [
+     "+750",
+     "0QA372740830#2296287598_15L9034Q112Q212"
+    ],
+    "Yazmin Jauregui to Win by KO/TKO/DQ in Round 3": [
+     "+1100",
+     "0QA372740830#2296287601_15L9034Q113Q213"
+    ],
+    "Yazmin Jauregui to Win by Submission in Round 1": [
+     "+2500",
+     "0QA372740830#2296287604_15L9034Q116Q216"
+    ],
+    "Yazmin Jauregui to Win by Submission in Round 2": [
+     "+3500",
+     "0QA372740830#2296287605_15L9034Q117Q217"
+    ],
+    "Yazmin Jauregui to Win by Submission in Round 3": [
+     "+5500",
+     "0QA372740830#2296287606_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Vanessa Demopoulos To Win And Under 0.5": [
+     "+6000",
+     "0QA372740835#2296287418_13L9034Q11Q21"
+    ],
+    "Vanessa Demopoulos To Win And Under 1.5": [
+     "+2000",
+     "0QA372740835#2296287534_13L9034Q11Q23"
+    ],
+    "Yazmin Jauregui To Win And Under 0.5": [
+     "+1000",
+     "0QA372740835#2296287518_14L9034Q12Q22"
+    ],
+    "Yazmin Jauregui To Win And Under 1.5": [
+     "+300",
+     "0QA372740835#2296287544_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Vanessa Demopoulos To Win And Over 1.5": [
+     "+750",
+     "0QA372740836#2296287536_13L9034Q11Q23"
+    ],
+    "Vanessa Demopoulos To Win And Over 2.5": [
+     "+1000",
+     "0QA372740836#2296287557_13L9034Q11Q25"
+    ],
+    "Yazmin Jauregui To Win And Over 1.5": [
+     "-400",
+     "0QA372740836#2296287543_14L9034Q12Q24"
+    ],
+    "Yazmin Jauregui To Win And Over 2.5": [
+     "-225",
+     "0QA372740836#2296287562_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-700",
+     "0QA372740837#2296287424_13L9034Q11Q22"
+    ],
+    "No": [
+     "+425",
+     "0QA372740837#2296287515_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-295",
+     "0QA372740838#2296287426_13L9034Q11Q22"
+    ],
+    "No": [
+     "+215",
+     "0QA372740838#2296287514_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Vanessa Demopoulos Round 1": [
+     "+2800",
+     "0QA372740826#2296287400_13L9034Q11Q20"
+    ],
+    "Vanessa Demopoulos Round 2": [
+     "+3500",
+     "0QA372740826#2296287527_13L9034Q11Q22"
+    ],
+    "Vanessa Demopoulos Round 3": [
+     "+4000",
+     "0QA372740826#2296287551_13L9034Q11Q24"
+    ],
+    "Vanessa Demopoulos By Decision": [
+     "+1200",
+     "0QA372740826#2296287595_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740826#2296287600_15L9034Q10Q212"
+    ],
+    "Yazmin Jauregui Round 1": [
+     "+475",
+     "0QA372740826#2296287526_14L9034Q12Q21"
+    ],
+    "Yazmin Jauregui Round 2": [
+     "+700",
+     "0QA372740826#2296287550_14L9034Q12Q23"
+    ],
+    "Yazmin Jauregui Round 3": [
+     "+1000",
+     "0QA372740826#2296287568_14L9034Q12Q25"
+    ],
+    "Yazmin Jauregui By Decision": [
+     "-170",
+     "0QA372740826#2296287599_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+425",
+     "0QA372740831#2296287412_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+500",
+     "0QA372740831#2296287520_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+750",
+     "0QA372740831#2296287532_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740831#2296287564_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-185",
+     "0QA372740831#2296287572_13L9034Q11Q25"
+    ]
+   },
+   "Yazmin Jauregui to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+175",
+     "0QA372740850#2296287450_13L9034Q11Q22"
+    ],
+    "No": [
+     "-235",
+     "0QA372740850#2296287503_13L9034Q13Q24"
+    ]
+   },
+   "Vanessa Demopoulos to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+1200",
+     "0QA372740851#2296287484_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA372740851#2296287500_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Vanessa Demopoulos to Win by KO/TKO/DQ or Decision": [
+     "+800",
+     "0QA372740829#2296287410_13L9034Q11Q21"
+    ],
+    "Vanessa Demopoulos to Win by KO/TKO/DQ or Submission": [
+     "+1200",
+     "0QA372740829#2296287521_13L9034Q12Q22"
+    ],
+    "Vanessa Demopoulos to Win by Submission or Decision": [
+     "+800",
+     "0QA372740829#2296287531_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740829#2296287573_13L9034Q17Q27"
+    ],
+    "Yazmin Jauregui to Win by KO/TKO/DQ or Decision": [
+     "-900",
+     "0QA372740829#2296287546_15L9034Q14Q24"
+    ],
+    "Yazmin Jauregui to Win by KO/TKO/DQ or Submission": [
+     "+175",
+     "0QA372740829#2296287554_15L9034Q15Q25"
+    ],
+    "Yazmin Jauregui to Win by Submission or Decision": [
+     "-225",
+     "0QA372740829#2296287565_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Vanessa Demopoulos to Win By KO/TKO/DQ or Yazmin Jauregui to Win by Submission": [
+     "+800",
+     "0QA372740852#2296287452_13L9034Q10Q21"
+    ],
+    "Vanessa Demopoulos to Win By KO/TKO/DQ or Yazmin Jauregui to Win by Decision": [
+     "-205",
+     "0QA372740852#2296287502_13L9034Q10Q22"
+    ],
+    "Vanessa Demopoulos to Win By Submission or Yazmin Jauregui to Win by KO/TKO/DQ": [
+     "+150",
+     "0QA372740852#2296287538_13L9034Q10Q23"
+    ],
+    "Vanessa Demopoulos to Win By Submission or Yazmin Jauregui to Win by Decision": [
+     "-205",
+     "0QA372740852#2296287541_13L9034Q10Q24"
+    ],
+    "Vanessa Demopoulos to Win By Decision or Yazmin Jauregui to Win by KO/TKO/DQ": [
+     "+135",
+     "0QA372740852#2296287559_13L9034Q10Q25"
+    ],
+    "Vanessa Demopoulos to Win By Decision or Yazmin Jauregui to Win by Submission": [
+     "+600",
+     "0QA372740852#2296287560_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740852#2296287577_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+175",
+     "0QA372740827#2296287404_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+900",
+     "0QA372740827#2296287524_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-185",
+     "0QA372740827#2296287528_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740827#2296287549_15L9034Q14Q24"
+    ]
+   },
+   "Vanessa Demopoulos to Win by Unanimous Decision": {
+    "Yes": [
+     "+1600",
+     "0QA372740841#2296287432_13L9034Q11Q22"
+    ]
+   },
+   "Yazmin Jauregui to Win by Unanimous Decision": {
+    "Yes": [
+     "-110",
+     "0QA372740842#2296287434_13L9034Q11Q22"
+    ]
+   },
+   "Vanessa Demopoulos to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA372740843#2296287436_13L9034Q11Q22"
+    ]
+   },
+   "Yazmin Jauregui to Win by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA372740844#2296287438_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Vanessa Demopoulos": [
+     "+2200",
+     "0QA372740878#2296287489_13L9034Q11Q22"
+    ],
+    "Yazmin Jauregui": [
+     "+185",
+     "0QA372740878#2296287495_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Vanessa Demopoulos": [
+     "+2200",
+     "0QA372740879#2296287490_13L9034Q11Q22"
+    ],
+    "Yazmin Jauregui": [
+     "+1400",
+     "0QA372740879#2296287494_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Vanessa Demopoulos": [
+     "+1200",
+     "0QA372740880#2296287491_13L9034Q11Q22"
+    ],
+    "Yazmin Jauregui": [
+     "-170",
+     "0QA372740880#2296287492_13L9034Q13Q24"
     ]
    }
   }
  },
  "401914470": {
-  "dk": "34704380",
+  "dk": "34704366",
   "left": "Elves Brener",
   "right": "Josiah Harrell",
   "rounds": 3,
-  "start": "2026-09-26T20:00Z",
-  "read": "2026-09-22T02:29Z",
+  "start": "2026-09-26T22:45Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
-   "Moneyline": {
-    "Josiah Harrell": [
-     "-135",
-     "0ML86404877_1"
-    ],
+   "Finish Only Moneyline (If Decision No Action)": {
     "Elves Brener": [
-     "+114",
-     "0ML86404877_3"
+     "-115",
+     "0QA372740913#2296287623_13L9034Q11Q21"
+    ],
+    "Josiah Harrell": [
+     "-120",
+     "0QA372740913#2296287707_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Elves Brener": [
+     "+115",
+     "0QA372740915#2296287625_13L9034Q11Q21"
+    ],
+    "Josiah Harrell": [
+     "-160",
+     "0QA372740915#2296287705_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Elves Brener": [
+     "-115",
+     "0QA372740963#2296287651_13L9034Q10Q21"
+    ],
+    "Josiah Harrell": [
+     "-115",
+     "0QA372740963#2296287681_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Elves Brener": [
+     "-140",
+     "0QA372740961#2296287650_13L9034Q10Q21"
+    ],
+    "Josiah Harrell": [
+     "+105",
+     "0QA372740961#2296287683_13L9034Q12Q23"
+    ]
+   },
+   "Moneyline": {
+    "Elves Brener": [
+     "+102",
+     "0ML86404828_1"
+    ],
+    "Josiah Harrell": [
+     "-122",
+     "0ML86404828_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Elves Brener": [
+     "+100",
+     "0QA372740959#2296287644_13L9034Q10Q21"
+    ],
+    "Josiah Harrell": [
+     "-130",
+     "0QA372740959#2296287697_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Elves Brener": [
+     "-175",
+     "0HC86439335P350_1"
+    ],
+    "Josiah Harrell": [
+     "+130",
+     "0HC86439335N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Elves Brener": [
+     "-250",
+     "0HC86439336P750_1"
+    ],
+    "Josiah Harrell": [
+     "+185",
+     "0HC86439336N750_3"
     ]
    },
    "Total Rounds": {
     "Over": [
      "-135",
-     "0OU86404878O250_1"
+     "0OU86404837O250_1"
     ],
     "Under": [
      "+105",
-     "0OU86404878U250_3"
+     "0OU86404837U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-260",
+     "0OU86439334O150_1"
+    ],
+    "Under": [
+     "+185",
+     "0OU86439334U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1400",
+     "0QA372740921#2296287646_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA372740921#2296287691_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372740889#2296287610_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4500",
+     "0QA372740965#2296287652_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA372740903#2296287617_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA372740903#2296287719_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA372740905#2296287618_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA372740905#2296287717_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-105",
+     "0QA372740881#2296287627_13L9034Q10Q20"
+    ],
+    "No": [
+     "-125",
+     "0QA372740881#2296287699_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+400",
+     "0QA372740917#2296287624_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+600",
+     "0QA372740917#2296287703_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+700",
+     "0QA372740917#2296287741_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1000",
+     "0QA372740917#2296287775_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1000",
+     "0QA372740917#2296287785_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1400",
+     "0QA372740917#2296287827_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-105",
+     "0QA372740917#2296287948_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Elves Brener to Win in Rounds 1-2": [
+     "+320",
+     "0QA372740884#2296287656_13L9034Q11Q21"
+    ],
+    "Elves Brener to Win in Round 3 or on Decision": [
+     "+225",
+     "0QA372740884#2296287751_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740884#2296287920_13L9034Q19Q29"
+    ],
+    "Josiah Harrell to Win in Rounds 1-2": [
+     "+320",
+     "0QA372740884#2296287793_15L9034Q15Q25"
+    ],
+    "Josiah Harrell to Win in Round 3 or on Decision": [
+     "+165",
+     "0QA372740884#2296287860_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Elves Brener to Win by KO/TKO/DQ in Round 1": [
+     "+850",
+     "0QA372740886#2296287658_13L9034Q11Q21"
+    ],
+    "Elves Brener to Win by KO/TKO/DQ in Round 2": [
+     "+1400",
+     "0QA372740886#2296287667_13L9034Q12Q22"
+    ],
+    "Elves Brener to Win by KO/TKO/DQ in Round 3": [
+     "+2000",
+     "0QA372740886#2296287755_13L9034Q13Q23"
+    ],
+    "Elves Brener to Win by Submission in Round 1": [
+     "+1000",
+     "0QA372740886#2296287807_13L9034Q16Q26"
+    ],
+    "Elves Brener to Win by Submission in Round 2": [
+     "+1600",
+     "0QA372740886#2296287864_13L9034Q17Q27"
+    ],
+    "Elves Brener to Win by Submission in Round 3": [
+     "+2200",
+     "0QA372740886#2296287876_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-105",
+     "0QA372740886#2296288001_13L9034Q121Q221"
+    ],
+    "Josiah Harrell to Win by KO/TKO/DQ in Round 1": [
+     "+750",
+     "0QA372740886#2296287952_15L9034Q111Q211"
+    ],
+    "Josiah Harrell to Win by KO/TKO/DQ in Round 2": [
+     "+1200",
+     "0QA372740886#2296287957_15L9034Q112Q212"
+    ],
+    "Josiah Harrell to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA372740886#2296287969_15L9034Q113Q213"
+    ],
+    "Josiah Harrell to Win by Submission in Round 1": [
+     "+1200",
+     "0QA372740886#2296287981_15L9034Q116Q216"
+    ],
+    "Josiah Harrell to Win by Submission in Round 2": [
+     "+2000",
+     "0QA372740886#2296287985_15L9034Q117Q217"
+    ],
+    "Josiah Harrell to Win by Submission in Round 3": [
+     "+2800",
+     "0QA372740886#2296287989_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Elves Brener To Win And Under 0.5": [
+     "+1100",
+     "0QA372740895#2296287613_13L9034Q11Q21"
+    ],
+    "Elves Brener To Win And Under 1.5": [
+     "+380",
+     "0QA372740895#2296287737_13L9034Q11Q23"
+    ],
+    "Josiah Harrell To Win And Under 0.5": [
+     "+1100",
+     "0QA372740895#2296287731_14L9034Q12Q22"
+    ],
+    "Josiah Harrell To Win And Under 1.5": [
+     "+380",
+     "0QA372740895#2296287777_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Elves Brener To Win And Over 1.5": [
+     "+165",
+     "0QA372740897#2296287739_13L9034Q11Q23"
+    ],
+    "Elves Brener To Win And Over 2.5": [
+     "+250",
+     "0QA372740897#2296287783_13L9034Q11Q25"
+    ],
+    "Josiah Harrell To Win And Over 1.5": [
+     "+120",
+     "0QA372740897#2296287779_14L9034Q12Q24"
+    ],
+    "Josiah Harrell To Win And Over 2.5": [
+     "+175",
+     "0QA372740897#2296287835_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-400",
+     "0QA372740899#2296287615_13L9034Q11Q22"
+    ],
+    "No": [
+     "+275",
+     "0QA372740899#2296287723_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-175",
+     "0QA372740901#2296287616_13L9034Q11Q22"
+    ],
+    "No": [
+     "+130",
+     "0QA372740901#2296287721_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Elves Brener Round 1": [
+     "+500",
+     "0QA372740882#2296287628_13L9034Q11Q20"
+    ],
+    "Elves Brener Round 2": [
+     "+850",
+     "0QA372740882#2296287743_13L9034Q11Q22"
+    ],
+    "Elves Brener Round 3": [
+     "+1100",
+     "0QA372740882#2296287787_13L9034Q11Q24"
+    ],
+    "Elves Brener By Decision": [
+     "+320",
+     "0QA372740882#2296287944_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740882#2296287965_15L9034Q10Q212"
+    ],
+    "Josiah Harrell Round 1": [
+     "+500",
+     "0QA372740882#2296287695_14L9034Q12Q21"
+    ],
+    "Josiah Harrell Round 2": [
+     "+850",
+     "0QA372740882#2296287773_14L9034Q12Q23"
+    ],
+    "Josiah Harrell Round 3": [
+     "+1100",
+     "0QA372740882#2296287823_14L9034Q12Q25"
+    ],
+    "Josiah Harrell By Decision": [
+     "+225",
+     "0QA372740882#2296287961_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+275",
+     "0QA372740887#2296287660_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+400",
+     "0QA372740887#2296287665_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA372740887#2296287757_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740887#2296287803_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-105",
+     "0QA372740887#2296287868_13L9034Q11Q25"
+    ]
+   },
+   "Josiah Harrell to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+240",
+     "0QA372740923#2296287647_13L9034Q11Q22"
+    ],
+    "No": [
+     "-340",
+     "0QA372740923#2296287689_13L9034Q13Q24"
+    ]
+   },
+   "Elves Brener to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+240",
+     "0QA372740925#2296287649_13L9034Q11Q22"
+    ],
+    "No": [
+     "-340",
+     "0QA372740925#2296287685_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Elves Brener to Win by KO/TKO/DQ or Decision": [
+     "+150",
+     "0QA372740885#2296287657_13L9034Q11Q21"
+    ],
+    "Elves Brener to Win by KO/TKO/DQ or Submission": [
+     "+240",
+     "0QA372740885#2296287669_13L9034Q12Q22"
+    ],
+    "Elves Brener to Win by Submission or Decision": [
+     "+165",
+     "0QA372740885#2296287753_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740885#2296287872_13L9034Q17Q27"
+    ],
+    "Josiah Harrell to Win by KO/TKO/DQ or Decision": [
+     "+100",
+     "0QA372740885#2296287765_15L9034Q14Q24"
+    ],
+    "Josiah Harrell to Win by KO/TKO/DQ or Submission": [
+     "+240",
+     "0QA372740885#2296287791_15L9034Q15Q25"
+    ],
+    "Josiah Harrell to Win by Submission or Decision": [
+     "+130",
+     "0QA372740885#2296287815_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Elves Brener to Win By KO/TKO/DQ or Josiah Harrell to Win by Submission": [
+     "+225",
+     "0QA372740927#2296287648_13L9034Q10Q21"
+    ],
+    "Elves Brener to Win By KO/TKO/DQ or Josiah Harrell to Win by Decision": [
+     "+105",
+     "0QA372740927#2296287687_13L9034Q10Q22"
+    ],
+    "Elves Brener to Win By Submission or Josiah Harrell to Win by KO/TKO/DQ": [
+     "+175",
+     "0QA372740927#2296287747_13L9034Q10Q23"
+    ],
+    "Elves Brener to Win By Submission or Josiah Harrell to Win by Decision": [
+     "+115",
+     "0QA372740927#2296287771_13L9034Q10Q24"
+    ],
+    "Elves Brener to Win By Decision or Josiah Harrell to Win by KO/TKO/DQ": [
+     "+125",
+     "0QA372740927#2296287789_13L9034Q10Q25"
+    ],
+    "Elves Brener to Win By Decision or Josiah Harrell to Win by Submission": [
+     "+175",
+     "0QA372740927#2296287819_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740927#2296287856_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+180",
+     "0QA372740883#2296287645_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+275",
+     "0QA372740883#2296287693_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-105",
+     "0QA372740883#2296287745_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740883#2296287761_15L9034Q14Q24"
+    ]
+   },
+   "Elves Brener to Win by Unanimous Decision": {
+    "Yes": [
+     "+380",
+     "0QA372740907#2296287619_13L9034Q11Q22"
+    ]
+   },
+   "Josiah Harrell to Win by Unanimous Decision": {
+    "Yes": [
+     "+275",
+     "0QA372740909#2296287620_13L9034Q11Q22"
+    ]
+   },
+   "Elves Brener to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA372740910#2296287621_13L9034Q11Q22"
+    ]
+   },
+   "Josiah Harrell to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA372740911#2296287622_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Elves Brener": [
+     "+450",
+     "0QA372740980#2296287654_13L9034Q11Q22"
+    ],
+    "Josiah Harrell": [
+     "+380",
+     "0QA372740980#2296287675_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Elves Brener": [
+     "+550",
+     "0QA372740982#2296287655_13L9034Q11Q22"
+    ],
+    "Josiah Harrell": [
+     "+700",
+     "0QA372740982#2296287673_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Elves Brener": [
+     "+320",
+     "0QA372740984#2296287661_13L9034Q11Q22"
+    ],
+    "Josiah Harrell": [
+     "+225",
+     "0QA372740984#2296287663_13L9034Q13Q24"
     ]
    }
   }
@@ -8838,27 +12486,533 @@
   "left": "Brady Hiestand",
   "right": "Rinya Nakamura",
   "rounds": 3,
-  "start": "2026-09-26T20:00Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-26T23:45Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Brady Hiestand": [
+     "+300",
+     "0QA372740789#2296287292_13L9034Q11Q21"
+    ],
+    "Rinya Nakamura": [
+     "-475",
+     "0QA372740789#2296287338_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Brady Hiestand": [
+     "+250",
+     "0QA372740790#2296287294_13L9034Q11Q21"
+    ],
+    "Rinya Nakamura": [
+     "-380",
+     "0QA372740790#2296287337_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Brady Hiestand": [
+     "+350",
+     "0QA372740814#2296287317_13L9034Q10Q21"
+    ],
+    "Rinya Nakamura": [
+     "-550",
+     "0QA372740814#2296287329_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Brady Hiestand": [
+     "+110",
+     "0QA372740813#2296287316_13L9034Q10Q21"
+    ],
+    "Rinya Nakamura": [
+     "-145",
+     "0QA372740813#2296287330_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Brady Hiestand": [
-     "+285",
+     "+310",
      "0ML86404825_1"
     ],
     "Rinya Nakamura": [
-     "-360",
+     "-395",
      "0ML86404825_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Brady Hiestand": [
+     "+550",
+     "0QA372740812#2296287314_13L9034Q10Q21"
+    ],
+    "Rinya Nakamura": [
+     "-1000",
+     "0QA372740812#2296287332_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Brady Hiestand": [
+     "+140",
+     "0HC86439328P350_1"
+    ],
+    "Rinya Nakamura": [
+     "-190",
+     "0HC86439328N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Brady Hiestand": [
+     "-105",
+     "0HC86439330P750_1"
+    ],
+    "Rinya Nakamura": [
+     "-125",
+     "0HC86439330N750_3"
     ]
    },
    "Total Rounds": {
     "Over": [
-     "-180",
+     "-188",
      "0OU86414348O150_1"
     ],
     "Under": [
-     "+140",
+     "+145",
      "0OU86414348U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+100",
+     "0OU86439326O250_1"
+    ],
+    "Under": [
+     "-135",
+     "0OU86439326U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1100",
+     "0QA372740793#2296287296_13L9034Q11Q22"
+    ],
+    "No": [
+     "-5000",
+     "0QA372740793#2296287335_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372740776#2296287279_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4000",
+     "0QA372740815#2296287318_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+185",
+     "0QA372740783#2296287286_13L9034Q11Q22"
+    ],
+    "No": [
+     "-250",
+     "0QA372740783#2296287344_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+600",
+     "0QA372740784#2296287287_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA372740784#2296287343_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+125",
+     "0QA372740769#2296287273_13L9034Q10Q20"
+    ],
+    "No": [
+     "-165",
+     "0QA372740769#2296287356_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+250",
+     "0QA372740791#2296287293_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+800",
+     "0QA372740791#2296287324_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+400",
+     "0QA372740791#2296287368_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1200",
+     "0QA372740791#2296287373_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+900",
+     "0QA372740791#2296287389_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2200",
+     "0QA372740791#2296287392_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+125",
+     "0QA372740791#2296287457_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Brady Hiestand to Win in Rounds 1-2": [
+     "+700",
+     "0QA372740772#2296287276_13L9034Q11Q21"
+    ],
+    "Brady Hiestand to Win in Round 3 or on Decision": [
+     "+500",
+     "0QA372740772#2296287361_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740772#2296287435_13L9034Q19Q29"
+    ],
+    "Rinya Nakamura to Win in Rounds 1-2": [
+     "+125",
+     "0QA372740772#2296287384_15L9034Q15Q25"
+    ],
+    "Rinya Nakamura to Win in Round 3 or on Decision": [
+     "+130",
+     "0QA372740772#2296287405_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Brady Hiestand to Win by KO/TKO/DQ in Round 1": [
+     "+2500",
+     "0QA372740774#2296287275_13L9034Q11Q21"
+    ],
+    "Brady Hiestand to Win by KO/TKO/DQ in Round 2": [
+     "+3000",
+     "0QA372740774#2296287354_13L9034Q12Q22"
+    ],
+    "Brady Hiestand to Win by KO/TKO/DQ in Round 3": [
+     "+4500",
+     "0QA372740774#2296287360_13L9034Q13Q23"
+    ],
+    "Brady Hiestand to Win by Submission in Round 1": [
+     "+1800",
+     "0QA372740774#2296287398_13L9034Q16Q26"
+    ],
+    "Brady Hiestand to Win by Submission in Round 2": [
+     "+2500",
+     "0QA372740774#2296287403_13L9034Q17Q27"
+    ],
+    "Brady Hiestand to Win by Submission in Round 3": [
+     "+3500",
+     "0QA372740774#2296287427_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+125",
+     "0QA372740774#2296287481_13L9034Q121Q221"
+    ],
+    "Rinya Nakamura to Win by KO/TKO/DQ in Round 1": [
+     "+275",
+     "0QA372740774#2296287455_15L9034Q111Q211"
+    ],
+    "Rinya Nakamura to Win by KO/TKO/DQ in Round 2": [
+     "+450",
+     "0QA372740774#2296287459_15L9034Q112Q212"
+    ],
+    "Rinya Nakamura to Win by KO/TKO/DQ in Round 3": [
+     "+1000",
+     "0QA372740774#2296287465_15L9034Q113Q213"
+    ],
+    "Rinya Nakamura to Win by Submission in Round 1": [
+     "+1200",
+     "0QA372740774#2296287471_15L9034Q116Q216"
+    ],
+    "Rinya Nakamura to Win by Submission in Round 2": [
+     "+2000",
+     "0QA372740774#2296287473_15L9034Q117Q217"
+    ],
+    "Rinya Nakamura to Win by Submission in Round 3": [
+     "+4000",
+     "0QA372740774#2296287475_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Brady Hiestand To Win And Under 0.5": [
+     "+2500",
+     "0QA372740779#2296287281_13L9034Q11Q21"
+    ],
+    "Brady Hiestand To Win And Under 1.5": [
+     "+900",
+     "0QA372740779#2296287365_13L9034Q11Q23"
+    ],
+    "Rinya Nakamura To Win And Under 0.5": [
+     "+600",
+     "0QA372740779#2296287349_14L9034Q12Q22"
+    ],
+    "Rinya Nakamura To Win And Under 1.5": [
+     "+165",
+     "0QA372740779#2296287375_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Brady Hiestand To Win And Over 1.5": [
+     "+400",
+     "0QA372740780#2296287367_13L9034Q11Q23"
+    ],
+    "Brady Hiestand To Win And Over 2.5": [
+     "+550",
+     "0QA372740780#2296287388_13L9034Q11Q25"
+    ],
+    "Rinya Nakamura To Win And Over 1.5": [
+     "-125",
+     "0QA372740780#2296287374_14L9034Q12Q24"
+    ],
+    "Rinya Nakamura To Win And Over 2.5": [
+     "+140",
+     "0QA372740780#2296287393_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-310",
+     "0QA372740781#2296287284_13L9034Q11Q22"
+    ],
+    "No": [
+     "+225",
+     "0QA372740781#2296287346_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-125",
+     "0QA372740782#2296287285_13L9034Q11Q22"
+    ],
+    "No": [
+     "-105",
+     "0QA372740782#2296287345_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Brady Hiestand Round 1": [
+     "+1100",
+     "0QA372740770#2296287272_13L9034Q11Q20"
+    ],
+    "Brady Hiestand Round 2": [
+     "+1600",
+     "0QA372740770#2296287358_13L9034Q11Q22"
+    ],
+    "Brady Hiestand Round 3": [
+     "+2200",
+     "0QA372740770#2296287382_13L9034Q11Q24"
+    ],
+    "Brady Hiestand By Decision": [
+     "+700",
+     "0QA372740770#2296287453_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740770#2296287463_15L9034Q10Q212"
+    ],
+    "Rinya Nakamura Round 1": [
+     "+250",
+     "0QA372740770#2296287357_14L9034Q12Q21"
+    ],
+    "Rinya Nakamura Round 2": [
+     "+400",
+     "0QA372740770#2296287381_14L9034Q12Q23"
+    ],
+    "Rinya Nakamura Round 3": [
+     "+900",
+     "0QA372740770#2296287399_14L9034Q12Q25"
+    ],
+    "Rinya Nakamura By Decision": [
+     "+185",
+     "0QA372740770#2296287461_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+225",
+     "0QA372740775#2296287278_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+320",
+     "0QA372740775#2296287351_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+650",
+     "0QA372740775#2296287363_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740775#2296287395_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+125",
+     "0QA372740775#2296287407_13L9034Q11Q25"
+    ]
+   },
+   "Rinya Nakamura to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+100",
+     "0QA372740794#2296287297_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA372740794#2296287334_13L9034Q13Q24"
+    ]
+   },
+   "Brady Hiestand to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+550",
+     "0QA372740795#2296287315_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1000",
+     "0QA372740795#2296287331_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Brady Hiestand to Win by KO/TKO/DQ or Decision": [
+     "+400",
+     "0QA372740773#2296287277_13L9034Q11Q21"
+    ],
+    "Brady Hiestand to Win by KO/TKO/DQ or Submission": [
+     "+550",
+     "0QA372740773#2296287352_13L9034Q12Q22"
+    ],
+    "Brady Hiestand to Win by Submission or Decision": [
+     "+370",
+     "0QA372740773#2296287362_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740773#2296287409_13L9034Q17Q27"
+    ],
+    "Rinya Nakamura to Win by KO/TKO/DQ or Decision": [
+     "-330",
+     "0QA372740773#2296287377_15L9034Q14Q24"
+    ],
+    "Rinya Nakamura to Win by KO/TKO/DQ or Submission": [
+     "+100",
+     "0QA372740773#2296287385_15L9034Q15Q25"
+    ],
+    "Rinya Nakamura to Win by Submission or Decision": [
+     "+115",
+     "0QA372740773#2296287396_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Brady Hiestand to Win By KO/TKO/DQ or Rinya Nakamura to Win by Submission": [
+     "+400",
+     "0QA372740796#2296287298_13L9034Q10Q21"
+    ],
+    "Brady Hiestand to Win By KO/TKO/DQ or Rinya Nakamura to Win by Decision": [
+     "+135",
+     "0QA372740796#2296287333_13L9034Q10Q22"
+    ],
+    "Brady Hiestand to Win By Submission or Rinya Nakamura to Win by KO/TKO/DQ": [
+     "-115",
+     "0QA372740796#2296287369_13L9034Q10Q23"
+    ],
+    "Brady Hiestand to Win By Submission or Rinya Nakamura to Win by Decision": [
+     "+120",
+     "0QA372740796#2296287372_13L9034Q10Q24"
+    ],
+    "Brady Hiestand to Win By Decision or Rinya Nakamura to Win by KO/TKO/DQ": [
+     "-125",
+     "0QA372740796#2296287390_13L9034Q10Q25"
+    ],
+    "Brady Hiestand to Win By Decision or Rinya Nakamura to Win by Submission": [
+     "+300",
+     "0QA372740796#2296287391_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740796#2296287417_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+105",
+     "0QA372740771#2296287274_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+400",
+     "0QA372740771#2296287355_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+125",
+     "0QA372740771#2296287359_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740771#2296287380_15L9034Q14Q24"
+    ]
+   },
+   "Brady Hiestand to Win by Unanimous Decision": {
+    "Yes": [
+     "+1000",
+     "0QA372740785#2296287288_13L9034Q11Q22"
+    ]
+   },
+   "Rinya Nakamura to Win by Unanimous Decision": {
+    "Yes": [
+     "+225",
+     "0QA372740786#2296287289_13L9034Q11Q22"
+    ]
+   },
+   "Brady Hiestand to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA372740787#2296287290_13L9034Q11Q22"
+    ]
+   },
+   "Rinya Nakamura to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA372740788#2296287291_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Brady Hiestand": [
+     "+1200",
+     "0QA372740822#2296287320_13L9034Q11Q22"
+    ],
+    "Rinya Nakamura": [
+     "+130",
+     "0QA372740822#2296287326_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Brady Hiestand": [
+     "+900",
+     "0QA372740823#2296287321_13L9034Q11Q22"
+    ],
+    "Rinya Nakamura": [
+     "+750",
+     "0QA372740823#2296287325_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Brady Hiestand": [
+     "+700",
+     "0QA372740824#2296287322_13L9034Q11Q22"
+    ],
+    "Rinya Nakamura": [
+     "+185",
+     "0QA372740824#2296287323_13L9034Q13Q24"
     ]
    }
   }
@@ -8898,17 +13052,87 @@
   "left": "Ilimbek Akylbek Uulu",
   "right": "Mehemmedeli Osmanli",
   "rounds": 3,
-  "start": "2026-09-26T20:00Z",
-  "read": "2026-09-23T00:25Z",
+  "start": "2026-09-27T00:45Z",
+  "read": "2026-09-25T13:13Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Mehemmedeli Osmanli": [
+     "-360",
+     "0QA372741014#2296287873_13L9034Q11Q21"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+240",
+     "0QA372741014#2296288042_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Mehemmedeli Osmanli": [
+     "-340",
+     "0QA372741016#2296287881_13L9034Q11Q21"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+225",
+     "0QA372741016#2296288039_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Mehemmedeli Osmanli": [
+     "-450",
+     "0QA372741064#2296287971_13L9034Q10Q21"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+300",
+     "0QA372741064#2296288015_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Mehemmedeli Osmanli": [
+     "-185",
+     "0QA372741062#2296287967_13L9034Q10Q21"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+140",
+     "0QA372741062#2296288018_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Mehemmedeli Osmanli": [
-     "-290",
+     "-298",
      "0ML86404827_1"
     ],
     "Ilimbek Akylbek Uulu": [
-     "+235",
+     "+240",
      "0ML86404827_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Mehemmedeli Osmanli": [
+     "-900",
+     "0QA372741060#2296287958_13L9034Q10Q21"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+500",
+     "0QA372741060#2296288024_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Mehemmedeli Osmanli": [
+     "-170",
+     "0HC86439327N350_1"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+125",
+     "0HC86439327P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Mehemmedeli Osmanli": [
+     "-600",
+     "0HC86439329P750_1"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+380",
+     "0HC86439329N750_3"
     ]
    },
    "Total Rounds": {
@@ -8919,6 +13143,442 @@
     "Under": [
      "+135",
      "0OU86404829U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+105",
+     "0OU86439325O250_1"
+    ],
+    "Under": [
+     "-140",
+     "0OU86439325U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1100",
+     "0QA372741022#2296287889_13L9034Q11Q22"
+    ],
+    "No": [
+     "-5000",
+     "0QA372741022#2296288033_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA372741000#2296287820_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4000",
+     "0QA372741066#2296287975_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+200",
+     "0QA372741007#2296287849_13L9034Q11Q22"
+    ],
+    "No": [
+     "-275",
+     "0QA372741007#2296288060_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA372741008#2296287853_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA372741008#2296288057_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+130",
+     "0QA372740991#2296287797_13L9034Q10Q20"
+    ],
+    "No": [
+     "-170",
+     "0QA372740991#2296288094_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+400",
+     "0QA372741018#2296287877_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+380",
+     "0QA372741018#2296287999_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+700",
+     "0QA372741018#2296288135_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+650",
+     "0QA372741018#2296288143_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1400",
+     "0QA372741018#2296288174_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1200",
+     "0QA372741018#2296288182_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+130",
+     "0QA372741018#2296288290_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Mehemmedeli Osmanli to Win in Rounds 1-2": [
+     "+130",
+     "0QA372740996#2296287808_13L9034Q11Q21"
+    ],
+    "Mehemmedeli Osmanli to Win in Round 3 or on Decision": [
+     "+145",
+     "0QA372740996#2296288109_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740996#2296288257_13L9034Q19Q29"
+    ],
+    "Ilimbek Akylbek Uulu to Win in Rounds 1-2": [
+     "+550",
+     "0QA372740996#2296288159_15L9034Q15Q25"
+    ],
+    "Ilimbek Akylbek Uulu to Win in Round 3 or on Decision": [
+     "+450",
+     "0QA372740996#2296288212_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Mehemmedeli Osmanli to Win by KO/TKO/DQ in Round 1": [
+     "+450",
+     "0QA372740998#2296287804_13L9034Q11Q21"
+    ],
+    "Mehemmedeli Osmanli to Win by KO/TKO/DQ in Round 2": [
+     "+750",
+     "0QA372740998#2296288088_13L9034Q12Q22"
+    ],
+    "Mehemmedeli Osmanli to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA372740998#2296288106_13L9034Q13Q23"
+    ],
+    "Mehemmedeli Osmanli to Win by Submission in Round 1": [
+     "+550",
+     "0QA372740998#2296288200_13L9034Q16Q26"
+    ],
+    "Mehemmedeli Osmanli to Win by Submission in Round 2": [
+     "+1000",
+     "0QA372740998#2296288209_13L9034Q17Q27"
+    ],
+    "Mehemmedeli Osmanli to Win by Submission in Round 3": [
+     "+2200",
+     "0QA372740998#2296288245_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+130",
+     "0QA372740998#2296288327_13L9034Q121Q221"
+    ],
+    "Ilimbek Akylbek Uulu to Win by KO/TKO/DQ in Round 1": [
+     "+3500",
+     "0QA372740998#2296288287_15L9034Q111Q211"
+    ],
+    "Ilimbek Akylbek Uulu to Win by KO/TKO/DQ in Round 2": [
+     "+4500",
+     "0QA372740998#2296288293_15L9034Q112Q212"
+    ],
+    "Ilimbek Akylbek Uulu to Win by KO/TKO/DQ in Round 3": [
+     "+6500",
+     "0QA372740998#2296288303_15L9034Q113Q213"
+    ],
+    "Ilimbek Akylbek Uulu to Win by Submission in Round 1": [
+     "+1100",
+     "0QA372740998#2296288312_15L9034Q116Q216"
+    ],
+    "Ilimbek Akylbek Uulu to Win by Submission in Round 2": [
+     "+1400",
+     "0QA372740998#2296288315_15L9034Q117Q217"
+    ],
+    "Ilimbek Akylbek Uulu to Win by Submission in Round 3": [
+     "+2200",
+     "0QA372740998#2296288318_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Mehemmedeli Osmanli To Win And Under 0.5": [
+     "+600",
+     "0QA372741003#2296287828_13L9034Q11Q21"
+    ],
+    "Mehemmedeli Osmanli To Win And Under 1.5": [
+     "+165",
+     "0QA372741003#2296288131_13L9034Q11Q23"
+    ],
+    "Ilimbek Akylbek Uulu To Win And Under 0.5": [
+     "+2000",
+     "0QA372741003#2296288073_14L9034Q12Q22"
+    ],
+    "Ilimbek Akylbek Uulu To Win And Under 1.5": [
+     "+700",
+     "0QA372741003#2296288147_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Mehemmedeli Osmanli To Win And Over 1.5": [
+     "-105",
+     "0QA372741004#2296288134_13L9034Q11Q23"
+    ],
+    "Mehemmedeli Osmanli To Win And Over 2.5": [
+     "+165",
+     "0QA372741004#2296288171_13L9034Q11Q25"
+    ],
+    "Ilimbek Akylbek Uulu To Win And Over 1.5": [
+     "+350",
+     "0QA372741004#2296288145_14L9034Q12Q24"
+    ],
+    "Ilimbek Akylbek Uulu To Win And Over 2.5": [
+     "+500",
+     "0QA372741004#2296288185_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-295",
+     "0QA372741005#2296287841_13L9034Q11Q22"
+    ],
+    "No": [
+     "+215",
+     "0QA372741005#2296288066_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-120",
+     "0QA372741006#2296287845_13L9034Q11Q22"
+    ],
+    "No": [
+     "-110",
+     "0QA372741006#2296288063_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Mehemmedeli Osmanli Round 1": [
+     "+250",
+     "0QA372740993#2296287794_13L9034Q11Q20"
+    ],
+    "Mehemmedeli Osmanli Round 2": [
+     "+450",
+     "0QA372740993#2296288100_13L9034Q11Q22"
+    ],
+    "Mehemmedeli Osmanli Round 3": [
+     "+1000",
+     "0QA372740993#2296288155_13L9034Q11Q24"
+    ],
+    "Mehemmedeli Osmanli By Decision": [
+     "+200",
+     "0QA372740993#2296288284_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740993#2296288300_15L9034Q10Q212"
+    ],
+    "Ilimbek Akylbek Uulu Round 1": [
+     "+900",
+     "0QA372740993#2296288097_14L9034Q12Q21"
+    ],
+    "Ilimbek Akylbek Uulu Round 2": [
+     "+1200",
+     "0QA372740993#2296288154_14L9034Q12Q23"
+    ],
+    "Ilimbek Akylbek Uulu Round 3": [
+     "+1800",
+     "0QA372740993#2296288203_14L9034Q12Q25"
+    ],
+    "Ilimbek Akylbek Uulu By Decision": [
+     "+650",
+     "0QA372740993#2296288296_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+215",
+     "0QA372740999#2296287816_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+320",
+     "0QA372740999#2296288079_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+650",
+     "0QA372740999#2296288115_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740999#2296288191_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+130",
+     "0QA372740999#2296288215_13L9034Q11Q25"
+    ]
+   },
+   "Ilimbek Akylbek Uulu to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+450",
+     "0QA372741024#2296287893_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA372741024#2296288030_13L9034Q13Q24"
+    ]
+   },
+   "Mehemmedeli Osmanli to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+110",
+     "0QA372741026#2296287963_13L9034Q11Q22"
+    ],
+    "No": [
+     "-145",
+     "0QA372741026#2296288021_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Mehemmedeli Osmanli to Win by KO/TKO/DQ or Decision": [
+     "-160",
+     "0QA372740997#2296287812_13L9034Q11Q21"
+    ],
+    "Mehemmedeli Osmanli to Win by KO/TKO/DQ or Submission": [
+     "+110",
+     "0QA372740997#2296288082_13L9034Q12Q22"
+    ],
+    "Mehemmedeli Osmanli to Win by Submission or Decision": [
+     "-125",
+     "0QA372740997#2296288112_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740997#2296288218_13L9034Q17Q27"
+    ],
+    "Ilimbek Akylbek Uulu to Win by KO/TKO/DQ or Decision": [
+     "+475",
+     "0QA372740997#2296288149_15L9034Q14Q24"
+    ],
+    "Ilimbek Akylbek Uulu to Win by KO/TKO/DQ or Submission": [
+     "+450",
+     "0QA372740997#2296288162_15L9034Q15Q25"
+    ],
+    "Ilimbek Akylbek Uulu to Win by Submission or Decision": [
+     "+255",
+     "0QA372740997#2296288194_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Mehemmedeli Osmanli to Win By KO/TKO/DQ or Ilimbek Akylbek Uulu to Win by Submission": [
+     "+120",
+     "0QA372741028#2296287897_13L9034Q10Q21"
+    ],
+    "Mehemmedeli Osmanli to Win By KO/TKO/DQ or Ilimbek Akylbek Uulu to Win by Decision": [
+     "+135",
+     "0QA372741028#2296288027_13L9034Q10Q22"
+    ],
+    "Mehemmedeli Osmanli to Win By Submission or Ilimbek Akylbek Uulu to Win by KO/TKO/DQ": [
+     "+250",
+     "0QA372741028#2296288137_13L9034Q10Q23"
+    ],
+    "Mehemmedeli Osmanli to Win By Submission or Ilimbek Akylbek Uulu to Win by Decision": [
+     "+175",
+     "0QA372741028#2296288141_13L9034Q10Q24"
+    ],
+    "Mehemmedeli Osmanli to Win By Decision or Ilimbek Akylbek Uulu to Win by KO/TKO/DQ": [
+     "+160",
+     "0QA372741028#2296288177_13L9034Q10Q25"
+    ],
+    "Mehemmedeli Osmanli to Win By Decision or Ilimbek Akylbek Uulu to Win by Submission": [
+     "+105",
+     "0QA372741028#2296288179_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372741028#2296288230_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+200",
+     "0QA372740995#2296287800_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+175",
+     "0QA372740995#2296288091_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+130",
+     "0QA372740995#2296288103_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA372740995#2296288153_15L9034Q14Q24"
+    ]
+   },
+   "Mehemmedeli Osmanli to Win by Unanimous Decision": {
+    "Yes": [
+     "+250",
+     "0QA372741009#2296287857_13L9034Q11Q22"
+    ]
+   },
+   "Ilimbek Akylbek Uulu to Win by Unanimous Decision": {
+    "Yes": [
+     "+900",
+     "0QA372741010#2296287861_13L9034Q11Q22"
+    ]
+   },
+   "Mehemmedeli Osmanli to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA372741011#2296287865_13L9034Q11Q22"
+    ]
+   },
+   "Ilimbek Akylbek Uulu to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA372741012#2296287869_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Mehemmedeli Osmanli": [
+     "+240",
+     "0QA372741080#2296287983_13L9034Q11Q22"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+1800",
+     "0QA372741080#2296288006_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Mehemmedeli Osmanli": [
+     "+330",
+     "0QA372741082#2296287987_13L9034Q11Q22"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+550",
+     "0QA372741082#2296288003_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Mehemmedeli Osmanli": [
+     "+200",
+     "0QA372741084#2296287991_13L9034Q11Q22"
+    ],
+    "Ilimbek Akylbek Uulu": [
+     "+650",
+     "0QA372741084#2296287995_13L9034Q13Q24"
     ]
    }
   }
