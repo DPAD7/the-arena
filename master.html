@@ -7504,6 +7504,9 @@
            into the score beside it (Jose, Sep 25, 2026) */
         var said = card.dataset.clk || (done ? "FINAL" : "");
         var two = said.split(/\s+-\s+/);
+        /* "End of 1st" stacks the same way: END over 1ST (Jose, Sep 25, 2026) */
+        var endOf = /^end of (.+)$/i.exec(said);
+        if (endOf) two = ["End", endOf[1]];
         if (two.length === 2) {
           clk.classList.add("gclk--two");
           two.forEach(function (x) { var b = document.createElement("b"); b.textContent = x; clk.appendChild(b); });
