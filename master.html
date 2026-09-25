@@ -10729,8 +10729,9 @@
          card, not swiping the board, and both at once means the card slides
          out from under the thumb (Jose, Sep 22, 2026: "if I'm on that actual
          piece it should not swipe"). .drvg is the live graph, read by holding
-         a finger on it and dragging along it, which is the same argument. */
-      ok = !e.target.closest(".daybar, .weekbar, .tabbar, .fview, .fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, input, textarea") &&
+         a finger on it and dragging along it, which is the same argument.The
+         dollar button is dragged the same way (Jose, Sep 25, 2026). */
+      ok = !e.target.closest(".daybar, .weekbar, .tabbar, .fview, .fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, input, textarea") &&
            !(caro && caro.scrollWidth > caro.clientWidth + 2);   /* a row that scrolls keeps the gesture */
       x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); drag = false; dx = 0;
     }, { passive: true });
