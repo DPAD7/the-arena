@@ -14774,7 +14774,9 @@
          the tiles wore "20:26" where ML belongs */
       var pick = saved[id] && saved[id].l ? saved[id] : null;
       var lab = was.l && !/ \u00b7 (\d+:\d\d|FINAL|LIVE)/.test(was.l) ? was.l
-              : pick ? pick.l : labelFor(b).replace(/ \u00b7 .*$/, "");
+              : pick ? pick.l : labelFor(b).replace(/ \u00b7 .*$/, "") + " \u00b7 " +
+                (card && card.dataset.kick ? new Date(card.dataset.kick).toLocaleTimeString("en-US",
+                  {timeZone: "America/New_York", hour: "numeric", minute: "2-digit"}) : "");
       var now = {o: was.o || (pick && pick.o) || priceOf(b), l: lab,
                  g: card ? (card.dataset.espn || card.dataset.bout || "") : (was.g || ""), st: st,
                  k: (card && card.dataset.kick) || was.k || ""};
