@@ -14608,11 +14608,19 @@
       var st = b.classList.contains("won") ? "won" : b.classList.contains("lost") ? "lost" : "live";
       var was = BANK.legs[id] || {};
       var now = {o: priceOf(b), l: was.l || labelFor(b),
-                 g: card ? (card.dataset.espn || card.dataset.bout || "") : (was.g || ""), st: st};
+                 g: card ? (card.dataset.espn || card.dataset.bout || "") : (was.g || ""), st: st,
+                 k: (card && card.dataset.kick) || was.k || ""};
       if (JSON.stringify(now) !== JSON.stringify(was)) { BANK.legs[id] = now; moved = true; }
     });
     Object.keys(BANK.legs).forEach(function (id) { if (!placed[id]) { delete BANK.legs[id]; moved = true; } });
-    var legs = Object.keys(placed).filter(function (id) { return BANK.legs[id]; }).sort()
+    /* today's games only, by each game's own start on the Eastern clock:
+       yesterday's gold is still on the board until the day's marks clear,
+       and it is not part of today's run (Jose, Sep 25, 2026) */
+    var today = dayKeyOf(new Date().toISOString());
+    var legs = Object.keys(placed).filter(function (id) {
+      var v = BANK.legs[id];
+      return v && v.k && dayKeyOf(v.k) === today;
+    }).sort()
       .map(function (id) { var v = BANK.legs[id]; return {id: id, o: v.o, l: v.l, g: v.g, st: v.st}; });
     var state = "";
     if (legs.length) {
