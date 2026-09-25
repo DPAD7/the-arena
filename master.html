@@ -7514,6 +7514,11 @@
       /* only ever one: the older bars go before the new one is seated */
       when.querySelectorAll(".glivebar").forEach(function (old0) { old0.remove(); });
       when.appendChild(lbar);
+      /* the new bar brought its own badge; the old one had already been
+         lifted beside the trend and outlived its bar, so the row wore two
+         (Jose, Sep 25, 2026: "why is there 2 live icons again"). The badge
+         is seated now, the older one dropped. */
+      if (window.orderTop) window.orderTop(card);
     }
 
     /* the score, the clock or FINAL between the two of them */
@@ -12404,14 +12409,9 @@
           /* while the game is on, the play mark rides beside the LIVE badge,
              the two of them centered under the score (Jose, Sep 17, 2026) */
           if (mark) mark.remove();
-          /* a badge already standing elsewhere on the card (lifted into the
-             top row) is the one: a second is never built beside it
-             (Jose, Sep 25, 2026: "why is there 2 live icons again") */
-          var had = card.querySelector(".glive");
-          var keep = had && !when.contains(had);
           when.innerHTML = st.shortDetail + "<br>" + score +
-            '<span class="glivebar">' + (keep ? "" :
-            '<img class="glive" src="ico/live-1.svg" alt="Live" width="34" height="34">') + '</span>';
+            '<span class="glivebar"><img class="glive" src="ico/live-1.svg" alt="Live" ' +
+            'width="34" height="34"></span>';
           /* the eye rides the live bar too. Rebuilding the bar left it behind
              and it fell back to the corner, so once a game kicked off the
              three of them stopped being one row
