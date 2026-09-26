@@ -977,6 +977,8 @@
   .drive--g .drvat .drvatdd { text-transform: uppercase; }
   .drive--g .drvat:has(.drvjer) .drvatdd { position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
     margin-bottom: 1px; white-space: nowrap; line-height: 1; }
+  .drive--g .drvat:has(.drvjer) .drvatspot { position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
+    margin-top: 1px; white-space: nowrap; line-height: 1; font-size: 11.5px; color: #fff; }
   .drvjer { display: inline-grid; place-items: center; width: 34px; height: 31px; }
   .drvjer > * { grid-area: 1 / 1; }
   .drvjer img { width: 34px; height: 31px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.6)); }
@@ -5684,9 +5686,11 @@
          line its number, with the down and distance over it (Jose, Sep 26,
          2026: "Kalshi jersey for where they are") */
       var offAb = graph ? ((card._drvab || ["", ""])[st.offLeft ? 0 : 1] || "") : "";
-      var yd = (/(\d+)\s*$/.exec(st.at || "") || [])[1] || "";
-      var jer = offAb && yd ? '<span class="drvjer" data-ab="' + offAb + '"><em' + (yd.length > 2 ? ' class="n3"' : '') + '>' + yd + '</em></span>' : "";
-      var atHtml = (graph && st.dd ? '<small class="drvatdd">' + st.dd + "</small>" : "") + (jer || (st.at || ""));
+      /* his passer's own number on the shirt; the spot goes under it */
+      var no = (card._qbjer || ["", ""])[st.offLeft ? 0 : 1] || "";
+      var jer = offAb ? '<span class="drvjer" data-ab="' + offAb + '"><em' + (no.length > 2 ? ' class="n3"' : '') + '>' + no + '</em></span>' : "";
+      var atHtml = (graph && st.dd ? '<small class="drvatdd">' + st.dd + "</small>" : "") +
+                   (jer ? jer + '<small class="drvatspot">' + (st.at || "") + "</small>" : (st.at || ""));
       if (atEl.dataset.said !== atHtml) {
         atEl.dataset.said = atHtml; atEl.innerHTML = atHtml;
         var js = atEl.querySelector(".drvjer");
@@ -13088,6 +13092,20 @@
         var lq = card.dataset.lqbid || card.dataset.lqb;
         var rq = card.dataset.rqbid || card.dataset.rqb;
         var stats = {};
+        /* each passer's jersey number, from the box score, for the ball's
+           shirt on the drive bar (Jose, Sep 26, 2026: "make it the QB's
+           jersey") */
+        card._qbjer = card._qbjer || ["", ""];
+        [lq, rq].forEach(function (q, i) {
+          box.forEach(function (tm) {
+            (tm.statistics || []).forEach(function (c) {
+              (c.athletes || []).forEach(function (a) {
+                var him = a.athlete || {};
+                if (String(him.id) === String(q) && him.jersey) card._qbjer[i] = String(him.jersey);
+              });
+            });
+          });
+        });
         [["l", lq], ["r", rq]].forEach(function (p) {
           if (!p[1]) return;
           stats[p[0]] = {
