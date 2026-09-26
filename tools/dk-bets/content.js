@@ -106,7 +106,16 @@
       await new Promise(function (r) { setTimeout(r, 350); });
     }
     grab();
-    return { balance: balance(), bets: Object.keys(seen).map(function (k) { return seen[k]; }) };
+    /* only what the board tracks: every open bet, and one settled in the last
+       two days, so an open bet is seen to land and is paid once. Older ones
+       are history (Jose, Sep 26, 2026: "it should get any that are open") */
+    const recent = Date.now() - 2 * 86400000;
+    const keep = Object.keys(seen).map(function (k) { return seen[k]; }).filter(function (b) {
+      if (/^(open|live|pending)$/.test(b.status) || !b.status) return true;
+      const t = Date.parse(String(b.placed).replace(/,(?=\s*\d{1,2}:)/, ""));
+      return !isNaN(t) && t >= recent;
+    });
+    return { balance: balance(), bets: keep };
   }
   chrome.runtime.onMessage.addListener(function (msg, _from, reply) {
     if (!msg || !msg.read) return;
