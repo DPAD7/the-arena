@@ -28,7 +28,11 @@
     });
     const head = (text.split("\n").find(function (l) { return /Parlay|Straight|Single|SGP|Pick/i.test(l); }) || "").trim();
     /* the screen writes these in capitals, WON and LOST */
-    const status = (/\b(Won|Lost|Open|Live|Cashed Out|Push|Void|Pending)\b/i.exec(text) || [])[1] || "";
+    /* the card's own status field first: a leg called "Live Moneyline" made
+       a settled bet read live (Sep 26, 2026) */
+    const status = (/\b(Won|Lost|Open|Live|Cashed Out|Push|Void|Pending)\b/i.exec(tid(card, "bet-details-status", id)) ||
+                    /\b(Won|Lost|Cashed Out|Push|Void)\b/i.exec(text) ||
+                    /\b(Open|Live|Pending)\b/i.exec(text) || [])[1] || "";
     const total = (/(?:Parlay|Pick)[^+−\-\n]*([+−\-]\d+)/i.exec(text) || [])[1] || "";
     return {
       card: id,
@@ -39,7 +43,8 @@
       wager: money((/Wager:[^\n|]*/i.exec(text) || [""])[0]),
       paid: money((/(?:Paid|Returned|Cashed Out)[^\n|]*/i.exec(text) || [""])[0]),
       topay: money((/(?:To Pay|Payout|To Win)[^\n|]*/i.exec(text) || [""])[0]),
-      placed: ((/Placed:\s*([^\n]+)/i.exec(text) || [])[1] || "").trim(),
+      placed: (tid(card, "bet-reference", id + "-0").replace(/^Placed:\s*/i, "") ||
+               (/Placed:\s*([^\n]+)/i.exec(text) || [])[1] || "").trim(),
       legs: legs
     };
   }
@@ -61,11 +66,16 @@
   function openCards() {
     document.querySelectorAll('[data-test-id^="bet-card-"]').forEach(function (c) {
       if (c.dataset.arenaOpened) return;
-      const btn = [].slice.call(c.querySelectorAll("button, [role=button]")).find(function (b) {
-        return /show legs|show details|view details/i.test(b.innerText || "");
+      /* whatever says "Show Legs", button or not: the words themselves are
+         clicked and the click rises to whatever listens for it */
+      const btn = [].slice.call(c.querySelectorAll("*")).find(function (b) {
+        return !b.children.length && /^\s*(show legs|show details|view details)\s*$/i.test(b.textContent || "");
       });
       c.dataset.arenaOpened = "1";
-      if (btn) btn.click();
+      if (btn) {
+        const hit = btn.closest("button, [role=button], a") || btn;
+        hit.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
+      }
     });
   }
   async function readAll() {
