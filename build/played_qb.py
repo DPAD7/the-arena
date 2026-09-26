@@ -36,7 +36,6 @@ import json
 import os
 import re
 import sys
-import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
@@ -109,8 +108,8 @@ def live_feed(var, gid):
     lg = "nfl" if var == "SCHED" else "college-football"
     u = ("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid))
     try:
-        with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"}), timeout=20) as r:
-            return json.load(r)
+        from curl_cffi import requests as rq
+        return rq.get(u, impersonate="chrome124", timeout=30).json()
     except Exception:
         return None
 

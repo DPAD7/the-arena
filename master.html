@@ -1850,6 +1850,26 @@
      no need to open a new page") */
   #hotset { position: fixed; z-index: 5; display: none; left: 50%; transform: translate(-50%, -50%); }
   html.hotlock #hotset { display: flex; }
+  /* the fight cards' posters, one row: the one you stop on is full size and
+     its bouts are the board under it (Jose, Sep 25, 2026) */
+  .pcar { display: flex; gap: 6px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding: 10px 0 14px; margin: 0 -12px 6px; touch-action: pan-x; -webkit-overflow-scrolling: touch; }
+  .pcar::-webkit-scrollbar { display: none; }
+  .pcar::before, .pcar::after { content: ""; flex: 0 0 calc(50% - 78px); }
+  .pcar .pc { flex: 0 0 150px; height: 217px; scroll-snap-align: center; border-radius: 10px; overflow: hidden;
+    position: relative; background: #151517; border: 1px solid rgba(255,255,255,.08); cursor: pointer;
+    transform: scale(.8); opacity: .55; transition: transform .2s ease, opacity .2s ease; }
+  .pcar .pc.on { transform: scale(1); opacity: 1; border-color: rgba(255,255,255,.22); }
+  .pcar .pc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .pcar .pc .pcx { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; gap: 6px; padding: 12px; text-align: center; color: #fff;
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 800; letter-spacing: .03em;
+    background: radial-gradient(120% 90% at 50% 0%, rgba(210,10,10,.35), transparent 70%), #111; }
+  .pcar .pc .pcx b { font-size: 26px; line-height: 1; }
+  .pcar .pc .pcx i { font-style: normal; font-size: 15px; opacity: .8; line-height: 1.1; }
+  .pcar .pc .pcwk { position: absolute; left: 0; right: 0; bottom: 16%; text-align: center; color: #fff;
+    font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 800; font-size: 17px; letter-spacing: .18em; }
+  .pcar .pc .pcx u { text-decoration: none; font-size: 13px; opacity: .6; }
   #hotset button { width: 66px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer;
     display: flex; align-items: center; justify-content: center; opacity: .45; transition: opacity .15s ease; }
   #hotset button[aria-pressed="true"] { opacity: 1; }
@@ -10792,10 +10812,110 @@
         return on(g[2]) && (byWeek || sport !== "college-football" || g[0] === cfbWeek);
       })));
     }
-    if (sport === "all" || sport === "mma") {
+    if (sport === "mma") {
+      /* one card at a time: the poster the row is stopped on */
+      var ev = ufcCard();
+      items = items.concat(fightItems(FIGHTS.filter(function (f) { return f[0] === ev; })));
+    } else if (sport === "all") {
       items = items.concat(fightItems(FIGHTS.filter(function (f) { return on(f[2]); })));
     }
     build(items, sport === "all");
+    if (sport === "mma" && BOARD === MAINBOARD) {
+      posterRow();
+      /* one card under its poster: it opens by itself */
+      var hb = BOARD.querySelector(".slot-h--bill");
+      if (hb && hb.getAttribute("aria-expanded") !== "true") hb.click();
+    }
+  }
+  /* ---- the posters (build/posters.py keeps them, from Wikipedia) ---- */
+  var UFCEV = null, POSTERS = null, PCAR = null;
+  function ufcCards() {
+    var has = {};
+    FIGHTS.forEach(function (f) { has[f[0]] = 1; });
+    return FIGHTCARDS.filter(function (c) { return has[c[1]]; })
+      .sort(function (a, b) { return Date.parse(a[2]) - Date.parse(b[2]); });
+  }
+  /* the card on show: the one picked, kept while the rail's month holds it;
+     a new month opens on its next card to come, else its first */
+  function ufcCard() {
+    var cs = ufcCards(), mo = /^\d{4}-\d{2}$/.test(day) ? day : "";
+    var cur = cs.filter(function (c) { return c[1] === UFCEV; })[0];
+    if (cur && (!mo || monthKeyOf(cur[2]) === mo)) return UFCEV;
+    var soon = Date.now() - 12 * 3600e3;
+    var pool = mo ? cs.filter(function (c) { return monthKeyOf(c[2]) === mo; }) : cs;
+    if (!pool.length) pool = cs;
+    var pick = pool.filter(function (c) { return Date.parse(c[2]) >= soon; })[0] || (mo ? pool[0] : pool[pool.length - 1]);
+    UFCEV = pick ? pick[1] : null;
+    return UFCEV;
+  }
+  function posterRow() {
+    var cs = ufcCards();
+    if (!cs.length) return;
+    if (!PCAR) {
+      PCAR = document.createElement("div");
+      PCAR.className = "pcar";
+      var settle = 0;
+      PCAR.addEventListener("scroll", function () {
+        clearTimeout(settle);
+        settle = setTimeout(function () {
+          var mid = PCAR.scrollLeft + PCAR.clientWidth / 2, best = null, gap = Infinity;
+          PCAR.querySelectorAll(".pc").forEach(function (el) {
+            var d = Math.abs(el.offsetLeft + el.offsetWidth / 2 - mid);
+            if (d < gap) { gap = d; best = el; }
+          });
+          if (!best || best.dataset.ev === UFCEV) return;
+          UFCEV = best.dataset.ev;
+          PCAR.querySelectorAll(".pc").forEach(function (el) { el.classList.toggle("on", el === best); });
+          /* the rail follows the poster to its month */
+          var mk = monthKeyOf(best.dataset.at);
+          if (mk !== day) {
+            day = mk;
+            dbar.querySelectorAll(".dtab").forEach(function (x) {
+              x.setAttribute("aria-selected", x.dataset.day === day ? "true" : "false");
+            });
+          }
+          var keep = PCAR.scrollLeft;
+          render();
+          PCAR.scrollLeft = keep;
+        }, 140);
+      });
+      PCAR.addEventListener("click", function (e) {
+        var el = e.target.closest(".pc");
+        if (el) PCAR.scrollTo({ left: el.offsetLeft + el.offsetWidth / 2 - PCAR.clientWidth / 2, behavior: "smooth" });
+      });
+    }
+    var draw = function () {
+      PCAR.innerHTML = cs.map(function (c) {
+        var src = POSTERS && POSTERS[c[1]];
+        var nm = String(c[3] || ""), when = new Date(c[2]).toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" }).toUpperCase();
+        var face, wk = /Contender Series.*Week (\d+)/i.exec(nm);
+        /* the Contender Series wears its own art, the week on it (Jose, Sep 25, 2026) */
+        if (wk) face = '<img src="img/posters/dwcs.jpg" alt="Contender Series week ' + wk[1] + '" loading="lazy">' +
+                       '<span class="pcwk">WEEK ' + wk[1] + '</span>';
+        else if (src) face = '<img src="' + src + '" alt="' + nm.replace(/"/g, "&quot;") + '" loading="lazy">';
+        else {
+          /* no poster yet: the card's own name, drawn */
+          var dw = /Contender Series.*Week (\d+)/i.exec(nm), num = /^(UFC \d+|Noche UFC|UFC Freedom 250)/.exec(nm);
+          var top = dw ? "DWCS" : num ? num[1].toUpperCase() : "UFC FIGHT NIGHT";
+          var sub = dw ? "WEEK " + dw[1] : (nm.split(": ")[1] || "");
+          face = '<div class="pcx"><b>' + top + '</b><i>' + sub + '</i><u>' + when + '</u></div>';
+        }
+        return '<div class="pc' + (c[1] === UFCEV ? " on" : "") + '" data-ev="' + c[1] + '" data-at="' + c[2] + '">' + face + '</div>';
+      }).join("");
+    };
+    draw();
+    BOARD.insertBefore(PCAR, BOARD.firstChild);
+    var seat = function (smooth) {
+      var el = PCAR.querySelector('.pc[data-ev="' + UFCEV + '"]');
+      if (el) PCAR.scrollTo({ left: el.offsetLeft + el.offsetWidth / 2 - PCAR.clientWidth / 2, behavior: smooth ? "smooth" : "auto" });
+    };
+    requestAnimationFrame(function () { seat(false); });
+    if (!POSTERS) {
+      POSTERS = {};
+      fetch("posters.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+        .then(function (j) { POSTERS = j || {}; var keep = PCAR.scrollLeft; draw(); PCAR.scrollLeft = keep; })
+        .catch(function () {});
+    }
   }
 
   function dayKeyOf(iso) {
@@ -11057,7 +11177,7 @@
          piece it should not swipe"). .drvg is the live graph, read by holding
          a finger on it and dragging along it, which is the same argument.The
          dollar button is dragged the same way (Jose, Sep 25, 2026). */
-      ok = !e.target.closest(".daybar, .weekbar, .tabbar, .fview, .fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, input, textarea") &&
+      ok = !e.target.closest(".pcar, .daybar, .weekbar, .tabbar, .fview, .fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, input, textarea") &&
            !(caro && caro.scrollWidth > caro.clientWidth + 2);   /* a row that scrolls keeps the gesture */
       x0 = t.clientX; y0 = t.clientY; t0 = Date.now(); drag = false; dx = 0;
     }, { passive: true });
