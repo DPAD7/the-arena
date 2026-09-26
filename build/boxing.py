@@ -246,10 +246,18 @@ def main():
             hit = dk.get((whoname.key(bt["a"]), whoname.key(bt["b"])))
             when = hit[1] if hit and hit[1][:10] >= str(e["date"] - dt.timedelta(days=1)) else ""
             if not when:
-                # no clock from the book: the evening of the date, the main
-                # event last, fifteen minutes a bout before it
-                base = dt.datetime.combine(e["date"], dt.time(23, 0), dt.timezone.utc)
-                when = (base - dt.timedelta(minutes=15 * k)).strftime("%Y-%m-%dT%H:%MZ")
+                # a late change of opponent: the book still lists the bout
+                # under the old name, and its clock is still the bout's.
+                # One man is enough for the time, never for the price.
+                for (x, y), v in dk.items():
+                    if (x == whoname.key(bt["a"]) or x == whoname.key(bt["b"])) and \
+                            abs((dt.date.fromisoformat(v[1][:10]) - e["date"]).days) <= 1:
+                        when = v[1]
+                        break
+            if not when:
+                # no clock from the book: the evening of the date, one clock
+                # for the card -- never a made-up time a bout
+                when = dt.datetime.combine(e["date"], dt.time(23, 0), dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
             ida, idb = face(bt["alink"], bt["a"]), face(bt["blink"], bt["b"])
             rows.append([e["id"], bid, when, bt["a"], ida, bt["b"], idb, "Boxing " + bt["w"],
                          "", "", "", "", "", ""])
@@ -293,12 +301,10 @@ def main():
                     "how": {"type": (bt["method"] or ("DRAW" if "dr" in bt["res"] else "NC")).upper(),
                             "round": rd.group(1) if rd else "", "time": bt["time"] or ""}})
             start = min(start, when) if start else when
-        # the card's own clock is its first bout's, the way a UFC card's is,
-        # and every bout on it wears that one clock, so the day page holds the
-        # card under one heading rather than one a bout (Jose, Sep 26, 2026)
+        # the card's own clock is its first bout's, the way a UFC card's is
+        # each bout keeps the book's own start, the way the UFC bouts do
+        # (Jose, Sep 26, 2026: "why are all the Zuffa Boxing at 11 AM")
         cards.append([0, e["id"], start, e["name"]])
-        for r in rows:
-            r[2] = start
         # prelims first and the main event last, the order a UFC card reads
         fights.extend(reversed(rows))
 
