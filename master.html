@@ -3865,8 +3865,9 @@
     });
     return out;
   }
-  function liveAlert(card, comp, ls, rs, stats) {
+  function liveAlert(card, comp, ls, rs, stats, box) {
     redZone(card, stats);
+    backupIn(card, box);
     var per = parseInt((comp.status || {}).period, 10) || 0;
     var half = per >= 3 || /half/i.test(((comp.status || {}).type || {}).detail || "");
     if (!half || per > 3) return;                  /* once, at the half or early in the third */
@@ -3942,6 +3943,68 @@
     });
     if (says.length) showAlert("Red zone \u00b7 " + (gameName(card) || ""), says);
   }
+  /* another passer for his club has thrown (two passes or more, so not a
+     trick play) while a leg on his passer is still open: he is hurt or pulled
+     (Jose, Sep 26, 2026) */
+  function backupIn(card, box) {
+    var gid = card.dataset.espn || "", seen = {};
+    try { seen = JSON.parse(localStorage.getItem("arena.livealerts") || "{}"); } catch (e) {}
+    var says = [];
+    [["l", card.dataset.lqbid, card.dataset.lqb], ["r", card.dataset.rqbid, card.dataset.rqb]].forEach(function (p) {
+      if (!p[1] || seen[gid + ":bk" + p[0]]) return;
+      var open = legsOn(card).filter(function (b) {
+        return (p[0] === "r" ? b.closest(".ptdside--r, .h2hside--r") : b.closest(".ptdside--l, .h2hside--l")) &&
+               !b.classList.contains("won") && !b.classList.contains("lost");
+      });
+      if (!open.length) return;
+      (box || []).forEach(function (t) {
+        (t.statistics || []).forEach(function (c) {
+          if (c.name !== "passing") return;
+          var his = (c.athletes || []).some(function (a) { return String((a.athlete || {}).id) === String(p[1]); });
+          if (!his) return;
+          var ai = (c.labels || []).indexOf("C/ATT");
+          (c.athletes || []).forEach(function (a) {
+            var who = a.athlete || {};
+            if (String(who.id) === String(p[1])) return;
+            var att = parseInt(String((a.stats || [])[ai] || "0/0").split("/")[1], 10) || 0;
+            if (att < 2 || seen[gid + ":bk" + p[0]]) return;
+            seen[gid + ":bk" + p[0]] = 1;
+            says.push(["qb", (who.displayName || "A backup") + " is throwing for " + famName(p[2]) + "'s team (" + att + " passes).",
+                       famName(p[2]) + " may be hurt or pulled; " + open.length + (open.length > 1 ? " legs" : " leg") + " on him still open."]);
+          });
+        });
+      });
+    });
+    if (!says.length) return;
+    try { localStorage.setItem("arena.livealerts", JSON.stringify(seen)); } catch (e) {}
+    showAlert("QB change \u00b7 " + (gameName(card) || ""), says);
+  }
+  /* every leg on a DraftKings slip in but one: which one, and where it
+     stands -- said once a slip (Jose, Sep 26, 2026) */
+  function oneLeft() {
+    if (typeof DKB !== "object" || !DKB || !DKB.bets) return;
+    var seen = {};
+    try { seen = JSON.parse(localStorage.getItem("arena.livealerts") || "{}"); } catch (e) {}
+    DKB.bets.forEach(function (bet) {
+      var legs = bet.legs || [], won = 0, lost = 0, left = null;
+      legs.forEach(function (lg) {
+        var b = null;
+        document.querySelectorAll("button.price[data-oid]").forEach(function (x) { if (x.dataset.oid === lg.sel) b = b || x; });
+        if (b && b.classList.contains("won")) won++;
+        else if (b && b.classList.contains("lost")) lost++;
+        else left = { lg: lg, b: b };
+      });
+      if (lost || legs.length < 2 || won !== legs.length - 1 || !left || seen["one:" + bet.id]) return;
+      seen["one:" + bet.id] = 1;
+      var card = left.b && left.b.closest(".gcard"), where = "";
+      if (card && card.dataset.clk) where = card.dataset.clk + (card.dataset.ls !== undefined ? ", " + card.dataset.ls + "\u2013" + card.dataset.rs : "");
+      showAlert("One leg left \u00b7 " + String(bet.odds || "").replace("-", "\u2212"),
+                [["dup", (left.lg.label || left.lg.pick) + (where ? " \u00b7 " + where : ""),
+                  won + " of " + legs.length + " in. Pays " + (typeof money === "function" ? money(bet.topay || 0) : bet.topay) + "."]]);
+    });
+    try { localStorage.setItem("arena.livealerts", JSON.stringify(seen)); } catch (e) {}
+  }
+  setInterval(oneLeft, 20000);
   function showAlert(head, says) {
     var el = document.getElementById("legalert");
     if (!el) { el = document.createElement("div"); el.id = "legalert"; document.body.appendChild(el); }
@@ -13441,7 +13504,7 @@
         /* halftime on a game he has a leg in: say so when it has gone sideways
            (Jose, Sep 26, 2026: "a 55 total at 3 at the half ... up 30 at the
            half and I have a QB to throw 2 PTD") */
-        if (live && typeof liveAlert === "function") liveAlert(card, comp, ls, rs, stats);
+        if (live && typeof liveAlert === "function") liveAlert(card, comp, ls, rs, stats, box);
         /* the section is .h2hx — it was rebuilt under that name and this
            lookup was never moved, so the whole block sat dead */
         var h = card.querySelector(".h2hx") || card.querySelector(".h2h");
