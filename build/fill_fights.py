@@ -257,11 +257,19 @@ def times_only():
         got = theirs.get(key)
         if not got or not got[1]:
             continue
+        # never ahead of the bout's own block by more than half an hour: a
+        # placeholder listing had a main-card bout at 4 PM (Sep 26, 2026)
+        if T(got[1]) < T(f[2]) - dt.timedelta(minutes=30):
+            continue
         if got[1] != f[2]:
             moved.append((f[3], f[5], f[2][11:16], got[1][11:16]))
         kicks[str(f[1])] = got[1]
     book = pricefile.read()
     book.setdefault("KICKS", {}).update(kicks)
+    # and one already held that breaks the same rule comes out
+    rows = {str(f[1]): f[2] for f in fights}
+    for k in [k for k, v in book["KICKS"].items() if k in rows and T(v) < T(rows[k]) - dt.timedelta(minutes=30)]:
+        del book["KICKS"][k]
     pricefile.write(book)
     print("their clock: %d bouts, %d moved" % (len(kicks), len(moved)))
     for a, b, was, now in moved[:10]:
