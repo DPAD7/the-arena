@@ -15438,6 +15438,29 @@
     if (mo < 0) return "";
     return dayKeyOf(new Date(Date.UTC(+m[3], mo, +m[2], 16)).toISOString());
   }
+  /* every leg of an open slip is gold on its card, every time the panel
+     draws -- not only when a sync lands, which a reload lost -- and saved so
+     the other devices see it (Jose, Sep 26, 2026: "why isn't it
+     highlighting") */
+  function dkGold() {
+    if (!DKB || !DKB.bets) return;
+    var added = false;
+    DKB.bets.forEach(function (bet) {
+      (bet.legs || []).forEach(function (lg) {
+        if (!lg.sel) return;
+        if (!(lg.sel in placed)) { placed[lg.sel] = true; added = true; }
+        if (!placed[lg.sel]) return;                 /* taken off by hand */
+        document.querySelectorAll("button.price[data-oid]").forEach(function (b) {
+          if (b.dataset.oid === lg.sel && !b.classList.contains("placed")) b.classList.add("placed");
+        });
+      });
+    });
+    if (added) {
+      try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
+      if (typeof placedState === "function") placedState();
+      if (typeof pushState === "function") pushState();
+    }
+  }
   function dkApply() {
     if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) return false;
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
@@ -15465,20 +15488,6 @@
     });
     if (typeof DKB.balance === "number") BANK.bal = DKB.balance;
     BANK.dkAt = DKB.at;
-    /* every leg of an open slip is gold on its card: what he placed is what
-       the book says he placed (Jose, Sep 26, 2026) */
-    var gold = false;
-    (DKB.bets || []).forEach(function (bet) {
-      (bet.legs || []).forEach(function (lg) {
-        if (!lg.sel || lg.sel in placed) return;   /* gold already, or taken off by hand */
-        placed[lg.sel] = true; gold = true;
-        document.querySelectorAll('button.price[data-oid="' + lg.sel + '"]').forEach(function (b) { b.classList.add("placed"); });
-      });
-    });
-    if (gold) {
-      try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
-      if (typeof placedState === "function") placedState();
-    }
     return true;
   }
   /* the double tap: ask the site to read the book now, then watch /bets
@@ -15565,6 +15574,7 @@
     });
     Object.keys(BANK.legs).forEach(function (id) { if (!placed[id]) { delete BANK.legs[id]; moved = true; } });
     if (dkApply()) moved = true;
+    dkGold();
     /* today's games only, by each game's own start on the Eastern clock:
        yesterday's gold is still on the board until the day's marks clear,
        and it is not part of today's run (Jose, Sep 25, 2026) */
