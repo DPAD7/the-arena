@@ -3319,8 +3319,30 @@
   .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) .h2hrow { gap: 0 !important; margin: 0 !important; }
   /* no strip of dark between the photos and the foot: the fade starts where
      they end (Jose, Sep 26, 2026: "there's a gap from the bottom of the images") */
-  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { margin-top: -2px !important; }
-  .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 52px; border-radius: 0; background: none !important; }
+  /* Apple's glass, the money bag's own: the foot rides up over the bottom of
+     the photos, blurs what is under it, and wears the two clubs through it,
+     so picture turns into bar with no edge between them (Jose, Sep 26, 2026:
+     "make it like the floating FAB, glassmorphic") */
+  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { margin-top: -30px !important; position: relative; z-index: 4; }
+  .gcard.gcard--v3 .h2hbar.h2hbar--blend {
+    -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6);
+    background: rgba(28, 28, 30, 0.28) !important;
+    /* the glass itself fades in, blur and all, so there is no line where it starts */
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, #000 46%);
+    mask-image: linear-gradient(180deg, transparent 0, #000 46%); }
+  .gcard.gcard--v3 .h2hbar.h2hbar--blend::before { opacity: .72;
+    -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,.25) 0, #000 70%);
+    mask-image: linear-gradient(180deg, rgba(0,0,0,.25) 0, #000 70%); }
+  /* the names and their prices stand just above the glass */
+  .gcard.gcard--v3:has(.h2hbar--blend) .h2hnm { bottom: 24px; }
+  /* the dark the photo fades into was a band above the glass: lighter, and
+     only as tall as the name needs */
+  .gcard.gcard--v3:has(.h2hbar--blend) .gside::after { height: 70px;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 0, rgba(0,0,0,.38) 60%, rgba(0,0,0,0) 100%); }
+  /* the photo row runs 30px longer, and that is the part under the glass,
+     so the stats in the middle keep all their rows */
+  .gcard.gcard--v3:has(.h2hbar--blend) > .ghead > :not(.gside) { padding-bottom: 30px !important; }
+  .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 60px; border-radius: 0; background: none; }
   /* its top edge fades into the card the way the photos fade under the
      names, so the colors rise out of the dark rather than start on a line
      (Jose, Sep 26, 2026) */
