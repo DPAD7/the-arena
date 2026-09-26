@@ -102,21 +102,66 @@ def ufc_art(name, when):
     return out.getvalue()
 
 
+TAPOLOGY = "https://www.tapology.com/fightcenter/promotions/6299-zuffa-boxing-zb"
+
+
+def zuffa_posters():
+    """Every Zuffa Boxing poster, numbered shows included, off Tapology's
+       promotion page (Jose, Sep 26, 2026: "we have the card images on this"):
+       {"zb-11": url, "zb-garcia-benn": url}. Tapology turns a Chrome
+       fingerprint away and answers Safari's."""
+    try:
+        t = rq.get(TAPOLOGY, impersonate="safari17_2_ios", timeout=30).text
+    except Exception:
+        return {}
+    out = {}
+    for alt, url in re.findall(r"<img alt='([^']+)' class='w-\[65px\][^']*' src='(https://images\.tapology\.com/poster_images/[^']+)'", t):
+        m = re.match(r"Zuffa Boxing (\d+)$", alt.strip())
+        if m:
+            key = "zb-%02d" % int(m.group(1))
+        else:
+            m = re.match(r"(?:Zuffa Boxing:\s*)?(\S+) vs\.? (\S+)$", alt.strip())
+            key = ("zb-%s-%s" % (m.group(1), m.group(2))).lower() if m else None
+        if key:
+            # the "large" cut: the profile one is a thumbnail, the original a
+            # screenshot of half a megabyte
+            out[key] = url.replace("/profile/", "/large/")
+    return out
+
+
 def main():
     s = pagefile.read()
     cards = json.loads(re.search(r"  var FIGHTCARDS = (\[\[.*?\]\]);", s, re.S).group(1))
-    # the big Zuffa nights have posters of their own; a numbered show wears
-    # the Zuffa art on the page and is not looked for
+    # every Zuffa night, numbered shows included: Tapology has their posters
     bx = re.search(r"  var BOXCARDS = (\[.*?\]);\n", s, re.S)
-    cards += [c for c in (json.loads(bx.group(1)) if bx else []) if not re.match(r"Zuffa Boxing \d", c[3])]
+    cards += json.loads(bx.group(1)) if bx else []
     try:
         have = json.load(open(LIST))
     except (OSError, ValueError):
         have = {}
     os.makedirs(OUT, exist_ok=True)
     got, missing = [], []
+    zp = zuffa_posters() if any(str(c[1]).startswith("zb-") for c in cards) else {}
     for c in cards:
         eid, name = str(c[1]), c[3]
+        if eid.startswith("zb-") and eid not in have and zp.get(eid):
+            if DRY:
+                got.append(name + " (Tapology)")
+                continue
+            try:
+                r = rq.get(zp[eid], impersonate="safari17_2_ios", timeout=45)
+                if r.status_code == 200 and len(r.content) > 2000:
+                    rel = "img/posters/%s.jpg" % eid
+                    Image.open(io.BytesIO(r.content)).convert("RGB").save(os.path.join(D, "site", rel), "JPEG", quality=86)
+                    have[eid] = rel
+                    got.append(name + " (Tapology)")
+                    continue
+            except Exception:
+                pass
+        if re.match(r"Zuffa Boxing \d", name) and eid not in have:
+            # a numbered show Tapology has no poster for yet wears the Zuffa
+            # art on the page; Wikipedia has none of them
+            continue
         # a stand-in from UFC.com is held until Wikipedia has the real one
         if eid in have and os.path.exists(os.path.join(D, "site", have[eid])) and "-ufc" not in have[eid]:
             continue

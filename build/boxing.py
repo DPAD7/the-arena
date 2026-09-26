@@ -26,6 +26,7 @@
        python3 build/boxing.py --dry    say what it would write
 """
 import datetime as dt
+import html
 import json
 import os
 import re
@@ -275,6 +276,112 @@ def ufc_results(num):
     return out
 
 
+TAP = "https://www.tapology.com"
+
+
+def tap_get(path):
+    """Tapology turns a Chrome fingerprint away and answers Safari's."""
+    try:
+        return rq.get(TAP + path, impersonate="safari17_2_ios", timeout=30).text
+    except Exception:
+        return ""
+
+
+def tap_events():
+    """Each Zuffa card's Tapology page, keyed the way the board keys them:
+       {"zb-02": "/fightcenter/events/138880-...", "zb-garcia-benn": ...}."""
+    t = tap_get("/fightcenter/promotions/6299-zuffa-boxing-zb")
+    out = {}
+    for href, alt in re.findall(r'href="(/fightcenter/events/\d+-[^"]+)".{0,6000}?<img alt=\'([^\']+)\' class=\'w-\[65px\]', t, re.S):
+        m = re.match(r"Zuffa Boxing (\d+)$", alt.strip())
+        if m:
+            out.setdefault("zb-%02d" % int(m.group(1)), href)
+        else:
+            m = re.match(r"(?:Zuffa Boxing:\s*)?(\S+) vs\.? (\S+)$", alt.strip())
+            if m:
+                out.setdefault(("zb-%s-%s" % m.groups()).lower(), href)
+    return out
+
+
+def _named(words):
+    """The man after a W or an L: Tapology writes his name twice ("Jalil
+       Hackett Jalil Hackett", or "Radivoje Kalajdzic R. Kalajdzic"), so the
+       name is the words up to where his surname comes round again."""
+    for k in range(2, min(6, len(words))):
+        if words[k:2 * k] == words[:k]:
+            return " ".join(words[:k])
+    for k in range(2, min(6, len(words))):
+        if words[k - 1] in words[k:k + 4]:
+            return " ".join(words[:k])
+    return " ".join(words[:2])
+
+
+def tap_results(path):
+    """Every finished bout on a Tapology card: winner, loser, how, round,
+       clock (Jose, Sep 26, 2026: "we have the results on there too")."""
+    t = tap_get(path)
+    tx = html.unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", t)))
+    out = []
+    pat = (r"(?P<how>(?:Decision|KO/TKO|TKO|KO|DQ|Disqualification|Technical Decision|Corner Stoppage)[^0-9]*?) "
+           r"(?:(?P<clk>\d+:\d\d) Round (?P<rd>\d+) of \d+|\d+ Rounds), [\d:]+ Total (?:\d+ )?W (?P<rest>.{0,300})")
+    for m in re.finditer(pat, tx):
+        rest = m.group("rest")
+        if " L " not in rest:
+            continue
+        w = _named(rest.split(" L ", 1)[0].split())
+        l = _named(rest.split(" L ", 1)[1].split())
+        how = m.group("how").strip().rstrip(",")
+        low = how.lower()
+        code = ("UD" if "unanimous" in low else "SD" if "split" in low else "MD" if "majority" in low else
+                "DEC" if low.startswith("decision") else "DQ" if "dq" in low or "disq" in low else
+                "RTD" if "corner" in low else "TD" if low.startswith("technical") else
+                "KO" if low.startswith("ko/tko") and "punch" not in low and False else
+                "TKO" if "tko" in low else "KO")
+        r = {"w": w, "l": l, "how": code, "rd": m.group("rd") or "", "time": m.group("clk") or ""}
+        if r not in out:
+            out.append(r)
+    # a draw is "D" on both men, a no contest "N" ("Overturned to No Contest")
+    for m in re.finditer(r"(Ends in a Draw|No Contest)[^D N]*?.{0,80}? (?P<k>[DN]) (?P<rest>.{0,300})", tx):
+        k, rest = m.group("k"), m.group("rest")
+        if (" %s " % k) not in rest:
+            continue
+        a_, b_ = rest.split(" %s " % k, 1)
+        r = {"w": "", "a": _named(a_.split()), "b": _named(b_.split()), "how": "DRAW" if k == "D" else "NC"}
+        if r not in out:
+            out.append(r)
+    return out
+
+
+def settle(bt, r):
+    """One result laid onto one of our bouts, winner first."""
+    ka = whoname.key(bt["a"])
+    wa = whoname.key(r.get("w") or r.get("a") or "")
+    if not r.get("w"):
+        bt["res"] = "drew" if "DRAW" in r["how"] else "nc"
+    elif wa == ka or surname(r["w"]).lower() == surname(bt["a"]).lower():
+        bt["res"] = "def."
+    else:
+        bt["a"], bt["b"], bt["alink"], bt["blink"] = bt["b"], bt["a"], bt["blink"], bt["alink"]
+        bt["res"] = "def."
+    # the scheduled length stays: "3/8" for a stoppage in the third of eight
+    sch = re.search(r"\((\d+)\)|/(\d+)|^(\d+)$", bt.get("round") or "")
+    sch = next((x for x in sch.groups() if x), "") if sch else ""
+    rd = r.get("rd") or ""
+    bt["round"] = (rd + "/" + sch) if rd and sch else (sch or rd or bt.get("round") or "")
+    bt["method"], bt["time"] = r["how"], r.get("time") or ""
+
+
+def same_bout(bt, r):
+    ka, kb = whoname.key(bt["a"]), whoname.key(bt["b"])
+    wa, wl = whoname.key(r.get("w") or r.get("a") or ""), whoname.key(r.get("l") or r.get("b") or "")
+    if {ka, kb} == {wa, wl}:
+        return True
+    # Tapology shortens a long name ("R. Kalajdzic"): both surnames will do
+    sa, sb = surname(bt["a"]).lower(), surname(bt["b"]).lower()
+    sw, sl = surname(r.get("w") or r.get("a") or "").lower(), surname(r.get("l") or r.get("b") or "").lower()
+    return {sa, sb} == {sw, sl}
+
+
 def main():
     evs = events(wiki(PAGE))
     # the promoter's own results laid over Wikipedia's for any card it has
@@ -285,23 +392,21 @@ def main():
             continue
         for r in ufc_results(num.group(1)):
             for bt in e["bouts"]:
-                ka, kb = whoname.key(bt["a"]), whoname.key(bt["b"])
-                wa, wl = whoname.key(r.get("w") or r.get("a") or ""), whoname.key(r.get("l") or r.get("b") or "")
-                if {ka, kb} != {wa, wl}:
-                    continue
-                if not r.get("w"):
-                    bt["res"] = "drew" if "DRAW" in r["how"] else "nc"
-                elif wa == ka:
-                    bt["res"] = "def."
-                else:
-                    bt["a"], bt["b"], bt["alink"], bt["blink"] = bt["b"], bt["a"], bt["blink"], bt["alink"]
-                    bt["res"] = "def."
-                # the scheduled length stays: "3/8" for a stoppage in the third of eight
-                sch = re.search(r"\((\d+)\)|/(\d+)|^(\d+)$", bt.get("round") or "")
-                sch = next((x for x in sch.groups() if x), "") if sch else ""
-                rd = r.get("rd") or ""
-                bt["round"] = (rd + "/" + sch) if rd and sch else (sch or rd or bt.get("round") or "")
-                bt["method"], bt["time"] = r["how"], r.get("time") or ""
+                if same_bout(bt, r):
+                    settle(bt, r)
+    # a bout that is over and still has no result from either takes
+    # Tapology's: Wikipedia leaves undercard bouts blank for months
+    open_ = [e for e in evs if e["date"] <= dt.date.today() and
+             any(bt["res"] in ("vs.", "vs") for bt in e["bouts"])]
+    if open_:
+        where = tap_events()
+        for e in open_:
+            if not where.get(e["id"]):
+                continue
+            for r in tap_results(where[e["id"]]):
+                for bt in e["bouts"]:
+                    if bt["res"] in ("vs.", "vs") and same_bout(bt, r):
+                        settle(bt, r)
     dk, dkraw = dk_bouts()
     s = pagefile.read()
     cards, fights, results, book, fprops = [], [], {}, {}, {}
