@@ -227,6 +227,13 @@
   .cashsheet { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%);
     width: min(360px, calc(100vw - 32px)); text-align: center; padding: 18px 16px 14px; }
   .cashsheet .cashamt { font-size: 36px; margin: 2px 0 12px; }
+  /* balance on top and the day at the foot stay put; the slips scroll */
+  .cashsheet:not([hidden]) { display: flex; flex-direction: column; max-height: min(78vh, 760px); }
+  .cashsheet .cashamt, .cashsheet #cashday { flex: none; }
+  .cashsheet #cashlegs { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain; scrollbar-width: none; margin: 0 -4px; padding: 0 4px; }
+  .cashsheet #cashlegs::-webkit-scrollbar { display: none; }
+  .cashsheet #cashlegs .slipcard + .slipcard { margin-top: 12px; }
   .cashsheet .slipcard { text-align: left; margin: 0; }
   .cashsheet .cashnone { color: #8e8e93; font-size: 14px; padding: 6px 0 2px; }
   .cashsheet .cashrcpt { margin-top: 12px; padding-top: 10px; text-align: left;
@@ -3649,7 +3656,7 @@
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="cashbag" aria-hidden="true"></i></button>
-<div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div id="cashlegs"></div></div>
+<div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div id="cashlegs"></div><div id="cashday"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -15509,6 +15516,8 @@
       .catch(function () { if (done) done(false); });
   }
   window._dkPull = dkPull;
+  var CASHHIDE = false;
+  try { CASHHIDE = localStorage.getItem("arena.cashhide") === "1"; } catch (e) {}
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -15599,7 +15608,10 @@
         moved = true;
       }
     }
-    amt.textContent = money(BANK.bal);
+    /* held down, the balance hides every dollar figure in the panel, and
+       held again shows them; this device remembers (Jose, Sep 26, 2026) */
+    var cm = function (v) { return CASHHIDE ? "\u2022\u2022\u2022\u2022\u2022\u2022" : money(v); };
+    amt.textContent = cm(BANK.bal);
     /* the book's open slips, each as its own card; none, and the balance
        stands alone (Jose, Sep 26, 2026) */
     if (DKB && DKB.at) {
@@ -15644,7 +15656,7 @@
         var rows = '<li class="slnamerow">' + esc(slipNames(ls)) + '</li>' +
           (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span>' +
             /* the price before the boost, beside the boost itself */
-            (bet.was ? '<b><s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s></b>' : "") + '</li>' : "");
+            (bet.was && !CASHHIDE ? '<b><s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s></b>' : "") + '</li>' : "");
         /* the arrow rides right after the last icon, however many there are,
            and opens the legs under them (Jose, Sep 26, 2026) */
         var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
@@ -15656,20 +15668,23 @@
           /* one line of three: the price, what went in, what it pays, with
              what each is written underneath (Jose, Sep 26, 2026) */
           '<div class="slgrid">' +
-          '<b class="slgodds">' + esc(String(bet.odds || "").replace("-", "\u2212")) + '</b>' +
-          '<b>' + money(bet.wager || 0) + '</b>' +
-          '<b class="cashpay">' + money(bet.topay || 0) + '</b>' +
+          '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(String(bet.odds || "").replace("-", "\u2212"))) + '</b>' +
+          '<b>' + cm(bet.wager || 0) + '</b>' +
+          '<b class="cashpay">' + cm(bet.topay || 0) + '</b>' +
           '<span>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</span><span>Amount</span><span>Total payout</span>' +
           '</div></div>';
-      }).join("") +
-      /* the day at the foot: what is in, and what it all pays (Jose, Sep 26, 2026) */
-      (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
+      }).join("");
+      /* the day's totals stand still under the slips, which scroll between
+         the balance and them (Jose, Sep 26, 2026) */
+      var dayEl = document.getElementById("cashday");
+      if (dayEl) dayEl.innerHTML = (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
         '<b>' + open.length + '</b>' +
-        '<b>' + money(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
-        '<b class="cashpay">' + money(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
+        '<b>' + cm(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
+        '<b class="cashpay">' + cm(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
         '<span>Slips today</span><span>Wagered</span><span>Total payout</span></div></div>' : "");
     } else if (!legs.length) {
       box.innerHTML = "";
+      var dayEl0 = document.getElementById("cashday"); if (dayEl0) dayEl0.innerHTML = "";
     } else {
       box.innerHTML = '<div class="slipcard' + (state ? " slipcard--" + state : "") + '">' +
         slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
@@ -15677,9 +15692,9 @@
         '</b><span class="slpay">' + parlay(legs) + '</span></div></div>' +
         /* the foot of a receipt: what went in, and what comes back if every
            leg lands, the unit included (Jose, Sep 25, 2026) */
-        '<div class="cashrcpt"><div><span>Amount</span><b>' + money(UNIT) + '</b></div>' +
+        '<div class="cashrcpt"><div><span>Amount</span><b>' + cm(UNIT) + '</b></div>' +
         '<div><span>Total payout</span><b class="cashpay">' +
-        money(UNIT * legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1)) + '</b></div></div>';
+        cm(UNIT * legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1)) + '</b></div></div>';
     }
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
   }
@@ -15711,6 +15726,24 @@
       if (at) place(at.side === "l" ? M : innerWidth - 52 - M, at.y * innerHeight);
     } catch (e) {}
     function openSheet() { bankDraw(); sheet.hidden = false; }
+    var amtEl = document.getElementById("cashamt"), holdT = null;
+    if (amtEl) {
+      amtEl.addEventListener("pointerdown", function () {
+        clearTimeout(holdT);
+        holdT = setTimeout(function () {
+          CASHHIDE = !CASHHIDE;
+          try { localStorage.setItem("arena.cashhide", CASHHIDE ? "1" : "0"); } catch (e) {}
+          if (navigator.vibrate) navigator.vibrate(12);
+          bankDraw();
+        }, 450);
+      });
+      ["pointerup", "pointerleave", "pointercancel"].forEach(function (ev) {
+        amtEl.addEventListener(ev, function () { clearTimeout(holdT); });
+      });
+      amtEl.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+      amtEl.style.webkitUserSelect = amtEl.style.userSelect = "none";
+      amtEl.style.webkitTouchCallout = "none";
+    }
     var sx = 0, sy = 0, ox = 0, oy = 0, moved = false, down = false;
     fab.addEventListener("pointerdown", function (e) {
       down = true; moved = false; sx = e.clientX; sy = e.clientY;
