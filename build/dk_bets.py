@@ -22,6 +22,7 @@
 """
 import json
 import os
+import re
 import sys
 import uuid
 
@@ -64,6 +65,44 @@ def page(ws, skip):
                 raise RuntimeError(str(d["error"])[:200])
             return ((d.get("result") or {}).get("initial") or {}).get("bets") or []
     return []
+
+
+def surname(n):
+    n = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", n or "").strip()
+    b = [x for x in n.split() if not re.match(r"^(Jr\.?|Sr\.?|II|III|IV|V)$", x)]
+    return b[-1] if b else n
+
+
+def label(x):
+    """The leg as the board writes one: Stockton 2+ PTD, Chambliss H2H, Texas ML."""
+    pick, mk = x.get("selectionDisplayName") or "", x.get("marketDisplayName") or ""
+    m = re.match(r"(.+?) Passing Touchdowns$", mk)
+    if m:
+        return "%s %s PTD" % (surname(m.group(1)), pick)
+    if "Passing Yards Moneyline" in mk:
+        return "%s H2H" % surname(pick)
+    m = re.match(r"(.+?) (?:Anytime TD|Touchdown)", mk)
+    if "Anytime" in mk or "TD Scorer" in mk:
+        return "%s 1+ ATD" % surname(pick)
+    if mk == "Moneyline":
+        return "%s ML" % pick
+    return ("%s %s" % (pick, mk)).strip()
+
+
+def legs_of(b):
+    """Every leg, with a same-game parlay inside a parlay opened into its own
+       legs: DraftKings writes it as one "2 Pick SGP" selection with its
+       price, and the legs under it carry none (Sep 26, 2026)."""
+    out = []
+    for x in b.get("selections") or []:
+        nest = x.get("nestedSGPSelections") or []
+        for y in (nest or [x]):
+            out.append({"sel": y.get("selectionId"), "pick": y.get("selectionDisplayName"),
+                        "market": y.get("marketDisplayName"), "label": label(y),
+                        "odds": "" if nest else plain(y.get("displayOdds")),
+                        "sgp": plain(x.get("displayOdds")) if nest else "",
+                        "status": (y.get("settlementStatus") or y.get("status") or "").lower()})
+    return out
 
 
 def main():
@@ -119,10 +158,7 @@ def main():
             "topay": bpay or b.get("potentialReturns"),
             "placed": b.get("placementDate"),
             "status": "open",
-            "legs": [{"sel": x.get("selectionId"), "pick": x.get("selectionDisplayName"),
-                      "market": x.get("marketDisplayName"), "odds": plain(x.get("displayOdds")),
-                      "status": (x.get("settlementStatus") or x.get("status") or "").lower()}
-                     for x in b.get("selections") or []]})
+            "legs": legs_of(b)})
     print("dk_bets: balance %s, %d open bets, %d legs"
           % (bal, len(bets), sum(len(b["legs"]) for b in bets)))
     if DRY:
