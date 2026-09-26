@@ -42,7 +42,9 @@
       id: (/Bet ID:\s*([A-Z0-9]+)/i.exec(text) || /\b(DK\d{10,})\b/.exec(text) || [])[1] || id,
       head: head,
       odds: (total || (legs.length === 1 ? legs[0].odds : "")).replace(/−/g, "-"),
-      boosted: !!pm[2],
+      /* the boost, from its own field (playerBonus-<id>): "+50% Parlay Boost" */
+      boost: tid(card, "playerBonus", id),
+      boosted: !!pm[2] || !!tid(card, "playerBonus", id),
       status: status.toLowerCase(),
       wager: money((/Wager:[^\n|]*/i.exec(text) || [""])[0]),
       paid: money((/(?:Paid|Returned|Cashed Out)[^\n|]*/i.exec(text) || [""])[0]),
