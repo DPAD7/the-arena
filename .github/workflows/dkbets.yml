@@ -1,0 +1,39 @@
+# The money bag's double tap: his open DraftKings bets and balance, read now.
+#
+# site/functions/bets.js starts this when the bag is double tapped; it runs
+# build/dk_bets.py, which reads the book with his held login and posts what it
+# found to /bets. The page watches /bets and fills the bag until it lands, the
+# way the helmet's double tap works (Jose, Sep 26, 2026).
+name: dkbets
+run-name: dkbets ${{ inputs.key }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        description: "the tap's key"
+        required: false
+
+concurrency:
+  group: dkbets
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  read:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet curl_cffi
+      - name: Read
+        env:
+          DK_COOKIES: ${{ secrets.DK_COOKIES }}
+        run: python build/dk_bets.py

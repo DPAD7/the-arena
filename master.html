@@ -15427,8 +15427,46 @@
     });
     if (typeof DKB.balance === "number") BANK.bal = DKB.balance;
     BANK.dkAt = DKB.at;
+    /* every leg of an open slip is gold on its card: what he placed is what
+       the book says he placed (Jose, Sep 26, 2026) */
+    var gold = false;
+    (DKB.bets || []).forEach(function (bet) {
+      (bet.legs || []).forEach(function (lg) {
+        if (!lg.sel || placed[lg.sel]) return;
+        placed[lg.sel] = true; gold = true;
+        document.querySelectorAll('button.price[data-oid="' + lg.sel + '"]').forEach(function (b) { b.classList.add("placed"); });
+      });
+    });
+    if (gold) {
+      try { localStorage.setItem(PLACEDKEY, JSON.stringify(placed)); } catch (e) {}
+      if (typeof placedState === "function") placedState();
+    }
     return true;
   }
+  /* the double tap: ask the site to read the book now, then watch /bets
+     until a sync newer than the ask lands -- the helmet's own way
+     (Jose, Sep 26, 2026) */
+  function dkFresh(done) {
+    fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST", cache: "no-store",
+      headers: { "content-type": "application/json" }, body: JSON.stringify({ pull: true }) })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j || !j.asked) { done(false, false); return; }
+        var t0 = Date.now(), tries = 0;
+        (function look() {
+          fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
+            .then(function (r) { return r.json(); })
+            .then(function (b) {
+              if (b && b.expired && b.expired >= j.asked) { done(false, false); return; }   /* login gone: red */
+              if (b && b.at && b.at >= j.asked) { DKB = b; DKB_T = Date.now(); bankDraw(); done(true, true); return; }
+              if (++tries > 30 || Date.now() - t0 > 150000) { done(true, false); return; }
+              if (done.step) done.step(Math.min(92, 20 + tries * 4));
+              setTimeout(look, 5000);
+            }).catch(function () { done(false, false); });
+        })();
+      }).catch(function () { done(false, false); });
+  }
+  window._dkFresh = dkFresh;
   function dkPull(done) {
     DKB_T = Date.now();
     return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
@@ -15515,7 +15553,7 @@
     BANK.out = BANK.out || {};
     /* never handed back on its own: a page drawn before its cards sees no
        gold at all, and read that as the legs taken off (Sep 25, 2026) */
-    if (legs.length && !BANK.out[dayk]) {
+    if (legs.length && !BANK.out[dayk] && !(DKB && DKB.at)) {
       BANK.bal = Math.round((BANK.bal - UNIT) * 100) / 100; BANK.out[dayk] = 1; moved = true;
     }
     if (legs.length) {
@@ -15523,7 +15561,7 @@
       var won = legs.every(function (b) { return b.st === "won"; });
       state = lost ? "lost" : won ? "won" : "";
       /* once a day: the whole payout on a cash, nothing on a miss */
-      if (state && !BANK.paid[dayk]) {
+      if (state && !BANK.paid[dayk] && !(DKB && DKB.at)) {
         var dec = 1;
         legs.forEach(function (b) { dec *= toDec(b.o) || 1; });
         BANK.bal = Math.round((BANK.bal + (won ? UNIT * dec : 0)) * 100) / 100;
@@ -15532,8 +15570,26 @@
       }
     }
     amt.textContent = money(BANK.bal);
-    if (!legs.length) {
-      box.innerHTML = '<div class="cashnone">No gold legs on the board</div>';
+    /* the book's open slips, each as its own card; none, and the balance
+       stands alone (Jose, Sep 26, 2026) */
+    if (DKB && DKB.at) {
+      var open = DKB.bets || [];
+      box.innerHTML = open.map(function (bet) {
+        var ls = (bet.legs || []).map(function (lg) {
+          var v = BANK.legs[lg.sel] || {};
+          return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: v.l || (lg.pick + " \u00b7 " + (lg.market || "")),
+                   g: v.g || "", st: v.st === "won" || v.st === "lost" ? v.st : "" };
+        });
+        var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
+        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + slipAvatars(ls) +
+          '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
+          '<div class="slfoot"><b>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</b><span class="slpay">' +
+          esc(String(bet.odds || "").replace("-", "\u2212")) + '</span></div></div>' +
+          '<div class="cashrcpt"><div><span>Amount</span><b>' + money(bet.wager || 0) + '</b></div>' +
+          '<div><span>Total payout</span><b class="cashpay">' + money(bet.topay || 0) + '</b></div></div>';
+      }).join("");
+    } else if (!legs.length) {
+      box.innerHTML = "";
     } else {
       box.innerHTML = '<div class="slipcard' + (state ? " slipcard--" + state : "") + '">' +
         slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
@@ -15598,15 +15654,17 @@
     function pullNow() {
       clearTimeout(fadeT);
       fillEl.className = "fabfill fabfill--on";
-      fillEl.style.height = "35%";
-      setTimeout(function () { if (fillEl.style.height === "35%") fillEl.style.height = "70%"; }, 250);
-      (window._dkPull || function (d) { d(false); })(function (ok, fresh) {
+      fillEl.style.height = "12%";
+      var fin = function (ok, fresh) {
         fillEl.style.height = "100%";
         /* green: a fresh sync; grey: read, but nothing new from the book in
            six hours; red: the read failed (Jose, Sep 26, 2026) */
         fillEl.classList.add(!ok ? "fabfill--bad" : fresh ? "fabfill--ok" : "fabfill--none");
         fadeT = setTimeout(function () { fillEl.className = "fabfill"; fillEl.style.height = "0"; }, 2500);
-      });
+      };
+      /* it climbs while the book is being read, about a minute */
+      fin.step = function (pc) { fillEl.style.height = pc + "%"; };
+      (window._dkFresh || function (d) { d(false); })(fin);
     }
     function up() {
       if (!down) return;
