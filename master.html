@@ -1845,6 +1845,20 @@
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800;
     font-size: 30px; font-variant-numeric: tabular-nums; pointer-events: none; }
   html.hotlock #hotboard.on { display: flex; }
+  /* the three sets under the carousel, on the grass above the line: the
+     carousel changes in place (Jose, Sep 25, 2026: "just load the carousel,
+     no need to open a new page") */
+  #hotset { position: fixed; z-index: 5; display: none; left: 50%; transform: translate(-50%, -50%); }
+  html.hotlock #hotset { display: flex; }
+  #hotset button { width: 66px; height: 40px; padding: 0; border: 0; background: none; cursor: pointer;
+    display: flex; align-items: center; justify-content: center; opacity: .45; transition: opacity .15s ease; }
+  #hotset button[aria-pressed="true"] { opacity: 1; }
+  #hotset .fpopico { width: 30px; height: 30px; display: block; pointer-events: none; }
+  #hotset .fpopico--out { color: #e2564d; }
+  .form.qcards.qcards--hot[data-set="not"] > .qcard:has(.cold):not([data-picked="1"]),
+  .form.qcards.qcards--hot[data-set="out"] > .qcard:has(.hurt):not([data-picked="1"]) { display: grid; }
+  .form.qcards.qcards--hot[data-set="not"] > .qcard:not(:has(.cold)),
+  .form.qcards.qcards--hot[data-set="out"] > .qcard:not(:has(.hurt)) { display: none; }
   html.hotlock .fturf .fslots .fpay::before, html.hotlock .fturf .fslots .fpay::after { display: none; }
   /* the centering space stays inside the board, so the billboard above the
      field is not clipped by the pager */
@@ -10119,8 +10133,51 @@
           var r = box.getBoundingClientRect();
           var want = top + (band - r.height) / 2;
           box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
+          /* the sets sit on the grass between the cards and the line */
+          var hs = hotSet(), cb = box.getBoundingClientRect().bottom;
+          /* a short screen with no grass to spare: the cards give up just
+             enough height for the row, and nothing moves on one that has it */
+          if (Y(1239) - cb < 36) {
+            var h1 = box.getBoundingClientRect().height, z2 = z * (h1 - (36 - (Y(1239) - cb))) / h1;
+            box.style.zoom = z2;
+            var r2 = box.getBoundingClientRect();
+            box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (Y(1239) - 36 - r2.bottom) / z2) + "px";
+            cb = box.getBoundingClientRect().bottom;
+          }
+          hs.style.top = Math.round((cb + Y(1239)) / 2) + "px";
         });
       };
+      /* HOT, NOT and OUT, the long-press menu's own faces, centered */
+      function hotSet() {
+        var hs = document.getElementById("hotset");
+        if (!hs) {
+          hs = document.createElement("div"); hs.id = "hotset";
+          document.body.appendChild(hs);
+          hs.addEventListener("click", function (e) {
+            var b = e.target.closest("button[data-set]");
+            if (!b) return;
+            e.stopPropagation();
+            var cur = document.querySelector(".form.qcards.qcards--hot");
+            if (!cur) return;
+            if (b.dataset.set === "hot") delete cur.dataset.set; else cur.dataset.set = b.dataset.set;
+            hs.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+            cur.scrollLeft = 0;
+            loopRow(cur);
+            centerHot();
+          });
+        }
+        if (!hs.firstChild) {
+          var pop = document.querySelector(".fpop:not(.prail)");
+          if (pop) hs.innerHTML = ["hot", "not", "out"].map(function (k) {
+            var b0 = pop.querySelector('button[data-pv="' + k + '"]');
+            return '<button type="button" data-set="' + k + '" aria-label="' + k.toUpperCase() + '" aria-pressed="' +
+                   ((box.dataset.set || "hot") === k ? "true" : "false") + '">' + (b0 ? b0.innerHTML : k.toUpperCase()) + '</button>';
+          }).join("");
+        }
+        var now = (document.querySelector(".form.qcards.qcards--hot") || box).dataset.set || "hot";
+        hs.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x.dataset.set === now ? "true" : "false"); });
+        return hs;
+      }
       window.addEventListener("resize", centerHot);
       lockHot();
       chips.addEventListener("click", lockHot);
@@ -11610,8 +11667,19 @@
       }
       tapWait = setTimeout(function () {
         tapWait = null;
+        /* a tap opens HOT, the season's field, not the last view it was on
+           (Jose, Sep 25, 2026: "on click it loads the hot page") */
+        try { localStorage.setItem("arena.fview", "hot"); } catch (e1) {}
         tapPass = true;
         formTab.click();                          /* a single tap, a moment late */
+        setTimeout(function () {
+          var season = [].slice.call(document.querySelectorAll(".wktab")).find(function (x) { return /SEASON/i.test(x.textContent); });
+          if (season && !season.classList.contains("on") && season.getAttribute("aria-selected") !== "true") season.click();
+          setTimeout(function () {
+            var b1 = document.querySelector('.fview:not(.fpop) button[data-fview="hot"]');
+            if (b1 && b1.getAttribute("aria-selected") !== "true") b1.click();
+          }, 120);
+        }, 120);
       }, 420);                                    /* 260 read two mouse clicks as two singles (Jose, Sep 23, 2026) */
     }, true);
   }
@@ -11658,7 +11726,9 @@
           var seasonTab = wk.find(function (x) { return /SEASON/i.test(x.textContent); });
           var onSeason = !seasonTab || seasonTab.getAttribute("aria-selected") === "true" || seasonTab.classList.contains("on");
           var fv0 = "all"; try { fv0 = localStorage.getItem("arena.fview") || "all"; } catch (e2) {}
-          items = [["all", "ALL"], ["hot", "HOT"], ["not", "NOT"], ["out", "OUT"]].map(function (v) {
+          /* HOT, NOT and OUT live on the HOT page now; the hold is the
+             weeks (Jose, Sep 25, 2026: "long press does weeks") */
+          items = [["all", "ALL"]].map(function (v) {
             return { key: v[0], label: v[1], view: v[0], season: seasonTab, cur: onSeason && fv0 === v[0] };
           }).concat(wk.filter(function (x) { return x !== seasonTab; }).map(function (x) {
             return { key: x.textContent, label: x.textContent.replace(/\s+/g, " ").trim(), el: x,
