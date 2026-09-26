@@ -512,13 +512,8 @@ def due_now(events):
 
 
 if "--if-due" in sys.argv:
-    # his open DraftKings bets and balance, every pass: a few seconds, and the
-    # one thing the board reads that he does not want to have to push itself
-    # (Jose, Sep 26, 2026)
-    if os.environ.get("DK_COOKIES") and not DRY:
-        r = subprocess.run([sys.executable, D + "/build/dk_bets.py"], capture_output=True, text=True, cwd=D)
-        for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
-            log("   " + line)
+    # DraftKings is read only when he double taps the bag (dkbets.yml), never
+    # on a sweep (Jose, Sep 26, 2026: "only when I double tap")
     hit, seen = due_now(src["events"])
     ahead = [e for e in board_events()
              if datetime.datetime.fromisoformat(e["start"].replace("Z", "+00:00")) > NOW]
