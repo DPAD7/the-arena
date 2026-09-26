@@ -36,14 +36,17 @@
     const total = (/(?:Parlay|Pick)[^+−\-\n]*([+−\-]\d+)/i.exec(text) || [])[1] || "";
     return {
       card: id,
-      id: (/Bet ID:\s*([A-Z0-9]+)/i.exec(text) || [])[1] || id,
+      id: (/Bet ID:\s*([A-Z0-9]+)/i.exec(text) || /\b(DK\d{10,})\b/.exec(text) || [])[1] || id,
       head: head,
       odds: (total || (legs.length === 1 ? legs[0].odds : "")).replace(/−/g, "-"),
       status: status.toLowerCase(),
       wager: money((/Wager:[^\n|]*/i.exec(text) || [""])[0]),
       paid: money((/(?:Paid|Returned|Cashed Out)[^\n|]*/i.exec(text) || [""])[0]),
       topay: money((/(?:To Pay|Payout|To Win)[^\n|]*/i.exec(text) || [""])[0]),
+      /* desktop writes the date bare -- "Sep 25, 2026, 3:02:50 PM - DK63..." --
+         and the phone app after "Placed:" */
       placed: (tid(card, "bet-reference", id + "-0").replace(/^Placed:\s*/i, "") ||
+               (/([A-Z][a-z]{2} \d{1,2}, \d{4},? \d{1,2}:\d\d(?::\d\d)? [AP]M)/.exec(text) || [])[1] ||
                (/Placed:\s*([^\n]+)/i.exec(text) || [])[1] || "").trim(),
       legs: legs
     };
@@ -69,7 +72,7 @@
       /* whatever says "Show Legs", button or not: the words themselves are
          clicked and the click rises to whatever listens for it */
       const btn = [].slice.call(c.querySelectorAll("*")).find(function (b) {
-        return !b.children.length && /^\s*(show legs|show details|view details)\s*$/i.test(b.textContent || "");
+        return !b.children.length && /^\s*(show legs|view picks|show picks|show details|view details)\s*$/i.test(b.textContent || "");
       });
       c.dataset.arenaOpened = "1";
       if (btn) {
