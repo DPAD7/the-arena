@@ -7801,7 +7801,7 @@
       }
     }
 
-    /* the passing yards, over the VS mark, above the touchdown rows */
+    /* the passing yards, the VS mark between them, under the touchdown rows */
     var yb = card.querySelectorAll(".gbody .h2hrow .h2hend > .trkbox");
     var yrow = stack.querySelector(".gyds");
     if (yb.length === 2) {
@@ -7811,8 +7811,11 @@
         yrow.innerHTML = '<span class="gh2h"></span><i class="gmk">' +
           '<svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg>' +
           '</i><span class="gh2h"></span>';
-        stack.insertBefore(yrow, line ? line.nextSibling : stack.firstChild);
       }
+      /* the order down the middle: the score, the touchdowns, then the
+         head to head on passing yards last (Jose, Sep 26, 2026: "PTD 1-2,
+         RTD, then H2H") */
+      if (stack.lastElementChild !== yrow) stack.appendChild(yrow);
       var ye = yrow.querySelectorAll(".gh2h");
       ye[0].innerHTML = ""; ye[1].innerHTML = "";
       var ly = parseInt(yb[0].textContent, 10) || 0, ry = parseInt(yb[1].textContent, 10) || 0;
