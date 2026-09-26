@@ -44,6 +44,11 @@
       odds: (total || (legs.length === 1 ? legs[0].odds : "")).replace(/−/g, "-"),
       /* the boost, from its own field (playerBonus-<id>): "+50% Parlay Boost" */
       boost: tid(card, "playerBonus", id),
+      /* DraftKings' own tags on the slip ("Early Exit Protected") and the
+         notes under them: an early exit pays a leg before the game is over,
+         so the final score is not the whole story for that bet */
+      tag: tid(card, "tag", id),
+      notes: [].slice.call(card.querySelectorAll('[data-test-id^="message-"]')).map(function (m) { return m.innerText.trim(); }).filter(Boolean),
       boosted: !!pm[2] || !!tid(card, "playerBonus", id),
       status: status.toLowerCase(),
       wager: money((/Wager:[^\n|]*/i.exec(text) || [""])[0]),
