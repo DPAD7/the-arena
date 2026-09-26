@@ -7756,6 +7756,8 @@
         /* "End of 1st" stacks the same way: END over 1ST (Jose, Sep 25, 2026) */
         var endOf = /^end of (.+)$/i.exec(said);
         if (endOf) two = ["End", endOf[1]];
+        /* and Halftime: HALF over TIME (Jose, Sep 26, 2026) */
+        if (/^half\s*time$/i.test(said)) two = ["Half", "Time"];
         if (two.length === 2) {
           clk.classList.add("gclk--two");
           two.forEach(function (x) { var b = document.createElement("b"); b.textContent = x; clk.appendChild(b); });
