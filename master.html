@@ -1819,7 +1819,8 @@
   .fwr.on { opacity: 1; }
   .pickghost.pickghost--parked { pointer-events: auto; touch-action: none; cursor: grab;
     transition: transform .22s cubic-bezier(.22, 1, .36, 1); }
-  .fthrow { position: fixed; left: 0; top: 0; z-index: 70; pointer-events: none; transition: opacity .25s ease; }
+  /* under the quarterback: the ball comes out from him, not over him */
+  .fthrow { position: fixed; left: 0; top: 0; z-index: 55; pointer-events: none; transition: opacity .25s ease; }
   .fball { position: fixed; left: 0; top: 0; z-index: 70; width: 18px; height: 18px; pointer-events: none;
     --fb-skin: #8b4a1f; --fb-edge: #3a1d0b; --fb-seam: #fff;
     transition: transform .42s cubic-bezier(.3, .6, .4, 1); }
@@ -1837,7 +1838,7 @@
   html.hotlock .fturf .fslots .fpay { position: absolute; left: var(--sbx); top: var(--sby); bottom: auto; right: auto;
     width: var(--sbw); height: var(--sbh); min-width: 0; padding: 0; margin: 0; transform: none;
     display: flex; align-items: center; justify-content: center; box-sizing: border-box;
-    border-radius: 3px; box-shadow: none; }
+    border-radius: 3px; box-shadow: none; border: 0 !important; }
   html.hotlock .fturf .fslots .fpay::before, html.hotlock .fturf .fslots .fpay::after { display: none; }
   /* the centering space stays inside the board, so the billboard above the
      field is not clipped by the pager */
@@ -1933,6 +1934,10 @@
   .pickghost--bare .qrec, .pickghost--bare .hurt, .pickghost--bare .cold { opacity: 0; }
   .pickghost--home { transition: transform .26s cubic-bezier(.22, 1, .36, 1),
     width .26s cubic-bezier(.22, 1, .36, 1), height .26s cubic-bezier(.22, 1, .36, 1), opacity .2s ease; }
+  /* a pass: he glides to the end zone for as long as the ball is in the air
+     (Jose, Sep 25, 2026: "as he's throwing he's ending up in the end zone") */
+  .pickghost--home.pickghost--glide { transition: transform .7s cubic-bezier(.3, .6, .4, 1),
+    width .7s cubic-bezier(.3, .6, .4, 1), height .7s cubic-bezier(.3, .6, .4, 1), opacity .2s ease; }
   .fview--ptd button.drop { color: #e3b341; }
   /* the picks sit over the eight as a row of their own, centered as a group
      on the same pitch as the squares: one stands dead center, two either
@@ -9379,8 +9384,9 @@
     { tier: "2", label: "2 PTD", color: "#3fbf5a", pts: [[0, 185], [160, 135]], at: [160, 135], box: [160, 135] }
   ];
   var RECEIVERS = [
-    [[-164, 135], [-157, 48], [-86, 0]],
-    [[159, 138], [121, 101], [152, 6]]
+    /* each receiver stands above his box, never on it (Sep 25, 2026) */
+    [[-164, 95], [-157, 48], [-86, 0]],
+    [[159, 98], [121, 70], [152, 6]]
   ];
   var POSTFOOT = 205;
   /* a point a fraction of the way along a polyline */
@@ -9681,8 +9687,10 @@
       shiftPicks(slots, picks.length);
       var sp = pickSpots(slots, picks.length)[picks.length - 1], rr = slots.getBoundingClientRect();
       g.classList.add("pickghost--home"); g.classList.remove("pickghost--parked");
-      setTimeout(function () { var hold = ghost; ghost = g; place(rr.left + sp.left + sp.w / 2, rr.top + sp.top + sp.h / 2, sp.w, sp.h); ghost = hold; }, tier === "r" ? 0 : 720);
-      setTimeout(function () { drawPicks(slots, picks, box); g.remove(); c.style.opacity = ""; }, tier === "r" ? 300 : 1020);
+      if (tier !== "r") g.classList.add("pickghost--glide");
+      /* at once: the throw and his glide to the end zone are one motion */
+      setTimeout(function () { var hold = ghost; ghost = g; place(rr.left + sp.left + sp.w / 2, rr.top + sp.top + sp.h / 2, sp.w, sp.h); ghost = hold; }, 0);
+      setTimeout(function () { drawPicks(slots, picks, box); g.remove(); c.style.opacity = ""; }, tier === "r" ? 300 : 760);
       if (parked === g) parked = null;
       forkbox.querySelectorAll(".fwr.on").forEach(function (im) { setTimeout(function () { im.classList.remove("on"); }, 700); });
       forkbox.querySelectorAll(".froute.drop").forEach(function (l) { l.classList.remove("drop"); });
