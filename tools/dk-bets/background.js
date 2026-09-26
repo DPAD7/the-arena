@@ -18,7 +18,14 @@ chrome.action.onClicked.addListener(async (tab) => {
   try {
     await chrome.tabs.sendMessage(tab.id, { read: true });
   } catch (e) {
-    badge("TAB", "#e2564d");
+    /* a tab opened before the extension was loaded has no reader in it: put
+       one in, and ask again */
+    try {
+      await chrome.scripting.executeScript({ target: { tabId: tab.id }, files: ["content.js"] });
+      await chrome.tabs.sendMessage(tab.id, { read: true });
+    } catch (e2) {
+      badge("TAB", "#e2564d");
+    }
   }
 });
 
