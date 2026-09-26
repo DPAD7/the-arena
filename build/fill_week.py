@@ -234,7 +234,14 @@ def price_event(e, qbs_id, league, dkpeople):
             ml[i] = (american(r["odds"]), r["oid"])
     # 1+, 2+ and 3+ passing touchdowns, the man found by his number
     ptd = [[None, None, None], [None, None, None]]
+    # every passer DraftKings prices a side for, whoever the card names: the
+    # book's word on who starts (Jose, Sep 25, 2026: "dk should confirm").
+    # venueRole says which half of the fixture he is on, in DraftKings' own
+    # order; the caller turns that into the board's
+    entry["_qb"] = {}
     for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1000" % e["id"]):
+        if r["market"].endswith("Passing Touchdowns") and r["pid"] and r["role"].lower() in ("away", "home"):
+            entry["_qb"].setdefault(r["role"].lower(), {})[r["pid"]] = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", r["who"])
         if not r["market"].endswith("Passing Touchdowns") or r["label"] not in ("1+", "2+", "3+"):
             continue
         i = his_side(r)
@@ -290,6 +297,7 @@ def main():
     unsettled, by_name, flipped, unoffered = [], [], [], []
     held = []
     both_ways = []
+    dk_qbs = {}
     sched_new = {}
     # DraftKings' number for a man, pinned to ours by build/dk_people.py
     dkp = os.path.join(D, "data", "dk_people.json")
@@ -358,6 +366,18 @@ def main():
                     return True
                 return False
             ml, entry = price_event(e, qbs_id, league, dkpeople)
+            # the book's passers, by side on the board, as ESPN ids where we
+            # hold the pin; a man we cannot pin is kept by name and said
+            seen_qb = entry.pop("_qb", {})
+            dkq = [[], []]
+            for role, men in seen_qb.items():
+                side = 0 if role == "away" else 1
+                if how == "flipped":
+                    side = 1 - side
+                for pid, nm in men.items():
+                    espn = (dkpeople.get(pid) or {}).get("espn") or pins.get(nm) or ""
+                    dkq[side].append([str(espn), nm])
+            dk_qbs[str(eid)] = dkq
             for i, v in ml.items():
                 sched_new[(var, eid, i)] = v
             ptd = entry["ptd"]
@@ -385,8 +405,16 @@ def main():
         pins.update(new_pins)
         json.dump(pins, open(pins_path, "w"), indent=0, sort_keys=True)
     if DRY:
+        print("DraftKings passers read for %d games" % len(dk_qbs))
         print("dry run -- nothing written")
         return
+    qf = os.path.join(D, "data", "dk_qbs.json")
+    try:
+        allq = json.load(open(qf))
+    except (OSError, ValueError):
+        allq = {}
+    allq.update(dk_qbs)
+    json.dump(allq, open(qf, "w"), separators=(",", ":"), sort_keys=True)
     # PROPS and the moneylines go to site/prices.json, never into the page: a
     # price that moves must not mean rewriting the page, or a price update and
     # an edit to the page can never both happen at once (Jose, Sep 18, 2026)

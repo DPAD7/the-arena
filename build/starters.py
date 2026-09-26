@@ -223,6 +223,10 @@ def main():
     # Dylan Lonergan had taken the job (Jose: "he was the starter you had aj
     # surace"). played_qb.py has already put the man who played on each
     # finished row, so the last finished row is the last word.
+    try:
+        dkq = json.load(open(os.path.join(D, "data", "dk_qbs.json")))
+    except (OSError, ValueError):
+        dkq = {}
     c = re.search(r"  var CFB = (\[\[.*?\]\]);\n", s, re.S)
     cfb = json.loads(c.group(1)) if c else []
     last = {}
@@ -257,6 +261,17 @@ def main():
             continue
         seen += 1
         for side, (i, club) in enumerate(((5, g[3]), (7, g[4]))):
+            # DraftKings first: the one passer it prices for this side is the
+            # starter, the way the chart names him in the NFL (Jose, Sep 25,
+            # 2026: "dk should confirm"). ESPN keeps no college depth chart --
+            # its feed comes back empty for every club -- so the book is the
+            # only word before kickoff that is not a guess.
+            book = [x for x in ((dkq.get(espn_id) or [[], []])[side]) if x[0]]
+            if len(book) == 1:
+                if book[0][0] != str(g[i + 1]):
+                    swaps.append("%-4s %-20s -> %-20s (DraftKings)" % (club, g[i], book[0][1]))
+                    g[i], g[i + 1] = book[0][1], book[0][0]
+                continue
             if club not in last or last[club][1] == str(g[i + 1]):
                 continue
             swaps.append("%-4s %-20s -> %-20s (last start)"

@@ -31,10 +31,12 @@
        python3 build/played_qb.py          fix every played game
        python3 build/played_qb.py --dry    say what it would change
 """
+import datetime
 import json
 import os
 import re
 import sys
+import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
@@ -61,9 +63,62 @@ def passers(box, ab):
                     out.append((ath.get("displayName") or "", str(ath.get("id"))))
     return out
 
+def first_up(d, had):
+    """Which of these passers threw first, from the plays in order. The play
+       text writes a man three ways -- "Dylan Lonergan", "D. Lonergan",
+       "D.Lonergan" -- so all three are tried. None when no play names one."""
+    forms = []
+    for name, pid in had:
+        b = [x for x in name.split() if not re.match(r"^(Jr\.?|Sr\.?|II|III|IV|V)$", x)]
+        if len(b) < 2:
+            continue
+        last = re.escape(" ".join(b[1:]))
+        pat = r"(?:%s|%s\.\s?%s)\s+(?:pass|sacked|scrambles)" % (re.escape(" ".join(b)), re.escape(b[0][0]), last)
+        forms.append((re.compile(pat), (name, pid)))
+    drives = ((d.get("drives") or {}).get("previous") or [])
+    cur = (d.get("drives") or {}).get("current")
+    if cur:
+        drives = drives + [cur]
+    for dr in drives:
+        for pl in dr.get("plays") or []:
+            t = pl.get("text") or ""
+            for rx, him in forms:
+                if rx.search(t):
+                    return him
+    return None
+
+
+def priced(gid, side):
+    """DraftKings priced this side's passing props: the man on the row is
+       who the board priced, and a played card keeps him (Jose, Sep 22, 2026:
+       "we had the odds for Murray, so leave it at that")."""
+    f = os.path.join(D, "site", "prices", "%s.json" % gid)
+    try:
+        pr = json.load(open(f))
+    except (OSError, ValueError):
+        return False
+    for market in ("ptd", "atd"):
+        got = (pr.get("props") or {}).get(market) or []
+        if len(got) > side and "\"" in json.dumps(got[side]):
+            return True
+    return False
+
+
+def live_feed(var, gid):
+    """A game under way, from ESPN, when there is no settled file yet."""
+    lg = "nfl" if var == "SCHED" else "college-football"
+    u = ("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid))
+    try:
+        with urllib.request.urlopen(urllib.request.Request(u, headers={"User-Agent": "Mozilla/5.0"}), timeout=20) as r:
+            return json.load(r)
+    except Exception:
+        return None
+
+
 def main():
     s = pagefile.read()
     changed, looked = [], 0
+    now = datetime.datetime.now(datetime.timezone.utc)
 
     for var in ("SCHED", "CFB"):
         m = re.search(r"  var %s = (\[\[.*?\]\]);\n" % var, s, re.S)
@@ -73,12 +128,23 @@ def main():
         touched = False
         for g in rows:
             f = os.path.join(D, "site", "final", "%s.json" % g[1])
-            if not os.path.exists(f):
-                continue
-            try:
-                d = json.load(open(f))
-            except ValueError:
-                continue
+            if os.path.exists(f):
+                try:
+                    d = json.load(open(f))
+                except ValueError:
+                    continue
+            else:
+                # a game on now: the box score already says who is throwing,
+                # so the card does not wait for the whistle to be right
+                try:
+                    kick = datetime.datetime.fromisoformat(str(g[2]).replace("Z", "+00:00"))
+                except ValueError:
+                    continue
+                if not (kick <= now <= kick + datetime.timedelta(hours=5)):
+                    continue
+                d = live_feed(var, g[1])
+                if not d:
+                    continue
             comp = (((d.get("header") or {}).get("competitions") or [{}])[0])
             box = (d.get("boxscore") or {}).get("players") or []
             if not box:
@@ -95,10 +161,18 @@ def main():
                 had = passers(box, club)
                 if not had:
                     continue
-                # he was there: leave him, whatever his share of the throwing
-                if any(str(g[i + 1]) == pid for _, pid in had):
+                # the man who threw first started. A priced man who played
+                # stays -- he is who the board priced -- but an unpriced one
+                # who only came in late gives way to the starter: Rutgers kept
+                # AJ Surace, 3 of 7, while Dylan Lonergan started (Sep 25, 2026)
+                first = first_up(d, had)
+                there = any(str(g[i + 1]) == pid for _, pid in had)
+                if there and (not first or str(g[i + 1]) == first[1]
+                              or priced(g[1], 0 if i == 5 else 1)):
                     continue
-                name, pid = had[0]
+                name, pid = first or had[0]
+                if str(g[i + 1]) == pid:
+                    continue
                 changed.append((var, g[0], g[3], g[4], g[i], name))
                 g[i], g[i + 1] = name, pid
                 touched = True

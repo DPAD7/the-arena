@@ -376,6 +376,28 @@ def card_running():
     return None
 
 
+def game_running():
+    """A football game under way: kicked off and less than five hours old.
+       While one is on, every pass reads its box score for who is actually
+       throwing, so a card that named the wrong man is right within ten
+       minutes of the snap rather than hours after the whistle
+       (Jose, Sep 25, 2026: "we need 100% accurate qbs")."""
+    page = open(D + "/master.html").read()
+    for var in ("SCHED", "CFB"):
+        m = re.search(r"var %s = (\[\[.*?\]\]);" % var, page, re.S)
+        if not m:
+            continue
+        for g in json.loads(m.group(1)):
+            try:
+                t = datetime.datetime.fromisoformat(str(g[2]).replace("Z", "+00:00"))
+            except Exception:
+                continue
+            if t <= NOW <= t + datetime.timedelta(hours=5) and \
+                    not os.path.exists(D + "/site/final/%s.json" % g[1]):
+                return g[1]
+    return None
+
+
 def after_due(events, seen):
     """The wakes that stand behind a game rather than in front of it."""
     hit = []
@@ -403,7 +425,7 @@ def settle_late(fight):
        site/final/mma-{id}.json and takes ESPN's stored closing price for every
        bout the board still shows unpriced."""
     jobs = ("mma_year.py",) if fight else (
-        "settle.py", "ledger.py", "alt_ptd.py",
+        "settle.py", "played_qb.py", "starters.py", "ledger.py", "alt_ptd.py",
         "nfl_clips.py", "build_nflindex.py", "club_clips.py", "x_clips.py")
     for job in jobs:
         if not os.path.exists(D + "/build/" + job):
@@ -415,6 +437,8 @@ def settle_late(fight):
             log("   %s: %s" % (job[:-3], line))
     if DRY:
         return
+    # played_qb and starters write the page, so the deploy carries it built
+    pagefile.deployable(pagefile.read())
     out = subprocess.run(
         ["npx", "wrangler", "pages", "deploy", ".",
          "--project-name=the-arenasports", "--branch=main"],
@@ -500,6 +524,7 @@ if "--if-due" in sys.argv:
     ranks = ranks_due(seen)
     late = after_due(board_events(), seen)
     running = card_running()
+    playing = game_running()
     if late:
         # one run settles every game in the slot and one every card, but a
         # football wake and a fight wake are different work, so a slot holding
@@ -516,7 +541,7 @@ if "--if-due" in sys.argv:
             log("unsettled: %s %s is final and has no result" % (lg, nm))
         late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
                         owed[0][0] == "mma")]
-    if not hit and not drawn and not late and not hub and not ranks and not running:
+    if not hit and not drawn and not late and not hub and not ranks and not running and not playing:
         os._exit(0)          # no interpreter shutdown to get stuck in
     log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
         "".join("%s, %d min after" % (n or "?", m) for _, n, m, _f in late) +
@@ -528,6 +553,17 @@ if "--if-due" in sys.argv:
         for key, _, _, _f in late:
             seen[key] = NOW.isoformat()
         json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+    if playing and not DRY:
+        r = subprocess.run([sys.executable, D + "/build/played_qb.py"], capture_output=True, text=True, cwd=D)
+        out = (r.stdout + r.stderr).strip().splitlines()
+        for line in out[-4:]:
+            log("   played_qb (live): " + line)
+        if any("rows corrected: 0" in x for x in out) is False and r.returncode == 0:
+            pagefile.deployable(pagefile.read())
+            dep = subprocess.run(["npx", "wrangler", "pages", "deploy", ".",
+                                  "--project-name=the-arenasports", "--branch=main"],
+                                 cwd=D + "/site", capture_output=True, text=True, timeout=300)
+            log("   live passer fixed: deployed" if dep.returncode == 0 else "   live passer fixed: DEPLOY FAILED")
     if running and not drawn:
         # the card is on: read the book again for the prices and for when the
         # bouts that are left now start (Jose, Sep 18, 2026)
