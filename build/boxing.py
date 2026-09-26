@@ -293,10 +293,14 @@ def main():
                     "how": {"type": (bt["method"] or ("DRAW" if "dr" in bt["res"] else "NC")).upper(),
                             "round": rd.group(1) if rd else "", "time": bt["time"] or ""}})
             start = min(start, when) if start else when
-        # the card's own clock is its first bout's, the way a UFC card's is
+        # the card's own clock is its first bout's, the way a UFC card's is,
+        # and every bout on it wears that one clock, so the day page holds the
+        # card under one heading rather than one a bout (Jose, Sep 26, 2026)
         cards.append([0, e["id"], start, e["name"]])
-        # main event first on the page, as Wikipedia lists it
-        fights.extend(rows)
+        for r in rows:
+            r[2] = start
+        # prelims first and the main event last, the order a UFC card reads
+        fights.extend(reversed(rows))
 
     print("boxing: %d cards, %d bouts, %d priced, %d results"
           % (len(cards), len(fights), priced,
