@@ -1931,6 +1931,13 @@
   .pickghost--lite > .qcard { grid-template-columns: 100% 0; }
   .pickghost--lite .qbface--card { object-position: 50% 8%; }
   .pickghost--lite .qname { justify-content: center; }
+  /* waiting in the spot he wears no name of his own: it is written under the spot */
+  .pickghost--parked .qname { display: none; }
+  .fqbname { position: absolute; left: 50%; top: calc(185px + 27.5px + 2px); font-size: 13px !important; line-height: 1; transform: translateX(-50%);
+    z-index: 5; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity .15s ease;
+    font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800; font-size: 14px;
+    color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.85); }
+  .fqbname.on { opacity: 1; }
   .pickghost--bare .qrec, .pickghost--bare .hurt, .pickghost--bare .cold { opacity: 0; }
   .pickghost--home { transition: transform .26s cubic-bezier(.22, 1, .36, 1),
     width .26s cubic-bezier(.22, 1, .36, 1), height .26s cubic-bezier(.22, 1, .36, 1), opacity .2s ease; }
@@ -9687,6 +9694,7 @@
       })(t0);
     }
     function takeIn(g, c, tier) {
+      spotName(null);
       if (picks.length >= MAXPICK || picks.some(function (p) { return String(p.id) === String(g.dataset.id); })) { sendHome(g); return; }
       var gr = g.getBoundingClientRect();
       throwTo(tier, [gr.left + gr.width / 2, gr.top + gr.height / 2]);
@@ -9706,6 +9714,7 @@
       forkbox.querySelectorAll(".froute.drop").forEach(function (l) { l.classList.remove("drop"); });
     }
     function sendHome(g) {
+      spotName(null);
       var c = g._card, hold = ghost; ghost = g;
       g.classList.add("pickghost--home"); g.classList.remove("pickghost--parked");
       shed(0);
@@ -9718,9 +9727,19 @@
     }
     /* left at the spot, he waits there: a swipe on him straight left, right
        or up plays it from where he stands */
+    /* his name under the spot he waits in, not squeezed into the tile
+       (Jose, Sep 25, 2026: "name below the placeholder") */
+    function spotName(g) {
+      var tag = forkbox.querySelector(".fqbname");
+      if (!tag) { tag = document.createElement("span"); tag.className = "fqbname"; forkbox.appendChild(tag); }
+      var h = g && g.querySelector(".qname h3");
+      tag.textContent = h ? h.textContent : "";
+      tag.classList.toggle("on", !!(g && h));
+    }
     function park(g) {
       parked = g;
       g.classList.remove("pickghost--home"); g.classList.add("pickghost--parked");
+      spotName(g);
       var fb = forkbox.getBoundingClientRect();
       var hold = ghost; ghost = g; place(fb.left + fb.width / 2, fb.top + 185, cw, ch); ghost = hold;
       if (g._wired) return;
