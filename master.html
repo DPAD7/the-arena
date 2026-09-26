@@ -972,6 +972,13 @@
   .drive--g .drvwin--r { top: 3px; bottom: auto; }
   .drive--g .drvdd { display: none !important; }
   .drive--g .drvat .drvatdd { display: block; font-size: 11.5px; color: #c9ccd2; margin-bottom: 1px; }
+  .drvjer { display: inline-grid; place-items: center; width: 34px; height: 31px; }
+  .drvjer > * { grid-area: 1 / 1; }
+  .drvjer img { width: 34px; height: 31px; object-fit: contain; filter: drop-shadow(0 2px 3px rgba(0,0,0,.6)); }
+  .drvjer em { font-style: normal; font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800;
+    font-size: 13px; line-height: 1; color: #fff; margin-top: 2px; position: relative; z-index: 1;
+    text-shadow: 0 1px 1px rgba(0,0,0,.35); font-variant-numeric: tabular-nums; }
+  .drvjer em.n3 { font-size: 11px; }
   /* the finger's own marks are HTML and not SVG: the plot is drawn on a
      viewBox stretched to the card's width, and a circle drawn in it comes
      out an egg */
@@ -5668,9 +5675,22 @@
     }
     var atEl = wrap.querySelector(".drvat");
     if (atEl) {
-      /* on the graph the down and distance rides over the yard line */
-      var atHtml = (graph && st.dd ? '<small class="drvatdd">' + st.dd + "</small>" : "") + (st.at || "");
-      if (atEl.dataset.said !== atHtml) { atEl.dataset.said = atHtml; atEl.innerHTML = atHtml; }
+      /* on the graph the ball is the driving club's Kalshi jersey, the yard
+         line its number, with the down and distance over it (Jose, Sep 26,
+         2026: "Kalshi jersey for where they are") */
+      var offAb = graph ? ((card._drvab || ["", ""])[st.offLeft ? 0 : 1] || "") : "";
+      var yd = (/(\d+)\s*$/.exec(st.at || "") || [])[1] || "";
+      var jer = offAb && yd ? '<span class="drvjer" data-ab="' + offAb + '"><em' + (yd.length > 2 ? ' class="n3"' : '') + '>' + yd + '</em></span>' : "";
+      var atHtml = (graph && st.dd ? '<small class="drvatdd">' + st.dd + "</small>" : "") + (jer || (st.at || ""));
+      if (atEl.dataset.said !== atHtml) {
+        atEl.dataset.said = atHtml; atEl.innerHTML = atHtml;
+        var js = atEl.querySelector(".drvjer");
+        if (js) {
+          var put = function (src) { if (src && js.isConnected) js.insertAdjacentHTML("afterbegin", '<img alt="" src="' + src + '">'); };
+          if (lgOf(card) === "nfl") put("ico/jersey/" + offAb.toLowerCase() + ".png");
+          else dyeJersey(CFBCOLOR[offAb] || clubHue(offAb, lgOf(card)) || "#8e8e93", ALTCOLOR[offAb] || "#c7cbd1", put);
+        }
+      }
       /* the far ends are where the label would hang off the card */
       atEl.style.left = Math.max(9, Math.min(91, st.pos)) + "%";
     }
