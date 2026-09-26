@@ -5519,7 +5519,11 @@
      The bands and the plot, in the numbers the look was approved in: 26px of
      band, 76px of plot, 26px of band, and the drive bar at the middle of the
      plot, which is what makes it the 50% line. */
-  var DRVTOP = 26, DRVPLOT = 76, DRVMID = 64;
+  /* The curve now runs the whole height, 4 to 124, behind the names and
+     numbers, which sit over it: a game lives between 30% and 70%, and in 76px
+     that was a flat line (Jose, Sep 26, 2026: "put it in the background so
+     we don't have to worry about the containers"). 50% is still the bar. */
+  var DRVTOP = 4, DRVPLOT = 120, DRVMID = 64;
   /* ESPN publishes a win number against rows where nothing was played. A
      Buffalo timeout was logged at 63.5% sitting between two plays at 97%,
      and drawn it is a spike out of nothing -- it is ESPN's own number
@@ -5539,9 +5543,15 @@
     if (keep.length < 2) return null;
     /* re-spaced across what is left, so a dropped row leaves no gap in the
        line and every place the finger can land is a play */
+    /* zoomed to this game: its widest swing from 50% nearly reaches the
+       edge, never less than 20 points of room, so a close game still shows
+       its shape; 50% stays on the bar */
+    var swing = 20;
+    keep.forEach(function (p) { swing = Math.max(swing, Math.abs(p.l - 50) * 1.08); });
+    swing = Math.min(50, swing);
     keep.forEach(function (p, i) {
       p.gx = i * 100 / (keep.length - 1);
-      p.gy = DRVTOP + (1 - p.l / 100) * DRVPLOT;
+      p.gy = DRVMID - (p.l - 50) / swing * (DRVPLOT / 2);
     });
     return keep;
   }
