@@ -334,7 +334,7 @@ def price_drawn():
     # read (Jose, Sep 23, 2026: double tap fetches the missing prices).
     from zoneinfo import ZoneInfo
     hour = NOW.astimezone(ZoneInfo("America/New_York")).hour
-    for job in ("settle.py", "played_qb.py", "kicks.py", "wire.py", "depth.py", "starters.py", "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "posters.py", "ask_fold.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "mirror.py", "records_mma.py", "ptd10.py", "covered.py"):
+    for job in ("settle.py", "played_qb.py", "kicks.py", "wire.py", "depth.py", "starters.py", "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "boxing.py", "posters.py", "ask_fold.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "mirror.py", "records_mma.py", "ptd10.py", "covered.py"):
         if job == "fill_week.py" and hour in SWEEP_ET and hour not in PRICE_ET:
             log("   fill_week: not a pricing hour (%d:00 ET), nothing asked" % hour)
             continue

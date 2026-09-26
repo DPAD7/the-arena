@@ -70,7 +70,7 @@ def search_title(name):
     need = [x.split()[-1].lower() for x in m.groups()] if m else []
     for hit in (j.get("query") or {}).get("search") or []:
         t = hit["title"]
-        if re.match(r"(UFC|Noche UFC)\b", t) and all(n in t.lower() for n in need):
+        if (re.match(r"(UFC|Noche UFC)\b", t) or "Zuffa" in name) and all(n in t.lower() for n in need):
             return t
     return None
 
@@ -102,6 +102,10 @@ def ufc_art(name, when):
 def main():
     s = pagefile.read()
     cards = json.loads(re.search(r"  var FIGHTCARDS = (\[\[.*?\]\]);", s, re.S).group(1))
+    # the big Zuffa nights have posters of their own; a numbered show wears
+    # the Zuffa art on the page and is not looked for
+    bx = re.search(r"  var BOXCARDS = (\[.*?\]);\n", s, re.S)
+    cards += [c for c in (json.loads(bx.group(1)) if bx else []) if not re.match(r"Zuffa Boxing \d", c[3])]
     try:
         have = json.load(open(LIST))
     except (OSError, ValueError):
@@ -121,7 +125,7 @@ def main():
             if eid in have:
                 continue
             when = datetime.datetime.fromisoformat(c[2].replace("Z", "+00:00"))
-            art = None if DRY or "Contender" in name else ufc_art(name, when)
+            art = None if DRY or "Contender" in name or "Zuffa" in name else ufc_art(name, when)
             if art:
                 rel = "img/posters/%s-ufc.jpg" % eid
                 open(os.path.join(D, "site", rel), "wb").write(art)
