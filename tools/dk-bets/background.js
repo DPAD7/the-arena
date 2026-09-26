@@ -17,7 +17,9 @@ chrome.action.onClicked.addListener(async (tab) => {
     badge("DK?", "#e2564d");     /* not a DraftKings page, or it needs a reload */
     return;
   }
-  if (!got || !got.bets) { badge("0", "#e2564d"); return; }
+  /* no open bets is an answer too, and is sent; no balance means the page
+     had not drawn, and nothing is sent */
+  if (!got || !got.bets || typeof got.balance !== "number") { badge("DK?", "#e2564d"); return; }
   try {
     const r = await fetch(BOARD, {
       method: "POST",
