@@ -3866,6 +3866,7 @@
     return out;
   }
   function liveAlert(card, comp, ls, rs, stats) {
+    redZone(card, stats);
     var per = parseInt((comp.status || {}).period, 10) || 0;
     var half = per >= 3 || /half/i.test(((comp.status || {}).type || {}).detail || "");
     if (!half || per > 3) return;                  /* once, at the half or early in the third */
@@ -3918,6 +3919,28 @@
     if (!says.length) return;
     try { localStorage.setItem("arena.livealerts", JSON.stringify(seen)); } catch (e) {}
     showAlert("Live \u00b7 " + (gameName(card) || ""), says);
+  }
+  /* his passer with a touchdown leg still short, and his club inside the 20:
+     said each time they get there, until the leg lands (Jose, Sep 26, 2026) */
+  function redZone(card, stats) {
+    var dv = card._drv;
+    if (!dv || typeof dv.ytg !== "number") return;
+    var inside = dv.ytg > 0 && dv.ytg <= 20, side = dv.offLeft ? "l" : "r";
+    var was = card._rz || {};
+    card._rz = { side: side, inside: inside };
+    if (!inside || (was.inside && was.side === side)) return;     /* only on the way in */
+    var says = [];
+    legsOn(card).forEach(function (b) {
+      var lab = labelFor(b) || "", m = /(\d)\+ (PTD|ATD)/.exec(lab);
+      if (!m) return;
+      var bs = b.closest(".ptdside--r") ? "r" : b.closest(".ptdside--l") ? "l" : "";
+      if (bs !== side) return;
+      var st = stats[side] || {}, got = m[2] === "PTD" ? (st.ptd || 0) : (st.td || 0);
+      if (got >= +m[1]) return;                                  /* landed: no more */
+      says.push(["blow", famName(side === "r" ? card.dataset.rqb : card.dataset.lqb) + " in the red zone: " + dv.at + ", " + dv.dd + ".",
+                 lab.replace(/ \u00b7.*/, "") + ": " + got + " of " + m[1] + "."]);
+    });
+    if (says.length) showAlert("Red zone \u00b7 " + (gameName(card) || ""), says);
   }
   function showAlert(head, says) {
     var el = document.getElementById("legalert");
@@ -6077,7 +6100,7 @@
     box.style.setProperty("--drv", ink);
     var at = end.possessionText || spotText(spot, lside, rside, lhome);
     var known = end.down >= 1 && end.down <= 4;
-    card._drv = { pos: pos, offLeft: offLeft, dd: dd, at: at,
+    card._drv = { pos: pos, offLeft: offLeft, dd: dd, at: at, ytg: end.yardsToEndzone,
                   dist: known ? end.distance : undefined,
                   l: graph ? pts[pts.length - 1].l : undefined,
                   lhome: lhome, lid: leftId };
