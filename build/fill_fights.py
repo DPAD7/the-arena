@@ -27,6 +27,8 @@ import subprocess
 import sys
 import unicodedata
 
+from curl_cffi import requests as rq
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
 import whoname
@@ -138,7 +140,68 @@ def dk_bouts():
             ka, kb = whoname.key(a), whoname.key(b)
             out[(ka, kb)] = (str(e["id"]), when)
             out[(kb, ka)] = (str(e["id"]), when)
+            # and by the names run together, so "Alateng Heili" finds
+            # "Alatengheili" with nobody writing it down (Sep 26, 2026)
+            for f_ in (squash, turned):
+                sa, sb = f_(a), f_(b)
+                out[(sa, sb)] = (str(e["id"]), when)
+                out[(sb, sa)] = (str(e["id"]), when)
+                # each man alone, for a bout whose opponent has changed
+                out.setdefault("_one", {})[sa] = (b, str(e["id"]), when)
+                out["_one"][sb] = (a, str(e["id"]), when)
     return out
+
+
+def squash(n):
+    """A name as its letters run together: "Alateng Heili" is "Alatengheili"."""
+    return re.sub(r"[^a-z]", "", fold(n))
+
+
+def turned(n):
+    """...and word order aside: "Wang Cong" is "Cong Wang"."""
+    return "".join(sorted(re.sub(r"[^a-z ]", "", fold(n)).split()))
+
+
+def same(a, b):
+    return squash(a) == squash(b) or turned(a) == turned(b)
+
+
+def find(bouts, a, b):
+    """This bout on DraftKings: exactly, or by the names run together."""
+    return (bouts.get((whoname.key(a), whoname.key(b))) or bouts.get((squash(a), squash(b))) or
+            bouts.get((turned(a), turned(b))))
+
+
+SCORE_CARDS = None
+
+
+def score_opponent(man, when):
+    """theScore's word on who a man fights on the card that night."""
+    global SCORE_CARDS
+    try:
+        if SCORE_CARDS is None:
+            SCORE_CARDS = rq.get("https://api.thescore.com/mma/events?upcoming=true", impersonate="chrome124", timeout=20).json()
+        day = when[:10]
+        for ev in SCORE_CARDS:
+            st = ev.get("start_datetime") or ""
+            try:
+                d0 = dt.datetime.strptime(st, "%a, %d %b %Y %H:%M:%S %z")
+            except ValueError:
+                continue
+            if abs((d0 - T(when)).total_seconds()) > 2 * 86400:
+                continue
+            for fx in rq.get("https://api.thescore.com/mma/events/%s/fights" % ev["id"], impersonate="chrome124", timeout=20).json():
+                names = [((fx.get(k) or {}).get("full_name") or "") for k in ("away_fighter", "home_fighter")]
+                for i_, x in enumerate(names):
+                    if same(x, man):
+                        return names[1 - i_]
+    except Exception:
+        return None
+    return None
+
+
+SWAPPED = []
+NOTES = {}
 
 
 def rounds_of(mkts):
@@ -253,8 +316,7 @@ def times_only():
     theirs = dk_bouts()
     kicks, moved = {}, []
     for f in fights:
-        key = (whoname.key(f[3]), whoname.key(f[5]))
-        got = theirs.get(key)
+        got = find(theirs, f[3], f[5])
         if not got or not got[1]:
             continue
         # never ahead of the bout's own block by more than half an hour: a
@@ -296,7 +358,29 @@ def main():
     fp, kicks = {}, {}
     for f in due:
         left, right = f[3], f[5]
-        eid, when = bouts.get((whoname.key(left), whoname.key(right))) or (None, "")
+        eid, when = find(bouts, left, right) or (None, "")
+        if not eid:
+            # one of ours on DraftKings against somebody else: a late change.
+            # Taken when theScore names the same man; said aloud otherwise
+            for side, man, other in ((0, left, right), (1, right, left)):
+                hit = (bouts.get("_one") or {}).get(squash(man))
+                if not hit or same(hit[0], other):
+                    continue
+                confirm = score_opponent(man, f[2])
+                if confirm and same(confirm, hit[0]):
+                    print("  REPLACED: %s now fights %s (was %s) -- DraftKings and theScore agree" % (man, hit[0], other))
+                    if side == 0:
+                        f[5], f[6], f[13:14] = hit[0], "", [""]
+                        right = hit[0]
+                    else:
+                        f[3], f[4], f[12:13] = hit[0], "", [""]
+                        left = hit[0]
+                    SWAPPED.append(f)
+                    eid, when = hit[1], hit[2]
+                else:
+                    print("  UNCONFIRMED: DraftKings has %s v %s, our card %s v %s" % (man, hit[0], left, right))
+                    NOTES[str(f[1])] = "DraftKings lists %s v %s" % (man, hit[0])
+                break
         if not eid:
             print("  %-22s v %-22s not on DraftKings by these names" % (left, right))
             continue
@@ -304,18 +388,22 @@ def main():
         if not mkts:
             print("  %-22s v %-22s nothing came back" % (left, right))
             continue
+        # the book's own spelling of each man, for its market labels
+        dkl, dkr = left, right
         for lab, got in (dig(mkts, "Moneyline") or {}).items():
-            if fold(lab) == fold(left):
+            if fold(lab) == fold(left) or same(lab, left):
                 f[8], f[9] = got
-            elif fold(lab) == fold(right):
+                dkl = lab
+            elif fold(lab) == fold(right) or same(lab, right):
                 f[10], f[11] = got
+                dkr = lab
         if when and when != f[2]:
             # logged, never quietly swapped: the row keeps ESPN's time and the
             # board reads the book's out of prices.json (Jose, Sep 18, 2026)
             print("      starts %s on our row, %s on their board" % (f[2][11:16], when[11:16]))
             kicks[str(f[1])] = when
         nr = rounds_of(mkts)
-        e = sheet(mkts, left, right, nr)
+        e = sheet(mkts, dkl, dkr, nr)
         fp[f[1]] = e
         archive[str(f[1])] = {"dk": eid, "left": left, "right": right, "rounds": nr, "start": when,
                               "read": NOW.strftime("%Y-%m-%dT%H:%MZ"), "markets": mkts}
@@ -337,6 +425,18 @@ def main():
     book["FPROPS"].update(fp)
     book.setdefault("KICKS", {}).update(kicks)
     pricefile.write(book)
+    # a change only DraftKings has made yet, said on the card until the rest agree
+    book["NOTES"] = NOTES
+    pricefile.write(book)
+    # a confirmed replacement changes who is on the card: the row in the page
+    if SWAPPED:
+        s2 = pagefile.read()
+        m2 = re.search(r"var FIGHTS = (\[\[.*?\]\]);", s2, re.S)
+        rows2 = json.loads(m2.group(1))
+        by = {r[1]: r for r in SWAPPED}
+        rows2 = [by.get(r[1], r) for r in rows2]
+        s2 = s2[:m2.start(1)] + json.dumps(rows2, separators=(",", ":"), ensure_ascii=False) + s2[m2.end(1):]
+        print("card changes written to the page: %d" % len(SWAPPED) if pagefile.write(s2) else "page moved under us")
     print("written: %d bouts in FPROPS, %d starts in KICKS, prices.json only -- the page is untouched"
           % (len(book["FPROPS"]), len(book.get("KICKS") or {})))
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
