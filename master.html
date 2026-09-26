@@ -223,6 +223,7 @@
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
   }
   .cashsheet[hidden] { display: none; }
+  html.cashlock, html.cashlock body { overflow: hidden; overscroll-behavior: none; }
   /* centered on the screen, wherever the button sits (Jose, Sep 25, 2026) */
   .cashsheet { left: 50% !important; top: 50% !important; transform: translate(-50%, -50%);
     width: min(360px, calc(100vw - 32px)); text-align: center; padding: 18px 16px 14px; }
@@ -15726,6 +15727,22 @@
       if (at) place(at.side === "l" ? M : innerWidth - 52 - M, at.y * innerHeight);
     } catch (e) {}
     function openSheet() { bankDraw(); sheet.hidden = false; }
+    /* the board stands still under the panel: only the slips scroll
+       (Jose, Sep 26, 2026) */
+    var lockBg = function () { document.documentElement.classList.toggle("cashlock", !sheet.hidden); };
+    new MutationObserver(lockBg).observe(sheet, { attributes: true, attributeFilter: ["hidden"] });
+    document.addEventListener("touchmove", function (e) {
+      if (sheet.hidden) return;
+      var list = document.getElementById("cashlegs");
+      if (list && list.contains(e.target) && list.scrollHeight > list.clientHeight) return;
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false });
+    document.addEventListener("wheel", function (e) {
+      if (sheet.hidden) return;
+      var list = document.getElementById("cashlegs");
+      if (list && list.contains(e.target) && list.scrollHeight > list.clientHeight) return;
+      e.preventDefault();
+    }, { passive: false });
     var amtEl = document.getElementById("cashamt"), holdT = null;
     if (amtEl) {
       amtEl.addEventListener("pointerdown", function () {
