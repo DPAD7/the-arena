@@ -2082,6 +2082,7 @@
     transition: transform .26s cubic-bezier(.22, 1, .36, 1), opacity .18s ease; }
   .fpop.fpop--on { transform: translate(-50%, 0); opacity: 1; }
   .fpop button { width: 66px; height: 55px; }
+  .fpop .fpopico { width: 30px; height: 30px; display: block; margin: 0 auto; pointer-events: none; }
   .fpop .spmark { top: 6px; height: 55px; width: 57px; }
   .prail { width: 274px; box-sizing: border-box; padding: 6px 5px !important; }
   .prail__win { position: relative; z-index: 2; width: 264px; overflow: hidden; }
@@ -11498,8 +11499,11 @@
        anywhere else and the bar sinks back (Jose, Sep 23, 2026). */
     var pop = document.createElement("div");
     pop.className = "fview fpop";
+    /* HOT wears the flame from the reactions set, not the word
+       (Jose, Sep 25, 2026) */
     pop.innerHTML = [["all", "All"], ["hot", "Hot"], ["not", "Not"], ["out", "Out"]].map(function (v) {
-      return '<button type="button" data-pv="' + v[0] + '">' + v[1] + '</button>';
+      var face = v[0] === "hot" ? '<img class="fpopico" src="ico/hot.png" alt="Hot">' : v[1];
+      return '<button type="button" data-pv="' + v[0] + '" aria-label="' + v[1] + '">' + face + '</button>';
     }).join("") + '<span class="spmark"></span>';
     document.body.appendChild(pop);
     var popMark = pop.querySelector(".spmark"), popOn = false, longT = null, longFired = false, popPick = null;
