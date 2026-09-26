@@ -1835,10 +1835,16 @@
   html.hotlock .fstadium { display: none; }
   html.hotlock .fturf { background-image: none !important; }
   html.hotlock .fturf .fslots { position: relative; }
-  html.hotlock .fturf .fslots .fpay { position: absolute; left: var(--sbx); top: var(--sby); bottom: auto; right: auto;
-    width: var(--sbw); height: var(--sbh); min-width: 0; padding: 0; margin: 0; transform: none;
-    display: flex; align-items: center; justify-content: center; box-sizing: border-box;
-    border-radius: 3px; box-shadow: none; border: 0 !important; }
+  html.hotlock .fturf .fslots .fpay { visibility: hidden; }
+  /* the wider scoreboard: the photo's light-gray frame and black face, twice
+     as wide, the price lit on it (Jose, Sep 25, 2026) */
+  #hotboard { position: fixed; z-index: 3; display: none; box-sizing: content-box;
+    align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
+    background: #000; border: 12px solid #cdd0d6; border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0,0,0,.45); color: var(--green);
+    font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800;
+    font-size: 30px; font-variant-numeric: tabular-nums; pointer-events: none; }
+  html.hotlock #hotboard.on { display: flex; }
   html.hotlock .fturf .fslots .fpay::before, html.hotlock .fturf .fslots .fpay::after { display: none; }
   /* the centering space stays inside the board, so the billboard above the
      field is not clipped by the pager */
@@ -1878,7 +1884,8 @@
   .fstadium { position: absolute; left: 0; right: 0; top: -120px; height: 120px; z-index: 0; pointer-events: none; }
   .fstadium svg { display: block; width: 100%; height: 100%; }
   .fturf .forkbox.fork-on { margin-bottom: 18px; }
-  .fturf .fview--ptd button, .fturf .fpay { background: transparent !important; }
+  .fturf .fview--ptd button, html:not(.hotlock) .fturf .fpay { background: transparent !important; }
+  .fturf .fview--ptd button { background: transparent !important; }
   /* the words stand outside their uprights, clear of the line */
   .fturf .fview--ptd button[data-fptd="1"] { transform: translateX(-46px); }
   .fturf .fview--ptd button[data-fptd="2"] { transform: translateX(46px); }
@@ -9054,7 +9061,8 @@
   var PICKKEY = "arena.picks.v1";
   function loadPicks() { try { return JSON.parse(localStorage.getItem(PICKKEY) || "[]"); } catch (e) { return []; } }
   /* six picks, not eight (Jose, Sep 23, 2026: "move the QBs from 8 to 6") */
-  var MAXPICK = 6;
+  /* three rows of six stand in the end zone (Jose, Sep 25, 2026) */
+  var MAXPICK = 18;
   function savePicks(p) { try { localStorage.setItem(PICKKEY, JSON.stringify(p.slice(0, MAXPICK))); } catch (e) {} }
   /* where the chips go, in the row's own coordinates: centered as a group on
      the squares' pitch, in the order they were picked */
@@ -9067,11 +9075,14 @@
        overlap a little rather than shrink or spill (Jose, Sep 23, 2026: "6
        inline") */
     var far = row.width * 0.84 - 8;                 /* the end zone's back line */
-    var pitch = Math.min(b2.left - a.left, n > 1 ? (far - w) / (n - 1) : 0);
+    /* rows of six, the first on the goal line and each next one stacked
+       above it (Jose, Sep 25, 2026: "fit another row") */
+    var per = 6, out = [];
     var t0 = (row.height - h) / 2;
-    var out = [];
     for (var i = 0; i < n; i++) {
-      out.push({ left: row.width / 2 + (i - (n - 1) / 2) * pitch - w / 2, top: t0, w: w, h: h });
+      var r = Math.floor(i / per), inRow = Math.min(per, n - r * per), j = i - r * per;
+      var pitch = Math.min(b2.left - a.left, inRow > 1 ? (far - w) / (per - 1) : 0);
+      out.push({ left: row.width / 2 + (j - (inRow - 1) / 2) * pitch - w / 2, top: t0 - r * (h + 8), w: w, h: h });
     }
     return out;
   }
@@ -10041,8 +10052,6 @@
           /* the price the picks pay together is lit on the stadium's own
              scoreboard (Jose, Sep 25, 2026: "odds in the scoreboard") */
           var ox = (W - FIELD.w * k) / 2, sbd = FIELD.board, root = document.documentElement.style;
-          root.setProperty("--sbw", Math.round((sbd[2] - sbd[0]) * k) + "px");
-          root.setProperty("--sbh", Math.round((sbd[3] - sbd[1]) * k) + "px");
           var Y = function (y) { return oy + y * k; };
           /* the picks' row stands on the goal line */
           var sb = slots.getBoundingClientRect().bottom;
@@ -10051,8 +10060,34 @@
              the price is laid out in: the page's sliding track moves what a
              fixed position would be measured from */
           var sr = slots.getBoundingClientRect();
-          root.setProperty("--sbx", Math.round(ox + sbd[0] * k - sr.left) + "px");
-          root.setProperty("--sby", Math.round(oy + sbd[1] * k - sr.top) + "px");
+          /* twice the painted board's width, the same height, on its middle:
+             drawn by us over the photo's, so a long price fits
+             (Jose, Sep 25, 2026: "make the scoreboard wider") */
+          var bw = (sbd[2] - sbd[0]) * k * 2, bcx = ox + (sbd[0] + sbd[2]) / 2 * k;
+          /* the board is its own piece on the page, pinned over the photo's:
+             nothing it sits inside can move or scale it */
+          var brd = document.getElementById("hotboard");
+          if (!brd) { brd = document.createElement("div"); brd.id = "hotboard"; document.body.appendChild(brd); }
+          /* the mockup he picked: the black face the photo's height and 2.5
+             times its width, a light-gray frame round it, the price large */
+          var fw = (sbd[2] - sbd[0]) * k * 2.53, fh = (sbd[3] - sbd[1]) * k;
+          var bx = Math.round(17.6 * k), by = Math.round(14.7 * k);
+          brd.style.left = Math.round(bcx - fw / 2 - bx) + "px";
+          brd.style.top = Math.round(oy + sbd[1] * k - by) + "px";
+          brd.style.width = Math.round(fw) + "px";
+          brd.style.height = Math.round(fh) + "px";
+          brd.style.borderWidth = by + "px " + bx + "px";
+          brd.style.fontSize = Math.round(47 * k) + "px";
+          var fp = slots.querySelector(".fpay");
+          brd.textContent = fp ? fp.textContent : "";
+          brd.classList.toggle("on", !!(fp && fp.textContent));
+          if (!slots._boardWatch) {
+            slots._boardWatch = new MutationObserver(function () {
+              var f2 = slots.querySelector(".fpay"), b2 = document.getElementById("hotboard");
+              if (b2) { b2.textContent = f2 ? f2.textContent : ""; b2.classList.toggle("on", !!(f2 && f2.textContent)); }
+            });
+            slots._boardWatch.observe(slots, { childList: true, subtree: true, characterData: true });
+          }
           /* the cards as tall as the band, and in the middle of it */
           var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
           if (!card) return;
