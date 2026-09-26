@@ -3832,8 +3832,9 @@
     var oid = btn.dataset.oid;
     if (!oid) return;
     var on = !placed[oid];
-    if (on) placed[oid] = true;
-    else delete placed[oid];
+    /* off is written down as off, not forgotten, so a DraftKings sync does
+       not put back a leg he took off (Jose, Sep 26, 2026) */
+    placed[oid] = on;
     document.querySelectorAll("button.price").forEach(function (b) {
       if (b.dataset.oid !== oid) return;
       b.classList.toggle("placed", on);
@@ -15432,7 +15433,7 @@
     var gold = false;
     (DKB.bets || []).forEach(function (bet) {
       (bet.legs || []).forEach(function (lg) {
-        if (!lg.sel || placed[lg.sel]) return;
+        if (!lg.sel || lg.sel in placed) return;   /* gold already, or taken off by hand */
         placed[lg.sel] = true; gold = true;
         document.querySelectorAll('button.price[data-oid="' + lg.sel + '"]').forEach(function (b) { b.classList.add("placed"); });
       });
