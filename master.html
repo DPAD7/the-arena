@@ -15656,8 +15656,15 @@
       box.innerHTML = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
-          return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: v.l || lg.label || (lg.pick + " \u00b7 " + (lg.market || "")),
-                   g: v.g || "", st: v.st === "won" || v.st === "lost" ? v.st : "" };
+          /* the leg's own game, off its card: the picture is settled by the
+             game, not the first word of a name ("Kansas" for Kansas State --
+             Jose, Sep 26, 2026) */
+          var b2 = document.querySelector('button.price[data-oid="' + (window.CSS && CSS.escape ? CSS.escape(lg.sel) : lg.sel) + '"]');
+          var c2 = b2 && b2.closest(".gcard");
+          var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "");
+          var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
+          return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
+                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "" };
         });
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way
