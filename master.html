@@ -1829,7 +1829,8 @@
      the picks, and the drawn stadium and turf step aside (Jose, Sep 25, 2026) */
   html.hotlock body { background: transparent; }
   html.hotlock body::before { content: ""; position: fixed; inset: 0; z-index: -1; pointer-events: none;
-    background: #07080c url(img/fox-field.jpg) center / cover no-repeat; }
+    background: #07080c url(img/fox-field.jpg) no-repeat;
+    background-size: var(--hotbg-w, cover); background-position: center var(--hotbg-y, 0px); }
   html.hotlock .fstadium { display: none; }
   html.hotlock .fturf { background-image: none !important; }
   /* the centering space stays inside the board, so the billboard above the
@@ -9416,8 +9417,8 @@
       var x = cx + k * 30, y = 145, r0 = 11;
       o.push(k === 0
         ? '<rect x="' + (x - r0) + '" y="' + (y - r0) + '" width="' + 2 * r0 + '" height="' + 2 * r0 +
-          '" fill="#206532" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>'
-        : '<circle cx="' + x + '" cy="' + y + '" r="' + r0 + '" fill="#206532" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>');
+          '" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>'
+        : '<circle cx="' + x + '" cy="' + y + '" r="' + r0 + '" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>');
     });
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '">' + o.join("") + '</svg>';
   }
@@ -9965,19 +9966,40 @@
       };
       /* the field and the carousel sit in the middle, equal space to the top
          and to the nav (Jose, Sep 23, 2026) */
+      /* HOT is laid on the FOX field behind it (img/fox-field.jpg, 768 x
+         1361, drawn to cover the screen from its middle): the picks stand in
+         the end zone at the goal line, and the carousel shrinks to sit
+         between the two near yard lines (Jose, Sep 25, 2026: "QBs end up
+         here when selected", "the carousel goes there") */
+      var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245] };
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
+          box.style.zoom = ""; box.style.marginTop = "";
           if (turf.hidden || !document.body.contains(turf)) return;
-          var nav = document.getElementById("sportbar");
-          var t = turf.getBoundingClientRect();
-          var cards = box.querySelectorAll(".qcard"), bot = t.bottom;
-          for (var i = 0; i < cards.length; i++) {
-            var r = cards[i].getBoundingClientRect();
-            if (r.height && r.bottom > bot) bot = r.bottom;
-          }
-          var top = t.top - 8, room = nav.getBoundingClientRect().top - top, h = bot - t.top;
-          turf.style.marginTop = Math.max(8, Math.round((room - h) / 2)) + "px";
+          var W = window.innerWidth, H = window.innerHeight;
+          /* as large as covers the screen, but never so large that the card
+             band falls behind the nav: then the field stops a little short
+             of the bottom, where the nav covers it anyway */
+          var navTop = document.getElementById("sportbar").getBoundingClientRect().top;
+          var k = Math.min(Math.max(W / FIELD.w, H / FIELD.h), (navTop - 12) / FIELD.band[1]);
+          k = Math.max(k, W / FIELD.w);
+          var oy = 0;
+          document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
+          document.documentElement.style.setProperty("--hotbg-y", oy + "px");
+          var Y = function (y) { return oy + y * k; };
+          /* the picks' row stands on the goal line */
+          var sb = slots.getBoundingClientRect().bottom;
+          turf.style.marginTop = Math.round(8 + Y(FIELD.goal) - sb) + "px";
+          /* the cards as tall as the band, and in the middle of it */
+          var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
+          if (!card) return;
+          var top = Y(FIELD.band[0]), band = Y(FIELD.band[1]) - top;
+          var z = Math.min(1, (band - 10) / card.getBoundingClientRect().height);
+          box.style.zoom = z;
+          var r = box.getBoundingClientRect();
+          var want = top + (band - r.height) / 2;
+          box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
         });
       };
       window.addEventListener("resize", centerHot);
