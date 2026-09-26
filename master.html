@@ -966,10 +966,12 @@
             font-weight: 700; font-size: 15px; }
   .drvwin--l { left: 2px; top: 3px; }
   .drvwin--r { right: 2px; bottom: 3px; }
-  /* the top club's number goes to the right, over the bottom club's, and the
-     down and distance takes the left (Jose, Sep 26, 2026) */
-  .drive--g .drvwin--l { left: auto; right: 2px; }
-  .drive--g .drvdd { right: auto !important; left: 2px !important; }
+  /* the two numbers share the top band, each club on its own side, and the
+     down and distance goes with the ball, over the yard line under the bar
+     (Jose, Sep 26, 2026) */
+  .drive--g .drvwin--r { top: 3px; bottom: auto; }
+  .drive--g .drvdd { display: none !important; }
+  .drive--g .drvat .drvatdd { display: block; font-size: 11.5px; color: #c9ccd2; margin-bottom: 1px; }
   /* the finger's own marks are HTML and not SVG: the plot is drawn on a
      viewBox stretched to the card's width, and a circle drawn in it comes
      out an egg */
@@ -5666,7 +5668,9 @@
     }
     var atEl = wrap.querySelector(".drvat");
     if (atEl) {
-      if (atEl.textContent !== st.at) atEl.textContent = st.at;
+      /* on the graph the down and distance rides over the yard line */
+      var atHtml = (graph && st.dd ? '<small class="drvatdd">' + st.dd + "</small>" : "") + (st.at || "");
+      if (atEl.dataset.said !== atHtml) { atEl.dataset.said = atHtml; atEl.innerHTML = atHtml; }
       /* the far ends are where the label would hang off the card */
       atEl.style.left = Math.max(9, Math.min(91, st.pos)) + "%";
     }
