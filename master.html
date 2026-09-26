@@ -13244,8 +13244,12 @@
         /* the section is .h2hx — it was rebuilt under that name and this
            lookup was never moved, so the whole block sat dead */
         var h = card.querySelector(".h2hx") || card.querySelector(".h2h");
-        if (h && stats.l && stats.r && stats.l.pyds !== null && stats.r.pyds !== null) {
-          var lv = stats.l.pyds, rv = stats.r.pyds, gap = lv - rv;
+        /* a passer who has not thrown yet is not in the box score at all: he
+           is nought, not missing, and one side missing held the other's yards
+           at 0 too -- Manning 56 read 0 while Brandon had not thrown
+           (Jose, Sep 26, 2026) */
+        if (h && stats.l && stats.r && (stats.l.pyds !== null || stats.r.pyds !== null)) {
+          var lv = stats.l.pyds || 0, rv = stats.r.pyds || 0, gap = lv - rv;
           var span = Math.max(Math.abs(gap), 60);
           var half = Math.min(Math.abs(gap) / span * 50, 50);
           var fill = h.querySelector(".h2hfill"), tick = h.querySelector(".h2htick");
