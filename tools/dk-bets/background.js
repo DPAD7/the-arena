@@ -1,8 +1,13 @@
-/* A click on the icon: the page reads its bets, and this sends them to the
-   board. The send is made from here, not the page, so DraftKings' own rules
-   about where the page may post do not apply. */
-const BOARD = "https://the-arenasports.pages.dev/bets?k=arena-001bff8ddf784985";
+/* A click on the icon asks the DraftKings page to read My Bets and send them
+   to the board. The page sends them itself and then says how it went; a page
+   that has to scroll and open every card can take longer than a message is
+   kept open, and waiting on one here came back as DK? (Sep 26, 2026).
 
+   The badge:  ...   reading
+               a number, green   sent: that many open bets
+               TAB, red   the page did not answer -- reload the DraftKings tab
+               BAL, red   no balance on the page -- not logged in, or not loaded
+               ERR, red   the board did not take it */
 function badge(text, color) {
   chrome.action.setBadgeText({ text: text });
   chrome.action.setBadgeBackgroundColor({ color: color });
@@ -10,24 +15,16 @@ function badge(text, color) {
 
 chrome.action.onClicked.addListener(async (tab) => {
   badge("...", "#8e8e93");
-  let got;
   try {
-    got = await chrome.tabs.sendMessage(tab.id, { read: true });
+    await chrome.tabs.sendMessage(tab.id, { read: true });
   } catch (e) {
-    badge("DK?", "#e2564d");     /* not a DraftKings page, or it needs a reload */
-    return;
+    badge("TAB", "#e2564d");
   }
-  /* no open bets is an answer too, and is sent; no balance means the page
-     had not drawn, and nothing is sent */
-  if (!got || !got.bets || typeof got.balance !== "number") { badge("DK?", "#e2564d"); return; }
-  try {
-    const r = await fetch(BOARD, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(got)
-    });
-    badge(r.ok ? String(got.bets.length) : "ERR", r.ok ? "#3fbf5a" : "#e2564d");
-  } catch (e) {
-    badge("ERR", "#e2564d");
-  }
+});
+
+chrome.runtime.onMessage.addListener((msg) => {
+  if (!msg || !msg.done) return;
+  if (msg.done === "sent") badge(String(msg.n), "#3fbf5a");
+  else if (msg.done === "nobalance") badge("BAL", "#e2564d");
+  else badge("ERR", "#e2564d");
 });

