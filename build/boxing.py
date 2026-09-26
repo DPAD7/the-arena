@@ -185,6 +185,12 @@ def dk_props(eid, a, b, nr):
                 return [od, oid]
         return None
 
+    def find_any(test):
+        for m, lab, od, oid in rows:
+            if m.startswith("Round Group Betting") and test(lab) and od:
+                return [od, oid]
+        return None
+
     def his(lab, man):
         return whoname.key(lab).startswith(whoname.key(man))
 
@@ -196,6 +202,15 @@ def dk_props(eid, a, b, nr):
     for n in range(1, nr + 1):
         e["rd%d" % n] = [find("Round Betting", lambda l, m=m, n=n: his(l, m) and l.endswith("Round %d" % n))
                          for m in (a, b)]
+    e["draw"] = [find("Fight Outcome", lambda l: l == "Draw")]
+    # the round groups, however the book cuts them: 1-2 and 3-4 on a short
+    # bout, 1-3 or 1-4 on a twelve-rounder
+    spans = sorted({tuple(map(int, re.search(r"Rounds (\d+)-(\d+)", lab).groups()))
+                    for m, lab, od, oid in rows
+                    if m.startswith("Round Group Betting") and re.search(r"Rounds (\d+)-(\d+)", lab)})
+    for lo, hi in spans:
+        e["rg%d-%d" % (lo, hi)] = [find_any(lambda l, m=m, lo=lo, hi=hi: his(l, m) and l.endswith("Rounds %d-%d" % (lo, hi)))
+                                   for m in (a, b)]
     return e
 
 

@@ -6132,6 +6132,22 @@
       for (var n = 1; n <= nr; n++) out.push([pre + " RD" + n, key + n]);
       return out;
     }
+    /* boxing: only what DraftKings sells on a bout. Winning a round is a
+       stoppage there, so the rounds sit under KO; no submissions, no UD or
+       split, no double chance (Jose, Sep 26, 2026: "will we ever get those
+       markets for Zuffa") */
+    if (/^zb-/.test(String(FS_BOUT))) {
+      var bp = FPROPS[FS_BOUT] || {};
+      var groups = Object.keys(bp).filter(function (k) { return /^rg\d+-\d+$/.test(k); })
+        .sort(function (x, y) { return parseInt(x.slice(2), 10) - parseInt(y.slice(2), 10); })
+        .map(function (k) { return [k, "RD" + k.slice(2), ["mko"], 2]; });
+      return {
+        "KO": [["ko", "BY KO", ["mko"], 2]].concat(byRound("rd", ["mko"])),
+        "DEC": [["dec", "BY DEC", ["mdec"], 2],
+                [null, "", ["mdec"], 5, [["GTD", "dist"], ["DRAW", "draw"]]]],
+        "FINISH": groups.concat([[null, "", ["mko"], 5, [["INSIDE", "nodist"]]]])
+      };
+    }
     var R = {
       "KO": [["ko", "BY KO", ["mko"], 2],
              ["koonly", "BY KO ONLY", ["mko"], 2]]
@@ -14628,6 +14644,11 @@
       var a = /^any(ko|sub)rd(\d+)$/.exec(key);
       if (a) t = a[1] === "ko" ? "Fight to End by KO in Round " + a[2]
                                : "Fight to End by Submission in Round " + a[2];
+    }
+    if (!t) {
+      var g = /^rg(\d+)-(\d+)$/.exec(key);
+      if (g) t = "$1 to Win in Rounds " + g[1] + "-" + g[2];
+      if (key === "draw") t = "Fight to End in a Draw";
     }
     if (!t) return key.toUpperCase();
     return t.replace("$1", who || "");
