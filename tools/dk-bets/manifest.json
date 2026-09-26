@@ -1,0 +1,16 @@
+{
+  "manifest_version": 3,
+  "name": "Arena DK Bets",
+  "version": "1.0.0",
+  "description": "Sends your DraftKings bets and balance from My Bets to the Arena board.",
+  "host_permissions": [
+    "https://*.draftkings.com/*",
+    "https://the-arenasports.pages.dev/*"
+  ],
+  "permissions": ["activeTab"],
+  "content_scripts": [
+    { "matches": ["https://*.draftkings.com/*"], "js": ["content.js"], "run_at": "document_idle" }
+  ],
+  "action": { "default_title": "Send my bets to the Arena" },
+  "background": { "service_worker": "background.js" }
+}

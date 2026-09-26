@@ -15340,10 +15340,54 @@
   BANK.legs = BANK.legs || {}; BANK.paid = BANK.paid || {};
   function bankKeep() { try { localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (e) {} }
   function money(n) { return "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
+  /* ---- DraftKings' own numbers, from the Arena DK Bets extension ----
+     The book fills at whatever it shows when the slip goes in, and the board
+     only knew the price it had when a price was marked: Army -198 here, -192
+     on the slip, $2.79 short (Jose, Sep 26, 2026: "math is off"). A sync from
+     My Bets (tools/dk-bets) is the truth: its balance is the balance, its
+     fills are the legs' prices, and a day it has settled is not paid twice. */
+  var DKB = null, DKB_T = 0;
+  function dkDay(placed) {
+    var m = /([A-Z][a-z]{2})[a-z]* (\d{1,2}), (\d{4})/.exec(placed || "");
+    if (!m) return "";
+    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(m[1]);
+    if (mo < 0) return "";
+    return dayKeyOf(new Date(Date.UTC(+m[3], mo, +m[2], 16)).toISOString());
+  }
+  function dkApply() {
+    if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) return false;
+    BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
+    (DKB.bets || []).forEach(function (bet) {
+      var d = dkDay(bet.placed);
+      if (!d) return;
+      BANK.out[d] = 1;
+      if (bet.status === "won" || bet.status === "lost") BANK.paid[d] = bet.status;
+      /* each gold leg takes the price its slip filled at */
+      (bet.legs || []).forEach(function (lg) {
+        var pick = String(lg.pick || "").toLowerCase(), ml = /moneyline/i.test(lg.market || "");
+        Object.keys(BANK.legs).forEach(function (id) {
+          var v = BANK.legs[id], lab = String(v.l || "").split(" \u00b7 ")[0].toLowerCase();
+          if (!lab || !pick || dayKeyOf(v.k || "") !== d) return;
+          var mine = ml ? / ml$/.test(lab) && pick.indexOf(lab.replace(/ ml$/, "")) === 0 : false;
+          if (mine && lg.odds) v.o = String(lg.odds).replace("-", "\u2212");
+        });
+      });
+    });
+    if (typeof DKB.balance === "number") BANK.bal = DKB.balance;
+    BANK.dkAt = DKB.at;
+    return true;
+  }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
     var moved = false;
+    if (Date.now() - DKB_T > 60000) {
+      DKB_T = Date.now();
+      fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (j) { if (j && j.at) { DKB = j; bankDraw(); } })
+        .catch(function () {});
+    }
     /* what the page shows of each gold leg is kept, so a leg on another tab
        or a finished card is still drawn */
     document.querySelectorAll("button.price.placed[data-oid]").forEach(function (b) {
@@ -15382,6 +15426,7 @@
       if (JSON.stringify(now) !== JSON.stringify(was)) { BANK.legs[id] = now; moved = true; }
     });
     Object.keys(BANK.legs).forEach(function (id) { if (!placed[id]) { delete BANK.legs[id]; moved = true; } });
+    if (dkApply()) moved = true;
     /* today's games only, by each game's own start on the Eastern clock:
        yesterday's gold is still on the board until the day's marks clear,
        and it is not part of today's run (Jose, Sep 25, 2026) */
