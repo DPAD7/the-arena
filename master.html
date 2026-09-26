@@ -3317,7 +3317,14 @@
   .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { padding: 0 !important; border-top: 0 !important;
     overflow: hidden; border-radius: 0 0 var(--card-r, 14px) var(--card-r, 14px); }
   .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) .h2hrow { gap: 0 !important; }
-  .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 44px; border-radius: 0; }
+  .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 52px; border-radius: 0; background: none !important; }
+  /* its top edge fades into the card the way the photos fade under the
+     names, so the colors rise out of the dark rather than start on a line
+     (Jose, Sep 26, 2026) */
+  .h2hbar--blend::before { content: ""; position: absolute; inset: 0; z-index: 0; background: var(--blend);
+    -webkit-mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.55) 40%, #000 80%);
+    mask-image: linear-gradient(180deg, transparent 0, rgba(0,0,0,.55) 40%, #000 80%); }
+  .h2hbar--blend > * { z-index: 1; }
   .h2hbar--blend .h2hchip.gyd { font-size: 16px !important; }
   .h2hbar--blend .h2hfill, .h2hbar--blend .h2htick, .h2hbar--blend .h2hzero { display: none !important; }
   .h2hbar--blend .h2hchip.gyd { position: absolute !important; top: 50% !important; left: 14px !important; right: auto !important;
@@ -7888,8 +7895,9 @@
       var vs0 = bar.querySelector(".gvs");
       if (vs0) vs0.style.left = at + "%";
       bar.classList.add("h2hbar--blend");
-      bar.style.background = "linear-gradient(90deg, " + cL + " 0%, " + cL + " " + Math.max(0, at - 18) + "%, " +
-                             cR + " " + Math.min(100, at + 18) + "%, " + cR + " 100%)";
+      bar.style.background = "";
+      bar.style.setProperty("--blend", "linear-gradient(90deg, " + cL + " 0%, " + cL + " " + Math.max(0, at - 18) + "%, " +
+                             cR + " " + Math.min(100, at + 18) + "%, " + cR + " 100%)");
       if (fill) fill.style.width = "0";
       if (chip2) {
         chip2.classList.add("gyd");
