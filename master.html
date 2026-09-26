@@ -177,6 +177,9 @@
   .cashfab .fabfill--on { opacity: 1; }
   .cashfab .fabfill--ok { background: rgba(63, 191, 90, 0.55); }
   .cashfab .fabfill--bad { background: rgba(255, 91, 91, 0.55); }
+  .slipcard .slwas { color: #8e8e93; font-weight: 600; margin-right: 4px; }
+  .slipcard .slboost { margin-top: 8px; display: inline-block; padding: 3px 8px; border-radius: 6px;
+    background: #6a2cf0; color: #fff; font: 800 11px/1.2 Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .04em; }
   .cashfab .fabfill--none { background: rgba(142, 142, 147, 0.55); }
   .cashfab .cashbag { position: relative; z-index: 1; }
   .cashfab .cashbag { width: 34px; height: 34px; display: block; pointer-events: none;
@@ -15585,7 +15588,10 @@
         return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + slipAvatars(ls) +
           '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
           '<div class="slfoot"><b>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</b><span class="slpay">' +
-          esc(String(bet.odds || "").replace("-", "\u2212")) + '</span></div></div>' +
+          /* a boosted slip shows what it was, struck, beside what it pays at */
+          (bet.boosted && bet.was ? '<s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s> ' : "") +
+          esc(String(bet.odds || "").replace("-", "\u2212")) + '</span></div>' +
+          (bet.boost ? '<div class="slboost">' + esc(bet.boost.toUpperCase()) + '</div>' : "") + '</div>' +
           '<div class="cashrcpt"><div><span>Amount</span><b>' + money(bet.wager || 0) + '</b></div>' +
           '<div><span>Total payout</span><b class="cashpay">' + money(bet.topay || 0) + '</b></div></div>';
       }).join("");

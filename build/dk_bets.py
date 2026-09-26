@@ -100,14 +100,23 @@ def main():
 
     bets = []
     for b in raw:
+        # a profit boost does not move the slip's own price: it rides in
+        # "bonus" / "playerBonus", with the boosted price and what it pays
+        # ("+468" boosted 50% to "+703", $803 on $100 -- Sep 26, 2026)
+        bo = b.get("bonus") or {}
+        pb = b.get("playerBonus") or {}
+        bodds = plain(bo.get("boostDisplayOdds") or pb.get("boostedDisplayOdds"))
+        bpay = bo.get("boostMaxReturns") or pb.get("maxWinningAmount")
         bets.append({
             "id": b.get("receiptId") or b.get("betId"),
             "type": b.get("type"),
-            "odds": plain(b.get("displayOdds")),
-            "was": plain(b.get("originalDisplayOdds")),
-            "boosted": plain(b.get("displayOdds")) != plain(b.get("originalDisplayOdds") or b.get("displayOdds")),
+            "odds": bodds or plain(b.get("displayOdds")),
+            "was": plain(b.get("originalDisplayOdds") or b.get("displayOdds")),
+            "boosted": bool(bodds),
+            "boost": ("+%d%% %s" % (round((bo.get("boostValue") or 0) * 100) or pb.get("boostPercentage") or 0,
+                                     "profit boost" if "Profit" in (bo.get("boostType") or pb.get("type") or "") else "boost")) if bodds else "",
             "wager": b.get("stake"),
-            "topay": b.get("potentialReturns"),
+            "topay": bpay or b.get("potentialReturns"),
             "placed": b.get("placementDate"),
             "status": "open",
             "legs": [{"sel": x.get("selectionId"), "pick": x.get("selectionDisplayName"),
