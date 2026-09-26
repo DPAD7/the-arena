@@ -1843,7 +1843,7 @@
     background: #000; border: 12px solid #cdd0d6; border-radius: 4px;
     box-shadow: 0 6px 18px rgba(0,0,0,.45); color: var(--green);
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800;
-    font-size: 30px; font-variant-numeric: tabular-nums; pointer-events: none; }
+    font-size: 30px; font-variant-numeric: tabular-nums; pointer-events: auto; cursor: pointer; }
   html.hotlock #hotboard.on { display: flex; }
   /* the three sets under the carousel, on the grass above the line: the
      carousel changes in place (Jose, Sep 25, 2026: "just load the carousel,
@@ -10103,7 +10103,16 @@
           /* the board is its own piece on the page, pinned over the photo's:
              nothing it sits inside can move or scale it */
           var brd = document.getElementById("hotboard");
-          if (!brd) { brd = document.createElement("div"); brd.id = "hotboard"; document.body.appendChild(brd); }
+          if (!brd) {
+            brd = document.createElement("div"); brd.id = "hotboard"; document.body.appendChild(brd);
+            /* the board is the price, and the price is the button: a tap puts
+               the picks on the slip, as the old one did (Jose, Sep 25, 2026) */
+            brd.addEventListener("click", function (e) {
+              e.stopPropagation();
+              var f3 = document.querySelector(".fturf .fslots .fpay");
+              if (f3 && f3.textContent) f3.click();
+            });
+          }
           /* the mockup he picked: the black face the photo's height and 2.5
              times its width, a light-gray frame round it, the price large */
           var fw = (sbd[2] - sbd[0]) * k * 2.53, fh = (sbd[3] - sbd[1]) * k;
