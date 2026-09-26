@@ -66,6 +66,7 @@ jobs:
           NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
           # what the double taps read is fetched back from the site with it
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          DK_COOKIES: ${{ secrets.DK_COOKIES }}
         run: python build/refresh.py --if-due
 
       - name: Keep what it wrote

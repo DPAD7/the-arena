@@ -15388,7 +15388,13 @@
     if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) return false;
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
     (DKB.bets || []).forEach(function (bet) {
-      var d = dkDay(bet.placed);
+      /* the sweep sends the book's own ISO time and selection ids; the
+         extension sent the screen's words */
+      var d = /^\d{4}-\d\d-\d\dT/.test(bet.placed || "") ? dayKeyOf(bet.placed) : dkDay(bet.placed);
+      (bet.legs || []).forEach(function (lg) {
+        var v = lg.sel && BANK.legs[lg.sel];
+        if (v && lg.odds) v.o = String(lg.odds).replace("-", "\u2212");
+      });
       if (!d) return;
       BANK.out[d] = 1;
       if (bet.status === "won" || bet.status === "lost") BANK.paid[d] = bet.status;
