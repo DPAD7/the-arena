@@ -3316,11 +3316,17 @@
      leader filling more of it (Jose, Sep 26, 2026: "that glass will be in
      the columns instead, we don't need the extra container") */
   .gcard.gcard--v3 > .gbody.h2hx { display: none !important; }
-  .gline.gyds.gyds--blend { position: relative; border-radius: 10px; overflow: hidden; margin: 4px 0;
+  /* the nav's own glass: dark, frosted, a light edge, the clubs only a tint
+     under it and a sheen across the top (Jose, Sep 26, 2026: "more glass-like,
+     like the bottom nav") */
+  .gline.gyds.gyds--blend { position: relative; border-radius: 12px; overflow: hidden; margin: 4px 0;
     -webkit-backdrop-filter: blur(22px) saturate(1.6); backdrop-filter: blur(22px) saturate(1.6);
-    background: rgba(28, 28, 30, 0.28); border: 1px solid rgba(255, 255, 255, 0.14) !important; }
+    background: rgba(28, 28, 30, 0.55); border: 1px solid rgba(255, 255, 255, 0.14) !important;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.10); }
   .gline.gyds.gyds--blend::before { content: ""; position: absolute; inset: 0; z-index: 0;
-    background: var(--blend); opacity: .72; }
+    background: var(--blend); opacity: .38; }
+  .gline.gyds.gyds--blend::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 55%; z-index: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,0)); pointer-events: none; }
   .gline.gyds.gyds--blend > * { position: relative; z-index: 1; }
   .gline.gyds.gyds--blend > .gmk { position: absolute; top: 50%; transform: translate(-50%, -50%); z-index: 2; }
   .gline.gyds.gyds--blend .gh2h { text-shadow: 0 1px 2px rgba(0,0,0,.6); }
