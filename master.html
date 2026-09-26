@@ -7900,6 +7900,9 @@
         var ymk = yr.querySelector(".gmk");
         /* the VS follows the blend, but stays between the two numbers */
         if (ymk) ymk.style.left = Math.max(38, Math.min(62, at)) + "%";
+        /* each name and his price stand level with the glass row
+           (Jose, Sep 26, 2026: "why isn't it in line with the name") */
+        requestAnimationFrame(function () { levelNames(card, yr); });
       }
       bar.classList.add("h2hbar--blend");
       bar.style.background = "";
@@ -7919,6 +7922,18 @@
     }
   }
   window.stateV3 = stateV3;
+  function levelNames(card, row) {
+    if (!row || !row.offsetHeight) return;
+    var rr = row.getBoundingClientRect(), mid = rr.top + rr.height / 2;
+    card.querySelectorAll(".gside .h2hnm").forEach(function (nm) {
+      /* the line that holds the name: the price if he has one, else the name */
+      var ln = nm.querySelector(":scope > .h2hodds") || nm.querySelector(".h2hnmtx") || nm;
+      var lr = ln.getBoundingClientRect();
+      if (!lr.height) return;
+      var now = parseFloat(getComputedStyle(nm).bottom) || 0;
+      nm.style.bottom = Math.round(now + (lr.top + lr.height / 2 - mid)) + "px";
+    });
+  }
   /* the Kalshi shirt as two shading layers, dyed at runtime and kept */
   var DYED = {}, DYETPL = null;
   function dyeJersey(body, sleeve, done) {
