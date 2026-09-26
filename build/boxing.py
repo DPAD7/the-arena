@@ -247,8 +247,56 @@ METHOD = {"UD": "Decision", "SD": "Decision", "MD": "Decision", "PTS": "Decision
           "KO": "KO/TKO", "TKO": "KO/TKO", "RTD": "KO/TKO", "DQ": "DQ"}
 
 
+def ufc_results(num):
+    """Zuffa's own results page on UFC.com, written live at ringside: each
+       "A defeats B via TKO - Round 3, 2:12" line as it lands. The official
+       word, and faster than Wikipedia (Jose, Sep 26, 2026: "we don't have
+       another credible source?")."""
+    try:
+        t = rq.get("https://www.ufc.com/news/zuffa-boxing-%s-results" % num,
+                   impersonate="chrome124", timeout=30).text
+    except Exception:
+        return []
+    tx = re.sub(r"\s+", " ", re.sub(r"<[^>]+>", " ", t))
+    out = []
+    for m in re.finditer(r"([A-Z][\w'.\- ]+?) (?:defeats|def\.) ([A-Z][\w'.\- ]+?) via ([A-Za-z ]+?)(?: \((?:[^)]*)\))?(?: [\u2013\-] Round (\d+)(?:, (\d+:\d\d))?)?(?= |$)", tx):
+        a, b, how = m.group(1).strip(), m.group(2).strip(), m.group(3).strip()
+        # the weight class sits before the names: "Cruiserweight: Rogelio Romero"
+        a = a.split(": ")[-1]
+        short = {"TKO": "TKO", "KO": "KO", "Unanimous Decision": "UD", "Split Decision": "SD",
+                 "Majority Decision": "MD", "Disqualification": "DQ", "Corner Retirement": "RTD"}
+        first = how.lower().split()[0] if how else ""
+        how = {"unanimous": "UD", "split": "SD", "majority": "MD", "decision": "DEC", "points": "PTS",
+               "technical": "TD", "disqualification": "DQ", "corner": "RTD"}.get(first) or \
+              next((v for k, v in short.items() if how.lower().startswith(k.lower())), how.upper()[:4])
+        out.append({"w": a, "l": b, "how": how, "rd": m.group(4) or "", "time": m.group(5) or ""})
+    for m in re.finditer(r"([A-Z][\w'.\- ]+?) vs\.? ([A-Z][\w'.\- ]+?) (?:ends in a|declared a) (draw|no contest)", tx, re.I):
+        out.append({"w": "", "a": m.group(1).split(": ")[-1].strip(), "b": m.group(2).strip(), "how": m.group(3).upper()})
+    return out
+
+
 def main():
     evs = events(wiki(PAGE))
+    # the promoter's own results laid over Wikipedia's for any card it has
+    # written: a bout it has settled takes its word
+    for e in evs:
+        num = re.match(r"zb-(\d+)$", e["id"])
+        if not num:
+            continue
+        for r in ufc_results(num.group(1)):
+            for bt in e["bouts"]:
+                ka, kb = whoname.key(bt["a"]), whoname.key(bt["b"])
+                wa, wl = whoname.key(r.get("w") or r.get("a") or ""), whoname.key(r.get("l") or r.get("b") or "")
+                if {ka, kb} != {wa, wl}:
+                    continue
+                if not r.get("w"):
+                    bt["res"] = "drew" if "DRAW" in r["how"] else "nc"
+                elif wa == ka:
+                    bt["res"] = "def."
+                else:
+                    bt["a"], bt["b"], bt["alink"], bt["blink"] = bt["b"], bt["a"], bt["blink"], bt["alink"]
+                    bt["res"] = "def."
+                bt["method"], bt["round"], bt["time"] = r["how"], r.get("rd") or bt.get("round") or "", r.get("time") or ""
     dk, dkraw = dk_bouts()
     s = pagefile.read()
     cards, fights, results, book, fprops = [], [], {}, {}, {}

@@ -376,6 +376,22 @@ def card_running():
     return None
 
 
+def boxing_running():
+    """A Zuffa card under way: first bell 30 minutes ago to 8 hours after it."""
+    page = open(D + "/master.html").read()
+    m = re.search(r"var BOXFIGHTS = (\[.*?\]);\n", page, re.S)
+    if not m:
+        return None
+    for f in json.loads(m.group(1)):
+        try:
+            t = datetime.datetime.fromisoformat(f[2].replace("Z", "+00:00"))
+        except Exception:
+            continue
+        if t - datetime.timedelta(minutes=30) <= NOW <= t + datetime.timedelta(hours=8):
+            return f[0]
+    return None
+
+
 def game_running():
     """A football game under way: kicked off and less than five hours old.
        While one is on, every pass reads its box score for who is actually
@@ -543,7 +559,7 @@ if "--if-due" in sys.argv:
             log("unsettled: %s %s is final and has no result" % (lg, nm))
         late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
                         owed[0][0] == "mma")]
-    if not hit and not drawn and not late and not hub and not ranks and not running and not playing:
+    if not hit and not drawn and not late and not hub and not ranks and not running and not playing and not boxing_running():
         os._exit(0)          # no interpreter shutdown to get stuck in
     log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
         "".join("%s, %d min after" % (n or "?", m) for _, n, m, _f in late) +
@@ -566,6 +582,16 @@ if "--if-due" in sys.argv:
                                   "--project-name=the-arenasports", "--branch=main"],
                                  cwd=D + "/site", capture_output=True, text=True, timeout=300)
             log("   live passer fixed: deployed" if dep.returncode == 0 else "   live passer fixed: DEPLOY FAILED")
+    # a Zuffa card on tonight: its results from the promoter's own page every
+    # pass while it runs (Jose, Sep 26, 2026)
+    if not DRY and boxing_running():
+        r = subprocess.run([sys.executable, D + "/build/boxing.py"], capture_output=True, text=True, cwd=D)
+        for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
+            log("   boxing (live): " + line)
+        pagefile.deployable(pagefile.read())
+        dep = subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
+                             cwd=D + "/site", capture_output=True, text=True, timeout=300)
+        log("   boxing results: deployed" if dep.returncode == 0 else "   boxing results: DEPLOY FAILED")
     if running and not drawn:
         # the card is on: read the book again for the prices and for when the
         # bouts that are left now start (Jose, Sep 18, 2026)
