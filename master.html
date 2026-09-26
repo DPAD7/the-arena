@@ -1530,6 +1530,17 @@
   .gcard.gcard--v3 > .gbody .price,
   .gcard.gcard--v3 > .gbody .ghost { width: auto; min-width: 52px; max-width: none;
     height: 28px; padding: 0 8px; border-radius: 9px; font-size: 13px; }
+  /* the prices went up beside the names, so the bar runs the whole foot */
+  .gcard.gcard--v3 > .gbody .h2hrow { grid-template-columns: 1fr; }
+  .gcard.gcard--v3 > .gbody .h2hend { display: none !important; }
+  .gcard--v3 .h2hnm .h2hnmtx { white-space: nowrap; }
+  .gcard.gcard--v3 .h2hnm .gschool:has(.h2hodds) { display: flex; align-items: center; justify-content: center; margin-top: 3px; }
+  .gcard--v3 .h2hnm:has(.h2hodds) { overflow: visible !important; text-overflow: clip !important; }
+  .gcard--v3 .h2hnm .h2hodds { display: inline-flex; vertical-align: middle; margin: 0 0 0 7px; }
+  .gcard--v3 .gside--r .h2hnm .h2hodds { margin: 0 7px 0 0; }
+  .gcard--v3 .h2hnm .h2hodds .price, .gcard--v3 .h2hnm .h2hodds .ghost {
+    width: auto; min-width: 46px; max-width: none; height: 26px; padding: 0 7px; border-radius: 9px;
+    font-size: 13px; text-shadow: none; }
   .gcard.gcard--v3 .h2hbar { position: relative; overflow: visible; height: 7px;
     border-radius: 4px; background: rgba(255,255,255,.16); }
   /* --- once the game is on: the mock's live and final rows --- */
@@ -4061,6 +4072,13 @@
     var lq = card && card.dataset.lqb ? famName(card.dataset.lqb) : "";
     var rq = card && card.dataset.rqb ? famName(card.dataset.rqb) : "";
 
+    /* head to head first: its price rides his name now, which is inside his
+       club's side, and the club rule below would call it a moneyline */
+    var h2h0 = btn.closest(".h2hodds");
+    if (h2h0 && card) {
+      var hs = card.querySelectorAll(".h2hodds");
+      return done(hs[0] === h2h0 ? lq : rq, "H2H");
+    }
     /* the moneyline, up in the heading beside its club */
     var club = btn.closest(".gteam");
     if (club) return done(teamLabel(club, card), "ML");
@@ -4127,7 +4145,7 @@
     /* head to head, under his own number */
     var h2ho = btn.closest(".h2hodds");
     if (h2ho) {
-      var slots = btn.closest(".h2hx").querySelectorAll(".h2hodds");
+      var slots = btn.closest(".gcard").querySelectorAll(".h2hodds");
       return done(slots[0] === h2ho ? lq : rq, "H2H");
     }
 
@@ -7322,6 +7340,35 @@
      from the season card to the NFL page to the week, and loses it everywhere
      the moment ESPN lifts him (Jose, Sep 22, 2026). Seated on every paint
      rather than built once, because the wire lands after the cards do. */
+  /* a name and its price on one line inside his half: the name gives up a
+     point of type at a time until the line fits, never its letters */
+  function fitName(nm) {
+    var tx = nm && nm.querySelector(".h2hnmtx");
+    if (!tx) return;
+    tx.style.fontSize = "";
+    nm.style.paddingLeft = nm.style.paddingRight = "";
+    /* his half runs under the middle column, so the room is only what shows
+       beside it, and the line is centered in that */
+    var card = nm.closest(".gcard"), mid = card && card.querySelector(".gline");
+    mid = mid && mid.parentElement;
+    if (mid) {
+      var nr = nm.getBoundingClientRect(), mr = mid.getBoundingClientRect();
+      if (nm.closest(".gside--l") && mr.left < nr.right) nm.style.paddingRight = Math.max(0, nr.right - mr.left) + "px";
+      if (nm.closest(".gside--r") && mr.right > nr.left) nm.style.paddingLeft = Math.max(0, mr.right - nr.left) + "px";
+    }
+    var room = nm.clientWidth - (parseFloat(nm.style.paddingLeft) || 0) - (parseFloat(nm.style.paddingRight) || 0) - 8,
+        fs = parseFloat(getComputedStyle(tx).fontSize) || 17;
+    var line = function () {
+      var w = 0;
+      [].forEach.call(nm.children, function (k) {
+        var cs = getComputedStyle(k);
+        if (cs.display === "block" || cs.position === "absolute" || k.classList.contains("gschool")) return;
+        w += k.getBoundingClientRect().width + (parseFloat(cs.marginLeft) || 0) + (parseFloat(cs.marginRight) || 0);
+      });
+      return w;
+    };
+    while (room > 0 && line() > room && fs > 10) { fs -= 1; tx.style.fontSize = fs + "px"; }
+  }
   function seatHurt(card) {
     if (!card || card.dataset.v3 !== "1" || card.dataset.bout) return;
     [["l", card.dataset.lqbid], ["r", card.dataset.rqbid]].forEach(function (p) {
@@ -7515,9 +7562,26 @@
     [["l", sides[0]], ["r", sides[1]]].forEach(function (p) {
       var mine = names.querySelector(".h2hside--" + p[0]);
       if (mine) p[1].appendChild(mine);
+      /* his head-to-head price rides his name, on the side toward the middle,
+         and the bar takes the whole foot (Jose, Sep 25, 2026: "move the h2h
+         to the right side of the qb name ... extend the bar to the full
+         width") */
       var odds = mine && mine.querySelector(".h2hodds");
-      var end = bar && bar.querySelectorAll(".h2hend")[p[0] === "l" ? 0 : 1];
-      if (odds && end) end.appendChild(odds);
+      var nm0 = mine && mine.querySelector(".h2hnm");
+      if (odds && nm0) {
+        /* the name in its own span, so a long one can shrink to fit beside
+           the price rather than push it off the card (Grunkemeyer) */
+        var tx0 = nm0.firstChild;
+        if (tx0 && tx0.nodeType === 3) {
+          var tx = document.createElement("span");
+          tx.className = "h2hnmtx";
+          nm0.insertBefore(tx, tx0);
+          tx.appendChild(tx0);
+        }
+        if (p[0] === "l") nm0.insertBefore(odds, nm0.childNodes[1] || null);
+        else nm0.insertBefore(odds, nm0.firstChild);
+        requestAnimationFrame(function () { fitName(nm0); });
+      }
       var lg0 = p[1].querySelector("img.glogo");
       var ab = (lg0 || {}).alt || "";
       /* his record sits beside his name; his club or school goes under it, and
@@ -7541,6 +7605,15 @@
         sch.className = "gschool";
         sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
         nm.appendChild(sch);
+      }
+      /* a college card: his name alone on top, the school with his price
+         beside it underneath; the NFL keeps the price by the name
+         (Jose, Sep 25, 2026) */
+      var sch1 = college && nm && nm.querySelector(".gschool");
+      var od1 = nm && nm.querySelector(":scope > .h2hodds");
+      if (sch1 && od1) {
+        if (p[0] === "l") sch1.appendChild(od1); else sch1.insertBefore(od1, sch1.firstChild);
+        requestAnimationFrame(function () { fitName(nm); });
       }
       if (!college && nm) {
         var drop = nm.querySelector(".gschool");
@@ -14536,7 +14609,7 @@
 
     var lq = famName(card.dataset.lqb);
     var rq = famName(card.dataset.rqb);
-    var ends = card.querySelectorAll(".h2hend"), slots = card.querySelectorAll(".h2hx .h2hodds");
+    var ends = card.querySelectorAll(".h2hend"), slots = card.querySelectorAll(".h2hodds");
     ends.forEach(function (end, i) {
       var b = slots[i] ? slots[i].querySelector("button.price") : null;
       var n = end.querySelector(".trkbox");
