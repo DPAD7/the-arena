@@ -3316,7 +3316,10 @@
      2026: "make it the whole section, fill it") */
   .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { padding: 0 !important; border-top: 0 !important;
     overflow: hidden; border-radius: 0 0 var(--card-r, 14px) var(--card-r, 14px); }
-  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) .h2hrow { gap: 0 !important; }
+  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) .h2hrow { gap: 0 !important; margin: 0 !important; }
+  /* no strip of dark between the photos and the foot: the fade starts where
+     they end (Jose, Sep 26, 2026: "there's a gap from the bottom of the images") */
+  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { margin-top: -2px !important; }
   .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 52px; border-radius: 0; background: none !important; }
   /* its top edge fades into the card the way the photos fade under the
      names, so the colors rise out of the dark rather than start on a line
