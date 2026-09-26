@@ -3,6 +3,8 @@
    after. Each card is read by the test ids the page puts on it, with its own
    text as the fallback, so a renamed id does not lose the bet. */
 (function () {
+  if (window.__arenaDkBets) return;      /* put in twice: once is enough */
+  window.__arenaDkBets = true;
   function money(t) {
     const m = /\$\s*([\d,]+(?:\.\d\d)?)/.exec(t || "");
     return m ? parseFloat(m[1].replace(/,/g, "")) : null;
