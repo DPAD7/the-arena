@@ -46,13 +46,15 @@ export async function onRequest({ request, env }) {
     let body = null;
     try { body = await request.json(); } catch (e) { return ok({ error: "bad" }, 400); }
     const bets = Array.isArray(body && body.bets) ? body.bets.slice(0, 500) : [];
-    /* a sync that read nothing keeps what was there: an empty list is a page
-       that had not drawn yet, not a book with no bets */
+    /* only open bets are sent, so an empty list can be the truth: it is taken
+       when the sync also read a balance, which says the page had drawn; with
+       no balance it is a page that had not, and what was there is kept */
     let keep = null;
     try { keep = JSON.parse((await env.ARENA.get(SLOT)) || "null"); } catch (e) { keep = null; }
+    const drew = typeof body.balance === "number";
     const out = {
-      balance: typeof body.balance === "number" ? body.balance : (keep && keep.balance) || null,
-      bets: bets.length ? bets : ((keep && keep.bets) || []),
+      balance: drew ? body.balance : (keep && keep.balance) || null,
+      bets: bets.length || drew ? bets : ((keep && keep.bets) || []),
       at: Date.now()
     };
     await env.ARENA.put(SLOT, JSON.stringify(out));
