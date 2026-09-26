@@ -185,11 +185,24 @@
   .slipcard--open .slpicks { display: block; }
   .slipcard .slpicks li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0;
     border-bottom: 1px solid rgba(255,255,255,.06); font-size: 14px; color: #e6e6e6; }
+  .slipcard .slpicks li.slnamerow { display: block; border-bottom: 0; font-size: 15px; line-height: 1.35; color: #fff; }
+  .slipcard .slpicks li.slboostrow { display: flex; align-items: center; justify-content: flex-start; gap: 10px; }
+  .slipcard .slpicks li.slboostrow .slboost { margin-top: 0; }
+  .slipcard .slpicks li.slboostrow b { line-height: 1; }
   .slipcard .slpicks li.slboostrow { border-bottom: 0; padding-top: 10px; }
   .slipcard .slpicks li b { color: #c9ccd2; font-variant-numeric: tabular-nums; }
   .slipcard .cashrcpt--in { margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,.14); }
   .cashsheet .slipcard + .slipcard { margin-top: 12px; }
   .cashday { margin-top: 14px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.22); font-weight: 700; }
+  .slipcard .slgrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px 8px; margin-top: 12px;
+    padding-top: 10px; border-top: 1px dashed rgba(255,255,255,.14); text-align: center; }
+  .slipcard .slgrid b { font: 800 19px/1.1 Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
+    font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .slipcard .slgrid .slgodds, .slipcard .slgrid .cashpay { color: var(--green); }
+  .slipcard.slday { background: none; border-color: transparent; padding-top: 0; }
+  .slipcard.slday .slgrid { border-top: 1px solid rgba(255,255,255,.22); margin-top: 4px; }
+  .slipcard .slgrid span { font: 700 11px/1.2 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em;
+    text-transform: uppercase; color: #8e8e93; }
   .slipcard .slwas { color: #8e8e93; font-weight: 600; margin-right: 4px; }
   .slipcard .slboost { margin-top: 8px; display: inline-block; padding: 3px 8px; border-radius: 6px;
     background: #6a2cf0; color: #fff; font: 800 11px/1.2 Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .04em; }
@@ -15615,18 +15628,12 @@
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way
            DraftKings' own slip does (Jose, Sep 26, 2026) */
-        /* every leg the same way, with its own price; a leg DraftKings folded
-           into a same-game pair carries none of its own, so the board's is
-           used (Jose, Sep 26, 2026: "just list it how we list it") */
-        var rows = (bet.legs || []).map(function (lg, i) {
-          var o = lg.odds;
-          if (!o) {
-            var b1 = document.querySelector('button.price[data-oid="' + (window.CSS && CSS.escape ? CSS.escape(lg.sel) : lg.sel) + '"]');
-            o = b1 ? (b1.dataset.odds || b1.textContent.trim()) : "";
-          }
-          return '<li><span>' + esc(ls[i].l.split(" \u00b7 ")[0]) + '</span><b>' + esc(String(o || "").replace("-", "\u2212")) + '</b></li>';
-        }).join("") +
-          (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span></li>' : "");
+        /* the names as one line, the way the slip always read; the legs'
+           prices stay behind the page (Jose, Sep 26, 2026) */
+        var rows = '<li class="slnamerow">' + esc(slipNames(ls)) + '</li>' +
+          (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span>' +
+            /* the price before the boost, beside the boost itself */
+            (bet.was ? '<b><s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s></b>' : "") + '</li>' : "");
         /* the arrow rides right after the last icon, however many there are,
            and opens the legs under them (Jose, Sep 26, 2026) */
         var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
@@ -15635,19 +15642,21 @@
         var avs = slipAvatars(ls).replace(/<\/div>$/, arrow + "</div>");
         return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + avs +
           '<ul class="slpicks">' + rows + '</ul>' +
-          '<div class="slfoot"><b>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</b><span class="slpay">' +
-          /* a boosted slip shows what it was, struck, beside what it pays at */
-          (bet.boosted && bet.was ? '<s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s> ' : "") +
-          esc(String(bet.odds || "").replace("-", "\u2212")) + '</span></div>' +
-          /* the receipt inside its own slip, not under it */
-          '<div class="cashrcpt cashrcpt--in"><div><span>Amount</span><b>' + money(bet.wager || 0) + '</b></div>' +
-          '<div><span>Total payout</span><b class="cashpay">' + money(bet.topay || 0) + '</b></div></div></div>';
+          /* one line of three: the price, what went in, what it pays, with
+             what each is written underneath (Jose, Sep 26, 2026) */
+          '<div class="slgrid">' +
+          '<b class="slgodds">' + esc(String(bet.odds || "").replace("-", "\u2212")) + '</b>' +
+          '<b>' + money(bet.wager || 0) + '</b>' +
+          '<b class="cashpay">' + money(bet.topay || 0) + '</b>' +
+          '<span>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</span><span>Amount</span><span>Total payout</span>' +
+          '</div></div>';
       }).join("") +
       /* the day at the foot: what is in, and what it all pays (Jose, Sep 26, 2026) */
-      (open.length > 1 ? '<div class="cashrcpt cashday"><div><span>Total wagered</span><b>' +
-        money(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b></div>' +
-        '<div><span>Total payout</span><b class="cashpay">' +
-        money(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b></div></div>' : "");
+      (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
+        '<b>' + open.length + '</b>' +
+        '<b>' + money(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
+        '<b class="cashpay">' + money(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
+        '<span>Slips today</span><span>Wagered</span><span>Total payout</span></div></div>' : "");
     } else if (!legs.length) {
       box.innerHTML = "";
     } else {
