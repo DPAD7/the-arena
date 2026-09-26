@@ -170,6 +170,15 @@
   }
   .cashfab.drag { transition: none; cursor: grabbing; }
   /* the money bag he picked, inked in the gold (Jose, Sep 25, 2026) */
+  .cashfab { overflow: hidden; }
+  .cashfab .fabfill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none;
+    background: rgba(255, 255, 255, 0.28); opacity: 0;
+    transition: height .45s cubic-bezier(.22, 1, .36, 1), background-color .2s ease, opacity .35s ease; }
+  .cashfab .fabfill--on { opacity: 1; }
+  .cashfab .fabfill--ok { background: rgba(63, 191, 90, 0.55); }
+  .cashfab .fabfill--bad { background: rgba(255, 91, 91, 0.55); }
+  .cashfab .fabfill--none { background: rgba(142, 142, 147, 0.55); }
+  .cashfab .cashbag { position: relative; z-index: 1; }
   .cashfab .cashbag { width: 34px; height: 34px; display: block; pointer-events: none;
     background: #e3b341;
     -webkit-mask: url(ico/moneybag.png) center / contain no-repeat;
@@ -15377,17 +15386,25 @@
     BANK.dkAt = DKB.at;
     return true;
   }
+  function dkPull(done) {
+    DKB_T = Date.now();
+    return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        if (j && j.at) { DKB = j; bankDraw(); }
+        /* read, and was the last sync from the book recent: six hours */
+        if (done) done(!!j, !!(j && j.at && Date.now() - j.at < 6 * 3600000));
+      })
+      .catch(function () { if (done) done(false); });
+  }
+  window._dkPull = dkPull;
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
     var moved = false;
-    if (Date.now() - DKB_T > 60000) {
-      DKB_T = Date.now();
-      fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
-        .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (j) { if (j && j.at) { DKB = j; bankDraw(); } })
-        .catch(function () {});
-    }
+    /* read once when the page opens; after that only on a double tap of the
+       bag (Jose, Sep 26, 2026: "every min?") */
+    if (!DKB_T) dkPull();
     /* what the page shows of each gold leg is kept, so a leg on another tab
        or a finished card is still drawn */
     document.querySelectorAll("button.price.placed[data-oid]").forEach(function (b) {
@@ -15528,11 +15545,35 @@
       moved = true; fab.classList.add("drag"); sheet.hidden = true;
       place(ox + dx, oy + dy);
     });
+    /* a double tap reads the bets the DK extension sent, the fill climbing
+       the bag and going green when it is in, red if it fails, the way the
+       helmet's does (Jose, Sep 26, 2026) */
+    var fillEl = document.createElement("span");
+    fillEl.className = "fabfill";
+    fab.insertBefore(fillEl, fab.firstChild);
+    var tapT = null, fadeT = null;
+    function pullNow() {
+      clearTimeout(fadeT);
+      fillEl.className = "fabfill fabfill--on";
+      fillEl.style.height = "35%";
+      setTimeout(function () { if (fillEl.style.height === "35%") fillEl.style.height = "70%"; }, 250);
+      (window._dkPull || function (d) { d(false); })(function (ok, fresh) {
+        fillEl.style.height = "100%";
+        /* green: a fresh sync; grey: read, but nothing new from the book in
+           six hours; red: the read failed (Jose, Sep 26, 2026) */
+        fillEl.classList.add(!ok ? "fabfill--bad" : fresh ? "fabfill--ok" : "fabfill--none");
+        fadeT = setTimeout(function () { fillEl.className = "fabfill"; fillEl.style.height = "0"; }, 2500);
+      });
+    }
     function up() {
       if (!down) return;
       down = false; fab.classList.remove("drag");
-      if (moved) settle();
-      else if (sheet.hidden) openSheet(); else sheet.hidden = true;
+      if (moved) { settle(); return; }
+      if (tapT) { clearTimeout(tapT); tapT = null; pullNow(); return; }
+      tapT = setTimeout(function () {
+        tapT = null;
+        if (sheet.hidden) openSheet(); else sheet.hidden = true;
+      }, 300);
     }
     fab.addEventListener("pointerup", up);
     fab.addEventListener("pointercancel", up);
