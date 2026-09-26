@@ -14702,6 +14702,21 @@
       }
     });
 
+    /* the moneyline lives in the middle column now, not the heading, so the
+       one above never found it and a club that won never counted: Clemson
+       won at -130 and the box showed -219 (Jose, Sep 26, 2026: "and -219
+       was the best?"). The winner is read off the final score. */
+    var mlb = card.querySelectorAll(".gline .gml button.price");
+    var fin = card.classList.contains("done") || card.dataset.clk === "FINAL";
+    if (!card.dataset.bout && fin && mlb.length >= 2 && !legs.some(function (l) { return / ML$/.test(l[1]); })) {
+      var sl = parseInt(card.dataset.ls, 10), sr = parseInt(card.dataset.rs, 10);
+      if (!isNaN(sl) && !isNaN(sr) && sl !== sr) {
+        var wi = sl > sr ? 0 : 1, sides0 = card.querySelectorAll(".ghead .gteam");
+        var lg0 = sides0[wi] && sides0[wi].querySelector("img.glogo");
+        legs.push([priceOf(mlb[wi]), ((lg0 && lg0.getAttribute("alt")) || "") + " ML"]);
+      }
+    }
+
     var lq = famName(card.dataset.lqb);
     var rq = famName(card.dataset.rqb);
     var ends = card.querySelectorAll(".h2hend"), slots = card.querySelectorAll(".h2hodds");
