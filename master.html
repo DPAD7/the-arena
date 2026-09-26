@@ -9383,16 +9383,17 @@
        would leave the field */
     /* level with the linemen (Jose, Sep 25, 2026: "move the PTD in line
        with the linemen") */
-    { tier: "1", label: "1 PTD", color: "#3fbf5a", pts: [[0, 185], [-160, 135]], at: [-160, 135], box: [-160, 135] },
+    { tier: "1", label: "1 PTD", color: "#3fbf5a", pts: [[0, 185], [-160, 172]], at: [-160, 172], box: [-160, 172] },
     /* the rush has its own box above the centre, the same size as the
        other two (Jose, Sep 23, 2026) */
     { tier: "r", label: "RTD",   color: "#3b82f6", pts: [[0, 185], [0, 0]], at: [0, 106], box: [0, 106] },
-    { tier: "2", label: "2 PTD", color: "#3fbf5a", pts: [[0, 185], [160, 135]], at: [160, 135], box: [160, 135] }
+    { tier: "2", label: "2 PTD", color: "#3fbf5a", pts: [[0, 185], [160, 172]], at: [160, 172], box: [160, 172] }
   ];
   var RECEIVERS = [
-    /* each receiver stands above his box, never on it (Sep 25, 2026) */
-    [[-164, 95], [-157, 48], [-86, 0]],
-    [[159, 98], [121, 70], [152, 6]]
+    /* each receiver on the line with the linemen, his box right under him
+       (Jose, Sep 25, 2026) */
+    [[-164, 135], [-157, 48], [-86, 0]],
+    [[164, 135], [121, 70], [152, 6]]
   ];
   var POSTFOOT = 205;
   /* a point a fraction of the way along a polyline */
@@ -9628,7 +9629,7 @@
         out.x = dir === "1" ? -along : dir === "2" ? along : 0;
         /* a pass slides him up into its box, which stands level with the
            linemen, not on his own line */
-        out.y = dir === "r" ? -along : (135 - 185) * frac;
+        out.y = dir === "r" ? -along : (172 - 185) * frac;
         if (along >= L - 0.5) out.hit = { tier: dir };
       }
       forkbox.querySelectorAll(".fwr.on").forEach(function (im) {
