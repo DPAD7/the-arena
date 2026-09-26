@@ -1934,10 +1934,9 @@
   .pickghost--bare .qrec, .pickghost--bare .hurt, .pickghost--bare .cold { opacity: 0; }
   .pickghost--home { transition: transform .26s cubic-bezier(.22, 1, .36, 1),
     width .26s cubic-bezier(.22, 1, .36, 1), height .26s cubic-bezier(.22, 1, .36, 1), opacity .2s ease; }
-  /* a pass: he glides to the end zone for as long as the ball is in the air
-     (Jose, Sep 25, 2026: "as he's throwing he's ending up in the end zone") */
-  .pickghost--home.pickghost--glide { transition: transform .7s cubic-bezier(.3, .6, .4, 1),
-    width .7s cubic-bezier(.3, .6, .4, 1), height .7s cubic-bezier(.3, .6, .4, 1), opacity .2s ease; }
+  /* after the catch he goes up to the end zone, a smooth half second */
+  .pickghost--home.pickghost--glide { transition: transform .5s cubic-bezier(.3, .6, .4, 1),
+    width .5s cubic-bezier(.3, .6, .4, 1), height .5s cubic-bezier(.3, .6, .4, 1), opacity .2s ease; }
   .fview--ptd button.drop { color: #e3b341; }
   /* the picks sit over the eight as a row of their own, centered as a group
      on the same pitch as the squares: one stands dead center, two either
@@ -9698,9 +9697,10 @@
       var sp = pickSpots(slots, picks.length)[picks.length - 1], rr = slots.getBoundingClientRect();
       g.classList.add("pickghost--home"); g.classList.remove("pickghost--parked");
       if (tier !== "r") g.classList.add("pickghost--glide");
-      /* at once: the throw and his glide to the end zone are one motion */
-      setTimeout(function () { var hold = ghost; ghost = g; place(rr.left + sp.left + sp.w / 2, rr.top + sp.top + sp.h / 2, sp.w, sp.h); ghost = hold; }, 0);
-      setTimeout(function () { drawPicks(slots, picks, box); g.remove(); c.style.opacity = ""; }, tier === "r" ? 300 : 760);
+      /* the throw plays first; once the ball is caught he goes up to the end
+         zone (Jose, Sep 25, 2026: "after the animation the QB goes up") */
+      setTimeout(function () { var hold = ghost; ghost = g; place(rr.left + sp.left + sp.w / 2, rr.top + sp.top + sp.h / 2, sp.w, sp.h); ghost = hold; }, tier === "r" ? 0 : 720);
+      setTimeout(function () { drawPicks(slots, picks, box); g.remove(); c.style.opacity = ""; }, tier === "r" ? 300 : 1250);
       if (parked === g) parked = null;
       forkbox.querySelectorAll(".fwr.on").forEach(function (im) { setTimeout(function () { im.classList.remove("on"); }, 700); });
       forkbox.querySelectorAll(".froute.drop").forEach(function (l) { l.classList.remove("drop"); });
