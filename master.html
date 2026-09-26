@@ -12993,7 +12993,9 @@
     FEED = FEED || {};
     id = String(id);
     var hit = FEED[id];
-    if (hit && (hit.final || Date.now() - hit.at < 20000)) return hit.p;
+    /* five seconds, the relay's own hold: a live clock read twenty seconds
+       stale ran half a minute behind the broadcast (Jose, Sep 26, 2026) */
+    if (hit && (hit.final || Date.now() - hit.at < 5000)) return hit.p;
     var league = lg === "college-football" ? "college-football" : "nfl";
     var box = { at: Date.now(), final: false, tried: hit ? hit.tried : false };
     var wire = function () {
@@ -13110,6 +13112,16 @@
         if (ls !== undefined && ls !== null) card.dataset.ls = ls;
         if (rs !== undefined && rs !== null) card.dataset.rs = rs;
         card.dataset.clk = live ? (st.shortDetail || "LIVE") : (done ? "FINAL" : "");
+        /* the clock between readings: ESPN gives it a play at a time, so it
+           counts down here on its own while it is running -- running meaning
+           it moved since the last reading -- and stops the moment ESPN's
+           stops (Jose, Sep 26, 2026: "smoothly moving the tick") */
+        var cs = /^(\d+):(\d\d)/.exec((comp.status || {}).displayClock || "");
+        if (live && cs) {
+          var sec = +cs[1] * 60 + +cs[2], was = card._clk;
+          card._clk = { sec: sec, at: Date.now(), run: !!(was && was.sec !== sec && was.per === (comp.status || {}).period),
+                        per: (comp.status || {}).period };
+        } else card._clk = null;
 
         var series = d.winprobability;
         if (series && series.length > 1) {
@@ -14429,6 +14441,17 @@
     }
   }
   /* one clock for every bout on the board, a beat a second */
+  /* a running football clock ticks down each second between readings, never
+     further than the next reading can be (ten seconds) */
+  setInterval(function () {
+    document.querySelectorAll(".gcard[data-espn]").forEach(function (card) {
+      var k = card._clk;
+      if (!k || !k.run) return;
+      var left = Math.max(0, k.sec - Math.min(12, (Date.now() - k.at) / 1000));
+      var t = Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2);
+      card.querySelectorAll(".gclk--two b:first-child").forEach(function (b) { if (b.textContent !== t) b.textContent = t; });
+    });
+  }, 1000);
   function mmss(n) {
     n = Math.max(0, Math.round(n));
     var m = Math.floor(n / 60), s = n % 60;

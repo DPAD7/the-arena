@@ -39,7 +39,7 @@ export async function onRequestGet({ request }) {
       referer: "https://www.espn.com/",
       origin: "https://www.espn.com"
     },
-    cf: { cacheTtl: 20, cacheEverything: true }
+    cf: { cacheTtl: 5, cacheEverything: true }
   });
   const body = await r.text();
   return new Response(body, {
@@ -47,7 +47,7 @@ export async function onRequestGet({ request }) {
     headers: {
       "content-type": r.headers.get("content-type") || "application/json",
       "access-control-allow-origin": "*",
-      "cache-control": "public, max-age=20"
+      "cache-control": "public, max-age=5"
     }
   });
 }
