@@ -3311,6 +3311,20 @@
     opacity: 0; transition: opacity 0.18s, left 0.18s; pointer-events: none; z-index: 3;
   }
   .h2hchip.on { opacity: 1; }
+  /* the blended bar: tall enough to carry the margin in its corner */
+  /* the blend is the whole foot of the card, edge to edge (Jose, Sep 26,
+     2026: "make it the whole section, fill it") */
+  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) { padding: 0 !important; border-top: 0 !important;
+    overflow: hidden; border-radius: 0 0 var(--card-r, 14px) var(--card-r, 14px); }
+  .gcard.gcard--v3 > .gbody.h2hx:has(.h2hbar--blend) .h2hrow { gap: 0 !important; }
+  .gcard.gcard--v3 .h2hbar.h2hbar--blend { height: 44px; border-radius: 0; }
+  .h2hbar--blend .h2hchip.gyd { font-size: 16px !important; }
+  .h2hbar--blend .h2hfill, .h2hbar--blend .h2htick, .h2hbar--blend .h2hzero { display: none !important; }
+  .h2hbar--blend .h2hchip.gyd { position: absolute !important; top: 50% !important; left: 14px !important; right: auto !important;
+    transform: translateY(-50%) !important; width: auto; height: auto; padding: 0 !important; background: none !important;
+    border: 0 !important; color: #fff !important; font: 800 12px/1 Barlow, "Helvetica Neue", Arial, sans-serif;
+    font-variant-numeric: tabular-nums; text-shadow: 0 1px 2px rgba(0,0,0,.7); z-index: 2; }
+  .h2hbar--blend .h2hchip.gyd.gyd--r { left: auto !important; right: 14px !important; }
   .h2hchip.gjersey { width: 42px; height: 38px; padding: 0 !important; background: none !important;
     border: 0 !important; box-shadow: none !important; z-index: 3; }
   .h2hchip.gjersey svg, .h2hchip.gjersey img { width: 42px; height: 38px; display: block; object-fit: contain;
@@ -7854,67 +7868,38 @@
       var a = parseInt(yb[0].textContent, 10) || 0, b2 = parseInt(yb[1].textContent, 10) || 0;
       var tot = a + b2, lead = a - b2;
       var fill = bar.querySelector(".h2hfill"), chip2 = bar.querySelector(".h2hchip");
-      var reach = tot ? Math.min(50, Math.abs(lead) / tot * 50) : 0;
-      var teams = card.querySelectorAll(".gteam"), up = lead >= 0 ? teams[0] : teams[1];
-      var ab = up ? ((up.querySelector("img.glogo") || {}).alt || "") : "";
-      if (fill) {
-        /* clubHue, not HUE: the raw map is the NFL's thirty-two, so every
-           college club fell straight through it to the grey and the bar had
-           no colour on it at all, while the NFL's was its club's own (Jose,
-           Sep 22, 2026: "NFL has colors on the h2h but college still
-           doesn't"). */
-        fill.style.background = clubHue(ab, lgOf(card)) || "#8e8e93";
-        /* whoever is a yard or more up: the fill runs from the VS to the
-           middle of his half, where his jersey stands; level, nothing
-           (Jose, Sep 23, 2026) */
-        fill.style.width = (lead !== 0 && tot ? 25 : 0) + "%";
-        if (lead >= 0) { fill.style.left = "auto"; fill.style.right = "50%"; }
-        else { fill.style.right = "auto"; fill.style.left = "50%"; }
+      /* The whole bar is the two clubs, one color blending into the other,
+         and whoever is up on passing yards fills more of it: the blend sits
+         at his share of the two totals. His margin rides his own corner,
+         "+45" (Jose, Sep 26, 2026, the red-to-blue bar he sent). */
+      var teams = card.querySelectorAll(".gteam");
+      var abL = teams[0] ? ((teams[0].querySelector("img.glogo") || {}).alt || "") : "";
+      var abR = teams[1] ? ((teams[1].querySelector("img.glogo") || {}).alt || "") : "";
+      var cL = driveHue(abL, lgOf(card)) || "#8e8e93", cR = driveHue(abR, lgOf(card)) || "#8e8e93";
+      /* two blues read as one bar: the left club takes its second color,
+         the rule the card's own lettering already follows */
+      if (hueGap(cL, cR) < 30) {
+        var alt0 = ALTCOLOR[abL], alt1 = ALTCOLOR[abR];
+        if (alt0 && hueGap(alt0, cR) >= 30) cL = alt0;
+        else if (alt1 && hueGap(cL, alt1) >= 30) cR = alt1;
       }
+      var at = tot ? Math.max(12, Math.min(88, 100 * a / tot)) : 50;
+      /* the VS stands where the two colors meet (Jose, Sep 26, 2026) */
+      var vs0 = bar.querySelector(".gvs");
+      if (vs0) vs0.style.left = at + "%";
+      bar.classList.add("h2hbar--blend");
+      bar.style.background = "linear-gradient(90deg, " + cL + " 0%, " + cL + " " + Math.max(0, at - 18) + "%, " +
+                             cR + " " + Math.min(100, at + 18) + "%, " + cR + " 100%)";
+      if (fill) fill.style.width = "0";
       if (chip2) {
         chip2.classList.add("gyd");
-        /* the margin worn as his jersey number, in his club's colour, dead
-           centre of his half of the bar */
-        chip2.classList.add("gjersey");
-        /* Kalshi's own jersey with the margin as its number; they stop at 99,
-           and a college club has none, so past that it is drawn here */
-        var n2 = Math.abs(lead);
-        /* one jersey for every margin: Kalshi's shirt with its number taken
-           off, and the margin printed on it here, so 7 and 201 look alike
-           (Jose, Sep 23, 2026). Only ever a Kalshi jersey: the shirt drawn
-           here is gone for good, so a picture that has not come is no shirt
-           at all, never a stand-in (Jose, Sep 25, 2026) */
-        var numEm = '<em' + (String(n2).length > 2 ? ' class="n3"' : '') + '>' + n2 + '</em>';
-        var key = ab + "|" + n2;
-        /* drawn again whenever the shirt is not there: the older head to head
-           writes its "+56" into this same chip and wipes the shirt, and a
-           chip that only redrew on a new margin kept the text
-           (Jose, Sep 25, 2026: "where are the jerseys on the h2h") */
-        var hasShirt = !!chip2.querySelector("img");
-        if (chip2.dataset.jersey !== key || (!hasShirt && chip2.dataset.nojersey !== key)) {
-          chip2.dataset.jersey = key;
-          chip2.innerHTML = "";
-          if (lgOf(card) === "nfl" && ab) {
-            chip2.innerHTML = '<img alt="" src="ico/jersey/' + ab.toLowerCase() + '.png">' + numEm;
-            chip2.querySelector("img").onerror = function () { chip2.innerHTML = ""; chip2.dataset.nojersey = key; };
-          } else if (ab) {
-            /* a college club: the same Kalshi shirt, dyed in its own two
-               colours -- body the first, sleeves the second (Jose, Sep 23, 2026) */
-            dyeJersey(CFBCOLOR[ab] || clubHue(ab, lgOf(card)) || "#8e8e93", ALTCOLOR[ab] || "#c7cbd1", function (url) {
-              if (url && chip2.dataset.jersey === key) chip2.innerHTML = '<img alt="" src="' + url + '">' + numEm;
-            });
-          }
-        }
+        chip2.classList.remove("gjersey");
+        chip2.removeAttribute("data-jersey");
+        chip2.innerHTML = "";
+        chip2.textContent = (tot && lead !== 0) ? "+" + Math.abs(lead) : "";
+        chip2.classList.toggle("gyd--r", lead < 0);
         chip2.style.opacity = (tot && lead !== 0) ? "" : "0";
-        chip2.style.color = "";
-        /* the middle of the winner's own half of the bar -- a quarter in from
-           his end -- so it is nowhere near the VS whatever the lead, and the
-           coloured fill is left to say how big the lead is on its own
-           (Jose, Sep 22, 2026: "put the 79 in the middle of the actual
-           progress bar for the winner") */
-        chip2.style.right = "auto";
-        chip2.style.left = (lead >= 0 ? 25 : 75) + "%";
-        chip2.style.transform = "translate(-50%, -50%)";
+        chip2.style.left = chip2.style.right = chip2.style.transform = chip2.style.color = "";
       }
     }
   }
@@ -13082,7 +13067,7 @@
           var lead = gap > 0 ? card.dataset.lqbid : (gap < 0 ? card.dataset.rqbid : "");
           /* a chip wearing the Kalshi jersey is the card's own to draw
              (stateV3): the "+56" written here wiped the shirt off the bar */
-          if (face.classList.contains("gjersey")) {
+          if (face.classList.contains("gjersey") || face.classList.contains("gyd")) {
             if (window.stateV3) setTimeout(function () { window.stateV3(card); }, 0);
           } else if (lead) {
             face.textContent = "+" + Math.abs(gap);
