@@ -9630,7 +9630,11 @@
         if (dir === "r") { im.style.opacity = String(Math.max(0, 1 - frac)); return; }
         var mine = !dir || (dir === "1" ? 0 : 1) === k;
         im.style.opacity = mine ? "" : "0";
-        var at = alongPts(RECEIVERS[k], dir && mine ? frac : 0);
+        /* he only starts his route while the swipe is on: the rest he runs
+           while the ball is in the air, so the two meet in the end zone
+           (Jose, Sep 25, 2026: "time it so the WR matches the ball") */
+        im._f = dir && mine ? frac * 0.3 : 0;
+        var at = alongPts(RECEIVERS[k], im._f);
         im.style.left = (137 + at[0]) + "px"; im.style.top = at[1] + "px";
       });
       forkbox.querySelectorAll(".froute").forEach(function (l) {
@@ -9649,7 +9653,11 @@
       var ir = im.getBoundingClientRect(), fb = forkbox.getBoundingClientRect();
       /* from his hand: wherever he stands when he lets it go */
       var ax0 = from ? from[0] : fb.left + fb.width / 2, ay0 = from ? from[1] : fb.top + 185;
-      var bx = ir.left + ir.width / 2, by = ir.top + ir.height / 2;
+      /* thrown to where he will be at the end of his route, and he runs
+         there in the same time the ball takes */
+      var route = RECEIVERS[tier === "1" ? 0 : 1], f0 = im._f || 0;
+      var endAt = alongPts(route, 1), nowAt = alongPts(route, f0);
+      var bx = ir.left + ir.width / 2 + (endAt[0] - nowAt[0]), by = ir.top + ir.height / 2 + (endAt[1] - nowAt[1]);
       var peak = 70 + Math.hypot(bx - ax0, by - ay0) * 0.25;
       var NS = "http://www.w3.org/2000/svg";
       var svg = document.createElementNS(NS, "svg");
@@ -9668,6 +9676,8 @@
       var t0 = performance.now(), T = 700, d = "";
       (function step(now) {
         var t = Math.min(1, (now - t0) / T), p = pt(t), q = pt(Math.min(1, t + 0.02));
+        var run = alongPts(route, f0 + (1 - f0) * t);
+        im.style.left = (137 + run[0]) + "px"; im.style.top = run[1] + "px";
         d += (d ? "L" : "M") + p[0].toFixed(1) + "," + p[1].toFixed(1);
         trail.setAttribute("d", d);
         var sc = 1 + 0.7 * Math.sin(Math.PI * t);
