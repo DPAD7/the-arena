@@ -7898,8 +7898,9 @@
         yr.classList.add("gyds--blend");
         yr.style.setProperty("--blend", G);
         var ymk = yr.querySelector(".gmk");
-        /* the VS follows the blend, but stays between the two numbers */
-        if (ymk) ymk.style.left = Math.max(38, Math.min(62, at)) + "%";
+        /* the VS stays in the middle, in line with the marks above it; only
+           the colors move (Jose, Sep 26, 2026) */
+        if (ymk) ymk.style.left = "50%";
         /* each name and his price stand level with the glass row
            (Jose, Sep 26, 2026: "why isn't it in line with the name") */
         requestAnimationFrame(function () { levelNames(card, yr); });
