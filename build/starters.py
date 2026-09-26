@@ -215,13 +215,67 @@ def main():
                                % (club, him["name"], him["mark"]))
                 clear[str(him["id"])] = 1
 
+    s = s[:m.start()] + "  var SCHED = %s;\n" % json.dumps(sched, separators=(",", ":")) + s[m.end():]
+
+    # college has no depth chart we read, so a college card takes the man who
+    # started that club's last played game. The row was drawn once, before
+    # the season, and Rutgers kept AJ Surace on Sep 25, 2026 a week after
+    # Dylan Lonergan had taken the job (Jose: "he was the starter you had aj
+    # surace"). played_qb.py has already put the man who played on each
+    # finished row, so the last finished row is the last word.
+    c = re.search(r"  var CFB = (\[\[.*?\]\]);\n", s, re.S)
+    cfb = json.loads(c.group(1)) if c else []
+    last = {}
+    for g in sorted(cfb, key=lambda g: g[2]):
+        if not os.path.exists(os.path.join(D, "site", "final", "%s.json" % g[1])):
+            continue
+        for i, club in ((5, g[3]), (7, g[4])):
+            if g[i + 1]:
+                last[club] = (g[i], str(g[i + 1]))
+    # a club whose drawn man DraftKings prices on any open card keeps him on
+    # all of them: the market outranks one box score
+    for g in cfb:
+        if os.path.exists(os.path.join(D, "site", "final", "%s.json" % g[1])):
+            continue
+        for side, (i, club) in enumerate(((5, g[3]), (7, g[4]))):
+            if club in last and last[club][1] != str(g[i + 1]) and priced(str(g[1]), side):
+                argued.append("%s %s started last, DraftKings prices %s"
+                              % (club, last[club][0], g[i]))
+                last.pop(club)
+    for g in cfb:
+        espn_id = str(g[1])
+        if only and espn_id != only:
+            continue
+        if os.path.exists(os.path.join(D, "site", "final", "%s.json" % espn_id)):
+            continue
+        try:
+            kick = datetime.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if not only and not (now - datetime.timedelta(hours=6) < kick
+                             <= now + datetime.timedelta(days=HORIZON_DAYS)):
+            continue
+        seen += 1
+        for side, (i, club) in enumerate(((5, g[3]), (7, g[4]))):
+            if club not in last or last[club][1] == str(g[i + 1]):
+                continue
+            swaps.append("%-4s %-20s -> %-20s (last start)"
+                         % (club, g[i], last[club][0]))
+            g[i], g[i + 1] = last[club]
+            f, pr = pricefile(espn_id)
+            held = [(v[side] if isinstance(v, list) and len(v) > side else None)
+                    for v in ((pr or {}).get("props") or {}).values()]
+            if "\"" in json.dumps(held) and unprice(espn_id, side):
+                swaps[-1] += "  [props cleared]"
+    if c:
+        s = s[:c.start()] + "  var CFB = %s;\n" % json.dumps(cfb, separators=(",", ":")) + s[c.end():]
+
     # who the mark comes off, for the page to read: a man the book is pricing
     # wears no plaster anywhere (Jose, Sep 22, 2026). Written whole each run,
     # so a man the book stops pricing gets his plaster back by himself.
     json.dump(clear, open(os.path.join(D, "site", "cleared.json"), "w"),
               separators=(",", ":"), sort_keys=True)
 
-    s = s[:m.start()] + "  var SCHED = %s;\n" % json.dumps(sched, separators=(",", ":")) + s[m.end():]
     if swaps and not pagefile.write(s):
         print("page changed under us, nothing written")
         return 1
