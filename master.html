@@ -1833,6 +1833,12 @@
     background-size: var(--hotbg-w, cover); background-position: center var(--hotbg-y, 0px); }
   html.hotlock .fstadium { display: none; }
   html.hotlock .fturf { background-image: none !important; }
+  html.hotlock .fturf .fslots { position: relative; }
+  html.hotlock .fturf .fslots .fpay { position: absolute; left: var(--sbx); top: var(--sby); bottom: auto; right: auto;
+    width: var(--sbw); height: var(--sbh); min-width: 0; padding: 0; margin: 0; transform: none;
+    display: flex; align-items: center; justify-content: center; box-sizing: border-box;
+    border-radius: 3px; box-shadow: none; }
+  html.hotlock .fturf .fslots .fpay::before, html.hotlock .fturf .fslots .fpay::after { display: none; }
   /* the centering space stays inside the board, so the billboard above the
      field is not clipped by the pager */
   html.hotlock #board { display: flow-root; }
@@ -9366,15 +9372,15 @@
        would leave the field */
     /* level with the linemen (Jose, Sep 25, 2026: "move the PTD in line
        with the linemen") */
-    { tier: "1", label: "1 PTD", color: "#3fbf5a", pts: [[0, 185], [-160, 145]], at: [-160, 145], box: [-160, 145] },
+    { tier: "1", label: "1 PTD", color: "#3fbf5a", pts: [[0, 185], [-160, 135]], at: [-160, 135], box: [-160, 135] },
     /* the rush has its own box above the centre, the same size as the
        other two (Jose, Sep 23, 2026) */
     { tier: "r", label: "RTD",   color: "#3b82f6", pts: [[0, 185], [0, 0]], at: [0, 106], box: [0, 106] },
-    { tier: "2", label: "2 PTD", color: "#3fbf5a", pts: [[0, 185], [160, 145]], at: [160, 145], box: [160, 145] }
+    { tier: "2", label: "2 PTD", color: "#3fbf5a", pts: [[0, 185], [160, 135]], at: [160, 135], box: [160, 135] }
   ];
   var RECEIVERS = [
-    [[-164, 145], [-157, 48], [-86, 0]],
-    [[159, 148], [121, 101], [152, 6]]
+    [[-164, 135], [-157, 48], [-86, 0]],
+    [[159, 138], [121, 101], [152, 6]]
   ];
   var POSTFOOT = 205;
   /* a point a fraction of the way along a polyline */
@@ -9416,7 +9422,7 @@
            'stroke="#fff" stroke-opacity=".45" stroke-width="1.4" stroke-dasharray="4 4"/>');
     /* the line on top of everything */
     [-2, -1, 0, 1, 2].forEach(function (k) {
-      var x = cx + k * 30, y = 145, r0 = 11;
+      var x = cx + k * 30, y = 135, r0 = 11;   /* clear of the QB spot below (Sep 25, 2026) */
       o.push(k === 0
         ? '<rect x="' + (x - r0) + '" y="' + (y - r0) + '" width="' + 2 * r0 + '" height="' + 2 * r0 +
           '" fill="none" stroke="#fff" stroke-opacity=".8" stroke-width="1.6"/>'
@@ -9551,7 +9557,10 @@
         var twin = card.cloneNode(true);
         /* the card may be drawn larger than its own layout (HOT's zoom): the
            copy is laid out the same way, so it is the same card, only moved */
-        var Z = parseFloat(getComputedStyle(card).zoom) || 1;
+        /* every zoom it sits under, the card row's own included: read off the
+           card alone it was 1, and the copy cut his face off (Sep 25, 2026) */
+        var Z = 1;
+        for (var zn = card; zn && zn.nodeType === 1; zn = zn.parentElement) Z *= parseFloat(getComputedStyle(zn).zoom) || 1;
         ghost._z = Z;
         twin.style.zoom = Z;
         twin.style.opacity = ""; twin.style.width = w0 / Z + "px"; twin.style.height = h0 / Z + "px";
@@ -9605,7 +9614,9 @@
         along = Math.max(0, Math.min(L, along));
         frac = along / L;
         out.x = dir === "1" ? -along : dir === "2" ? along : 0;
-        out.y = dir === "r" ? -along : 0;
+        /* a pass slides him up into its box, which stands level with the
+           linemen, not on his own line */
+        out.y = dir === "r" ? -along : (135 - 185) * frac;
         if (along >= L - 0.5) out.hit = { tier: dir };
       }
       forkbox.querySelectorAll(".fwr.on").forEach(function (im) {
@@ -9973,7 +9984,7 @@
          the end zone at the goal line, and the carousel shrinks to sit
          between the two near yard lines (Jose, Sep 25, 2026: "QBs end up
          here when selected", "the carousel goes there") */
-      var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245] };
+      var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245], board: [318, 261, 440, 383] };
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
@@ -9989,10 +10000,21 @@
           var oy = 0;
           document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
           document.documentElement.style.setProperty("--hotbg-y", oy + "px");
+          /* the price the picks pay together is lit on the stadium's own
+             scoreboard (Jose, Sep 25, 2026: "odds in the scoreboard") */
+          var ox = (W - FIELD.w * k) / 2, sbd = FIELD.board, root = document.documentElement.style;
+          root.setProperty("--sbw", Math.round((sbd[2] - sbd[0]) * k) + "px");
+          root.setProperty("--sbh", Math.round((sbd[3] - sbd[1]) * k) + "px");
           var Y = function (y) { return oy + y * k; };
           /* the picks' row stands on the goal line */
           var sb = slots.getBoundingClientRect().bottom;
           turf.style.marginTop = Math.round(8 + Y(FIELD.goal) - sb) + "px";
+          /* the scoreboard measured from the picks' own row, which is what
+             the price is laid out in: the page's sliding track moves what a
+             fixed position would be measured from */
+          var sr = slots.getBoundingClientRect();
+          root.setProperty("--sbx", Math.round(ox + sbd[0] * k - sr.left) + "px");
+          root.setProperty("--sby", Math.round(oy + sbd[1] * k - sr.top) + "px");
           /* the cards as tall as the band, and in the middle of it */
           var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
           if (!card) return;
