@@ -8,6 +8,7 @@
      {game id: {
         "wx":     {"c": condition, "t": temp F, "g": gust mph, "p": precip %, "in": 1 if covered},
         "spread": the favorite's points, from ESPN's pickcenter,
+        "total":  the game's over/under, the same place,
         "out":    [{"id", "name", "pos", "status", "team", "lead": "receiving" | "rushing" | ""}],
      }}
 
@@ -58,6 +59,8 @@ def main():
         pc = (d.get("pickcenter") or [{}])[0] or {}
         if pc.get("spread") is not None:
             e["spread"] = abs(float(pc["spread"]))
+        if pc.get("overUnder") is not None:
+            e["total"] = float(pc["overUnder"])
         # who leads each club in receiving and rushing
         lead = {}
         for t in d.get("leaders") or []:

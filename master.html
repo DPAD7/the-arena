@@ -3853,15 +3853,82 @@
       says.push(["dup", "Already on an open DraftKings slip.", "A second bet on it doubles the same risk."]);
     }
     if (!says.length) return;
+    showAlert("Consider \u00b7 " + (gameName(card) || ""), says);
+  }
+  /* legs he has on this game: gold on the board, or on an open DraftKings slip */
+  function legsOn(card) {
+    var out = [];
+    card.querySelectorAll("button.price[data-oid]").forEach(function (b) {
+      var id = b.dataset.oid, dk = typeof DKB === "object" && DKB && DKB.bets &&
+        DKB.bets.some(function (b0) { return (b0.legs || []).some(function (lg) { return lg.sel === id; }); });
+      if (placed[id] || dk) out.push(b);
+    });
+    return out;
+  }
+  function liveAlert(card, comp, ls, rs, stats) {
+    var per = parseInt((comp.status || {}).period, 10) || 0;
+    var half = per >= 3 || /half/i.test(((comp.status || {}).type || {}).detail || "");
+    if (!half || per > 3) return;                  /* once, at the half or early in the third */
+    var gid = card.dataset.espn || "", a = (ALERTS || {})[gid] || {};
+    var mine = legsOn(card);
+    if (!mine.length) return;
+    var l = parseInt(ls, 10) || 0, r = parseInt(rs, 10) || 0, says = [];
+    var seen = {};
+    try { seen = JSON.parse(localStorage.getItem("arena.livealerts") || "{}"); } catch (e) {}
+    /* 1. scoring far under the total: less than a third of it by the half */
+    /* what that means depends on the leg (Jose, Sep 26, 2026) */
+    if (a.total && !seen[gid + ":pace"] && l + r < a.total * 0.3) {
+      seen[gid + ":pace"] = 1;
+      var notes = [];
+      mine.forEach(function (b) {
+        var lab = labelFor(b) || "", nm = lab.split(" ")[0];
+        var sideR = !!b.closest(".gside--r, .ptdside--r, .h2hside--r") ||
+                    (b.closest(".gml") && [].indexOf.call(card.querySelectorAll(".gml button.price"), b) === 1);
+        var mineS = sideR ? r : l, theirs = sideR ? l : r;
+        if (/ ML/.test(lab) || b.closest(".gml")) {
+          var fav = parseInt(String(priceOf(b)).replace(/\u2212/g, "-"), 10) < 0;
+          if (fav && mineS <= theirs) notes.push(nm + " ML: a low-scoring game keeps the underdog close; one score flips it.");
+          else if (!fav) notes.push(nm + " ML: low scoring helps the underdog, which is your side.");
+        } else if (/[2-9]\+ PTD/.test(lab)) {
+          var need = +(/(\d)\+ PTD/.exec(lab) || [0, 2])[1], got = (stats[sideR ? "r" : "l"] || {}).ptd || 0;
+          if (got < need) notes.push(lab.replace(/ \u00b7.*/, "") + ": " + got + " so far, and fewer touchdowns are coming.");
+        } else if (/ATD|RTD/.test(lab)) {
+          notes.push(lab.replace(/ \u00b7.*/, "") + ": fewer touchdowns, though slow games lean on the run.");
+        } else if (/H2H/.test(lab)) {
+          var mv = (stats[sideR ? "r" : "l"] || {}).pyds || 0, ov = (stats[sideR ? "l" : "r"] || {}).pyds || 0;
+          if (mv < ov) notes.push(nm + " H2H: behind " + mv + "\u2013" + ov + " in a game with few plays left to catch up.");
+        }
+      });
+      if (notes.length) says.push(["wx", (l + r) + " points at the half against a " + a.total + " total.", notes.join(" ")]);
+    }
+    /* 2. a blowout at the half with a 2+ PTD leg on the team in front */
+    var gap = l - r;
+    if (Math.abs(gap) >= 28 && !seen[gid + ":blow"]) {
+      mine.forEach(function (b) {
+        var lab = labelFor(b) || "", m = /(\d)\+ PTD/.exec(lab);
+        if (!m) return;
+        var sideR = !!b.closest(".ptdside--r"), lead = sideR ? gap < 0 : gap > 0;
+        var have = (stats[sideR ? "r" : "l"] || {}).ptd || 0;
+        if (!lead || have >= +m[1]) return;
+        seen[gid + ":blow"] = 1;
+        says.push(["blow", "Up " + Math.abs(gap) + " at the half; " + famName(sideR ? card.dataset.rqb : card.dataset.lqb) + " has " + have + " of " + m[1] + " PTD.",
+                   "The starter may sit in the second half."]);
+      });
+    }
+    if (!says.length) return;
+    try { localStorage.setItem("arena.livealerts", JSON.stringify(seen)); } catch (e) {}
+    showAlert("Live \u00b7 " + (gameName(card) || ""), says);
+  }
+  function showAlert(head, says) {
     var el = document.getElementById("legalert");
     if (!el) { el = document.createElement("div"); el.id = "legalert"; document.body.appendChild(el); }
     el.innerHTML = '<button type="button" class="lax" aria-label="Close">\u00d7</button>' +
-      '<b class="lahead">Consider \u00b7 ' + esc(gameName(card) || "") + '</b>' +
+      '<b class="lahead">' + esc(head) + '</b>' +
       says.map(function (x) { return '<div class="la la--' + x[0] + '"><p>' + esc(x[1]) + '</p><small>' + esc(x[2]) + '</small></div>'; }).join("");
     el.classList.add("on");
     el.querySelector(".lax").onclick = function () { el.classList.remove("on"); };
-    clearTimeout(legAlert.t);
-    legAlert.t = setTimeout(function () { el.classList.remove("on"); }, 7000);
+    clearTimeout(showAlert.t);
+    showAlert.t = setTimeout(function () { el.classList.remove("on"); }, 9000);
   }
   function slipSoon() {
     clearTimeout(slipDraw);
@@ -13348,6 +13415,10 @@
           if (tk) tk.classList.toggle("hit", v >= need);
         });
 
+        /* halftime on a game he has a leg in: say so when it has gone sideways
+           (Jose, Sep 26, 2026: "a 55 total at 3 at the half ... up 30 at the
+           half and I have a QB to throw 2 PTD") */
+        if (live && typeof liveAlert === "function") liveAlert(card, comp, ls, rs, stats);
         /* the section is .h2hx — it was rebuilt under that name and this
            lookup was never moved, so the whole block sat dead */
         var h = card.querySelector(".h2hx") || card.querySelector(".h2h");
