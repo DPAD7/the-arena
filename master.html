@@ -15613,9 +15613,20 @@
         var c0 = b0 && b0.closest(".gcard");
         return c0 && c0.dataset.kick ? Date.parse(c0.dataset.kick) : 9e15;
       };
+      /* a leg on more than one slip leads every slip it is on, in the same
+         order on each, and the rest follow by kickoff: Texas first on both
+         tickets it is on (Jose, Sep 26, 2026) */
+      var onSlips = {};
+      (DKB.bets || []).forEach(function (bet) {
+        var once = {};
+        (bet.legs || []).forEach(function (lg) { if (!once[lg.sel]) { once[lg.sel] = 1; onSlips[lg.sel] = (onSlips[lg.sel] || 0) + 1; } });
+      });
       var open = (DKB.bets || []).map(function (bet) {
-        var legs0 = (bet.legs || []).map(function (lg) { return { lg: lg, k: kickOf(lg.sel) }; })
-          .sort(function (a, b) { return a.k - b.k; });
+        var legs0 = (bet.legs || []).map(function (lg, i) { return { lg: lg, k: kickOf(lg.sel), n: onSlips[lg.sel] || 1, i: i }; })
+          .sort(function (a, b) {
+            var sa = a.n > 1 ? 0 : 1, sb = b.n > 1 ? 0 : 1;
+            return sa - sb || a.k - b.k || a.i - b.i;      /* a tie keeps the book's order */
+          });
         return { bet: bet, legs: legs0.map(function (x) { return x.lg; }), k: legs0.length ? legs0[0].k : 9e15 };
       }).sort(function (a, b) { return a.k - b.k; })
         .map(function (x) { return Object.assign({}, x.bet, { legs: x.legs }); });
