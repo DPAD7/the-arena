@@ -79,6 +79,13 @@ export async function onRequest({ request, env }) {
     let keep = null;
     try { keep = JSON.parse((await env.ARENA.get(SLOT)) || "null"); } catch (e) { keep = null; }
     const drew = typeof body.balance === "number";
+    /* the free tier is a thousand writes a day: a sync that found nothing new
+       is not written, unless a double tap is waiting on it (Sep 26, 2026) */
+    if (keep && drew && keep.balance === body.balance &&
+        JSON.stringify(keep.bets || []) === JSON.stringify(bets) && !keep.expired) {
+      const asked = parseInt((await env.ARENA.get("dkbets:pull")) || "0", 10);
+      if (!(asked > (keep.at || 0))) return ok({ at: keep.at, bets: bets.length, same: true });
+    }
     const out = {
       balance: drew ? body.balance : (keep && keep.balance) || null,
       bets: bets.length || drew ? bets : ((keep && keep.bets) || []),
