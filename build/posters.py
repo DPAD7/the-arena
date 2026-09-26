@@ -85,7 +85,10 @@ def ufc_art(name, when):
     slug = ("ufc-%s" % m.group(1)) if m else ("ufc-fight-night-%s-%02d-%d" % (et.strftime("%B").lower(), et.day, et.year))
     try:
         t = rq.get("https://www.ufc.com/event/" + slug, impersonate="chrome124", timeout=30).text
-        u = re.findall(r'(https://ufc\.com/images/styles/background_image_md/[^"\s]*EVENT-ART[^"\s]*)', t)
+        # the event art, or before it is out the temporary hero of the two
+        # headliners the page carries, which is art enough until it is
+        u = (re.findall(r'(https://ufc\.com/images/styles/background_image_md/[^"\s]*EVENT-ART[^"\s]*)', t) or
+             re.findall(r'(https://ufc\.com/images/styles/background_image_md/[^"\s]*TEMP-HERO[^"\s]*)', t))
         if not u:
             return None
         img = Image.open(io.BytesIO(rq.get(u[0].replace("&amp;", "&"), impersonate="chrome124", timeout=30).content)).convert("RGB")
