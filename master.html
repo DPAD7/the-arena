@@ -186,7 +186,6 @@
   .slipcard--open .slpicks { display: block; }
   .slipcard .slpicks li { display: flex; justify-content: space-between; gap: 10px; padding: 6px 0;
     border-bottom: 1px solid rgba(255,255,255,.06); font-size: 14px; color: #e6e6e6; }
-  .slipcard .slpicks li.slsgp span { padding-left: 10px; border-left: 2px solid rgba(255,255,255,.25); }
   .slipcard .slpicks li.slboostrow { border-bottom: 0; padding-top: 10px; }
   .slipcard .slpicks li b { color: #c9ccd2; font-variant-numeric: tabular-nums; }
   .slipcard .cashrcpt--in { margin: 12px 0 0; padding-top: 10px; border-top: 1px dashed rgba(255,255,255,.14); }
@@ -15617,13 +15616,16 @@
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way
            DraftKings' own slip does (Jose, Sep 26, 2026) */
-        /* a same-game pair has one price between its legs: it is written on
-           the first of them, the rest bracketed to it */
-        var seenSgp = {};
+        /* every leg the same way, with its own price; a leg DraftKings folded
+           into a same-game pair carries none of its own, so the board's is
+           used (Jose, Sep 26, 2026: "just list it how we list it") */
         var rows = (bet.legs || []).map(function (lg, i) {
-          var o = lg.odds ? String(lg.odds).replace("-", "\u2212") : "";
-          if (!lg.odds && lg.sgp) { o = seenSgp[lg.sgp] ? "" : "SGP " + String(lg.sgp).replace("-", "\u2212"); seenSgp[lg.sgp] = 1; }
-          return '<li' + (lg.sgp ? ' class="slsgp"' : "") + '><span>' + esc(ls[i].l.split(" \u00b7 ")[0]) + '</span><b>' + esc(o) + '</b></li>';
+          var o = lg.odds;
+          if (!o) {
+            var b1 = document.querySelector('button.price[data-oid="' + (window.CSS && CSS.escape ? CSS.escape(lg.sel) : lg.sel) + '"]');
+            o = b1 ? (b1.dataset.odds || b1.textContent.trim()) : "";
+          }
+          return '<li><span>' + esc(ls[i].l.split(" \u00b7 ")[0]) + '</span><b>' + esc(String(o || "").replace("-", "\u2212")) + '</b></li>';
         }).join("") +
           (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span></li>' : "");
         return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + slipAvatars(ls) +
