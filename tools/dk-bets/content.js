@@ -68,6 +68,10 @@
      The bonus sits beside it ($0.41) and is not the balance -- the first
      sync read that one (Sep 26, 2026) */
   function balance() {
+    /* the cash field itself, by its own test id */
+    const cash = document.querySelector('[data-testid="standardized-header-combined-balance-cash"]');
+    const c = money(cash ? cash.innerText : "");
+    if (c !== null) return c;
     let best = null;
     document.querySelectorAll("body *").forEach(function (el) {
       if (el.children.length) return;
