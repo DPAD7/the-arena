@@ -17,12 +17,15 @@
        python3 build/posters.py          fetch what is missing
        python3 build/posters.py --dry    say what it would fetch
 """
+import datetime
+import io
 import json
 import os
 import re
 import sys
 
 from curl_cffi import requests as rq
+from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
@@ -36,7 +39,7 @@ API = "https://en.wikipedia.org/w/api.php"
 
 
 def title_of(name):
-    m = re.match(r"(UFC \d+)\b", name)
+    m = re.match(r"(UFC (?:Freedom )?\d+)\b", name)
     return m.group(1) if m else name
 
 
@@ -52,6 +55,50 @@ def poster_url(title):
     return "https://" + m.group(0) if m else None
 
 
+def search_title(name):
+    """The article when the card's own name is not its title: Wikipedia
+       writes "UFC Fight Night: Silva vs. Delgado" where the board has "Noche
+       UFC: Silva vs. Delgado", and "vs." where the board has "vs"."""
+    try:
+        j = rq.get(API, params={"action": "query", "list": "search", "srsearch": name.replace(":", " "),
+                                "format": "json", "srlimit": 3}, headers=UA, timeout=30).json()
+    except Exception:
+        return None
+    # the two headliners must both be in the title: a loose hit took another
+    # card with the same man on it (Allen vs. Costa for Allen vs. Duncan)
+    m = re.search(r":\s*(.+?)\s+vs\.?\s+(.+?)(?:\s+\d+)?$", name)
+    need = [x.split()[-1].lower() for x in m.groups()] if m else []
+    for hit in (j.get("query") or {}).get("search") or []:
+        t = hit["title"]
+        if re.match(r"(UFC|Noche UFC)\b", t) and all(n in t.lower() for n in need):
+            return t
+    return None
+
+
+def ufc_art(name, when):
+    """The event art from UFC.com, cropped to a poster: it is up before
+       Wikipedia has the official one, and gives way to it once it is
+       (Jose, Sep 25, 2026: "get them fight week"). Wide and without words,
+       so the middle of it is kept."""
+    m = re.match(r"UFC (\d+)\b", name)
+    et = when.astimezone(datetime.timezone(datetime.timedelta(hours=-4)))
+    slug = ("ufc-%s" % m.group(1)) if m else ("ufc-fight-night-%s-%02d-%d" % (et.strftime("%B").lower(), et.day, et.year))
+    try:
+        t = rq.get("https://www.ufc.com/event/" + slug, impersonate="chrome124", timeout=30).text
+        u = re.findall(r'(https://ufc\.com/images/styles/background_image_md/[^"\s]*EVENT-ART[^"\s]*)', t)
+        if not u:
+            return None
+        img = Image.open(io.BytesIO(rq.get(u[0].replace("&amp;", "&"), impersonate="chrome124", timeout=30).content)).convert("RGB")
+    except Exception:
+        return None
+    w, h = img.size
+    cw = int(h * 263 / 380)
+    img = img.crop(((w - cw) // 2, 0, (w - cw) // 2 + cw, h)).resize((263, 380), Image.LANCZOS)
+    out = io.BytesIO()
+    img.save(out, "JPEG", quality=86)
+    return out.getvalue()
+
+
 def main():
     s = pagefile.read()
     cards = json.loads(re.search(r"  var FIGHTCARDS = (\[\[.*?\]\]);", s, re.S).group(1))
@@ -63,11 +110,25 @@ def main():
     got, missing = [], []
     for c in cards:
         eid, name = str(c[1]), c[3]
-        if eid in have and os.path.exists(os.path.join(D, "site", have[eid])):
+        # a stand-in from UFC.com is held until Wikipedia has the real one
+        if eid in have and os.path.exists(os.path.join(D, "site", have[eid])) and "-ufc" not in have[eid]:
             continue
         url = poster_url(title_of(name))
         if not url:
-            missing.append(name)
+            alt = search_title(name)
+            url = poster_url(alt) if alt else None
+        if not url:
+            if eid in have:
+                continue
+            when = datetime.datetime.fromisoformat(c[2].replace("Z", "+00:00"))
+            art = None if DRY or "Contender" in name else ufc_art(name, when)
+            if art:
+                rel = "img/posters/%s-ufc.jpg" % eid
+                open(os.path.join(D, "site", rel), "wb").write(art)
+                have[eid] = rel
+                got.append(name + " (UFC.com art)")
+            else:
+                missing.append(name)
             continue
         if DRY:
             got.append(name)
@@ -80,6 +141,11 @@ def main():
         except Exception:
             missing.append(name)
             continue
+        if "-ufc" in have.get(eid, ""):
+            try:
+                os.remove(os.path.join(D, "site", have[eid]))
+            except OSError:
+                pass
         ext = ".png" if url.lower().endswith(".png") else ".jpg"
         rel = "img/posters/%s%s" % (eid, ext)
         open(os.path.join(D, "site", rel), "wb").write(r.content)
