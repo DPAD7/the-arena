@@ -296,7 +296,12 @@ def main():
                 else:
                     bt["a"], bt["b"], bt["alink"], bt["blink"] = bt["b"], bt["a"], bt["blink"], bt["alink"]
                     bt["res"] = "def."
-                bt["method"], bt["round"], bt["time"] = r["how"], r.get("rd") or bt.get("round") or "", r.get("time") or ""
+                # the scheduled length stays: "3/8" for a stoppage in the third of eight
+                sch = re.search(r"\((\d+)\)|/(\d+)|^(\d+)$", bt.get("round") or "")
+                sch = next((x for x in sch.groups() if x), "") if sch else ""
+                rd = r.get("rd") or ""
+                bt["round"] = (rd + "/" + sch) if rd and sch else (sch or rd or bt.get("round") or "")
+                bt["method"], bt["time"] = r["how"], r.get("time") or ""
     dk, dkraw = dk_bouts()
     s = pagefile.read()
     cards, fights, results, book, fprops = [], [], {}, {}, {}
@@ -388,11 +393,22 @@ def main():
     for k, v in fprops.items():
         bk.setdefault("FPROPS", {}).setdefault(k, {}).update(v)
     pricefile.write(bk)
+    # every bout carries its prices in its own row and its props inline, the
+    # way a UFC bout does: a finished bout is never written to from the file
+    # again, so one that closed after the page was built showed dashes
+    # (Jose, Sep 26, 2026: "the odds are missing, but we had them before")
+    held = bk.get("FIGHTS") or {}
+    for r in fights:
+        v = held.get(r[1])
+        if v and len(v) >= 4:
+            r[8], r[9], r[10], r[11] = v[0], v[1], v[2], v[3]
+    boxfp = {k: v for k, v in (bk.get("FPROPS") or {}).items() if str(k).startswith("zb-")}
 
-    block = ("  var BOXCARDS = %s;\n  var BOXFIGHTS = %s;\n"
+    block = ("  var BOXCARDS = %s;\n  var BOXFIGHTS = %s;\n  var BOXFPROPS = %s;\n"
              % (json.dumps(cards, separators=(",", ":"), ensure_ascii=False),
-                json.dumps(fights, separators=(",", ":"), ensure_ascii=False)))
-    m = re.search(r"  var BOXCARDS = .*?;\n  var BOXFIGHTS = .*?;\n", s, re.S)
+                json.dumps(fights, separators=(",", ":"), ensure_ascii=False),
+                json.dumps(boxfp, separators=(",", ":"), ensure_ascii=False)))
+    m = re.search(r"  var BOXCARDS = .*?;\n  var BOXFIGHTS = .*?;\n(?:  var BOXFPROPS = .*?;\n)?", s, re.S)
     if m:
         new = s[:m.start()] + block + s[m.end():]
     else:
