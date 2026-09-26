@@ -202,7 +202,10 @@ def event_for(g, league, keyed, events, club, cfb, loose=True):
     return None, "unsettled"
 
 
-def price_event(e, qbs_id, league, dkpeople):
+NEWPINS = {}
+
+
+def price_event(e, qbs_id, league, dkpeople, names=None):
     """One DraftKings event, read: the moneyline as {side: (price, oid)},
        and the PROPS entry -- ptd, atd, h2h -- for the two passers named."""
     qbs_id = [str(x) for x in qbs_id]
@@ -214,6 +217,18 @@ def price_event(e, qbs_id, league, dkpeople):
     # else's price.
     def his_side(r):
         who = dkpeople.get(r.get("pid") or "")
+        if not who and r.get("pid") and names:
+            # a man DraftKings numbers but we have not pinned: his written name
+            # against the two passers on this card, the only two men it could
+            # be. One match pins him for good; both, or neither, and he is
+            # left alone. Mason McKenzie's prices were thrown away for want
+            # of a pin while the book priced him (Jose, Sep 26, 2026)
+            bare = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", r.get("who") or "")
+            hit = [i for i in (0, 1) if names[i] and whoname.same(bare, names[i])]
+            if len(hit) == 1:
+                who = {"espn": qbs_id[hit[0]], "name": names[hit[0]]}
+                dkpeople[r["pid"]] = who
+                NEWPINS[r["pid"]] = who
         if not who:
             return None
         for i in (0, 1):
@@ -365,7 +380,7 @@ def main():
                         return False
                     return True
                 return False
-            ml, entry = price_event(e, qbs_id, league, dkpeople)
+            ml, entry = price_event(e, qbs_id, league, dkpeople, [g[5], g[7]])
             # the book's passers, by side on the board, as ESPN ids where we
             # hold the pin; a man we cannot pin is kept by name and said
             seen_qb = entry.pop("_qb", {})
@@ -401,6 +416,12 @@ def main():
     if both_ways:
         print("a written name that fits both passers in the same game, so neither took it (%d): %s"
               % (len(set(both_ways)), ", ".join(sorted(set(both_ways)))))
+    if NEWPINS and not DRY:
+        allp = json.load(open(dkp)) if os.path.exists(dkp) else {}
+        allp.update(NEWPINS)
+        json.dump(allp, open(dkp, "w"), indent=1, sort_keys=True)
+        print("pinned from the card's own two passers (%d): %s"
+              % (len(NEWPINS), ", ".join(v["name"] for v in NEWPINS.values())))
     if new_pins and not DRY:
         pins.update(new_pins)
         json.dump(pins, open(pins_path, "w"), indent=0, sort_keys=True)

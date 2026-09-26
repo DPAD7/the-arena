@@ -5132,8 +5132,21 @@
      simply absent from it (Jose, Sep 21, 2026) */
   var RANK = {};
   fetch("ranks.json").then(function (r) { return r.json(); })
-    .then(function (j) { RANK = j || {}; if (typeof paintAll === "function") paintAll(); })
+    .then(function (j) { RANK = j || {}; if (typeof paintAll === "function") paintAll(); seatRanks(); })
     .catch(function () { RANK = {}; });
+  /* the AP number on every school line already drawn: the file lands after
+     the first cards are laid out, and those cards never got theirs
+     (Jose, Sep 26, 2026: "some have them, some don't") */
+  function seatRanks(root) {
+    (root || document).querySelectorAll(".gcard .gschool").forEach(function (sch) {
+      var em = sch.querySelector(".grank"), ab = sch.textContent.replace(/#\d+\s*/, "").trim(), r = RANK[ab];
+      if (r && !em) sch.insertAdjacentHTML("afterbegin", '<em class="grank">#' + r + "</em> ");
+      else if (r && em && em.textContent !== "#" + r) em.textContent = "#" + r;
+      else if (!r && em) em.remove();
+    });
+  }
+  new MutationObserver(function () { clearTimeout(seatRanks._t); seatRanks._t = setTimeout(function () { seatRanks(); }, 200); })
+    .observe(document.documentElement, { childList: true, subtree: true });
   var CFBCOVER = null;
   fetch("cfb_cover.json").then(function (r) { return r.json(); })
     .then(function (j) { CFBCOVER = {}; Object.keys(j || {}).forEach(function (k) { CFBCOVER[String(j[k].id)] = 1; }); if (typeof paintAll === "function") paintAll(); })
@@ -7706,12 +7719,15 @@
          not (Jose, Sep 22, 2026). */
       var nm = mine && mine.querySelector(".h2hnm");
       var college = card.dataset.lg === "college-football";
-      if (college && nm && ab && !nm.querySelector(".gschool")) {
+      /* written again on every paint: the rankings file lands after the
+         first cards are drawn, and a school line made before it never got
+         its number (Jose, Sep 26, 2026: "some have them, some don't") */
+      if (college && nm && ab) {
         var r = RANK[ab];
-        var sch = document.createElement("small");
-        sch.className = "gschool";
-        sch.innerHTML = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
-        nm.appendChild(sch);
+        var sch = nm.querySelector(".gschool");
+        if (!sch) { sch = document.createElement("small"); sch.className = "gschool"; nm.appendChild(sch); }
+        var want = (r ? '<em class="grank">#' + r + "</em> " : "") + ab;
+        if (sch.innerHTML !== want) sch.innerHTML = want;
       }
       /* (the price stays by the name on a college card too, the same as the
          NFL's -- Jose, Sep 26, 2026: "keep it consistent") */
