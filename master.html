@@ -177,10 +177,9 @@
   .cashfab .fabfill--on { opacity: 1; }
   .cashfab .fabfill--ok { background: rgba(63, 191, 90, 0.55); }
   .cashfab .fabfill--bad { background: rgba(255, 91, 91, 0.55); }
-  .slipcard .slview { display: inline-flex; align-items: center; gap: 6px; margin: 10px 0 2px; padding: 6px 12px;
-    border: 0; border-radius: 9px; background: rgba(255,255,255,.08); color: #c9ccd2; cursor: pointer;
-    font: 800 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
-  .slipcard .slview svg { width: 12px; height: 12px; transition: transform .2s ease; }
+  .slipcard .slview { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0;
+    border-radius: 10px; background: rgba(255,255,255,.08); color: #c9ccd2; cursor: pointer; align-self: center; }
+  .slipcard .slview svg { width: 16px; height: 16px; transition: transform .2s ease; }
   .slipcard--open .slview svg { transform: rotate(180deg); }
   .slipcard .slpicks { display: none; list-style: none; margin: 8px 0 0; padding: 0; }
   .slipcard--open .slpicks { display: block; }
@@ -15628,9 +15627,13 @@
           return '<li><span>' + esc(ls[i].l.split(" \u00b7 ")[0]) + '</span><b>' + esc(String(o || "").replace("-", "\u2212")) + '</b></li>';
         }).join("") +
           (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span></li>' : "");
-        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + slipAvatars(ls) +
-          '<button type="button" class="slview" onclick="this.parentNode.classList.toggle(\'slipcard--open\')">' +
-          'View picks<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>' +
+        /* the arrow rides right after the last icon, however many there are,
+           and opens the legs under them (Jose, Sep 26, 2026) */
+        var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
+          'onclick="this.closest(\'.slipcard\').classList.toggle(\'slipcard--open\')">' +
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
+        var avs = slipAvatars(ls).replace(/<\/div>$/, arrow + "</div>");
+        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + avs +
           '<ul class="slpicks">' + rows + '</ul>' +
           '<div class="slfoot"><b>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</b><span class="slpay">' +
           /* a boosted slip shows what it was, struck, beside what it pays at */
