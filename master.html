@@ -2083,6 +2083,7 @@
   .fpop.fpop--on { transform: translate(-50%, 0); opacity: 1; }
   .fpop button { width: 66px; height: 55px; }
   .fpop .fpopico { width: 30px; height: 30px; display: block; margin: 0 auto; pointer-events: none; }
+  .fpop .fpopico--out { color: #e2564d; }
   .fpop .spmark { top: 6px; height: 55px; width: 57px; }
   .prail { width: 274px; box-sizing: border-box; padding: 6px 5px !important; }
   .prail__win { position: relative; z-index: 2; width: 264px; overflow: hidden; }
@@ -11502,7 +11503,11 @@
     /* HOT wears the flame from the reactions set, not the word
        (Jose, Sep 25, 2026) */
     pop.innerHTML = [["all", "All"], ["hot", "Hot"], ["not", "Not"], ["out", "Out"]].map(function (v) {
-      var face = v[0] === "hot" ? '<img class="fpopico" src="ico/hot.png" alt="Hot">' : v[1];
+      /* NOT the worried face he sent; OUT the board's own band-aid */
+      var face = v[0] === "hot" ? '<img class="fpopico" src="ico/hot.png" alt="Hot">'
+               : v[0] === "not" ? '<img class="fpopico" src="ico/not.png" alt="Not">'
+               : v[0] === "out" ? '<svg class="fpopico fpopico--out" viewBox="0 0 26 26" aria-hidden="true"><use href="#hurt"/></svg>'
+               : v[1];
       return '<button type="button" data-pv="' + v[0] + '" aria-label="' + v[1] + '">' + face + '</button>';
     }).join("") + '<span class="spmark"></span>';
     document.body.appendChild(pop);
