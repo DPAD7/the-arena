@@ -38,6 +38,9 @@ export async function onRequest({ request, env }) {
   if (!allowed(request, env)) return ok({ error: "no" }, 403);
 
   if (request.method === "GET") {
+    /* the reader's login as DraftKings last re-issued it, locked with a key
+       only the reader holds (build/dk_bets.py) */
+    if (new URL(request.url).searchParams.get("jar")) return ok({ jar: await env.ARENA.get("dkbets:jar") });
     const held = await env.ARENA.get(SLOT);
     return ok(held ? JSON.parse(held) : { balance: null, bets: [], at: 0 });
   }
@@ -61,6 +64,11 @@ export async function onRequest({ request, env }) {
         body: JSON.stringify({ ref: "main", inputs: { key: String(now) } })
       });
       return ok({ asked: now, started: r.status === 204 || r.status === 200 }, r.status === 204 || r.status === 200 ? 200 : 502);
+    }
+    if (body && typeof body.jar === "string") {
+      if (body.jar.length > 60000) return ok({ error: "big" }, 400);
+      await env.ARENA.put("dkbets:jar", body.jar);
+      return ok({ kept: true });
     }
     /* the reader's login no longer works: said, so the bag goes red, and
        what was held is kept */

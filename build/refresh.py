@@ -626,6 +626,16 @@ if "--if-due" in sys.argv:
         settle_late(_fight)
     if hub and not DRY:
         read_hub()
+        # once a day, DraftKings is asked for a token and the login it hands
+        # back is kept, so his login never lapses between double taps; his
+        # bets are not read (Jose, Sep 26, 2026: "only when I double tap")
+        try:
+            r = subprocess.run([sys.executable, D + "/build/dk_bets.py", "--keep"],
+                               capture_output=True, text=True, cwd=D, timeout=90)
+            for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
+                log("   dk login: " + line)
+        except Exception as e:
+            log("   dk login: did not run (%s)" % type(e).__name__)
     if ranks and not DRY:
         read_ranks()
     if not hit:

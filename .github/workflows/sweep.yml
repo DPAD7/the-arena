@@ -47,7 +47,7 @@ jobs:
           node-version: "22"   # wrangler wants 22 or better
 
       - name: What the scripts need
-        run: pip install --quiet curl_cffi
+        run: pip install --quiet curl_cffi cryptography
 
       - name: The register, and somewhere to write
         # logs/ is not in the repo -- a runner starts without it, and the first
@@ -66,6 +66,7 @@ jobs:
           NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
           # what the double taps read is fetched back from the site with it
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          DK_COOKIES: ${{ secrets.DK_COOKIES }}
         run: python build/refresh.py --if-due
 
       - name: Keep what it wrote

@@ -19,6 +19,7 @@
 
        python3 build/dk_bets.py          read and send
        python3 build/dk_bets.py --dry    read and print
+       python3 build/dk_bets.py --keep   only keep the login alive (daily)
 """
 import json
 import os
@@ -29,6 +30,7 @@ import uuid
 from curl_cffi import requests as rq
 
 DRY = "--dry" in sys.argv
+KEEP = "--keep" in sys.argv
 BOARD = "https://the-arenasports.pages.dev/bets?k=arena-001bff8ddf784985"
 JWT = "https://gaming-us-md.draftkings.com/api/wager/v1/generateEnterpriseJWT"
 SOCKET = "wss://gateway.northamerica-northeast2.prod.dkapis.com/dkusmd/shelby/api/v1/websocket?format=json&jwt="
@@ -37,13 +39,66 @@ HEAD = {"origin": "https://sportsbook.draftkings.com", "referer": "https://sport
 LOCAL = os.path.expanduser("~/.arena/dk_cookies.json")
 
 
-def login():
+def seed():
+    """The login as it was exported: the secret, or the file on his Mac."""
     raw = os.environ.get("DK_COOKIES")
     if raw:
-        return json.loads(raw)
+        return raw
     if os.path.exists(LOCAL):
-        return json.load(open(LOCAL))
+        return open(LOCAL).read()
     return None
+
+
+def box(raw):
+    """A lock keyed on the exported login itself, so only a run that holds the
+       secret can open what is kept on the site, and a fresh export (a new
+       secret) simply starts over from itself."""
+    import base64
+    import hashlib
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+    return AESGCM(hashlib.sha256(("dk-jar:" + raw).encode()).digest()), base64
+
+
+def kept(raw):
+    """The login as DraftKings last re-issued it, kept locked on the site.
+       Every token DraftKings mints hands back fresh login cookies -- the
+       long ones good for a year, the session one for a week (Sep 26, 2026)
+       -- so a read that keeps them keeps the login alive, and the HAR is
+       exported once rather than again and again (Jose: "how do we not have
+       to do it again and again")."""
+    try:
+        g = rq.get(BOARD + "&jar=1", impersonate="chrome124", timeout=30).json()
+        blob = g.get("jar")
+        if not blob:
+            return None
+        aes, b64 = box(raw)
+        b = b64.b64decode(blob)
+        return json.loads(aes.decrypt(b[:12], b[12:], None))
+    except Exception:
+        return None
+
+
+def keep(raw, held, fresh):
+    """Lock the re-issued cookies and put them on the site."""
+    jar = dict(held.get("cookies") or {})
+    jar.update(fresh)
+    out = dict(held, cookies=jar)
+    aes, b64 = box(raw)
+    iv = os.urandom(12)
+    blob = b64.b64encode(iv + aes.encrypt(iv, json.dumps(out).encode(), None)).decode()
+    r = rq.post(BOARD, data=json.dumps({"jar": blob}), headers={"content-type": "application/json"},
+                impersonate="chrome124", timeout=30)
+    print("dk_bets: login re-issued and kept (%d cookies, %d)" % (len(fresh), r.status_code))
+
+
+def login():
+    """The newest login there is: the kept one, else the export. Returns the
+       login and the export it is keyed on."""
+    raw = seed()
+    if not raw:
+        return None, None, False
+    k = kept(raw)
+    return (k or json.loads(raw)), raw, bool(k)
 
 
 def plain(o):
@@ -106,13 +161,25 @@ def legs_of(b):
 
 
 def main():
-    held = login()
+    held, raw, was_kept = login()
     if not held:
         print("dk_bets: no login held (DK_COOKIES), nothing read")
         return 0
     jar, uid = held.get("cookies") or {}, held.get("uid")
     s = rq.Session(impersonate="chrome124")
     r = s.get(JWT, cookies=jar, headers=HEAD, timeout=30)
+    if (r.status_code != 200 or "token" not in r.text) and was_kept:
+        # the kept login failed: try the export before calling it expired
+        held = json.loads(raw)
+        jar = held.get("cookies") or {}
+        s = rq.Session(impersonate="chrome124")
+        r = s.get(JWT, cookies=jar, headers=HEAD, timeout=30)
+    fresh = {c.name: c.value for c in s.cookies.jar}
+    if r.status_code == 200 and "token" in r.text and fresh and not DRY:
+        keep(raw, held, fresh)
+    if KEEP:
+        # the daily touch: the login is kept alive, the bets are not read
+        return 0 if r.status_code == 200 and "token" in r.text else 1
     if r.status_code != 200 or "token" not in r.text:
         print("dk_bets: LOGIN EXPIRED -- the cookies no longer mint a token (%d); export them again" % r.status_code)
         if not DRY:

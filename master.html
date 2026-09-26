@@ -15957,7 +15957,13 @@
           });
         return { bet: bet, legs: legs0.map(function (x) { return x.lg; }), k: legs0.length ? legs0[0].k : 9e15 };
       }).sort(function (a, b) { return a.k - b.k; })
-        .map(function (x) { return Object.assign({}, x.bet, { legs: x.legs }); });
+        .map(function (x) { return Object.assign({}, x.bet, { legs: x.legs }); })
+        /* a slip with a leg the board has seen lose is over: it leaves the bag
+           on its own, without waiting on the next read of the book (Jose,
+           Sep 26, 2026: "it should drop automatically") */
+        .filter(function (bet) {
+          return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost"; });
+        });
       box.innerHTML = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
