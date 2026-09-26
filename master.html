@@ -9541,16 +9541,38 @@
     var after = last.nextSibling;
     real.forEach(function (c) { box.insertBefore(mk(c), after); });
     var span = function () { return first.offsetLeft - box.querySelector(".qcard--clone").offsetLeft; };
-    /* open on the first real card */
-    box.scrollLeft += span();
+    /* open on the first real card, centered -- measured, not stepped by a
+       clone span, which the HOT zoom changes after the fact and which left
+       the row sitting on the sixth card (Jose, Sep 26, 2026) */
+    box._seatFirst = function () {
+      var prev = box.style.scrollSnapType;
+      box.style.scrollSnapType = "none";
+      /* by where the card sits on the screen: the row is zoomed to fit the
+         field, and offsets and scroll do not share a scale under a zoom */
+      for (var k = 0; k < 4; k++) {
+        var br = box.getBoundingClientRect(), fr = first.getBoundingClientRect();
+        var off = (fr.left + fr.width / 2) - (br.left + br.width / 2);
+        if (Math.abs(off) < 1) break;
+        var z = parseFloat(getComputedStyle(box).zoom) || 1;
+        box.scrollLeft += off / z;
+      }
+      requestAnimationFrame(function () { box.style.scrollSnapType = prev; });
+    };
+    box._seatFirst();
+    requestAnimationFrame(box._seatFirst);
     var wait = 0;
     box._loopOff = function () {
       clearTimeout(wait);
       wait = setTimeout(function () {
-        var w = span(), mid = box.scrollLeft + box.clientWidth / 2;
-        var lo = first.offsetLeft - 5, hi = last.offsetLeft + last.offsetWidth + 5;
-        if (mid < lo) box.scrollLeft += w;
-        else if (mid > hi) box.scrollLeft -= w;
+        /* on the screen, like the seat above: under the zoom, offsets and
+           scroll are not one scale, and the wrap jumped cards */
+        var br = box.getBoundingClientRect(), mid = br.left + br.width / 2;
+        var fr = first.getBoundingClientRect(), lr = last.getBoundingClientRect();
+        var c0 = box.querySelector(".qcard--clone"), z = parseFloat(getComputedStyle(box).zoom) || 1;
+        var w = c0 ? (fr.left - c0.getBoundingClientRect().left) / z : 0;
+        if (!w) return;
+        if (mid < fr.left - 5) box.scrollLeft += w;
+        else if (mid > lr.right + 5) box.scrollLeft -= w;
       }, 120);
     };
     box.addEventListener("scroll", box._loopOff, { passive: true });
@@ -10435,6 +10457,9 @@
           var r = box.getBoundingClientRect();
           var want = top + (band - r.height) / 2;
           box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
+          /* the zoom moved every card: sit on the first again, once, when the
+             row is first laid out -- never while he is swiping it */
+          if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           /* the sets sit on the grass between the cards and the line */
           var hs = hotSet(), cb = box.getBoundingClientRect().bottom;
           /* a short screen with no grass to spare: the cards give up just
@@ -10464,6 +10489,7 @@
             if (b.dataset.set === "hot") delete cur.dataset.set; else cur.dataset.set = b.dataset.set;
             hs.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
             cur.scrollLeft = 0;
+            cur._seated = false;         /* each set opens on its own first card */
             loopRow(cur);
             centerHot();
           });
