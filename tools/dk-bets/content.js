@@ -33,12 +33,16 @@
     const status = (/\b(Won|Lost|Open|Live|Cashed Out|Push|Void|Pending)\b/i.exec(tid(card, "bet-details-status", id)) ||
                     /\b(Won|Lost|Cashed Out|Push|Void)\b/i.exec(text) ||
                     /\b(Open|Live|Pending)\b/i.exec(text) || [])[1] || "";
-    const total = (/(?:Parlay|Pick)[^+−\-\n]*([+−\-]\d+)/i.exec(text) || [])[1] || "";
+    /* a boosted slip shows two prices, "+120 +180": the second is the one it
+       pays at (Sep 26, 2026) */
+    const pm = /(?:Parlay|Pick)[^+−\-\n]*([+−\-]\d+)(?:\s*([+−\-]\d+))?/i.exec(text) || [];
+    const total = pm[2] || pm[1] || "";
     return {
       card: id,
       id: (/Bet ID:\s*([A-Z0-9]+)/i.exec(text) || /\b(DK\d{10,})\b/.exec(text) || [])[1] || id,
       head: head,
       odds: (total || (legs.length === 1 ? legs[0].odds : "")).replace(/−/g, "-"),
+      boosted: !!pm[2],
       status: status.toLowerCase(),
       wager: money((/Wager:[^\n|]*/i.exec(text) || [""])[0]),
       paid: money((/(?:Paid|Returned|Cashed Out)[^\n|]*/i.exec(text) || [""])[0]),
@@ -46,7 +50,9 @@
       /* desktop writes the date bare -- "Sep 25, 2026, 3:02:50 PM - DK63..." --
          and the phone app after "Placed:" */
       placed: (tid(card, "bet-reference", id + "-0").replace(/^Placed:\s*/i, "") ||
-               (/([A-Z][a-z]{2} \d{1,2}, \d{4},? \d{1,2}:\d\d(?::\d\d)? [AP]M)/.exec(text) || [])[1] ||
+               /* the date beside the bet id, not the game's "Final Score" date */
+               (/([A-Z][a-z]{2} \d{1,2}, \d{4},? \d{1,2}:\d\d(?::\d\d)? [AP]M)\s*[•·]\s*DK\d/.exec(text) || [])[1] ||
+               ((text.match(/[A-Z][a-z]{2} \d{1,2}, \d{4},? \d{1,2}:\d\d(?::\d\d)? [AP]M/g) || []).slice(-1)[0]) ||
                (/Placed:\s*([^\n]+)/i.exec(text) || [])[1] || "").trim(),
       legs: legs
     };
