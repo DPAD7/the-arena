@@ -13135,6 +13135,53 @@
      game still being played fell through to ESPN and silently got nothing, on
      every sport. (Jose spotted it on Syracuse at Pittsburgh, Sep 17, 2026) */
   function espnUrl(u) { return "/espn?u=" + encodeURIComponent(u); }
+  /* theScore's box for a game, as ESPN writes one, for the two passers on
+     the card only: each is found on his own side of the ball, by surname,
+     or as the one man on that side who has thrown -- the two passers in the
+     game are the only men it could be */
+  var SCOREBOX = null;
+  function scoreBox(card, lq, rq) {
+    var gid = card.dataset.espn;
+    if (!gid) return;
+    if (SCOREBOX === null) {
+      SCOREBOX = {};
+      fetch("scoreboxes.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+        .then(function (j) { SCOREBOX = j || {}; }).catch(function () {});
+      return;
+    }
+    var path = SCOREBOX[gid];
+    if (!path || card._sboxBusy) return;
+    card._sboxBusy = true;
+    fetch(espnUrl("https://api.thescore.com" + path + "/player_records"), { cache: "no-store" })
+      .then(function (r) { return r.json(); })
+      .then(function (recs) {
+        card._sboxBusy = false;
+        if (!Array.isArray(recs)) return;
+        var sur = function (n) {
+          return String(n || "").replace(/\s+(Jr\.?|Sr\.?|II|III|IV|V)$/i, "").split(" ").pop().toLowerCase();
+        };
+        var mk = function (id, name, side) {
+          var mine = recs.filter(function (x) { return x.alignment === side && x.player; });
+          var hit = mine.filter(function (x) { return sur(x.player.full_name) === sur(name); });
+          if (hit.length !== 1) hit = mine.filter(function (x) { return (x.passing_attempts || 0) > 0; });
+          if (hit.length !== 1) return null;
+          var x = hit[0], him = { id: String(id), displayName: name, jersey: String(x.player.number || "") };
+          return { athlete: him, x: x };
+        };
+        var men = [mk(card.dataset.lqbid, card.dataset.lqb, "away"), mk(card.dataset.rqbid, card.dataset.rqb, "home")]
+          .filter(Boolean);
+        if (!men.length) return;
+        var cat = function (name, yk, tk) {
+          return { name: name, labels: ["YDS", "TD"],
+                   athletes: men.map(function (m) { return { athlete: m.athlete, stats: [String(m.x[yk] || 0), String(m.x[tk] || 0)] }; }) };
+        };
+        card._sbox = [{ team: {}, statistics: [
+          cat("passing", "passing_yards", "passing_touchdowns"),
+          cat("rushing", "rushing_yards", "rushing_touchdowns"),
+          cat("receiving", "receiving_yards", "receiving_touchdowns")] }];
+      })
+      .catch(function () { card._sboxBusy = false; });
+  }
   function statLine(box, who, cat, want) {
     var byId = /^\d+$/.test(String(who));
     var out = null;
@@ -13492,6 +13539,17 @@
         var box = (d.boxscore || {}).players || [];
         var lq = card.dataset.lqbid || card.dataset.lqb;
         var rq = card.dataset.rqbid || card.dataset.rqb;
+        /* ESPN's box with nobody in it while the game is on: theScore's is
+           read instead, and written in ESPN's shape for everything below.
+           It lands a pass behind (Jose, Sep 26, 2026: Mestemaker at 260 and
+           2 TD, the card at 0) */
+        var espnEmpty = !box.some(function (tm) {
+          return (tm.statistics || []).some(function (c) { return (c.athletes || []).length; });
+        });
+        if (espnEmpty && (live || done)) {
+          scoreBox(card, lq, rq);
+          if (card._sbox) box = card._sbox;
+        }
         var stats = {};
         /* each passer's jersey number, from the box score, for the ball's
            shirt on the drive bar (Jose, Sep 26, 2026: "make it the QB's

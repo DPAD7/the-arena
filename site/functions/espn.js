@@ -14,7 +14,9 @@ const HOSTS = [
   "site.api.espn.com",
   "site.web.api.espn.com",
   "sports.core.api.espn.com",
-  "cdn.espn.com"
+  "cdn.espn.com",
+  /* theScore's box, when ESPN's is empty (Sep 26, 2026) */
+  "api.thescore.com"
 ];
 
 export async function onRequestGet({ request }) {
