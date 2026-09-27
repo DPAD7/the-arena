@@ -223,8 +223,6 @@
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
   }
   .cashsheet[hidden] { display: none; }
-  .gcard .bnote { margin-top: 4px; text-align: center; color: #e3b341; font: 700 11px/1.2 "Barlow Condensed", "Arial Narrow", sans-serif;
-    letter-spacing: .04em; text-transform: uppercase; }
   #legalert { position: fixed; left: 16px; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom)); z-index: 80;
     padding: 14px 40px 12px 14px; border-radius: 16px; background: rgba(28, 28, 30, 0.94);
     -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); border: 1px solid rgba(227, 179, 65, 0.45);
@@ -12912,15 +12910,6 @@
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
     return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
-      /* a card change only DraftKings has made yet: said on the bout, in
-         gold, until ESPN and theScore agree (Jose, Sep 26, 2026) */
-      var notes = j.NOTES || {};
-      document.querySelectorAll(".gcard[data-bout]").forEach(function (c) {
-        var n = notes[c.dataset.bout], el = c.querySelector(".bnote");
-        if (!n) { if (el) el.remove(); return; }
-        if (!el) { el = document.createElement("div"); el.className = "bnote"; (c.querySelector(".gmid") || c).appendChild(el); }
-        el.textContent = n;
-      });
       var moved = 0, inPlace = [], rebuild = 0, nowPlease = 0;
       /* A game that is over keeps the price it closed at. prices.json is one
          file for the whole board and it is still asked for, but what it says

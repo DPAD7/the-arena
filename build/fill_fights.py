@@ -201,7 +201,6 @@ def score_opponent(man, when):
 
 
 SWAPPED = []
-NOTES = {}
 
 
 def rounds_of(mkts):
@@ -379,7 +378,6 @@ def main():
                     eid, when = hit[1], hit[2]
                 else:
                     print("  UNCONFIRMED: DraftKings has %s v %s, our card %s v %s" % (man, hit[0], left, right))
-                    NOTES[str(f[1])] = "DraftKings lists %s v %s" % (man, hit[0])
                 break
         if not eid:
             print("  %-22s v %-22s not on DraftKings by these names" % (left, right))
@@ -426,7 +424,6 @@ def main():
     book.setdefault("KICKS", {}).update(kicks)
     pricefile.write(book)
     # a change only DraftKings has made yet, said on the card until the rest agree
-    book["NOTES"] = NOTES
     pricefile.write(book)
     # a confirmed replacement changes who is on the card: the row in the page
     if SWAPPED:
