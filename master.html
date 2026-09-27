@@ -1280,6 +1280,7 @@
   .gcard--v3 .gstack { display: flex; flex-direction: column; gap: 0; }
   .gcard--v3 .gydsgap { text-align: center; font: 800 13px/1 Barlow, "Helvetica Neue", Arial, sans-serif;
     color: var(--green); font-variant-numeric: tabular-nums; min-height: 13px; margin-top: 2px; }
+  .gcard--v3 .gydsgap .gydsarr { width: 8px; height: 10px; margin: 0 3px; vertical-align: -1px; }
 
   .gcard--v3 .gline,
   .gcard.gcard--v3 .ptdx.ptdx--v2.ptdx--balls .ptdrow {
@@ -1631,6 +1632,7 @@
   .gcard--v3 .h2hnm:has(.h2hodds) { overflow: visible !important; text-overflow: clip !important; }
   .gcard--v3 .h2hnm .h2hodds { display: inline-flex; vertical-align: middle; margin: 0 0 0 7px; }
   .gcard--v3 .gside--r .h2hnm .h2hodds { margin: 0 7px 0 0; }
+  .gcard--v3.gdone .h2hnm .h2hodds { display: none !important; }
   .gcard--v3 .h2hnm .h2hodds .price, .gcard--v3 .h2hnm .h2hodds .ghost {
     width: auto; min-width: 46px; max-width: none; height: 26px; padding: 0 7px; border-radius: 9px;
     font-size: 13px; text-shadow: none; }
@@ -8194,7 +8196,14 @@
       if (!gap) { gap = document.createElement("div"); gap.className = "gydsgap"; }
       if (stack.lastElementChild !== gap) stack.appendChild(gap);
       var dd = ly - ry;
-      gap.textContent = dd ? "+" + Math.abs(dd) : "";
+      /* a chevron on the leader's side, pointing at him, in place of the
+         plus (Jose, Sep 27, 2026: "make it an arrow < for who's winning") */
+      var chev = function (pts) {
+        return '<svg class="gydsarr" viewBox="0 0 10 12" aria-hidden="true"><polyline points="' + pts +
+          '" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+      };
+      gap.innerHTML = !dd ? "" : dd > 0 ? chev("7,1.5 2.5,6 7,10.5") + Math.abs(dd)
+                                      : Math.abs(dd) + chev("3,1.5 7.5,6 3,10.5");
       gap.classList.toggle("gydsgap--l", dd > 0);
       gap.classList.toggle("gydsgap--r", dd < 0);
     }
@@ -13356,6 +13365,9 @@
         var st = (comp.status || {}).type || {};
         var done = st.state === "post" || st.completed === true;
         var live = !done && st.state === "in";
+        /* over: the head-to-head price beside each name goes (Jose, Sep 27,
+           2026: "after the game we can remove the button for h2h") */
+        card.classList.toggle("gdone", done);
         /* a finished game has nothing left to watch (Jose, Sep 17, 2026) --
            and nothing left to ask about either. It used to keep reading the
            same finished summary every thirty seconds for as long as the tab
@@ -13714,6 +13726,11 @@
           pane.querySelectorAll(".ptdbtn").forEach(function (btn) {
             var line = btn.querySelector(".ptdline");
             var need = line ? parseInt(line.textContent, 10) : NaN;
+            /* the rushing row carries no line to count to: its one button is
+               the first run in, and the sheet it opens holds them all. With no
+               number it never got a play at all (Jose, Sep 27, 2026: Allen's
+               two rushing scores, no clip) */
+            if (isNaN(need) && kind === "ATD") need = 1;
             var had = btn.querySelector(".ptdplay");
             /* No clip, no button. The summary already carries the scoring
                plays and the clip list, so whether THIS touchdown has one can
