@@ -9510,16 +9510,18 @@
      an absence, not a clean bill of health, so nothing is drawn for it.
      (Jose, Sep 21, 2026: the mark goes next to the name.) */
   var WIRE = {}, WIREAT = 0;
+  /* who is cold, from site/cold.json (build/qb_search.py): one TD or fewer per
+     full start, with two starts at least (Jose, Sep 28, 2026) */
+  var COLD = {};
   /* the name and the plaster on one line: .fname is a column, so a bare
      mark beside the text became a row of its own under it */
-  /* cold is the other side of the gold ring: a man he has not marked wears a
-   snowflake, and it goes the moment he rings him (Jose, Sep 21, 2026:
-   "for cold QBs ... anyone who doesn't have the yellow gold around it") */
+  /* cold is worked out from his starts, not from the gold ring: it was every
+     man he had not ringed, so QBs who were not cold wore it (Jose, Sep 28, 2026) */
   function coldMark(id) {
     /* a man on the wire is hurt, not cold: the plaster says everything the
        snowflake would and two marks on one name says neither clearly
        (Jose, Sep 21, 2026: "if you're injured you don't get it") */
-    if (RINGED[String(id)] || hurtAt(id)) return "";
+    if (!COLD[String(id)] || hurtAt(id)) return "";
     return '<i class="cold" title="Cold" aria-label="Cold">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#cold"/></svg></i>';
   }
@@ -11604,6 +11606,15 @@
            only redrawing the Form tab (Jose, Sep 22, 2026) */
         if (sport === "form") { var at = window.scrollY; render(); window.scrollTo(0, at); return; }
         if (typeof seatHurt === "function") document.querySelectorAll(".gcard").forEach(seatHurt);
+      })
+      .catch(function () {});
+    fetch("cold.json", { cache: "no-store" })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) {
+        var c = (j && j.cold) || {};
+        if (JSON.stringify(c) === JSON.stringify(COLD)) return;
+        COLD = c;
+        if (sport === "form") { var at = window.scrollY; render(); window.scrollTo(0, at); }
       })
       .catch(function () {});
     /* the birthdays ride along too: the file is keyed by game and the border

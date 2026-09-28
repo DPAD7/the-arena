@@ -124,7 +124,7 @@ def main():
                         a_, b_ = int(mine), int(theirs)
                         res = ("W " if a_ > b_ else "L " if a_ < b_ else "T ") + "%d-%d" % (a_, b_)
                     q["g"].append({"d": iso, "o": them, "h": side == 1, "r": res, "yd": line[0],
-                                   "p": line[1], "ru": line[2], "px": px, "sl": slot(iso)})
+                                   "p": line[1], "ru": line[2], "px": px, "sl": slot(iso), "att": line[3]})
                 elif kick > now - dt.timedelta(hours=4):
                     if q["nx"] and q["nx"]["d"] <= iso:
                         continue
@@ -139,8 +139,24 @@ def main():
             q["nx"]["al"] = round(sum(a) / len(a), 1) if a else None
     # a name with no game and no next game is nothing to show
     qbs = {k: v for k, v in qbs.items() if v["g"] or v["nx"]}
+    # cold (Jose, Sep 28, 2026, "let's do the 6"): one TD or fewer, passing
+    # and rushing, per full start, with at least two full starts. A full start
+    # is ten or more throws -- a game he came into late or left hurt does not
+    # count against him
+    cold = {}
+    for pid, q in qbs.items():
+        full = [g for g in q["g"] if g.get("att", 0) >= 10]
+        tds = sum(g["p"] + g["ru"] for g in full)
+        if len(full) >= 2 and tds <= len(full):
+            cold[pid] = [len(full), tds]
+    for q in qbs.values():
+        for g in q["g"]:
+            g.pop("att", None)
+    json.dump({"at": now.strftime("%Y-%m-%dT%H:%MZ"), "cold": cold},
+              open(os.path.join(D, "site", "cold.json"), "w"), separators=(",", ":"))
     out = {"at": now.strftime("%Y-%m-%dT%H:%MZ"), "qbs": qbs}
     json.dump(out, open(os.path.join(D, "site", "qbsearch.json"), "w"), separators=(",", ":"))
+    print("cold: " + ", ".join(sorted(qbs[k]["n"] for k in cold)))
     print("qbsearch: %d QBs (%d NFL), %d games"
           % (len(qbs), sum(1 for v in qbs.values() if v["lg"] == "nfl"), sum(len(v["g"]) for v in qbs.values())))
 
