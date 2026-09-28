@@ -4132,6 +4132,7 @@
   var PLACEDKEY = "odds.placed.v1";
   var placed = {};
   try { placed = JSON.parse(localStorage.getItem(PLACEDKEY) || "{}") || {}; } catch (e) { placed = {}; }
+  window.isPlaced = function (oid) { return !!(oid && placed[oid]); };
   function markSaved(root) {
     (root || document).querySelectorAll("button.price[data-oid]").forEach(function (b) {
       if (saved[b.dataset.oid]) b.classList.add("on");
@@ -8245,8 +8246,24 @@
       var ye = yrow.querySelectorAll(".gh2h");
       ye[0].innerHTML = ""; ye[1].innerHTML = "";
       var ly = parseInt(yb[0].textContent, 10) || 0, ry = parseInt(yb[1].textContent, 10) || 0;
-      ye[0].appendChild(numChip(ly, ly > ry));
-      ye[1].appendChild(numChip(ry, ry > ly));
+      /* the head to head he marked wears the same box the moneyline does:
+         gold while it is on, green or red once the game is over -- the price
+         beside the name goes then, so the box is what says it (Jose, Sep 27,
+         2026: "the box goes around the H2H section like ML does") */
+      var hslots = card.querySelectorAll(".h2hodds");
+      var hpr = ((typeof PROPS === "object" && PROPS[card.dataset.espn]) || {}).h2h || [];
+      [[ye[0], ly, ry, 0], [ye[1], ry, ly, 1]].forEach(function (e) {
+        var hb = hslots[e[3]] ? hslots[e[3]].querySelector("button.price") : null;
+        /* once the game is over the button has gone, so the price is found
+           by its own id: marked on the board, or on a slip from the book */
+        var oid = (hb && hb.dataset.oid) || (hpr[e[3]] && hpr[e[3]][1]) || "";
+        var onDk = !!(oid && typeof DKB === "object" && DKB && (DKB.bets || []).some(function (bt) {
+          return (bt.legs || []).some(function (lg) { return lg.sel === oid; });
+        }));
+        var mine = !!((hb && (hb.classList.contains("on") || hb.classList.contains("placed"))) ||
+                      (window.isPlaced && window.isPlaced(oid)) || onDk);
+        e[0].appendChild(numChip(e[1], e[1] > e[2], mine, mine && done ? e[1] > e[2] : null));
+      });
       /* the margin under the VS, in the room below the rows, leaning to the
          side that leads (Jose, Sep 26, 2026: "put the difference under the
          VS column") */
