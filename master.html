@@ -2146,7 +2146,7 @@
      the spacers keep the first and last in the middle (Jose, Sep 23, 2026:
      "make the container larger to fit within this section") */
   .form.qcards.qcards--hot > .qcard { zoom: 1.5; flex: 0 0 188px; }
-  .form.qcards.qcards--hot:not(.qcards--full) { zoom: var(--hotz, 1); }
+  .form.qcards.qcards--hot { zoom: var(--hotz, 1); }
   /* HOT, NOT and OUT are gone from under the carousel (Jose, Sep 28, 2026) */
   #hotset { display: none !important; }
   .form.qcards.qcards--hot.qcards--still::before, .form.qcards.qcards--hot.qcards--still::after { display: none; }
@@ -2345,7 +2345,7 @@
   .qcards--out > .qcard:not(:has(.hurt)) { display: none; }
   /* on the field every quarterback is in the row, hot or not; only the ones
      already picked leave it (Jose, Sep 28, 2026: "all the QBs there") */
-  .form.qcards.qcards--hot:not(.qcards--full) > .qcard:not([data-picked="1"]) { display: grid; }
+  .form.qcards.qcards--hot > .qcard:not([data-picked="1"]) { display: grid; }
   /* OUT is two columns like ALL, and an odd last one stands in the middle
      of the two (Jose, Sep 23, 2026: "on the out make it 2 columns, and if
      it's 5 for example it's in the center of the 2 columns") */
@@ -10625,6 +10625,25 @@
     /* a man who came on in garbage time or for an injury is not a week's card:
        Pickett threw one and Bennett three (Jose, Sep 17, 2026) */
     rows = rows.filter(function (r) { return r.priced || r.ptd > 0 || r.atd > 0; });
+    /* one per club: the man named for its next game, and a starter who has
+       lost the job only because he is hurt -- Lock, who started while
+       Darnold was out and is healthy, is not shown (Jose, Sep 28, 2026) */
+    (function () {
+      var now = Date.now(), next = {};
+      (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
+        var t = Date.parse(g[2]);
+        if (t < now - 5 * 3600000) return;
+        [[g[3], g[6]], [g[4], g[8]]].forEach(function (p) {
+          if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, id: String(p[1]) };
+        });
+      });
+      rows = rows.filter(function (m) {
+        var nx = next[m.club];
+        if (!nx || nx.id === String(m.id)) return true;
+        var w = WIRE[String(m.id)];
+        return !!(w && /out|injur|doubt|question|reserve/i.test(w.status || ""));
+      });
+    })();
     /* Touchdowns first, thrown and run together, and the club's record only to
        split men who scored the same. Leading with the record put two men who
        had scored nothing above the best passer in the league, because their
