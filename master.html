@@ -2146,6 +2146,8 @@
      "make the container larger to fit within this section") */
   .form.qcards.qcards--hot > .qcard { zoom: 1.5; flex: 0 0 188px; }
   .form.qcards.qcards--hot { zoom: var(--hotz, 1); }
+  .form.qcards.qcards--hot.qcards--still::before, .form.qcards.qcards--hot.qcards--still::after { display: none; }
+  .form.qcards.qcards--hot.qcards--still { justify-content: center; }
   .form.qcards.qcards--hot::before, .form.qcards.qcards--hot::after { flex: 0 0 calc((100% - 282px) / 2 - 10px); }
   .pickghost { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none;
     border-radius: 18px; overflow: hidden; background: #121214;
@@ -9946,17 +9948,18 @@
     var real = [].slice.call(box.querySelectorAll(".qcard")).filter(function (c) {
       return getComputedStyle(c).display !== "none";
     });
-    if (real.length < 2) { box.style.justifyContent = real.length ? "center" : ""; return; }
+    box.classList.remove("qcards--still");
+    if (real.length < 2) { box.classList.add("qcards--still"); return; }
     /* only a row that runs off the screen loops; two or three that fit sit
        still in the middle, no copies (Jose, Sep 28, 2026: "the loop doesn't
        make sense for 2 players") */
     var lastR = real[real.length - 1];
     if (lastR.offsetLeft + lastR.offsetWidth - real[0].offsetLeft <= box.clientWidth + 1) {
-      box.style.justifyContent = "center";
+      box.classList.add("qcards--still");
+      box.scrollLeft = 0;
       box._seatFirst = null;
       return;
     }
-    box.style.justifyContent = "";
     var mk = function (c) {
       var k = c.cloneNode(true);
       k.classList.add("qcard--clone");
@@ -10895,6 +10898,9 @@
              flipped big and small (Jose, Sep 28, 2026: "why are we doing
              resizing? ... never resize") */
           var top = Y(FIELD.band[0]), band = Y(FIELD.band[1]) - top;
+          /* the room is what is left between the pick slot on the goal line
+             and the icons above the line: nothing may overlap either */
+          var floorY = Y(1239) - 44, ceilY = Math.max(top, slots.getBoundingClientRect().bottom + 8);
           var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
           var hs = hotSet();
           HOTZ = HOTZ || window._hotz || 0;
@@ -10903,7 +10909,7 @@
             var natural = card.getBoundingClientRect().height / zNow;
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
-            HOTZ = window._hotz = Math.min(1, (band - 10) / natural, (Y(1239) - top - 36 - 4) / natural);
+            HOTZ = window._hotz = Math.min(1, (band - 10) / natural, (floorY - ceilY) / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
@@ -10912,7 +10918,10 @@
           if (!HOTZ && (box._retry = (box._retry || 0) + 1) < 40) setTimeout(centerHot, 120);
           if (card) {
             var z = HOTZ || 1, r = box.getBoundingClientRect();
-            var want = top + (band - r.height) / 2;
+            /* in the middle of the band, but never so low that the sets under
+               them have less than their own height above the line (Jose,
+               Sep 28, 2026: "the overlap") */
+            var want = Math.max(ceilY, Math.min(ceilY + (floorY - ceilY - r.height) / 2, floorY - r.height));
             box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
             if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           }
