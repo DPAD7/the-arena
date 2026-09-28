@@ -10972,7 +10972,11 @@
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
             var roomNow = (cardFloor - 6) - (turf.getBoundingClientRect().bottom + 6);
-            HOTZ = window._hotz = Math.min(1, roomNow / natural);
+            /* the size in the layout he picked (the left one, Sep 28, 2026):
+               55px tall on a 430px screen, scaled with the screen's width, so
+               a smaller phone gets the same picture, not a thinner strip */
+            var gapTop = turf.getBoundingClientRect().bottom + 3, gapBot = navTop - SLIPH - 3;
+            HOTZ = window._hotz = Math.min(1, (55 * W / 430) / natural, (gapBot - gapTop) / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
@@ -10991,13 +10995,8 @@
                the icons. The cards fit in it: if they ever do not, they are
                made smaller once and keep that -- they never grow back, so
                nothing flips -- and they sit in the middle of it */
-            var ceil = turf.getBoundingClientRect().bottom + 6, room = iconTop - 6 - ceil;
-            if (r.height > room && room > 20) {
-              HOTZ = window._hotz = HOTZ * room / r.height;
-              document.documentElement.style.setProperty("--hotz", HOTZ);
-              box.style.zoom = HOTZ; z = HOTZ; r = box.getBoundingClientRect();
-            }
-            var want = Math.max(ceil, ceil + (room - r.height) / 2);
+            var ceil = turf.getBoundingClientRect().bottom + 3, room = navTop - SLIPH - 3 - ceil;
+            var want = ceil + (room - r.height) / 2;
             box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
             if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           }
