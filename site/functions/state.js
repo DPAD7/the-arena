@@ -90,13 +90,11 @@ export async function onRequest({ request, env }) {
     }
     /* the same marks again are not written again: the free tier allows a
        thousand writes a day, and every open device saves as it settles */
-    try {
-      const held = JSON.parse((await env.ARENA.get(SLOT)) || "null");
-      if (held) {
-        const a = Object.assign({}, held, { at: 0 }), b = Object.assign({}, keep, { at: 0 });
-        if (JSON.stringify(a) === JSON.stringify(b)) return ok({ at: held.at, same: true });
-      }
-    } catch (e) {}
+    // compared with what was read above, not read a second time
+    if (held0 && held0.at) {
+      const a = Object.assign({}, held0, { at: 0 }), b = Object.assign({}, keep, { at: 0 });
+      if (JSON.stringify(a) === JSON.stringify(b)) return ok({ at: held0.at, same: true });
+    }
     await env.ARENA.put(SLOT, JSON.stringify(keep));
     return ok({ at: keep.at });
   }

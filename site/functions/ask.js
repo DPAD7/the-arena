@@ -45,6 +45,8 @@ const FLOW = "ask.yml";
 const RUNS_AN_HOUR = 30;
 const MOST_GAMES = 40;
 const PRICE_DAYS = 21;
+// every game's asked price, in one record (was one "ask:price:<game>" each)
+const PRICES = "ask:prices";
 // a tap whose run has not been seen on GitHub by now never started
 const NO_RUN_MS = 3 * 60 * 1000;
 // the same games asked again this soon after an answer get that answer
@@ -160,11 +162,8 @@ async function runOf(env, rec) {
 }
 
 async function pricesFor(env, games) {
-  const out = {};
-  await Promise.all(games.map(async gid => {
-    const one = await readJSON(env, "ask:price:" + gid);
-    if (one && one.price) out[gid] = one.price;
-  }));
+  const out = {}, all = (await readJSON(env, PRICES)) || {};
+  games.forEach(gid => { if (all[gid] && all[gid].price) out[gid] = all[gid].price; });
   return out;
 }
 
@@ -264,14 +263,21 @@ async function answer(request, env) {
   const prices = (body && body.prices && typeof body.prices === "object") ? body.prices : {};
   const now = Date.now();
   const priced = [];
+  /* every game's price in one record, not one record a game: a tap of forty
+     games was forty writes, and the free tier allows a thousand a day
+     (Sep 28, 2026). A game older than PRICE_DAYS drops off as it is rewritten */
+  const all = (await readJSON(env, PRICES)) || {};
+  for (const gid of Object.keys(all)) {
+    if (!all[gid] || now - (all[gid].at || 0) > PRICE_DAYS * 86400000) delete all[gid];
+  }
   for (const gid of Object.keys(prices)) {
     if (!/^\d{5,12}$/.test(gid)) continue;
     const price = prices[gid];
     if (!price || typeof price !== "object") continue;
-    await env.ARENA.put("ask:price:" + gid, JSON.stringify({ price, at: now, key }),
-      { expirationTtl: PRICE_DAYS * 86400 });
+    all[gid] = { price, at: now, key };
     priced.push(gid);
   }
+  if (priced.length) await env.ARENA.put(PRICES, JSON.stringify(all));
   if (key) {
     const slot = "ask:run:" + key;
     const rec = (await readJSON(env, slot)) || { key, games: [], at: now, run: null, url: null };
@@ -286,16 +292,12 @@ async function answer(request, env) {
 }
 
 async function everything(env) {
-  const out = {};
-  let cursor;
-  do {
-    const page = await env.ARENA.list({ prefix: "ask:price:", cursor });
-    await Promise.all(page.keys.map(async k => {
-      const one = await readJSON(env, k.name);
-      if (one && one.price) out[k.name.slice("ask:price:".length)] = { price: one.price, at: one.at };
-    }));
-    cursor = page.list_complete ? null : page.cursor;
-  } while (cursor);
+  /* one read for the sweep, where it was a list and a read per game on
+     every run */
+  const out = {}, all = (await readJSON(env, PRICES)) || {};
+  for (const gid of Object.keys(all)) {
+    if (all[gid] && all[gid].price) out[gid] = { price: all[gid].price, at: all[gid].at };
+  }
   return ok({ prices: out });
 }
 
