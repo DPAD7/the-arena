@@ -10930,8 +10930,9 @@
           }
           /* the sets sit on the grass between the cards and the line, cards
              or none */
-          var cb = card ? box.getBoundingClientRect().bottom : Y(FIELD.band[1]);
-          hs.style.top = Math.round((cb + Y(1239)) / 2) + "px";
+          /* one fixed place, cards or none: the stack never moves (Jose,
+             Sep 28, 2026: "why are you trying to change the layout") */
+          hs.style.top = Math.round(Y(1239) - 22) + "px";
         });
       };
       /* HOT, NOT and OUT, the long-press menu's own faces, centered */
