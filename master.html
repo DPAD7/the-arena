@@ -249,6 +249,62 @@
   .cashfab .cashbag .fabfill--ok { background: #1a7a36; }
   .cashfab .cashbag .fabfill--bad { background: #ff5b5b; }
   .cashfab .cashbag .fabfill--none { background: #8e8e93; }
+
+  /* the search: pull down from the top of any page, type a quarterback, get
+     his season; type a few, get the 1+ PTD parlay (Jose, Sep 28, 2026) */
+  #qsearch { position: fixed; left: 0; right: 0; top: 0; z-index: 90; box-sizing: border-box;
+    padding: calc(14px + env(safe-area-inset-top)) 14px 10px; background: #0b0b0c;
+    border-bottom: 1px solid #26262a; border-radius: 0 0 22px 22px; box-shadow: 0 18px 40px rgba(0,0,0,.7);
+    max-height: 88vh; overflow-y: auto; transform: translateY(-105%); transition: transform .28s cubic-bezier(.22,1,.36,1);
+    font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff; }
+  #qsearch.open { transform: none; }
+  #qsearch .qsbar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; background: rgba(255,255,255,.08);
+    border: 1px solid rgba(255,255,255,.14); border-radius: 14px; padding: 9px 12px; }
+  #qsearch .qsbar svg { width: 18px; height: 18px; flex: none; opacity: .7; }
+  #qsearch input { flex: 1; min-width: 120px; background: none; border: 0; outline: 0; color: #fff;
+    font: 600 17px Barlow, "Helvetica Neue", Arial, sans-serif; padding: 3px 0; }
+  #qsearch input::placeholder { color: #8e8e93; }
+  #qsearch .qschip { display: inline-flex; align-items: center; gap: 6px; background: rgba(255,255,255,.12); border: 0;
+    border-radius: 9px; padding: 5px 9px; color: #fff; font: 600 14px Barlow, sans-serif; cursor: pointer; }
+  #qsearch .qschip i { font-style: normal; opacity: .55; }
+  #qsearch .qssug { list-style: none; margin: 8px 0 0; padding: 0; }
+  #qsearch .qssug li { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid #1f1f23; cursor: pointer; }
+  #qsearch .qssug li b { font-size: 16px; }
+  #qsearch .qssug li span { color: #8e8e93; font-size: 13px; font-weight: 600; }
+  #qsearch .qsface { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; object-position: 50% 8%; background: #1c1c1f; flex: none; }
+  #qsearch .qscard { margin-top: 12px; background: #151517; border: 1px solid #26262a; border-radius: 16px; padding: 14px; }
+  #qsearch .qswho { display: flex; align-items: center; gap: 12px; }
+  #qsearch .qswho .qsface { width: 56px; height: 56px; border-radius: 12px; }
+  #qsearch .qsnm { font: 800 22px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .02em; text-transform: uppercase; }
+  #qsearch .qssub { color: #8e8e93; font-size: 13px; font-weight: 600; margin-top: 2px; }
+  #qsearch .qssea { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 14px; text-align: center; }
+  #qsearch .qssea b { display: block; font: 800 22px "Barlow Condensed", sans-serif; }
+  #qsearch .qssea span, #qsearch th, #qsearch .qstile span, #qsearch .qstot span {
+    font: 700 11px "Barlow Condensed", sans-serif; letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
+  #qsearch .qsh { font: 700 12px "Barlow Condensed", sans-serif; letter-spacing: .12em; color: #e3b341; margin: 16px 0 6px; text-transform: uppercase; }
+  #qsearch table { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; font-size: 14px; }
+  #qsearch th { text-align: left; padding: 0 0 5px; }
+  #qsearch td { padding: 7px 0; border-top: 1px solid #222226; }
+  #qsearch .r { text-align: right; }
+  #qsearch .ok { color: #3fd06a; font-weight: 800; } #qsearch .no { color: #ff5a4f; font-weight: 800; }
+  #qsearch .qspx { font: 800 15px "Barlow Condensed", sans-serif; }
+  #qsearch .pg { color: #3fd06a; } #qsearch .py { color: #f5d547; } #qsearch .pr { color: #ff5a4f; } #qsearch .pn { color: #8e8e93; }
+  #qsearch .qsnext { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #qsearch .qstile { background: #1c1c1f; border-radius: 10px; padding: 9px 10px; }
+  #qsearch .qstile span { display: block; }
+  #qsearch .qstile b { font-size: 15px; }
+  #qsearch .qsleg { display: grid; grid-template-columns: 40px 1fr auto; gap: 10px; align-items: center; padding: 9px 0; border-top: 1px solid #222226; }
+  #qsearch .qsleg:first-of-type { border-top: 0; }
+  #qsearch .qsleg .n2 { font-weight: 800; font-size: 16px; }
+  #qsearch .qsleg .rec { font-size: 12px; color: #8e8e93; font-weight: 600; margin-top: 2px; }
+  #qsearch .qstot { display: grid; grid-template-columns: 1fr 1fr 1fr; text-align: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #333; }
+  #qsearch .qstot b { display: block; font: 800 24px "Barlow Condensed", sans-serif; }
+  #qsearch .qsnote { margin-top: 12px; background: rgba(227,179,65,.1); border: 1px solid rgba(227,179,65,.35); border-radius: 10px;
+    padding: 9px 11px; font-size: 13px; color: #f1d99a; line-height: 1.35; }
+  #qsearch .qsgrab { width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.3); margin: 12px auto 2px; cursor: pointer; }
+  #qspull { position: fixed; left: 50%; top: calc(8px + env(safe-area-inset-top)); z-index: 89; transform: translate(-50%, -80px);
+    font: 700 12px "Barlow Condensed", sans-serif; letter-spacing: .14em; color: #c9ccd2; background: rgba(28,28,30,.9);
+    border-radius: 10px; padding: 7px 12px; pointer-events: none; opacity: 0; }
   .cashsheet {
     position: fixed; z-index: 46; width: 220px; box-sizing: border-box;
     padding: 14px 16px; border-radius: 16px;
@@ -3712,6 +3768,13 @@
     <div id="board"></div>
     <div class="pane pane--side" id="panenext" aria-hidden="true"></div>
   </div></div>
+</div>
+<div id="qspull">PULL TO SEARCH</div>
+<div id="qsearch" role="dialog" aria-label="Search quarterbacks">
+  <div class="qsbar" id="qsbar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#fff" stroke-width="2.4"/><line x1="16" y1="16" x2="21.5" y2="21.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><input id="qsin" type="search" autocomplete="off" autocapitalize="words" placeholder="Search a QB, or a few for a parlay"></div>
+  <ul class="qssug" id="qssug"></ul>
+  <div id="qsout"></div>
+  <div class="qsgrab" id="qsgrab" aria-label="Close"></div>
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i><i class="wal-cw"><i class="wal-cd"></i></i></i></button>
@@ -16393,6 +16456,193 @@
       if (!sheet.hidden && !fab.contains(e.target) && !sheet.contains(e.target)) sheet.hidden = true;
     });
     addEventListener("resize", function () { if (fab.style.left) settle(); });
+  })();
+</script>
+
+<script>
+  /* the search (Jose, Sep 28, 2026): pull down from the top of any page and
+     it drops in; a name gives his card, a few give the 1+ PTD parlay. It all
+     comes from qbsearch.json, written by build/qb_search.py, so it answers as
+     he types and asks nobody for anything */
+  (function () {
+    var box = document.getElementById("qsearch"), inp = document.getElementById("qsin"),
+        sug = document.getElementById("qssug"), out = document.getElementById("qsout"),
+        bar = document.getElementById("qsbar"), hint = document.getElementById("qspull");
+    if (!box) return;
+    var DATA = null, picked = [];
+    function load() {
+      if (DATA) return Promise.resolve(DATA);
+      return fetch("qbsearch.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+        .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
+    }
+    function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    function open() {
+      if (box.classList.contains("open")) return;
+      box.classList.add("open"); load().then(function () { draw(); });
+      setTimeout(function () { try { inp.focus(); } catch (e) {} }, 60);
+    }
+    function close() { box.classList.remove("open"); try { inp.blur(); } catch (e) {} }
+    window.openSearch = open;
+    document.getElementById("qsgrab").addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+      if (e.key === "/" && !box.classList.contains("open") && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || "")) { e.preventDefault(); open(); }
+    });
+    document.addEventListener("pointerdown", function (e) {
+      if (box.classList.contains("open") && !box.contains(e.target)) close();
+    });
+    /* pull down at the very top of the page; HOT and the sheets keep their own gestures */
+    var y0 = null;
+    addEventListener("touchstart", function (e) {
+      y0 = null;
+      if (box.classList.contains("open") || window.scrollY > 2 || document.documentElement.classList.contains("hotlock")) return;
+      if (document.querySelector("dialog[open]")) return;
+      y0 = e.touches[0].clientY;
+    }, { passive: true });
+    addEventListener("touchmove", function (e) {
+      if (y0 === null) return;
+      var dy = e.touches[0].clientY - y0;
+      if (dy > 10) { hint.style.opacity = Math.min(1, dy / 70); hint.style.transform = "translate(-50%, " + Math.min(0, dy - 80) + "px)"; }
+    }, { passive: true });
+    addEventListener("touchend", function (e) {
+      if (y0 === null) return;
+      var dy = (e.changedTouches[0] || {}).clientY - y0;
+      hint.style.opacity = 0; hint.style.transform = "";
+      y0 = null;
+      if (dy > 70) open();
+    }, { passive: true });
+
+    function face(id, lg) { return '<img class="qsface" alt="" loading="lazy" src="face/' + (lg === "cfb" ? "college-football" : "nfl") + "/" + esc(id) + '.png" onerror="this.style.visibility=\'hidden\'">'; }
+    function num(p) { var n = parseInt(String(p || "").replace(/[−]/g, "-"), 10); return isNaN(n) ? null : n; }
+    function band(p) { var n = num(p); return n === null ? "pn" : n <= -600 ? "pr" : n <= -500 ? "py" : "pg"; }
+    function show(p) { return p ? String(p).replace("-", "−") : "—"; }
+    function dec(p) { var n = num(p); return n === null ? null : n > 0 ? 1 + n / 100 : 1 + 100 / -n; }
+    function when(iso, sl) {
+      var d = new Date(iso);
+      return d.toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" }) + " " +
+             d.toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" }) + " " +
+             d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+    }
+    function wxSay(w) {
+      if (!w || w.t === undefined) return "—";
+      if (w.in) return "Indoors";
+      var s2 = w.t + "°";
+      if (w.g) s2 += ", gusts " + w.g + " mph";
+      if (w.p) s2 += ", " + w.p + "% rain";
+      return s2;
+    }
+    function badWx(w) { return w && !w.in && ((w.g || 0) >= 15 || (w.p || 0) >= 50); }
+    function slotSay(sl) { return sl === 1 ? "1:00" : sl === 4 ? "4:00" : "other"; }
+
+    function match(q) {
+      var qs = DATA ? DATA.qbs : {}, t = q.trim().toLowerCase();
+      if (!t) return [];
+      var parts = t.split(/\s+/), hits = [];
+      Object.keys(qs).forEach(function (id) {
+        if (picked.indexOf(id) >= 0) return;
+        var words = qs[id].n.toLowerCase().split(/[\s.'-]+/);
+        var ok = parts.every(function (pt) { return words.some(function (w) { return w.indexOf(pt) === 0; }); });
+        if (ok) hits.push(id);
+      });
+      hits.sort(function (a, b) {
+        var A = qs[a], B = qs[b];
+        return (A.lg === "nfl" ? 0 : 1) - (B.lg === "nfl" ? 0 : 1) || B.g.length - A.g.length || A.n.localeCompare(B.n);
+      });
+      return hits.slice(0, 8);
+    }
+    function draw() {
+      var qs = DATA ? DATA.qbs : {};
+      [].slice.call(bar.querySelectorAll(".qschip")).forEach(function (c) { c.remove(); });
+      picked.forEach(function (id) {
+        var c = document.createElement("button"); c.type = "button"; c.className = "qschip";
+        c.innerHTML = esc((qs[id] || {}).n || id) + " <i>×</i>";
+        c.addEventListener("click", function () { picked = picked.filter(function (x) { return x !== id; }); draw(); });
+        bar.insertBefore(c, inp);
+      });
+      inp.placeholder = picked.length ? "Add another" : "Search a QB, or a few for a parlay";
+      var hits = match(inp.value);
+      sug.innerHTML = hits.map(function (id) {
+        var q = qs[id];
+        return '<li data-id="' + esc(id) + '">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><br><span>' +
+               esc(q.t) + " · " + (q.lg === "nfl" ? "NFL" : "CFB") + "</span></div></li>";
+      }).join("");
+      out.innerHTML = picked.length === 1 ? card(picked[0]) : picked.length > 1 ? parlay(picked) : "";
+    }
+    sug.addEventListener("click", function (e) {
+      var li = e.target.closest("li"); if (!li) return;
+      picked.push(li.dataset.id); inp.value = ""; draw();
+      try { inp.focus(); } catch (e2) {}
+    });
+    inp.addEventListener("input", draw);
+    inp.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { var li = sug.querySelector("li"); if (li) { picked.push(li.dataset.id); inp.value = ""; draw(); } }
+      if (e.key === "Backspace" && !inp.value && picked.length) { picked.pop(); draw(); }
+    });
+
+    function card(id) {
+      var q = DATA.qbs[id]; if (!q) return "";
+      var yd = 0, p = 0, ru = 0, hit = 0, priced = 0, wins = 0, losses = 0;
+      q.g.forEach(function (g) {
+        yd += g.yd; p += g.p; ru += g.ru; if (g.p > 0) hit++;
+        if (/^W/.test(g.r)) wins++; else if (/^L/.test(g.r)) losses++;
+      });
+      var h = '<div class="qscard"><div class="qswho">' + face(id, q.lg) + '<div><div class="qsnm">' + esc(q.n) +
+        '</div><div class="qssub">' + esc(q.t) + " · QB" + (q.g.length ? " · " + wins + "–" + losses : "") + "</div></div></div>";
+      h += '<div class="qssea"><div><b>' + yd + "</b><span>Pass yds</span></div><div><b>" + p + "</b><span>PTD</span></div><div><b>" +
+           ru + "</b><span>RTD</span></div><div><b>" + hit + "/" + q.g.length + "</b><span>1+ PTD</span></div></div>";
+      if (q.g.length) {
+        h += '<div class="qsh">This season</div><table><tr><th>Date</th><th>Opp</th><th class="r">Yds</th><th class="r">PTD</th><th class="r">RTD</th><th class="r">1+ PTD</th></tr>';
+        q.g.forEach(function (g) {
+          var d = new Date(g.d).toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" });
+          h += "<tr><td>" + d + "</td><td>" + (g.h ? "vs " : "@ ") + esc(g.o) + (g.r ? " · " + esc(g.r.split(" ")[0]) : "") +
+               '</td><td class="r">' + g.yd + '</td><td class="r">' + g.p + '</td><td class="r">' + g.ru + '</td><td class="r"><span class="qspx ' +
+               band(g.px) + '">' + show(g.px) + "</span> " + (g.p > 0 ? '<span class="ok">✓</span>' : '<span class="no">✕</span>') + "</td></tr>";
+        });
+        h += "</table>";
+      }
+      var nx = q.nx;
+      if (nx) {
+        h += '<div class="qsh">Next · ' + (nx.h ? "vs " : "@ ") + esc(nx.o) + " · " + esc(when(nx.d)) + "</div><div class=\"qsnext\">" +
+          '<div class="qstile"><span>1+ PTD</span><b class="' + band(nx.px) + '">' + (nx.px ? show(nx.px) : "not posted") + "</b></div>" +
+          '<div class="qstile"><span>' + esc(nx.o) + " allows</span><b>" + (nx.al === null || nx.al === undefined ? "—" : nx.al + " PTD / game") + "</b></div>" +
+          '<div class="qstile"><span>Weather</span><b>' + esc(wxSay(nx.wx)) + "</b></div>" +
+          '<div class="qstile"><span>Injury</span><b>' + esc(nx.inj || "Not listed") + "</b></div></div>";
+      } else {
+        h += '<div class="qsnote">No game on the board for him this week.</div>';
+      }
+      return h + "</div>";
+    }
+    function parlay(ids) {
+      var d = 1, chance = 1, notes = [], priced = 0;
+      var legs = ids.map(function (id) {
+        var q = DATA.qbs[id]; if (!q) return "";
+        var nx = q.nx, px = nx && nx.px ? nx.px : "", last = q.g[0];
+        var hits = q.g.map(function (g) { return g.p > 0 ? "✓" : "✕"; }).reverse().join("");
+        var hit = q.g.filter(function (g) { return g.p > 0; }).length;
+        var dd = dec(px);
+        if (dd) { d *= dd; chance *= 1 / dd; priced++; }
+        var last2 = q.n.split(" ").slice(-1)[0];
+        if (!nx) notes.push(last2 + " has no game this week.");
+        else {
+          if (!px) notes.push(last2 + "’s price isn’t posted yet.");
+          if (num(px) !== null && num(px) <= -600) notes.push(last2 + " is −600 or longer.");
+          if (nx.inj) notes.push(last2 + " is " + nx.inj.toLowerCase() + ".");
+          if (badWx(nx.wx)) notes.push(last2 + ": " + wxSay(nx.wx) + ".");
+        }
+        var slots = {};
+        q.g.forEach(function (g) { slots[slotSay(g.sl)] = (slots[slotSay(g.sl)] || 0) + 1; });
+        return '<div class="qsleg">' + face(id, q.lg) + '<div><div class="n2">' + esc(q.n) + '</div><div class="rec"><span class="ok">' +
+          hits.replace(/✕/g, '</span><span class="no">✕</span><span class="ok">') + "</span> " + hit + "/" + q.g.length +
+          (nx ? " · next " + (nx.h ? "vs " : "@ ") + esc(nx.o) + " " + slotSay(nx.sl) : "") + '</div></div><div class="qspx ' + band(px) + '">' +
+          (px ? show(px) : "—") + "</div></div>";
+      }).join("");
+      var price = priced === ids.length && priced ? (d >= 2 ? "+" + Math.round((d - 1) * 100) : "−" + Math.round(100 / (d - 1))) : "—";
+      var h = '<div class="qscard"><div class="qsh" style="margin-top:0">1+ PTD parlay · this week</div>' + legs +
+        '<div class="qstot"><div><b>' + ids.length + '</b><span>Legs</span></div><div><b class="pg">' + price + '</b><span>Parlay</span></div><div><b>' +
+        (priced === ids.length && priced ? Math.round(chance * 100) + "%" : "—") + "</b><span>All hit</span></div></div>";
+      if (notes.length) h += '<div class="qsnote">' + notes.map(esc).join("<br>") + "</div>";
+      return h + "</div>";
+    }
   })();
 </script>
 
