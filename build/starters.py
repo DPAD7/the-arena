@@ -182,6 +182,18 @@ def main():
 
     swaps, cleared, argued, clear, seen = [], [], [], {}, 0
     now = datetime.datetime.now(datetime.timezone.utc)
+    # the book's passers per game and side, as ESPN ids (fill_week.py asks
+    # ESPN who each one is and keeps him only if ESPN says he is a QB on that
+    # club), and the wire, which the book cannot overrule
+    try:
+        dkq_nfl = json.load(open(os.path.join(D, "data", "dk_qbs.json")))
+    except (OSError, ValueError):
+        dkq_nfl = {}
+    try:
+        wire = json.load(open(os.path.join(D, "site", "wire.json")))
+    except (OSError, ValueError):
+        wire = {}
+    STOP = ("out", "injured reserve", "physically unable to perform", "suspended", "pup", "ir")
     for g in sched:
         espn_id = str(g[1])
         if only and espn_id != only:
@@ -209,6 +221,18 @@ def main():
                 if str(g[i + 1]) != str(held["id"]):
                     swaps.append("%-4s %-20s -> %-20s (named)" % (club, g[i], held["name"]))
                     g[i], g[i + 1] = held["name"], held["id"]
+                    unprice(espn_id, side)
+                continue
+            # ESPN and DraftKings agree, or DraftKings decides: the one passer
+            # the book prices for this side starts, unless the wire has him
+            # Out, on IR, PUP or suspended. Keenum was priced all day while the
+            # chart still said Bagent (Jose, Sep 28, 2026: "ESPN has to talk to
+            # DraftKings to make sure we're pulling the right quarterback")
+            book = [x for x in ((dkq_nfl.get(espn_id) or [[], []])[side]) if x and x[0]]
+            if len(book) == 1 and (wire.get(book[0][0]) or {}).get("status", "").lower() not in STOP:
+                if str(g[i + 1]) != book[0][0]:
+                    swaps.append("%-4s %-20s -> %-20s (DraftKings, ESPN id %s)" % (club, g[i], book[0][1], book[0][0]))
+                    g[i], g[i + 1] = book[0][1], book[0][0]
                     unprice(espn_id, side)
                 continue
             him = settle(club, espn_id, side, depth)

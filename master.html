@@ -12538,6 +12538,21 @@
         var id = c.dataset.espn || c.dataset.bout;
         if (id && !seen[id]) { seen[id] = 1; ids.push(id); }
       });
+      /* what the board holds for these games before the asking: green is
+         the answer changing something, grey is DraftKings saying what we
+         already had, red is the asking failing (Jose, Sep 28, 2026: "green if
+         you got the new prices ... gray if it's still ... red if it's not
+         working") */
+      var snap = function () {
+        return JSON.stringify(ids.map(function (id) {
+          var row = null;
+          [[typeof SCHED === "object" ? SCHED : [], 9], [typeof CFB === "object" ? CFB : [], 10]].forEach(function (pair) {
+            pair[0].forEach(function (r) { if (String(r[1]) === String(id)) row = r.slice(pair[1], pair[1] + 4); });
+          });
+          return [row, (typeof PROPS === "object" && PROPS[id]) || null, (typeof FPROPS === "object" && FPROPS[id]) || null];
+        }));
+      };
+      var before = snap();
       var t0 = Date.now(), LIMIT = 240000;   /* the store can lag a minute behind a finished run: red only if it truly failed */
       var climb = function () {
         var p = Math.min(1, (Date.now() - t0) / 60000);
@@ -12556,7 +12571,7 @@
               .then(function (st) {
                 if (st && st.prices) Object.keys(st.prices).forEach(function (id) { window._seatAsked(id, st.prices[id]); });
                 if (st && st.state === "done" && st.prices) Object.keys(st.prices).forEach(function (id) { ASKED[id] = 1; });
-                if (st && st.state === "done") { fillDone(shortOfPrice().length ? "none" : "ok"); return; }
+                if (st && st.state === "done") { fillDone(snap() !== before ? "ok" : "none"); return; }
                 if (st && st.state === "failed") { fillDone("bad"); return; }
                 if (Date.now() - t0 > LIMIT) { fillDone("bad"); return; }
                 setTimeout(look, 3000);

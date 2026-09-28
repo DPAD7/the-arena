@@ -105,7 +105,12 @@ def pull(path):
                      # (Jose, Sep 22, 2026: "why are we guessing name they wont
                      # fucking change")
                      "pid": str(who.get("id") or ""),
-                     "role": who.get("venueRole") or ""})
+                     # "AwayPlayer" / "HomePlayer" in the book's words, kept as
+                     # away / home: the test below only ever knew the short
+                     # form, so the book's passers were never read and its
+                     # word on who starts never reached the starter check
+                     # (Sep 28, 2026)
+                     "role": re.sub(r"player$", "", (who.get("venueRole") or "").lower())})
     return rows
 
 
@@ -203,6 +208,44 @@ def event_for(g, league, keyed, events, club, cfb, loose=True):
 
 
 NEWPINS = {}
+# DraftKings writes a few clubs its own way
+DKCLUB = {"JAC": "JAX", "WAS": "WSH", "LA": "LAR"}
+
+
+def espn_qb(name, club, league):
+    """ESPN's id for a quarterback DraftKings prices, found by ESPN's own
+       search and kept only if ESPN itself says he is a QB on this club --
+       so a passer the book prices is never dropped for want of a pin
+       (Jose, Sep 28, 2026: "no matter what quarterback it is ... go find the
+       id"). One answer or none; never a guess between two."""
+    from curl_cffi import requests as rq
+    lg = "nfl" if league == "nfl" else "college-football"
+    try:
+        q = rq.get("https://site.web.api.espn.com/apis/common/v3/search",
+                   params={"query": name, "limit": 8, "type": "player"}, impersonate="chrome", timeout=20).json()
+    except Exception:
+        return None
+    hits = []
+    for it in q.get("items") or []:
+        if (it.get("league") or "") not in (lg, "nfl" if lg == "nfl" else "ncaaf", "college-football"):
+            continue
+        try:
+            a = rq.get("https://site.web.api.espn.com/apis/common/v3/sports/football/%s/athletes/%s" % (lg, it["id"]),
+                       impersonate="chrome", timeout=20).json().get("athlete") or {}
+        except Exception:
+            continue
+        pos = (a.get("position") or {}).get("abbreviation")
+        t = a.get("team") or {}
+        if lg == "nfl":
+            ok = bool(club) and (t.get("abbreviation") or "").upper() == DKCLUB.get(club.upper(), club.upper())
+        else:
+            # college: DraftKings writes the school's name, ESPN its own --
+            # one has to contain the other
+            mine, theirs = club.lower(), (t.get("displayName") or t.get("location") or "").lower()
+            ok = bool(mine and theirs) and (mine in theirs or theirs in mine)
+        if pos == "QB" and ok:
+            hits.append(str(it["id"]))
+    return hits[0] if len(set(hits)) == 1 else None
 
 
 def price_event(e, qbs_id, league, dkpeople, names=None):
@@ -227,6 +270,20 @@ def price_event(e, qbs_id, league, dkpeople, names=None):
             hit = [i for i in (0, 1) if names[i] and whoname.same(bare, names[i])]
             if len(hit) == 1:
                 who = {"espn": qbs_id[hit[0]], "name": names[hit[0]]}
+                dkpeople[r["pid"]] = who
+                NEWPINS[r["pid"]] = who
+        if not who and r.get("pid") and r.get("market", "").endswith("Passing Touchdowns"):
+            # a passer the book prices who is neither pinned nor either man on
+            # the card: ESPN is asked who he is, and he is pinned for good, so
+            # the sweep's starter check can put him on the card if he starts
+            bare = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", r.get("who") or "")
+            side = (r.get("role") or "").lower()
+            club = (e.get(side) or "") if side in ("away", "home") else ""
+            if league == "nfl":
+                club = club.split(" ")[0]
+            espn = espn_qb(bare, club, league) if bare else None
+            if espn:
+                who = {"espn": espn, "name": bare}
                 dkpeople[r["pid"]] = who
                 NEWPINS[r["pid"]] = who
         if not who:
@@ -350,7 +407,12 @@ def main():
             elif how == "unsettled":
                 unsettled.append("%s/%s (%s)" % (away, home, league))
                 continue
-            if full(str(eid)):
+            # a full game is left alone until the day it is played: from
+            # twenty-four hours out it is read on every pass, so the price on the card
+            # is the one DraftKings has now and the book's passers confirm the
+            # starter -- Keenum sat at a morning -265 with DraftKings at -218
+            # (Jose, Sep 28, 2026)
+            if full(str(eid)) and T(g[2]) > NOW + dt.timedelta(hours=24):
                 held.append("%s/%s" % (away, home))
                 continue
             # the two passers, by id through person_name; else the identical written name
