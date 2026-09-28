@@ -64,6 +64,8 @@ export async function onRequest({ request, env }) {
          is a field thrown away on the next write, so anything the board keeps
          has to be named (Jose, Sep 20, 2026) */
       ring: body && body.ring && typeof body.ring === "object" ? body.ring : {},
+      /* the starred quarterbacks in the search's row (Sep 28, 2026) */
+      stars: body && body.stars && typeof body.stars === "object" ? body.stars : {},
       /* the balance behind the dollar button: what it stands at, the legs it
          has seen, and which runs of legs it has already settled */
       bank: body && body.bank && typeof body.bank === "object" ? body.bank : await heldBank(env),

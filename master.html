@@ -271,6 +271,26 @@
   #qsearch .qssug li { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border-bottom: 1px solid #1f1f23; cursor: pointer; }
   #qsearch .qssug li b { font-size: 16px; }
   #qsearch .qssug li span { color: #8e8e93; font-size: 13px; font-weight: 600; }
+  /* the 32 starters under the box, the way a favorites row reads: his face
+     in a rounded square on his club's tint, a star in the corner, his name
+     under it; starred men lead (Jose, Sep 28, 2026) */
+  #qsearch .qsrow { display: flex; gap: 12px; overflow-x: auto; margin: 12px -14px 2px; padding: 4px 14px 6px;
+    scrollbar-width: none; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; }
+  #qsearch .qsrow::-webkit-scrollbar { display: none; }
+  #qsearch .qsrow[hidden] { display: none; }
+  #qsearch .qst { flex: none; width: 70px; display: flex; flex-direction: column; align-items: center; gap: 6px;
+    background: none; border: 0; padding: 0; color: #fff; cursor: pointer; font: inherit; }
+  #qsearch .qst-pic { position: relative; width: 70px; height: 70px; border-radius: 18px; overflow: visible;
+    background: linear-gradient(145deg, var(--tint, #333) -30%, #1c1c1f 70%); }
+  #qsearch .qst-pic img { width: 100%; height: 100%; border-radius: 18px; object-fit: cover; object-position: 50% 10%; display: block; }
+  #qsearch .qst.on .qst-pic { box-shadow: 0 0 0 2px var(--amber, #e3b341); }
+  #qsearch .qst-star { position: absolute; right: -6px; bottom: -6px; width: 28px; height: 28px; border-radius: 50%;
+    background: #1c1c1f; border: 3px solid #0b0b0c; display: grid; place-items: center; padding: 0; cursor: pointer; }
+  #qsearch .qst-star svg { width: 15px; height: 15px; }
+  #qsearch .qst-star polygon { fill: none; stroke: #fff; stroke-width: 1.8; stroke-linejoin: round; }
+  #qsearch .qst-star.on polygon { fill: var(--amber, #e3b341); stroke: var(--amber, #e3b341); }
+  #qsearch .qst b { font: 700 13px/1.1 Barlow, "Helvetica Neue", Arial, sans-serif; max-width: 74px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   #qsearch .qsface { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; object-position: 50% 8%; background: #1c1c1f; flex: none; }
   #qsearch .qscard { margin-top: 12px; background: #151517; border: 1px solid #26262a; border-radius: 16px; padding: 14px; }
   #qsearch .qswho { display: flex; align-items: center; gap: 12px; }
@@ -3790,6 +3810,7 @@
 <div id="qspull">PULL TO SEARCH</div>
 <div id="qsearch" role="dialog" aria-label="Search quarterbacks">
   <div class="qsbar" id="qsbar"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="7" fill="none" stroke="#fff" stroke-width="2.4"/><line x1="16" y1="16" x2="21.5" y2="21.5" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg><input id="qsin" type="search" autocomplete="off" autocapitalize="words" placeholder="Search a QB, or a few for a parlay"></div>
+  <div class="qsrow" id="qsrow" aria-label="Starting quarterbacks"></div>
   <ul class="qssug" id="qssug"></ul>
   <div id="qsout"></div>
   <div class="qsgrab" id="qsgrab" aria-label="Close"></div>
@@ -7352,10 +7373,15 @@
     return true;
   }
   var pushTimer = null;
+  /* the starred quarterbacks in the search's row, by ESPN id, synced like
+     every other mark */
+  var STARS = {};
+  try { STARS = JSON.parse(localStorage.getItem("arena.stars") || "{}") || {}; } catch (e) { STARS = {}; }
+  window.STARS = STARS;
   function pushState() {
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function () {
-      var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {},
+      var body = {hidden: hid || {}, placed: placed || {}, picks: saved || {}, stars: STARS || {},
                   ring: (typeof RINGED === "object" && RINGED) || {},
                   bank: (typeof BANKMET !== "undefined" && BANKMET && typeof BANK === "object" && BANK) || null};
       try {
@@ -7396,12 +7422,17 @@
             Object.keys(mine || {}).forEach(function (k) { out[k] = mine[k]; });
             return out;
           };
-          j = {hidden: fold(hid, j.hidden), placed: fold(placed, j.placed),
+          j = {hidden: fold(hid, j.hidden), placed: fold(placed, j.placed), stars: fold(STARS, j.stars),
                picks: fold(saved, j.picks), ring: fold(RINGED, j.ring), bank: j.bank, at: Date.now()};
           try { localStorage.setItem("arena.met", "1"); } catch (e) {}
         } else if (!j.at) {
           return;
         }
+        if (j.stars && JSON.stringify(j.stars) !== JSON.stringify(STARS)) {
+          STARS = window.STARS = j.stars;
+          try { localStorage.setItem("arena.stars", JSON.stringify(STARS)); } catch (e) {}
+          if (window.qsRow) window.qsRow();
+        } else if (!j.stars && Object.keys(STARS).length) pushState();
         if (j.hidden && JSON.stringify(j.hidden) !== JSON.stringify(hid)) {
           hid = j.hidden;
           try { localStorage.setItem(HIDEKEY, JSON.stringify(hid)); } catch (e) {}
@@ -16746,8 +16777,9 @@
       try { if (typeof moneyRows === "function" && LEDGER) moneyRows().forEach(function (r) { add(String(r.id), r.name, qs[r.id] ? null : r.club); }); } catch (e) {}
       Object.keys(next).forEach(function (club) {
         var x = next[club], q = add(x.id, x.n, club);
-        if (q.nx && q.nx.gid === x.gid) return;
         var lad = ((((typeof PROPS === "object" && PROPS[x.gid]) || {}).ptd) || [])[x.side] || [];
+        /* the price is always the board's own, never the file's older copy */
+        if (q.nx && q.nx.gid === x.gid) { q.nx.px = (lad[0] && lad[0][0]) || q.nx.px; return; }
         var et = new Date(new Date(x.iso).toLocaleString("en-US", { timeZone: "America/New_York" }));
         var w = (typeof WIRE === "object" && WIRE[x.id]) || {};
         q.nx = { d: x.iso, gid: x.gid, o: x.o, h: x.side === 1, px: (lad[0] && lad[0][0]) || "",
@@ -16755,12 +16787,59 @@
                  wx: ((typeof ALERTS === "object" && ALERTS[x.gid]) || {}).wx || {}, inj: w.status || "",
                  al: q.nx && q.nx.o === x.o ? q.nx.al : null };
       });
+      fromBoard.next = next;
       /* a man another club now starts in his place has no next game of his own */
       Object.keys(qs).forEach(function (id) {
         var q = qs[id], x = q.nx && next[q.t];
         if (x && x.gid === q.nx.gid && x.id !== id) q.nx = null;
       });
     }
+    /* the 32: each club's man for its next game, starred first (newest star
+       first), then by club. A tap puts him in the search; the star keeps him
+       at the front (Jose, Sep 28, 2026) */
+    var row = document.getElementById("qsrow");
+    var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2.8 14.8,9 21.4,9.6 16.4,14 17.9,20.6 12,17.2 6.1,20.6 7.6,14 2.6,9.6 9.2,9"/></svg>';
+    function qsRow() {
+      if (!row || !DATA) return;
+      var nx = fromBoard.next || {}, st = window.STARS || {};
+      var men = Object.keys(nx).map(function (club) { return { club: club, id: nx[club].id, n: nx[club].n }; })
+        .filter(function (m) { return m.id; });
+      men.sort(function (a, b) {
+        var sa = st[a.id] || 0, sb = st[b.id] || 0;
+        if (sa || sb) return sb - sa;
+        return a.club < b.club ? -1 : a.club > b.club ? 1 : 0;
+      });
+      row.innerHTML = men.map(function (m) {
+        var tint = (typeof HUE === "object" && HUE[m.club]) || "#333";
+        var last = typeof famName === "function" ? famName(m.n) : String(m.n).split(" ").pop();
+        return '<button type="button" class="qst' + (picked.indexOf(m.id) >= 0 ? " on" : "") + '" data-id="' + esc(m.id) + '">' +
+          '<span class="qst-pic" style="--tint:' + tint + '">' + face(m.id, "nfl") +
+          '<span class="qst-star' + (st[m.id] ? " on" : "") + '" role="button" aria-label="Star ' + esc(m.n) + '">' + STAR + "</span></span>" +
+          "<b>" + esc(last) + "</b></button>";
+      }).join("");
+      row.hidden = !!inp.value.trim();
+    }
+    window.qsRow = qsRow;
+    if (row) row.addEventListener("click", function (e) {
+      var t = e.target.closest(".qst");
+      if (!t) return;
+      var id = t.dataset.id;
+      if (e.target.closest(".qst-star")) {
+        e.stopPropagation();
+        var st = window.STARS || {};
+        if (st[id]) delete st[id]; else st[id] = Date.now();
+        window.STARS = st;
+        try { localStorage.setItem("arena.stars", JSON.stringify(st)); } catch (e2) {}
+        if (typeof pushState === "function") pushState();
+        qsRow();
+        return;
+      }
+      /* in the search, the way picking his name there would: a second man
+         makes it a parlay, a man already in comes out */
+      var at = picked.indexOf(id);
+      if (at >= 0) picked.splice(at, 1); else picked.push(id);
+      inp.value = ""; draw();
+    });
     function open() {
       if (box.classList.contains("open")) return;
       box.classList.add("open"); load().then(function () { try { fromBoard(); } catch (e) {} draw(); });
@@ -16859,6 +16938,7 @@
       if (!hits.length && DATA && inp.value.trim())
         sug.innerHTML = '<li class="qsnone"><div><b>No QB called “' + esc(inp.value.trim()) + '”</b><br><span>NFL starters and anyone who has played this season</span></div></li>';
       out.innerHTML = picked.length === 1 ? card(picked[0]) : picked.length > 1 ? parlay(picked) : "";
+      qsRow();
     }
     sug.addEventListener("click", function (e) {
       var li = e.target.closest("li[data-id]"); if (!li) return;
