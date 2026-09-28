@@ -9193,8 +9193,15 @@
     };
     items.sort(byOrder);
     var lg = "", dy = "", tm = "", fy = null, row = null;
+    /* a fight card is dated by its first bell: the bouts after midnight
+       Eastern split UFC 332 into a 10/3 row and a 10/4 row (Jose, Sep 28, 2026) */
+    var dateOf = function (it) {
+      var at = it[0] === "mma" && !showLeague && firstBell[it[4] || "Fight card"]
+        ? new Date(firstBell[it[4] || "Fight card"]).toISOString() : it[2];
+      return etParts(at);
+    };
     items.forEach(function (it) {
-      var p = etParts(it[2]), key = p.day + " " + p.date;
+      var p = etParts(it[2]), pd = dateOf(it), key = pd.day + " " + pd.date;
       /* the league rides the clock now -- "CFB 7:30 PM" on one line, on every
          slot, rather than a heading of its own above them (Jose, Sep 17, 2026) */
       if (showLeague && it[0] !== lg) {
@@ -9234,8 +9241,8 @@
       if ((!bill || !BILLS[key + "|" + slot]) && (slot !== tm || (!bill && fin !== fy))) {
         tm = slot; fy = fin;
         var n = items.filter(function (x) {
-          var q = etParts(x[2]);
-          return x[0] === it[0] && q.day + " " + q.date === key &&
+          var q = etParts(x[2]), qd = dateOf(x);
+          return x[0] === it[0] && qd.day + " " + qd.date === key &&
                  (x[0] === "mma" && !showLeague ? (x[4] || "Fight card") : q.time) === slot;
         }).length;
         var board = document.createElement("div");
@@ -9268,7 +9275,7 @@
           (isCard && !onDay
             /* the date alone: a month of evenings does not need the
                weekday said twice (Jose, Sep 19, 2026) */
-            ? '<span class="slotdate">' + p.date + '</span>' +
+            ? '<span class="slotdate">' + pd.date + '</span>' +
               '<span class="slotev">' + slot + '</span>'
             : '<span class="slotday">' + p.day.toUpperCase() + " " + p.date + "</span>" +
               (isCard ? p.time : slot)) +
