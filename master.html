@@ -221,34 +221,31 @@
   .cashfab .cashbag { width: 42px; height: 42px; overflow: hidden;
     -webkit-mask-image: url(ico/moneybag-solid.png); mask-image: url(ico/moneybag-solid.png); }
   .cashfab .cashbag .fabfill { background: rgba(24, 110, 50, 0.75); }   /* climbing: dark green on the white bag (Jose: "dark green!") */
-  /* the wallet he drew (Jose, Sep 27, 2026): solid white at rest; a double
-     tap turns it to its outline and fills it white from the bottom, the edge
-     kept clear of the fill so the shape never goes; full, it is the solid
-     wallet again, and the card pops up out of the top like mail -- green
-     when the book is read, red when it fails, grey when nothing is new --
-     then sinks back */
+  /* the wallet he drew (Jose, Sep 27, 2026): at rest, its outline with the
+     inside filled white and a dark gap between them, so the shape always
+     reads. A double tap empties it and fills it back up while the book is
+     read; then the card rises out of the top like mail -- green when the book
+     is read, red when it fails, grey when nothing is new -- and drops back */
   .cashfab .wal { position: relative; z-index: 1; width: 46px; height: 46px; display: block; pointer-events: none; }
-  .cashfab .wal > i { position: absolute; inset: 0; display: block;
+  .cashfab .wal > i, .cashfab .wal-cd { position: absolute; inset: 0; display: block;
     -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-position: center; mask-position: center; }
-  .cashfab .wal-cd { background: #fff; -webkit-mask-image: url(ico/wallet-card.png); mask-image: url(ico/wallet-card.png);
-    transition: background-color .25s ease; }
-  .cashfab .wal-bd { background: #fff; -webkit-mask-image: url(ico/wallet-body.png); mask-image: url(ico/wallet-body.png); }
-  .cashfab .wal-ln { background: #fff; -webkit-mask-image: url(ico/wallet-line.png); mask-image: url(ico/wallet-line.png); opacity: 0; }
-  .cashfab .wal-in { -webkit-mask-image: url(ico/wallet-inner.png); mask-image: url(ico/wallet-inner.png); opacity: 0; }
-  .cashfab .wal-lv { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: #fff;
+  .cashfab .wal-in { -webkit-mask-image: url(ico/wallet-inner.png); mask-image: url(ico/wallet-inner.png); }
+  .cashfab .wal-lv { position: absolute; left: 0; right: 0; bottom: 0; height: 100%; background: #fff;
     transition: height .45s cubic-bezier(.22, 1, .36, 1); }
-  .cashfab .wal.filling .wal-bd, .cashfab .wal.filling .wal-cd { opacity: 0; }
-  .cashfab .wal.filling .wal-ln, .cashfab .wal.filling .wal-in { opacity: 1; }
-  .cashfab .wal.pop .wal-cd { animation: walpop .7s cubic-bezier(.3, 1.6, .5, 1) both; }
-  .cashfab .wal.pop .wal-cd, .cashfab .wal.sink .wal-cd { -webkit-mask-image: url(ico/wallet-card-tall.png); mask-image: url(ico/wallet-card-tall.png); }
-  .cashfab .wal.pop.ok .wal-cd { background: #1a7a36; }
-  .cashfab .wal.pop.bad .wal-cd { background: #e2564d; }
-  .cashfab .wal.pop.none .wal-cd { background: #8e8e93; }
-  .cashfab .wal.sink .wal-cd { animation: walsink .35s ease-in both; }
-  @keyframes walpop { 0% { transform: translateY(12%); } 100% { transform: translateY(-12%); } }
-  @keyframes walsink { 0% { transform: translateY(-12%); } 100% { transform: translateY(0); } }
-  @media (prefers-reduced-motion: reduce) { .cashfab .wal.pop .wal-cd, .cashfab .wal.sink .wal-cd { animation: none; } }
+  .cashfab .wal-ln { background: #fff; -webkit-mask-image: url(ico/wallet-line.png); mask-image: url(ico/wallet-line.png); }
+  /* the card shows only above the wallet's top edge, so it rises out of it */
+  .cashfab .wal > .wal-cw { -webkit-mask: none; mask: none; clip-path: inset(-40% -20% 74% -20%); }
+  .cashfab .wal-cd { opacity: 0; -webkit-mask-image: url(ico/wallet-card-tall.png); mask-image: url(ico/wallet-card-tall.png);
+    transform: translateY(20%); }
+  .cashfab .wal.pop .wal-cd { opacity: 1; animation: walpop .7s cubic-bezier(.3, 1.6, .5, 1) both; }
+  .cashfab .wal.sink .wal-cd { opacity: 1; animation: walsink .4s ease-in both; }
+  .cashfab .wal.ok .wal-cd { background: #1a7a36; }
+  .cashfab .wal.bad .wal-cd { background: #e2564d; }
+  .cashfab .wal.none .wal-cd { background: #8e8e93; }
+  @keyframes walpop { 0% { transform: translateY(20%); } 100% { transform: translateY(-8%); } }
+  @keyframes walsink { 0% { transform: translateY(-8%); } 100% { transform: translateY(20%); } }
+  @media (prefers-reduced-motion: reduce) { .cashfab .wal.pop .wal-cd { animation: none; transform: none; } }
   .cashfab .cashbag .fabfill--ok { background: #1a7a36; }
   .cashfab .cashbag .fabfill--bad { background: #ff5b5b; }
   .cashfab .cashbag .fabfill--none { background: #8e8e93; }
@@ -3714,7 +3711,7 @@
   </div></div>
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
-<button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-cd"></i><i class="wal-bd"></i><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i></i></button>
+<button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i><i class="wal-cw"><i class="wal-cd"></i></i></i></button>
 <div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div id="cashlegs"></div><div id="cashday"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
@@ -16291,12 +16288,11 @@
       fillEl.style.height = "12%";
       var fin = function (ok, fresh) {
         fillEl.style.height = "100%";
-        /* full: the solid wallet again, then the card pops up out of it --
+        /* full: the wallet at rest again, then the card rises out of it --
            green: a fresh sync; grey: read, but nothing new from the book in
            six hours; red: the read failed (Jose, Sep 26-27, 2026) */
         popT = setTimeout(function () {
           wal.className = "wal";
-          fillEl.style.height = "0";
           popT = setTimeout(function () {
             wal.className = "wal pop " + (!ok ? "bad" : fresh ? "ok" : "none");
             fadeT = setTimeout(function () {
