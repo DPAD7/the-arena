@@ -11734,6 +11734,12 @@
     pullWire();
   }
   function render() {
+    /* HOT's field, scoreboard and scroll lock belong to HOT alone: any other
+       board drawn -- a week's cards on Form, another sport -- takes them down,
+       or the field and the black scoreboard showed through behind a week's
+       cards (Jose, Sep 28, 2026: "there's a leak") */
+    if (BOARD === MAINBOARD && (sport !== "form" || formWeek !== "season"))
+      document.documentElement.classList.remove("hotlock");
     if (sport === "form") {
       loadLedger(function () {
         if (BOARD === MAINBOARD) formTabs();
