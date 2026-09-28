@@ -212,6 +212,18 @@
     background: #fff;   /* white, not gold (Jose, Sep 27, 2026) */
     -webkit-mask: url(ico/moneybag.png) center / contain no-repeat;
     mask: url(ico/moneybag.png) center / contain no-repeat; }
+  /* the bag alone, no tile: his own bag filled solid white with the $ cut
+     out, a shadow to hold it off any photo, and the double tap's fill
+     climbing inside the bag itself (Jose, Sep 27, 2026) */
+  .cashfab { background: none; border: 0; box-shadow: none;
+    -webkit-backdrop-filter: none; backdrop-filter: none; overflow: visible;
+    filter: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.7)); }
+  .cashfab .cashbag { width: 42px; height: 42px; overflow: hidden;
+    -webkit-mask-image: url(ico/moneybag-solid.png); mask-image: url(ico/moneybag-solid.png); }
+  .cashfab .cashbag .fabfill { background: rgba(63, 191, 90, 0.5); }   /* climbing: light green on the white bag */
+  .cashfab .cashbag .fabfill--ok { background: #3fbf5a; }
+  .cashfab .cashbag .fabfill--bad { background: #ff5b5b; }
+  .cashfab .cashbag .fabfill--none { background: #8e8e93; }
   .cashsheet {
     position: fixed; z-index: 46; width: 220px; box-sizing: border-box;
     padding: 14px 16px; border-radius: 16px;
@@ -16243,7 +16255,8 @@
        helmet's does (Jose, Sep 26, 2026) */
     var fillEl = document.createElement("span");
     fillEl.className = "fabfill";
-    fab.insertBefore(fillEl, fab.firstChild);
+    /* inside the bag, so the fill takes the bag's own shape */
+    (fab.querySelector(".cashbag") || fab).appendChild(fillEl);
     var tapT = null, fadeT = null;
     function pullNow() {
       clearTimeout(fadeT);
