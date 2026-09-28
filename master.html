@@ -2145,7 +2145,9 @@
      the spacers keep the first and last in the middle (Jose, Sep 23, 2026:
      "make the container larger to fit within this section") */
   .form.qcards.qcards--hot > .qcard { zoom: 1.5; flex: 0 0 188px; }
-  .form.qcards.qcards--hot { zoom: var(--hotz, 1); }
+  .form.qcards.qcards--hot:not(.qcards--full) { zoom: var(--hotz, 1); }
+  /* HOT, NOT and OUT are gone from under the carousel (Jose, Sep 28, 2026) */
+  #hotset { display: none !important; }
   .form.qcards.qcards--hot.qcards--still::before, .form.qcards.qcards--hot.qcards--still::after { display: none; }
   .form.qcards.qcards--hot.qcards--still { justify-content: center; }
   .form.qcards.qcards--hot::before, .form.qcards.qcards--hot::after { flex: 0 0 calc((100% - 282px) / 2 - 10px); }
@@ -10825,7 +10827,9 @@
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
           box.style.marginTop = "";
-          if (turf.hidden || !document.body.contains(turf)) return;
+          /* off the field the cards are their own size again: HOT's size
+             stayed on them and squashed the grid (Jose, Sep 28, 2026) */
+          if (turf.hidden || !document.body.contains(turf)) { box.style.zoom = ""; return; }
           var W = window.innerWidth, H = window.innerHeight;
           /* as large as covers the screen, but never so large that the card
              band falls behind the nav: then the field stops a little short
@@ -10925,8 +10929,8 @@
           hs.style.top = Math.round(Y(1239) - 22) + "px";
           if (card) {
             var z = HOTZ || 1, r = box.getBoundingClientRect();
-            var iconTop = Math.min.apply(null, [].map.call(hs.querySelectorAll("button"), function (x) {
-              return x.getBoundingClientRect().top; }).concat([Y(1239) - 44]));
+            var iconTop = Y(1239) - 8;
+            if (box.dataset.set) { delete box.dataset.set; loopRow(box); }
             /* the room is between the pick box (the bottom of the turf) and
                the icons. The cards fit in it: if they ever do not, they are
                made smaller once and keep that -- they never grow back, so
