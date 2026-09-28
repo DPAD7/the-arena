@@ -10648,6 +10648,12 @@
       });
       /* marked, not dropped: only the All grid leaves them out -- HOT keeps
          every man (Jose, Sep 28, 2026: "I was talking about the All tab") */
+      /* a man traded mid-season is carded by the club that names him for its
+         next game, not the one his old games were for -- McCarthy to the
+         Giants (Jose, Sep 28, 2026) */
+      Object.keys(next).forEach(function (club) {
+        rows.forEach(function (m) { if (String(m.id) === next[club].id) m.club = club; });
+      });
       rows.forEach(function (m) {
         var nx = next[m.club];
         if (!nx || nx.id === String(m.id)) return;
