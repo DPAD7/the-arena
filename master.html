@@ -322,7 +322,7 @@
   #qsearch .qsform { margin-top: 8px; background: #1c1c1f; border-radius: 10px; padding: 9px 10px 8px; }
   #qsearch .qsform > span { display: block; font: 700 11px "Barlow Condensed", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
-  #qsearch .qsfield { position: relative; height: 178px; margin-top: 6px; }
+  #qsearch .qsfield { position: relative; height: 180px; margin-top: 6px; }
   #qsearch .qsfield .los { position: absolute; left: 1%; right: 1%; top: 85px; height: 2px; background: #fff; }
   #qsearch .qsj { position: absolute; width: 22px; height: 22px; transform: translateX(-50%);
     background: center / contain no-repeat; }
@@ -17133,18 +17133,31 @@
          on the edges. The defense faces the offense, so its left is the
          offense's right. */
       var three4 = d.some(function (m) { return m.k === "nt" || m.k === "lilb"; });
-      var X = { lt: 30, lg: 38, c: 46, rg: 54, rt: 62, te: 70, wr1: 5, wr2: 95, wr3: 84, qb: 46, rb: 46, fb: 46,
-                lde: 64, ldt: 52, nt: 46, rdt: 40, rde: 28,
-                lolb: 74, lilb: 52, mlb: 46, rilb: 40, rolb: 18,
-                wlb: three4 ? 18 : 28, slb: three4 ? 74 : 68,
-                lcb: 95, rcb: 5, fs: 32, ss: 64 };
-      var Y = { lt: 58, lg: 58, c: 58, rg: 58, rt: 58, te: 58, wr1: 58, wr2: 46, wr3: 46, qb: 32, rb: 6, fb: 6,
-                lde: 92, ldt: 92, nt: 92, rdt: 92, rde: 92,
-                lolb: 92, rolb: 92, lilb: 122, mlb: 122, rilb: 122,
-                wlb: three4 ? 92 : 122, slb: three4 ? 92 : 122,
-                lcb: 96, rcb: 96, fs: 150, ss: 150 };
-      /* every spot has its one place; a man whose spot is not one of these is
-         not drawn -- eleven a side, the chart's own */
+      /* every defender squared up on an offensive spot, the same spacing as
+         the line across from him (Jose, Sep 28, 2026: "why is defense
+         randomly spaced") */
+      /* the NFL's own diagrams (Jose, Sep 28, 2026, "Meet the defense"):
+         a 4-3 is DE DT DT DE even across the line, three backers even behind
+         them, then CB S S CB in one row; a 3-4 is DE DT DE, four backers in
+         one row with the corners out wide on it, the two safeties deep */
+      /* no fullback in the set: one back, offset to the two-receiver side;
+         the tight end on the other side, next to the left tackle, with the X
+         split outside him (Jose, Sep 28, 2026) */
+      var OFFX = { lt: 30, lg: 38, c: 46, rg: 54, rt: 62, te: 22, wr1: 5, wr2: 95, wr3: 80, qb: 46, rb: 56, fb: 56 };
+      var OFFY = { lt: 58, lg: 58, c: 58, rg: 58, rt: 58, te: 58, wr1: 58, wr2: 46, wr3: 46, qb: 32, rb: 6, fb: 6 };
+      var DX = three4
+        ? { rde: 30, nt: 46, lde: 62, slb: 22, rolb: 22, rilb: 38, lilb: 54, mlb: 46, wlb: 70, lolb: 70,
+            rcb: 5, lcb: 95, ss: 34, fs: 58 }
+        : { rde: 22, rdt: 38, ldt: 54, lde: 70, slb: 30, mlb: 46, wlb: 62,
+            rcb: 5, ss: 32, fs: 60, lcb: 95 };
+      var DY = three4
+        ? { rde: 92, nt: 92, lde: 92, wlb: 122, rolb: 122, rilb: 122, lilb: 122, mlb: 122, slb: 122, lolb: 122,
+            rcb: 122, lcb: 122, fs: 152, ss: 152 }
+        : { rde: 92, rdt: 92, ldt: 92, lde: 92, wlb: 122, mlb: 122, slb: 122,
+            rcb: 152, fs: 152, ss: 152, lcb: 152 };
+      var X = {}, Y = {};
+      [OFFX, DX].forEach(function (m) { Object.keys(m).forEach(function (k) { X[k] = m[k]; }); });
+      [OFFY, DY].forEach(function (m) { Object.keys(m).forEach(function (k) { Y[k] = m[k]; }); });
       var place = function (list, club) {
         list.forEach(function (m) {
           var k = m.k || "";
