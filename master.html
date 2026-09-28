@@ -158,7 +158,7 @@
   .cashfab {
     position: fixed; z-index: 45; right: 12px;
     bottom: calc(100px + env(safe-area-inset-bottom));
-    width: 52px; height: 52px; padding: 0; margin: 0;
+    width: 60px; height: 60px; padding: 0; margin: 0;
     display: grid; place-items: center;
     background: rgba(28, 28, 30, 0.72); color: #fff;
     -webkit-backdrop-filter: blur(22px) saturate(1.6);
@@ -226,7 +226,7 @@
      reads. A double tap empties it and fills it back up while the book is
      read; then the card rises out of the top like mail -- green when the book
      is read, red when it fails, grey when nothing is new -- and drops back */
-  .cashfab .wal { position: relative; z-index: 1; width: 46px; height: 46px; display: block; pointer-events: none; }
+  .cashfab .wal { position: relative; z-index: 1; width: 58px; height: 58px;   /* bigger (Jose, Sep 27, 2026: "too small") */ display: block; pointer-events: none; }
   .cashfab .wal > i, .cashfab .wal-cd { position: absolute; inset: 0; display: block;
     -webkit-mask-size: contain; mask-size: contain; -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
     -webkit-mask-position: center; mask-position: center; }
@@ -13658,6 +13658,9 @@
            (Jose, Sep 26, 2026: "a 55 total at 3 at the half ... up 30 at the
            half and I have a QB to throw 2 PTD") */
         if (live && typeof liveAlert === "function") liveAlert(card, comp, ls, rs, stats, box);
+        /* the final line, kept for the box that says what the game paid */
+        card._qbst = stats;
+        if (done && typeof showHitsLater === "function") showHitsLater(card);
         /* the section is .h2hx — it was rebuilt under that name and this
            lookup was never moved, so the whole block sat dead */
         var h = card.querySelector(".h2hx") || card.querySelector(".h2h");
@@ -15306,6 +15309,31 @@
         if (best) legs.push([best[1], (who + " " + best[0] + "+ " + kind).trim()]);
       });
     });
+
+    /* every price the game paid, worked out from the prices it was offered
+       and his final line -- the card only draws 1+ and 2+, so a 3+ that paid
+       +558 never counted and the box said the Raiders at +150 was the best
+       (Jose, Sep 27, 2026: "you're saying this is the best bet that won?") */
+    var gpr = !card.dataset.bout && fin && typeof PROPS === "object" ? PROPS[card.dataset.espn] : null;
+    var qs = card._qbst || {};
+    if (gpr) {
+      [["l", 0, lq], ["r", 1, rq]].forEach(function (sd) {
+        var st = qs[sd[0]] || {}, lad = (gpr.ptd || [])[sd[1]] || [], atd = (gpr.atd || [])[sd[1]] || [];
+        lad.forEach(function (slot, k) {
+          if (slot && slot[0] && st.ptd !== null && st.ptd !== undefined && st.ptd >= k + 1)
+            legs.push([slot[0], (sd[2] + " " + (k + 1) + "+ PTD").trim()]);
+        });
+        atd.forEach(function (slot, k) {
+          if (slot && slot[0] && st.td !== null && st.td !== undefined && st.td >= k + 1)
+            legs.push([slot[0], (sd[2] + " " + (k + 1) + "+ ATD").trim()]);
+        });
+      });
+      var ly = (qs.l || {}).pyds, ry = (qs.r || {}).pyds, hh = gpr.h2h || [];
+      if (ly !== null && ly !== undefined && ry !== null && ry !== undefined && ly !== ry) {
+        var hw = ly > ry ? 0 : 1;
+        if (hh[hw] && hh[hw][0]) legs.push([hh[hw][0], ((hw ? rq : lq) + " H2H").trim()]);
+      }
+    }
 
     /* a bout's sheet: every method price the result paid. It reads the way an
        NFL leg reads -- the man's face, then the market as its own marks, the
