@@ -16627,9 +16627,46 @@
         .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
     }
     function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    /* the search holds every QB the board holds, always: each club's man for
+       its next game and everyone on the season list, taken from the page's own
+       data every time it opens, so it never waits on a rebuild of the file
+       (Jose, Sep 28, 2026: "make it match once and for all") */
+    function fromBoard() {
+      var qs = DATA.qbs, now = Date.now(), next = {};
+      (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
+        var t = Date.parse(g[2]);
+        if (t < now - 4 * 3600000) return;
+        [[g[3], g[5], g[6], 0, g[4]], [g[4], g[7], g[8], 1, g[3]]].forEach(function (p) {
+          if (!p[2]) return;
+          if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, iso: g[2], gid: String(g[1]), n: p[1], id: String(p[2]), side: p[3], o: p[4] };
+        });
+      });
+      var add = function (id, n, club) {
+        var q = qs[id] || (qs[id] = { n: n, t: club, lg: "nfl", g: [], nx: null });
+        if (club) q.t = club;
+        return q;
+      };
+      try { if (typeof moneyRows === "function" && LEDGER) moneyRows().forEach(function (r) { add(String(r.id), r.name, qs[r.id] ? null : r.club); }); } catch (e) {}
+      Object.keys(next).forEach(function (club) {
+        var x = next[club], q = add(x.id, x.n, club);
+        if (q.nx && q.nx.gid === x.gid) return;
+        var lad = ((((typeof PROPS === "object" && PROPS[x.gid]) || {}).ptd) || [])[x.side] || [];
+        var et = new Date(new Date(x.iso).toLocaleString("en-US", { timeZone: "America/New_York" }));
+        var w = (typeof WIRE === "object" && WIRE[x.id]) || {};
+        q.nx = { d: x.iso, gid: x.gid, o: x.o, h: x.side === 1, px: (lad[0] && lad[0][0]) || "",
+                 sl: et.getDay() !== 0 ? 0 : et.getHours() < 14 ? 1 : et.getHours() < 18 ? 4 : 0,
+                 wx: ((typeof ALERTS === "object" && ALERTS[x.gid]) || {}).wx || {}, inj: w.status || "",
+                 al: q.nx && q.nx.o === x.o ? q.nx.al : null };
+      });
+      /* a man another club now starts in his place has no next game of his own */
+      Object.keys(qs).forEach(function (id) {
+        var q = qs[id], x = q.nx && next[q.t];
+        if (x && x.gid === q.nx.gid && x.id !== id) q.nx = null;
+      });
+    }
     function open() {
       if (box.classList.contains("open")) return;
-      box.classList.add("open"); load().then(function () { draw(); });
+      box.classList.add("open"); load().then(function () { try { fromBoard(); } catch (e) {} draw(); });
       setTimeout(function () { try { inp.focus(); } catch (e) {} }, 60);
     }
     function close() { box.classList.remove("open"); try { inp.blur(); } catch (e) {} }
@@ -16688,7 +16725,7 @@
     function match(q) {
       var qs = DATA ? DATA.qbs : {}, t = q.trim().toLowerCase();
       if (!t) return [];
-      var parts = t.split(/\s+/), hits = [];
+      var parts = t.split(/[\s.'-]+/).filter(Boolean), hits = [];
       Object.keys(qs).forEach(function (id) {
         if (picked.indexOf(id) >= 0) return;
         var words = qs[id].n.toLowerCase().split(/[\s.'-]+/);
