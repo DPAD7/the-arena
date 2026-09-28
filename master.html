@@ -2145,6 +2145,7 @@
      the spacers keep the first and last in the middle (Jose, Sep 23, 2026:
      "make the container larger to fit within this section") */
   .form.qcards.qcards--hot > .qcard { zoom: 1.5; flex: 0 0 188px; }
+  .form.qcards.qcards--hot { zoom: var(--hotz, 1); }
   .form.qcards.qcards--hot::before, .form.qcards.qcards--hot::after { flex: 0 0 calc((100% - 282px) / 2 - 10px); }
   .pickghost { position: fixed; left: 0; top: 0; z-index: 60; pointer-events: none;
     border-radius: 18px; overflow: hidden; background: #121214;
@@ -10811,7 +10812,12 @@
          between the two near yard lines (Jose, Sep 25, 2026: "QBs end up
          here when selected", "the carousel goes there") */
       var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245], board: [318, 261, 440, 383] };
-      var HOTZ = 0;   /* the carousel's one size, set once */
+      /* the carousel's one size, for the whole visit: HOT is built again when
+         his saved marks arrive, and a size kept per build was lost with the
+         old one -- the new row came up full size behind the slip (Jose,
+         Sep 28, 2026). It is laid on the page as --hotz, so any row built
+         later wears it from its first frame. */
+      var HOTZ = window._hotz || 0;
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
@@ -10891,14 +10897,19 @@
           var top = Y(FIELD.band[0]), band = Y(FIELD.band[1]) - top;
           var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
           var hs = hotSet();
+          HOTZ = HOTZ || window._hotz || 0;
           if (card && !HOTZ) {
             var zNow = parseFloat(getComputedStyle(box).zoom) || 1;
             var natural = card.getBoundingClientRect().height / zNow;
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
-            HOTZ = Math.min(1, (band - 10) / natural, (Y(1239) - top - 36 - 4) / natural);
+            HOTZ = window._hotz = Math.min(1, (band - 10) / natural, (Y(1239) - top - 36 - 4) / natural);
+            document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
+          /* no card to measure yet: look again in a moment, never leave the
+             row at full size */
+          if (!HOTZ && (box._retry = (box._retry || 0) + 1) < 40) setTimeout(centerHot, 120);
           if (card) {
             var z = HOTZ || 1, r = box.getBoundingClientRect();
             var want = top + (band - r.height) / 2;
