@@ -8235,6 +8235,28 @@
      Every number is MIRRORED out of the node the live pass already writes --
      the .trkbox counts, the yard boxes -- so nothing upstream had to change
      and no count can go missing because this rewrote its seat. */
+  /* one test for every leg on a card, whatever kind: marked on the board, kept
+     in his marks by its id, or on a slip from the book. The head to head had
+     all three and the moneyline and the touchdown rungs had only the first,
+     so a moneyline he had on a DraftKings slip never turned green
+     (Jose, Sep 28, 2026: "take your one edit and apply it to everything") */
+  function legMine(btn, oid) {
+    oid = oid || (btn && btn.dataset.oid) || "";
+    if (btn && (btn.classList.contains("on") || btn.classList.contains("placed"))) return true;
+    if (window.isPlaced && window.isPlaced(oid)) return true;
+    return !!(oid && typeof DKB === "object" && DKB && (DKB.bets || []).some(function (bt) {
+      return (bt.legs || []).some(function (lg) { return lg.sel === oid; });
+    }));
+  }
+  function mlOids(gid) {
+    var got = ["", ""];
+    [[typeof SCHED === "object" ? SCHED : [], 9], [typeof CFB === "object" ? CFB : [], 10]].forEach(function (pair) {
+      pair[0].forEach(function (row) {
+        if (String(row[1]) === String(gid)) got = [row[pair[1] + 1] || "", row[pair[1] + 3] || ""];
+      });
+    });
+    return got;
+  }
   function numChip(v, on, placed, won) {
     var b = document.createElement("b");
     b.className = "pnum" + (on ? " on" : "") + (placed ? " placed" : "") +
@@ -8308,10 +8330,10 @@
         /* a club price he had marked keeps its gold on the score that
            answered it (Jose, Sep 22, 2026: "where is the gold box around the
            stuff I checked off") */
-        [[ends[0], l, r], [ends[1], r, l]].forEach(function (e) {
+        var mo = mlOids(card.dataset.espn);
+        [[ends[0], l, r, 0], [ends[1], r, l, 1]].forEach(function (e) {
           var ml = e[0].querySelector(".gml button.price");
-          var mk = !!(ml && (ml.classList.contains("on") ||
-                             ml.classList.contains("placed")));
+          var mk = legMine(ml, (ml && ml.dataset.oid) || mo[e[3]]);
           e[0].appendChild(numChip(e[1], e[1] > e[2], mk,
             mk && done ? e[1] > e[2] : null));
         });
@@ -8347,11 +8369,7 @@
         /* once the game is over the button has gone, so the price is found
            by its own id: marked on the board, or on a slip from the book */
         var oid = (hb && hb.dataset.oid) || (hpr[e[3]] && hpr[e[3]][1]) || "";
-        var onDk = !!(oid && typeof DKB === "object" && DKB && (DKB.bets || []).some(function (bt) {
-          return (bt.legs || []).some(function (lg) { return lg.sel === oid; });
-        }));
-        var mine = !!((hb && (hb.classList.contains("on") || hb.classList.contains("placed"))) ||
-                      (window.isPlaced && window.isPlaced(oid)) || onDk);
+        var mine = legMine(hb, oid);
         e[0].appendChild(numChip(e[1], e[1] > e[2], mine, mine && done ? e[1] > e[2] : null));
       });
       /* the margin under the VS, in the room below the rows, leaning to the
@@ -8400,12 +8418,17 @@
            any rung of his he had marked */
         var placed = false, wonAt = 0;
         side.querySelectorAll(".ptdbtn button.price").forEach(function (b0, i0) {
-          if (b0.classList.contains("on") || b0.classList.contains("placed")) {
+          if (legMine(b0)) {
             placed = true;
             var ln0 = b0.closest(".ptdbtn").querySelector(".ptdline");
             var n0 = ln0 ? parseInt(ln0.textContent, 10) : i0 + 1;
             if (!isNaN(n0)) wonAt = Math.max(wonAt, n0);
           }
+        });
+        /* and every rung the card does not draw -- 3+, 4+ and up -- by its id */
+        var lad0 = ((((typeof PROPS === "object" && PROPS[card.dataset.espn]) || {})[sec.dataset.kind === "ATD" ? "atd" : "ptd"]) || [])[sd[1]] || [];
+        lad0.forEach(function (slot, k) {
+          if (slot && slot[1] && legMine(null, slot[1])) { placed = true; wonAt = Math.max(wonAt, k + 1); }
         });
         var oth = counts[sd[1] ? 0 : 1];
         var ov = oth ? parseInt(oth.textContent, 10) : 0;
@@ -16241,8 +16264,13 @@
       if (typeof pushState === "function") pushState();
     }
   }
+  var bankFix = false;
   function dkApply() {
-    if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) return false;
+    /* the book's balance is the balance, every time it is read -- a unit taken
+       off before the read landed stayed off, and the wallet said $150.22 with
+       $250.22 on DraftKings (Jose, Sep 28, 2026) */
+    if (DKB && typeof DKB.balance === "number" && BANK.bal !== DKB.balance) { BANK.bal = DKB.balance; bankFix = true; }
+    if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) { var f0 = bankFix; bankFix = false; return f0; }
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
     (DKB.bets || []).forEach(function (bet) {
       /* the sweep sends the book's own ISO time and selection ids; the
@@ -16385,7 +16413,9 @@
     BANK.out = BANK.out || {};
     /* never handed back on its own: a page drawn before its cards sees no
        gold at all, and read that as the legs taken off (Sep 25, 2026) */
-    if (legs.length && !BANK.out[dayk] && !(DKB && DKB.at)) {
+    /* once the book has ever been read, the book keeps the balance: the page
+       never takes a unit or pays one out itself again */
+    if (legs.length && !BANK.out[dayk] && !(DKB && DKB.at) && !BANK.dkAt) {
       BANK.bal = Math.round((BANK.bal - UNIT) * 100) / 100; BANK.out[dayk] = 1; moved = true;
     }
     if (legs.length) {
@@ -16393,7 +16423,7 @@
       var won = legs.every(function (b) { return b.st === "won"; });
       state = lost ? "lost" : won ? "won" : "";
       /* once a day: the whole payout on a cash, nothing on a miss */
-      if (state && !BANK.paid[dayk] && !(DKB && DKB.at)) {
+      if (state && !BANK.paid[dayk] && !(DKB && DKB.at) && !BANK.dkAt) {
         var dec = 1;
         legs.forEach(function (b) { dec *= toDec(b.o) || 1; });
         BANK.bal = Math.round((BANK.bal + (won ? UNIT * dec : 0)) * 100) / 100;
