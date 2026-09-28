@@ -10747,7 +10747,11 @@
       chips.addEventListener("pointerup", fLetGo);
       chips.addEventListener("pointercancel", fLetGo);
       box.className = "form qcards qcards--" + fv;
-      box.innerHTML = rows.map(function (r, i) { return qcard(r, i + 1, rec); }).join("");
+      /* the numbers count only the men the All grid shows: a benched or
+         season-out man took a number while hidden, so Winston read 32 with
+         29 before him (Jose, Sep 28, 2026) */
+      var nShown = 0;
+      box.innerHTML = rows.map(function (r) { return qcard(r, r.bench ? "" : ++nShown, rec); }).join("");
       /* an odd count in a two-column view: the last card takes the middle */
       function soloLast() {
         var cards = [].slice.call(box.querySelectorAll(".qcard"));
