@@ -2340,6 +2340,7 @@
     padding: 12px 2px 20px; overflow: visible; }
   .form.qcards.qcards--all::before, .form.qcards.qcards--all::after { display: none; }
   .form.qcards.qcards--all > .qcard { flex: none; }
+  .form.qcards.qcards--all > .qcard--bench { display: none; }
   .qcards--hot > .qcard:not(.qcard--gold) { display: none; }
   .qcards--not > .qcard:not(:has(.cold)) { display: none; }
   .qcards--out > .qcard:not(:has(.hurt)) { display: none; }
@@ -10604,7 +10605,7 @@
       ? '<img class="qbface qbface--card" data-ring="' + r.id + '" alt="" loading="lazy" src="face/nfl/' +
         r.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
       : '<img class="qbface qbface--card" alt="" src="' + NOFACE + '">';
-    return '<article class="qcard' + (RINGED[String(r.id)] ? " qcard--gold" : "") + '">' +
+    return '<article class="qcard' + (RINGED[String(r.id)] ? " qcard--gold" : "") + (r.bench ? " qcard--bench" : "") + '">' +
       '<div class="qface" style="--hue:' + cardHue(club) + ';--mark:url(logos/nfl/' +
         club.toLowerCase() + '.png)">' + face +
         '<span class="qrank">' + rank + "</span></div>" +
@@ -10637,11 +10638,13 @@
           if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, id: String(p[1]) };
         });
       });
-      rows = rows.filter(function (m) {
+      /* marked, not dropped: only the All grid leaves them out -- HOT keeps
+         every man (Jose, Sep 28, 2026: "I was talking about the All tab") */
+      rows.forEach(function (m) {
         var nx = next[m.club];
-        if (!nx || nx.id === String(m.id)) return true;
+        if (!nx || nx.id === String(m.id)) return;
         var w = WIRE[String(m.id)];
-        return !!(w && /out|injur|doubt|question|reserve/i.test(w.status || ""));
+        if (!(w && /out|injur|doubt|question|reserve/i.test(w.status || ""))) m.bench = true;
       });
     })();
     /* Touchdowns first, thrown and run together, and the club's record only to
