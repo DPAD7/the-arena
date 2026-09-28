@@ -62,6 +62,47 @@ def passers(box, ab):
                     out.append((ath.get("displayName") or "", str(ath.get("id"))))
     return out
 
+
+def attempts(box, ab, pid):
+    """How many passes one man threw for that club."""
+    for team in box:
+        if str(((team.get("team") or {}).get("abbreviation")) or "").upper() != str(ab).upper():
+            continue
+        for cat in team.get("statistics") or []:
+            if cat.get("name") != "passing":
+                continue
+            labels = cat.get("labels") or []
+            j = labels.index("C/ATT") if "C/ATT" in labels else -1
+            for a in cat.get("athletes") or []:
+                if str((a.get("athlete") or {}).get("id")) == str(pid) and j >= 0:
+                    try:
+                        return int(str(a["stats"][j]).split("/")[1])
+                    except (IndexError, ValueError, KeyError):
+                        return 0
+    return 0
+
+
+def busiest(box, ab):
+    """The passer with the most attempts for that club, or None."""
+    best, most = None, -1
+    for team in box:
+        if str(((team.get("team") or {}).get("abbreviation")) or "").upper() != str(ab).upper():
+            continue
+        for cat in team.get("statistics") or []:
+            if cat.get("name") != "passing":
+                continue
+            labels = cat.get("labels") or []
+            j = labels.index("C/ATT") if "C/ATT" in labels else -1
+            for a in cat.get("athletes") or []:
+                ath = a.get("athlete") or {}
+                try:
+                    att = int(str((a.get("stats") or [])[j]).split("/")[1]) if j >= 0 else 0
+                except (IndexError, ValueError):
+                    att = 0
+                if ath.get("id") and att > most:
+                    best, most = (ath.get("displayName") or "", str(ath.get("id"))), att
+    return best
+
 def first_up(d, had):
     """Which of these passers threw first, from the plays in order. The play
        text writes a man three ways -- "Dylan Lonergan", "D. Lonergan",
@@ -154,10 +195,13 @@ def main():
             for c in comp.get("competitors") or []:
                 sides[c.get("homeAway")] = str((c.get("team") or {}).get("abbreviation") or "")
             for i, home in ((5, "away"), (7, "home")):
-                club = sides.get(home)
-                if not club:
-                    continue
+                # the row's own club first: a neutral site can list the row's
+                # home side as ESPN's away, and Arkansas was given Utah's man
+                club = g[3] if i == 5 else g[4]
                 had = passers(box, club)
+                if not had:
+                    club = sides.get(home)
+                    had = passers(box, club) if club else []
                 if not had:
                     continue
                 # the man who threw first started. A priced man who played
@@ -165,6 +209,16 @@ def main():
                 # who only came in late gives way to the starter: Rutgers kept
                 # AJ Surace, 3 of 7, while Dylan Lonergan started (Sep 25, 2026)
                 first = first_up(d, had)
+                # no play names a thrower (a settled file keeps no drives): the
+                # busiest passer, never a backup with one throw -- West Virginia
+                # read Jyron Hughley, 1 attempt, for Michael Hawkins Jr.'s game
+                # (Jose, Sep 27, 2026)
+                top = busiest(box, club)
+                if not first or (top and first[1] != top[1] and
+                                 2 * attempts(box, club, first[1]) < attempts(box, club, top[1])):
+                    # a first throw that was a trick play or a backup's one
+                    # snap: Hughley threw once, first, while Hawkins threw 17
+                    first = top
                 there = any(str(g[i + 1]) == pid for _, pid in had)
                 if there and (not first or str(g[i + 1]) == first[1]
                               or priced(g[1], 0 if i == 5 else 1)):
