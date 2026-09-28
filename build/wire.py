@@ -32,6 +32,7 @@ from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "site", "wire.json")
+HELD = os.path.join(D, "data", "wire_held.json")
 WHO = ("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl"
        "/seasons/%d/athletes/%s")
 
@@ -74,6 +75,18 @@ def main():
         for pid, hurt in ex.map(ask, ids):
             if hurt and hurt.get("status"):
                 out[pid] = hurt
+    # news seen before ESPN's injury entry catches up: held until ESPN has
+    # something newer of its own (Jose, Sep 28, 2026: "as soon as you see it,
+    # report it on the page")
+    held = {}
+    try:
+        held = json.load(open(HELD))
+    except (OSError, ValueError):
+        pass
+    for pid, h in held.items():
+        mine = out.get(pid)
+        if not mine or (mine.get("since") or "") < (h.get("since") or ""):
+            out[pid] = {k: h.get(k) for k in ("status", "abbr", "type", "side", "since", "returns", "note")}
     json.dump(out, open(OUT, "w"), separators=(",", ":"))
     name = {}
     for wk in led:
