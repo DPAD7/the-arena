@@ -2340,7 +2340,8 @@
     padding: 12px 2px 20px; overflow: visible; }
   .form.qcards.qcards--all::before, .form.qcards.qcards--all::after { display: none; }
   .form.qcards.qcards--all > .qcard { flex: none; }
-  .form.qcards.qcards--all > .qcard--bench { display: none; }
+  /* HOT and All show the same 32, one a club (Jose, Sep 28, 2026) */
+  .form.qcards > .qcard.qcard--bench { display: none !important; }
   .qcards--hot > .qcard:not(.qcard--gold) { display: none; }
   .qcards--not > .qcard:not(:has(.cold)) { display: none; }
   .qcards--out > .qcard:not(:has(.hurt)) { display: none; }
@@ -10633,9 +10634,17 @@
       (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
         var t = Date.parse(g[2]);
         if (t < now - 5 * 3600000) return;
-        [[g[3], g[6]], [g[4], g[8]]].forEach(function (p) {
-          if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, id: String(p[1]) };
+        [[g[3], g[6], g[5]], [g[4], g[8], g[7]]].forEach(function (p) {
+          if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, id: String(p[1]), name: p[2] };
         });
+      });
+      /* a man named to start who has not thrown yet this season still gets
+         his club's card -- Keenum for the Bears (Jose, Sep 28, 2026) */
+      Object.keys(next).forEach(function (club) {
+        var nx = next[club];
+        if (!nx.id || rows.some(function (m) { return String(m.id) === nx.id; })) return;
+        rows.push({ name: nx.name, club: club, id: nx.id, ptd: 0, atd: 0, h2hw: 0, mlw: 0, legs: [],
+                    units: 0, weeks: 0, played: 0, priced: false, agg: true });
       });
       /* marked, not dropped: only the All grid leaves them out -- HOT keeps
          every man (Jose, Sep 28, 2026: "I was talking about the All tab") */
