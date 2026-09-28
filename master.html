@@ -10738,6 +10738,7 @@
          between the two near yard lines (Jose, Sep 25, 2026: "QBs end up
          here when selected", "the carousel goes there") */
       var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245], board: [318, 261, 440, 383] };
+      var SKYCUT = 0.09;
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
@@ -10750,7 +10751,16 @@
           var navTop = document.getElementById("sportbar").getBoundingClientRect().top;
           var k = Math.min(Math.max(W / FIELD.w, H / FIELD.h), (navTop - 12) / FIELD.band[1]);
           k = Math.max(k, W / FIELD.w);
-          var oy = 0;
+          /* the whole field sits higher, with less sky over the stadium; the
+             picks, the board and the carousel ride up with it, so everything
+             keeps its place on the field (Jose, Sep 27, 2026: "move the image
+             up and cut off some of the sky") */
+          /* the photo is drawn a touch larger so that, raised, it still reaches
+             the bottom of the screen; never so far that the carousel falls
+             behind the nav */
+          k = Math.max(k, H / (FIELD.h * (1 - SKYCUT)));
+          var oy = -Math.round(Math.max(0, Math.min(FIELD.h * k * SKYCUT, FIELD.h * k - H)));
+          if (oy + FIELD.band[1] * k > navTop - 12) oy = Math.round(navTop - 12 - FIELD.band[1] * k);
           document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
           document.documentElement.style.setProperty("--hotbg-y", oy + "px");
           /* the price the picks pay together is lit on the stadium's own
