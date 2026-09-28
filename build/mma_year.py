@@ -117,6 +117,31 @@ def score_lines(iso):
     return _SCORE
 
 
+CORE = "https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc/events/%s/competitions/%s/status"
+CORE_TYPE = {"dq": "DQ", "ko": "KO", "tko": "TKO", "submission": "Submission", "sub": "Submission",
+             "decision-unanimous": "Decision - Unanimous", "decision-split": "Decision - Split",
+             "decision-majority": "Decision - Majority", "decision": "Decision", "draw": "Draw",
+             "no-contest": "No Contest", "nc": "No Contest"}
+
+
+def core_how(eid, c):
+    """How a bout ended, from ESPN's core feed, when theScore has no line for
+       it and the summary's details are empty: Osmanli v Akylbek Uulu ended by
+       DQ at 2:19 of the first, and the card drew no finish at all (Jose,
+       Sep 27, 2026: "why do I need to keep telling you about things like
+       this")."""
+    try:
+        st = get(CORE % (eid, c["id"])) or {}
+    except Exception:
+        return None
+    res = st.get("result") or {}
+    name = str(res.get("name") or "").lower()
+    if not name or not ((st.get("type") or {}).get("completed")):
+        return None
+    kind = CORE_TYPE.get(name) or res.get("displayName") or name.upper()
+    return {"type": kind, "round": st.get("period") or "", "time": st.get("displayClock") or "", "scorecard": ""}
+
+
 def main():
     s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
@@ -229,6 +254,8 @@ def main():
                     ds = [plain(str((x.get("athlete") or {}).get("displayName") or "").split()[-1]) for x in c["competitors"]]
                     day = email.utils.format_datetime(T(j["events"][0]["date"]))[5:16]
                     how = _HOW.get((day + "|" + ds[0], ds[1])) or _HOW.get((day + "|" + ds[1], ds[0]))
+                if not how:
+                    how = core_how(eid, c)
                 if how:
                     c["how"] = how
         json.dump(j, open(D + "/site/final/mma-%s.json" % eid, "w"), separators=(",", ":"))
