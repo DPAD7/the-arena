@@ -8894,12 +8894,43 @@
         return;
       }
       if (!armed) return;                    /* short of red: nothing happened */
-      if (hid[id]) { delete hid[id]; } else { hid[id] = 1; }
-      saveHidden();
-      render();
+      flipHide(card, id);
     }
     zone.addEventListener("pointerup", letGo);
     zone.addEventListener("pointercancel", letGo);
+  }
+
+  /* Hiding touches the one card: it leaves its row for the shelf and the
+     rest of the board stays exactly where it is. Redrawing the whole board
+     for it made the page jump under him (Jose, Sep 28, 2026: "it's rebuilding
+     it every time I hide something"). Bringing one back, or the first hide
+     of the day when there is no shelf yet, still needs the board drawn --
+     and then whatever he was looking at is put back on the same spot. */
+  function flipHide(card, id) {
+    var hiding = !hid[id];
+    if (hiding) hid[id] = 1; else delete hid[id];
+    saveHidden();
+    var box = BOARD.querySelector(".hidebox"), label = BOARD.querySelector(".hidebar span");
+    var row = card.closest(".caro, .bill"), slot = card.closest(".board");
+    if (hiding && box && label && row && slot && !card.closest(".hidebox")) {
+      card.style.opacity = "";
+      box.appendChild(card);
+      if (!row.querySelector(".gcard")) slot.remove();
+      var n = parseInt(String(label.textContent).replace(/\D+/g, ""), 10) || 0;
+      label.textContent = "Hidden \u00B7 " + (n + 1);
+      return;
+    }
+    var ref = null, top = 0;
+    [].some.call(BOARD.querySelectorAll(".gcard"), function (c) {
+      if (c === card || c.closest(".hidebox")) return false;
+      var r = c.getBoundingClientRect();
+      if (!r.height || r.top < 0) return false;
+      ref = c; top = r.top; return true;
+    });
+    var y = window.scrollY;
+    render();
+    if (ref && ref.isConnected && ref.getBoundingClientRect().height) window.scrollBy(0, ref.getBoundingClientRect().top - top);
+    else window.scrollTo(0, y);
   }
 
   function armHide(card) {
