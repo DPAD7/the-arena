@@ -13359,12 +13359,10 @@
         rebuild++;                 /* a sheet is open: it goes with the rest */
         nowPlease = 0;
       }
-      if (nowPlease) {
-        var atY = window.scrollY;
-        render();
-        window.scrollTo(0, atY);
-        setTimeout(function () { window.scrollTo(0, atY); }, 60);
-      } else if (rebuild) {
+      /* a clock that moved waits, like everything else, until he has stopped
+         scrolling: redrawing mid-scroll threw him back to where he had been */
+      if (nowPlease) rebuild++;
+      if (rebuild) {
         var takeIt = function () {
           if (busy() || (!document.hidden && Date.now() - LASTTOUCH < 12000)) {
             clearTimeout(window._buildWait);
@@ -16087,7 +16085,14 @@
        place is put back after that render rather than before it -- three
        tries inside a second and a half all landed while the old board was
        still up, and he came back to the top (Sep 19, 2026) */
+    var mine = false;
+    ["touchstart", "wheel", "keydown"].forEach(function (ev) {
+      addEventListener(ev, function () { mine = true; }, { passive: true, capture: true, once: true });
+    });
     var put = function () {
+      /* the moment he scrolls himself, the page stops putting him anywhere
+         (Jose, Sep 28, 2026: "if I'm scrolling it's cause I wanna scroll") */
+      if (mine) return;
       if (Math.abs(window.scrollY - at) < 4) return;
       if (document.body.scrollHeight < at) return;   /* not drawn that far yet */
       window.scrollTo(0, at);
