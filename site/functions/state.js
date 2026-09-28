@@ -6,7 +6,9 @@
    device wrote.
 
    GET  /state?k=<key>   -> { hidden: {...}, placed: {...}, picks: {...}, at: <ms> }
-   POST /state?k=<key>   <- the same shape, stored whole
+   POST /state?k=<key>   <- {patch: {field: {set: {...}, del: [...]}}}: the entries a
+                            device changed, laid over what is held. A whole field
+                            sent instead replaces that field; the rest are kept
 
    It answers without a key. The board is one man's, every device has to work
    the moment it opens the site, and a handshake per browser was friction he
@@ -56,21 +58,36 @@ export async function onRequest({ request, env }) {
     } catch (e) {
       return new Response("bad", { status: 400 });
     }
+    /* a write carries only the marks that device changed, and they are laid
+       over what is held: a device left open with an older copy used to send
+       everything it held, and so put back gold he had taken off elsewhere
+       (Jose, Sep 28, 2026: "every time you refresh it goes back on") */
+    let held0 = null;
+    try { held0 = JSON.parse((await env.ARENA.get(SLOT)) || "null"); } catch (e) { held0 = null; }
+    held0 = held0 || { hidden: {}, placed: {}, picks: {}, ring: {}, stars: {}, bank: null };
+    const obj = (k) => body && body[k] && typeof body[k] === "object" ? body[k] : null;
     const keep = {
-      hidden: body && body.hidden && typeof body.hidden === "object" ? body.hidden : {},
-      placed: body && body.placed && typeof body.placed === "object" ? body.placed : {},
-      picks: body && body.picks && typeof body.picks === "object" ? body.picks : {},
-      /* the men ringed gold on the ledger, by ESPN id. A field left out here
-         is a field thrown away on the next write, so anything the board keeps
-         has to be named (Jose, Sep 20, 2026) */
-      ring: body && body.ring && typeof body.ring === "object" ? body.ring : {},
+      hidden: obj("hidden") || held0.hidden || {},
+      placed: obj("placed") || held0.placed || {},
+      picks: obj("picks") || held0.picks || {},
+      /* the men ringed gold on the ledger, by ESPN id */
+      ring: obj("ring") || held0.ring || {},
       /* the starred quarterbacks in the search's row (Sep 28, 2026) */
-      stars: body && body.stars && typeof body.stars === "object" ? body.stars : {},
-      /* the balance behind the dollar button: what it stands at, the legs it
-         has seen, and which runs of legs it has already settled */
-      bank: body && body.bank && typeof body.bank === "object" ? body.bank : await heldBank(env),
+      stars: obj("stars") || held0.stars || {},
+      /* the balance behind the dollar button */
+      bank: obj("bank") || held0.bank || null,
       at: Date.now()
     };
+    /* a patch: the entries one device changed, laid over the list held */
+    const patch = body && body.patch && typeof body.patch === "object" ? body.patch : {};
+    for (const k of ["hidden", "placed", "picks", "ring", "stars"]) {
+      const p = patch[k];
+      if (!p || typeof p !== "object") continue;
+      const out = Object.assign({}, keep[k] || {});
+      for (const x of (Array.isArray(p.del) ? p.del : [])) delete out[x];
+      Object.assign(out, p.set && typeof p.set === "object" ? p.set : {});
+      keep[k] = out;
+    }
     /* the same marks again are not written again: the free tier allows a
        thousand writes a day, and every open device saves as it settles */
     try {
