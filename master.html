@@ -1671,6 +1671,8 @@
   .gcard--v3 .gside--r .h2hnm .h2hodds { margin: 0 7px 0 0; }
   /* gone the moment the game starts, not at the end: the box on the yards says it from there (Jose, Sep 27, 2026) */
   .gcard--v3.gdone .h2hnm .h2hodds, .gcard--v3.locked .h2hnm .h2hodds { display: none !important; }
+  /* with the price gone the name stands alone, centered under the face (Jose, Sep 27, 2026) */
+  .gcard--v3.gdone .h2hnm, .gcard--v3.locked .h2hnm { padding-left: 0 !important; padding-right: 0 !important; }
   .gcard--v3 .h2hnm .h2hodds .price, .gcard--v3 .h2hnm .h2hodds .ghost {
     width: auto; min-width: 46px; max-width: none; height: 26px; padding: 0 7px; border-radius: 9px;
     font-size: 13px; text-shadow: none; }
