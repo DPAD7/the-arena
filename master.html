@@ -10927,7 +10927,17 @@
             var z = HOTZ || 1, r = box.getBoundingClientRect();
             var iconTop = Math.min.apply(null, [].map.call(hs.querySelectorAll("button"), function (x) {
               return x.getBoundingClientRect().top; }).concat([Y(1239) - 44]));
-            var want = iconTop - 6 - r.height;
+            /* the room is between the pick box (the bottom of the turf) and
+               the icons. The cards fit in it: if they ever do not, they are
+               made smaller once and keep that -- they never grow back, so
+               nothing flips -- and they sit in the middle of it */
+            var ceil = turf.getBoundingClientRect().bottom + 6, room = iconTop - 6 - ceil;
+            if (r.height > room && room > 20) {
+              HOTZ = window._hotz = HOTZ * room / r.height;
+              document.documentElement.style.setProperty("--hotz", HOTZ);
+              box.style.zoom = HOTZ; z = HOTZ; r = box.getBoundingClientRect();
+            }
+            var want = Math.max(ceil, ceil + (room - r.height) / 2);
             box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
             if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           }
