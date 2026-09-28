@@ -2377,6 +2377,8 @@
   .qbface--card { position: relative; z-index: 1; width: 100%; height: 100%;
     border: 0; border-radius: 0; background: none; object-fit: cover; object-position: 38% 8%; }
   .qbface--card.qbface--ring { border: 0; box-shadow: none; }
+  .qrank .hurt--corner { display: inline-flex; margin: 0; }
+  .qrank .hurt--corner svg { width: 18px; height: 18px; }
   .qrank { position: absolute; z-index: 2; left: 7px; top: 5px;
     font-weight: 800; font-size: 12px; color: rgba(255,255,255,0.75); }
   .qside { padding: 8px 6px 20px 0; position: relative; z-index: 2; display: grid;
@@ -10617,7 +10619,7 @@
       "</div>" +
       '<footer class="qname"><h3>' + esc(famName(r.name)) + "</h3>" +
         '<small class="qrec">' + w + "-" + l + "</small>" +
-        hurtMark(r.id) + coldMark(r.id) + "</footer>" +
+        (String(rank).indexOf("hurt--corner") >= 0 ? "" : hurtMark(r.id)) + coldMark(r.id) + "</footer>" +
       "</article>";
   }
   function renderMoney() {
@@ -10751,7 +10753,11 @@
          season-out man took a number while hidden, so Winston read 32 with
          29 before him (Jose, Sep 28, 2026) */
       var nShown = 0;
-      box.innerHTML = rows.map(function (r) { return qcard(r, r.bench ? "" : ++nShown, rec); }).join("");
+      box.innerHTML = rows.map(function (r) {
+        /* a man on the wire has no number: his plaster takes its corner
+           (Jose, Sep 28, 2026) */
+        return qcard(r, r.bench ? "" : hurtAt(r.id) ? hurtMark(r.id).replace('class="hurt', 'class="hurt hurt--corner') : ++nShown, rec);
+      }).join("");
       /* an odd count in a two-column view: the last card takes the middle */
       function soloLast() {
         var cards = [].slice.call(box.querySelectorAll(".qcard"));
