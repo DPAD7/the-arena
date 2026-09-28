@@ -2342,6 +2342,9 @@
   .qcards--hot > .qcard:not(.qcard--gold) { display: none; }
   .qcards--not > .qcard:not(:has(.cold)) { display: none; }
   .qcards--out > .qcard:not(:has(.hurt)) { display: none; }
+  /* on the field every quarterback is in the row, hot or not; only the ones
+     already picked leave it (Jose, Sep 28, 2026: "all the QBs there") */
+  .form.qcards.qcards--hot:not(.qcards--full) > .qcard:not([data-picked="1"]) { display: grid; }
   /* OUT is two columns like ALL, and an odd last one stands in the middle
      of the two (Jose, Sep 23, 2026: "on the out make it 2 columns, and if
      it's 5 for example it's in the center of the 2 columns") */
@@ -10916,7 +10919,8 @@
             var natural = card.getBoundingClientRect().height / zNow;
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
-            HOTZ = window._hotz = Math.min(1, (band - 10) / natural, (floorY - ceilY) / natural);
+            var roomNow = (Y(1239) - 8 - 6) - (turf.getBoundingClientRect().bottom + 6);
+            HOTZ = window._hotz = Math.min(1, roomNow / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
