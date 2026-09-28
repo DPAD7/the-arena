@@ -16528,7 +16528,7 @@
       if (w.in) return "Indoors";
       var s2 = w.t + "°";
       if (w.g) s2 += ", gusts " + w.g + " mph";
-      if (w.p) s2 += ", " + w.p + "% rain";
+      if ((w.p || 0) >= 20) s2 += ", " + w.p + "% rain";
       return s2;
     }
     function badWx(w) { return w && !w.in && ((w.g || 0) >= 15 || (w.p || 0) >= 50); }
@@ -16633,7 +16633,7 @@
         q.g.forEach(function (g) { slots[slotSay(g.sl)] = (slots[slotSay(g.sl)] || 0) + 1; });
         return '<div class="qsleg">' + face(id, q.lg) + '<div><div class="n2">' + esc(q.n) + '</div><div class="rec"><span class="ok">' +
           hits.replace(/✕/g, '</span><span class="no">✕</span><span class="ok">') + "</span> " + hit + "/" + q.g.length +
-          (nx ? " · next " + (nx.h ? "vs " : "@ ") + esc(nx.o) + " " + slotSay(nx.sl) : "") + '</div></div><div class="qspx ' + band(px) + '">' +
+          (nx ? " · next " + (nx.h ? "vs " : "@ ") + esc(nx.o) + " " + esc(when(nx.d)) : "") + '</div></div><div class="qspx ' + band(px) + '">' +
           (px ? show(px) : "—") + "</div></div>";
       }).join("");
       var price = priced === ids.length && priced ? (d >= 2 ? "+" + Math.round((d - 1) * 100) : "−" + Math.round(100 / (d - 1))) : "—";

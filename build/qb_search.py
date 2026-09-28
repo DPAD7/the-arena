@@ -93,7 +93,8 @@ def main():
     wire = load(os.path.join(D, "site", "wire.json"), {})
     now = dt.datetime.now(dt.timezone.utc)
     qbs, allowed = {}, {}
-    for lg, var in (("nfl", "SCHED"), ("cfb", "CFB")):
+    # the NFL only, for now (Jose, Sep 28, 2026: "just for NFL now")
+    for lg, var in (("nfl", "SCHED"),):
         for r in rows(s, var):
             gid, iso, away, home = str(r[1]), r[2], r[3], r[4]
             try:
