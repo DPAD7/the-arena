@@ -16411,16 +16411,30 @@
       wal.className = "wal filling";
       fillEl.style.transition = "none"; fillEl.style.height = "0";
       void fillEl.offsetHeight; fillEl.style.transition = "";
-      fillEl.style.height = "12%";
-      /* one long, easing climb toward 90% while the book is read (a sync
-         takes about a minute), rather than a 4% jump every five seconds that
-         looked stuck in between (Jose, Sep 27, 2026) */
-      var climbT = setTimeout(function () {
-        fillEl.style.transition = "height 60s cubic-bezier(.12, .6, .3, 1)";
-        fillEl.style.height = "90%";
-      }, 350);
+      /* the fill never stops: it is paced to how long the last syncs took,
+         so it is near the top about when the answer lands, and it keeps
+         creeping -- slower and slower, never still -- if the answer is late.
+         The answer finishes it, and the card pops as it touches the top
+         (Jose, Sep 28, 2026: "move continuously ... slower or faster,
+         depending on when we get the result") */
+      var EXP = 45000;
+      try { EXP = Math.max(8000, Math.min(150000, parseFloat(localStorage.getItem("arena.dkSyncMs")) || 45000)); } catch (e0) {}
+      fillEl.style.transition = "none";
+      var t0 = performance.now(), climbing = true;
+      var climbT = null;
+      (function step() {
+        if (!climbing) return;
+        var k = (performance.now() - t0) / EXP;
+        fillEl.style.height = (97 * (1 - Math.exp(-2.4 * k))).toFixed(2) + "%";
+        climbT = requestAnimationFrame(step);
+      })();
       var fin = function (ok, fresh) {
-        clearTimeout(climbT);
+        climbing = false; cancelAnimationFrame(climbT);
+        /* how long this one took, to pace the next */
+        if (ok) { try {
+          var took = performance.now() - t0, was = parseFloat(localStorage.getItem("arena.dkSyncMs")) || took;
+          localStorage.setItem("arena.dkSyncMs", String(Math.round(was * 0.6 + took * 0.4)));
+        } catch (e1) {} }
         var cls = !ok ? "bad" : fresh ? "ok" : "none", fired = false;
         /* the card pops the moment the fill reaches the top -- on the fill's
            own end, not on a timer that ran late or not at all (Jose, Sep 28,
@@ -16444,9 +16458,9 @@
         fillEl.addEventListener("transitionend", onEnd);
         fillEl.style.height = getComputedStyle(fillEl).height;   /* from wherever it has got to */
         void fillEl.offsetHeight;
-        fillEl.style.transition = "height .5s cubic-bezier(.3, .6, .4, 1)";
+        fillEl.style.transition = "height .35s ease-out";
         fillEl.style.height = "100%";
-        popT = setTimeout(top, 650);   /* if the browser drops the end event */
+        popT = setTimeout(top, 480);   /* if the browser drops the end event */
       };
       /* the climb is its own; the checks along the way no longer move it */
       fin.step = function () {};
