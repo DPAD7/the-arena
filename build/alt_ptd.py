@@ -41,7 +41,7 @@ def an_games(season, week):
 def rungs(props, surname):
     """[1+ .. 5+] for this man, DraftKings first, else the consensus."""
     pl = props["players"]
-    got = [None] * 5
+    got, mine = [None] * 5, [None] * 5
     for n in range(1, 6):
         dk = con = None
         for k in props["player_props"]:
@@ -68,7 +68,8 @@ def rungs(props, surname):
                             con = ln.get("odds")
         v = dk if dk is not None else con
         got[n - 1] = ("%+d" % v) if v is not None else None
-    return got
+        mine[n - 1] = ("%+d" % dk) if dk is not None else None
+    return got, mine
 
 
 def main():
@@ -77,7 +78,12 @@ def main():
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     clubs = {g[1]: (g[3], g[4]) for g in sched}
     week_of = {g[1]: g[0] for g in sched}
-    cache, found, blank = {}, 0, 0
+    cache, found, blank, added = {}, 0, 0, 0
+    PR = json.load(open(D + "/site/prices.json"))
+    sides = {}
+    for g in sched:
+        sides[(str(g[1]), str(g[6]))] = 0
+        sides[(str(g[1]), str(g[8]))] = 1
     for wk, rows in led.items():
         games = an_games(2026, int(wk))
         for r in rows:
@@ -96,7 +102,23 @@ def main():
                 except Exception as e:
                     print("  no board for game %s: %s" % (gid, str(e)[:60]))
                     cache[gid] = {"players": {}, "player_props": {}}
-            got = rungs(cache[gid], r[0].split()[-1].lower())
+            got, dk = rungs(cache[gid], r[0].split()[-1].lower())
+            # DraftKings' own rungs the board did not keep -- 4+ and 5+ before
+            # Sep 28, 2026 -- go on the game's ladder, so the best price that
+            # paid can be a 4+ (Jose: "he threw for four"). Only DraftKings',
+            # never the consensus
+            side = sides.get((str(eid), str(r[2])))
+            pr = (PR.get("PROPS") or {}).get(str(eid))
+            if side is not None and pr and pr.get("ptd"):
+                lad = pr["ptd"][side] = list(pr["ptd"][side] or [])
+                for k, v in enumerate(dk):
+                    if v is None:
+                        continue
+                    while len(lad) <= k:
+                        lad.append(None)
+                    if not lad[k]:
+                        lad[k] = [v, ""]
+                        added += 1
             while len(r) < 14:
                 r.append(None)
             r[13] = got
@@ -106,6 +128,8 @@ def main():
                 blank += 1
                 print("  no rungs: %-20s %s" % (r[0], r[1]))
     json.dump(led, open(D + "/site/ledger.json", "w"), separators=(",", ":"))
+    json.dump(PR, open(D + "/site/prices.json", "w"), separators=(",", ":"))
+    print("DraftKings rungs added to the board's ladders: %d" % added)
     print("rungs written for %d passers, %d had none" % (found, blank))
 
 

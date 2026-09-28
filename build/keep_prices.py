@@ -43,8 +43,9 @@ def main():
                 if not name:
                     continue
                 passers.append({"name": name, "id": str(pid), "side": i,
-                                "ptd": [(pr.get("ptd") or [[None, None], [None, None]])[i][k] for k in (0, 1)],
-                                "atd": [(pr.get("atd") or [[None, None], [None, None]])[i][k] for k in (0, 1)]})
+                                # every rung, not only 1+ and 2+ (Sep 28, 2026)
+                                "ptd": list((pr.get("ptd") or [[], []])[i] or []),
+                                "atd": list((pr.get("atd") or [[], []])[i] or [])})
             now = {"eid": g[1], "league": "nfl" if var == "SCHED" else "ncaaf", "week": g[0],
                    "kick": g[2], "away": g[3], "home": g[4], "passers": passers,
                    "ml": [g[ml_at[0]] or None, g[ml_at[1]] or None],
@@ -66,7 +67,10 @@ def main():
                 if filled:
                     json.dump(old, open(f, "w"), separators=(",", ":"))
                     kept += 1
-                same = json.dumps(old.get("passers")) == json.dumps(passers) and old.get("ml") == now["ml"] and old.get("h2h") == now["h2h"]
+                # measured against the latest read on file, so a price that
+                # has not moved since is not written down again
+                last = (old.get("moves") or [old])[-1]
+                same = json.dumps(last.get("passers")) == json.dumps(passers) and last.get("ml") == now["ml"] and last.get("h2h") == now["h2h"]
                 if same:
                     continue
                 if T(g[2]) > NOW:                     # still to kick: the move is worth keeping

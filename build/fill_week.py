@@ -247,7 +247,9 @@ def price_event(e, qbs_id, league, dkpeople, names=None):
         i = side_of(r["label"], e["away"], e["home"])
         if i is not None:
             ml[i] = (american(r["odds"]), r["oid"])
-    # 1+, 2+ and 3+ passing touchdowns, the man found by his number
+    # the whole passing-touchdown ladder DraftKings sells, 1+ up to whatever
+    # its top rung is (Jose, Sep 28, 2026: Shough threw four and the board
+    # had kept only 1+ to 3+, so his 4+ never counted)
     ptd = [[None, None, None], [None, None, None]]
     # every passer DraftKings prices a side for, whoever the card names: the
     # book's word on who starts (Jose, Sep 25, 2026: "dk should confirm").
@@ -257,11 +259,15 @@ def price_event(e, qbs_id, league, dkpeople, names=None):
     for r in pull("/sportscontent/dkusmd/v1/events/%s/categories/1000" % e["id"]):
         if r["market"].endswith("Passing Touchdowns") and r["pid"] and r["role"].lower() in ("away", "home"):
             entry["_qb"].setdefault(r["role"].lower(), {})[r["pid"]] = re.sub(r"\s*\([A-Za-z&.\- ]+\)$", "", r["who"])
-        if not r["market"].endswith("Passing Touchdowns") or r["label"] not in ("1+", "2+", "3+"):
+        m = re.match(r"^(\d+)\+$", str(r["label"]).strip())
+        if not r["market"].endswith("Passing Touchdowns") or not m:
             continue
         i = his_side(r)
         if i is not None:
-            ptd[i][int(r["label"][0]) - 1] = [american(r["odds"]), r["oid"]]
+            k = int(m.group(1)) - 1
+            while len(ptd[i]) <= k:
+                ptd[i].append(None)
+            ptd[i][k] = [american(r["odds"]), r["oid"]]
     entry["ptd"] = ptd
     # anytime touchdowns for both leagues: the college card draws them, the
     # NFL card does not, but the ledger tracks them (Jose, Sep 16, 2026:
