@@ -10851,7 +10851,13 @@
           /* the line the icons stand on clears the slip by their own height,
              so none of them is ever behind it (Jose, Sep 28, 2026) */
           var clear = (slipEl && !slipEl.hidden && slipEl.getBoundingClientRect().height) ? 26 : 10;
-          var oy = Math.min(0, Math.round(floor - clear - 1239 * k));
+          /* the original field, in the original place, always: it never
+             moves for the slip (Jose, Sep 28, 2026: "use the original field").
+             The slip's own room is kept free below the cards instead, shown
+             or not, so nothing shifts when it comes and goes */
+          var oy = 0;
+          var SLIPH = 76;
+          var cardFloor = navTop - SLIPH - 8;
           document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
           document.documentElement.style.setProperty("--hotbg-y", oy + "px");
           /* the price the picks pay together is lit on the stadium's own
@@ -10919,7 +10925,7 @@
             var natural = card.getBoundingClientRect().height / zNow;
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
-            var roomNow = (Y(1239) - 8 - 6) - (turf.getBoundingClientRect().bottom + 6);
+            var roomNow = (cardFloor - 6) - (turf.getBoundingClientRect().bottom + 6);
             HOTZ = window._hotz = Math.min(1, roomNow / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
@@ -10933,7 +10939,7 @@
           hs.style.top = Math.round(Y(1239) - 22) + "px";
           if (card) {
             var z = HOTZ || 1, r = box.getBoundingClientRect();
-            var iconTop = Y(1239) - 8;
+            var iconTop = cardFloor;
             if (box.dataset.set) { delete box.dataset.set; loopRow(box); }
             /* the room is between the pick box (the bottom of the turf) and
                the icons. The cards fit in it: if they ever do not, they are
