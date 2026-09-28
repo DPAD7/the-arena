@@ -16717,16 +16717,19 @@
         return '<li data-id="' + esc(id) + '">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><br><span>' +
                esc(q.t) + " · " + (q.lg === "nfl" ? "NFL" : "CFB") + "</span></div></li>";
       }).join("");
+      /* a name it cannot find says so, never a blank (Jose, Sep 28, 2026: "this is awkward") */
+      if (!hits.length && DATA && inp.value.trim())
+        sug.innerHTML = '<li class="qsnone"><div><b>No QB called “' + esc(inp.value.trim()) + '”</b><br><span>NFL starters and anyone who has played this season</span></div></li>';
       out.innerHTML = picked.length === 1 ? card(picked[0]) : picked.length > 1 ? parlay(picked) : "";
     }
     sug.addEventListener("click", function (e) {
-      var li = e.target.closest("li"); if (!li) return;
+      var li = e.target.closest("li[data-id]"); if (!li) return;
       picked.push(li.dataset.id); inp.value = ""; draw();
       try { inp.focus(); } catch (e2) {}
     });
     inp.addEventListener("input", draw);
     inp.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") { var li = sug.querySelector("li"); if (li) { picked.push(li.dataset.id); inp.value = ""; draw(); } }
+      if (e.key === "Enter") { var li = sug.querySelector("li[data-id]"); if (li) { picked.push(li.dataset.id); inp.value = ""; draw(); } }
       if (e.key === "Backspace" && !inp.value && picked.length) { picked.pop(); draw(); }
     });
 
