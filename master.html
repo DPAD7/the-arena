@@ -4605,9 +4605,13 @@
     var out = "", picks = all.slice(0, 20), rest = all.length - picks.length;
     picks.forEach(function (b, i) {
       var m = legParts(b.l);
-      var who = m ? m[1] : (b.l || "").split(" ")[0];
+      var sh = m ? "" : shortLeg(b.l), ms = /\s(\d+\+)\s/.exec(" " + sh + " ");
+      var who = m ? m[1] : sh.split(" ")[0];
       var pic = slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
       var mk = markFor(m ? m[2] : "");
+      /* a leg with no card and no face says what it is, "40+", not the
+         first letters of a name (Jose, Sep 27, 2026: "why does it say Jay") */
+      if (!pic && ms) who = ms[1];
       /* the earlier circle paints over the later one, so its own badge is
          never hidden by its neighbour (Jose, Sep 17, 2026) */
       out += '<i class="slav' + (b.st ? " slav--" + b.st : "") + '" style="z-index:' + (picks.length - i) + '">' +
@@ -4617,13 +4621,28 @@
     return '<div class="slavs">' + out +
            (rest > 0 ? '<b class="slavmore">+' + rest + "</b>" : "") + "</div>";
   }
+  /* a milestone leg the book writes long, "Jaylen Waddle to Have 40+
+     Receiving Yards, Davante Adams to Have 40+ Receiving Yards", reads
+     "Waddle + Adams 40+ Rec" -- the same rule dk_bets.py writes new slips by,
+     for a slip read before it did (Jose, Sep 27, 2026) */
+  function shortLeg(l) {
+    var t = String(l || "").replace(/\s*\u00b7\s*$/, "");
+    var re = /([^,]+?) to (?:Have|Record|Score) (\d+\+) ([A-Za-z ]+?)(?=,|$| The )/g, m, men = [], n = "", st = "";
+    var abbr = { "Receiving Yards": "Rec", "Rushing Yards": "Rush", "Passing Yards": "Pass Yds",
+                 "Receptions": "Rec", "Passing Touchdowns": "PTD", "Touchdowns": "TD" };
+    while ((m = re.exec(t))) {
+      var b = m[1].trim().split(" ").filter(function (x) { return !/^(Jr\.?|Sr\.?|II|III|IV|V)$/.test(x); });
+      men.push(b[b.length - 1]); n = m[2]; st = abbr[m[3].trim()] || m[3].trim();
+    }
+    return men.length ? men.join(" + ") + " " + n + " " + st : t;
+  }
   function slipNames(picks) {
     var seen = {}, names = [];
     picks.forEach(function (b) {
       var m = legParts(b.l);
       /* a leg with no card of its own reads as the book wrote it, whole:
          "Waddle + Adams 40+ Rec", not its first word */
-      var who = m ? m[1] : (b.l || "").replace(/\s*\u00b7\s*$/, "");
+      var who = m ? m[1] : shortLeg(b.l);
       if (!seen[who]) { seen[who] = 1; names.push(who); }
     });
     return names.join(", ");
