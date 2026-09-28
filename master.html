@@ -10178,6 +10178,14 @@
     [[164, 135], [121, 70], [152, 6]]
   ];
   var POSTFOOT = 205;
+  /* the formation stands five yards further up than the routes were drawn
+     for, so each route runs five yards shorter: the catch stays in the end
+     zone, not in the stands */
+  var routeOf = function (k) { return route(k); };
+  function route(k) {
+    var P = RECEIVERS[k], sh = window._hotShift || 0;
+    return P.map(function (pt, i) { return i ? [pt[0], Math.min(P[0][1], pt[1] + sh)] : pt; });
+  }
   /* a point a fraction of the way along a polyline */
   function alongPts(P, f) {
     var L = [], T = 0;
@@ -10423,7 +10431,7 @@
            while the ball is in the air, so the two meet in the end zone
            (Jose, Sep 25, 2026: "time it so the WR matches the ball") */
         im._f = dir && mine ? frac * 0.3 : 0;
-        var at = alongPts(RECEIVERS[k], im._f);
+        var at = alongPts(route(k), im._f);
         im.style.left = (137 + at[0]) + "px"; im.style.top = at[1] + "px";
       });
       forkbox.querySelectorAll(".froute").forEach(function (l) {
@@ -10444,7 +10452,7 @@
       var ax0 = from ? from[0] : fb.left + fb.width / 2, ay0 = from ? from[1] : fb.top + 185;
       /* thrown to where he will be at the end of his route, and he runs
          there in the same time the ball takes */
-      var route = RECEIVERS[tier === "1" ? 0 : 1], f0 = im._f || 0;
+      var route = routeOf(tier === "1" ? 0 : 1), f0 = im._f || 0;
       var endAt = alongPts(route, 1), nowAt = alongPts(route, f0);
       var bx = ir.left + ir.width / 2 + (endAt[0] - nowAt[0]), by = ir.top + ir.height / 2 + (endAt[1] - nowAt[1]);
       var peak = 70 + Math.hypot(bx - ax0, by - ay0) * 0.25;
@@ -10860,6 +10868,7 @@
          Sep 28, 2026). It is laid on the page as --hotz, so any row built
          later wears it from its first frame. */
       var HOTZ = window._hotz || 0;
+      var FIVEYDS = 90;   /* one five-yard line apart, near the goal, in the photo's pixels */
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
@@ -10900,7 +10909,11 @@
           var Y = function (y) { return oy + y * k; };
           /* the picks' row stands on the goal line */
           var sb = slots.getBoundingClientRect().bottom;
-          turf.style.marginTop = Math.round(8 + Y(FIELD.goal) - sb) + "px";
+          /* the whole formation five yards further up -- the line, the
+             boxes, the spot, the receivers -- all together (Jose, Sep 28,
+             2026: "everything needs to move up with them") */
+          turf.style.marginTop = Math.round(8 + Y(FIELD.goal - FIVEYDS) - sb) + "px";
+          window._hotShift = Math.round(FIVEYDS * k);
           /* the scoreboard measured from the picks' own row, which is what
              the price is laid out in: the page's sliding track moves what a
              fixed position would be measured from */
