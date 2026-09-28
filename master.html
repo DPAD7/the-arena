@@ -2046,7 +2046,8 @@
     box-shadow: 0 6px 18px rgba(0,0,0,.45); color: var(--green);
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; font-weight: 800;
     font-size: 30px; font-variant-numeric: tabular-nums; pointer-events: auto; cursor: pointer; }
-  html.hotlock #hotboard.on { display: flex; }
+  /* the big board always stands, lit with the price once there is one (Jose, Sep 28, 2026) */
+  html.hotlock #hotboard { display: flex; }
   /* the three sets under the carousel, on the grass above the line: the
      carousel changes in place (Jose, Sep 25, 2026: "just load the carousel,
      no need to open a new page") */
@@ -9797,7 +9798,8 @@
   function loadPicks() { try { return JSON.parse(localStorage.getItem(PICKKEY) || "[]"); } catch (e) { return []; } }
   /* six picks, not eight (Jose, Sep 23, 2026: "move the QBs from 8 to 6") */
   /* three rows of six stand in the end zone (Jose, Sep 25, 2026) */
-  var MAXPICK = 18;
+  /* twelve at most, two rows of six (Jose, Sep 28, 2026) */
+  var MAXPICK = 12;
   function savePicks(p) { try { localStorage.setItem(PICKKEY, JSON.stringify(p.slice(0, MAXPICK))); } catch (e) {} }
   /* where the chips go, in the row's own coordinates: centered as a group on
      the squares' pitch, in the order they were picked */
