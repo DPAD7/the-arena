@@ -10750,7 +10750,15 @@
           var navTop = document.getElementById("sportbar").getBoundingClientRect().top;
           var k = Math.min(Math.max(W / FIELD.w, H / FIELD.h), (navTop - 12) / FIELD.band[1]);
           k = Math.max(k, W / FIELD.w);
-          var oy = 0;
+          /* the field, and everything standing on it, lifted as one so the
+             carousel and the sets under it sit clear above the betslip bar
+             (or the nav when there is no slip) -- the same size, the same
+             places on the field (Jose, Sep 27, 2026: "the icons and carousel
+             sit above the bet slip") */
+          var slipEl = document.getElementById("slipbar");
+          var floor = slipEl && !slipEl.hidden && slipEl.getBoundingClientRect().height
+            ? slipEl.getBoundingClientRect().top : navTop;
+          var oy = Math.min(0, Math.round(floor - 10 - 1239 * k));
           document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
           document.documentElement.style.setProperty("--hotbg-y", oy + "px");
           /* the price the picks pay together is lit on the stadium's own
