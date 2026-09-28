@@ -142,7 +142,7 @@ HUB_ET = (10,)
 # reads its number from. A vote moves once a week, so asking more often only
 # asks. Left hand-run, nothing on the schedule had ever refreshed them
 # (Jose, Sep 23, 2026: "put the rankings on the schedule, once a day").
-RANKS_ET = (9,)
+RANKS_ET = (9, 15)   # the AP poll is out Sunday afternoon; 9 AM alone left it a day behind (Sep 27, 2026)
 RANK_JOBS = ("cfb_rank.py", "ufc_rankings.py", "fighter_ranks.py")
 HUB = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 HUB_JOBS = ("hub_props", "hub_sheets", "hub_sheet_games", "hub_team_sheets",
