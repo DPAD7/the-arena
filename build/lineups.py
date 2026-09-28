@@ -96,101 +96,74 @@ def starters(eid, tid):
     return [(str(x.get("playerId")), str(x.get("jersey") or "")) for x in d.get("entries") or [] if x.get("starter")]
 
 
-def depth(tid):
-    """Every depth list the club keeps, as (spot, [espn ids in order]) --
-       the spot is ESPN's own key: lt, lg, c, rg, rt, te, wr, lde, ldt, mlb,
-       lcb, fs and the rest, which is how each man is put in his place"""
+def chart(tid):
+    """The club's depth chart as {"off": {spot: [ids]}, "def": {spot: [ids]}}:
+       offense from its three-receiver set, defense from its base 4-3 or
+       3-4. A spot ESPN numbers more than once -- the three receivers share
+       "wr", told apart by slot -- becomes wr1, wr2, wr3 in slot order. The
+       nickel back is left out: eleven a side, always (Jose, Sep 28, 2026)."""
     d = get("%s/seasons/%d/teams/%s/depthcharts" % (CORE, season(), tid)) or {}
-    lists = []
+    out = {"off": {}, "def": {}}
     for it in d.get("items") or []:
-        for key, pos in (it.get("positions") or {}).items():
-            ids = []
-            for a in pos.get("athletes") or []:
-                ref = (a.get("athlete") or {}).get("$ref", "")
-                m = re.search(r"/athletes/(\d+)", ref)
+        name = (it.get("name") or "").lower()
+        pos = it.get("positions") or {}
+        side = "off" if "qb" in pos else "def" if name.startswith("base") else None
+        if not side or out[side]:
+            continue
+        for key, v in pos.items():
+            if key == "nb":
+                continue
+            groups = {}
+            for a in v.get("athletes") or []:
+                m = re.search(r"/athletes/(\d+)", (a.get("athlete") or {}).get("$ref", ""))
                 if m:
-                    ids.append(m.group(1))
-            if ids:
-                lists.append((key, ids))
-    return lists
+                    groups.setdefault(a.get("slot") or 0, []).append(m.group(1))
+            slots = sorted(groups)
+            for n, sl in enumerate(slots):
+                spot = key if len(slots) == 1 else "%s%d" % (key, n + 1)
+                out[side][spot] = groups[sl]
+    return out
+
+
+# the eleven spots a side, and nothing else: five up front, the passer, one
+# back, one tight end, three receivers; the defense as its chart names it
+OFFSPOTS = ("lt", "lg", "c", "rg", "rt", "qb", "rb", "te", "wr1", "wr2", "wr3")
 
 
 def club(tid, hurt, qb=None):
-    """One club's two elevens, tonight's report laid over its last lineup."""
-    eid = last_game(tid)
-    if not eid:
+    """One club's two elevens off its depth chart, tonight's report laid over
+       it: the first man at each spot starts; one who is out gives way to the
+       next man there who is not, and the spot wears that man's number with a
+       red edge; one who is questionable keeps it with a yellow edge."""
+    ros, ch = roster(tid), chart(tid)
+    if not ch["off"] or not ch["def"]:
         return None
-    ros, first = roster(tid), starters(eid, tid)
-    if not first:
-        return None
-    lists = depth(tid)
-    taken = {pid for pid, _ in first}
+    taken = set()
+    for spots in ch.values():
+        for ids in spots.values():
+            if ids:
+                taken.add(ids[0])
     side = {"off": [], "def": []}
-    for pid, num in first:
-        pos = (ros.get(pid) or ("", ""))[1]
-        num = (ros.get(pid) or (num, ""))[0] or num
-        which = "off" if pos in OFF else "def" if pos in DEF else None
-        if not which:
-            continue
-        st = hurt.get(pid, "")
-        s = "out" if st in OUTS else "q" if st in QS else ""
-        if pos == "QB" and qb and qb in ros:
-            # the man named to start tonight, whoever the chart has next
-            num, s = ros[qb][0] or num, "" if hurt.get(qb, "") not in QS else "q"
-            if qb != pid:
-                s = "out" if st in OUTS else s
-        elif s == "out":
-            # his backup's number in his spot: the next man on any list he is
-            # on who is neither out nor already starting elsewhere, and failing
-            # that anyone at his position who is free
-            found = None
-            for _, ids in lists:
-                if pid not in ids:
-                    continue
-                for nxt in ids[ids.index(pid) + 1:]:
-                    if nxt in taken or hurt.get(nxt, "") in OUTS or nxt not in ros:
-                        continue
-                    found = nxt
-                    break
-                if found:
-                    break
-            if not found:
-                found = next((x for x, v in ros.items() if v[1] == pos and x not in taken
-                              and hurt.get(x, "") not in OUTS), None)
-            if found:
-                # a man signed this week can be on the roster before his number
-                # is: his own page has it, and a blank beats the hurt man's
-                num = ros[found][0] or jersey(found)
-                taken.add(found)
-        # his spot on the chart, one that fits his position -- a receiver who
-        # also returns kicks is listed first at kr, and that is not where he
-        # lines up: where he stands first, else anywhere he is listed
-        fit = SPOTS.get(pos, ())
-        k = next((key for key, ids in lists if ids and ids[0] == pid and key in fit), None) or \
-            next((key for key, ids in lists if pid in ids and key in fit), "")
-        side[which].append({"n": num, "p": pos, "s": s, "k": k, "_id": pid})
-    # two linemen on one spot: ESPN moves the backup up once a starter is
-    # hurt, so the hurt man and his backup both answer to it and a spot goes
-    # empty. The hurt man takes the empty spot, wearing the number of whoever
-    # stands first there now (Sep 28, 2026: Baltimore's centre)
-    line = [m for m in side["off"] if m["k"] in _OL]
-    free = [k for k in _OL if k not in {m["k"] for m in line}]
-    seen = {}
-    for m in sorted(line, key=lambda m: m["s"] == "out"):
-        if m["k"] in seen and free:
-            k = free.pop(0)
-            m["k"] = k
-            for key, ids in lists:
-                if key != k:
-                    continue
-                nxt = next((x for x in ids if x not in taken and hurt.get(x, "") not in OUTS and x in ros), None)
-                if nxt:
-                    m["n"] = ros[nxt][0] or jersey(nxt)
-                    taken.add(nxt)
-                break
-        seen[m["k"]] = 1
-    for x in side["off"] + side["def"]:
-        x.pop("_id", None)
+    for which, spots in (("off", [(k, ch["off"].get(k) or ch["off"].get(k.rstrip("0123456789")) or []) for k in OFFSPOTS]),
+                         ("def", list(ch["def"].items()))):
+        for k, ids in spots:
+            if not ids:
+                continue
+            first = ids[0]
+            if k == "qb" and qb and qb in ros:
+                # the man named to start tonight, whoever the chart has first
+                s = "out" if qb != first and hurt.get(first, "") in OUTS else \
+                    "q" if hurt.get(qb, "") in QS else ""
+                side[which].append({"n": ros[qb][0] or jersey(qb), "p": "QB", "s": s, "k": k})
+                continue
+            st = hurt.get(first, "")
+            s = "out" if st in OUTS else "q" if st in QS else ""
+            man = first
+            if s == "out":
+                man = next((x for x in ids[1:] if hurt.get(x, "") not in OUTS and x not in taken), first)
+                taken.add(man)
+            num = (ros.get(man) or ("", ""))[0] or jersey(man)
+            side[which].append({"n": num, "p": (ros.get(first) or ("", ""))[1], "s": s, "k": k})
     return side
 
 

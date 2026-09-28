@@ -322,8 +322,8 @@
   #qsearch .qsform { margin-top: 8px; background: #1c1c1f; border-radius: 10px; padding: 9px 10px 8px; }
   #qsearch .qsform > span { display: block; font: 700 11px "Barlow Condensed", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
-  #qsearch .qsfield { position: relative; height: 158px; margin-top: 6px; }
-  #qsearch .qsfield .los { position: absolute; left: 1%; right: 1%; top: 64px; height: 2px; background: #fff; }
+  #qsearch .qsfield { position: relative; height: 178px; margin-top: 6px; }
+  #qsearch .qsfield .los { position: absolute; left: 1%; right: 1%; top: 85px; height: 2px; background: #fff; }
   #qsearch .qsj { position: absolute; width: 22px; height: 22px; transform: translateX(-50%);
     background: center / contain no-repeat; }
   #qsearch .qsj em { position: absolute; left: 0; right: 0; top: 5px; text-align: center; font: 800 9px Barlow, Arial, sans-serif;
@@ -17124,33 +17124,36 @@
       };
       // every man in his named spot off ESPN's chart (lt, lg, c ... lcb, fs);
       // the defense faces the offense, so its left is the offense's right
-      var X = { lt: 30, lg: 38, c: 46, rg: 54, rt: 62, qb: 46, rb: 57, fb: 35, hb: 57,
-                lde: 64, ldt: 52, nt: 46, rdt: 40, rde: 28, lolb: 68, lilb: 52, mlb: 46, rilb: 40, rolb: 24,
-                wlb: 30, slb: 62, lcb: 95, rcb: 5, nb: 84, fs: 32, ss: 62 };
-      var Y = { qb: 2, rb: 2, fb: 2, hb: 2, lde: 72, ldt: 72, nt: 72, rdt: 72, rde: 72,
-                lolb: 100, lilb: 100, mlb: 100, rilb: 100, rolb: 100, wlb: 100, slb: 100,
-                lcb: 76, rcb: 76, nb: 88, fs: 130, ss: 130 };
-      var used = {};
-      var place = function (list, club, off) {
-        var te = 0, wr = 0, spare = 0;
+      /* the formations as they line up (Jose, Sep 28, 2026): on offense seven
+         on the line -- five linemen, the tight end on the right, the X
+         receiver split left -- the Z and the slot a step off it, the passer
+         under the centre and the back behind him. On defense a 4-3 is four
+         down, the strong-side backer over the tight end and the strong safety
+         his side; a 3-4 is two ends and the nose with its outside backers up
+         on the edges. The defense faces the offense, so its left is the
+         offense's right. */
+      var three4 = d.some(function (m) { return m.k === "nt" || m.k === "lilb"; });
+      var X = { lt: 30, lg: 38, c: 46, rg: 54, rt: 62, te: 70, wr1: 5, wr2: 95, wr3: 84, qb: 46, rb: 46, fb: 46,
+                lde: 64, ldt: 52, nt: 46, rdt: 40, rde: 28,
+                lolb: 74, lilb: 52, mlb: 46, rilb: 40, rolb: 18,
+                wlb: three4 ? 18 : 28, slb: three4 ? 74 : 68,
+                lcb: 95, rcb: 5, fs: 32, ss: 64 };
+      var Y = { lt: 58, lg: 58, c: 58, rg: 58, rt: 58, te: 58, wr1: 58, wr2: 46, wr3: 46, qb: 32, rb: 6, fb: 6,
+                lde: 92, ldt: 92, nt: 92, rdt: 92, rde: 92,
+                lolb: 92, rolb: 92, lilb: 122, mlb: 122, rilb: 122,
+                wlb: three4 ? 92 : 122, slb: three4 ? 92 : 122,
+                lcb: 96, rcb: 96, fs: 150, ss: 150 };
+      /* every spot has its one place; a man whose spot is not one of these is
+         not drawn -- eleven a side, the chart's own */
+      var place = function (list, club) {
         list.forEach(function (m) {
-          var k = m.k || "", x = X[k], y = Y[k];
-          if (k === "te") { x = te++ ? 22 : 70; y = 36; }
-          else if (k === "wr") { x = [5, 95, 84, 14][wr++] || 14; y = 36; }
-          else if (x !== undefined && used[k + off]) { x += 6; }
-          if (x === undefined) {
-            // no named spot: his position says which row he stands in
-            y = off ? 36 : /^(DE|DT|NT|DL|EDGE)$/.test(m.p) ? 72 : /^(CB)$/.test(m.p) ? 88 : /^(S|FS|SS|DB)$/.test(m.p) ? 130 : 100;
-            x = off ? [20, 72, 12, 80][spare % 4] : [24, 68, 20, 72][spare % 4];
-            spare++;
-          }
-          if (y === undefined) y = off ? 36 : 100;
-          used[k + off] = 1;
-          put(m, x, y, club);
+          var k = m.k || "";
+          if (X[k] === undefined || Y[k] === undefined) return;
+          put(m, X[k], Y[k], club);
         });
       };
-      place(o, mine, true);
-      place(d, theirs, false);
+      place(o, mine);
+      place(d, theirs);
       var key = (outs ? '<i style="border-color:#ff3b30"></i>starter out, backup in' : "") +
                 (qs ? '<i style="border-color:#ffd60a"></i>questionable' : "");
       return '<div class="qsform"><span>' + esc(mine) + " offense vs " + esc(theirs) + ' defense</span><div class="qsfield">' +
