@@ -10919,20 +10919,18 @@
           /* no card to measure yet: look again in a moment, never leave the
              row at full size */
           if (!HOTZ && (box._retry = (box._retry || 0) + 1) < 40) setTimeout(centerHot, 120);
+          /* the stack, from the bottom up, never moving: the icons in their
+             one place, the cards sitting right on top of them -- nothing above
+             can push the cards down onto the icons (Jose, Sep 28, 2026) */
+          hs.style.top = Math.round(Y(1239) - 22) + "px";
           if (card) {
             var z = HOTZ || 1, r = box.getBoundingClientRect();
-            /* in the middle of the band, but never so low that the sets under
-               them have less than their own height above the line (Jose,
-               Sep 28, 2026: "the overlap") */
-            var want = Math.max(ceilY, Math.min(ceilY + (floorY - ceilY - r.height) / 2, floorY - r.height));
+            var iconTop = Math.min.apply(null, [].map.call(hs.querySelectorAll("button"), function (x) {
+              return x.getBoundingClientRect().top; }).concat([Y(1239) - 44]));
+            var want = iconTop - 6 - r.height;
             box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
             if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           }
-          /* the sets sit on the grass between the cards and the line, cards
-             or none */
-          /* one fixed place, cards or none: the stack never moves (Jose,
-             Sep 28, 2026: "why are you trying to change the layout") */
-          hs.style.top = Math.round(Y(1239) - 22) + "px";
         });
       };
       /* HOT, NOT and OUT, the long-press menu's own faces, centered */
