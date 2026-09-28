@@ -131,6 +131,19 @@ def surname(n):
 def label(x):
     """The leg as the board writes one: Stockton 2+ PTD, Chambliss H2H, Texas ML."""
     pick, mk = x.get("selectionDisplayName") or "", x.get("marketDisplayName") or ""
+    # a milestone, one man or several: "Jaylen Waddle to Have 40+ Receiving
+    # Yards, Davante Adams to Have 40+ Receiving Yards" is "Waddle + Adams 40+
+    # Rec" -- the first word alone put "Jaylen" on the bag (Sep 27, 2026)
+    ms = re.findall(r"([^,]+?) to (?:Have|Record|Score) (\d+\+) ([A-Za-z ]+?)(?:,|$)", pick)
+    if ms:
+        short = {"Receiving Yards": "Rec", "Rushing Yards": "Rush", "Passing Yards": "Pass Yds",
+                 "Receptions": "Rec", "Passing Touchdowns": "PTD", "Touchdowns": "TD"}
+        stats = {(n, short.get(st.strip(), st.strip())) for _, n, st in ms}
+        who = " + ".join(surname(m[0].strip()) for m in ms)
+        if len(stats) == 1:
+            n, st = stats.pop()
+            return "%s %s %s" % (who, n, st)
+        return ", ".join("%s %s %s" % (surname(m[0].strip()), m[1], short.get(m[2].strip(), m[2].strip())) for m in ms)
     m = re.match(r"(.+?) Passing Touchdowns$", mk)
     if m:
         return "%s %s PTD" % (surname(m.group(1)), pick)

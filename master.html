@@ -4621,7 +4621,9 @@
     var seen = {}, names = [];
     picks.forEach(function (b) {
       var m = legParts(b.l);
-      var who = m ? m[1] : (b.l || "").split(" ")[0];
+      /* a leg with no card of its own reads as the book wrote it, whole:
+         "Waddle + Adams 40+ Rec", not its first word */
+      var who = m ? m[1] : (b.l || "").replace(/\s*\u00b7\s*$/, "");
       if (!seen[who]) { seen[who] = 1; names.push(who); }
     });
     return names.join(", ");
