@@ -10841,7 +10841,10 @@
           var slipEl = document.getElementById("slipbar");
           var floor = slipEl && !slipEl.hidden && slipEl.getBoundingClientRect().height
             ? slipEl.getBoundingClientRect().top : navTop;
-          var oy = Math.min(0, Math.round(floor - 10 - 1239 * k));
+          /* the line the icons stand on clears the slip by their own height,
+             so none of them is ever behind it (Jose, Sep 28, 2026) */
+          var clear = (slipEl && !slipEl.hidden && slipEl.getBoundingClientRect().height) ? 26 : 10;
+          var oy = Math.min(0, Math.round(floor - clear - 1239 * k));
           document.documentElement.style.setProperty("--hotbg-w", Math.round(FIELD.w * k) + "px");
           document.documentElement.style.setProperty("--hotbg-y", oy + "px");
           /* the price the picks pay together is lit on the stadium's own
