@@ -291,6 +291,11 @@
   #qsearch .qst-star.on polygon { fill: var(--amber, #e3b341); stroke: var(--amber, #e3b341); }
   #qsearch .qst b { font: 700 13px/1.1 Barlow, "Helvetica Neue", Arial, sans-serif; max-width: 74px;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  #qsearch .qsadd { display: block; width: 100%; margin-top: 12px; padding: 13px; border-radius: 12px; border: 0;
+    background: var(--amber, #e3b341); color: #0b0b0c; font: 800 16px/1 Barlow, "Helvetica Neue", Arial, sans-serif;
+    letter-spacing: .04em; text-transform: uppercase; cursor: pointer; }
+  #qsearch .qsadd[disabled] { background: #26262a; color: #8e8e93; cursor: default; }
+  #qsearch .qsadd--done { background: #1a7a36; color: #fff; }
   #qsearch .qsface { width: 40px; height: 40px; border-radius: 10px; object-fit: cover; object-position: 50% 8%; background: #1c1c1f; flex: none; }
   #qsearch .qscard { margin-top: 12px; background: #151517; border: 1px solid #26262a; border-radius: 16px; padding: 14px; }
   #qsearch .qswho { display: flex; align-items: center; gap: 12px; }
@@ -10221,6 +10226,24 @@
       setTimeout(function () { btn.classList.remove("fpay--done"); btn.textContent = was; }, 1400);
     });
   }
+  /* legs from anywhere on the page onto the slip, the way the eight's button
+     puts them there: [{oid, o, l, g, gn}], a leg with no price id is left out
+     (Jose, Sep 28, 2026: the search's parlay, "two out of three available,
+     then two end up in the slip") */
+  window.addLegs = function (legs) {
+    var n = 0;
+    (legs || []).forEach(function (x) {
+      if (!x || !x.oid || !x.o) return;
+      saved[x.oid] = { o: String(x.o).replace("-", "\u2212"), l: x.l, g: x.g || "", gn: x.gn || "" };
+      document.querySelectorAll("button.price").forEach(function (b0) { if (b0.dataset.oid === x.oid) b0.classList.add("on"); });
+      n++;
+    });
+    if (!n) return 0;
+    try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
+    if (typeof slip === "function") slip();
+    return n;
+  };
   function pricePicks(slots, picks) {
     var bar = document.querySelector(".fview--ptd");
     var out = bar && bar.querySelector(".fpay");
@@ -17024,6 +17047,9 @@
           '<div class="qstile"><span>' + esc(nx.o) + " allows</span><b>" + (nx.al === null || nx.al === undefined ? "—" : nx.al + " PTD / game") + "</b></div>" +
           '<div class="qstile"><span>Weather</span><b>' + esc(wxSay(nx.wx)) + "</b></div>" +
           '<div class="qstile"><span>Injury</span><b>' + esc(nx.inj || "Not listed") + "</b></div></div>";
+        var one = slipLegs([id]).length;
+        h += '<button type="button" class="qsadd"' + (one ? "" : " disabled") + ">" +
+          (one ? "Add 1+ PTD to betslip" : "No price posted yet") + "</button>";
       } else {
         h += '<div class="qsnote">No game on the board for him this week.</div>';
       }
@@ -17038,7 +17064,7 @@
         var hit = q.g.filter(function (g) { return g.p > 0; }).length;
         var dd = dec(px);
         if (dd) { d *= dd; chance *= 1 / dd; priced++; }
-        var last2 = q.n.split(" ").slice(-1)[0];
+        var last2 = typeof famName === "function" ? famName(q.n) : q.n.split(" ").slice(-1)[0];
         if (!nx) notes.push(last2 + " has no game this week.");
         else {
           if (!px) notes.push(last2 + "’s price isn’t posted yet.");
@@ -17058,8 +17084,36 @@
         '<div class="qstot"><div><b>' + ids.length + '</b><span>Legs</span></div><div><b class="pg">' + price + '</b><span>Parlay</span></div><div><b>' +
         (priced === ids.length && priced ? Math.round(chance * 100) + "%" : "—") + "</b><span>All hit</span></div></div>";
       if (notes.length) h += '<div class="qsnote">' + notes.map(esc).join("<br>") + "</div>";
+      var n = slipLegs(ids).length;
+      h += '<button type="button" class="qsadd"' + (n ? "" : " disabled") + ">" +
+        (!n ? "No prices posted yet" : n === ids.length ? "Add to betslip" : "Add " + n + " of " + ids.length + " to betslip") + "</button>";
       return h + "</div>";
     }
+    /* each man's 1+ PTD for his next game, price and id off the board itself;
+       a man whose price is not posted is left off */
+    function slipLegs(ids) {
+      var out = [];
+      ids.forEach(function (id) {
+        var q = DATA.qbs[id], nx = q && q.nx;
+        if (!nx || !nx.gid) return;
+        var side = nx.h ? 1 : 0;
+        var r0 = ((((typeof PROPS === "object" && PROPS[nx.gid]) || {}).ptd || [])[side] || [])[0];
+        if (!r0 || !r0[0] || !r0[1]) return;
+        var row = null;
+        (typeof SCHED === "object" ? SCHED : []).forEach(function (g) { if (String(g[1]) === String(nx.gid)) row = g; });
+        var t = new Date(nx.d).toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+        out.push({ oid: r0[1], o: r0[0], g: nx.gid, gn: row ? row[3] + " @ " + row[4] : "",
+                   l: (typeof famName === "function" ? famName(q.n) : q.n) + " 1+ PTD \u00b7 " + t });
+      });
+      return out;
+    }
+    out.addEventListener("click", function (e) {
+      var b = e.target.closest(".qsadd");
+      if (!b || b.disabled || !window.addLegs) return;
+      var n = window.addLegs(slipLegs(picked));
+      b.textContent = n ? "Added " + n + " to betslip" : "No prices posted yet";
+      b.classList.add("qsadd--done");
+    });
   })();
 </script>
 
