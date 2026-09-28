@@ -10649,7 +10649,12 @@
            Sep 28, 2026: "why is Cooper Rush still there") */
         var hurtNow = w && /out|injur|doubt|question|reserve/i.test(w.status || "") &&
                       !/coach|decision|not injury|personal|suspen/i.test((w.type || "") + " " + (w.note || ""));
-        if (!hurtNow) m.bench = true;
+        /* out for the season -- back no earlier than the regular season's
+           end, or said so in so many words -- is kept on the wire but not
+           shown: Dart, on IR until January 17 (Jose, Sep 28, 2026) */
+        var season = w && ((w.returns && w.returns >= "2027-01-10") ||
+                           /season-ending|out for the (rest of the )?season/i.test(w.note || ""));
+        if (!hurtNow || season) m.bench = true;
       });
     })();
     /* Touchdowns first, thrown and run together, and the club's record only to
