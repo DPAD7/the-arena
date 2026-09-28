@@ -16419,22 +16419,32 @@
       }, 350);
       var fin = function (ok, fresh) {
         clearTimeout(climbT);
-        fillEl.style.transition = "height .4s cubic-bezier(.22, 1, .36, 1)";
+        var cls = !ok ? "bad" : fresh ? "ok" : "none", fired = false;
+        /* the card pops the moment the fill reaches the top -- on the fill's
+           own end, not on a timer that ran late or not at all (Jose, Sep 28,
+           2026: "when it's at the top the card pops up"): the wallet is at
+           rest again and the card rises, in the same frame. green: a fresh
+           sync; grey: read, nothing new from the book in six hours; red: the
+           read failed */
+        var top = function () {
+          if (fired) return;
+          fired = true;
+          fillEl.removeEventListener("transitionend", onEnd);
+          clearTimeout(popT);
+          fillEl.style.transition = "";
+          wal.className = "wal pop " + cls;
+          fadeT = setTimeout(function () {
+            wal.className = "wal sink " + cls;
+            fadeT = setTimeout(function () { wal.className = "wal"; }, 400);
+          }, 2400);
+        };
+        var onEnd = function (e) { if (!e || e.propertyName === "height") top(); };
+        fillEl.addEventListener("transitionend", onEnd);
+        fillEl.style.height = getComputedStyle(fillEl).height;   /* from wherever it has got to */
+        void fillEl.offsetHeight;
+        fillEl.style.transition = "height .5s cubic-bezier(.3, .6, .4, 1)";
         fillEl.style.height = "100%";
-        setTimeout(function () { fillEl.style.transition = ""; }, 450);
-        /* full: the wallet at rest again, then the card rises out of it --
-           green: a fresh sync; grey: read, but nothing new from the book in
-           six hours; red: the read failed (Jose, Sep 26-27, 2026) */
-        popT = setTimeout(function () {
-          wal.className = "wal";
-          popT = setTimeout(function () {
-            wal.className = "wal pop " + (!ok ? "bad" : fresh ? "ok" : "none");
-            fadeT = setTimeout(function () {
-              wal.className = "wal sink " + (!ok ? "bad" : fresh ? "ok" : "none");
-              fadeT = setTimeout(function () { wal.className = "wal"; }, 380);
-            }, 2400);
-          }, 120);
-        }, 480);
+        popT = setTimeout(top, 650);   /* if the browser drops the end event */
       };
       /* the climb is its own; the checks along the way no longer move it */
       fin.step = function () {};
