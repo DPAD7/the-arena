@@ -1,0 +1,62 @@
+# The fight recorder, for one card, on GitHub (it used to run on his Mac).
+#
+# refresh.py starts this when a UFC card is half an hour from its first bell.
+# log_fights.py reads ESPN's live numbers for every bout every few seconds
+# until the last bout is final; anim.py cuts them into the rewinds the cards
+# play (site/anim); the readings and the rewinds are committed and the site is
+# deployed so the rewinds show that night. A job can run six hours, so the
+# recorder stops itself at five and three quarters.
+name: fightlog
+run-name: fightlog ${{ inputs.event }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      event:
+        description: "ESPN event id of the card"
+        required: true
+
+concurrency:
+  group: fightlog-${{ inputs.event }}
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install --quiet curl_cffi
+
+      - name: Record the card
+        run: python build/log_fights.py --event "${{ inputs.event }}" --every 6 --hours 5.75
+
+      - name: Cut the rewinds and keep them
+        run: |
+          python build/anim.py
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git add data/fight_log.jsonl data/fight_plays.jsonl site/anim
+          if git diff --cached --quiet; then echo "nothing recorded"; exit 0; fi
+          git commit -m "rewinds for card ${{ inputs.event }}"
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash && git push && break
+            sleep 20
+          done
+
+      - name: Put them on the board
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
+          cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main

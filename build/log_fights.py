@@ -229,7 +229,7 @@ def main():
         # and ran until five in the morning on a card that ended at one
         # (Jose, Sep 20, 2026: "it needs to stop polling after the last fight
         # goes final"). Nine hours is the backstop for a card that never says.
-        if (not live and not ahead) or time.time() - started > 9 * 3600:
+        if (not live and not ahead) or time.time() - started > float(arg("--hours", "9")) * 3600:
             print("card finished: %d of %d bouts final; %d readings on file"
                   % (len(done), len(bouts), sum(1 for _ in open(OUT))))
             break

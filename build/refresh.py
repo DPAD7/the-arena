@@ -20,6 +20,7 @@
 """
 import datetime
 import json
+import urllib.request
 import os
 import re
 import signal
@@ -571,6 +572,28 @@ if "--if-due" in sys.argv:
         for key, _, _, _f in late:
             seen[key] = NOW.isoformat()
         json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+    # a fight card starting: set the recorder going on GitHub for the whole
+    # card. It ran on his Mac and never moved when the sweep did, so the 9/26
+    # card has no rewinds (Jose, Sep 27, 2026: "where are the rewinds")
+    if running and not DRY and ("fightlog@" + str(running)) not in seen:
+        tok = os.environ.get("GITHUB_TOKEN") or ""
+        repo = os.environ.get("GITHUB_REPOSITORY") or "DPAD7/the-arena"
+        if tok:
+            try:
+                req = urllib.request.Request(
+                    "https://api.github.com/repos/%s/actions/workflows/fightlog.yml/dispatches" % repo,
+                    data=json.dumps({"ref": "main", "inputs": {"event": str(running)}}).encode(),
+                    headers={"authorization": "Bearer " + tok, "accept": "application/vnd.github+json",
+                             "content-type": "application/json", "user-agent": "the-arena-sweep"}, method="POST")
+                code = urllib.request.urlopen(req, timeout=30).status
+            except Exception as e:
+                code = str(e)[:80]
+            log("fight recorder for card %s: %s" % (running, "started" if code == 204 else "NOT started (%s)" % code))
+            if code == 204:
+                seen["fightlog@" + str(running)] = NOW.isoformat()
+                json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+        else:
+            log("fight recorder: no GITHUB_TOKEN here, not started")
     if playing and not DRY:
         r = subprocess.run([sys.executable, D + "/build/played_qb.py"], capture_output=True, text=True, cwd=D)
         out = (r.stdout + r.stderr).strip().splitlines()

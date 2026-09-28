@@ -34,6 +34,7 @@ jobs:
     # the run writes back what it read: the page, the prices, the settled games
     permissions:
       contents: write
+      actions: write      # to set the fight recorder going when a card starts
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
@@ -67,6 +68,7 @@ jobs:
           # what the double taps read is fetched back from the site with it
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python build/refresh.py --if-due
 
       - name: Keep what it wrote
