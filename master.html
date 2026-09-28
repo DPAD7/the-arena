@@ -12460,7 +12460,7 @@
         var id = c.dataset.espn || c.dataset.bout;
         if (id && !seen[id]) { seen[id] = 1; ids.push(id); }
       });
-      var t0 = Date.now(), LIMIT = 150000;
+      var t0 = Date.now(), LIMIT = 240000;   /* the store can lag a minute behind a finished run: red only if it truly failed */
       var climb = function () {
         var p = Math.min(1, (Date.now() - t0) / 60000);
         fillAt(Math.round(40 + 52 * (1 - Math.pow(1 - p, 2))), "ok");
@@ -16543,7 +16543,14 @@
       (function step() {
         if (!climbing) return;
         var k = (performance.now() - t0) / EXP;
-        fillEl.style.height = (97 * (1 - Math.exp(-2.4 * k))).toFixed(2) + "%";
+        /* a steady climb to 75% by the time the last runs took, then a crawl
+           that never reaches the top: only the answer fills the rest, so it
+           touches the top and turns green together (Jose, Sep 28, 2026: "at
+           59 seconds and then 60 it should go, fill and then green") */
+        var h = k < 1 ? 75 * k : 75 + 13 * (1 - Math.exp(-1.2 * (k - 1)));
+        /* the wallet's inside runs from 13% to 70% of its box (wallet-inner.png):
+           the fill is laid on that, so 88% looked full at the old scale */
+        fillEl.style.height = (12.9 + 0.57 * h).toFixed(2) + "%";
         climbT = requestAnimationFrame(step);
       })();
       var fin = function (ok, fresh) {
@@ -16578,7 +16585,7 @@
         void fillEl.offsetHeight;
         fillEl.style.transition = "height .35s ease-out";
         fillEl.style.height = "100%";
-        popT = setTimeout(top, 480);   /* if the browser drops the end event */
+        popT = setTimeout(top, 420);   /* if the browser drops the end event */
       };
       /* the climb is its own; the checks along the way no longer move it */
       fin.step = function () {};

@@ -52,7 +52,7 @@ const FRESH_MS = 2 * 60 * 1000;
 // a run that finished without posting is given this long for the post to
 // show up here -- the store is eventually consistent across Cloudflare's
 // cities -- before the tap is called failed
-const SETTLE_MS = 90 * 1000;
+const SETTLE_MS = 180 * 1000;
 
 function ok(body, status) {
   return new Response(JSON.stringify(body), {
@@ -96,7 +96,8 @@ function ids(list) {
 }
 
 async function readJSON(env, key) {
-  const held = await env.ARENA.get(key, { cacheTtl: 30 });
+  // no edge cache: a poll must see the answer the moment it is posted
+  const held = await env.ARENA.get(key);
   if (!held) return null;
   try { return JSON.parse(held); } catch (e) { return null; }
 }
