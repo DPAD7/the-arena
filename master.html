@@ -4278,6 +4278,8 @@
        above it but the page, and .gcard lookups go through cardOf(). */
     if (d.parentElement && d.parentElement !== document.body) {
       d._home = d.parentElement;
+      var prev = d.previousElementSibling;
+      d._btn = prev && prev.classList.contains("gmorebtn") ? prev : null;
       d._card = d.closest(".gcard");
       document.body.appendChild(d);
     }
@@ -4291,7 +4293,11 @@
   }
   function sheetHome(d) {
     if (d && d._home) {
-      try { d._home.appendChild(d); } catch (e) {}
+      /* back behind its own button, not at the end of the row: the opener
+         finds it as the button's next sibling, and put back last it was not,
+         so the trend did nothing the second time (Jose, Sep 28, 2026) */
+      var btn = d._btn && d._btn.parentNode === d._home ? d._btn : null;
+      try { if (btn) d._home.insertBefore(d, btn.nextSibling); else d._home.appendChild(d); } catch (e) {}
       d._home = null; d._card = null;
     }
   }
@@ -9030,7 +9036,7 @@
     card.dataset.pooled = "1";
     card.querySelectorAll(".gmorebtn").forEach(function (b) {
       b.addEventListener("click", function () {
-        var sheet = b.nextElementSibling;
+        var sheet = b._sheet || (b._sheet = b.nextElementSibling && b.nextElementSibling.tagName === "DIALOG" ? b.nextElementSibling : null) || b.nextElementSibling;
         /* whose sheet this is, taken off the card it hangs on */
         var own = cardOf(b);
         if (own && own.dataset.bout) {
@@ -13431,7 +13437,7 @@
   pullPrices();
   document.querySelectorAll(".gmorebtn").forEach(function (b) {
     b.addEventListener("click", function () {
-      var sheet = b.nextElementSibling;
+      var sheet = b._sheet || (b._sheet = b.nextElementSibling && b.nextElementSibling.tagName === "DIALOG" ? b.nextElementSibling : null);
       if (sheet && sheet.tagName === "DIALOG") openSheet(sheet);
     });
   });
