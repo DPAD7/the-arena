@@ -168,7 +168,29 @@ def club(tid, hurt, qb=None):
         fit = SPOTS.get(pos, ())
         k = next((key for key, ids in lists if ids and ids[0] == pid and key in fit), None) or \
             next((key for key, ids in lists if pid in ids and key in fit), "")
-        side[which].append({"n": num, "p": pos, "s": s, "k": k})
+        side[which].append({"n": num, "p": pos, "s": s, "k": k, "_id": pid})
+    # two linemen on one spot: ESPN moves the backup up once a starter is
+    # hurt, so the hurt man and his backup both answer to it and a spot goes
+    # empty. The hurt man takes the empty spot, wearing the number of whoever
+    # stands first there now (Sep 28, 2026: Baltimore's centre)
+    line = [m for m in side["off"] if m["k"] in _OL]
+    free = [k for k in _OL if k not in {m["k"] for m in line}]
+    seen = {}
+    for m in sorted(line, key=lambda m: m["s"] == "out"):
+        if m["k"] in seen and free:
+            k = free.pop(0)
+            m["k"] = k
+            for key, ids in lists:
+                if key != k:
+                    continue
+                nxt = next((x for x in ids if x not in taken and hurt.get(x, "") not in OUTS and x in ros), None)
+                if nxt:
+                    m["n"] = ros[nxt][0] or jersey(nxt)
+                    taken.add(nxt)
+                break
+        seen[m["k"]] = 1
+    for x in side["off"] + side["def"]:
+        x.pop("_id", None)
     return side
 
 

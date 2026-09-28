@@ -2058,6 +2058,12 @@
     font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 13px;
     letter-spacing: 0.1em; text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8); }
   .froute.drop { color: #fff !important; }
+  .fol { position: absolute; z-index: 4; top: 135px; width: 26px; height: 26px; transform: translate(-50%, -50%);
+    background: center / contain no-repeat; pointer-events: none; }
+  .fol em { position: absolute; left: 0; right: 0; top: 6px; text-align: center; font: 800 10px Barlow, Arial, sans-serif;
+    font-style: normal; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.6); }
+  .fol--out { filter: drop-shadow(1.3px 0 0 #ff3b30) drop-shadow(-1.3px 0 0 #ff3b30) drop-shadow(0 1.3px 0 #ff3b30) drop-shadow(0 -1.3px 0 #ff3b30); }
+  .fol--q { filter: drop-shadow(1.3px 0 0 #ffd60a) drop-shadow(-1.3px 0 0 #ffd60a) drop-shadow(0 1.3px 0 #ffd60a) drop-shadow(0 -1.3px 0 #ffd60a); }
   .fwr { position: absolute; z-index: 4; width: 34px; height: 34px; transform: translate(-50%, -50%);
     pointer-events: none; opacity: 0; transition: opacity .2s ease; }
   .fwr.on { opacity: 1; }
@@ -10406,25 +10412,40 @@
       .catch(function () { return {}; });
     return HOTLU;
   }
+  /* lifted, his five stand in his club's Kalshi jerseys with their numbers,
+     where the rings were, the hurt ones edged (Jose, Sep 28, 2026: "use the
+     kalshi jerseys") */
   function olMarks(forkbox, club) {
     var routes = forkbox && forkbox.querySelector(".froutes");
     if (!routes || !club) return;
     loadLu().then(function (lu) {
-      var marks = {};
+      var line = {};
       Object.keys(lu || {}).some(function (gid) {
         var mine = (lu[gid] || {})[club];
         if (!mine) return false;
-        (mine.off || []).forEach(function (m) { if (m.s && /^(lt|lg|c|rg|rt)$/.test(m.k)) marks[m.k] = m.s; });
+        (mine.off || []).forEach(function (m) { if (/^(lt|lg|c|rg|rt)$/.test(m.k)) line[m.k] = m; });
         return true;
       });
-      routes.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(routeSvg(marks)) + '")';
+      if (!Object.keys(line).length) return;
+      forkbox.querySelectorAll(".fol").forEach(function (x) { x.remove(); });
+      ["lt", "lg", "c", "rg", "rt"].forEach(function (k, i) {
+        var m = line[k] || { n: "", s: "" };
+        var j = document.createElement("i");
+        j.className = "fol" + (m.s ? " fol--" + m.s : "");
+        j.style.left = (137 + (i - 2) * 30) + "px";
+        j.style.backgroundImage = "url(ico/jersey/" + club.toLowerCase() + ".png)";
+        j.innerHTML = "<em>" + String(m.n || "").replace(/[^0-9]/g, "") + "</em>";
+        forkbox.appendChild(j);
+      });
+      routes.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(routeSvg(null, true)) + '")';
     });
   }
   function olClear(forkbox) {
     var routes = forkbox && forkbox.querySelector(".froutes");
+    if (forkbox) forkbox.querySelectorAll(".fol").forEach(function (x) { x.remove(); });
     if (routes) routes.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(routeSvg()) + '")';
   }
-  function routeSvg(marks) {
+  function routeSvg(marks, noLine) {
     marks = marks || {};
     var W = 420, H = 236, cx = W / 2, o = [];   /* tall enough for the quarterback's spot */
     /* the three boxes, faint -- where the finger goes, not a line to follow */
@@ -10438,7 +10459,7 @@
     o.push('<rect x="' + (cx - 28.5) + '" y="' + (185 - 27.5) + '" width="57" height="55" rx="18" fill="#fff" fill-opacity=".04" ' +
            'stroke="#fff" stroke-opacity=".45" stroke-width="1.4" stroke-dasharray="4 4"/>');
     /* the line on top of everything */
-    [-2, -1, 0, 1, 2].forEach(function (k) {
+    if (!noLine) [-2, -1, 0, 1, 2].forEach(function (k) {
       var x = cx + k * 30, y = 135, r0 = 11;   /* clear of the QB spot below (Sep 25, 2026) */
       var mk = marks[["lt", "lg", "c", "rg", "rt"][k + 2]];
       var ink = mk === "out" ? 'stroke="#ff3b30" stroke-opacity="1" stroke-width="2.6"'
