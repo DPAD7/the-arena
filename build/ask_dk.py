@@ -111,7 +111,11 @@ def games(asked, board, why):
             if not e:
                 why[gid] = "unmapped (%s)" % how
                 continue
-            ml, entry = fill_week.price_event(e, [g[6], g[8]], league, dkpeople)
+            # the passers' names go with their numbers, so a man DraftKings has not
+            # been pinned to yet is found the way the sweep finds him -- Keenum's
+            # prices came back empty from a tap while the book had them
+            # (Jose, Sep 28, 2026)
+            ml, entry = fill_week.price_event(e, [g[6], g[8]], league, dkpeople, [g[5], g[7]])
             one = {}
             if ml:
                 row = ["", "", "", ""]
