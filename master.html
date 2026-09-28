@@ -5100,6 +5100,15 @@
     /* the game he was written against settles who he is; the sport's own map
        and then anything at all are only for a leg with no game on it */
     var hit = gamePic(gid, who) || (sport && look(m[sport])) || look(m.any);
+    /* DraftKings writes a club "PHI Eagles": the letters are the club, so
+       the wallet wears the logo the slip does, not "PHI" in type
+       (Jose, Sep 28, 2026) */
+    var club = /^([A-Z]{2,4})\s+[A-Z][a-z]/.exec(String(who || ""));
+    if (!hit && club) {
+      var save = who; who = club[1];
+      hit = gamePic(gid, who) || (sport && look(m[sport])) || look(m.any);
+      who = save;
+    }
     if (!hit) return "";
     return '<img class="slpic' + (hit.round ? " slpic--face" : "") + '" alt="" loading="lazy" src="' + hit.src +
            '" data-next="' + (hit.alt || "") + '"' +
