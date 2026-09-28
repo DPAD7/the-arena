@@ -16685,6 +16685,9 @@
       y0 = null;
       if (box.classList.contains("open") || window.scrollY > 2 || document.documentElement.classList.contains("hotlock")) return;
       if (document.querySelector("dialog[open]")) return;
+      /* a drag that starts on a card's hide corner is the hide, never the
+         search (Jose, Sep 28, 2026: "conflicting with the drag down to hide") */
+      if (e.target.closest && e.target.closest(".gcorner, .gcorner--pulling")) return;
       y0 = e.touches[0].clientY;
     }, { passive: true });
     addEventListener("touchmove", function (e) {
@@ -16694,6 +16697,7 @@
     }, { passive: true });
     addEventListener("touchend", function (e) {
       if (y0 === null) return;
+      if (document.querySelector(".gcorner--pulling, .gcorner--armed")) { y0 = null; hint.style.opacity = 0; hint.style.transform = ""; return; }
       var dy = (e.changedTouches[0] || {}).clientY - y0;
       hint.style.opacity = 0; hint.style.transform = "";
       y0 = null;
