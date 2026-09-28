@@ -157,6 +157,12 @@ def settle(club, espn_id, side, depth):
     return None
 
 
+try:
+    NAMED = json.load(open(os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "qb_named.json")))
+except (OSError, ValueError):
+    NAMED = {}
+
+
 def main():
     only = None
     if "--game" in sys.argv:
@@ -194,6 +200,17 @@ def main():
         seen += 1
         # the away side is drawn on the left and is index 0 everywhere
         for side, (i, club) in enumerate(((5, g[3]), (7, g[4]))):
+            # a named starter the chart does not know yet: reported by the
+            # club or the insiders and held in data/qb_named.json by game --
+            # Keenum over Bagent on Sep 28, 2026, which the chart missed
+            # (Jose: "how do you not catch this")
+            held = NAMED.get("%s|%s" % (espn_id, club))
+            if held:
+                if str(g[i + 1]) != str(held["id"]):
+                    swaps.append("%-4s %-20s -> %-20s (named)" % (club, g[i], held["name"]))
+                    g[i], g[i + 1] = held["name"], held["id"]
+                    unprice(espn_id, side)
+                continue
             him = settle(club, espn_id, side, depth)
             if not him:
                 continue
