@@ -9945,7 +9945,17 @@
     var real = [].slice.call(box.querySelectorAll(".qcard")).filter(function (c) {
       return getComputedStyle(c).display !== "none";
     });
-    if (real.length < 2) return;
+    if (real.length < 2) { box.style.justifyContent = real.length ? "center" : ""; return; }
+    /* only a row that runs off the screen loops; two or three that fit sit
+       still in the middle, no copies (Jose, Sep 28, 2026: "the loop doesn't
+       make sense for 2 players") */
+    var lastR = real[real.length - 1];
+    if (lastR.offsetLeft + lastR.offsetWidth - real[0].offsetLeft <= box.clientWidth + 1) {
+      box.style.justifyContent = "center";
+      box._seatFirst = null;
+      return;
+    }
+    box.style.justifyContent = "";
     var mk = function (c) {
       var k = c.cloneNode(true);
       k.classList.add("qcard--clone");
@@ -10801,10 +10811,11 @@
          between the two near yard lines (Jose, Sep 25, 2026: "QBs end up
          here when selected", "the carousel goes there") */
       var FIELD = { w: 768, h: 1361, goal: 712, band: [1050, 1245], board: [318, 261, 440, 383] };
+      var HOTZ = 0;   /* the carousel's one size, set once */
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
-          box.style.zoom = ""; box.style.marginTop = "";
+          box.style.marginTop = "";
           if (turf.hidden || !document.body.contains(turf)) return;
           var W = window.innerWidth, H = window.innerHeight;
           /* as large as covers the screen, but never so large that the card
@@ -10872,29 +10883,31 @@
             });
             slots._boardWatch.observe(slots, { childList: true, subtree: true, characterData: true });
           }
-          /* the cards as tall as the band, and in the middle of it */
-          var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
-          if (!card) return;
+          /* the cards take one size and keep it: worked out the first time
+             there is a card to measure, and never again -- a pass that found
+             the row mid-rebuild used to reset them to full size, so they
+             flipped big and small (Jose, Sep 28, 2026: "why are we doing
+             resizing? ... never resize") */
           var top = Y(FIELD.band[0]), band = Y(FIELD.band[1]) - top;
-          var z = Math.min(1, (band - 10) / card.getBoundingClientRect().height);
-          box.style.zoom = z;
-          var r = box.getBoundingClientRect();
-          var want = top + (band - r.height) / 2;
-          box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
-          /* the zoom moved every card: sit on the first again, once, when the
-             row is first laid out -- never while he is swiping it */
-          if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
-          /* the sets sit on the grass between the cards and the line */
-          var hs = hotSet(), cb = box.getBoundingClientRect().bottom;
-          /* a short screen with no grass to spare: the cards give up just
-             enough height for the row, and nothing moves on one that has it */
-          if (Y(1239) - cb < 36) {
-            var h1 = box.getBoundingClientRect().height, z2 = z * (h1 - (36 - (Y(1239) - cb))) / h1;
-            box.style.zoom = z2;
-            var r2 = box.getBoundingClientRect();
-            box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (Y(1239) - 36 - r2.bottom) / z2) + "px";
-            cb = box.getBoundingClientRect().bottom;
+          var card = [].filter.call(box.querySelectorAll(".qcard"), function (c) { return c.getBoundingClientRect().height; })[0];
+          var hs = hotSet();
+          if (card && !HOTZ) {
+            var zNow = parseFloat(getComputedStyle(box).zoom) || 1;
+            var natural = card.getBoundingClientRect().height / zNow;
+            /* as tall as the band allows, and short enough to leave the sets
+               their grass above the line */
+            HOTZ = Math.min(1, (band - 10) / natural, (Y(1239) - top - 36 - 4) / natural);
           }
+          if (HOTZ) box.style.zoom = HOTZ;
+          if (card) {
+            var z = HOTZ || 1, r = box.getBoundingClientRect();
+            var want = top + (band - r.height) / 2;
+            box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
+            if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
+          }
+          /* the sets sit on the grass between the cards and the line, cards
+             or none */
+          var cb = card ? box.getBoundingClientRect().bottom : Y(FIELD.band[1]);
           hs.style.top = Math.round((cb + Y(1239)) / 2) + "px";
         });
       };
