@@ -10826,6 +10826,7 @@
          Sep 28, 2026). It is laid on the page as --hotz, so any row built
          later wears it from its first frame. */
       var HOTZ = window._hotz || 0;
+      var FIVEYDS = 90;   /* one five-yard line apart, near the goal, in the photo's pixels */
       var centerHot = function () {
         requestAnimationFrame(function () {
           turf.style.marginTop = "";
@@ -10866,7 +10867,10 @@
           var Y = function (y) { return oy + y * k; };
           /* the picks' row stands on the goal line */
           var sb = slots.getBoundingClientRect().bottom;
-          turf.style.marginTop = Math.round(8 + Y(FIELD.goal) - sb) + "px";
+          /* five yards up from where it stood, one line on the photo, so the
+             grass below holds the cards at a size that reads (Jose, Sep 28,
+             2026: "move up center and formation up 5 yards") */
+          turf.style.marginTop = Math.round(8 + Y(FIELD.goal - FIVEYDS) - sb) + "px";
           /* the scoreboard measured from the picks' own row, which is what
              the price is laid out in: the page's sliding track moves what a
              fixed position would be measured from */
