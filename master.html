@@ -16108,9 +16108,11 @@
             .then(function (b) {
               if (b && b.expired && b.expired >= j.asked) { done(false, false); return; }   /* login gone: red */
               if (b && b.at && b.at >= j.asked) { DKB = b; DKB_T = Date.now(); bankDraw(); done(true, true); return; }
-              if (++tries > 30 || Date.now() - t0 > 150000) { done(true, false); return; }
-              if (done.step) done.step(Math.min(92, 20 + tries * 4));
-              setTimeout(look, 5000);
+              if (++tries > 75 || Date.now() - t0 > 150000) { done(true, false); return; }
+              if (done.step) done.step(Math.min(92, 20 + tries * 2));
+              /* every two seconds: the green comes up as soon as the book's
+                 answer lands, not up to five seconds after (Jose, Sep 28, 2026) */
+              setTimeout(look, 2000);
             }).catch(function () { done(false, false); });
         })();
       }).catch(function () { done(false, false); });
