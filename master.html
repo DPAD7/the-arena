@@ -16286,8 +16286,18 @@
       fillEl.style.transition = "none"; fillEl.style.height = "0";
       void fillEl.offsetHeight; fillEl.style.transition = "";
       fillEl.style.height = "12%";
+      /* one long, easing climb toward 90% while the book is read (a sync
+         takes about a minute), rather than a 4% jump every five seconds that
+         looked stuck in between (Jose, Sep 27, 2026) */
+      var climbT = setTimeout(function () {
+        fillEl.style.transition = "height 60s cubic-bezier(.12, .6, .3, 1)";
+        fillEl.style.height = "90%";
+      }, 350);
       var fin = function (ok, fresh) {
+        clearTimeout(climbT);
+        fillEl.style.transition = "height .4s cubic-bezier(.22, 1, .36, 1)";
         fillEl.style.height = "100%";
+        setTimeout(function () { fillEl.style.transition = ""; }, 450);
         /* full: the wallet at rest again, then the card rises out of it --
            green: a fresh sync; grey: read, but nothing new from the book in
            six hours; red: the read failed (Jose, Sep 26-27, 2026) */
@@ -16302,8 +16312,8 @@
           }, 120);
         }, 480);
       };
-      /* it climbs while the book is being read, about a minute */
-      fin.step = function (pc) { fillEl.style.height = pc + "%"; };
+      /* the climb is its own; the checks along the way no longer move it */
+      fin.step = function () {};
       (window._dkFresh || function (d) { d(false); })(fin);
     }
     function up() {
