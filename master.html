@@ -10644,7 +10644,12 @@
         var nx = next[m.club];
         if (!nx || nx.id === String(m.id)) return;
         var w = WIRE[String(m.id)];
-        if (!(w && /out|injur|doubt|question|reserve/i.test(w.status || ""))) m.bench = true;
+        /* hurt means hurt: "Out" for a coach's decision is a benching, and
+           Rush, who lost the job to Penix, is not an injured starter (Jose,
+           Sep 28, 2026: "why is Cooper Rush still there") */
+        var hurtNow = w && /out|injur|doubt|question|reserve/i.test(w.status || "") &&
+                      !/coach|decision|not injury|personal|suspen/i.test((w.type || "") + " " + (w.note || ""));
+        if (!hurtNow) m.bench = true;
       });
     })();
     /* Touchdowns first, thrown and run together, and the club's record only to
