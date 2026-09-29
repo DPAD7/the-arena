@@ -8,3 +8,9 @@ compatibility_date = "2026-01-01"
 [[kv_namespaces]]
 binding = "ARENA"
 id = "1bdd65972c8f48a2b9650e5f853c9f4f"
+
+# the clock (clock/, a Worker of its own): /wake reads its status through this
+[[durable_objects.bindings]]
+name = "CLOCK"
+class_name = "Clock"
+script_name = "arena-clock"

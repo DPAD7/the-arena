@@ -1,0 +1,17 @@
+# The board's clock: one Durable Object holding one alarm, set to the next
+# moment that matters (clock.js). The daily cron only re-arms it.
+name = "arena-clock"
+main = "clock.js"
+compatibility_date = "2026-01-01"
+workers_dev = false
+
+[[durable_objects.bindings]]
+name = "CLOCK"
+class_name = "Clock"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Clock"]
+
+[triggers]
+crons = ["0 13 * * *"]

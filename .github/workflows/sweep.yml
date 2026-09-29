@@ -1,7 +1,7 @@
 # The board's own sweep, run by GitHub instead of a Mac.
 #
 # Same script the LaunchAgent ran every ten minutes: refresh.py decides for
-# itself whether this moment is due -- five sweeps a day, the hub at 10 ET,
+# itself whether this moment is due -- three sweeps a day, the hub at 10 ET,
 # 120/60/30 minutes before each kickoff and first bell, and after the whistle.
 #
 # The six-gigabyte record stays on the Mac. The only tables the sweep reads
@@ -14,14 +14,21 @@
 name: sweep
 
 on:
-  schedule:
-    - cron: "*/10 * * * *"
+  # no alarm of its own: the site's clock (clock/clock.js) starts it at the
+  # moments that matter -- sweeps, pregame, the injury report, live passes,
+  # the day's close-out (Jose, Sep 29, 2026: "why would it go off every 10
+  # minutes")
   # a change that lands on main goes out at once. A session in the cloud pushes
   # to its own branch, so merging it is what puts it on the board -- without
   # this it would have waited for the next sweep (Jose, Sep 19, 2026)
   push:
     branches: [main]
   workflow_dispatch:
+    inputs:
+      mode:
+        description: "due (refresh.py --if-due) or dayend (refresh.py --day-end)"
+        required: false
+        default: "due"
 
 # two runs must never overlap: they would write the same files at once
 concurrency:
@@ -71,7 +78,12 @@ jobs:
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: python build/refresh.py --if-due
+        run: |
+          if [ "${{ inputs.mode }}" = "dayend" ]; then
+            python build/refresh.py --day-end
+          else
+            python build/refresh.py --if-due
+          fi
 
       - name: The site, checked
         # every run, due or not: the site carries main's page (if not, it is
