@@ -60,7 +60,11 @@ def slug(name):
 
 
 def drawn():
-    """every NFL passer on the board, name to ESPN id."""
+    """every NFL passer on the board and every one on a club's depth chart,
+       name to ESPN id: a backup is pinned before the week he starts, not
+       after -- Mariota's prices sat under Daniels's face for want of it
+       (Jose, Sep 29, 2026: "we should get IDs for all ESPN quarterbacks and
+       IDs for all DraftKings quarterbacks")"""
     s = open(os.path.join(D, "master.html")).read()
     m = re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S)
     out = {}
@@ -68,6 +72,14 @@ def drawn():
         for name, pid in ((g[5], g[6]), (g[7], g[8])):
             if name and pid:
                 out[name] = str(pid)
+    try:
+        depth = json.load(open(os.path.join(D, "site", "depth.json")))
+    except (OSError, ValueError):
+        depth = {}
+    for room in depth.values():
+        for q in room.get("qbs") or []:
+            if q.get("name") and q.get("id"):
+                out.setdefault(q["name"], str(q["id"]))
     return out
 
 
@@ -88,7 +100,7 @@ def main():
     for name, espn in sorted(drawn().items()):
         if espn in known:
             continue
-        found = by.get(slug(name)) or []
+        found = by.get(slug(name)) or by.get(slug(re.sub(r"\s+(jr\.?|sr\.?|ii|iii|iv|v)$", "", name, flags=re.I))) or []
         if len(found) == 1:
             have[found[0]] = {"espn": espn, "name": name}
             known.add(espn)

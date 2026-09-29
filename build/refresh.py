@@ -570,7 +570,12 @@ def due_now(events):
     return hit, seen
 
 
-if "--if-due" in sys.argv:
+if "--day-end" in sys.argv:
+    # the day's last game is final (build/day_end.py): one full pass, the
+    # same one a sweep runs, then the page's prices and the deploy below
+    log("day end: every game of the day is final -- a full pass")
+    price_drawn()
+elif "--if-due" in sys.argv:
     # DraftKings is read only when he double taps the bag (dkbets.yml), never
     # on a sweep (Jose, Sep 26, 2026: "only when I double tap")
     hit, seen = due_now(src["events"])

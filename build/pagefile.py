@@ -88,6 +88,27 @@ def stamps(page):
     return h(code), h(data)
 
 
+def schedule(page):
+    """site/schedule.json: every kickoff and first bell on the board, for the
+       site's own clock (site/functions/wake.js), which reads it to know when
+       anything is due -- sweeps, pregame, injury windows, live games, finals
+       (Jose, Sep 29, 2026). [[kind, id, start ISO, league]]"""
+    import json as _j
+    out = []
+    for var, kind, lg in (("SCHED", "game", "nfl"), ("CFB", "game", "college-football"),
+                          ("FIGHTCARDS", "card", "mma"), ("BOXCARDS", "card", "boxing")):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
+        for g in _j.loads(m.group(1)) if m else []:
+            if len(g) > 2 and g[2]:
+                row = [kind, str(g[1]), g[2], lg]
+                # a game: its clubs and the passer each card names, by ESPN id,
+                # so the clock can tie a leg to his game and his box line
+                if kind == "game" and len(g) > 8:
+                    row += [g[3], g[4], g[5], str(g[6] or ""), g[7], str(g[8] or "")]
+                out.append(row)
+    _j.dump(out, open(os.path.join(D, "site", "schedule.json"), "w"), separators=(",", ":"))
+
+
 def deployable(page):
     """The page wrapped as site/index.html, written ready to deploy.
 
@@ -108,6 +129,7 @@ def deployable(page):
         except OSError:
             pass
     files = "%014d" % (int(h.hexdigest(), 16) % 10 ** 14)
+    schedule(page)
     open(os.path.join(D, "site", "build.txt"), "w").write(code + "\n" + data + "\n" + files + "\n")
     open(os.path.join(D, "site", "index.html"), "w").write(
         DOC + page + "\n</body>\n</html>\n")

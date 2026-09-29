@@ -43,7 +43,23 @@
   setTimeout(go, 80);
 })();
 </script>
-<title>The Arena</title>
+<title>Stacked</title>
+<!-- the app as the phone sees it: its name under the icon, full screen,
+     and black launch screens so opening it never flashes white
+     (Jose, Sep 29, 2026). The address stays the-arenasports. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Stacked">
+<link rel="apple-touch-startup-image" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1320x2868.png">
+<link rel="apple-touch-startup-image" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1206x2622.png">
+<link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1290x2796.png">
+<link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1179x2556.png">
+<link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1284x2778.png">
+<link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1170x2532.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1125x2436.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1242x2688.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/828x1792.png">
+<link rel="apple-touch-startup-image" media="(device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1080x2340.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/750x1334.png">
 <meta name="referrer" content="no-referrer">
 <!-- the two typefaces are kept in site/font: a reader should not have to
      ask Google for a font to read a scoreboard (Jose, Sep 18, 2026) -->
@@ -11991,9 +12007,16 @@
     for (var i = 0; i < sides.length && i < 2; i++) {
       var nm = sides[i].querySelector(".fname");
       if (!nm) continue;
-      var old = nm.querySelector(".frec");
+      /* the record's place is the top of the card, inside, across from the
+         rank: the slot seatRecord made. Written beside the name instead, it
+         left that slot empty on every bout drawn before the file came in --
+         the whole DWCS card (Jose, Sep 29, 2026) */
+      var head = card.querySelector(".ghead--fight");
+      var slot = head && head.querySelector(":scope > .frec--" + (i === 0 ? "l" : "r"));
+      var old = slot || nm.querySelector(".frec");
+      if (slot) nm.querySelectorAll(".frec").forEach(function (x) { x.remove(); });
       var rec = FIGHTREC[ids[i]];
-      if (!rec) { if (old) old.remove(); continue; }
+      if (!rec) { if (old && !slot) old.remove(); else if (old) old.textContent = ""; continue; }
       var bits = String(rec).split("-");
       var say = bits.length > 2 && bits[2] !== "0"
               ? bits[0] + "-" + bits[1] + "-" + bits[2]

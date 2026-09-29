@@ -47,6 +47,8 @@ jobs:
 
       - name: Save the finished games and count them in
         env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           NFL_CLIENT_ID: ${{ secrets.NFL_CLIENT_ID }}
@@ -62,7 +64,9 @@ jobs:
             fi
           done
           python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
-          cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main
+          (cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main)
+          # the day's last game: one full pass to close the day out
+          python build/day_end.py
 
       - name: Keep what it wrote
         run: |
