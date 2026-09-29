@@ -31,7 +31,7 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "site", "alerts.json")
 NOW = dt.datetime.now(dt.timezone.utc)
 HURT = ("Out", "Doubtful", "Questionable", "Injured Reserve", "Suspension")
-SHARE = 0.10     # of the club's targets and carries, to be worth a warning
+SHARE = 0.15     # of the club's targets and carries, or of its targets, to be worth a warning
 
 
 def usage(rows, need):
@@ -58,7 +58,10 @@ def usage(rows, need):
         per = []
         for r in gs:
             gid = str(r[1])
-            if gid not in cache:
+            # [targets, carries, receiving yards, receiving TDs]; a game kept
+            # before the yards were is read again
+            old = next((m for men in (cache.get(gid) or {}).values() for m in men.values()), None)
+            if gid not in cache or (old is not None and len(old) < 4):
                 try:
                     d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
                                impersonate="chrome124", timeout=20).json()
@@ -75,27 +78,32 @@ def usage(rows, need):
                         if col not in lb:
                             continue
                         for x in st.get("athletes") or []:
-                            try:
-                                n = int((x.get("stats") or [])[lb.index(col)])
-                            except (ValueError, IndexError):
-                                continue
-                            m = men.setdefault(str((x.get("athlete") or {}).get("id")), [0, 0])
-                            m[0 if st["name"] == "receiving" else 1] += n
+                            v = x.get("stats") or []
+                            num = lambda c: int(v[lb.index(c)]) if c in lb and lb.index(c) < len(v) and str(v[lb.index(c)]).lstrip("-").isdigit() else 0
+                            m = men.setdefault(str((x.get("athlete") or {}).get("id")), [0, 0, 0, 0])
+                            if st["name"] == "receiving":
+                                m[0] += num(col); m[2] += num("YDS"); m[3] += num("TD")
+                            else:
+                                m[1] += num(col)
                 if not box:
                     continue
                 cache[gid] = box
                 grew = True
             if ab in cache[gid]:
                 per.append(cache[gid][ab])
-        total = sum(sum(m) for men in per for m in men.values()) or 1
+        total = sum(m[0] + m[1] for men in per for m in men.values()) or 1
+        tds = sum(m[3] for men in per for m in men.values())
+        tgts = sum(m[0] for men in per for m in men.values()) or 1
         last = set(pid for men in per[-2:] for pid in men)
         club = use.setdefault(ab, {})
         for men in per:
             for pid, m in men.items():
-                u = club.setdefault(pid, {"g": 0, "tg": 0, "car": 0})
+                u = club.setdefault(pid, {"g": 0, "tg": 0, "car": 0, "ryd": 0, "rtd": 0, "tds": tds})
                 u["g"] += 1; u["tg"] += m[0]; u["car"] += m[1]
+                u["ryd"] += m[2] if len(m) > 2 else 0; u["rtd"] += m[3] if len(m) > 3 else 0
         for pid, u in club.items():
             u["sh"] = round((u["tg"] + u["car"]) / total, 3)
+            u["tsh"] = round(u["tg"] / tgts, 3)
             u["recent"] = pid in last
     if grew:
         json.dump(cache, open(path, "w"), separators=(",", ":"), sort_keys=True)
@@ -165,10 +173,12 @@ def main():
             lg = x.pop("lg")
             u = (use.get(x["team"]) or {}).get(x["id"])
             # a passer is judged on his own; anyone else has to matter now
-            if x["pos"] != "QB" and not (u and u["recent"] and u["sh"] >= SHARE):
+            if x["pos"] != "QB" and not (u and u["recent"] and (u["sh"] >= SHARE or u["tsh"] >= SHARE or
+                                                               (u["tds"] >= 2 and u["rtd"] * 4 >= u["tds"]))):
                 continue
             if u and u["g"] and x["pos"] != "QB":
-                x.update(sh=u["sh"], tg=round(u["tg"] / u["g"], 1), car=round(u["car"] / u["g"], 1),
+                x.update(sh=u["sh"], tsh=u["tsh"], tg=round(u["tg"] / u["g"], 1), car=round(u["car"] / u["g"], 1),
+                         ryd=round(u["ryd"] / u["g"]), rtd=u["rtd"], tds=u["tds"],
                          tgw="targets" if lg == "nfl" else "catches")
             keep.append(x)
         if keep:

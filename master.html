@@ -4128,7 +4128,14 @@
     (a.out || []).forEach(function (x) {
       if (x.id === String(qb) || x.pos === "QB") return;
       if (team && x.team !== team) return;
-      if (!x.lead && !/Out|Doubtful|Reserve/.test(x.status)) return;
+      /* only a man whose absence can sink this leg: on a passing leg, 15% of
+         the targets or a quarter of the touchdown catches; on any other, 15%
+         of the targets and carries (Jose, Sep 29, 2026: "not just saying it
+         for anything or everything") */
+      if (x.sh != null) {
+        var big = passing ? (x.tsh >= 0.15 || (x.tds >= 2 && x.rtd * 4 >= x.tds)) : x.sh >= 0.15;
+        if (!big) return;
+      } else if (!x.lead && !/Out|Doubtful|Reserve/.test(x.status)) return;
       /* what he has been getting, off every box score this season */
       var used = x.sh ? Math.round(x.sh * 100) + "% of the " + x.team + " touches: " +
         (x.tg ? x.tg + " " + (x.tgw || "targets") + (x.car ? ", " : "") : "") + (x.car ? x.car + " carries" : "") + " a game." : "";
@@ -4137,6 +4144,18 @@
       var why = String(x.why || "").split(/\s+-\s+/).map(function (w) { return /^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase(); }).join(", ");
       var gone = x.back && x.back >= new Date().getFullYear() + (new Date().getMonth() >= 2 ? 1 : 0) + "-01-20";
       var said = gone ? "out for the season" : x.status.toLowerCase().replace("injured reserve", "on injured reserve");
+      /* on a passing leg, what the passer loses with him: his usual targets,
+         his yards, his touchdown catches (Jose, Sep 29, 2026: "usually gets
+         around 3 to 4 targets ... those yards would be tougher to get") */
+      if (passing && x.tg >= 1) {
+        var lo = Math.floor(x.tg), hi = Math.ceil(x.tg), qn = famName(qbName) || "his passer";
+        var ifs = /Questionable|Doubtful/.test(x.status) ? "If he sits, tougher" : "Tougher";
+        var tgs = (lo === hi ? "about " + lo : lo + " to " + hi) + " " + (x.tgw || "targets");
+        used = /H2H/.test(lab)
+          ? "Usually gets " + tgs + " and " + (x.ryd || 0) + " yards a game. " + ifs + " for " + qn + " to reach his yards."
+          : "Usually gets " + tgs + " a game" + (x.tds ? " and caught " + (x.rtd || 0) + " of " + x.team + "'s " + x.tds + " TD passes" : "") +
+            ". " + ifs + " for " + qn + " to throw his.";
+      }
       says.push(["out", x.name + " (" + x.pos + ") is " + said + (why ? " (" + why + ")" : "") + ".",
                  used || (x.lead ? "He leads the team in " + x.lead + "." : "")]);
     });
