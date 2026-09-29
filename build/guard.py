@@ -128,6 +128,24 @@ def formats():
     return wrong
 
 
+def rewinds():
+    """Every bout on a card finished in the last two weeks has a rewind. The
+       recorder runs on GitHub from half an hour before the first bell; a card
+       with none means it never started, and nothing else would say so --
+       9/22 and 9/26 went by with no rewinds at all (Sep 28, 2026)."""
+    idx = load(os.path.join("anim", "index.json")) if os.path.exists(os.path.join(SITE, "anim", "index.json")) else {}
+    cards = {}
+    for g, left in rows("FIGHTS"):
+        if -dt.timedelta(days=14) < left < -dt.timedelta(hours=6):
+            cards.setdefault(g[0], []).append(str(g[1]))
+    wrong = []
+    for eid, bouts in cards.items():
+        miss = [b for b in bouts if b not in idx]
+        if miss:
+            wrong.append((None, "card %s: %d of %d bouts have no rewind" % (eid, len(miss), len(bouts))))
+    return wrong
+
+
 def prices():
     p, wrong = load("prices.json"), []
     for g, left in soon("SCHED", before=dt.timedelta(0), after=dt.timedelta(days=1)):
@@ -211,7 +229,7 @@ def the_page():
         return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
 
 
-CHECKS = (passers, lineups, benches, formats, prices, faces, jerseys, fights, settled, files)
+CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, jerseys, fights, settled, files)
 # the order a mend is run in, when more than one is due
 MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups")
 

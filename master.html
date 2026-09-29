@@ -343,8 +343,10 @@
   .qstip span.q { color: #ffd60a; }
   #qsearch .qsj em { position: absolute; left: 0; right: 0; top: 5px; text-align: center; font: 800 9px Barlow, Arial, sans-serif;
     font-style: normal; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.6); }
-  #qsearch .qsj.out { filter: drop-shadow(1.2px 0 0 #ff3b30) drop-shadow(-1.2px 0 0 #ff3b30) drop-shadow(0 1.2px 0 #ff3b30) drop-shadow(0 -1.2px 0 #ff3b30); }
-  #qsearch .qsj.q { filter: drop-shadow(1.2px 0 0 #ffd60a) drop-shadow(-1.2px 0 0 #ffd60a) drop-shadow(0 1.2px 0 #ffd60a) drop-shadow(0 -1.2px 0 #ffd60a); }
+  /* a black gap first, then the edge: a red edge on KC's red jersey or a
+     yellow one on a gold jersey still reads (Jose, Sep 28, 2026) */
+  #qsearch .qsj.out { filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000) drop-shadow(1.2px 0 0 #ff3b30) drop-shadow(-1.2px 0 0 #ff3b30) drop-shadow(0 1.2px 0 #ff3b30) drop-shadow(0 -1.2px 0 #ff3b30); }
+  #qsearch .qsj.q { filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000) drop-shadow(1.2px 0 0 #ffd60a) drop-shadow(-1.2px 0 0 #ffd60a) drop-shadow(0 1.2px 0 #ffd60a) drop-shadow(0 -1.2px 0 #ffd60a); }
   #qsearch .qskey { text-align: center; font: 700 11px Barlow, Arial, sans-serif; color: #8e8e93; margin-top: 2px; }
   #qsearch .qskey i { display: inline-block; width: 10px; height: 10px; border: 2px solid; border-radius: 3px; vertical-align: -2px; margin: 0 4px 0 8px; }
   #qsearch .qstile { background: #1c1c1f; border-radius: 10px; padding: 9px 10px; }
@@ -2077,8 +2079,8 @@
     background: center / contain no-repeat; pointer-events: none; }
   .fol em { position: absolute; left: 0; right: 0; top: 6px; text-align: center; font: 800 10px Barlow, Arial, sans-serif;
     font-style: normal; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.6); }
-  .fol--out { filter: drop-shadow(1.3px 0 0 #ff3b30) drop-shadow(-1.3px 0 0 #ff3b30) drop-shadow(0 1.3px 0 #ff3b30) drop-shadow(0 -1.3px 0 #ff3b30); }
-  .fol--q { filter: drop-shadow(1.3px 0 0 #ffd60a) drop-shadow(-1.3px 0 0 #ffd60a) drop-shadow(0 1.3px 0 #ffd60a) drop-shadow(0 -1.3px 0 #ffd60a); }
+  .fol--out { filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000) drop-shadow(1.3px 0 0 #ff3b30) drop-shadow(-1.3px 0 0 #ff3b30) drop-shadow(0 1.3px 0 #ff3b30) drop-shadow(0 -1.3px 0 #ff3b30); }
+  .fol--q { filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000) drop-shadow(1.3px 0 0 #ffd60a) drop-shadow(-1.3px 0 0 #ffd60a) drop-shadow(0 1.3px 0 #ffd60a) drop-shadow(0 -1.3px 0 #ffd60a); }
   .fwr { position: absolute; z-index: 4; width: 34px; height: 34px; transform: translate(-50%, -50%);
     pointer-events: none; opacity: 0; transition: opacity .2s ease; }
   .fwr.on { opacity: 1; }
