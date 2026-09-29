@@ -1,3 +1,4 @@
+import { store } from "./_store.js";
 /* A game is final: save it once, now.
 
    The phone reads ESPN while a game is on and sees FINAL the moment it lands.
@@ -40,12 +41,12 @@ export async function onRequest({ request, env }) {
     .map(String).filter(function (g) { return /^\d{6,12}$/.test(g); }).slice(0, 20);
   const fresh = [], had = [];
   for (const g of games) {
-    if (await env.ARENA.get("final:" + g)) { had.push(g); continue; }
+    if (await store(env).get("final:" + g)) { had.push(g); continue; }
     fresh.push(g);
   }
   if (!fresh.length) return ok({ started: [], had: had });
   const hour = "final:hour:" + new Date().toISOString().slice(0, 13);
-  const n = parseInt((await env.ARENA.get(hour)) || "0", 10) || 0;
+  const n = parseInt((await store(env).get(hour)) || "0", 10) || 0;
   if (n >= RUNS_AN_HOUR) return ok({ started: [], had: had, held: fresh, why: "hourly cap" });
   const r = await fetch("https://api.github.com/repos/" + REPO + "/actions/workflows/" + FLOW + "/dispatches", {
     method: "POST",
@@ -58,7 +59,7 @@ export async function onRequest({ request, env }) {
     body: JSON.stringify({ ref: "main", inputs: { games: fresh.join(",") } })
   });
   if (r.status !== 204) return ok({ started: [], had: had, error: "dispatch " + r.status }, 502);
-  await env.ARENA.put(hour, String(n + 1), { expirationTtl: 7200 });
-  for (const g of fresh) await env.ARENA.put("final:" + g, String(Date.now()), { expirationTtl: KEEP_S });
+  await store(env).put(hour, String(n + 1), { expirationTtl: 7200 });
+  for (const g of fresh) await store(env).put("final:" + g, String(Date.now()), { expirationTtl: KEEP_S });
   return ok({ started: fresh, had: had });
 }

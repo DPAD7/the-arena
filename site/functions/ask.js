@@ -1,3 +1,4 @@
+import { store } from "./_store.js";
 /* The double tap: the prices a card is missing, asked for there and then.
 
    The sweep reads DraftKings three times a day. A price posted between two
@@ -99,7 +100,7 @@ function ids(list) {
 
 async function readJSON(env, key) {
   // no edge cache: a poll must see the answer the moment it is posted
-  const held = await env.ARENA.get(key);
+  const held = await store(env).get(key);
   if (!held) return null;
   try { return JSON.parse(held); } catch (e) { return null; }
 }
@@ -196,9 +197,9 @@ async function tap(request, env) {
   }
 
   const hour = "ask:hour:" + new Date().toISOString().slice(0, 13);
-  const count = parseInt((await env.ARENA.get(hour)) || "0", 10) || 0;
+  const count = parseInt((await store(env).get(hour)) || "0", 10) || 0;
   if (count >= RUNS_AN_HOUR) return ok({ key, state: "failed", error: "enough runs this hour" }, 429);
-  await env.ARENA.put(hour, String(count + 1), { expirationTtl: 2 * 3600 });
+  await store(env).put(hour, String(count + 1), { expirationTtl: 2 * 3600 });
 
   let started;
   try {
@@ -206,7 +207,7 @@ async function tap(request, env) {
   } catch (e) {
     return ok({ key, state: "failed", games, error: String(e.message || e) }, 502);
   }
-  await env.ARENA.put(slot, JSON.stringify({
+  await store(env).put(slot, JSON.stringify({
     key, games, at: now, run: started.run, url: started.url, result: null
   }), { expirationTtl: 2 * 86400 });
   return ok({ key, state: "running", games, again: false });
@@ -236,7 +237,7 @@ async function poll(url, env) {
     if (!rec.run && run.id) {
       rec.run = run.id;
       rec.url = run.html_url || null;
-      await env.ARENA.put(slot, JSON.stringify(rec), { expirationTtl: 2 * 86400 });
+      await store(env).put(slot, JSON.stringify(rec), { expirationTtl: 2 * 86400 });
     }
     if (run.status === "completed") {
       const ended = Date.parse(run.updated_at || "") || now;
@@ -277,7 +278,7 @@ async function answer(request, env) {
     all[gid] = { price, at: now, key };
     priced.push(gid);
   }
-  if (priced.length) await env.ARENA.put(PRICES, JSON.stringify(all));
+  if (priced.length) await store(env).put(PRICES, JSON.stringify(all));
   if (key) {
     const slot = "ask:run:" + key;
     const rec = (await readJSON(env, slot)) || { key, games: [], at: now, run: null, url: null };
@@ -286,7 +287,7 @@ async function answer(request, env) {
       missing: ids(body.missing),
       why: (body.why && typeof body.why === "object") ? body.why : {}
     };
-    await env.ARENA.put(slot, JSON.stringify(rec), { expirationTtl: 2 * 86400 });
+    await store(env).put(slot, JSON.stringify(rec), { expirationTtl: 2 * 86400 });
   }
   return ok({ kept: priced.length });
 }

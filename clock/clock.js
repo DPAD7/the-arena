@@ -65,6 +65,21 @@ export class Clock {
 
   async fetch(request) {
     const url = new URL(request.url);
+    /* the board's own store, always current: his marks, the slip, the
+       wallet's bets and the double taps' records. KV could hand back a copy a
+       minute old and capped its daily writes; this cannot do either (Jose,
+       Sep 29, 2026: "how does it work for sportsbooks but not us") */
+    if (url.pathname.endsWith("/kv")) {
+      if (request.method === "GET") {
+        const rec = await this.ctx.storage.get("kv:" + url.searchParams.get("k"));
+        if (!rec || (rec.exp && rec.exp < Date.now())) return new Response(null, { status: 404 });
+        return new Response(rec.v, { headers: { "content-type": "text/plain" } });
+      }
+      const b = await request.json();
+      if (b.del) await this.ctx.storage.delete("kv:" + b.k);
+      else await this.ctx.storage.put("kv:" + b.k, { v: String(b.v), exp: b.ttl ? Date.now() + b.ttl * 1000 : 0 });
+      return Response.json({ ok: true });
+    }
     // the phone's push subscription, his alert settings, a test
     if (url.pathname.endsWith("/sub") && request.method === "POST") {
       const b = await request.json();
@@ -229,7 +244,10 @@ export class Clock {
   async slips(sched, now) {
     if (!this.env.ARENA) return false;
     let held = null;
-    try { held = JSON.parse((await this.env.ARENA.get("dkbets")) || "null"); } catch (e) { held = null; }
+    try {
+      const own = await this.ctx.storage.get("kv:dkbets");
+      held = JSON.parse((own && own.v) || (await this.env.ARENA.get("dkbets")) || "null");
+    } catch (e) { held = null; }
     const slips = ((held && held.bets) || []).filter(b => (b.legs || []).length);
     if (!slips.length) return false;
     const rows = {};

@@ -1,3 +1,4 @@
+import { store } from "./_store.js";
 /* The clock's door to GitHub.
 
    clock/clock.js (a Worker holding one alarm) calls this at each moment that
@@ -28,7 +29,7 @@ export async function onRequest({ request, env }) {
   }
   if (request.method !== "POST") return ok({ error: "no" }, 405);
   if (!env.ARENA || !env.GH_TOKEN) return ok({ error: "not set up" }, 500);
-  const want = await env.ARENA.get("clock:wake");
+  const want = await store(env).get("clock:wake");
   const said = request.headers.get("x-wake") || "";
   if (!want || said !== want) return ok({ error: "no" }, 403);
   let body = {};

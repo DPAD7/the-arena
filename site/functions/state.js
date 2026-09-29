@@ -1,3 +1,4 @@
+import { store } from "./_store.js";
 /* The board's own marks, kept on the site instead of in each browser.
 
    Hidden games, placed prices and the slip lived in localStorage, so the
@@ -39,7 +40,7 @@ function allowed(request, env) {
 /* a write that carries no balance keeps the one already held: a device that
    has not read the store yet must never wipe it (Sep 25, 2026) */
 async function heldBank(env) {
-  try { const held = JSON.parse((await env.ARENA.get(SLOT)) || "null"); return (held && held.bank) || null; }
+  try { const held = JSON.parse((await store(env).get(SLOT)) || "null"); return (held && held.bank) || null; }
   catch (e) { return null; }
 }
 export async function onRequest({ request, env }) {
@@ -47,7 +48,7 @@ export async function onRequest({ request, env }) {
   if (!allowed(request, env)) return new Response("no", { status: 403 });
 
   if (request.method === "GET") {
-    const held = await env.ARENA.get(SLOT);
+    const held = await store(env).get(SLOT);
     return ok(held ? JSON.parse(held) : { hidden: {}, placed: {}, picks: {}, ring: {}, at: 0 });
   }
 
@@ -63,7 +64,7 @@ export async function onRequest({ request, env }) {
        everything it held, and so put back gold he had taken off elsewhere
        (Jose, Sep 28, 2026: "every time you refresh it goes back on") */
     let held0 = null;
-    try { held0 = JSON.parse((await env.ARENA.get(SLOT)) || "null"); } catch (e) { held0 = null; }
+    try { held0 = JSON.parse((await store(env).get(SLOT)) || "null"); } catch (e) { held0 = null; }
     held0 = held0 || { hidden: {}, placed: {}, picks: {}, ring: {}, stars: {}, bank: null };
     const obj = (k) => body && body[k] && typeof body[k] === "object" ? body[k] : null;
     const keep = {
@@ -95,7 +96,7 @@ export async function onRequest({ request, env }) {
       const a = Object.assign({}, held0, { at: 0 }), b = Object.assign({}, keep, { at: 0 });
       if (JSON.stringify(a) === JSON.stringify(b)) return ok({ at: held0.at, same: true });
     }
-    await env.ARENA.put(SLOT, JSON.stringify(keep));
+    await store(env).put(SLOT, JSON.stringify(keep));
     return ok({ at: keep.at });
   }
 
