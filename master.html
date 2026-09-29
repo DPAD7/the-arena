@@ -15194,7 +15194,7 @@
     var el = function (n, at) { var e = document.createElementNS(NS, n); for (var k in at) e.setAttribute(k, at[k]); return e; };
     var y = function (t) { return (t / TOTAL) * FH; };
 
-    var spin, redF, blueF, marksA, marksB, ctrl, nowL, tally, tallyG = [], foot, voidA, voidB;
+    var spin, redF, blueF, marksA, marksB, ctrl, nowL, tally, tallyG = [], foot, voidA, voidB, GROW = [];
     var laid = [], lastSeam = -1;
     var count = {}, placed = {}, i = 0, seam = CX, wantSeam = CX, turn = 0, wantTurn = 0, ground = false;
     var t0 = performance.now(), held = false, heldT = 0, shownT = 0, over = false, dead = false;
@@ -15216,6 +15216,26 @@
       voidB = el("rect", {x: 0, y: 0, width: 0, height: 0, fill: "#0d0d0d"});
       holder.appendChild(voidA); holder.appendChild(voidB);
       ctrl = el("g", {}); svg.appendChild(ctrl);
+      /* control time grows while it is being had: each stretch's bar is laid
+         empty now and fills as the clock runs through that stretch. A fight
+         rebuilt from the round tables knows control only per round, and the
+         whole round's bar used to appear at once when the round ended
+         (Jose, Sep 29, 2026: "it needs to happen ... when it's happening
+         during the fight") */
+      GROW = [];
+      var prevT = 0;
+      d.ev.forEach(function (e) {
+        if (!e.state) return;
+        var from = Math.max(prevT, Math.floor(Math.max(0, e.t - 1) / 300) * 300);
+        [["a", 189, e.ac], ["b", 205, e.bc]].forEach(function (q) {
+          if (!(q[2] > 0)) return;
+          var full = Math.max(3, (q[2] / TOTAL) * FH * 1.6);
+          var r = el("rect", {x: q[1], y: y(from), width: 6, height: 0, rx: 3, fill: "#f0913c", "fill-opacity": 0.9});
+          ctrl.appendChild(r);
+          GROW.push({r: r, t0: from, t1: Math.max(from + 1, e.t), full: full});
+        });
+        prevT = e.t;
+      });
       svg.appendChild(el("line", {x1: CX, y1: 0, x2: CX, y2: FH, stroke: "#fff", "stroke-width": 3}));
       for (var r = 0; r <= d.rounds; r++) {
         var yy = Math.max(4, Math.min(FH, y(r * 300))), w = (r === 0 || r === d.rounds) ? 24 : 16;
@@ -15325,12 +15345,7 @@
       var clinch = !ground && e.cl > 0;
       wantTurn = ground ? (e.ac >= e.bc ? 90 : -90) : 0;
       wantSeam = ground ? CX : (clinch ? (e.ac >= e.bc ? FL + (FR - FL) * 0.80 : FL + (FR - FL) * 0.20) : CX);
-      [["a", 189, e.ac], ["b", 205, e.bc]].forEach(function (q) {
-        var got = q[2];
-        if (!(got > 0)) return;
-        var h2 = Math.max(3, (got / TOTAL) * FH * 1.6);
-        ctrl.appendChild(el("rect", {x: q[1], y: Math.max(0, y(e.t) - h2), width: 6, height: h2, rx: 3, fill: "#f0913c", "fill-opacity": 0.9}));
-      });
+      /* the bars are grown by sayClock, stretch by stretch */
     }
 
     function paint() {
@@ -15359,7 +15374,17 @@
         }
       }
     }
+    function growControl(t) {
+      for (var g = 0; g < GROW.length; g++) {
+        var b = GROW[g];
+        var f = t <= b.t0 ? 0 : Math.min(1, (t - b.t0) / (b.t1 - b.t0));
+        var h = b.full * f, end = y(Math.min(t, b.t1));
+        b.r.setAttribute("height", h.toFixed(1));
+        b.r.setAttribute("y", Math.max(0, end - h).toFixed(1));
+      }
+    }
     function sayClock(t) {
+      growControl(t);
       var rd = Math.min(d.rounds, Math.floor(t / 300) + 1), left = 300 - (t - (rd - 1) * 300);
       foot.textContent = "R" + rd + " " + Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2);
       foot.setAttribute("fill", "#9a9a9a");
@@ -15385,6 +15410,7 @@
       tallyG.forEach(function (t) { svg.appendChild(t); });
     }
     function sayDone() {
+      growControl(d.stop + 1);
       foot.textContent = d.how + (d.fr ? " · R" + d.fr : "") + (d.fc ? " " + d.fc : "");
       foot.setAttribute("fill", "#ffffff");
       nowL.setAttribute("y1", y(d.stop)); nowL.setAttribute("y2", y(d.stop));
