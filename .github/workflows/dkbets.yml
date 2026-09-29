@@ -36,4 +36,5 @@ jobs:
       - name: Read
         env:
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
         run: python build/dk_bets.py

@@ -41,6 +41,13 @@ export async function onRequest({ request, env }) {
     /* the reader's login as DraftKings last re-issued it, locked with a key
        only the reader holds (build/dk_bets.py) */
     if (new URL(request.url).searchParams.get("jar")) return ok({ jar: await env.ARENA.get("dkbets:jar") });
+    /* the login his own browser sent (tools/dk-bets): handed back only to the
+       reader, which holds ASK_SECRET -- never to the page */
+    if (new URL(request.url).searchParams.get("login")) {
+      if (!env.ASK_SECRET || request.headers.get("x-ask-secret") !== env.ASK_SECRET) return ok({ error: "no" }, 403);
+      const l = await env.ARENA.get("dkbets:login");
+      return ok(l ? JSON.parse(l) : {});
+    }
     const held = await env.ARENA.get(SLOT);
     return ok(held ? JSON.parse(held) : { balance: null, bets: [], at: 0 });
   }
@@ -64,6 +71,16 @@ export async function onRequest({ request, env }) {
         body: JSON.stringify({ ref: "main", inputs: { key: String(now) } })
       });
       return ok({ asked: now, started: r.status === 204 || r.status === 200 }, r.status === 204 || r.status === 200 ? 200 : 502);
+    }
+    /* the extension's login: the DraftKings cookies from his logged-in
+       browser, sent whenever DraftKings is open, so an expired login mends
+       itself without an export (Jose, Sep 29, 2026: "without having to go
+       back and forth"). Write-only from here; only the reader reads it back */
+    if (body && body.login && typeof body.login === "object" && body.login.cookies) {
+      const txt = JSON.stringify({ cookies: body.login.cookies, at: Date.now() });
+      if (txt.length > 60000) return ok({ error: "big" }, 400);
+      await env.ARENA.put("dkbets:login", txt);
+      return ok({ login: true });
     }
     if (body && typeof body.jar === "string") {
       if (body.jar.length > 60000) return ok({ error: "big" }, 400);
