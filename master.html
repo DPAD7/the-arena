@@ -16787,6 +16787,16 @@
     if (document.hidden) keepPlace();
   });
   window.busy = busy;
+  /* a new version is read from the network, never from the copy the phone
+     keeps (?v= tells the service worker so), and asked for once: if it comes
+     back the same, it is not asked again this session */
+  function freshPage(v) {
+    var tried = "";
+    try { tried = sessionStorage.getItem("arena.tried") || ""; sessionStorage.setItem("arena.tried", v); } catch (e) {}
+    if (tried === v) return;
+    location.replace(location.pathname + "?v=" + encodeURIComponent(v) + location.hash);
+  }
+  if (/[?&]v=/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash);
   function watchBuild() {
     fetch("build.txt", {cache: "no-store"})
       .then(function (r) { return r.ok ? r.text() : null; })
@@ -16806,7 +16816,7 @@
         if (v === BUILT && two[1] && /^\d{14}$/.test(BUILTD) && two[1] !== BUILTD) {
           if (!document.hidden || busy()) return;
           keepPlace();
-          try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} location.reload();
+          try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} freshPage(two.join("-"));
           return;
         }
         /* deployable() stamps the page by replacing every __BUILD__ in it,
@@ -16845,7 +16855,7 @@
           sessionStorage.setItem("arena.at", String(window.scrollY));
           sessionStorage.setItem("arena.sp", String(sport || ""));
         } catch (e) {}
-        try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} location.reload();
+        try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} freshPage(two.join("-"));
       })
       .catch(function () {});
   }

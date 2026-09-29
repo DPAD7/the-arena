@@ -32,3 +32,40 @@ self.addEventListener("notificationclick", function (e) {
     return self.clients.openWindow(url);
   })());
 });
+
+/* ---- instant open (Jose, Sep 29, 2026) ----
+   The app itself opens from the copy kept here, at once, and a fresh copy is
+   fetched behind it for next time. A new version the board asks for comes
+   with ?v= on the address and is always read from the network, so a saved
+   copy can never hold an update back. Pictures, fonts and icons are kept;
+   prices, marks and every function are always asked of the site. */
+var SHELL = "stacked-shell-v1", STATIC = "stacked-static-v1";
+self.addEventListener("fetch", function (e) {
+  var req = e.request, url = new URL(req.url);
+  if (req.method !== "GET" || url.origin !== self.location.origin) return;
+  if (req.mode === "navigate") {
+    if (url.searchParams.has("v")) {
+      e.respondWith(fetch(req).then(function (r) {
+        var copy = r.clone();
+        caches.open(SHELL).then(function (c) { c.put("/", copy); });
+        return r;
+      }).catch(function () { return caches.match("/"); }));
+      return;
+    }
+    e.respondWith(caches.open(SHELL).then(function (c) {
+      return c.match("/").then(function (hit) {
+        var fresh = fetch("/", { cache: "no-store" }).then(function (r) { if (r.ok) c.put("/", r.clone()); return r; });
+        if (hit) { e.waitUntil(fresh.catch(function () {})); return hit; }
+        return fresh;
+      });
+    }));
+    return;
+  }
+  if (/^\/(ico|font|logos|img|launch)\//.test(url.pathname) || /\/(icon-\d+|apple-touch-icon)\.png$/.test(url.pathname)) {
+    e.respondWith(caches.open(STATIC).then(function (c) {
+      return c.match(req).then(function (hit) {
+        return hit || fetch(req).then(function (r) { if (r.ok) c.put(req, r.clone()); return r; });
+      });
+    }));
+  }
+});
