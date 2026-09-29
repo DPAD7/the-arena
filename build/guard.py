@@ -292,6 +292,34 @@ def live():
         if len(st) > 1:
             body = body.replace(st[1], "__DATA__")
         return body == pagefile.DOC + pagefile.read() + "\n</body>\n</html>\n"
+    # the clock: an alarm set, and set for the future -- a lost alarm is re-armed
+    # (Sep 29, 2026: the board runs on it, so it is checked every pass)
+    # read twice: while the clock is mid-check its next alarm reads empty
+    nxt = None
+    for _ in range(2):
+        c = get("/wake")
+        try:
+            nxt = (c.json() if c is not None and c.status_code == 200 else {}).get("next")
+        except ValueError:
+            nxt = None
+        if nxt:
+            break
+        import time
+        time.sleep(8)
+    late = True
+    if nxt:
+        try:
+            late = dt.datetime.fromisoformat(nxt.replace("Z", "+00:00")) < dt.datetime.now(dt.timezone.utc) - dt.timedelta(minutes=5)
+        except ValueError:
+            late = True
+    if late:
+        a = get("/wake?arm=1")
+        wrong.append("the clock had no alarm (%s) -- re-armed: %s" % (nxt, a.text[:80] if a is not None else "no answer"))
+    # the alerts and the store answer, and the schedule the clock reads is there
+    for path, want in (("/push", "prefs"), ("/schedule.json", "")):
+        r = get(path)
+        if r is None or r.status_code != 200 or (want and want not in r.text):
+            wrong.append("%s does not answer (%s)" % (path, r.status_code if r is not None else "none"))
     if not same():
         print("   mending: the site does not carry main's page -- building and deploying it")
         pagefile.deployable(pagefile.read())
