@@ -16606,6 +16606,8 @@
         document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { refresh(c); });
       });
       if ((j.changed || []).length) { setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); if (typeof bankDraw === "function") bankDraw(); }
+      /* a bout moved: the fight cards read again at once */
+      if ((j.bouts || []).length && typeof refreshFights === "function") { refreshFights(); if (typeof bankDraw === "function") bankDraw(); }
     };
     LIVESOCK.onclose = function () { LIVESOCK = null; if (window.lookAgain) window.lookAgain(); };
   }

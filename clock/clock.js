@@ -141,7 +141,27 @@ export class Clock {
     const socks = this.ctx.getWebSockets();
     if (!socks.length) return false;
     const on = sched.filter(r => r[0] === "game" && Date.parse(r[2]) <= now + 10 * MIN && now - Date.parse(r[2]) < 5 * 60 * MIN);
-    if (!on.length) return false;
+    // a fight card running: its bouts on the same line, on a faster beat --
+    // a knockout lands on any second (Jose, Sep 29, 2026)
+    const cards = sched.filter(r => r[0] === "card" && r[3] === "mma" && Date.parse(r[2]) <= now + 10 * MIN && now - Date.parse(r[2]) < 7 * 60 * MIN);
+    if (!on.length && !cards.length) return false;
+    let fighting = false;
+    const fsig = (await this.ctx.storage.get("fightsig")) || {}, bouts = [];
+    for (const ymd of new Set(cards.map(r => etParts(Date.parse(r[2])).date.replace(/-/g, "")))) {
+      try {
+        const j = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd)).json();
+        for (const e of j.events || []) for (const c of e.competitions || []) {
+          const st = c.status || {}, state = (st.type || {}).state;
+          if (state === "in") fighting = true;
+          const w = (c.competitors || []).filter(m => m.winner).map(m => m.id).join("");
+          const now1 = [state, st.period, st.displayClock, w].join("|");
+          if (fsig[c.id] !== undefined && fsig[c.id] !== now1) bouts.push(String(c.id));
+          fsig[c.id] = now1;
+        }
+      } catch (e) {}
+    }
+    await this.ctx.storage.put("fightsig", fsig);
+    if (bouts.length) for (const ws of socks) { try { ws.send(JSON.stringify({ bouts })); } catch (e) {} }
     const sig = (await this.ctx.storage.get("livesig")) || {}, changed = [];
     const asks = new Set(on.map(r => r[3] + "|" + etParts(Date.parse(r[2])).date.replace(/-/g, "")));
     let playing = false;
@@ -161,7 +181,7 @@ export class Clock {
     }
     await this.ctx.storage.put("livesig", sig);
     if (changed.length) for (const ws of socks) { try { ws.send(JSON.stringify({ changed })); } catch (e) {} }
-    return playing;
+    return fighting ? "fight" : playing;
   }
 
   async tick() {
@@ -194,9 +214,11 @@ export class Clock {
     // a page open while football is on: every fifteen seconds
     let pushing = false;
     try { pushing = await this.livePush(sched, now); } catch (e) { pushing = false; }
-    if (pushing) next = Math.min(next, now + 15000);
+    if (pushing) next = Math.min(next, now + (pushing === "fight" ? 5000 : 15000));
+    // a bout with his money on it is on: alerts every fifteen seconds
+    if (live === "fight") next = Math.min(next, now + 15000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
-    await this.ctx.storage.setAlarm(Math.max(now + (pushing ? 15000 : 30000), next));
+    await this.ctx.storage.setAlarm(Math.max(now + (pushing === "fight" ? 5000 : pushing ? 15000 : live === "fight" ? 15000 : 30000), next));
   }
 
   moments(sched, now) {
@@ -388,6 +410,7 @@ export class Clock {
     const keep = {};
     for (const [gid, g] of Object.entries(games)) keep[gid] = { qb: g.qb, state: g.state };
     await this.ctx.storage.put("prev", Object.assign(prev, keep));
+    if (Object.entries(games).some(([gid, g]) => rows[gid] && rows[gid][0] === "bout" && g.state === "in")) return "fight";
     return Object.values(games).some(g => g.state === "in") || [...want].some(gid => !games[gid] || games[gid].state === "pre");
   }
 
