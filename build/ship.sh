@@ -27,7 +27,7 @@ if ! git pull --rebase -q origin main 2>/dev/null; then
   while [ -d .git/rebase-merge ] || [ -d .git/rebase-apply ]; do
     for f in $(git diff --name-only --diff-filter=U); do
       case "$f" in
-        site/prices.json|site/ledger.json|site/anim/*|data/*.json|site/index.html|site/build.txt)
+        site/prices.json|site/ledger.json|site/anim/*|data/*.json|site/index.html|site/build.txt|site/guard.json|site/lineups.json|site/wire.json|site/depth.json)
           git checkout --theirs -- "$f" 2>/dev/null || git checkout --ours -- "$f"
           git add "$f"
           echo "  kept our freshly written $f" ;;
