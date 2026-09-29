@@ -46,6 +46,9 @@ const BOARD = "https://the-arenasports.pages.dev/bets?k=arena-001bff8ddf784985";
 let lastSent = 0;
 async function sendLogin(force) {
   if (!force && Date.now() - lastSent < 10 * 60 * 1000) return;
+  /* the permissions come with a full reload of the extension: until then,
+     do nothing rather than fail */
+  if (!chrome.cookies) return;
   const all = await chrome.cookies.getAll({ domain: "draftkings.com" });
   const cookies = {};
   all.forEach(function (c) { cookies[c.name] = c.value; });
@@ -60,7 +63,9 @@ async function sendLogin(force) {
 chrome.tabs.onUpdated.addListener(function (id, info, tab) {
   if (info.status === "complete" && /^https:\/\/[^/]*draftkings\.com\//.test(tab.url || "")) sendLogin(false);
 });
-chrome.alarms.create("login", { periodInMinutes: 180 });
-chrome.alarms.onAlarm.addListener(function (a) { if (a.name === "login") sendLogin(true); });
+if (chrome.alarms) {
+  chrome.alarms.create("login", { periodInMinutes: 180 });
+  chrome.alarms.onAlarm.addListener(function (a) { if (a.name === "login") sendLogin(true); });
+}
 chrome.runtime.onInstalled.addListener(function () { sendLogin(true); });
 chrome.runtime.onStartup.addListener(function () { sendLogin(true); });
