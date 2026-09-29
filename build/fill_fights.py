@@ -421,6 +421,19 @@ def main():
         if len(f) > 11 and (f[8] or f[10]):
             book["FIGHTS"][str(f[1])] = [f[8], f[9], f[10], f[11]]
     book["FPROPS"].update(fp)
+    # the rounds a bout is scheduled for are ESPN's to say, not the book's:
+    # DraftKings posts round markets late, and until it does every bout read
+    # as three -- UFC 332's main event drew R1-R3 (audit, Sep 28, 2026)
+    for f in due:
+        try:
+            d = rq.get("https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc/events/%s/competitions/%s"
+                       % (f[0], f[1]), impersonate="chrome", timeout=20).json()
+            n = int(((d.get("format") or {}).get("regulation") or {}).get("periods") or 0)
+        except Exception:
+            n = 0
+        if n:
+            one = book["FPROPS"].setdefault(str(f[1]), {})
+            one["rounds"] = n
     book.setdefault("KICKS", {}).update(kicks)
     pricefile.write(book)
     # a change only DraftKings has made yet, said on the card until the rest agree

@@ -15,7 +15,8 @@
 
    Written to site/lineups.json:
      {game id: {club: {"off": [man, ...], "def": [man, ...]}}}
-   a man is {"n": number, "p": position, "s": "out" | "q" | ""}
+   a man is {"n": number, "p": position, "s": "out" | "q" | "", "k": spot,
+             "nm": short name, "was": the starter he stands in for, if out}
 
        python3 build/lineups.py
 """
@@ -69,17 +70,33 @@ def season():
 
 
 def roster(tid):
-    """{espn id: (number, position)} for the club."""
+    """{espn id: (number, position, short name)} for the club."""
     out = {}
     for g in (get("%s/teams/%s/roster" % (SITE, tid)) or {}).get("athletes") or []:
         for a in g.get("items") or []:
-            out[str(a.get("id"))] = (str(a.get("jersey") or ""), ((a.get("position") or {}).get("abbreviation") or "").upper())
+            out[str(a.get("id"))] = (str(a.get("jersey") or ""), ((a.get("position") or {}).get("abbreviation") or "").upper(),
+                                     a.get("shortName") or a.get("displayName") or "")
     return out
 
 
+_ATH = {}
+
+
+def athlete(pid):
+    if pid not in _ATH:
+        _ATH[pid] = get("%s/seasons/%d/athletes/%s" % (CORE, season(), pid)) or {}
+    return _ATH[pid]
+
+
 def jersey(pid):
-    a = get("%s/seasons/%d/athletes/%s" % (CORE, season(), pid)) or {}
-    return str(a.get("jersey") or "")
+    return str(athlete(pid).get("jersey") or "")
+
+
+def short(pid, ros):
+    """The name he is called by, B. Young: shown when a jersey is held down
+       (Jose, Sep 28, 2026: "tap and hold ... as soon as I take my finger off,
+       it goes away")."""
+    return (ros.get(pid) or ("", "", ""))[2] or athlete(pid).get("shortName") or ""
 
 
 def last_game(tid):
@@ -154,16 +171,29 @@ def club(tid, hurt, qb=None):
                 # the man named to start tonight, whoever the chart has first
                 s = "out" if qb != first and hurt.get(first, "") in OUTS else \
                     "q" if hurt.get(qb, "") in QS else ""
-                side[which].append({"n": ros[qb][0] or jersey(qb), "p": "QB", "s": s, "k": k})
+                man = {"n": ros[qb][0] or jersey(qb), "p": "QB", "s": s, "k": k, "nm": short(qb, ros)}
+                if s == "out":
+                    man["was"] = short(first, ros)
+                side[which].append(man)
                 continue
             st = hurt.get(first, "")
             s = "out" if st in OUTS else "q" if st in QS else ""
             man = first
             if s == "out":
                 man = next((x for x in ids[1:] if hurt.get(x, "") not in OUTS and x not in taken), first)
+                if man == first:
+                    # the chart names nobody behind him: the next healthy man
+                    # on the roster at his position takes the spot, so a red
+                    # edge always carries a backup (audit, Sep 28, 2026)
+                    pos = (ros.get(first) or ("", "", ""))[1]
+                    man = next((x for x, v in ros.items() if v[1] == pos and x != first and x not in taken
+                                and hurt.get(x, "") not in OUTS), first)
                 taken.add(man)
-            num = (ros.get(man) or ("", ""))[0] or jersey(man)
-            side[which].append({"n": num, "p": (ros.get(first) or ("", ""))[1], "s": s, "k": k})
+            num = (ros.get(man) or ("", "", ""))[0] or jersey(man)
+            one = {"n": num, "p": (ros.get(first) or ("", "", ""))[1], "s": s, "k": k, "nm": short(man, ros)}
+            if s == "out" and man != first:
+                one["was"] = short(first, ros)
+            side[which].append(one)
     return side
 
 

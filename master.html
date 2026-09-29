@@ -169,6 +169,12 @@
     transition: left .22s ease-out, top .22s ease-out, opacity .2s;
   }
   .cashfab.drag { transition: none; cursor: grabbing; }
+  /* a sheet up is the thing being read: the wallet steps out of it, and
+     the slip bar folds away under the slip's own sheet (audit, Sep 28, 2026) */
+  body:has(dialog.sheet[open]) .cashfab { opacity: 0; pointer-events: none; }
+  body:has(#slipsheet[open]) #slipbar { visibility: hidden; }
+  /* the slip bar up: the wallet rests above it, never on its figures */
+  body.slipon .cashfab:not([style*="top"]) { bottom: calc(14px + 67px + 8px + 67px + 8px + 8px + env(safe-area-inset-bottom)); }
   /* the money bag he picked, inked in the gold (Jose, Sep 25, 2026) */
   .cashfab { overflow: hidden; }
   .cashfab .fabfill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; pointer-events: none;
@@ -325,7 +331,16 @@
   #qsearch .qsfield { position: relative; height: 180px; margin-top: 6px; }
   #qsearch .qsfield .los { position: absolute; left: 1%; right: 1%; top: 85px; height: 2px; background: #fff; }
   #qsearch .qsj { position: absolute; width: 22px; height: 22px; transform: translateX(-50%);
-    background: center / contain no-repeat; }
+    background: center / contain no-repeat; -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  /* a finger-sized target around a small jersey, for the hold */
+  #qsearch .qsj em.pos { font-size: 7px; }
+  #qsearch .qsj::after { content: ""; position: absolute; inset: -7px; }
+  .qstip { position: fixed; z-index: 1000; pointer-events: none; padding: 6px 9px; border-radius: 8px;
+    background: #2c2c2e; color: #fff; font: 600 13px Barlow, Arial, sans-serif; white-space: nowrap;
+    box-shadow: 0 4px 14px rgba(0,0,0,.5); }
+  .qstip b { font-weight: 800; }
+  .qstip span { display: block; font-size: 11px; color: #ff6961; margin-top: 1px; }
+  .qstip span.q { color: #ffd60a; }
   #qsearch .qsj em { position: absolute; left: 0; right: 0; top: 5px; text-align: center; font: 800 9px Barlow, Arial, sans-serif;
     font-style: normal; color: #fff; text-shadow: 0 1px 1px rgba(0,0,0,.6); }
   #qsearch .qsj.out { filter: drop-shadow(1.2px 0 0 #ff3b30) drop-shadow(-1.2px 0 0 #ff3b30) drop-shadow(0 1.2px 0 #ff3b30) drop-shadow(0 -1.2px 0 #ff3b30); }
@@ -6904,8 +6919,11 @@
   var NET_APP = [
     [/prime video|amazon/i, "Prime Video", "https://app.primevideo.com/"],
     [/netflix/i, "Netflix", "https://www.netflix.com/browse"],
-    [/peacock/i, "Peacock", "https://www.peacocktv.com/watch/sports"],
-    [/nfl network|nfl\+/i, "NFL+", "https://www.nfl.com/plus/"],
+    /* only a stream no channel carries gets its own app: a game on NBC and
+       Peacock, or on NFL Network, is on YouTube TV like everything else
+       (audit, Sep 28, 2026, against Jose's Sep 16 rule) */
+    [/^(?!.*\bnbc\b).*peacock/i, "Peacock", "https://www.peacocktv.com/watch/sports"],
+    [/^nfl\+$/i, "NFL+", "https://www.nfl.com/plus/"],
     [/espn\+/i, "ESPN", "https://www.espn.com/watch/"]
   ];
   function watchMark(eid) {
@@ -10434,7 +10452,7 @@
         j.className = "fol" + (m.s ? " fol--" + m.s : "");
         j.style.left = (137 + (i - 2) * 30) + "px";
         j.style.backgroundImage = "url(ico/jersey/" + club.toLowerCase() + ".png)";
-        j.innerHTML = "<em>" + String(m.n || "").replace(/[^0-9]/g, "") + "</em>";
+        j.innerHTML = "<em>" + (String(m.n || "").replace(/[^0-9]/g, "") || k.toUpperCase()) + "</em>";
         forkbox.appendChild(j);
       });
       routes.style.backgroundImage = 'url("data:image/svg+xml;utf8,' + encodeURIComponent(routeSvg(null, true)) + '")';
@@ -11142,7 +11160,12 @@
              of the bottom, where the nav covers it anyway */
           var navTop = document.getElementById("sportbar").getBoundingClientRect().top;
           var k = Math.min(Math.max(W / FIELD.w, H / FIELD.h), (navTop - 12) / FIELD.band[1]);
-          k = Math.max(k, W / FIELD.w);
+          /* the field is never so tall that the card band falls behind the
+             nav: on a short phone, an iPad or a desktop it stops at the height
+             that fits and stands centered, dark either side, rather than
+             pushing the row under the nav and off the screen (audit, Sep 28,
+             2026: HOT could not be reached at 1280 or 375x667) */
+          var FW = Math.min(W, FIELD.w * k);
           /* the field, and everything standing on it, lifted as one so the
              carousel and the sets under it sit clear above the betslip bar
              (or the nav when there is no slip) -- the same size, the same
@@ -11232,7 +11255,7 @@
             /* one size, always: the one in his 10:41 screenshot, 55px tall on
                a 430px screen and in step with the width -- never shrunk for a
                slip, which fits under it (Jose, Sep 28, 2026) */
-            HOTZ = window._hotz = Math.min(1, (55 * W / 430) / natural);
+            HOTZ = window._hotz = Math.min(1, (55 * FW / 430) / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
@@ -12269,6 +12292,13 @@
     render();
     window.scrollTo(0, 0);
   }
+  /* every piece that is dragged for its own sake: the wallet, the eye's
+     track, a hide corner, the live graph, the slip, the pick ghost, the
+     field, the search. A finger that starts on one of them belongs to it --
+     never to the board's swipe and never to the pull-down search (Jose, Sep
+     28, 2026: "I hold the wallet and swipe down and it thinks I'm swiping
+     down for the search"). One list, read by both. */
+  var OWNDRAG = window.OWNDRAG = ".fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, #qsearch, input, textarea";
   (function () {
     var x0 = 0, y0 = 0, t0 = 0, ok = false, drag = false, dx = 0, sides = {};
     function width() { return TRACK.getBoundingClientRect().width; }
@@ -12280,7 +12310,7 @@
          piece it should not swipe"). .drvg is the live graph, read by holding
          a finger on it and dragging along it, which is the same argument.The
          dollar button is dragged the same way (Jose, Sep 25, 2026). */
-      ok = !e.target.closest(".pcar, .daybar, .weekbar, .tabbar, .fview, .fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, #qsearch, input, textarea") &&
+      ok = !e.target.closest(".pcar, .daybar, .weekbar, .tabbar, .fview, " + OWNDRAG) &&
            !(caro && caro.scrollWidth > caro.clientWidth + 2);   /* a row that scrolls keeps the gesture */
       /* the search sits over the board: while it is open nothing under it is
          swiped (Jose, Sep 28, 2026: its row of quarterbacks swiped the page) */
@@ -15210,7 +15240,11 @@
     bar.appendChild(end);
   }
   function drawTimeline(card, c, st, rd, label) {
-    var rounds = (((c.format || {}).regulation || {}).periods) || 3;
+    /* ESPN's own record first, then the rounds on the bout's card, never a
+       guessed three: a five-round stoppage on a three-round rail lands in the
+       wrong round (audit, Sep 28, 2026) */
+    var rounds = (((c.format || {}).regulation || {}).periods) ||
+      parseInt(((typeof FPROPS === "object" && FPROPS[card.dataset.bout]) || {}).rounds, 10) || 3;
     var each = (((c.format || {}).regulation || {}).clock) || 300;
     var state = ((st.type || {}).state) || "";
     var secs = typeof st.clock === "number" ? st.clock : 0;
@@ -16737,8 +16771,23 @@
       var w = fab.offsetWidth, h = fab.offsetHeight;
       fab.style.right = "auto"; fab.style.bottom = "auto";
       fab.style.left = clamp(x, M, innerWidth - w - M) + "px";
-      fab.style.top = clamp(y, M + 40, innerHeight - h - 96) + "px";
+      fab.style.top = clamp(y, M + 40, floorY() - h) + "px";
+      fab._want = y;
     }
+    /* the lowest the wallet may sit: above the nav, and above the slip bar
+       while it is up, so its figures are never under the wallet */
+    function floorY() {
+      var sb = document.getElementById("slipbar");
+      if (sb && !sb.hidden) {
+        var r = sb.getBoundingClientRect();
+        if (r.height) return r.top - 8;
+      }
+      return innerHeight - 96;
+    }
+    var sbar = document.getElementById("slipbar");
+    if (sbar) new MutationObserver(function () {
+      if (fab.style.top) place(parseFloat(fab.style.left) || M, fab._want != null ? fab._want : parseFloat(fab.style.top));
+    }).observe(sbar, { attributes: true, attributeFilter: ["hidden"] });
     function settle() {
       var r = fab.getBoundingClientRect();
       var left = r.left + r.width / 2 < innerWidth / 2;
@@ -17016,7 +17065,9 @@
       if (document.querySelector("dialog[open]")) return;
       /* a drag that starts on a card's hide corner is the hide, never the
          search (Jose, Sep 28, 2026: "conflicting with the drag down to hide") */
-      if (e.target.closest && e.target.closest(".gcorner, .gcorner--pulling")) return;
+      if (e.target.closest && e.target.closest((window.OWNDRAG || ".gcorner") + ", .gcorner--pulling")) return;
+      /* nor while a sheet of the wallet's is up */
+      if (document.querySelector(".cashsheet:not([hidden]), .cashfab.drag")) return;
       y0 = e.touches[0].clientY;
     }, { passive: true });
     addEventListener("touchmove", function (e) {
@@ -17026,7 +17077,7 @@
     }, { passive: true });
     addEventListener("touchend", function (e) {
       if (y0 === null) return;
-      if (document.querySelector(".gcorner--pulling, .gcorner--armed")) { y0 = null; hint.style.opacity = 0; hint.style.transform = ""; return; }
+      if (document.querySelector(".gcorner--pulling, .gcorner--armed, .cashfab.drag")) { y0 = null; hint.style.opacity = 0; hint.style.transform = ""; return; }
       var dy = (e.changedTouches[0] || {}).clientY - y0;
       hint.style.opacity = 0; hint.style.transform = "";
       y0 = null;
@@ -17111,6 +17162,45 @@
     }
     /* his club's last lineup on offense against tonight's opponent's on
        defense, off site/lineups.json (build/lineups.py) */
+    /* the spot a man holds, as it is said: LT, DE, OLB, CB */
+    function SPOTNAME(k, p) {
+      var b = String(k || "").replace(/[0-9]/g, "");
+      var n = { lde: "DE", rde: "DE", ldt: "DT", rdt: "DT", nt: "NT", lolb: "OLB", rolb: "OLB", lilb: "ILB", rilb: "ILB",
+                wlb: "LB", mlb: "LB", slb: "LB", lcb: "CB", rcb: "CB" }[b];
+      return n || (b ? b.toUpperCase() : String(p || ""));
+    }
+    /* hold a jersey and his name shows over it; lift the finger and it is
+       gone. A tap does nothing (Jose, Sep 28, 2026: "tap and hold is the
+       best and as soon as I take my finger off, it goes away") */
+    (function () {
+      var tip = null, hold = null, x0 = 0, y0 = 0;
+      function hide() { clearTimeout(hold); hold = null; if (tip) { tip.remove(); tip = null; } }
+      document.addEventListener("pointerdown", function (e) {
+        var j = e.target.closest && e.target.closest("#qsearch .qsj[data-nm]");
+        hide();
+        if (!j || !j.dataset.nm) return;
+        x0 = e.clientX; y0 = e.clientY;
+        hold = setTimeout(function () {
+          var r = j.getBoundingClientRect();
+          tip = document.createElement("div");
+          tip.className = "qstip";
+          tip.innerHTML = "<b>" + esc(j.dataset.nm) + "</b> " + esc(j.dataset.pos || "") +
+            (j.dataset.was ? "<span>in for " + esc(j.dataset.was) + "</span>" :
+             j.classList.contains("q") ? '<span class="q">questionable</span>' : "");
+          document.body.appendChild(tip);
+          var w = tip.getBoundingClientRect().width;
+          tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px";
+          tip.style.top = (r.top - tip.getBoundingClientRect().height - 8) + "px";
+        }, 220);
+      });
+      document.addEventListener("pointermove", function (e) {
+        if (hold && !tip && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) hide();
+      });
+      ["pointerup", "pointercancel", "scroll"].forEach(function (ev) { document.addEventListener(ev, hide, true); });
+      document.addEventListener("contextmenu", function (e) {
+        if (e.target.closest && e.target.closest("#qsearch .qsj")) e.preventDefault();
+      });
+    })();
     function formation(gid, mine, theirs) {
       var g = (LU || {})[gid] || {}, o = (g[mine] || {}).off, d = (g[theirs] || {}).def;
       if (!o || !o.length || !d || !d.length) return "";
@@ -17119,8 +17209,11 @@
       var put = function (m, x, y, club) {
         if (!m) return;
         if (m.s === "out") outs++; else if (m.s === "q") qs++;
-        spots.push('<i class="qsj' + (m.s ? " " + m.s : "") + '" style="left:' + x + "%;top:" + y + "px;background-image:url(ico/jersey/" +
-          esc(String(club).toLowerCase()) + '.png)"><em>' + esc(m.n) + "</em></i>");
+        spots.push('<i class="qsj' + (m.s ? " " + m.s : "") + '" data-nm="' + esc(m.nm || "") + '" data-pos="' + esc(SPOTNAME(m.k, m.p)) +
+          '" data-was="' + esc(m.was || "") + '" style="left:' + x + "%;top:" + y + "px;background-image:url(ico/jersey/" +
+          esc(String(club).toLowerCase()) + '.png)"><em' + (m.n ? "" : ' class="pos"') + ">" +
+          /* a man signed this week has no number yet: his spot is written instead */
+          esc(m.n || SPOTNAME(m.k, m.p)) + "</em></i>");
       };
       // every man in his named spot off ESPN's chart (lt, lg, c ... lcb, fs);
       // the defense faces the offense, so its left is the offense's right
@@ -17249,6 +17342,9 @@
       ids.forEach(function (id) {
         var q = DATA.qbs[id], nx = q && q.nx;
         if (!nx || !nx.gid) return;
+        /* the slip is for games still to come: one under way is never added,
+           the same as the board locks its prices at kickoff (audit, Sep 28) */
+        if (Date.parse(nx.d) <= Date.now()) return;
         var side = nx.h ? 1 : 0;
         var r0 = ((((typeof PROPS === "object" && PROPS[nx.gid]) || {}).ptd || [])[side] || [])[0];
         if (!r0 || !r0[0] || !r0[1]) return;

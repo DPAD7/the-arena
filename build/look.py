@@ -55,6 +55,117 @@ def launch(p):
     return None
 
 
+def drag(pg, cdp, x, y, dy):
+    """A finger put down at x, y and drawn dy pixels down, the way a phone
+    sends it."""
+    pts = lambda yy: [{"x": x, "y": yy}]
+    cdp.send("Input.dispatchTouchEvent", {"type": "touchStart", "touchPoints": pts(y)})
+    for k in range(1, 11):
+        cdp.send("Input.dispatchTouchEvent", {"type": "touchMove", "touchPoints": pts(y + dy * k / 10)})
+        pg.wait_for_timeout(16)
+    cdp.send("Input.dispatchTouchEvent", {"type": "touchEnd", "touchPoints": []})
+    pg.wait_for_timeout(600)
+
+
+def gestures(b, seen):
+    """A drag belongs to what it starts on: the wallet drawn down never opens
+    the search, and a pull at the top of the page always does (Sep 28, 2026)."""
+    wrong = []
+    c = b.new_context(viewport={"width": 430, "height": 932}, has_touch=True, is_mobile=True, device_scale_factor=1)
+    pg = c.new_page()
+    pg.route("**/*", serve)
+    pg.goto(HOST + "/")
+    pg.wait_for_timeout(4000)
+    cdp = c.new_cdp_session(pg)
+    opened = "document.querySelector('#qsearch').classList.contains('open')"
+    close = "document.querySelector('#qsearch').classList.remove('open')"
+    fab = pg.evaluate("""(() => { const f = document.querySelector('.cashfab'); if (!f) return null;
+        const r = f.getBoundingClientRect(); return r.width ? [r.left + r.width / 2, r.top + r.height / 2] : null })()""")
+    if fab:
+        pg.evaluate("scrollTo(0, 0)")
+        drag(pg, cdp, fab[0], fab[1], 160)
+        if pg.evaluate(opened):
+            wrong.append("drawing the wallet down opens the search")
+        pg.evaluate(close)
+        seen.append("wallet drag")
+    for cls, what in ((".htrack", "the eye's track"), (".gcorner", "a hide corner"), (".drvg", "the live graph")):
+        at = pg.evaluate("""s => { const f = [...document.querySelectorAll(s)].find(e => { const r = e.getBoundingClientRect();
+            return r.width && r.top > 0 && r.bottom < innerHeight; }); if (!f) return null;
+            const r = f.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2] }""", cls)
+        if at:
+            pg.evaluate("scrollTo(0, 0)")
+            drag(pg, cdp, at[0], at[1], 120)
+            if pg.evaluate(opened):
+                wrong.append("drawing %s down opens the search" % what)
+            pg.evaluate(close)
+    # a price on the slip: the wallet rests above the slip bar's figures, and
+    # steps out of the way of the slip's own sheet (audit, Sep 28, 2026)
+    pg.evaluate("scrollTo(0, 0)")
+    pg.evaluate("""(() => { if (!window.addLegs || typeof SCHED !== 'object') return;
+        const g = SCHED.find(g => Date.parse(g[2]) > Date.now() && g[10]);
+        if (g) window.addLegs([{ oid: g[10], o: g[9], g: String(g[1]), gn: g[3] + ' @ ' + g[4], l: g[3] + ' ML' }]); })()""")
+    pg.wait_for_timeout(1200)
+    lap = pg.evaluate("""(() => { const f = document.querySelector('.cashfab'), s = document.getElementById('slipbar');
+        if (!f || !s || s.hidden) return null; const a = f.getBoundingClientRect(), b = s.getBoundingClientRect();
+        return Math.max(0, Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top)) *
+               Math.max(0, Math.min(a.right, b.right) - Math.max(a.left, b.left)) > 0 })()""")
+    if lap is None:
+        seen.append("no slip bar to test")
+    elif lap:
+        wrong.append("the wallet sits on the slip bar")
+    else:
+        seen.append("wallet clear of slip")
+        pg.evaluate("openSheet(document.getElementById('slipsheet'))")
+        pg.wait_for_timeout(900)
+        shown = pg.evaluate("""(() => { const d = document.querySelector('dialog.sheet[open]'), f = document.querySelector('.cashfab');
+            return d && f ? getComputedStyle(f).opacity : null })()""")
+        if shown is not None and float(shown) > 0.05:
+            wrong.append("the wallet floats over an open sheet")
+        pg.evaluate("document.querySelectorAll('dialog.sheet[open]').forEach(d => d.close())")
+    pg.evaluate("scrollTo(0, 0)")
+    top = pg.evaluate("""(() => { const m = document.querySelector('main, #board, .board') || document.body;
+        const r = m.getBoundingClientRect(); return [innerWidth / 2, Math.max(r.top, 0) + 200] })()""")
+    drag(pg, cdp, top[0], top[1], 160)
+    if not pg.evaluate(opened):
+        wrong.append("a pull down at the top of the page does not open the search")
+    else:
+        seen.append("pull-down")
+    c.close()
+    return wrong
+
+
+def hot(b, seen):
+    """HOT at every screen he uses: the cards 55px tall on a 430 phone and in
+    step with the width, and the whole row above the nav -- on a short phone,
+    an iPad and a desktop as much as on his own (audit, Sep 28, 2026)."""
+    wrong = []
+    for W, H, phone in ((430, 932, True), (390, 844, True), (1024, 1366, False), (1280, 900, False)):
+        c = b.new_context(viewport={"width": W, "height": H}, device_scale_factor=1)
+        pv = c.new_page()
+        pv.route("**/*", serve)
+        pv.add_init_script("try { localStorage.setItem('arena.fview', 'hot') } catch (e) {}")
+        pv.goto(HOST + "/")
+        pv.wait_for_timeout(3000)
+        pv.evaluate("""(() => { const b = [...document.querySelectorAll('#sportbar button')]
+            .find(b => (b.getAttribute('aria-label') || '') == 'Form'); if (b) b.click(); })()""")
+        pv.wait_for_timeout(3000)
+        r = pv.evaluate("""(() => { const cs = [...document.querySelectorAll('.qcards--hot .qcard')]
+            .map(c => c.getBoundingClientRect()).filter(r => r.height && r.right > 0 && r.left < innerWidth);
+            const nav = document.getElementById('sportbar').getBoundingClientRect();
+            return cs.length ? { h: cs[0].height, bottom: Math.max(...cs.map(r => r.bottom)), nav: nav.top } : null })()""")
+        if not r:
+            wrong.append("HOT shows no cards at %dx%d" % (W, H))
+        else:
+            if phone:
+                seen.append("HOT %.1fpx at %d" % (r["h"], W))
+                if abs(r["h"] - 55 * W / 430) > 3:
+                    wrong.append("HOT cards are %.0fpx tall at %d, not %.0f" % (r["h"], W, 55 * W / 430))
+            if r["bottom"] > r["nav"] + 1:
+                wrong.append("the HOT row runs under the nav at %dx%d (%.0f past %.0f)" % (W, H, r["bottom"], r["nav"]))
+        c.close()
+    return wrong
+
+
 def main():
     try:
         from playwright.sync_api import sync_playwright
@@ -90,7 +201,7 @@ def main():
                 if broken:
                     wrong.append("%d pictures on screen are broken: %s" % (len(broken), ", ".join(broken[:5])))
                 # the Form tab, opened once on All and once on HOT
-                for view in ("all", "hot"):
+                for view in ("all",):
                     pv = c.new_page()
                     pv.route("**/*", serve)
                     pv.add_init_script("try { localStorage.setItem('arena.fview', '%s') } catch (e) {}" % view)
@@ -106,13 +217,6 @@ def main():
                         seen.append("All %d" % n)
                         if n != 32:
                             wrong.append("the All tab shows %d passers, not 32" % n)
-                    else:
-                        h = pv.evaluate("""(() => { const c = [...document.querySelectorAll('.qcards--hot .qcard')]
-                            .find(c => c.getBoundingClientRect().height); return c ? c.getBoundingClientRect().height : 0 })()""")
-                        want = 55 * W / 430
-                        seen.append("HOT %.1fpx" % h)
-                        if abs(h - want) > 3:
-                            wrong.append("HOT cards are %.0fpx tall, not %.0f" % (h, want))
                     pv.close()
                 # the row is drawn when search opens and its file has come in
                 pg.evaluate("window.openSearch && window.openSearch()")
@@ -121,6 +225,9 @@ def main():
                 seen.append("search row %d" % n)
                 if n != 32:
                     wrong.append("the search row holds %d starters, not 32" % n)
+            if W == 430:
+                wrong += gestures(b, seen)
+                wrong += hot(b, seen)
             for e in errs[:3]:
                 wrong.append("the page threw at %d wide: %s" % (W, e))
             c.close()

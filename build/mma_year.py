@@ -39,6 +39,25 @@ def get(u):
     return None
 
 
+_FMT = {}
+
+
+def fmt(eid, cid):
+    """How many rounds the bout was scheduled for, off ESPN's own record of
+       it: a five-round stoppage drawn on a three-round rail puts the finish
+       in the wrong round (audit, Sep 28, 2026)."""
+    key = (str(eid), str(cid))
+    if key not in _FMT:
+        try:
+            from curl_cffi import requests as rq
+            d = rq.get("https://sports.core.api.espn.com/v2/sports/mma/leagues/ufc/events/%s/competitions/%s" % key,
+                       impersonate="chrome", timeout=20).json()
+            _FMT[key] = d.get("format")
+        except Exception:
+            _FMT[key] = None
+    return _FMT[key]
+
+
 def T(x):
     return dt.datetime.fromisoformat(x.replace("Z", "+00:00"))
 
@@ -167,7 +186,7 @@ def main():
         done = any((((c.get("status") or {}).get("type") or {}).get("state") == "post") for c in comps)
         if done:
             finals[eid] = {"events": [{"id": eid, "name": e.get("name"), "date": e["date"],
-                                       "competitions": [{"id": str(c["id"]), "status": c.get("status"), "details": [d for d in (c.get("details") or []) if str(((d.get("type") or {}).get("text") or "")).startswith("Unofficial Winner")],
+                                       "competitions": [{"id": str(c["id"]), "status": c.get("status"), "format": c.get("format") or fmt(eid, c["id"]), "details": [d for d in (c.get("details") or []) if str(((d.get("type") or {}).get("text") or "")).startswith("Unofficial Winner")],
                                                          "competitors": [{"id": x.get("id"), "winner": x.get("winner"), "athlete": {"displayName": (x.get("athlete") or {}).get("displayName")}} for x in c.get("competitors") or []]}
                                                         for c in comps]}]}
         for c in comps:

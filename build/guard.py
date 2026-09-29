@@ -105,6 +105,29 @@ def lineups():
             for g, left in soon("SCHED", after=dt.timedelta(days=1)) if g[3] in depth and str(g[1]) not in lu]
 
 
+def benches():
+    """A red edge always carries a backup: a starter marked out with nobody
+       named in for him is a hole in the chart."""
+    return [("lineups", "%s %s is out with nobody in for him" % (c, m.get("nm") or m.get("k")))
+            for g in load("lineups.json").values() for c, x in g.items()
+            for side in x.values() for m in side if m.get("s") == "out" and not m.get("was")]
+
+
+def formats():
+    """A finished bout knows how many rounds it was scheduled for, or its
+       finish is drawn in the wrong round."""
+    wrong = []
+    for f in glob.glob(os.path.join(SITE, "final", "mma-*.json")):
+        try:
+            d = json.load(open(f))
+        except (OSError, ValueError):
+            continue
+        n = sum(1 for e in d.get("events") or [] for c in e.get("competitions") or [] if not c.get("format"))
+        if n:
+            wrong.append((None, "%s has %d bouts with no round count" % (os.path.basename(f), n)))
+    return wrong
+
+
 def prices():
     p, wrong = load("prices.json"), []
     for g, left in soon("SCHED", before=dt.timedelta(0), after=dt.timedelta(days=1)):
@@ -188,7 +211,7 @@ def the_page():
         return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
 
 
-CHECKS = (passers, lineups, prices, faces, jerseys, fights, settled, files)
+CHECKS = (passers, lineups, benches, formats, prices, faces, jerseys, fights, settled, files)
 # the order a mend is run in, when more than one is due
 MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups")
 
