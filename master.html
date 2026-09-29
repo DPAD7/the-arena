@@ -4002,6 +4002,14 @@
       animation: none; transition: transform 0.26s cubic-bezier(0.32, 0.72, 0, 1);
     }
   }
+  /* a sheet slides back down when it closes, the way it came up: the close
+     itself is immediate, the browser animates the picture of it
+     (Jose, Sep 29, 2026) */
+  ::view-transition-old(root), ::view-transition-new(root) { animation-duration: .18s; }
+  html.vt-sheet::view-transition-old(root), html.vt-sheet::view-transition-new(root) { animation: none; }
+  ::view-transition-old(sheet) { animation: sheet-down .24s cubic-bezier(0.32, 0.72, 0, 1) forwards; }
+  ::view-transition-new(sheet) { animation: none; }
+  @keyframes sheet-down { to { transform: translateY(100%); } }
   @keyframes sheet-up {
     from { transform: translateY(100%); }
     to { transform: translateY(0); }
@@ -4674,6 +4682,22 @@
     SLIPRODE = null;
     if (bar && SLIPHOME && bar.parentNode !== SLIPHOME) SLIPHOME.appendChild(bar);
   }
+  (function () {
+    var D = window.HTMLDialogElement && HTMLDialogElement.prototype, native = D && D.close;
+    if (!native || !document.startViewTransition) return;
+    D.close = function (v) {
+      var self = this;
+      if (!self.open || !self.classList.contains("sheet") || self.classList.contains("sheet--settling") ||
+          (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return native.call(self, v);
+      self.style.viewTransitionName = "sheet";
+      document.documentElement.classList.add("vt-sheet");
+      var vt;
+      try { vt = document.startViewTransition(function () { native.call(self, v); }); }
+      catch (e) { self.style.viewTransitionName = ""; document.documentElement.classList.remove("vt-sheet"); return native.call(self, v); }
+      vt.ready.catch(function () {});
+      vt.finished.catch(function () {}).then(function () { self.style.viewTransitionName = ""; document.documentElement.classList.remove("vt-sheet"); });
+    };
+  })();
   function openSheet(d) {
     if (!d || d.open) return;
     heldAt = window.pageYOffset || document.documentElement.scrollTop || 0;
@@ -5129,7 +5153,10 @@
     var btn = document.querySelector('button.price[data-oid="' +
               String(id).replace(/"/g, '\\"') + '"]');
     if (btn) { setPick(btn, false); return; }
-    saved[id] = undefined;
+    /* deleted, not left as an empty key: an empty key was never sent as a
+       removal, so a leg off another day's card came back on the next read
+       -- eleven of them, cleared and back (Jose, Sep 29, 2026) */
+    delete saved[id];
     try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {}
     if (typeof pushState === "function") pushState();
     slip();
@@ -5638,9 +5665,11 @@
       if (!asking) { arm(true); return; }
       Object.keys(saved).forEach(function (id) { drop(id); });
       /* and anything left in storage whose price is no longer on the board —
-         a card that was removed, a chip that went back to a placeholder */
-      saved = {};
+         a card that was removed, a chip that went back to a placeholder --
+         emptied in place, so the sync sees the very same slip go empty */
+      Object.keys(saved).forEach(function (id) { delete saved[id]; });
       try { localStorage.removeItem(KEY); } catch (e) {}
+      if (typeof pushState === "function") pushState();
       document.querySelectorAll("button.price.on").forEach(function (b) {
         b.classList.remove("on");
       });
@@ -7816,7 +7845,13 @@
             ring: (typeof RINGED === "object" && RINGED) || {},
             bank: (typeof BANKMET !== "undefined" && BANKMET && typeof BANK === "object" && BANK) || null};
   }
+  var APPLYING = false;
   function pushState() {
+    /* while a read of the store is being laid onto the page, the page is
+       half old and half new: a save asked for then waits until the read is
+       done, or it saw an empty slip beside a full store and sent deletes
+       (Sep 29, 2026) */
+    if (APPLYING) { setTimeout(pushState, 0); return; }
     /* the change is logged now, at the tap, before any read can land */
     var all0 = marksNow(), t0 = Date.now();
     Object.keys(all0).forEach(function (k) {
@@ -7827,9 +7862,13 @@
       try { was = JSON.parse(LASTSYNC[k]) || {}; } catch (e) { was = {}; }
       var mine = journalOver(k, was);
       Object.keys(all0[k]).forEach(function (x) {
+        if (all0[k][x] === undefined || all0[k][x] === null) return;
         if (JSON.stringify(all0[k][x]) !== JSON.stringify(mine[x])) JOURNAL.push({k: k, x: x, v: all0[k][x], t: t0});
       });
-      Object.keys(mine).forEach(function (x) { if (!(x in all0[k])) JOURNAL.push({k: k, x: x, del: 1, t: t0}); });
+      /* gone, or left behind as an empty key: either way a removal */
+      Object.keys(mine).forEach(function (x) {
+        if (!(x in all0[k]) || all0[k][x] === undefined || all0[k][x] === null) JOURNAL.push({k: k, x: x, del: 1, t: t0});
+      });
     });
     journalNow();
     clearTimeout(pushTimer);
@@ -7888,6 +7927,8 @@
       .then(function (j) {
         if (!j) return;
         var moved = false;
+        APPLYING = true;
+        try {
         /* this device's own changes of the last two minutes are laid back
            over whatever the store answered: a stale copy never undoes a tap */
         ["hidden", "placed", "picks", "ring", "stars"].forEach(function (k) {
@@ -7970,6 +8011,7 @@
              just been read, which is not what was wanted. */
           moved = true;
         }
+        } finally { APPLYING = false; }
         if (typeof markSaved === "function") markSaved(document);
         if (typeof placedState === "function") placedState();
         if (typeof slip === "function") slip();
@@ -13499,6 +13541,18 @@
     });
   })();
 
+  /* a tab change crossfades like an app's, not a jump (Jose, Sep 29, 2026):
+     the browser keeps a picture of the old board and fades it into the new.
+     The stack's own tab keeps its double tap untouched. */
+  sbar.addEventListener("click", function (e) {
+    var t = e.target.closest(".sptab");
+    if (!t || window._vtNow || t.dataset.sp === "form" || !document.startViewTransition ||
+        (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
+    e.stopImmediatePropagation(); e.preventDefault();
+    var vt0 = document.startViewTransition(function () { window._vtNow = true; try { t.click(); } finally { window._vtNow = false; } });
+    /* a transition cut short by the next tap is not an error */
+    vt0.ready.catch(function () {}); vt0.finished.catch(function () {});
+  }, true);
   sbar.addEventListener("click", function (e) {
     var t = e.target.closest(".sptab");
     if (!t) return;
