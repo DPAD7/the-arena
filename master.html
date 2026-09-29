@@ -17728,16 +17728,16 @@
         if (card) { var v = card.querySelector(".slview"); if (v && !card.classList.contains("slipcard--open")) slipOpen(v); card.scrollIntoView({ block: "start" }); return; }
         if (++tries < 20) setTimeout(find, 300);
       })();
-    } else if ((m = /^game=(.+)$/.exec(h))) {
-      var tries2 = 0;
+    } else if ((m = /^(game|bout)=(.+)$/.exec(h))) {
+      var tries2 = 0, attr = m[1] === "bout" ? "data-bout" : "data-espn", id2 = m[2];
       (function find2() {
-        var c = document.querySelector('.gcard[data-espn="' + m[1] + '"]');
+        var c = document.querySelector('.gcard[' + attr + '="' + id2 + '"]');
         if (c) { c.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
         if (++tries2 < 20) setTimeout(find2, 300);
       })();
     }
   }
-  if (/^#(slip|game)=/.test(location.hash)) setTimeout(function () { landOn(location.href); history.replaceState(null, "", location.pathname); }, 1500);
+  if (/^#(slip|game|bout)=/.test(location.hash)) setTimeout(function () { landOn(location.href); history.replaceState(null, "", location.pathname); }, 1500);
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;

@@ -11,7 +11,7 @@ const MIN = 60000;
 /* sel -> {gid, kind, side, n, team, qb, qbName, lg} for every leg the board prices */
 export function legIndex(prices, sched) {
   const rows = {};
-  for (const r of sched) if (r[0] === "game") rows[r[1]] = r;
+  for (const r of sched) if (r[0] === "game" || r[0] === "bout") rows[r[1]] = r;
   const out = {};
   const put = (oid, v) => { if (oid && !out[oid]) out[oid] = v; };
   for (const lgk of ["SCHED", "CFB"]) {
@@ -31,7 +31,37 @@ export function legIndex(prices, sched) {
       if (h && h[1]) put(h[1], { gid, kind: "h2h", side, team, qb, qbName, lg: r[3] });
     }
   }
+  // fights: the moneyline and every prop the board prices, by DraftKings id
+  for (const [bid, f] of Object.entries(prices.FIGHTS || {})) {
+    const r = rows[bid] || null;
+    put(f[1], { gid: bid, kind: "fml", side: 0, fight: 1, who: r ? r[4] : "" });
+    put(f[3], { gid: bid, kind: "fml", side: 1, fight: 1, who: r ? r[5] : "" });
+  }
+  for (const [bid, fp] of Object.entries(prices.FPROPS || {})) {
+    for (const [key, v] of Object.entries(fp || {})) {
+      if (!Array.isArray(v)) continue;
+      const one = v.length === 1;
+      v.forEach((c, s0) => { if (c && c[1]) put(c[1], { gid: bid, kind: "fm", key, side: one ? -1 : s0, fight: 1 }); });
+    }
+  }
   return out;
+}
+
+/* a bout as ESPN's fight scoreboard has it: on or over, the round, the
+   winner's side and how */
+export function readBout(bid, board) {
+  const b = { state: "pre", period: 0, clock: "", winner: null, how: "", ids: [] };
+  for (const e of board.events || []) for (const c of e.competitions || []) {
+    if (String(c.id) !== String(bid)) continue;
+    const st = c.status || {};
+    b.state = (st.type || {}).state || "pre";
+    b.period = st.period || 0; b.clock = st.displayClock || "";
+    (c.competitors || []).forEach((m, i) => { b.ids.push(String(m.id)); if (m.winner) b.winner = String(m.id); });
+    for (const d of c.details || []) { const t = (d.type || {}).text || ""; if (t.indexOf("Unofficial Winner") === 0) b.how = t.slice(17).trim(); }
+    // ESPN's own words for how, said the way a card says them
+    b.how = ({ Kotko: "KO/TKO", Decision: "decision", Submission: "submission" })[b.how] || b.how;
+  }
+  return b;
 }
 
 const last = (n) => String(n || "").split(" ").filter(w => !/^(jr\.?|sr\.?|ii|iii|iv)$/i.test(w)).pop() || n;
@@ -78,8 +108,24 @@ export async function readGame(gid, lg, board) {
 }
 
 /* a leg's standing: won, lost or open */
-export function legState(v, g, other) {
+export function legState(v, g, other, row) {
   if (!v || !g) return "open";
+  if (v.fight) {
+    if (g.state !== "post") return "open";
+    const sideId = row ? String(v.side === 0 ? row[6] : row[7]) : null;
+    const mine = v.side === -1 ? !!g.winner : g.winner === sideId;
+    const how = /sub/i.test(g.how) ? "sub" : /dec/i.test(g.how) ? "dec" : /ko|knock/i.test(g.how) ? "ko" : "";
+    if (v.kind === "fml") return mine ? "won" : "lost";
+    const k = v.key || "";
+    if (k === "ko" || k === "koonly") return mine && how === "ko" ? "won" : "lost";
+    if (k === "sub" || k === "subonly") return mine && how === "sub" ? "won" : "lost";
+    if (k === "dec" || k === "deconly" || k === "cards") return mine && how === "dec" ? "won" : "lost";
+    if (k === "anyko") return how === "ko" ? "won" : "lost";
+    if (k === "anysub") return how === "sub" ? "won" : "lost";
+    if (k === "dist" || k === "anydec") return how === "dec" ? "won" : "lost";
+    if (k === "nodist") return how && how !== "dec" ? "won" : "lost";
+    return "open";      // the rest wait on DraftKings' own word
+  }
   const over = g.state === "post";
   const q = g.qb[String(v.qb)] || { ptd: 0, rtd: 0, pyd: 0 };
   if (v.kind === "ml") return over ? (g.sc[v.side] > g.sc[1 - v.side] ? "won" : "lost") : "open";
@@ -100,9 +146,9 @@ export function news(slips, idx, games, prev, rows) {
   for (const bet of slips) {
     const legs = (bet.legs || []).map(lg => {
       const v = idx[lg.sel], g = v && games[v.gid], r = v && rows[v.gid];
-      const other = v && r ? (v.side ? r[7] : r[9]) : null;
+      const other = v && r && !v.fight ? (v.side ? r[7] : r[9]) : null;
       const dk = String(lg.status || "").toLowerCase();
-      const st = dk === "won" || dk === "lost" ? dk : legState(v, g, other);
+      const st = dk === "won" || dk === "lost" ? dk : legState(v, g, other, r);
       return { lg, v, g, st };
     });
     if (legs.some(x => x.st === "lost")) continue;
@@ -124,6 +170,21 @@ export function news(slips, idx, games, prev, rows) {
     const v = idx[lg.sel]; if (!v) continue;
     const g = games[v.gid], p = prev[v.gid] || {}, r = rows[v.gid];
     if (!g || !r) continue;
+    if (v.fight) {
+      if (g.state === "in" && !seen["fon@" + v.gid]) {
+        seen["fon@" + v.gid] = 1;
+        out.push({ key: "fon@" + v.gid, type: "fight", title: r[4] + " vs " + r[5], body: "Your fight is on" + (g.period ? " · R" + g.period : "") + ".", url: "/#bout=" + v.gid });
+      }
+      if (g.state === "post" && !seen["ffin@" + v.gid]) {
+        seen["ffin@" + v.gid] = 1;
+        const won = g.winner === String(r[6]) ? r[4] : g.winner === String(r[7]) ? r[5] : "";
+        const said = (bet.legs || []).map(l => ({ l, w: idx[l.sel] })).filter(x => x.w && x.w.gid === v.gid)
+          .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, null, r) === "won" ? "hit" : legState(x.w, g, null, r) === "lost" ? "missed" : "")).join(" · ");
+        out.push({ key: "ffin@" + v.gid, type: "fight", title: "Final: " + (won ? won + " wins" : r[4] + " vs " + r[5]) + (g.how ? " by " + g.how : ""),
+                   body: (g.period ? "R" + g.period + " " + g.clock + ". " : "") + said + ".", url: "/#bout=" + v.gid });
+      }
+      continue;
+    }
     const away = r[4], home = r[5];
     if (v.kind === "ptd" || v.kind === "atd") {
       const q = g.qb[String(v.qb)] || { ptd: 0, rtd: 0 }, q0 = (p.qb || {})[String(v.qb)] || { ptd: 0, rtd: 0 };
@@ -134,7 +195,8 @@ export function news(slips, idx, games, prev, rows) {
           const mine = (bet.legs || []).map(l => idx[l.sel]).filter(w => w && w.kind === "ptd" && w.qb === v.qb).map(w => w.n);
           const hit = mine.filter(n => n <= q.ptd), next = mine.filter(n => n > q.ptd).sort((a, b) => a - b)[0];
           out.push({ key: k, type: "td", title: last(v.qbName) + " TD pass (" + q.ptd + ")",
-                     body: (hit.length ? hit.sort().pop() + "+ PTD hit. " : "") + (next ? "Next: " + next + "+ needs " + (next - q.ptd) + " more." : "") + " " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + ".",
+                     body: [hit.length ? hit.sort().pop() + "+ PTD hit." : "", next ? "Next: " + next + "+ needs " + (next - q.ptd) + " more." : "",
+                            away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + "."].filter(Boolean).join(" "),
                      url: "/#game=" + v.gid });
         }
       }
@@ -165,7 +227,7 @@ export function news(slips, idx, games, prev, rows) {
       if (!seen[k]) {
         seen[k] = 1;
         const said = (bet.legs || []).map(l => ({ l, w: idx[l.sel] })).filter(x => x.w && x.w.gid === v.gid)
-          .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, x.w.side ? r[7] : r[9]) === "won" ? "hit" : "missed")).join(" · ");
+          .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, x.w.side ? r[7] : r[9], r) === "won" ? "hit" : "missed")).join(" · ");
         out.push({ key: k, type: "final", title: "Final: " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home, body: said + ".", url: "/#game=" + v.gid });
       }
     }
@@ -180,7 +242,7 @@ export function liveLegs(slips, idx, games, rows) {
     const st = (bet.legs || []).map(lg => {
       const v = idx[lg.sel], r = v && rows[v.gid];
       const dk = String(lg.status || "").toLowerCase();
-      return dk === "won" || dk === "lost" ? dk : legState(v, v && games[v.gid], v && r ? (v.side ? r[7] : r[9]) : null);
+      return dk === "won" || dk === "lost" ? dk : legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
     });
     if (st.includes("lost")) continue;
     n += st.filter(s => s === "open").length;
@@ -189,3 +251,29 @@ export function liveLegs(slips, idx, games, rows) {
 }
 
 export { SITE, MIN };
+
+/* a slip's end as far as can be told now: won, lost or open */
+export function slipState(bet, idx, games, rows) {
+  const st = (bet.legs || []).map(lg => {
+    const v = idx[lg.sel], r = v && rows[v.gid];
+    const dk = String(lg.status || "").toLowerCase();
+    return dk === "won" || dk === "lost" ? dk : legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
+  });
+  if (st.includes("lost")) return "lost";
+  return st.length && st.every(x => x === "won") ? "won" : "open";
+}
+
+/* what could sink a leg before its game, in words: his passer's mark, and a
+   teammate out who matters to this kind of leg -- the page's own rules */
+export function risks(v, a, wire) {
+  const out = [];
+  if (v.qb && wire[String(v.qb)] && wire[String(v.qb)].status && v.kind !== "ml")
+    out.push(last(v.qbName) + " is " + String(wire[String(v.qb)].status).toLowerCase() + ".");
+  const passing = v.kind === "ptd" || v.kind === "h2h";
+  for (const x of a.out || []) {
+    if (x.team !== v.team || x.pos === "QB" || x.sh == null) continue;
+    const big = passing ? (x.tsh >= 0.15 || (x.tds >= 2 && x.rtd * 4 >= x.tds)) : v.kind === "ml" ? x.sh >= 0.15 : false;
+    if (big) out.push(x.name + " (" + x.pos + ") is " + String(x.status).toLowerCase().replace("injured reserve", "on injured reserve") + ".");
+  }
+  return out;
+}

@@ -106,6 +106,13 @@ def schedule(page):
                 if kind == "game" and len(g) > 8:
                     row += [g[3], g[4], g[5], str(g[6] or ""), g[7], str(g[8] or "")]
                 out.append(row)
+    # every bout, for the fight legs on his slips:
+    # ["bout", bout id, start, "mma"|"boxing", left, right, left id, right id, card id]
+    for var, lg in (("FIGHTS", "mma"), ("BOXFIGHTS", "boxing")):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
+        for f in _j.loads(m.group(1)) if m else []:
+            if len(f) > 6 and f[2]:
+                out.append(["bout", str(f[1]), f[2], lg, f[3], f[5], str(f[4] or ""), str(f[6] or ""), str(f[0])])
     _j.dump(out, open(os.path.join(D, "site", "schedule.json"), "w"), separators=(",", ":"))
 
 

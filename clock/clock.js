@@ -21,10 +21,10 @@
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
 import { sendPush } from "./push.js";
-import { legIndex, readGame, news, liveLegs } from "./watch.js";
+import { legIndex, readGame, readBout, news, liveLegs, slipState, risks } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
-const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true };
+const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true, fight: true, recap: true };
 const SWEEP_ET = [9, 15, 21];
 const HUB_ET = [10];
 const BEFORE = [120, 60, 30];
@@ -157,6 +157,8 @@ export class Clock {
         out.push({ key: "report@" + date + " " + t, at: etMs(y, m, d, Math.floor(t / 60), t % 60) });
     }
     for (const r of sched) {
+      // a bout rides its card's moments; it starts nothing of its own
+      if (r[0] === "bout") continue;
       const start = Date.parse(r[2]);
       if (!(start > now - 12 * 60 * MIN && start < now + 36 * 60 * MIN)) continue;
       for (const b of BEFORE) out.push({ key: "pre@" + r[1] + "@" + b, at: start - b * MIN });
@@ -231,7 +233,7 @@ export class Clock {
     const slips = ((held && held.bets) || []).filter(b => (b.legs || []).length);
     if (!slips.length) return false;
     const rows = {};
-    for (const r of sched) if (r[0] === "game") rows[r[1]] = r;
+    for (const r of sched) if (r[0] === "game" || r[0] === "bout") rows[r[1]] = r;
     let prices = {};
     try { prices = await (await fetch(SITE + "/prices.json")).json(); } catch (e) { return false; }
     const idx = legIndex(prices, sched);
@@ -258,7 +260,7 @@ export class Clock {
     for (const bet of slips) for (const l of bet.legs || []) {
       const v = idx[l.sel]; if (!v) continue;
       const st = Date.parse(rows[v.gid][2]);
-      if (now >= st - 5 * MIN && now < st + 5 * 60 * MIN) want.add(v.gid);
+      if (now >= st - 5 * MIN && now < st + (v.fight ? 7 : 5) * 60 * MIN) want.add(v.gid);
     }
     const prev = (await this.ctx.storage.get("prev")) || {};
     const games = {};
@@ -266,13 +268,57 @@ export class Clock {
       const boards = {};
       for (const gid of want) {
         const r = rows[gid], ymd = etParts(Date.parse(r[2])).date.replace(/-/g, ""), k = r[3] + ymd;
+        if (r[3] === "boxing") continue;       // no live feed: DraftKings' own word settles it
         if (!boards[k]) {
-          try { boards[k] = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/football/" + r[3] + "/scoreboard?dates=" + ymd + (r[3] === "college-football" ? "&groups=80&limit=400" : ""))).json(); }
-          catch (e) { boards[k] = {}; }
+          const u = r[0] === "bout"
+            ? "https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd
+            : "https://site.api.espn.com/apis/site/v2/sports/football/" + r[3] + "/scoreboard?dates=" + ymd + (r[3] === "college-football" ? "&groups=80&limit=400" : "");
+          try { boards[k] = await (await fetch(u)).json(); } catch (e) { boards[k] = {}; }
         }
-        games[gid] = await readGame(gid, r[3], boards[k]);
+        games[gid] = r[0] === "bout" ? readBout(gid, boards[k]) : await readGame(gid, r[3], boards[k]);
       }
     }
+    // changes on a leg after it was bet: a teammate ruled out, his passer
+    // downgraded -- the first read of a leg is only remembered, never said
+    const future = [];
+    for (const bet of slips) for (const l of bet.legs || []) {
+      const v = idx[l.sel];
+      if (v && !v.fight && Date.parse(rows[v.gid][2]) > now) future.push({ bet, l, v });
+    }
+    if (future.length) {
+      let alerts = {};
+      try { alerts = await (await fetch(SITE + "/alerts.json")).json(); } catch (e) { alerts = {}; }
+      if (!wire) { try { wire = await (await fetch(SITE + "/wire.json")).json(); } catch (e) { wire = {}; } }
+      const was = (await this.ctx.storage.get("risk")) || {};
+      for (const x of future) {
+        const now1 = risks(x.v, alerts[x.v.gid] || {}, wire);
+        if (was[x.l.sel]) {
+          for (const said of now1) if (!was[x.l.sel].includes(said))
+            out.push({ key: "chg@" + x.l.sel + "@" + said, type: "change", title: "Change on your " + ((x.l.label || x.l.pick || "").split(" · ")[0] || "leg"),
+                       body: said, url: "/#slip=" + x.bet.id });
+        }
+        was[x.l.sel] = now1;
+      }
+      await this.ctx.storage.put("risk", was);
+    }
+    // each slip's end, kept for the week's recap
+    const hist = (await this.ctx.storage.get("hist")) || {};
+    for (const bet of slips) {
+      const st = slipState(bet, idx, games, rows);
+      if ((st === "won" || st === "lost") && !hist[bet.id]) hist[bet.id] = { res: st, wager: +bet.wager || 0, pay: +bet.topay || 0, at: now };
+    }
+    const et = etParts(now);
+    if (et.wd === 2 && et.h >= 10) {
+      const wk = Object.values(hist).filter(h => now - h.at < 7 * 86400000);
+      if (wk.length) {
+        const won = wk.filter(h => h.res === "won"), lost = wk.filter(h => h.res === "lost");
+        const net = won.reduce((t, h) => t + h.pay, 0) - wk.reduce((t, h) => t + h.wager, 0);
+        out.push({ key: "recap@" + et.date, type: "recap", title: "Your week",
+                   body: won.length + " won, " + lost.length + " lost · " + (net >= 0 ? "+$" : "−$") + Math.abs(net).toFixed(2) + ".", url: "/" });
+      }
+    }
+    for (const k of Object.keys(hist)) if (now - hist[k].at > 60 * 86400000) delete hist[k];
+    await this.ctx.storage.put("hist", hist);
     for (const m of news(slips, idx, games, prev, rows)) out.push(m);
     const badge = liveLegs(slips, idx, games, rows);
     await this.tell(out, badge);
