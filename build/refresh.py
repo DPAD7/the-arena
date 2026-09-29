@@ -561,6 +561,12 @@ if "--if-due" in sys.argv:
         late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
                         owed[0][0] == "mma")]
     if not hit and not drawn and not late and not hub and not ranks and not running and not playing and not boxing_running():
+        # between sweeps: only a new injury report or a new insider post does
+        # anything (Jose, Sep 29, 2026)
+        if not DRY:
+            r = subprocess.run([sys.executable, D + "/build/watch_news.py"], capture_output=True, text=True, cwd=D)
+            for line in (r.stdout + r.stderr).strip().splitlines()[-8:]:
+                log("   " + line)
         os._exit(0)          # no interpreter shutdown to get stuck in
     log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
         "".join("%s, %d min after" % (n or "?", m) for _, n, m, _f in late) +

@@ -98,6 +98,16 @@ def deployable(page):
        (Jose, Sep 19, 2026: "I don't want to have to refresh the page")."""
     code, data = stamps(page)
     page = page.replace("__BUILD__", code).replace("__DATA__", data)
-    open(os.path.join(D, "site", "build.txt"), "w").write(code + "\n" + data + "\n")
+    # a third stamp for the injury report and the lineups: the page reads
+    # them again only when the sweep has written new ones (Sep 29, 2026)
+    import hashlib
+    h = hashlib.sha1()
+    for f in ("alerts.json", "lineups.json"):
+        try:
+            h.update(open(os.path.join(D, "site", f), "rb").read())
+        except OSError:
+            pass
+    files = "%014d" % (int(h.hexdigest(), 16) % 10 ** 14)
+    open(os.path.join(D, "site", "build.txt"), "w").write(code + "\n" + data + "\n" + files + "\n")
     open(os.path.join(D, "site", "index.html"), "w").write(
         DOC + page + "\n</body>\n</html>\n")

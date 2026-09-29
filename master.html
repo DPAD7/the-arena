@@ -4214,7 +4214,7 @@
       .then(function (j) { if (j) ALERTLU = j; }).catch(function () {});
   }
   alertsPull();
-  setInterval(alertsPull, 300000);
+  window.alertsPull = alertsPull;
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") alertsPull(); });
   /* the Form cards wear what can sink each passer; they may be drawn before
      the file lands, so they are drawn again once it has */
@@ -16706,6 +16706,12 @@
         /* two stamps: the code's, then the data's */
         var two = v.trim().split(/\s+/);
         v = two[0];
+        /* the injury report and lineups, read again only when the sweep has
+           written new ones */
+        if (two[2] && two[2] !== watchBuild.files) {
+          if (watchBuild.files && typeof window.alertsPull === "function") window.alertsPull();
+          watchBuild.files = window.FILESTAMP = two[2];
+        }
         /* the same code with new prices: taken only while the page is put
            away, so it is there when he comes back and never under his thumb */
         if (v === BUILT && two[1] && /^\d{14}$/.test(BUILTD) && two[1] !== BUILTD) {
@@ -16754,7 +16760,12 @@
       })
       .catch(function () {});
   }
-  setInterval(watchBuild, 60000);
+  /* every ten minutes while it is open, and on coming back to it: the board
+     changes no faster than the ten-minute tick that writes it, so asking any
+     oftener only finds the same stamp (Jose, Sep 29, 2026: "why do we need to
+     check so often") */
+  setInterval(watchBuild, 600000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") watchBuild(); });
   /* back to where he was reading, after a version change took the page */
   (function () {
     var at = 0, sp = "";
@@ -17955,10 +17966,13 @@
     if (!box) return;
     var DATA = null, picked = [], LU = null, LUAT = 0;
     function load() {
-      /* the lineup is asked again once it is five minutes old: a man on the
-         injury report since it was read shows on the next open */
-      if (!LU || Date.now() - (LUAT || 0) > 300000) fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-        .then(function (j) { LU = j || {}; LUAT = Date.now(); if (box.classList.contains("open")) draw(); }).catch(function () { LU = LU || {}; });
+      /* the lineup is asked again when the sweep has written a new one: a man
+         on the injury report since it was read shows on the next open */
+      if (!LU || LUAT !== (window.FILESTAMP || LUAT)) {
+        var stamp = window.FILESTAMP;
+        fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+          .then(function (j) { LU = j || {}; LUAT = stamp; if (box.classList.contains("open")) draw(); }).catch(function () { LU = LU || {}; });
+      }
       if (DATA) return Promise.resolve(DATA);
       return fetch("qbsearch.json", { cache: "no-store" }).then(function (r) { return r.json(); })
         .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
