@@ -16588,10 +16588,32 @@
        lands on any second and the card should stop saying LIVE on the same
        breath ESPN says final -- the same beat watch.py keeps on the machine
        (Jose, Sep 22, 2026: "it shouldn't be taking 30 seconds") */
-    if (live) return 10000;
+    if (live) return LIVESOCK ? 120000 : 10000;
     if (soonest === Infinity) return 0;
     return Math.max(60000, Math.min(soonest - 20 * 60000 - now, 5 * 60000));
   }
+  /* live without asking: while the page is open, the clock sends the games
+     whose score, clock or down just moved, and only those cards are read
+     again. The ten-second look stays only as a two-minute backstop while the
+     line is up (Jose, Sep 29, 2026) */
+  var LIVESOCK = null;
+  function liveLine() {
+    if (LIVESOCK || document.hidden || !window.WebSocket) return;
+    try { LIVESOCK = new WebSocket(location.origin.replace(/^http/, "ws") + "/live"); } catch (e) { LIVESOCK = null; return; }
+    LIVESOCK.onmessage = function (e) {
+      var j = {}; try { j = JSON.parse(e.data); } catch (err) {}
+      (j.changed || []).forEach(function (id) {
+        document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { refresh(c); });
+      });
+      if ((j.changed || []).length) { setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); if (typeof bankDraw === "function") bankDraw(); }
+    };
+    LIVESOCK.onclose = function () { LIVESOCK = null; if (window.lookAgain) window.lookAgain(); };
+  }
+  liveLine();
+  document.addEventListener("visibilitychange", function () {
+    if (document.hidden) { if (LIVESOCK) { try { LIVESOCK.close(); } catch (e) {} LIVESOCK = null; } }
+    else liveLine();
+  });
   function refreshVisible() {
     var now = Date.now(), soon = now + 8 * 86400000;
     document.querySelectorAll(".board:not([hidden]) .gcard[data-espn], .hidebox .gcard[data-espn]")

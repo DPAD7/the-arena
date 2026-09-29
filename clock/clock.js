@@ -65,6 +65,16 @@ export class Clock {
 
   async fetch(request) {
     const url = new URL(request.url);
+    /* an open page: a live line down which the clock sends the games that
+       just changed, so the page stops asking ESPN every ten seconds (Jose,
+       Sep 29, 2026: "live without asking") */
+    if (request.headers.get("Upgrade") === "websocket") {
+      const pair = new WebSocketPair();
+      this.ctx.acceptWebSocket(pair[1]);
+      const at = await this.ctx.storage.getAlarm();
+      if (!at || at > Date.now() + 15000) await this.ctx.storage.setAlarm(Date.now() + 5000);
+      return new Response(null, { status: 101, webSocket: pair[0] });
+    }
     /* the board's own store, always current: his marks, the slip, the
        wallet's bets and the double taps' records. KV could hand back a copy a
        minute old and capped its daily writes; this cannot do either (Jose,
@@ -122,6 +132,37 @@ export class Clock {
   }
 
   async alarm() { await this.tick(); }
+  async webSocketMessage(ws, msg) {}
+  async webSocketClose(ws) { try { ws.close(); } catch (e) {} }
+
+  /* while a page is open and football is being played: one scoreboard read
+     per league and day, and the games whose score, clock or down moved */
+  async livePush(sched, now) {
+    const socks = this.ctx.getWebSockets();
+    if (!socks.length) return false;
+    const on = sched.filter(r => r[0] === "game" && Date.parse(r[2]) <= now + 10 * MIN && now - Date.parse(r[2]) < 5 * 60 * MIN);
+    if (!on.length) return false;
+    const sig = (await this.ctx.storage.get("livesig")) || {}, changed = [];
+    const asks = new Set(on.map(r => r[3] + "|" + etParts(Date.parse(r[2])).date.replace(/-/g, "")));
+    let playing = false;
+    for (const a of asks) {
+      const [lg, ymd] = a.split("|");
+      try {
+        const j = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/scoreboard?dates=" + ymd + (lg === "college-football" ? "&groups=80&limit=400" : ""))).json();
+        for (const e of j.events || []) {
+          const c = (e.competitions || [])[0] || {}, st = c.status || {};
+          if (((st.type || {}).state) === "in") playing = true;
+          const now1 = [((st.type || {}).state), st.displayClock, st.period, (c.competitors || []).map(x => x.score).join("-"),
+                        ((c.situation || {}).downDistanceText || ""), ((c.situation || {}).possession || "")].join("|");
+          if (sig[e.id] !== undefined && sig[e.id] !== now1) changed.push(String(e.id));
+          sig[e.id] = now1;
+        }
+      } catch (e) {}
+    }
+    await this.ctx.storage.put("livesig", sig);
+    if (changed.length) for (const ws of socks) { try { ws.send(JSON.stringify({ changed })); } catch (e) {} }
+    return playing;
+  }
 
   async tick() {
     const now = Date.now();
@@ -150,8 +191,12 @@ export class Clock {
     if (watch.checking) next = Math.min(next, now + 2 * MIN);
     // a game with his money on it is being played: look every minute
     if (live) next = Math.min(next, now + MIN);
+    // a page open while football is on: every fifteen seconds
+    let pushing = false;
+    try { pushing = await this.livePush(sched, now); } catch (e) { pushing = false; }
+    if (pushing) next = Math.min(next, now + 15000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
-    await this.ctx.storage.setAlarm(Math.max(now + 30000, next));
+    await this.ctx.storage.setAlarm(Math.max(now + (pushing ? 15000 : 30000), next));
   }
 
   moments(sched, now) {
