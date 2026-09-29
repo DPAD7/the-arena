@@ -477,7 +477,7 @@
   .cashsheet .cashlbl { font-size: 12px; font-weight: 700; letter-spacing: .08em;
     color: #8e8e93; text-transform: uppercase; }
   .cashsheet .cashamt { margin-top: 4px; font-size: 30px; font-weight: 800;
-    font-variant-numeric: tabular-nums; color: #e3b341; }
+    font-variant-numeric: tabular-nums; color: #fff; }   /* white, not gold (Jose, Sep 29, 2026) */
   /* the mark that says which sport is open. It is one element that slides,
      rather than a state on each pill, so it can travel with a finger. */
   .spmark {
@@ -16919,7 +16919,10 @@
         var qb = s === 0 ? [g[5], g[6]] : [g[7], g[8]], q = (r && r.qb[String(qb[1])]) || { ptd: 0, rtd: 0 };
         var pair = mine.some(function (x) { return x.v.k === "ptd"; }) && mine.some(function (x) { return x.v.k === "atd"; });
         mine.sort(function (a, b) { return a.v.k < b.v.k ? 1 : -1; }).forEach(function (x) {
-          var n = x.v.n || 1, have = x.v.k === "ptd" ? q.ptd : q.rtd, st = legSt(x) || (have >= n ? "won" : "");
+          var n = x.v.n || 1, have = x.v.k === "ptd" ? q.ptd : q.rtd;
+          /* a final game settles every count: short of its rung it lost (the
+             box went gold at FINAL -- Moore's 0 PTD, Sep 29, 2026) */
+          var st = legSt(x) || (have >= n ? "won" : (r && r.state === "post") ? "lost" : "");
           var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : (!r || r.state === "pre") ? " trkn--pre" : "";
           var mk = x.v.k === "ptd" ? '<svg class="trkmk" viewBox="0 0 20 21"><use href="#fb"/></svg>' : '<svg class="trkmk" viewBox="0 0 52 47"><use href="#rush"/></svg>';
           var what = x.v.k === "ptd" ? "PTD" : "RTD", pct = Math.min(100, Math.round(have / n * 100));
