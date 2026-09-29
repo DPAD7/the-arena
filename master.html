@@ -1,10 +1,11 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot img{width:190px;height:auto}#boot.boot--out{opacity:0;pointer-events:none}</style>
-<div id="boot" aria-hidden="true"><img src="ico/qbspy-boot.png" alt=""></div>
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.bstack{position:relative;width:200px;height:227px}.bstack img{position:absolute;left:0;width:200px;height:auto;opacity:0;animation:bdrop .32s cubic-bezier(.22,1,.36,1) forwards}.bstack .p1{top:65.5px;animation-delay:.05s}.bstack .p2{top:33.7px;animation-delay:.3s}.bstack .p3{top:0;animation-delay:.55s}.bstack .bd{top:0;animation:bpop .38s cubic-bezier(.34,1.56,.64,1) .85s forwards}@keyframes bdrop{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}@keyframes bpop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}</style>
+<div id="boot" aria-hidden="true"><div class="bstack"><img class="p1" src="ico/boot-plate.png" alt=""><img class="p2" src="ico/boot-plate.png" alt=""><img class="p3" src="ico/boot-plate.png" alt=""><img class="bd" src="ico/boot-dollar.png" alt=""></div></div>
 <script>
-/* the QB Spy mark on black from the very first paint, until the board is
+/* the stack on black from the very first paint, built plate 1, 2, 3 and
+   then the $ (Jose, Sep 29, 2026), until the board is
    drawn and every picture on screen has arrived (Jose, Sep 23, 2026: "it
    should open once the images and page is loaded completely, not before") */
 (function () {
@@ -13,7 +14,7 @@
      middle is lower than the screen's: lift the mark by half the difference,
      so it sits in the middle of the glass (Jose, Sep 23, 2026) */
   try {
-    var im = document.querySelector("#boot img"), gap = screen.height - innerHeight;
+    var im = document.querySelector("#boot .bstack"), gap = screen.height - innerHeight;
     if (im && gap > 0 && gap < 120) im.style.transform = "translateY(" + (-gap / 2) + "px)";
   } catch (e) {}
   var go = function () {
@@ -27,6 +28,8 @@
         if (r.bottom > 0 && r.top < vh && r.width && !imgs[k].complete) { ready = false; break; }
       }
     }
+    /* the stack is always built whole before the board opens: three plates and the $ */
+    if (Date.now() - t0 < 1300) ready = false;
     if (!ready && Date.now() - t0 < 10000) { setTimeout(go, 80); return; }
     b.classList.add("boot--out"); setTimeout(function () { b.remove(); }, 400);
   };
