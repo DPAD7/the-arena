@@ -13,6 +13,8 @@
                 moneyline and 1+ passing TD                         fill_week
      faces      every named passer and every fighter this week      faces
                 has a picture on the site
+     alerts     every NFL game in the next week has its weather and
+                injuries read for the leg alert                      alerts
      jerseys    a Kalshi jersey for every club
      fights     every bout this week has its weight class
      settled    every game and bout over for six hours has its
@@ -182,6 +184,14 @@ def faces():
 NOPIC = set(load("nopic.json") or [])
 
 
+def alerts():
+    """every NFL game in the next eight days has its weather and injuries read
+       for the leg alert (Sep 29, 2026)"""
+    al = load("alerts.json")
+    return [("alerts", "game %s (%s at %s) has no alert read" % (g[1], g[3], g[4]))
+            for g, _ in soon("SCHED", before=dt.timedelta(0)) if str(g[1]) not in al]
+
+
 def jerseys():
     return [(None, "%s has no Kalshi jersey" % c) for c in load("depth.json")
             if not os.path.exists(os.path.join(SITE, "ico", "jersey", c + ".png"))]
@@ -229,7 +239,7 @@ def the_page():
         return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
 
 
-CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, jerseys, fights, settled, files)
+CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, fights, settled, files)
 # the order a mend is run in, when more than one is due
 MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups")
 
