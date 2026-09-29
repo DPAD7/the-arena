@@ -198,7 +198,7 @@ def fight_tab(b, seen):
     return []
 
 
-def tracker(b, seen):
+def tracker(b, seen, board="SCHED"):
     """A DraftKings slip opened in the wallet draws its games: built here from
     the newest finished game with a saved result and a passing-TD price, so
     the check uses real ids and a real box score (Sep 29, 2026)."""
@@ -207,12 +207,21 @@ def tracker(b, seen):
     pick = None
     for f in sorted(glob.glob(os.path.join(SITE, "final", "4*.json")), key=os.path.getmtime, reverse=True):
         gid = os.path.basename(f)[:-5]
-        ml = (prices.get("SCHED") or {}).get(gid)
+        ml = (prices.get(board) or {}).get(gid)
         ptd = ((prices.get("PROPS") or {}).get(gid) or {}).get("ptd") or []
-        if ml and ml[3] and len(ptd) > 1 and ptd[1] and ptd[1][0] and ptd[1][0][1]:
-            pick = (gid, ml[3], ptd[1][0][1]); break
+        if not ml:
+            continue
+        # the winning side, so the slip lives: a lost leg drops it (Sep 29, 2026)
+        try:
+            d = json.load(open(f))
+            won = [x["homeAway"] for x in d["header"]["competitions"][0]["competitors"] if x.get("winner")]
+        except Exception:
+            won = []
+        s = 1 if won == ["home"] else 0 if won == ["away"] else None
+        if s is not None and ml[2 * s + 1] and len(ptd) > s and ptd[s] and ptd[s][0] and ptd[s][0][1]:
+            pick = (gid, ml[2 * s + 1], ptd[s][0][1]); break
     if not pick:
-        seen.append("no finished game to test the tracker on")
+        seen.append("no finished %s game to test the tracker on" % board)
         return []
     bet = {"balance": 1, "at": 9e12, "bets": [{"id": "look", "odds": "+100", "wager": 1, "topay": 2, "legs": [
         {"sel": pick[1], "pick": "", "market": "Moneyline", "label": "ML", "odds": "+100", "status": "open"},
@@ -235,6 +244,9 @@ def tracker(b, seen):
     got = pg.evaluate("""(() => { const t = document.querySelector('#cashlegs .slipcard--open .sltrk');
         if (!t) return null; return { games: t.querySelectorAll('.trkg').length, rows: t.querySelectorAll('.trkr').length,
         fin: /FINAL/.test(t.innerText), h: t.getBoundingClientRect().height } })()""")
+    if os.environ.get("LOOKSHOT"):
+        el = pg.query_selector("#cashlegs .slipcard--open")
+        if el: el.screenshot(path=os.path.join(os.environ["LOOKSHOT"], "tracker_%s.png" % board))
     c.close()
     wrong = ["the wallet tracker threw: " + e for e in errs[:2]]
     if not got or not got["games"] or got["rows"] < 2 or not got["h"]:
@@ -366,6 +378,7 @@ def main():
                 wrong += hot(b, seen)
                 wrong += fight_tab(b, seen)
                 wrong += tracker(b, seen)
+                wrong += tracker(b, seen, "CFB")
                 wrong += fight_tracker(b, seen)
             for e in errs[:3]:
                 wrong.append("the page threw at %d wide: %s" % (W, e))

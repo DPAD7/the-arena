@@ -16863,6 +16863,7 @@
         when = "Q1 " + r.clock + " left";
       }
       var fill = st ? 100 : q1 && r && r.period === 1 ? Math.round((900 - left) / 900 * 100) : 0;
+      if (st === "lost") TRKLOST[x.lg.sel] = 1;
       var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
       return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + (P.yes ? "YES" : "NO") + "</b>" + name +
         ' <i>\u00b7 ' + what + '</i></div><div class="trkbar trkbar--one"><i style="width:' + fill + "%;background:" +
@@ -16881,6 +16882,7 @@
     if (!st && P.over === false && have > (P.line || n)) st = "lost";
     if (!st && over) st = P.over === false ? "won" : have >= n ? "won" : "lost";
     var pct = Math.min(100, Math.round(have / n * 100));
+    if (st === "lost") TRKLOST[x.lg.sel] = 1;
     var bx = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
     var lab = (P.over === false ? "U" + (P.line || n) : n + "+");
     return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + esc(lab) + "</b>" + name +
@@ -16961,7 +16963,10 @@
         }
         var wa = Math.round((1 - ph) * 100), wh = 100 - wa;
         var sa = r ? (r.sc.away || 0) : 0, sh = r ? (r.sc.home || 0) : 0;
-        out += '<div class="trkr trkr--two' + (legSt(x) ? " trkr--" + legSt(x) : "") + '">' +
+        /* over, the score settles it: behind at FINAL, the slip is dead */
+        var mst = legSt(x) || (r && r.state === "post" && +sa !== +sh ? ((s === 0 ? +sa > +sh : +sh > +sa) ? "won" : "lost") : "");
+        if (mst === "lost") TRKLOST[x.lg.sel] = 1;
+        out += '<div class="trkr trkr--two' + (mst ? " trkr--" + mst : "") + '">' +
           '<span class="trkc trkc--logo' + (s === 0 ? " trkc--mine" : "") + '">' + trkFace(pic(away)) + "</span>" +
           '<div class="trkm"><div class="trkt"><small>(' + wa + "%)</small><b>" + esc(sa) + "</b><em>–</em><b>" + esc(sh) + "</b><small>(" + wh + "%)</small></div>" +
           '<div class="trkbar"><i style="width:' + wa + "%;background:" + trkHue(away) + '"></i><i style="flex:1;background:' + trkHue(home) + '"></i></div></div>' +
@@ -16971,8 +16976,11 @@
       G.legs.filter(function (x) { return x.v.k === "h2h"; }).forEach(function (x) {
         var s = x.v.s, me = s === 0 ? [g[5], g[6], away] : [g[7], g[8], home], him = s === 0 ? [g[7], g[8], home] : [g[5], g[6], away];
         var ym = r && r.qb[String(me[1])] ? r.qb[String(me[1])].yd : 0, yh = r && r.qb[String(him[1])] ? r.qb[String(him[1])].yd : 0;
+        ym = +ym || 0; yh = +yh || 0;
         var gap = ym - yh, share = ym + yh ? Math.round(ym / (ym + yh) * 100) : 50;
-        out += '<div class="trkr trkr--two' + (legSt(x) ? " trkr--" + legSt(x) : "") + '">' +
+        var hst = legSt(x) || (r && r.state === "post" && gap !== 0 ? (gap > 0 ? "won" : "lost") : "");
+        if (hst === "lost") TRKLOST[x.lg.sel] = 1;
+        out += '<div class="trkr trkr--two' + (hst ? " trkr--" + hst : "") + '">' +
           '<span class="trkc trkc--mine">' + trkFace(pic(me[0])) + "</span>" +
           '<div class="trkm"><div class="trkt trkt--h2h"><span>' + esc(famName(me[0])) + "</span><b>" + ym + "</b>" +
           '<em class="' + (gap < 0 ? "dn" : "up") + '">' + (gap >= 0 ? "+" : "−") + Math.abs(gap) + "</em>" +
@@ -16992,6 +17000,7 @@
           /* a final game settles every count: short of its rung it lost (the
              box went gold at FINAL -- Moore's 0 PTD, Sep 29, 2026) */
           var st = legSt(x) || (have >= n ? "won" : (r && r.state === "post") ? "lost" : "");
+          if (st === "lost") TRKLOST[x.lg.sel] = 1;
           var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : (!r || r.state === "pre") ? " trkn--pre" : "";
           var mk = x.v.k === "ptd" ? '<svg class="trkmk" viewBox="0 0 20 21"><use href="#fb"/></svg>' : '<svg class="trkmk" viewBox="0 0 52 47"><use href="#rush"/></svg>';
           var what = x.v.k === "ptd" ? "PTD" : "RTD", pct = Math.min(100, Math.round(have / n * 100));
@@ -17375,7 +17384,12 @@
           /* a fight leg wears its fighter, or both men for a leg on the fight,
              off the bout it was placed on, and the market's own mark */
           var fv = (LMAP[lg.sel] && LMAP[lg.sel].fight) ? LMAP[lg.sel] : trkFightOf(lg, {}), fw = "", fmk = "";
-          var fr0 = fv && trkFightRow(fv.g);
+          var fr0 = fv && trkFightRow(fv.g), bv = LMAP[lg.sel], br0 = bv && !bv.fight && trkRow(bv.g);
+          if (br0) {
+            gid = String(bv.g);
+            fw = bv.k === "ml" ? br0.g[bv.s === 0 ? 3 : 4] : br0.g[bv.s === 0 ? 5 : 7];
+            fmk = markFor(bv.k === "ml" ? "ML" : bv.k === "h2h" ? "H2H" : (bv.n || 1) + "+ " + (bv.k === "ptd" ? "PTD" : "ATD"));
+          }
           if (fr0) {
             gid = String(fv.g);
             fw = fv.s === 0 ? fr0.g[3] : fv.s === 1 ? fr0.g[5] : fr0.g[3] + " vs " + fr0.g[5];
