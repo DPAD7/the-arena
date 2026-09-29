@@ -354,10 +354,23 @@ def main():
     bouts = dk_bouts()
     print("fights to start: %d | DraftKings bouts: %d" % (len(due), len(bouts) // 2))
     archive = json.load(open(ARCHIVE)) if os.path.exists(ARCHIVE) else {}
+    # each bout's DraftKings event, pinned the first time the two names find
+    # it and read by that number ever after: DraftKings gives a fighter no id
+    # of his own, so the event is the one number that ties their bout to ESPN's
+    # (Jose, Sep 29, 2026: "ids from DraftKings and ESPN ... for fighters too")
+    pinf = os.path.join(D, "data", "dk_bouts.json")
+    pins = json.load(open(pinf)) if os.path.exists(pinf) else {}
+    live = {}
+    for k, v in bouts.items():
+        if k != "_one" and isinstance(v, tuple):
+            live[v[0]] = v[1]
     fp, kicks = {}, {}
     for f in due:
         left, right = f[3], f[5]
-        eid, when = find(bouts, left, right) or (None, "")
+        held = pins.get(str(f[1]))
+        eid, when = (held, live[held]) if held in live else (find(bouts, left, right) or (None, ""))
+        if eid and not held:
+            pins[str(f[1])] = eid
         if not eid:
             # one of ours on DraftKings against somebody else: a late change.
             # Taken when theScore names the same man; said aloud otherwise
@@ -436,6 +449,7 @@ def main():
             one["rounds"] = n
     book.setdefault("KICKS", {}).update(kicks)
     pricefile.write(book)
+    json.dump(pins, open(pinf, "w"), indent=1, sort_keys=True)
     # a change only DraftKings has made yet, said on the card until the rest agree
     pricefile.write(book)
     # a confirmed replacement changes who is on the card: the row in the page
