@@ -239,6 +239,9 @@ def tracker(b, seen, board="SCHED"):
     pg.wait_for_timeout(4000)
     pg.evaluate("document.getElementById('cashsheet').hidden = false; window.bankDraw && bankDraw()")
     pg.wait_for_timeout(1200)
+    pg.evaluate("""(() => { for (const d of ['0', '-1', '1']) { const b = document.querySelector('#cashdays [data-d="' + d + '"]');
+        if (b) cashDay(b); if (document.querySelector('#cashlegs .slview')) break; } })()""")
+    pg.wait_for_timeout(300)
     pg.evaluate("document.querySelectorAll('#cashlegs .slview').forEach(b => slipOpen(b))")
     pg.wait_for_timeout(3500)
     got = pg.evaluate("""(() => { const t = document.querySelector('#cashlegs .slipcard--open .sltrk');
@@ -298,6 +301,9 @@ def fight_tracker(b, seen):
     pg.wait_for_timeout(4000)
     pg.evaluate("document.getElementById('cashsheet').hidden = false; window.bankDraw && bankDraw()")
     pg.wait_for_timeout(1200)
+    pg.evaluate("""(() => { for (const d of ['0', '-1', '1']) { const b = document.querySelector('#cashdays [data-d="' + d + '"]');
+        if (b) cashDay(b); if (document.querySelector('#cashlegs .slview')) break; } })()""")
+    pg.wait_for_timeout(300)
     pg.evaluate("document.querySelectorAll('#cashlegs .slview').forEach(b => slipOpen(b))")
     pg.wait_for_timeout(3500)
     got = pg.evaluate("""(() => { const t = document.querySelector('#cashlegs .slipcard--open .sltrk');

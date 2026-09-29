@@ -488,6 +488,12 @@
   .cashsheet #cashlegs .slipcard + .slipcard { margin-top: 12px; }
   .cashsheet .slipcard { text-align: left; margin: 0; }
   .cashsheet .cashnone { color: #8e8e93; font-size: 14px; padding: 6px 0 2px; }
+  /* the day under the balance: the start of his dashboard (Jose, Sep 29, 2026) */
+  .cashsheet .cashdays { flex: none; display: flex; gap: 2px; margin: 0 0 12px; padding: 3px; border-radius: 10px;
+    background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
+  .cashsheet .cashdays button { flex: 1; border: 0; border-radius: 8px; padding: 7px 0; background: none; cursor: pointer;
+    font: 600 14px Barlow, "Helvetica Neue", Arial, sans-serif; color: #8e8e93; }
+  .cashsheet .cashdays button.on { background: rgba(255,255,255,.14); color: #fff; }
   .cashsheet .cashrcpt { margin-top: 12px; padding-top: 10px; text-align: left;
     border-top: 1px dashed rgba(255,255,255,.18); }
   .cashsheet .cashrcpt > div { display: flex; justify-content: space-between; align-items: baseline;
@@ -3952,7 +3958,7 @@
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i><i class="wal-cw"><i class="wal-cd"></i></i></i></button>
-<div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div id="cashlegs"></div><div id="cashday"></div></div>
+<div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div class="cashdays" id="cashdays" role="tablist"><button type="button" data-d="-1" onclick="cashDay(this)">Yesterday</button><button type="button" data-d="0" class="on" onclick="cashDay(this)">Today</button><button type="button" data-d="1" onclick="cashDay(this)">Tomorrow</button></div><div id="cashlegs"></div><div id="cashday"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -17227,6 +17233,27 @@
     });
     return out + "</div>";
   }
+  var CASHDAY = 0;
+  function cashDay(b) {
+    CASHDAY = +b.dataset.d;
+    [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle("on", x === b); });
+    bankDraw();
+  }
+  /* -1, 0 or 1: yesterday or before, today, tomorrow or after, by the first
+     kickoff or first bell among the slip's legs that the board can place */
+  function slipDay(bet, kickOf) {
+    var map = legMap(), k = 9e15;
+    (bet.legs || []).forEach(function (lg) {
+      var t = kickOf(lg.sel), v = map[lg.sel] || trkFightOf(lg, {});
+      if (t >= 9e15 && v) { var row = v.fight ? trkFightRow(v.g) : trkRow(v.g); if (row) t = Date.parse(row.g[2]); }
+      if (t >= 9e15) { var pg = trkGameOf(lg), row2 = pg && trkRow(pg); if (row2) t = Date.parse(row2.g[2]); }
+      if (t < k) k = t;
+    });
+    if (k >= 9e15) return 0;
+    var day = function (ms) { return Date.parse(new Date(ms).toLocaleDateString("en-CA", { timeZone: "America/New_York" }) + "T00:00Z"); };
+    var d = Math.round((day(k) - day(Date.now())) / 86400000);
+    return d < 0 ? -1 : d > 0 ? 1 : 0;
+  }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -17359,9 +17386,13 @@
            Sep 26, 2026: "it should drop automatically") */
         .filter(function (bet) {
           return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; });
-        });
+        })
+        /* the day picked under the balance: a slip is on the day its first
+           game starts, Eastern; anything after tomorrow waits under Tomorrow */
+        .filter(function (bet) { return slipDay(bet, kickOf) === CASHDAY; });
       var LMAP = legMap();
-      box.innerHTML = open.map(function (bet) {
+      if (!open.length) box.innerHTML = '<div class="cashnone">No slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + "</div>";
+      else box.innerHTML = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
           /* the leg's own game, off its card: the picture is settled by the
@@ -17437,7 +17468,7 @@
         '<b>' + open.length + '</b>' +
         '<b>' + cm(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
         '<b class="cashpay">' + cm(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
-        '<span>Slips today</span><span>Wagered</span><span>Total payout</span></div></div>' : "");
+        '<span>Slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + '</span><span>Wagered</span><span>Total payout</span></div></div>' : "");
     } else if (!legs.length) {
       box.innerHTML = "";
       var dayEl0 = document.getElementById("cashday"); if (dayEl0) dayEl0.innerHTML = "";
