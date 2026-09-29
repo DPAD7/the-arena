@@ -4132,7 +4132,12 @@
       /* what he has been getting, off every box score this season */
       var used = x.sh ? Math.round(x.sh * 100) + "% of the " + x.team + " touches: " +
         (x.tg ? x.tg + " " + (x.tgw || "targets") + (x.car ? ", " : "") : "") + (x.car ? x.car + " carries" : "") + " a game." : "";
-      says.push(["out", x.name + " (" + x.pos + ") is " + x.status.toLowerCase().replace("injured reserve", "on injured reserve") + ".",
+      /* ESPN's own words for it: "torn ACL, out for the season" when he is
+         not back before February */
+      var why = String(x.why || "").split(/\s+-\s+/).map(function (w) { return /^[A-Z]{2,}$/.test(w) ? w : w.toLowerCase(); }).join(", ");
+      var gone = x.back && x.back >= new Date().getFullYear() + (new Date().getMonth() >= 2 ? 1 : 0) + "-01-20";
+      var said = gone ? "out for the season" : x.status.toLowerCase().replace("injured reserve", "on injured reserve");
+      says.push(["out", x.name + " (" + x.pos + ") is " + said + (why ? " (" + why + ")" : "") + ".",
                  used || (x.lead ? "He leads the team in " + x.lead + "." : "")]);
     });
     /* 5. already on an open DraftKings slip */

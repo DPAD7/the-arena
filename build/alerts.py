@@ -148,8 +148,12 @@ def main():
                 if st not in HURT or pos not in ("QB", "WR", "TE", "RB"):
                     continue
                 pid = str(a.get("id"))
+                # what it is and when he is back, as ESPN has it: "Knee - ACL",
+                # back 2027-02-15 is the season (Achane, Sep 28, 2026)
+                det = i.get("details") or {}
                 hurt.append({"id": pid, "name": a.get("displayName"), "pos": pos,
-                             "status": st, "team": ab, "lead": lead.get(pid, ""), "lg": lg})
+                             "status": st, "team": ab, "lead": lead.get(pid, ""), "lg": lg,
+                             "why": det.get("type") or "", "back": (det.get("returnDate") or "")[:10]})
         if hurt:
             e["out"] = hurt
             hurts.extend(hurt)
