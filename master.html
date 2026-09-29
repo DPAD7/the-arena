@@ -418,7 +418,7 @@
     color: #8e8e93; text-transform: uppercase; }
   /* a leg's edge: gold while it is live, green once it lands, red once it
      cannot -- the same colors a placed price wears on its card */
-  .slav.slav--live { border: 2px solid #ffffff; }
+  .slav.slav--live { border: 2px solid #e3b341; }
   .slav.slav--won { border: 2px solid var(--green); }
   .slav.slav--lost { border: 2px solid #e2564d; }
   .slipcard.slipcard--won { border-color: var(--green); }
@@ -930,13 +930,13 @@
   /* a marked box wears the same gold edge as a placed price, price or not:
      a white dash read as something else (Jose, Sep 25, 2026) */
   .ghost--want {
-    border-color: #ffffff !important;
+    border-color: #e3b341 !important;
     border-style: solid !important; border-width: 2px !important;
-    box-shadow: 0 0 0 1px rgba(255,255,255,.35), 0 0 12px rgba(255,255,255,.40) !important;
-    color: #ffffff !important;
+    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40) !important;
+    color: #e3b341 !important;
   }
   .ghost--want::after { content: "\2014"; }
-  .gcard.gcard--v3 .ghost--want::after { color: #ffffff !important; }
+  .gcard.gcard--v3 .ghost--want::after { color: #e3b341 !important; }
   .ptdx--v2 .ptdbtn .ghost { min-width: 48px; padding: 6px 7px; }
   .gcard:not([data-lg]) .ghead .ghost { min-width: 46px; padding: 6px 7px; }
 
@@ -975,11 +975,9 @@
      that is only marked on the slip. Gold of its own: --amber is white in
      this theme, so it would have read as another white border
      (Jose, Sep 19, 2026) */
-  /* white since Sep 29, 2026 (Jose: "placed prices change to white"): the
-     edge and its glow are white; green and red still say how it settled */
-  .price.placed, .gcard.locked .price.placed { border-color: #ffffff; border-width: 2px;
-    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0 12px rgba(255, 255, 255, 0.40); }
-  .price.on.placed { border-color: #ffffff; }
+  .price.placed, .gcard.locked .price.placed { border-color: #e3b341; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 12px rgba(227, 179, 65, 0.40); }
+  .price.on.placed { border-color: #e3b341; }
   /* gold while it is still live, green once it wins, red once it does not.
      The board already says which: a settled cell wears a tick or a cross, and
      a fight's method price is marked paid (Jose, Sep 19, 2026) */
@@ -1542,8 +1540,8 @@
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30) !important; }
   .price.placed.lost { border-color: #e2564d !important;
     box-shadow: 0 0 0 1px rgba(226,86,77,.35), 0 0 10px rgba(226,86,77,.30) !important; }
-  .gcard.gcard--v3 .price.placed { border-color: #ffffff; border-width: 2px;
-    box-shadow: 0 0 0 1px rgba(255,255,255,.35), 0 0 12px rgba(255,255,255,.40); }
+  .gcard.gcard--v3 .price.placed { border-color: #e3b341; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40); }
   .gcard.gcard--v3 .price.won { border-color: var(--green); color: var(--green); }
   .gcard.gcard--v3 .price.lost { border-color: #e2564d; color: #e2564d; }
   .gcard.gcard--v3 .ghost { display: inline-flex; align-items: center;
@@ -1821,8 +1819,8 @@
   .gcard.gcard--v3 .pnum.on { color: var(--ink); }
   .gcard.gcard--v3 .pnum--tap { cursor: pointer; }
   /* the gold box he put on the price carries over to what he did, and settles */
-  .gcard.gcard--v3 .pnum.placed { border-color: #ffffff; border-width: 2px;
-    background: rgba(255,255,255,.10); color: var(--ink); }
+  .gcard.gcard--v3 .pnum.placed { border-color: #e3b341; border-width: 2px;
+    background: rgba(227,179,65,.10); color: var(--ink); }
   .gcard.gcard--v3 .pnum.won { border-color: var(--green); color: var(--green);
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
   .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;
