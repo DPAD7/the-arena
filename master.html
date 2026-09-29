@@ -16557,8 +16557,10 @@
           fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
             .then(function (r) { return r.json(); })
             .then(function (b) {
-              if (b && b.expired && b.expired >= j.asked) { done(false, false); return; }   /* login gone: red */
+              /* a fresh sync wins: an expiry flagged by an older read never
+                 turns a good one red (Jose, Sep 29, 2026) */
               if (b && b.at && b.at >= j.asked) { DKB = b; DKB_T = Date.now(); bankDraw(); done(true, true); return; }
+              if (b && b.expired && b.expired >= j.asked && b.expired > (b.at || 0)) { done(false, false); return; }   /* login gone: red */
               if (++tries > 75 || Date.now() - t0 > 150000) { done(true, false); return; }
               if (done.step) done.step(Math.min(92, 20 + tries * 2));
               /* every two seconds: the green comes up as soon as the book's
