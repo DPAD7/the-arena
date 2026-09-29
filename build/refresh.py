@@ -250,6 +250,48 @@ def read_hub():
     log("hub: %d readers set going, logging to %s" % (len(HUB_JOBS), log_path))
 
 
+# The NFL's practice report is due by 4 p.m. ET, or as soon as practice is
+# over, on three set days before each game, and the last of them carries the
+# game status (Out, Doubtful, Questionable) -- NFL Personnel (Injury) Report
+# Policy. By kickoff weekday (Mon=0): the days whose report counts.
+REPORT_DAYS = {6: (2, 3, 4), 0: (3, 4, 5), 3: (0, 1, 2), 4: (1, 2, 3), 5: (1, 2, 3), 2: (6, 0, 1)}
+REPORT_FROM, REPORT_TO = (15, 30), (19, 0)     # ET: around the 4 p.m. deadline and late practices
+
+
+def report_window(seen):
+    """Is this a half hour the NFL's injury report can have moved in? A report
+       day for some game on the board, between 3:30 and 7 p.m. ET, once each
+       half hour. Marks the half hour served when it is."""
+    from zoneinfo import ZoneInfo
+    et = NOW.astimezone(ZoneInfo("America/New_York"))
+    if not ((et.hour, et.minute) >= REPORT_FROM and (et.hour, et.minute) < REPORT_TO):
+        return False
+    try:
+        s = pagefile.read()
+        rows = json.loads(re.search(r"  var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
+    except Exception:
+        return False
+    today = et.date()
+    hit = False
+    for g in rows:
+        try:
+            k = datetime.datetime.fromisoformat(g[2].replace("Z", "+00:00")).astimezone(ZoneInfo("America/New_York"))
+        except ValueError:
+            continue
+        gap = (k.date() - today).days
+        if 1 <= gap <= 4 and today.weekday() in REPORT_DAYS.get(k.weekday(), ()):
+            hit = True
+            break
+    if not hit:
+        return False
+    key = "report@%s %02d:%02d" % (today.isoformat(), et.hour, 30 if et.minute >= 30 else 0)
+    if key in seen:
+        return False
+    seen[key] = NOW.isoformat()
+    json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+    return True
+
+
 def sweeps_due(seen):
     """The sweep hour this run is standing in for, if it is one."""
     from zoneinfo import ZoneInfo
@@ -561,9 +603,10 @@ if "--if-due" in sys.argv:
         late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
                         owed[0][0] == "mma")]
     if not hit and not drawn and not late and not hub and not ranks and not running and not playing and not boxing_running():
-        # between sweeps: only a new injury report or a new insider post does
-        # anything (Jose, Sep 29, 2026)
-        if not DRY:
+        # between sweeps, only in the NFL's own report windows: a new injury
+        # report or insider post does anything (Jose, Sep 29, 2026: "there's
+        # specific rules to this")
+        if not DRY and report_window(seen):
             r = subprocess.run([sys.executable, D + "/build/watch_news.py"], capture_output=True, text=True, cwd=D)
             for line in (r.stdout + r.stderr).strip().splitlines()[-8:]:
                 log("   " + line)
