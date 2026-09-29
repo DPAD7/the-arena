@@ -20,7 +20,11 @@
    and sets the next alarm. The moments come from site/schedule.json, which
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
+import { sendPush } from "./push.js";
+import { legIndex, readGame, news, liveLegs } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
+// every kind of alert, on until he turns it off (the alert settings)
+const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true };
 const SWEEP_ET = [9, 15, 21];
 const HUB_ET = [10];
 const BEFORE = [120, 60, 30];
@@ -61,6 +65,36 @@ export class Clock {
 
   async fetch(request) {
     const url = new URL(request.url);
+    // the phone's push subscription, his alert settings, a test
+    if (url.pathname.endsWith("/sub") && request.method === "POST") {
+      const b = await request.json();
+      const subs = (await this.ctx.storage.get("subs")) || {};
+      if (b.sub && b.sub.endpoint) subs[b.sub.endpoint] = b.sub;
+      if (b.drop) delete subs[b.drop];
+      await this.ctx.storage.put("subs", subs);
+      return Response.json({ subs: Object.keys(subs).length });
+    }
+    if (url.pathname.endsWith("/prefs")) {
+      let prefs = Object.assign({}, PREFS, (await this.ctx.storage.get("prefs")) || {});
+      if (request.method === "POST") {
+        const b = await request.json();
+        for (const k of Object.keys(PREFS)) if (k in b) prefs[k] = !!b[k];
+        await this.ctx.storage.put("prefs", prefs);
+      }
+      const subs = (await this.ctx.storage.get("subs")) || {};
+      return Response.json({ prefs, subs: Object.keys(subs).length, opened: (await this.ctx.storage.get("opened")) || {} });
+    }
+    if (url.pathname.endsWith("/opened") && request.method === "POST") {
+      // which alerts he opens, to cut the ones he never does
+      const b = await request.json(), op = (await this.ctx.storage.get("opened")) || {};
+      const t = String(b.type || "other"); op[t] = (op[t] || 0) + 1;
+      await this.ctx.storage.put("opened", op);
+      return Response.json({ ok: true });
+    }
+    if (url.pathname.endsWith("/test") && request.method === "POST") {
+      const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Stacked", body: "Alerts are on. This is what they look like.", url: "/" }], 0);
+      return Response.json({ sent: n });
+    }
     if (url.pathname.endsWith("/status")) {
       const done = (await this.ctx.storage.get("done")) || {};
       const at = await this.ctx.storage.getAlarm();
@@ -91,11 +125,16 @@ export class Clock {
     const watch = await this.finals(sched, now, done);
     // the day's close-out, once every game of the day is final
     await this.dayEnd(sched, now, done);
+    // his slips: what their games are doing, and what is worth a push
+    let live = false;
+    try { live = await this.slips(sched, now); } catch (e) { live = false; }
     await this.ctx.storage.put("done", done);
     // the next alarm: the next moment, or the next final check
     let next = now + 6 * 60 * MIN;
     for (const m of moments) if (m.at > now + 30000 && !done[m.key] && m.at < next) next = m.at;
     if (watch.checking) next = Math.min(next, now + 2 * MIN);
+    // a game with his money on it is being played: look every minute
+    if (live) next = Math.min(next, now + MIN);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
     await this.ctx.storage.setAlarm(Math.max(now + 30000, next));
   }
@@ -182,6 +221,89 @@ export class Clock {
         if (await this.wake("dayend")) done["dayend@" + date] = now;
       }
     }
+  }
+
+  /* his open slips, read while their games are on */
+  async slips(sched, now) {
+    if (!this.env.ARENA) return false;
+    let held = null;
+    try { held = JSON.parse((await this.env.ARENA.get("dkbets")) || "null"); } catch (e) { held = null; }
+    const slips = ((held && held.bets) || []).filter(b => (b.legs || []).length);
+    if (!slips.length) return false;
+    const rows = {};
+    for (const r of sched) if (r[0] === "game") rows[r[1]] = r;
+    let prices = {};
+    try { prices = await (await fetch(SITE + "/prices.json")).json(); } catch (e) { return false; }
+    const idx = legIndex(prices, sched);
+    const out = [];
+    // the half hour before a slip's first game: a reminder, with anything on
+    // the injury wire about the passers on it
+    let wire = null;
+    for (const bet of slips) {
+      const starts = (bet.legs || []).map(l => idx[l.sel]).filter(Boolean).map(v => Date.parse(rows[v.gid][2]));
+      if (!starts.length) continue;
+      const first = Math.min(...starts);
+      if (first - now > 20 * MIN && first - now <= 40 * MIN) {
+        if (!wire) { try { wire = await (await fetch(SITE + "/wire.json")).json(); } catch (e) { wire = {}; } }
+        const qbs = [...new Set((bet.legs || []).map(l => idx[l.sel]).filter(v => v && v.qb).map(v => v.qb))];
+        const hurt = qbs.map(q => wire[String(q)] && wire[String(q)].status ? (idx && Object.values(idx).find(v => v.qb === q) || {}).qbName + " is " + wire[String(q)].status.toLowerCase() : "").filter(Boolean);
+        const r0 = Object.values(rows).find(r => Date.parse(r[2]) === first);
+        out.push({ key: "pre@" + bet.id, type: "pregame", title: "Your " + (bet.odds || "") + " slip starts soon",
+                   body: (r0 ? r0[4] + " @ " + r0[5] + " kicks off in 30 minutes." : "First game in 30 minutes.") + (hurt.length ? " " + hurt.join("; ") + "." : ""),
+                   url: "/#slip=" + bet.id });
+      }
+    }
+    // the games on his legs being played now
+    const want = new Set();
+    for (const bet of slips) for (const l of bet.legs || []) {
+      const v = idx[l.sel]; if (!v) continue;
+      const st = Date.parse(rows[v.gid][2]);
+      if (now >= st - 5 * MIN && now < st + 5 * 60 * MIN) want.add(v.gid);
+    }
+    const prev = (await this.ctx.storage.get("prev")) || {};
+    const games = {};
+    if (want.size) {
+      const boards = {};
+      for (const gid of want) {
+        const r = rows[gid], ymd = etParts(Date.parse(r[2])).date.replace(/-/g, ""), k = r[3] + ymd;
+        if (!boards[k]) {
+          try { boards[k] = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/football/" + r[3] + "/scoreboard?dates=" + ymd + (r[3] === "college-football" ? "&groups=80&limit=400" : ""))).json(); }
+          catch (e) { boards[k] = {}; }
+        }
+        games[gid] = await readGame(gid, r[3], boards[k]);
+      }
+    }
+    for (const m of news(slips, idx, games, prev, rows)) out.push(m);
+    const badge = liveLegs(slips, idx, games, rows);
+    await this.tell(out, badge);
+    const keep = {};
+    for (const [gid, g] of Object.entries(games)) keep[gid] = { qb: g.qb, state: g.state };
+    await this.ctx.storage.put("prev", Object.assign(prev, keep));
+    return Object.values(games).some(g => g.state === "in") || [...want].some(gid => !games[gid] || games[gid].state === "pre");
+  }
+
+  /* send what has not been sent, of the kinds he has on */
+  async tell(msgs, badge) {
+    if (!msgs.length || !this.env.VAPID_JWK) return 0;
+    const prefs = Object.assign({}, PREFS, (await this.ctx.storage.get("prefs")) || {});
+    const sent = (await this.ctx.storage.get("sent")) || {};
+    const subs = (await this.ctx.storage.get("subs")) || {};
+    const jwk = JSON.parse(this.env.VAPID_JWK);
+    let n = 0;
+    for (const m of msgs) {
+      if (sent[m.key] || (m.type in prefs && !prefs[m.type])) continue;
+      sent[m.key] = Date.now();
+      for (const [ep, sub] of Object.entries(subs)) {
+        try {
+          const st = await sendPush(sub, { title: m.title, body: m.body, url: m.url, tag: m.key, type: m.type, badge }, jwk);
+          if (st === 404 || st === 410) delete subs[ep]; else n++;
+        } catch (e) {}
+      }
+    }
+    for (const k of Object.keys(sent)) if (Date.now() - sent[k] > 14 * 86400000) delete sent[k];
+    await this.ctx.storage.put("sent", sent);
+    await this.ctx.storage.put("subs", subs);
+    return n;
   }
 
   async wake(mode) {

@@ -539,6 +539,29 @@
   .cashsheet #cashlegs .slipcard + .slipcard { margin-top: 12px; }
   .cashsheet .slipcard { text-align: left; margin: 0; }
   .cashsheet .cashnone { color: #8e8e93; font-size: 14px; padding: 6px 0 2px; }
+  /* the alerts: a bell in the wallet's corner, green when they are on, and
+     the kinds of alert under it (Jose, Sep 29, 2026) */
+  .cashsheet { position: fixed; }
+  .cashsheet .cashbell { position: absolute; top: 12px; right: 12px; width: 34px; height: 34px; border-radius: 10px;
+    border: 1px solid rgba(255,255,255,.14); background: rgba(255,255,255,.06); color: #8e8e93; display: grid;
+    place-items: center; padding: 0; cursor: pointer; }
+  .cashsheet .cashbell svg { width: 18px; height: 18px; }
+  .cashsheet .cashbell.on { color: var(--green); border-color: rgba(23,194,87,.5); }
+  .cashsheet .alertset { flex: none; text-align: left; margin: 0 0 12px; padding: 8px 10px; border-radius: 12px;
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.1); }
+  .cashsheet .alertset h4 { margin: 2px 0 6px; font: 700 12px "Barlow Condensed", Arial, sans-serif; letter-spacing: .1em;
+    color: #8e8e93; text-transform: uppercase; }
+  .cashsheet .alertset label { display: flex; align-items: center; justify-content: space-between; padding: 7px 2px;
+    font: 500 15px Barlow, Arial, sans-serif; color: #fff; border-top: 1px solid rgba(255,255,255,.06); }
+  .cashsheet .alertset input { appearance: none; width: 42px; height: 24px; border-radius: 8px; background: #3a3a3c;
+    position: relative; cursor: pointer; margin: 0; flex: none; transition: background .15s; }
+  .cashsheet .alertset input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px;
+    border-radius: 6px; background: #fff; transition: transform .15s; }
+  .cashsheet .alertset input:checked { background: var(--green); }
+  .cashsheet .alertset input:checked::after { transform: translateX(18px); }
+  .cashsheet .alertset .asay { font: 500 13px/1.35 Barlow, Arial, sans-serif; color: #8e8e93; padding: 4px 2px; }
+  .cashsheet .alertset button.atest { margin-top: 8px; width: 100%; padding: 9px 0; border-radius: 10px; border: 1px solid rgba(255,255,255,.14);
+    background: rgba(255,255,255,.08); color: #fff; font: 700 14px Barlow, Arial, sans-serif; cursor: pointer; }
   /* the day under the balance: the start of his dashboard (Jose, Sep 29, 2026) */
   .cashsheet .cashdays { flex: none; display: flex; gap: 2px; margin: 0 0 12px; padding: 3px; border-radius: 10px;
     background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1); }
@@ -4016,7 +4039,7 @@
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i><i class="wal-cw"><i class="wal-cd"></i></i></i></button>
-<div class="cashsheet" id="cashsheet" hidden><div class="cashamt" id="cashamt">&mdash;</div><div class="cashdays" id="cashdays" role="tablist"><button type="button" data-d="-1" onclick="cashDay(this)">Yesterday</button><button type="button" data-d="0" class="on" onclick="cashDay(this)">Today</button><button type="button" data-d="1" onclick="cashDay(this)">Tomorrow</button></div><div id="cashlegs"></div><div id="cashday"></div></div>
+<div class="cashsheet" id="cashsheet" hidden><button type="button" class="cashbell" id="cashbell" aria-label="Alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v3.6L4.4 15.4c-.4.7.1 1.6.9 1.6h13.4c.8 0 1.3-.9.9-1.6L18 12.6V9a6 6 0 0 0-6-6zm-2.4 15.5a2.4 2.4 0 0 0 4.8 0z" fill="currentColor"/></svg></button><div class="cashamt" id="cashamt">&mdash;</div><div class="alertset" id="alertset" hidden></div><div class="cashdays" id="cashdays" role="tablist"><button type="button" data-d="-1" onclick="cashDay(this)">Yesterday</button><button type="button" data-d="0" class="on" onclick="cashDay(this)">Today</button><button type="button" data-d="1" onclick="cashDay(this)">Tomorrow</button></div><div id="cashlegs"></div><div id="cashday"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -17608,6 +17631,103 @@
     var d = Math.round((day(k) - day(Date.now())) / 86400000);
     return d < 0 ? -1 : d > 0 ? 1 : 0;
   }
+  /* ---- the alerts: service worker, the bell, the settings, the landing ---- */
+  var ALERTKINDS = [["td", "Touchdowns and your next rung"], ["redzone", "Red zone"], ["wp", "Win chance swings"],
+                    ["final", "Finals"], ["slip", "One leg left and you won"], ["pregame", "Before kickoff"],
+                    ["change", "Changes after you bet"]];
+  var SWREG = null;
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("sw.js").then(function (r) { SWREG = r; alertBell(); }).catch(function () {});
+    navigator.serviceWorker.addEventListener("message", function (e) { if (e.data && e.data.go) landOn(e.data.go); });
+  }
+  function b64key(s) {
+    var raw = atob(s.replace(/-/g, "+").replace(/_/g, "/") + "===".slice((s.length + 3) % 4)), out = new Uint8Array(raw.length);
+    for (var i = 0; i < raw.length; i++) out[i] = raw.charCodeAt(i);
+    return out;
+  }
+  function alertBell() {
+    var bell = document.getElementById("cashbell");
+    if (!bell || !SWREG || !SWREG.pushManager) return;
+    SWREG.pushManager.getSubscription().then(function (sub) {
+      bell.classList.toggle("on", !!sub && typeof Notification !== "undefined" && Notification.permission === "granted");
+    }).catch(function () {});
+  }
+  function alertPanel() {
+    var box = document.getElementById("alertset");
+    if (!box) return;
+    if (!box.hidden) { box.hidden = true; return; }
+    box.hidden = false;
+    var standalone = window.navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+    if (!SWREG || !SWREG.pushManager || typeof Notification === "undefined") {
+      box.innerHTML = "<h4>Alerts</h4><div class='asay'>" + (standalone ? "This phone can't take alerts." :
+        "Add Stacked to your home screen first (Share, then Add to Home Screen), and open it from there.") + "</div>";
+      return;
+    }
+    box.innerHTML = "<h4>Alerts</h4><div class='asay'>Reading…</div>";
+    fetch("push", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (st) {
+      var draw = function (on) {
+        box.innerHTML = "<h4>Alerts</h4>" + (on ? ALERTKINDS.map(function (k) {
+          return '<label>' + esc(k[1]) + '<input type="checkbox" data-k="' + k[0] + '"' + (st.prefs && st.prefs[k[0]] === false ? "" : " checked") + '></label>';
+        }).join("") + '<button type="button" class="atest">Send a test</button>' :
+          "<div class='asay'>Get alerts on your slips with the app closed: touchdowns, red zone, finals, one leg left.</div>" +
+          '<button type="button" class="atest" data-on="1">Turn on alerts</button>');
+        box.querySelectorAll("input[data-k]").forEach(function (inp) {
+          inp.addEventListener("change", function () {
+            var p = {}; p[inp.dataset.k] = inp.checked;
+            fetch("push", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ prefs: p }) });
+          });
+        });
+        var b = box.querySelector(".atest");
+        if (b) b.addEventListener("click", function () {
+          if (b.dataset.on) {
+            /* asked from his tap: the phone only allows it from one */
+            Notification.requestPermission().then(function (perm) {
+              if (perm !== "granted") { box.querySelector(".asay").textContent = "Alerts are off in the phone's settings for Stacked."; return; }
+              return SWREG.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: b64key(st.key) }).then(function (sub) {
+                return fetch("push", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ sub: sub.toJSON() }) });
+              }).then(function () { alertBell(); draw(true); });
+            }).catch(function () { box.querySelector(".asay").textContent = "Couldn't turn alerts on."; });
+          } else {
+            b.textContent = "Sent";
+            fetch("push", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ test: true }) });
+          }
+        });
+      };
+      SWREG.pushManager.getSubscription().then(function (sub) { draw(!!sub && Notification.permission === "granted"); });
+    }).catch(function () { box.innerHTML = "<h4>Alerts</h4><div class='asay'>Couldn't reach the alerts.</div>"; });
+  }
+  (function () {
+    var bell = document.getElementById("cashbell");
+    if (bell) bell.addEventListener("click", function (e) { e.stopPropagation(); alertPanel(); });
+  })();
+  /* a tapped alert lands on what it was about: the slip, open, in the
+     wallet, or the game's card (Jose, Sep 29, 2026) */
+  function landOn(url) {
+    var h = String(url || "").split("#")[1] || "", m;
+    if ((m = /^slip=(.+)$/.exec(h))) {
+      var sheet = document.getElementById("cashsheet");
+      if (sheet) { sheet.hidden = false; document.documentElement.classList.add("cashlock"); }
+      var tries = 0;
+      (function find() {
+        if (typeof bankDraw === "function") bankDraw();
+        var card = document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]');
+        if (!card && typeof cashDay === "function") {
+          [-1, 0, 1].some(function (d) { var b = document.querySelector('#cashdays [data-d="' + d + '"]'); if (b) cashDay(b); return !!document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]'); });
+          card = document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]');
+        }
+        if (card) { var v = card.querySelector(".slview"); if (v && !card.classList.contains("slipcard--open")) slipOpen(v); card.scrollIntoView({ block: "start" }); return; }
+        if (++tries < 20) setTimeout(find, 300);
+      })();
+    } else if ((m = /^game=(.+)$/.exec(h))) {
+      var tries2 = 0;
+      (function find2() {
+        var c = document.querySelector('.gcard[data-espn="' + m[1] + '"]');
+        if (c) { c.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
+        if (++tries2 < 20) setTimeout(find2, 300);
+      })();
+    }
+  }
+  if (/^#(slip|game)=/.test(location.hash)) setTimeout(function () { landOn(location.href); history.replaceState(null, "", location.pathname); }, 1500);
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -17815,6 +17935,13 @@
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
       if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel]; }); })) setTimeout(bankDraw, 0);
+      /* the icon's badge while the app is open: legs still being played on
+         the open slips (the clock sets it while the app is closed) */
+      try {
+        var liveN = (DKB.bets || []).filter(function (b0) { return !(b0.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; }); })
+          .reduce(function (t, b0) { return t + (b0.legs || []).filter(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost"; }).length; }, 0);
+        if (navigator.setAppBadge) { if (liveN) navigator.setAppBadge(liveN); else navigator.clearAppBadge(); }
+      } catch (e) {}
       /* the day's totals stand still under the slips, which scroll between
          the balance and them (Jose, Sep 26, 2026) */
       var dayEl = document.getElementById("cashday");
