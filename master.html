@@ -1,7 +1,7 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.bstack{position:relative;width:200px;height:227px}.bstack img{position:absolute;left:0;width:200px;height:auto;opacity:0;animation:bdrop .32s cubic-bezier(.22,1,.36,1) forwards}.bstack .p1{top:65.5px;animation-delay:.05s}.bstack .p2{top:33.7px;animation-delay:.3s}.bstack .p3{top:0;animation-delay:.55s}.bstack .bd{top:0;animation:bpop .38s cubic-bezier(.34,1.56,.64,1) .85s forwards}@keyframes bdrop{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}@keyframes bpop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}</style>
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.bstack{position:relative;width:200px;height:227px}.bstack img{position:absolute;left:0;width:200px;height:auto;opacity:0;animation:bdrop .55s cubic-bezier(.22,1,.36,1) forwards}.bstack .p1{top:65.5px;animation-delay:.2s}.bstack .p2{top:33.7px;animation-delay:.85s}.bstack .p3{top:0;animation-delay:1.5s}.bstack .bd{top:0;animation:bpop .6s cubic-bezier(.34,1.56,.64,1) 2.2s forwards}@keyframes bdrop{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}@keyframes bpop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}</style>
 <div id="boot" aria-hidden="true"><div class="bstack"><img class="p1" src="ico/boot-plate.png" alt=""><img class="p2" src="ico/boot-plate.png" alt=""><img class="p3" src="ico/boot-plate.png" alt=""><img class="bd" src="ico/boot-dollar.png" alt=""></div></div>
 <script>
 /* the stack on black from the very first paint, built plate 1, 2, 3 and
@@ -28,8 +28,9 @@
         if (r.bottom > 0 && r.top < vh && r.width && !imgs[k].complete) { ready = false; break; }
       }
     }
-    /* the stack is always built whole before the board opens: three plates and the $ */
-    if (Date.now() - t0 < 1300) ready = false;
+    /* the stack is always built whole before the board opens, never rushed:
+       three plates, the $, and a beat on the finished stack (Jose, Sep 29, 2026) */
+    if (Date.now() - t0 < 3200) ready = false;
     if (!ready && Date.now() - t0 < 10000) { setTimeout(go, 80); return; }
     b.classList.add("boot--out"); setTimeout(function () { b.remove(); }, 400);
   };
@@ -417,7 +418,7 @@
     color: #8e8e93; text-transform: uppercase; }
   /* a leg's edge: gold while it is live, green once it lands, red once it
      cannot -- the same colors a placed price wears on its card */
-  .slav.slav--live { border: 2px solid #e3b341; }
+  .slav.slav--live { border: 2px solid #ffffff; }
   .slav.slav--won { border: 2px solid var(--green); }
   .slav.slav--lost { border: 2px solid #e2564d; }
   .slipcard.slipcard--won { border-color: var(--green); }
@@ -929,13 +930,13 @@
   /* a marked box wears the same gold edge as a placed price, price or not:
      a white dash read as something else (Jose, Sep 25, 2026) */
   .ghost--want {
-    border-color: #e3b341 !important;
+    border-color: #ffffff !important;
     border-style: solid !important; border-width: 2px !important;
-    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40) !important;
-    color: #e3b341 !important;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.35), 0 0 12px rgba(255,255,255,.40) !important;
+    color: #ffffff !important;
   }
   .ghost--want::after { content: "\2014"; }
-  .gcard.gcard--v3 .ghost--want::after { color: #e3b341 !important; }
+  .gcard.gcard--v3 .ghost--want::after { color: #ffffff !important; }
   .ptdx--v2 .ptdbtn .ghost { min-width: 48px; padding: 6px 7px; }
   .gcard:not([data-lg]) .ghead .ghost { min-width: 46px; padding: 6px 7px; }
 
@@ -974,9 +975,11 @@
      that is only marked on the slip. Gold of its own: --amber is white in
      this theme, so it would have read as another white border
      (Jose, Sep 19, 2026) */
-  .price.placed, .gcard.locked .price.placed { border-color: #e3b341; border-width: 2px;
-    box-shadow: 0 0 0 1px rgba(227, 179, 65, 0.35), 0 0 12px rgba(227, 179, 65, 0.40); }
-  .price.on.placed { border-color: #e3b341; }
+  /* white since Sep 29, 2026 (Jose: "placed prices change to white"): the
+     edge and its glow are white; green and red still say how it settled */
+  .price.placed, .gcard.locked .price.placed { border-color: #ffffff; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.35), 0 0 12px rgba(255, 255, 255, 0.40); }
+  .price.on.placed { border-color: #ffffff; }
   /* gold while it is still live, green once it wins, red once it does not.
      The board already says which: a settled cell wears a tick or a cross, and
      a fight's method price is marked paid (Jose, Sep 19, 2026) */
@@ -1539,8 +1542,8 @@
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30) !important; }
   .price.placed.lost { border-color: #e2564d !important;
     box-shadow: 0 0 0 1px rgba(226,86,77,.35), 0 0 10px rgba(226,86,77,.30) !important; }
-  .gcard.gcard--v3 .price.placed { border-color: #e3b341; border-width: 2px;
-    box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.40); }
+  .gcard.gcard--v3 .price.placed { border-color: #ffffff; border-width: 2px;
+    box-shadow: 0 0 0 1px rgba(255,255,255,.35), 0 0 12px rgba(255,255,255,.40); }
   .gcard.gcard--v3 .price.won { border-color: var(--green); color: var(--green); }
   .gcard.gcard--v3 .price.lost { border-color: #e2564d; color: #e2564d; }
   .gcard.gcard--v3 .ghost { display: inline-flex; align-items: center;
@@ -1818,8 +1821,8 @@
   .gcard.gcard--v3 .pnum.on { color: var(--ink); }
   .gcard.gcard--v3 .pnum--tap { cursor: pointer; }
   /* the gold box he put on the price carries over to what he did, and settles */
-  .gcard.gcard--v3 .pnum.placed { border-color: #e3b341; border-width: 2px;
-    background: rgba(227,179,65,.10); color: var(--ink); }
+  .gcard.gcard--v3 .pnum.placed { border-color: #ffffff; border-width: 2px;
+    background: rgba(255,255,255,.10); color: var(--ink); }
   .gcard.gcard--v3 .pnum.won { border-color: var(--green); color: var(--green);
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
   .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;
