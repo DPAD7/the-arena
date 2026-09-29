@@ -48,7 +48,9 @@ jobs:
           node-version: "22"   # wrangler wants 22 or better
 
       - name: What the scripts need
-        run: pip install --quiet curl_cffi cryptography
+        # playwright drives the runner's own Chrome for build/look.py, so no
+        # browser is downloaded
+        run: pip install --quiet curl_cffi cryptography playwright
 
       - name: The register, and somewhere to write
         # logs/ is not in the repo -- a runner starts without it, and the first
@@ -70,6 +72,16 @@ jobs:
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python build/refresh.py --if-due
+
+      - name: The site, checked
+        # every run, due or not: the site carries main's page (if not, it is
+        # built and deployed again), the functions answer, a face is a
+        # picture. What is wrong lands in site/guard.json (Sep 28, 2026)
+        if: always()
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: python build/guard.py --live
 
       - name: Keep what it wrote
         run: |
