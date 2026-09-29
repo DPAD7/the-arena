@@ -163,6 +163,46 @@ except (OSError, ValueError):
     NAMED = {}
 
 
+_TEAMS = None
+
+
+def chart_qbs(club):
+    """The club's QBs in chart order, off ESPN's own depth chart -- for when
+       site/depth.json has nothing for the club (Tampa, Sep 28, 2026)."""
+    global _TEAMS
+    from curl_cffi import requests as rq
+    try:
+        if _TEAMS is None:
+            j = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams", impersonate="chrome", timeout=30).json()
+            _TEAMS = {t["team"]["abbreviation"]: t["team"]["id"]
+                      for t in j["sports"][0]["leagues"][0]["teams"]}
+        tid = _TEAMS.get(club)
+        yr = datetime.datetime.now().year if datetime.datetime.now().month >= 3 else datetime.datetime.now().year - 1
+        d = rq.get("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/%d/teams/%s/depthcharts"
+                   % (yr, tid), impersonate="chrome", timeout=30).json()
+        for it in d.get("items") or []:
+            qb = (it.get("positions") or {}).get("qb")
+            if qb:
+                out = []
+                for a in qb.get("athletes") or []:
+                    m = re.search(r"/athletes/(\d+)", (a.get("athlete") or {}).get("$ref", ""))
+                    if m:
+                        out.append(m.group(1))
+                return out
+    except Exception:
+        return []
+    return []
+
+
+def espn_name(pid):
+    from curl_cffi import requests as rq
+    try:
+        return rq.get("https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/%s" % pid,
+                      impersonate="chrome", timeout=30).json()["athlete"]["displayName"]
+    except Exception:
+        return ""
+
+
 def main():
     only = None
     if "--game" in sys.argv:
@@ -235,6 +275,19 @@ def main():
                     g[i], g[i + 1] = book[0][1], book[0][0]
                     unprice(espn_id, side)
                 continue
+            # the wire outranks everything left: a man it has out, on IR or
+            # doubtful gives way to the next man on the club's chart who is
+            # not (Jose, Sep 28, 2026: "why do we still have Baker in")
+            cur = str(g[i + 1])
+            if (wire.get(cur) or {}).get("status", "").lower() in STOP + ("doubtful",):
+                nxt = next((x for x in chart_qbs(club) if x != cur and
+                            (wire.get(x) or {}).get("status", "").lower() not in STOP + ("doubtful",)), None)
+                if nxt:
+                    nm = espn_name(nxt) or g[i]
+                    swaps.append("%-4s %-20s -> %-20s (wire: %s)" % (club, g[i], nm, wire[cur]["status"]))
+                    g[i], g[i + 1] = nm, nxt
+                    unprice(espn_id, side)
+                    continue
             him = settle(club, espn_id, side, depth)
             if not him:
                 continue
