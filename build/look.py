@@ -166,6 +166,33 @@ def hot(b, seen):
     return wrong
 
 
+def fight_tab(b, seen):
+    """The fights tab opens on the next card's month, wherever the other tabs
+    were: week 8 of the NFL, then UFC, landed in November (Sep 28, 2026)."""
+    c = b.new_context(viewport={"width": 430, "height": 932}, device_scale_factor=1)
+    pv = c.new_page()
+    pv.route("**/*", serve)
+    pv.goto(HOST + "/")
+    pv.wait_for_timeout(3000)
+    tab = """s => { const b = [...document.querySelectorAll('#sportbar .sptab')].find(b => b.dataset.sp == s); if (b) b.click(); }"""
+    pv.evaluate(tab, "nfl")
+    pv.wait_for_timeout(1200)
+    pv.evaluate("""(() => { const t = document.querySelector('#daybar [data-day="W8"]'); if (t) t.click(); })()""")
+    pv.wait_for_timeout(1200)
+    pv.evaluate(tab, "mma")
+    pv.wait_for_timeout(1500)
+    got, want = pv.evaluate("""(() => {
+        const on = document.querySelector('#daybar [aria-selected="true"]');
+        let n = null; FIGHTS.forEach(f => { const t = Date.parse(f[2]); if (t >= Date.now() - 8 * 3600000 && (n === null || t < n)) n = t; });
+        const et = new Date(new Date(n || Date.now()).toLocaleString('en-US', { timeZone: 'America/New_York' }));
+        return [on ? on.dataset.day : null, et.getFullYear() + '-' + ('0' + (et.getMonth() + 1)).slice(-2)] })()""")
+    c.close()
+    if got != want:
+        return ["the fights tab opens on %s, not the next card's month %s" % (got, want)]
+    seen.append("fights tab %s" % got)
+    return []
+
+
 def main():
     try:
         from playwright.sync_api import sync_playwright
@@ -228,6 +255,7 @@ def main():
             if W == 430:
                 wrong += gestures(b, seen)
                 wrong += hot(b, seen)
+                wrong += fight_tab(b, seen)
             for e in errs[:3]:
                 wrong.append("the page threw at %d wide: %s" % (W, e))
             c.close()

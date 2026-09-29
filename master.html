@@ -13122,7 +13122,17 @@
     if (want === "week") {
       day = "W" + (sport === "nfl" ? weekOf(SCHED, WEEKS) : weekOf(CFB, CFB_WEEKS));
     }
-    else if (want === "month") day = monthKeyOf(anchor);
+    /* the fights open on the month of the next card -- or the one on now --
+       never on the month of the week he was reading elsewhere: week 8 of the
+       NFL was landing him in November's cards (Jose, Sep 28, 2026) */
+    else if (want === "month") {
+      var soon = Date.now() - 8 * 3600000, nextCard = null;
+      (typeof FIGHTS === "object" ? FIGHTS : []).forEach(function (f) {
+        var t = Date.parse(f[2]);
+        if (t >= soon && (nextCard === null || t < nextCard)) nextCard = t;
+      });
+      day = monthKeyOf(new Date(nextCard || Date.now()).toISOString());
+    }
     /* the calendar opens on today, not on the first day of the week he was
        just looking at: coming off Week 2 it landed on Thursday 9/17, the
        week's first kickoff, three days behind (Jose, Sep 20, 2026: "it needs
