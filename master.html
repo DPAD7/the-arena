@@ -7621,33 +7621,79 @@
   window.STARS = STARS;
   /* what the store held for each mark when this device last read or wrote it */
   var LASTSYNC = {};
+  /* ---- this device's own changes, for two minutes ----
+     The store is Cloudflare KV, and a read there can hand back the copy from
+     before a write for up to a minute. Two things came of it: a second tap's
+     write was laid over a stale copy that still held the first tap's gold,
+     and put it back for good; and the page's own re-read painted the old
+     gold over taps he had just taken off (Jose, Sep 29, 2026: "I un-click,
+     two seconds later it refreshes and it's 17 bets"). So every change is
+     logged the moment it is made, every write carries the whole log, and
+     every read has the log laid back over it: nothing stale can undo a tap
+     made in the last two minutes. */
+  var JOURNAL = [], JWIN = 120000;
+  try { JOURNAL = JSON.parse(sessionStorage.getItem("arena.journal") || "[]") || []; } catch (e) { JOURNAL = []; }
+  function journalNow() {
+    var cut = Date.now() - JWIN;
+    JOURNAL = JOURNAL.filter(function (e) { return e.t > cut; });
+    try { sessionStorage.setItem("arena.journal", JSON.stringify(JOURNAL)); } catch (e) {}
+    return JOURNAL;
+  }
+  function journalOver(k, list) {
+    var out = {};
+    Object.keys(list || {}).forEach(function (x) { out[x] = list[x]; });
+    journalNow().forEach(function (e) {
+      if (e.k !== k) return;
+      if (e.del) delete out[e.x]; else out[e.x] = e.v;
+    });
+    return out;
+  }
+  function marksNow() {
+    return {hidden: hid || {}, placed: placed || {}, picks: saved || {}, stars: STARS || {},
+            ring: (typeof RINGED === "object" && RINGED) || {},
+            bank: (typeof BANKMET !== "undefined" && BANKMET && typeof BANK === "object" && BANK) || null};
+  }
   function pushState() {
+    /* the change is logged now, at the tap, before any read can land */
+    var all0 = marksNow(), t0 = Date.now();
+    Object.keys(all0).forEach(function (k) {
+      if (k === "bank" || all0[k] === null || LASTSYNC[k] === undefined) return;
+      var js = JSON.stringify(all0[k]);
+      if (js === LASTSYNC[k]) return;
+      var was = {};
+      try { was = JSON.parse(LASTSYNC[k]) || {}; } catch (e) { was = {}; }
+      var mine = journalOver(k, was);
+      Object.keys(all0[k]).forEach(function (x) {
+        if (JSON.stringify(all0[k][x]) !== JSON.stringify(mine[x])) JOURNAL.push({k: k, x: x, v: all0[k][x], t: t0});
+      });
+      Object.keys(mine).forEach(function (x) { if (!(x in all0[k])) JOURNAL.push({k: k, x: x, del: 1, t: t0}); });
+    });
+    journalNow();
     clearTimeout(pushTimer);
     pushTimer = setTimeout(function () {
-      /* only the marks this device changed since it last read or wrote the
-         store go up; the site lays them over what it holds. Sending the whole
-         copy let a device left open put back gold he had taken off on
-         another (Jose, Sep 28, 2026: "every time you refresh it goes back on") */
-      var all = {hidden: hid || {}, placed: placed || {}, picks: saved || {}, stars: STARS || {},
-                 ring: (typeof RINGED === "object" && RINGED) || {},
-                 bank: (typeof BANKMET !== "undefined" && BANKMET && typeof BANK === "object" && BANK) || null};
-      /* and within each list only the entries that changed -- one game hidden,
-         one ring taken off -- so two devices never undo each other's */
+      /* only the marks this device changed go up, laid over what the site
+         holds: sending the whole copy let a device left open put back gold
+         he had taken off on another (Jose, Sep 28, 2026). Every change of the
+         last two minutes goes, not only the newest, so a write laid over a
+         stale copy still carries the tap before it. */
+      var all = marksNow();
       var body = {patch: {}}, any = false, now = {};
       Object.keys(all).forEach(function (k) {
         if (all[k] === null) return;
         var js = JSON.stringify(all[k]);
         now[k] = js;
-        if (js === LASTSYNC[k]) return;
-        any = true;
-        if (k === "bank" || LASTSYNC[k] === undefined) { body[k] = all[k]; return; }
-        var was = {};
-        try { was = JSON.parse(LASTSYNC[k]) || {}; } catch (e) { was = {}; }
+        if (k === "bank" || LASTSYNC[k] === undefined) {
+          if (js === LASTSYNC[k]) return;
+          any = true; body[k] = all[k]; return;
+        }
         var set = {}, del = [];
-        Object.keys(all[k]).forEach(function (x) {
-          if (JSON.stringify(all[k][x]) !== JSON.stringify(was[x])) set[x] = all[k][x];
+        journalNow().forEach(function (e) {
+          if (e.k !== k) return;
+          if (e.del) { delete set[e.x]; if (del.indexOf(e.x) < 0) del.push(e.x); }
+          else { set[e.x] = e.v; del = del.filter(function (d) { return d !== e.x; }); }
         });
-        Object.keys(was).forEach(function (x) { if (!(x in all[k])) del.push(x); });
+        if (!Object.keys(set).length && !del.length) return;
+        any = true;
         body.patch[k] = {set: set, del: del};
       });
       if (!any) return;
@@ -7679,6 +7725,11 @@
       .then(function (j) {
         if (!j) return;
         var moved = false;
+        /* this device's own changes of the last two minutes are laid back
+           over whatever the store answered: a stale copy never undoes a tap */
+        ["hidden", "placed", "picks", "ring", "stars"].forEach(function (k) {
+          if (j[k] !== undefined && j[k] !== null) j[k] = journalOver(k, j[k]);
+        });
         /* what the store says now is what this device last saw of it */
         ["hidden", "placed", "picks", "ring", "stars", "bank"].forEach(function (k) {
           if (j[k] !== undefined && j[k] !== null) LASTSYNC[k] = JSON.stringify(j[k]);
