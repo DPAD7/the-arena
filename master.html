@@ -16973,11 +16973,31 @@
        its next game and everyone on the season list, taken from the page's own
        data every time it opens, so it never waits on a rebuild of the file
        (Jose, Sep 28, 2026: "make it match once and for all") */
+    /* the games that are over: the board's own settled cards, and the
+       result the sweep writes to final/<id>.json within minutes of the end */
+    var ENDED = {};
+    function ended() {
+      var now = Date.now(), ask = [];
+      document.querySelectorAll('.gcard[data-settled="1"][data-espn]').forEach(function (c) { ENDED[c.dataset.espn] = 1; });
+      (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
+        var t = Date.parse(g[2]), id = String(g[1]);
+        if (t <= now && t > now - 6 * 3600000 && !ENDED[id]) ask.push(id);
+      });
+      return Promise.all(ask.map(function (id) {
+        return fetch("final/" + id + ".json", { cache: "no-store" }).then(function (r) {
+          if (r.ok && /json/.test(r.headers.get("content-type") || "")) ENDED[id] = 1;
+        }).catch(function () {});
+      }));
+    }
     function fromBoard() {
       var qs = DATA.qbs, now = Date.now(), next = {};
       (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
         var t = Date.parse(g[2]);
-        if (t < now - 4 * 3600000) return;
+        /* a game is his next until it is final -- then next week's -- not
+           until a clock runs out: four hours on, a game still being played
+           had gone, and a finished one sat there for hours (Jose, Sep 28,
+           2026: "says next week's game once it's done") */
+        if (ENDED[String(g[1])] || t < now - 6 * 3600000) return;
         [[g[3], g[5], g[6], 0, g[4]], [g[4], g[7], g[8], 1, g[3]]].forEach(function (p) {
           if (!p[2]) return;
           if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, iso: g[2], gid: String(g[1]), n: p[1], id: String(p[2]), side: p[3], o: p[4] };
@@ -17056,7 +17076,7 @@
     });
     function open() {
       if (box.classList.contains("open")) return;
-      box.classList.add("open"); load().then(function () { try { fromBoard(); } catch (e) {} draw(); });
+      box.classList.add("open"); load().then(ended).then(function () { try { fromBoard(); } catch (e) {} draw(); });
       setTimeout(function () { try { inp.focus(); } catch (e) {} }, 60);
     }
     function close() { box.classList.remove("open"); try { inp.blur(); } catch (e) {} }
@@ -17300,7 +17320,8 @@
       }
       var nx = q.nx;
       if (nx) {
-        h += '<div class="qsh">Next · ' + (nx.h ? "vs " : "@ ") + esc(nx.o) + " · " + esc(when(nx.d)) + "</div><div class=\"qsnext\">" +
+        /* under way: it says so, and gives way to next week's once final */
+        h += '<div class="qsh">' + (Date.parse(nx.d) <= Date.now() ? "Live · " : "Next · ") + (nx.h ? "vs " : "@ ") + esc(nx.o) + " · " + esc(when(nx.d)) + "</div><div class=\"qsnext\">" +
           '<div class="qstile"><span>1+ PTD</span><b class="' + band(nx.px) + '">' + (nx.px ? show(nx.px) : "not posted") + "</b></div>" +
           '<div class="qstile"><span>' + esc(nx.o) + " allows</span><b>" + (nx.al === null || nx.al === undefined ? "—" : nx.al + " PTD/g") + "</b></div>" +
           '<div class="qstile"><span>Weather</span><b>' + esc(wxShort(nx.wx)) + "</b></div></div>" +

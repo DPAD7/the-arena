@@ -89,7 +89,9 @@ def cards():
 
 
 def last_name(n):
-    bits = str(n or "").strip().split(" ")
+    # a suffix is not a surname: Raul Rosas Jr. is ROSAS (Sep 28, 2026)
+    bits = [b for b in str(n or "").strip().split(" ")
+            if b.lower().strip(".,") not in ("jr", "sr", "ii", "iii", "iv")]
     return (bits[-1] if bits else "").upper()
 
 
