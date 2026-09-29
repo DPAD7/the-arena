@@ -31,6 +31,7 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "site", "alerts.json")
 NOW = dt.datetime.now(dt.timezone.utc)
 HURT = ("Out", "Doubtful", "Questionable", "Injured Reserve", "Suspension")
+ROOF = {}
 SHARE = 0.15     # of the club's targets and carries, or of its targets, to be worth a warning
 
 
@@ -132,8 +133,21 @@ def main():
             continue
         gi = d.get("gameInfo") or {}
         w, v = gi.get("weather") or {}, gi.get("venue") or {}
+        # the summary can leave a roof blank (U.S. Bank Stadium read open air,
+        # so a dome game warned of 20 mph gusts -- Sep 29, 2026); ESPN's own
+        # venue record says so
+        indoor = v.get("indoor")
+        if indoor is None and v.get("id"):
+            if v["id"] not in ROOF:
+                try:
+                    ROOF[v["id"]] = rq.get("https://sports.core.api.espn.com/v2/sports/football/leagues/%s/venues/%s"
+                                           % ("nfl" if lg == "nfl" else "college-football", v["id"]),
+                                           impersonate="chrome124", timeout=20).json().get("indoor")
+                except Exception:
+                    ROOF[v["id"]] = None
+            indoor = ROOF[v["id"]]
         e = {"wx": {"c": w.get("conditionId"), "t": w.get("temperature"), "g": w.get("gust"),
-                    "p": w.get("precipitation"), "in": 1 if v.get("indoor") else 0}}
+                    "p": w.get("precipitation"), "in": 1 if indoor else 0}}
         pc = (d.get("pickcenter") or [{}])[0] or {}
         if pc.get("spread") is not None:
             e["spread"] = abs(float(pc["spread"]))
