@@ -20,6 +20,7 @@
 
        python3 build/look.py
 """
+import json
 import os
 import sys
 
@@ -40,6 +41,10 @@ def serve(route):
     f = os.path.join(SITE, path)
     if os.path.isfile(f):
         return route.fulfill(path=f)
+    # /face/<league>/<id>.png is a function on the site; locally it is the mirror
+    if path.startswith("face/"):
+        f = os.path.join(SITE, "faces", path[5:])
+        return route.fulfill(path=f) if os.path.isfile(f) else route.fulfill(status=404, body="")
     # the functions: state, ask, bets, clip, espn, face
     if path.startswith(("state", "ask", "bets", "clip", "espn")):
         return route.fulfill(status=200, body="{}", content_type="application/json")
@@ -193,6 +198,54 @@ def fight_tab(b, seen):
     return []
 
 
+def tracker(b, seen):
+    """A DraftKings slip opened in the wallet draws its games: built here from
+    the newest finished game with a saved result and a passing-TD price, so
+    the check uses real ids and a real box score (Sep 29, 2026)."""
+    import glob
+    prices = json.load(open(os.path.join(SITE, "prices.json")))
+    pick = None
+    for f in sorted(glob.glob(os.path.join(SITE, "final", "4*.json")), key=os.path.getmtime, reverse=True):
+        gid = os.path.basename(f)[:-5]
+        ml = (prices.get("SCHED") or {}).get(gid)
+        ptd = ((prices.get("PROPS") or {}).get(gid) or {}).get("ptd") or []
+        if ml and ml[3] and len(ptd) > 1 and ptd[1] and ptd[1][0] and ptd[1][0][1]:
+            pick = (gid, ml[3], ptd[1][0][1]); break
+    if not pick:
+        seen.append("no finished game to test the tracker on")
+        return []
+    bet = {"balance": 1, "at": 9e12, "bets": [{"id": "look", "odds": "+100", "wager": 1, "topay": 2, "legs": [
+        {"sel": pick[1], "pick": "", "market": "Moneyline", "label": "ML", "odds": "+100", "status": "open"},
+        {"sel": pick[2], "pick": "1+", "market": "Passing Touchdowns", "label": "1+ PTD", "odds": "-200", "status": "open"}]}]}
+    def serve2(route):
+        if "/bets" in route.request.url and route.request.method == "GET":
+            return route.fulfill(body=json.dumps(bet), content_type="application/json")
+        return serve(route)
+    c = b.new_context(viewport={"width": 430, "height": 932})
+    pg = c.new_page()
+    errs = []
+    pg.on("pageerror", lambda e: errs.append(str(e).splitlines()[0][:160]))
+    pg.route("**/*", serve2)
+    pg.goto(HOST + "/")
+    pg.wait_for_timeout(4000)
+    pg.evaluate("document.getElementById('cashsheet').hidden = false; window.bankDraw && bankDraw()")
+    pg.wait_for_timeout(1200)
+    pg.evaluate("document.querySelectorAll('#cashlegs .slview').forEach(b => slipOpen(b))")
+    pg.wait_for_timeout(3500)
+    got = pg.evaluate("""(() => { const t = document.querySelector('#cashlegs .slipcard--open .sltrk');
+        if (!t) return null; return { games: t.querySelectorAll('.trkg').length, rows: t.querySelectorAll('.trkr').length,
+        fin: /FINAL/.test(t.innerText), h: t.getBoundingClientRect().height } })()""")
+    c.close()
+    wrong = ["the wallet tracker threw: " + e for e in errs[:2]]
+    if not got or not got["games"] or got["rows"] < 2 or not got["h"]:
+        wrong.append("the wallet tracker did not draw game %s (%s)" % (pick[0], got))
+    elif not got["fin"]:
+        wrong.append("the wallet tracker did not read game %s as final" % pick[0])
+    else:
+        seen.append("tracker %s" % pick[0])
+    return wrong
+
+
 def main():
     try:
         from playwright.sync_api import sync_playwright
@@ -256,6 +309,7 @@ def main():
                 wrong += gestures(b, seen)
                 wrong += hot(b, seen)
                 wrong += fight_tab(b, seen)
+                wrong += tracker(b, seen)
             for e in errs[:3]:
                 wrong.append("the page threw at %d wide: %s" % (W, e))
             c.close()

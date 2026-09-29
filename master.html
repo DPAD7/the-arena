@@ -189,6 +189,56 @@
   .cashfab .fabfill--on { opacity: 1; }
   .cashfab .fabfill--ok { background: rgba(63, 191, 90, 0.55); }
   .cashfab .fabfill--bad { background: rgba(255, 91, 91, 0.55); }
+  /* the slip, tracked (Jose, Sep 29, 2026): opened, a slip DraftKings holds
+     shows its games in place of the list of names */
+  .slipcard--trk.slipcard--open .slpicks { display: none; }
+  .slipcard .sltrk { display: none; }
+  .slipcard--open .sltrk { display: block; margin-top: 8px; }
+  .trkg { padding: 2px 0 4px; }
+  .trkg + .trkg { border-top: 2px solid #3a3b42; margin-top: 6px; padding-top: 6px; }
+  .trkh { font: 600 14px Barlow, "Helvetica Neue", Arial, sans-serif; color: #9a9aa0; margin: 6px 0 4px;
+    display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+  .trkst { background: var(--green); color: #000; font: 800 12px Barlow, sans-serif; padding: 3px 8px; border-radius: 6px; }
+  .trkst--pre { background: #2c2d33; color: #9a9aa0; }
+  .trkst--fin { background: #2c2d33; color: #fff; }
+  .trkr { display: grid; grid-template-columns: 48px minmax(0, 1fr) 48px; gap: 10px; align-items: center;
+    padding: 10px 0; border-bottom: 1px dashed #2c2d33; }
+  .trkr:last-child { border-bottom: 0; }
+  .trkr--pair { grid-template-columns: 36px 64px minmax(0, 1fr) 40px; padding: 5px 0; border-bottom: 0; }
+  .trkc { width: 48px; height: 48px; border-radius: 12px; background: #1f2026; border: 2px solid #2c2d33;
+    overflow: hidden; display: block; box-sizing: border-box; }
+  .trkc img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .trkc--logo img { object-fit: contain; padding: 7px; box-sizing: border-box; }
+  .trkc--sm { width: 36px; height: 36px; border-radius: 9px; }
+  .trkc--mine { border-color: #e3b341; box-shadow: 0 0 0 1px rgba(227,179,65,.35), 0 0 12px rgba(227,179,65,.35); }
+  .trkr--two .trkm { height: 48px; display: flex; flex-direction: column; justify-content: space-between; min-width: 0; }
+  .trkt { display: flex; align-items: center; justify-content: center; gap: 8px; height: 28px; white-space: nowrap;
+    overflow: hidden; font: 800 28px/28px "Barlow Condensed", sans-serif; color: #fff; transform: translateY(-6px); }
+  .trkt small { font-size: 15px; color: #9a9aa0; }
+  .trkt em { font-style: normal; color: #5a5b62; }
+  .trkt--h2h { gap: 6px; font-size: 21px; }
+  .trkt--h2h span { font-size: 14px; font-weight: 700; }
+  .trkt--h2h em { font-size: 13px; color: var(--green); }
+  .trkt--h2h em.dn { color: #e2564d; }
+  .trkt .dim { color: #9a9aa0; }
+  .trkbar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; background: #2c2d33; }
+  .trkbar i { display: block; height: 100%; }
+  .trkbar i + i { border-left: 2px solid #fff; }
+  .trkbar--one { height: 10px; border-radius: 5px; margin-top: 6px; }
+  .trkbar--one i { border-radius: 5px; }
+  .trkr--pair .trkbar--one { margin-top: 0; }
+  .trkl { display: flex; align-items: center; gap: 5px; font: 700 18px "Barlow Condensed", sans-serif; color: #fff; white-space: nowrap; }
+  .trkl b { color: var(--green); font-weight: 800; }
+  .trkl i { font-style: normal; color: #9a9aa0; font-weight: 600; }
+  .trkr--pair .trkl { color: #9a9aa0; }
+  .trkmk { width: 20px; height: 20px; color: #fff; fill: #fff; --fb-skin: #fff; --fb-edge: #15161a; --fb-seam: #15161a; }
+  .trkn { height: 40px; border-radius: 10px; border: 2px solid #e3b341; display: flex; align-items: center; justify-content: center;
+    font: 800 22px "Barlow Condensed", sans-serif; color: #fff; box-sizing: border-box; }
+  .trkr--pair .trkn { height: 32px; font-size: 19px; border-radius: 8px; }
+  .trkn--won { border-color: var(--green); color: var(--green); }
+  .trkn--lost { border-color: #e2564d; color: #e2564d; }
+  .trkn--pre { border-color: #2c2d33; color: #9a9aa0; }
+  .trkloose { display: flex; justify-content: space-between; padding: 6px 0; color: #e6e6e6; font-size: 14px; }
   .slipcard .slview { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0;
     border-radius: 10px; background: rgba(255,255,255,.08); color: #c9ccd2; cursor: pointer; align-self: center; }
   .slipcard .slview svg { width: 16px; height: 16px; transition: transform .2s ease; }
@@ -16588,6 +16638,200 @@
   window._dkPull = dkPull;
   var CASHHIDE = false;
   try { CASHHIDE = localStorage.getItem("arena.cashhide") === "1"; } catch (e) {}
+  /* ---- the slip, tracked ----
+     A slip DraftKings holds, opened under its arrow, is drawn as the games
+     it rides on: each game's line, the moneyline's score and win chance, the
+     passers' head to head, and every touchdown leg with its count, live
+     (Jose, Sep 29, 2026 -- the whole design is in the notes as
+     wallet-slip-tracker). Every leg is tied to its game by DraftKings' own
+     selection id, the same id each price on the board carries, never by a
+     written name. */
+  function legMap() {
+    var m = {};
+    var put = function (oid, v) { if (oid && !m[oid]) m[oid] = v; };
+    [[typeof SCHED === "object" ? SCHED : [], "nfl", 10], [typeof CFB === "object" ? CFB : [], "college-football", 11]]
+      .forEach(function (set) {
+        set[0].forEach(function (g) {
+          put(g[set[2]], { g: String(g[1]), k: "ml", s: 0, lg: set[1] });
+          put(g[set[2] + 2], { g: String(g[1]), k: "ml", s: 1, lg: set[1] });
+        });
+      });
+    if (typeof PROPS === "object") Object.keys(PROPS).forEach(function (gid) {
+      var p = PROPS[gid] || {};
+      (p.h2h || []).forEach(function (c, s) { if (c && c[1]) put(c[1], { g: gid, k: "h2h", s: s }); });
+      ["ptd", "atd"].forEach(function (k) {
+        (p[k] || []).forEach(function (side, s) {
+          (side || []).forEach(function (c, i) { if (c && c[1]) put(c[1], { g: gid, k: k, s: s, n: i + 1 }); });
+        });
+      });
+    });
+    return m;
+  }
+  function trkRow(gid) {
+    var hit = null;
+    [[typeof SCHED === "object" ? SCHED : [], "nfl"], [typeof CFB === "object" ? CFB : [], "college-football"]].some(function (set) {
+      return set[0].some(function (g) { if (String(g[1]) === String(gid)) { hit = { g: g, lg: set[1] }; return true; } return false; });
+    });
+    return hit;
+  }
+  /* the club's own color that shows on black: its bright one, else its first */
+  function trkHue(ab) {
+    var dull = function (c) {
+      if (!c) return true;
+      var n = parseInt(c.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255, l = (r * 299 + g * 587 + b * 114) / 1000;
+      return l < 45 || l > 235;
+    };
+    var a = (typeof ALTCOLOR === "object" && ALTCOLOR[ab]) || "", h = (typeof HUE === "object" && HUE[ab]) || (typeof CFBCOLOR === "object" && CFBCOLOR[ab]) || "";
+    return !dull(a) ? a : !dull(h) ? h : "#8e8e93";
+  }
+  function trkImplied(p) {
+    var n = parseInt(String(p || "").replace(/[−–]/g, "-"), 10);
+    if (isNaN(n) || !n) return null;
+    return n < 0 ? -n / (-n + 100) : 100 / (n + 100);
+  }
+  var TRKD = {}, OPENSLIP = {};
+  /* what ESPN's summary says of one game: score, state, win chance, and each
+     passer's yards, passing and rushing touchdowns, by his own ESPN id */
+  function trkRead(d) {
+    var comp = (((d.header || {}).competitions) || [{}])[0] || {};
+    var st = (comp.status || {}).type || {}, out = { state: st.state || "pre", sc: {}, wp: null, qb: {} };
+    out.detail = (st.state === "in") ? (st.shortDetail || "") : "";
+    out.period = (comp.status || {}).period; out.clock = (comp.status || {}).displayClock;
+    (comp.competitors || []).forEach(function (c) { out.sc[c.homeAway] = c.score; });
+    var wp = d.winprobability || [];
+    if (wp.length) out.wp = wp[wp.length - 1].homeWinPercentage;
+    ((d.boxscore || {}).players || []).forEach(function (t) {
+      (t.statistics || []).forEach(function (grp) {
+        var lab = grp.labels || [], iy = lab.indexOf("YDS"), it = lab.indexOf("TD");
+        (grp.athletes || []).forEach(function (a) {
+          var id = String((a.athlete || {}).id || ""), s = a.stats || [], q = out.qb[id] = out.qb[id] || { yd: 0, ptd: 0, rtd: 0 };
+          if (grp.name === "passing") { q.yd = parseInt(s[iy], 10) || 0; q.ptd = parseInt(s[it], 10) || 0; }
+          if (grp.name === "rushing") q.rtd = parseInt(s[it], 10) || 0;
+        });
+      });
+    });
+    return out;
+  }
+  function trkChip(r, kick) {
+    if (!r || r.state === "pre") return '<span class="trkst trkst--pre">PRE</span>';
+    if (r.state === "post") return '<span class="trkst trkst--fin">FINAL</span>';
+    var q = r.period > 4 ? "OT" : "Q" + r.period;
+    var said = /half/i.test(r.detail) ? "HALF" : q + " " + (r.clock || "");
+    return '<span class="trkst">LIVE ' + esc(said) + "</span>";
+  }
+  function trkFace(src) { return '<img src="' + src + '" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'; }
+  /* one slip, drawn as its games */
+  function slipTrack(bet) {
+    var map = legMap(), games = {}, order = [], loose = [];
+    (bet.legs || []).forEach(function (lg) {
+      var v = map[lg.sel];
+      var row = v && trkRow(v.g);
+      if (!v || !row) { loose.push(lg); return; }
+      if (!games[v.g]) { games[v.g] = { row: row, legs: [] }; order.push(v.g); }
+      games[v.g].legs.push({ lg: lg, v: v });
+    });
+    if (!order.length) return "";
+    order.sort(function (a, b) { return Date.parse(games[a].row.g[2]) - Date.parse(games[b].row.g[2]); });
+    var html = order.map(function (gid) {
+      var G = games[gid], g = G.row.g, lg = G.row.lg, r = TRKD[gid] || null;
+      var away = g[3], home = g[4], kick = new Date(g[2]);
+      var day = kick.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric", timeZone: "America/New_York" }).replace(",", "");
+      var tm = kick.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+      var out = '<div class="trkg"><div class="trkh">' + esc(day) + " · " + esc(tm) + " · " + esc(away) + " @ " + esc(home) + " " + trkChip(r) + "</div>";
+      var pic = function (who) { var h = gamePic(gid, who); return h ? h.src : ""; };
+      var legSt = function (x) {
+        var st = (BANK.legs[x.lg.sel] || {}).st || String(x.lg.status || "").toLowerCase();
+        return st === "won" ? "won" : st === "lost" ? "lost" : "";
+      };
+      /* the moneyline: both clubs, the score, each side's chance to win */
+      G.legs.filter(function (x) { return x.v.k === "ml"; }).forEach(function (x) {
+        var s = x.v.s, ph;
+        if (r && r.wp != null) ph = r.wp;
+        else {
+          var pa = trkImplied(lg === "nfl" ? g[9] : g[10]), pb = trkImplied(lg === "nfl" ? g[11] : g[12]);
+          ph = pa != null && pb != null ? pb / (pa + pb) : 0.5;
+        }
+        var wa = Math.round((1 - ph) * 100), wh = 100 - wa;
+        var sa = r ? (r.sc.away || 0) : 0, sh = r ? (r.sc.home || 0) : 0;
+        out += '<div class="trkr trkr--two' + (legSt(x) ? " trkr--" + legSt(x) : "") + '">' +
+          '<span class="trkc trkc--logo' + (s === 0 ? " trkc--mine" : "") + '">' + trkFace(pic(away)) + "</span>" +
+          '<div class="trkm"><div class="trkt"><small>(' + wa + "%)</small><b>" + esc(sa) + "</b><em>–</em><b>" + esc(sh) + "</b><small>(" + wh + "%)</small></div>" +
+          '<div class="trkbar"><i style="width:' + wa + "%;background:" + trkHue(away) + '"></i><i style="flex:1;background:' + trkHue(home) + '"></i></div></div>' +
+          '<span class="trkc trkc--logo' + (s === 1 ? " trkc--mine" : "") + '">' + trkFace(pic(home)) + "</span></div>";
+      });
+      /* the head to head: his passer on the left, both yards and the gap */
+      G.legs.filter(function (x) { return x.v.k === "h2h"; }).forEach(function (x) {
+        var s = x.v.s, me = s === 0 ? [g[5], g[6], away] : [g[7], g[8], home], him = s === 0 ? [g[7], g[8], home] : [g[5], g[6], away];
+        var ym = r && r.qb[String(me[1])] ? r.qb[String(me[1])].yd : 0, yh = r && r.qb[String(him[1])] ? r.qb[String(him[1])].yd : 0;
+        var gap = ym - yh, share = ym + yh ? Math.round(ym / (ym + yh) * 100) : 50;
+        out += '<div class="trkr trkr--two' + (legSt(x) ? " trkr--" + legSt(x) : "") + '">' +
+          '<span class="trkc trkc--mine">' + trkFace(pic(me[0])) + "</span>" +
+          '<div class="trkm"><div class="trkt trkt--h2h"><span>' + esc(famName(me[0])) + "</span><b>" + ym + "</b>" +
+          '<em class="' + (gap < 0 ? "dn" : "up") + '">' + (gap >= 0 ? "+" : "−") + Math.abs(gap) + "</em>" +
+          '<b class="dim">' + yh + '</b><span class="dim">' + esc(famName(him[0])) + "</span></div>" +
+          '<div class="trkbar"><i style="width:' + share + "%;background:" + trkHue(me[2]) + '"></i><i style="flex:1;background:' + trkHue(him[2]) + '"></i></div></div>' +
+          '<span class="trkc">' + trkFace(pic(him[0])) + "</span></div>";
+      });
+      /* the touchdown legs, by passer: both kinds on one man sit as a pair of
+         short rows; one alone is the full row */
+      [0, 1].forEach(function (s) {
+        var mine = G.legs.filter(function (x) { return (x.v.k === "ptd" || x.v.k === "atd") && x.v.s === s; });
+        if (!mine.length) return;
+        var qb = s === 0 ? [g[5], g[6]] : [g[7], g[8]], q = (r && r.qb[String(qb[1])]) || { ptd: 0, rtd: 0 };
+        var pair = mine.some(function (x) { return x.v.k === "ptd"; }) && mine.some(function (x) { return x.v.k === "atd"; });
+        mine.sort(function (a, b) { return a.v.k < b.v.k ? 1 : -1; }).forEach(function (x) {
+          var n = x.v.n || 1, have = x.v.k === "ptd" ? q.ptd : q.rtd, st = legSt(x) || (have >= n ? "won" : "");
+          var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : (!r || r.state === "pre") ? " trkn--pre" : "";
+          var mk = x.v.k === "ptd" ? '<svg class="trkmk" viewBox="0 0 20 21"><use href="#fb"/></svg>' : '<svg class="trkmk" viewBox="0 0 52 47"><use href="#rush"/></svg>';
+          var what = x.v.k === "ptd" ? "PTD" : "RTD", pct = Math.min(100, Math.round(have / n * 100));
+          var bar = '<div class="trkbar trkbar--one"><i style="width:' + pct + "%;background:" + (st === "won" ? "var(--green)" : st === "lost" ? "#e2564d" : "#fff") + '"></i></div>';
+          out += pair
+            ? '<div class="trkr trkr--pair"><span class="trkc trkc--sm">' + trkFace(pic(qb[0])) + '</span><div class="trkl"><b>' + n + "+</b>" + what + mk + "</div>" + bar + '<span class="trkn' + box + '">' + have + "</span></div>"
+            : '<div class="trkr"><span class="trkc">' + trkFace(pic(qb[0])) + '</span><div class="trkm"><div class="trkl"><b>' + n + "+</b>" + esc(famName(qb[0])) + ' <i>· ' + what + "</i>" + mk + "</div>" + bar + '</div><span class="trkn' + box + '">' + have + "</span></div>";
+        });
+      });
+      return out + "</div>";
+    }).join("");
+    /* a leg off no game the board carries keeps its plain line */
+    if (loose.length) html += '<div class="trkg">' + loose.map(function (lg) {
+      return '<div class="trkloose">' + esc(lg.label || lg.pick || "") + '<b>' + esc(String(lg.odds || "").replace("-", "−")) + "</b></div>";
+    }).join("") + "</div>";
+    return html;
+  }
+  /* the games on the slips that are open, read from ESPN once they are under
+     way -- the same feed the live cards use, held five seconds -- and the
+     open slips drawn again as each answer lands */
+  function trkPull() {
+    var map = legMap(), want = {};
+    document.querySelectorAll("#cashlegs .slipcard--open[data-bet]").forEach(function (c) {
+      var bet = (DKB && DKB.bets || []).filter(function (b) { return String(b.id) === c.dataset.bet; })[0];
+      (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; if (v) want[v.g] = 1; });
+    });
+    Object.keys(want).forEach(function (gid) {
+      var row = trkRow(gid);
+      if (!row || Date.parse(row.g[2]) > Date.now() + 20 * 60000) return;
+      gameFeed(gid, row.lg).then(function (d) {
+        TRKD[gid] = trkRead(d);
+        trkPaint();
+      }).catch(function () {});
+    });
+  }
+  function trkPaint() {
+    document.querySelectorAll("#cashlegs .slipcard[data-bet] .sltrk").forEach(function (el) {
+      var id = el.closest(".slipcard").dataset.bet;
+      var bet = (DKB && DKB.bets || []).filter(function (b) { return String(b.id) === id; })[0];
+      if (bet) el.innerHTML = slipTrack(bet);
+    });
+  }
+  window.slipOpen = function (btn) {
+    var c = btn.closest(".slipcard"), on = c.classList.toggle("slipcard--open");
+    if (c.dataset.bet) { if (on) OPENSLIP[c.dataset.bet] = 1; else delete OPENSLIP[c.dataset.bet]; }
+    if (on) trkPull();
+  };
+  setInterval(function () {
+    var sh = document.getElementById("cashsheet");
+    if (sh && !sh.hidden && document.visibilityState === "visible") trkPull();
+  }, 15000);
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -16721,6 +16965,7 @@
         .filter(function (bet) {
           return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost"; });
         });
+      var LMAP = legMap();
       box.innerHTML = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
@@ -16729,7 +16974,7 @@
              Jose, Sep 26, 2026) */
           var b2 = document.querySelector('button.price[data-oid="' + (window.CSS && CSS.escape ? CSS.escape(lg.sel) : lg.sel) + '"]');
           var c2 = b2 && b2.closest(".gcard");
-          var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "");
+          var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LMAP[lg.sel] || {}).g || "";
           var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
           return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "" };
@@ -16746,11 +16991,13 @@
         /* the arrow rides right after the last icon, however many there are,
            and opens the legs under them (Jose, Sep 26, 2026) */
         var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
-          'onclick="this.closest(\'.slipcard\').classList.toggle(\'slipcard--open\')">' +
+          'onclick="slipOpen(this)">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
         var avs = slipAvatars(ls).replace(/<\/div>$/, arrow + "</div>");
-        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + '">' + avs +
-          '<ul class="slpicks">' + rows + '</ul>' +
+        var trk = slipTrack(bet);
+        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
+          (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + avs +
+          '<ul class="slpicks">' + rows + '</ul>' + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
           /* one line of three: the price, what went in, what it pays, with
              what each is written underneath (Jose, Sep 26, 2026) */
           '<div class="slgrid">' +
