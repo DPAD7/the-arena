@@ -38,6 +38,8 @@
 <!-- the two typefaces are kept in site/font: a reader should not have to
      ask Google for a font to read a scoreboard (Jose, Sep 18, 2026) -->
 <link rel="stylesheet" href="font/barlow.css">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">
 <style>
   :root {
     --ground: #000;
@@ -529,11 +531,15 @@
     -webkit-mask-size: contain; mask-size: contain;
     -webkit-mask-position: center; mask-position: center;
     -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
-    transition: opacity 0.35s ease; }
+    transition: opacity 0.35s ease;
+    /* the stack keeps its lines: the fill tints only its white, so the
+       plates and the $ go green and the black keylines stay black; it
+       climbs in gray, then takes the answer's color (Jose, Sep 29, 2026) */
+    mix-blend-mode: multiply; }
   .spfill--on { opacity: 1; }
   /* it climbs, so it is anchored at the foot and only its height moves */
   .spfill i { position: absolute; left: 0; right: 0; bottom: 0; height: 0;
-    background: #ffffff;
+    background: #9a9aa0;
     transition: height 0.45s cubic-bezier(.22, 1, .36, 1),
                 background-color 0.2s ease; }
   .spfill--ok i { background: var(--green); }
@@ -6523,8 +6529,8 @@
     /* the nav wears the round card, black and white; the cage stays on the
        UFC and DWCS headings (Jose, Sep 25, 2026) */
     {key: "mma", label: "UFC", ico: "ico/ufc-round.svg"},
-    {key: "college-football", label: "CFB", ico: "ico/cfp-new.png"},
-    {key: "form", label: "Form", ico: "ico/qbspy-2.png"},
+    {key: "college-football", label: "CFB", ico: "ico/cfp-bw.png"},
+    {key: "form", label: "Form", ico: "ico/stack-nav.png"},
     {key: "nfl", label: "NFL", ico: "ico/nfl-shield.png"},
     {key: "all", label: "All", ico: "ico/cal-3.svg"}
   ];
