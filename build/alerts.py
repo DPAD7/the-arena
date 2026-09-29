@@ -167,6 +167,13 @@ def main():
                 a = i.get("athlete") or {}
                 st = i.get("status") or ""
                 pos = ((a.get("position") or {}).get("abbreviation")) or ""
+                # every man on the report, both clubs, for the list under the
+                # lineup (Jose, Sep 29, 2026: "a full list of the offense and
+                # defensive injuries for team versus opponent")
+                if st in HURT:
+                    det0 = i.get("details") or {}
+                    e.setdefault("inj", []).append({"n": a.get("displayName") or "", "p": pos, "s": st, "t": ab,
+                                                    "w": det0.get("type") or "", "b": (det0.get("returnDate") or "")[:10]})
                 if st not in HURT or pos not in ("QB", "WR", "TE", "RB"):
                     continue
                 pid = str(a.get("id"))

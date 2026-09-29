@@ -414,6 +414,26 @@
   #qsearch .qsform { margin-top: 8px; background: #1c1c1f; border-radius: 10px; padding: 9px 10px 8px; }
   #qsearch .qsform > span { display: block; font: 700 11px "Barlow Condensed", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
+  /* the lineup folds shut under its own arrow, and stays how he left it */
+  #qsearch .qsform > .qshd { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
+  #qsearch .qsfold { width: 26px; height: 22px; border: 0; border-radius: 6px; background: rgba(255,255,255,.08);
+    color: #8e8e93; display: grid; place-items: center; padding: 0; cursor: pointer; }
+  #qsearch .qsfold svg { width: 14px; height: 14px; transition: transform .2s; }
+  #qsearch .qsform.shut .qsfold svg { transform: rotate(-90deg); }
+  #qsearch .qsform.shut > :not(.qshd) { display: none; }
+  /* both clubs' injury reports under the field, offense and defense */
+  #qsearch .qsinj { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; padding-top: 8px;
+    border-top: 1px solid rgba(255,255,255,.08); }
+  #qsearch .qsinj h5 { margin: 0 0 4px; font: 700 12px "Barlow Condensed", Arial, sans-serif; letter-spacing: .08em; color: #fff; }
+  #qsearch .qsinj h6 { margin: 6px 0 2px; font: 700 10px "Barlow Condensed", Arial, sans-serif; letter-spacing: .1em; color: #8e8e93; }
+  #qsearch .qsinj p { margin: 0; display: flex; gap: 5px; align-items: baseline; font: 500 12px/1.35 Barlow, Arial, sans-serif; color: #fff; }
+  #qsearch .qsinj p i { font-style: normal; color: #8e8e93; min-width: 22px; font-size: 11px; }
+  #qsearch .qsinj p b { margin-left: auto; font-size: 10px; font-weight: 800; padding: 1px 4px; border-radius: 4px; flex: none; }
+  #qsearch .qsinj b.out { background: #ff3b30; color: #fff; }
+  #qsearch .qsinj b.ir { background: #3a3a3c; color: #fff; }
+  #qsearch .qsinj b.d { background: #ff9f0a; color: #000; }
+  #qsearch .qsinj b.q { background: #ffd60a; color: #000; }
+  #qsearch .qsinj .none { color: #8e8e93; font-size: 12px; }
   #qsearch .qsfield { position: relative; height: 180px; margin-top: 6px; }
   #qsearch .qsfield .los { position: absolute; left: 1%; right: 1%; top: 85px; height: 2px; background: #fff; }
   #qsearch .qsj { position: absolute; width: 22px; height: 22px; transform: translateX(-50%);
@@ -4087,8 +4107,18 @@
      rain at BC, "if I add something to the betslip ... an alert saying this
      to consider"). */
   var ALERTS = null;
+  function qsFold(hd) {
+    var f = hd.closest(".qsform"); if (!f) return;
+    var shut = !f.classList.contains("shut");
+    document.querySelectorAll("#qsearch .qsform").forEach(function (x) { x.classList.toggle("shut", shut); });
+    try { localStorage.setItem("arena.qsform", shut ? "shut" : "open"); } catch (e) {}
+  }
   fetch("alerts.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { ALERTS = j || {}; }).catch(function () { ALERTS = {}; });
+  /* each club's five up front and who of them is hurt, for the line check */
+  var ALERTLU = {};
+  fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (j) { ALERTLU = j || {}; }).catch(function () {});
   function legAlert(btn, card) {
     if (!card || !ALERTS) return;
     var gid = card.dataset.espn || "", a = ALERTS[gid] || {}, says = [];
@@ -4123,8 +4153,13 @@
       says.push(["blow", (a.spread >= 28 ? "Spread " + a.spread + " points" : noMl ? "No moneyline posted" : "Favorite at " + String(worst).replace("-", "\u2212")) + ": blowout risk.",
                  passing ? "Starters often sit by the third quarter." : "Big favorites can win without covering your leg."]);
     }
-    /* 4. a productive teammate out */
-    var team = sideR ? (card.querySelectorAll(".ghead .gteam img.glogo")[1] || {}).alt : sideL ? (card.querySelectorAll(".ghead .gteam img.glogo")[0] || {}).alt : "";
+    /* 4. a productive teammate out -- his own club's, never the other
+       one's: Achane out is no risk to a Minnesota moneyline (Jose, Sep 29,
+       2026). A moneyline price sits in the card's own row, left club first. */
+    var mlAt = [].indexOf.call(mls, btn), isML = mlAt >= 0;
+    var tR = sideR || mlAt === 1, tL = sideL || mlAt === 0;
+    var logos = card.querySelectorAll(".ghead .gteam img.glogo");
+    var team = tR ? (logos[1] || {}).alt : tL ? (logos[0] || {}).alt : "";
     (a.out || []).forEach(function (x) {
       if (x.id === String(qb) || x.pos === "QB") return;
       if (team && x.team !== team) return;
@@ -4159,7 +4194,21 @@
       says.push(["out", x.name + " (" + x.pos + ") is " + said + (why ? " (" + why + ")" : "") + ".",
                  used || (x.lead ? "He leads the team in " + x.lead + "." : "")]);
     });
-    /* 5. already on an open DraftKings slip */
+    /* 5. his line: a starter up front out or questionable weakens the run
+       game and the push at the goal line, so it rides his club's moneyline
+       and its passer's rushing touchdown (Jose, Sep 29, 2026) */
+    var lu = team && ALERTLU[gid] && ALERTLU[gid][team];
+    if (lu && (isML || /ATD/.test(lab))) {
+      var SPOT = { lt: "LT", lg: "LG", c: "C", rg: "RG", rt: "RT" };
+      var hurt = (lu.off || []).filter(function (m) { return SPOT[m.k] && (m.s === "out" || m.s === "q"); });
+      if (hurt.length) {
+        var outs = hurt.filter(function (m) { return m.s === "out"; }).length;
+        says.push(["ol", team + " line: " + hurt.map(function (m) { return SPOT[m.k] + " " + (m.was || m.nm) + (m.s === "out" ? " out" + (m.was && m.nm ? ", " + m.nm + " in" : "") : " questionable"); }).join("; ") + ".",
+                   isML ? (outs ? "A starter down up front: harder to run the ball and protect." : "If " + (hurt.length > 1 ? "they sit" : "he sits") + ", harder to run the ball and protect.")
+                        : "Fewer holes near the goal line for " + (famName(qbName) || "him") + " to run it in."]);
+      }
+    }
+    /* 6. already on an open DraftKings slip */
     if (typeof DKB === "object" && DKB && DKB.bets && DKB.bets.some(function (b0) {
           return (b0.legs || []).some(function (lg) { return lg.sel === btn.dataset.oid; }); })) {
       says.push(["dup", "Already on an open DraftKings slip.", "A second bet on it doubles the same risk."]);
@@ -17976,6 +18025,27 @@
         if (e.target.closest && e.target.closest("#qsearch .qsj")) e.preventDefault();
       });
     })();
+    /* both clubs' injury reports, his club first, each split offense and
+       defense, the worst first (Jose, Sep 29, 2026) */
+    function injList(gid, mine, theirs) {
+      var all = ((typeof ALERTS === "object" && ALERTS && ALERTS[gid]) || {}).inj || [];
+      var OFF = /^(QB|RB|FB|WR|TE|OT|OG|OL|G|T|C|LS|K|PK|P)$/;
+      var RANK = { "Out": 0, "Injured Reserve": 1, "Suspension": 1, "Doubtful": 2, "Questionable": 3 };
+      var TAG = { "Out": ["out", "OUT"], "Injured Reserve": ["ir", "IR"], "Suspension": ["ir", "SUSP"], "Doubtful": ["d", "D"], "Questionable": ["q", "Q"] };
+      var side = function (club) {
+        var men = all.filter(function (x) { return x.t === club; })
+          .sort(function (a, b) { return (a.s in RANK ? RANK[a.s] : 9) - (b.s in RANK ? RANK[b.s] : 9); });
+        var rows = function (list) {
+          return list.length ? list.map(function (x) {
+            var tg = TAG[x.s] || ["q", x.s];
+            return "<p><i>" + esc(x.p) + "</i><span>" + esc(x.n) + '</span><b class="' + tg[0] + '">' + tg[1] + "</b></p>";
+          }).join("") : '<div class="none">None</div>';
+        };
+        return "<div><h5>" + esc(club) + "</h5><h6>OFFENSE</h6>" + rows(men.filter(function (x) { return OFF.test(x.p); })) +
+          "<h6>DEFENSE</h6>" + rows(men.filter(function (x) { return !OFF.test(x.p); })) + "</div>";
+      };
+      return '<div class="qsinj">' + side(mine) + side(theirs) + "</div>";
+    }
     function formation(gid, mine, theirs) {
       var g = (LU || {})[gid] || {}, o = (g[mine] || {}).off, d = (g[theirs] || {}).def;
       if (!o || !o.length || !d || !d.length) return "";
@@ -18037,8 +18107,12 @@
       place(d, theirs);
       var key = (outs ? '<i style="border-color:#ff3b30"></i>starter out, backup in' : "") +
                 (qs ? '<i style="border-color:#ffd60a"></i>questionable' : "");
-      return '<div class="qsform"><span>' + esc(mine) + " offense vs " + esc(theirs) + ' defense</span><div class="qsfield">' +
-        '<div class="los"></div>' + spots.join("") + "</div>" + (key ? '<div class="qskey">' + key + "</div>" : "") + "</div>";
+      var shut = false;
+      try { shut = localStorage.getItem("arena.qsform") === "shut"; } catch (e) {}
+      return '<div class="qsform' + (shut ? " shut" : "") + '"><span class="qshd" onclick="qsFold(this)">' + esc(mine) + " offense vs " + esc(theirs) +
+        ' defense<button type="button" class="qsfold" aria-label="Fold the lineup"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button></span>' +
+        '<div class="qsfield"><div class="los"></div>' + spots.join("") + "</div>" + (key ? '<div class="qskey">' + key + "</div>" : "") +
+        injList(gid, mine, theirs) + "</div>";
     }
     function card(id) {
       var q = DATA.qbs[id]; if (!q) return "";
