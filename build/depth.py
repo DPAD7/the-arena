@@ -71,18 +71,61 @@ def clubs():
     return sorted(t["abbr"] for t in json.loads(m.group(1)))
 
 
+_TIDS = None
+
+
+def feed(abbr):
+    """The same room off ESPN's data feed, for when the chart page will not
+       answer -- it does not from GitHub's machines, and the sweep wrote an
+       empty file on Sep 28, 2026 that let Mayfield stay on Tampa's card while
+       out. The feed has the order but no letters; the wire gives those."""
+    global _TIDS
+    try:
+        if _TIDS is None:
+            j = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams",
+                       impersonate="chrome", timeout=30).json()
+            _TIDS = {t["team"]["abbreviation"]: t["team"]["id"] for t in j["sports"][0]["leagues"][0]["teams"]}
+        tid = _TIDS.get(abbr) or _TIDS.get({"WAS": "WSH", "JAC": "JAX"}.get(abbr, abbr))
+        if not tid:
+            return []
+        names = {}
+        ro = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/%s/roster" % tid,
+                    impersonate="chrome", timeout=30).json()
+        for g in ro.get("athletes") or []:
+            for a in g.get("items") or []:
+                names[str(a.get("id"))] = a.get("displayName") or a.get("fullName")
+        import datetime as _dt
+        now = _dt.datetime.now()
+        yr = now.year if now.month >= 3 else now.year - 1
+        d = rq.get("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/seasons/%d/teams/%s/depthcharts"
+                   % (yr, tid), impersonate="chrome", timeout=30).json()
+        for it in d.get("items") or []:
+            qb = (it.get("positions") or {}).get("qb")
+            if not qb:
+                continue
+            out = []
+            for rank, a in enumerate(qb.get("athletes") or [], 1):
+                m = re.search(r"/athletes/(\d+)", (a.get("athlete") or {}).get("$ref", ""))
+                if m:
+                    out.append({"id": m.group(1), "name": names.get(m.group(1)) or "", "rank": rank, "mark": None})
+            return out
+    except Exception:
+        return []
+    return []
+
+
 def ask(abbr):
     """One club's quarterback room, in the order the chart lists it."""
     try:
         r = rq.get(PAGE % abbr.lower(), impersonate="chrome", timeout=30)
         if r.status_code != 200:
-            return abbr, []
+            return abbr, feed(abbr)
         m = BLOB.search(r.text)
         if not m:
-            return abbr, []
+            return abbr, feed(abbr)
         groups = json.loads(m.group(1))["page"]["content"]["depth"]["dethTeamGroups"]
     except Exception:
-        return abbr, []
+        return abbr, feed(abbr)
 
     out, seen = [], set()
     for g in groups:
@@ -136,6 +179,16 @@ def main():
                                                      qbs[0]["mark"], him))
         out[abbr] = {"qbs": qbs, "starter": starter}
 
+    # a club this read found nothing for keeps what the file held -- an
+    # absence is never written over the last good room (the file went empty
+    # on the Sep 28 morning sweep and nobody's card was checked all day)
+    try:
+        old = json.load(open(OUT))
+    except (OSError, ValueError):
+        old = {}
+    for abbr, room in old.items():
+        if abbr not in out:
+            out[abbr] = room
     json.dump(out, open(OUT, "w"), separators=(",", ":"), sort_keys=True)
     marked = [q for v in out.values() for q in v["qbs"] if q["mark"]]
     print("depth: %d clubs, %d quarterbacks, %d carrying a mark -> %s"
