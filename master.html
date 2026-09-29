@@ -238,6 +238,7 @@
   .trkn--won { border-color: var(--green); color: var(--green); }
   .trkn--lost { border-color: #e2564d; color: #e2564d; }
   .trkn--pre { border-color: #2c2d33; color: #9a9aa0; }
+  .trkq { font: 600 12px Barlow, "Helvetica Neue", Arial, sans-serif; color: #9a9aa0; margin-top: 4px; }
   .trkloose { display: flex; justify-content: space-between; padding: 6px 0; color: #e6e6e6; font-size: 14px; }
   .slipcard .slview { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0;
     border-radius: 10px; background: rgba(255,255,255,.08); color: #c9ccd2; cursor: pointer; align-self: center; }
@@ -4861,7 +4862,8 @@
       var m = legParts(b.l);
       var sh = m ? "" : shortLeg(b.l), ms = /\s(\d+\+)\s/.exec(" " + sh + " ");
       var who = m ? m[1] : sh.split(" ")[0];
-      var pic = slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
+      var pic = b.pic ? '<img class="slpic slpic--face" alt="" loading="lazy" src="face/nfl/' + b.pic + '.png" data-next="' + espnHead(b.pic) + '" onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}else{this.remove();}">'
+        : slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
       var mk = markFor(m ? m[2] : "");
       /* a leg with no card and no face says what it is, "40+", not the
          first letters of a name (Jose, Sep 27, 2026: "why does it say Jay") */
@@ -5199,7 +5201,9 @@
     var look = function (x) { return x && (x[who] || x[famName(who)] || x[String(who).toUpperCase()]); };
     /* the game he was written against settles who he is; the sport's own map
        and then anything at all are only for a leg with no game on it */
-    var hit = gamePic(gid, who) || (sport && look(m[sport])) || look(m.any);
+    /* a leg whose game is known takes a face from that game or none: "Smith"
+       on an Eagles prop wore Geno Smith (Jose, Sep 29, 2026) */
+    var hit = gamePic(gid, who) || (gid && sportOf(gid) ? null : (sport && look(m[sport])) || look(m.any));
     /* DraftKings writes a club "PHI Eagles": the letters are the club, so
        the wallet wears the logo the slip does, not "PHI" in type
        (Jose, Sep 28, 2026) */
@@ -16700,17 +16704,147 @@
     (comp.competitors || []).forEach(function (c) { out.sc[c.homeAway] = c.score; });
     var wp = d.winprobability || [];
     if (wp.length) out.wp = wp[wp.length - 1].homeWinPercentage;
+    out.men = {};
     ((d.boxscore || {}).players || []).forEach(function (t) {
       (t.statistics || []).forEach(function (grp) {
         var lab = grp.labels || [], iy = lab.indexOf("YDS"), it = lab.indexOf("TD");
         (grp.athletes || []).forEach(function (a) {
+          var nm = (a.athlete || {}).displayName || "", man = out.men[nm] = out.men[nm] || { id: String((a.athlete || {}).id || ""), st: {} };
+          var line = man.st[grp.name] = {};
+          lab.forEach(function (l, i) { line[l] = (a.stats || [])[i]; });
           var id = String((a.athlete || {}).id || ""), s = a.stats || [], q = out.qb[id] = out.qb[id] || { yd: 0, ptd: 0, rtd: 0 };
           if (grp.name === "passing") { q.yd = parseInt(s[iy], 10) || 0; q.ptd = parseInt(s[it], 10) || 0; }
           if (grp.name === "rushing") q.rtd = parseInt(s[it], 10) || 0;
         });
       });
     });
+    /* each play with its quarter and clock, for a leg that asks when */
+    out.plays = [];
+    (((d.drives || {}).previous) || []).concat((d.drives || {}).current ? [(d.drives || {}).current] : []).forEach(function (dr) {
+      (dr.plays || []).forEach(function (pl) {
+        out.plays.push({ q: (pl.period || {}).number, c: (pl.clock || {}).displayValue, t: pl.text || "" });
+      });
+    });
     return out;
+  }
+  /* ---- a leg the board holds no price for: the props ----
+     Tackles, yards, catches, a yes or no on the first quarter -- found in
+     the one game it is on, the man in that game's own box score (Jose,
+     Sep 29, 2026: "8 tackles ... a receiver to get 40 yards ... a yes or no
+     first-quarter reception"). The game is DraftKings' own event number,
+     through site/dkevents.json, else the two clubs its event is written
+     with; never a written name alone. */
+  var DKEVENTS = {};
+  fetch("dkevents.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+    .then(function (j) { DKEVENTS = j || {}; }).catch(function () {});
+  function trkGameOf(lg) {
+    if (lg.ev && DKEVENTS[lg.ev]) return DKEVENTS[lg.ev];
+    var m = /^([A-Z]{2,4})\s+\S.*?\s@\s([A-Z]{2,4})\s/.exec(String(lg.evn || "") + " ");
+    if (!m) return "";
+    var near = (typeof SCHED === "object" ? SCHED : []).filter(function (g) {
+      return g[3] === m[1] && g[4] === m[2] && Math.abs(Date.parse(g[2]) - Date.now()) < 5 * 86400000;
+    });
+    return near.length === 1 ? String(near[0][1]) : "";
+  }
+  /* the stat a market names, where it is in ESPN's box score, how it is said */
+  var PROPSTAT = [
+    [/rush(ing)? \+ rec(eiving)? yards|rush \+ rec yds/i, [["rushing", "YDS"], ["receiving", "YDS"]], "RUSH+REC YDS"],
+    [/receiving yards|rec yds/i, [["receiving", "YDS"]], "REC YDS"],
+    [/longest reception/i, [["receiving", "LONG"]], "LONG REC"],
+    [/receptions/i, [["receiving", "REC"]], "REC"],
+    [/rushing yards|rush yds/i, [["rushing", "YDS"]], "RUSH YDS"],
+    [/rushing attempts|carries/i, [["rushing", "CAR"]], "CAR"],
+    [/passing yards|pass yds/i, [["passing", "YDS"]], "PASS YDS"],
+    [/completions/i, [["passing", "C/ATT", 0]], "COMP"],
+    [/pass(ing)? attempts/i, [["passing", "C/ATT", 1]], "ATT"],
+    [/interceptions thrown|interceptions/i, [["passing", "INT"]], "INT"],
+    [/tackles \+ assists|tackles and assists|total tackles/i, [["defensive", "TOT"]], "TKL+AST"],
+    [/solo tackles/i, [["defensive", "SOLO"]], "SOLO"],
+    [/sacks/i, [["defensive", "SACKS"]], "SACKS"],
+    [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]], "TD"]
+  ];
+  /* who and what a prop leg says: "DeVonta Smith to Have 40+ Receiving
+     Yards", or a market "Zack Baun Tackles + Assists" picked "Over 7.5" */
+  function propParse(lg) {
+    var pick = String(lg.pick || ""), mk = String(lg.market || ""), m;
+    var yn = /^(yes|no)$/i.exec(pick.trim());
+    if ((m = /^(.+?) to (?:have|record|score) (\d+)\+ (.+)$/i.exec(pick))) return { who: m[1], n: +m[2], over: true, what: m[3], mk: mk };
+    var who = mk.replace(/\s*(-|\u2013)?\s*(o\/u|over\/under|milestones?|alt(ernate)?)\s*$/i, "");
+    var stat = PROPSTAT.filter(function (p) { return p[0].test(who); })[0];
+    if (stat) who = who.replace(stat[0], "").replace(/\s+(\d(st|nd|rd|th) quarter|first quarter)$/i, "").trim();
+    if (yn) {
+      /* "DeVonta Smith 1st Quarter Reception": the man is what comes before
+         the quarter or the event it asks about */
+      var man0 = mk.replace(/\s+((1st|2nd|3rd|4th|first) (quarter|half)|to (score|record|have)|anytime|first|reception|touchdown|td)\b.*$/i, "").trim();
+      return { who: man0 || who || pick, yes: /yes/i.test(yn[1]), what: mk, mk: mk };
+    }
+    if ((m = /^(over|under)\s+([\d.]+)$/i.exec(pick))) return { who: who, n: /over/i.test(m[1]) ? Math.floor(+m[2]) + 1 : Math.floor(+m[2]), over: /over/i.test(m[1]), line: +m[2], what: mk, mk: mk };
+    if ((m = /^(\d+)\+$/.exec(pick.trim()))) return { who: who, n: +m[1], over: true, what: mk, mk: mk };
+    return { who: who || pick, what: mk, mk: mk };
+  }
+  /* the man in the game's own box score: the whole written name, else one
+     man only whose surname and first initial fit -- two who fit is no one */
+  function propMan(r, who) {
+    if (!r || !r.men || !who) return null;
+    var fold = function (x) { return String(x).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\b(jr|sr|ii|iii|iv)\b\.?/ig, "").replace(/[^a-z ]/ig, "").trim().toLowerCase(); };
+    var w = fold(who), all = Object.keys(r.men);
+    var hit = all.filter(function (n) { return fold(n) === w; });
+    if (hit.length !== 1) {
+      var parts = w.split(" "), last = parts[parts.length - 1], ini = parts[0][0];
+      hit = all.filter(function (n) { var f = fold(n).split(" "); return f[f.length - 1] === last && f[0][0] === ini; });
+    }
+    return hit.length === 1 ? r.men[hit[0]] : null;
+  }
+  function propRow(x, r) {
+    var P = propParse(x.lg), man = propMan(r, P.who);
+    var stat = PROPSTAT.filter(function (p) { return p[0].test(P.what || "") || p[0].test(P.mk || ""); })[0];
+    var st = (BANK.legs[x.lg.sel] || {}).st || String(x.lg.status || "").toLowerCase();
+    st = st === "won" ? "won" : st === "lost" ? "lost" : "";
+    var over = r && r.state === "post", pre = !r || r.state === "pre";
+    var face = man && man.id ? trkFace("face/nfl/" + man.id + ".png", espnHead(man.id)) : "";
+    var name = esc(famName(P.who || ""));
+    /* a yes or no that asks when: the first quarter, read off the plays */
+    var q1 = /1st quarter|first quarter/i.test(P.mk || "");
+    if (P.yes !== undefined) {
+      var what = q1 && /reception/i.test(P.mk) ? "1Q REC" : esc(String(P.what || "").replace(P.who, "").trim().toUpperCase() || "YES/NO");
+      var when = "", happened = false, left = 0;
+      if (q1 && r && r.plays && man) {
+        var last = String(P.who).split(" ").pop().toLowerCase(), ini = String(P.who).trim()[0].toLowerCase();
+        var re = new RegExp("\\bto " + ini + "\\.\\s?" + last + "\\b", "i");
+        var got = r.plays.filter(function (p) { return p.q === 1 && re.test(p.t) && !/incomplete|no play|penalty/i.test(p.t); })[0];
+        if (got) { happened = true; when = "caught at Q1 " + got.c; }
+      }
+      var q1over = r && (r.state === "post" || (r.period || 0) > 1);
+      if (!st && q1) st = happened ? (P.yes ? "won" : "lost") : (q1over ? (P.yes ? "lost" : "won") : "");
+      if (q1 && r && r.state === "in" && r.period === 1 && !happened) {
+        var cl = String(r.clock || "15:00").split(":"); left = (+cl[0] * 60 + (+cl[1] || 0));
+        when = "Q1 " + r.clock + " left";
+      }
+      var fill = st ? 100 : q1 && r && r.period === 1 ? Math.round((900 - left) / 900 * 100) : 0;
+      var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
+      return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + (P.yes ? "YES" : "NO") + "</b>" + name +
+        ' <i>\u00b7 ' + what + '</i></div><div class="trkbar trkbar--one"><i style="width:' + fill + "%;background:" +
+        (st === "won" ? "var(--green)" : st === "lost" ? "#e2564d" : "#fff") + '"></i></div>' + (when ? '<div class="trkq">' + esc(when) + "</div>" : "") +
+        '</div><span class="trkn' + box + '">' + (st === "won" ? "\u2713" : st === "lost" ? "\u2717" : "\u2014") + "</span></div>";
+    }
+    /* a count against a line: the bar toward it, the count in the box */
+    var have = 0;
+    if (stat && man) stat[1].forEach(function (src) {
+      var v = ((man.st[src[0]] || {})[src[1]]);
+      if (src[2] !== undefined && v) v = String(v).split("/")[src[2]];
+      have += parseFloat(v) || 0;
+    });
+    var n = P.n || 1;
+    if (!st && P.over && have >= n) st = "won";
+    if (!st && P.over === false && have > (P.line || n)) st = "lost";
+    if (!st && over) st = P.over === false ? "won" : have >= n ? "won" : "lost";
+    var pct = Math.min(100, Math.round(have / n * 100));
+    var bx = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
+    var lab = (P.over === false ? "U" + (P.line || n) : n + "+");
+    return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + esc(lab) + "</b>" + name +
+      ' <i>\u00b7 ' + esc(stat ? stat[2] : String(P.what || "").toUpperCase()) + '</i></div><div class="trkbar trkbar--one"><i style="width:' + pct +
+      "%;background:" + (st === "won" ? "var(--green)" : st === "lost" ? "#e2564d" : "#fff") + '"></i></div></div><span class="trkn' + bx + '">' +
+      (Math.round(have * 10) / 10) + "</span></div>";
   }
   function trkChip(r, kick) {
     if (!r || r.state === "pre") return '<span class="trkst trkst--pre">PRE</span>';
@@ -16719,12 +16853,17 @@
     var said = /half/i.test(r.detail) ? "HALF" : q + " " + (r.clock || "");
     return '<span class="trkst">LIVE ' + esc(said) + "</span>";
   }
-  function trkFace(src) { return '<img src="' + src + '" alt="" loading="lazy" onerror="this.style.visibility=\'hidden\'">'; }
+  function trkFace(src, alt) {
+    return '<img src="' + src + '" alt="" loading="lazy"' + (alt ? ' data-next="' + alt + '"' : "") +
+      ' onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}else{this.style.visibility=\'hidden\';}">';
+  }
+  function espnHead(id) { return "https://a.espncdn.com/i/headshots/nfl/players/full/" + id + ".png"; }
   /* one slip, drawn as its games */
   function slipTrack(bet) {
     var map = legMap(), games = {}, order = [], loose = [];
     (bet.legs || []).forEach(function (lg) {
       var v = map[lg.sel];
+      if (!v) { var pg = trkGameOf(lg); if (pg) v = { g: pg, k: "prop" }; }
       var row = v && trkRow(v.g);
       if (!v || !row) { loose.push(lg); return; }
       if (!games[v.g]) { games[v.g] = { row: row, legs: [] }; order.push(v.g); }
@@ -16790,6 +16929,7 @@
             : '<div class="trkr"><span class="trkc">' + trkFace(pic(qb[0])) + '</span><div class="trkm"><div class="trkl"><b>' + n + "+</b>" + esc(famName(qb[0])) + ' <i>· ' + what + "</i>" + mk + "</div>" + bar + '</div><span class="trkn' + box + '">' + have + "</span></div>";
         });
       });
+      G.legs.filter(function (x) { return x.v.k === "prop"; }).forEach(function (x) { out += propRow(x, r); });
       return out + "</div>";
     }).join("");
     /* a leg off no game the board carries keeps its plain line */
@@ -16805,14 +16945,14 @@
     var map = legMap(), want = {};
     document.querySelectorAll("#cashlegs .slipcard--open[data-bet]").forEach(function (c) {
       var bet = (DKB && DKB.bets || []).filter(function (b) { return String(b.id) === c.dataset.bet; })[0];
-      (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; if (v) want[v.g] = 1; });
+      (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; var g0 = v ? v.g : trkGameOf(lg); if (g0) want[g0] = 1; });
     });
     Object.keys(want).forEach(function (gid) {
       var row = trkRow(gid);
       if (!row || Date.parse(row.g[2]) > Date.now() + 20 * 60000) return;
       gameFeed(gid, row.lg).then(function (d) {
         TRKD[gid] = trkRead(d);
-        trkPaint();
+        if (typeof bankDraw === "function") bankDraw(); else trkPaint();
       }).catch(function () {});
     });
   }
@@ -16976,8 +17116,18 @@
           var c2 = b2 && b2.closest(".gcard");
           var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LMAP[lg.sel] || {}).g || "";
           var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
+          var pic0 = "";
+          if (!LMAP[lg.sel]) {
+            var pg0 = trkGameOf(lg);
+            if (pg0) {
+              gid = gid || pg0;
+              var P0 = propParse(lg), m0 = propMan(TRKD[pg0], P0.who);
+              if (m0 && m0.id) pic0 = m0.id;
+              lab = (famName(P0.who || "") + " " + (P0.yes !== undefined ? (P0.yes ? "YES" : "NO") : P0.over === false ? "U" + (P0.line || "") : (P0.n || "") + "+")).trim() + " \u00b7 ";
+            }
+          }
           return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
-                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "" };
+                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "", pic: pic0 };
         });
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way

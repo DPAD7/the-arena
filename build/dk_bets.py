@@ -177,6 +177,17 @@ def label(x):
     return ("%s %s" % (pick, mk)).strip()
 
 
+def first(y, x, *keys):
+    for o in (y, x):
+        for k in keys:
+            v = o.get(k)
+            if isinstance(v, dict):
+                v = v.get("id") or v.get("name")
+            if v:
+                return v
+    return None
+
+
 def legs_of(b):
     """Every leg, with a same-game parlay inside a parlay opened into its own
        legs: DraftKings writes it as one "2 Pick SGP" selection with its
@@ -189,7 +200,15 @@ def legs_of(b):
                         "market": y.get("marketDisplayName"), "label": label(y),
                         "odds": "" if nest else plain(y.get("displayOdds")),
                         "sgp": plain(x.get("displayOdds")) if nest else "",
-                        "status": (y.get("settlementStatus") or y.get("status") or "").lower()})
+                        "status": (y.get("settlementStatus") or y.get("status") or "").lower(),
+                        # the game it is on, by the book's own event number: a leg
+                        # the board has no price for still finds its game through
+                        # site/dkevents.json (Sep 29, 2026)
+                        "ev": str(first(y, x, "eventId", "eventID", "event_id") or ""),
+                        "evn": first(y, x, "eventName", "eventDisplayName", "eventDescription") or "",
+                        # which fields the book sends, names only, until the
+                        # event id is confirmed in them
+                        "_k": sorted(k for k in y.keys() if "vent" in k.lower() or "game" in k.lower())})
     return out
 
 

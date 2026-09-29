@@ -118,6 +118,10 @@ def american(o):
     return str(o).replace("−", "-")
 
 
+DKEV = {}
+DKEVF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "site", "dkevents.json")
+
+
 def dk_events(league):
     d = ask(None, None, "/sportscontent/dkusmd/v1/leagues/%d" % LEAGUE[league]) or {}
     out = []
@@ -382,6 +386,7 @@ def main():
     dkpeople = json.load(open(dkp)) if os.path.exists(dkp) else {}
     print("dk_people.json: %d men pinned" % len(dkpeople))
 
+    DKEV.update(json.load(open(DKEVF)) if os.path.exists(DKEVF) else {})
     for league, var in (("nfl", "SCHED"), ("ncaaf", "CFB")):
         arr = json.loads(re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S).group(1))
         games = [g for g in arr if NOW < T(g[2]) <= HORIZON]
@@ -415,6 +420,9 @@ def main():
             if full(str(eid)) and T(g[2]) > NOW + dt.timedelta(hours=24):
                 held.append("%s/%s" % (away, home))
                 continue
+            # DraftKings' event number for this game, kept so a leg on his slip
+            # finds its game by the book's own id (site/dkevents.json)
+            DKEV[str(e["id"])] = str(eid)
             # the two passers, by id through person_name; else the identical written name
             qbs = [(g[5], str(g[6])), (g[7], str(g[8]))]
             qbs_id = [str(g[6]), str(g[8])]
@@ -504,6 +512,7 @@ def main():
         allq = {}
     allq.update(dk_qbs)
     json.dump(allq, open(qf, "w"), separators=(",", ":"), sort_keys=True)
+    json.dump(DKEV, open(DKEVF, "w"), separators=(",", ":"), sort_keys=True)
     # PROPS and the moneylines go to site/prices.json, never into the page: a
     # price that moves must not mean rewriting the page, or a price update and
     # an edit to the page can never both happen at once (Jose, Sep 18, 2026)
