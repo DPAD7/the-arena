@@ -135,6 +135,32 @@ def unprice(espn_id, side):
     return hit
 
 
+def book_of(espn_id, club, depth):
+    """Whose passing prices the card is carrying for this club, off the
+       prices file itself: DraftKings' own number for each man it priced,
+       pinned to ESPN's in data/dk_people.json, and kept only if ESPN has him
+       in this club's room. The side is settled by the club, never by
+       DraftKings' away/home order. data/dk_qbs.json goes stale on a game the
+       sweep holds more than a day out; this does not, because it is the very
+       read the prices on the card came from (Jose, Sep 29, 2026: Daniels's
+       face over Mariota's prices -- "we should get IDs for all ESPN
+       quarterbacks and IDs for all DraftKings quarterbacks")."""
+    f, pr = pricefile(espn_id)
+    q = ((pr or {}).get("props") or {}).get("_qb") or {}
+    try:
+        pins = json.load(open(os.path.join(D, "data", "dk_people.json")))
+    except (OSError, ValueError):
+        pins = {}
+    room = set(str(x.get("id")) for x in ((depth.get(club) or {}).get("qbs") or []))
+    out = []
+    for men in q.values():
+        for pid, nm in (men or {}).items():
+            e = str((pins.get(str(pid)) or {}).get("espn") or "")
+            if e and e in room and [e, nm] not in out:
+                out.append([e, nm])
+    return out
+
+
 def settle(club, espn_id, side, depth):
     """The man who starts for this club on this game, and what to say about
        him. Answers None when we have no chart for the club at all -- an
@@ -150,7 +176,9 @@ def settle(club, espn_id, side, depth):
             # Probable or Questionable: he plays, and he keeps his mark unless
             # the book is pricing him
             return {"id": q["id"], "name": q["name"], "mark": mark,
-                    "cleared": 1 if priced(espn_id, side) else 0}
+                    # the book pricing HIM, not just his side: the side was
+                    # priced for Mariota while Daniels sat questionable
+                    "cleared": 1 if any(x[0] == str(q["id"]) for x in book_of(espn_id, club, depth)) else 0}
         # marked and stopped: keep going down the room, and if that man is
         # marked too, keep going. A conflict with the book is noted by the
         # caller rather than settled here.
@@ -269,6 +297,8 @@ def main():
             # chart still said Bagent (Jose, Sep 28, 2026: "ESPN has to talk to
             # DraftKings to make sure we're pulling the right quarterback")
             book = [x for x in ((dkq_nfl.get(espn_id) or [[], []])[side]) if x and x[0]]
+            if not book:
+                book = book_of(espn_id, club, depth)
             if len(book) == 1 and (wire.get(book[0][0]) or {}).get("status", "").lower() not in STOP:
                 if str(g[i + 1]) != book[0][0]:
                     swaps.append("%-4s %-20s -> %-20s (DraftKings, ESPN id %s)" % (club, g[i], book[0][1], book[0][0]))

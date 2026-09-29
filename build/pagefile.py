@@ -24,6 +24,7 @@
    (Jose, Sep 17, 2026)
 """
 import os
+import re
 import time
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -66,6 +67,27 @@ DOC = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="referrer" content="no-referrer">\n</head>\n<body>\n')
 
 
+# a line of the page that is only data: the schedules, prices and maps the
+# sweep rewrites every run ("  var SCHED = [[...]];")
+DATALINE = re.compile(r'^  var [A-Z][A-Z0-9_]* = [\[{"].*;\s*$')
+
+
+def stamps(page):
+    """Two fourteen-digit stamps: one for the code, one for the data lines.
+       A stamp from the clock changed on every sweep, and the page reloads on
+       a new stamp, so the app restarted every time prices moved and closed
+       the wallet or the search under him (Jose, Sep 29, 2026: "is there a
+       bug in the code that restarts the app when something refreshes?").
+       Now only new code reloads a page in front of him; new data waits for
+       the page to be put away."""
+    import hashlib
+    code, data = [], []
+    for line in page.split("\n"):
+        (data if DATALINE.match(line) else code).append(line)
+    h = lambda xs: "%014d" % (int(hashlib.sha1("\n".join(xs).encode()).hexdigest(), 16) % 10 ** 14)
+    return h(code), h(data)
+
+
 def deployable(page):
     """The page wrapped as site/index.html, written ready to deploy.
 
@@ -74,8 +96,8 @@ def deployable(page):
        reloads itself when it has changed, so a new version reaches a phone
        that is already open without anybody pulling to refresh
        (Jose, Sep 19, 2026: "I don't want to have to refresh the page")."""
-    stamp = time.strftime("%Y%m%d%H%M%S", time.gmtime())
-    page = page.replace("__BUILD__", stamp)
-    open(os.path.join(D, "site", "build.txt"), "w").write(stamp + "\n")
+    code, data = stamps(page)
+    page = page.replace("__BUILD__", code).replace("__DATA__", data)
+    open(os.path.join(D, "site", "build.txt"), "w").write(code + "\n" + data + "\n")
     open(os.path.join(D, "site", "index.html"), "w").write(
         DOC + page + "\n</body>\n</html>\n")

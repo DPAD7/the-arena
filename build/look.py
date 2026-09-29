@@ -367,7 +367,10 @@ def main():
                     if view == "all":
                         n = pv.evaluate("""new Set([...document.querySelectorAll('.qcard:not(.qcard--clone)')]
                             .filter(c => c.getBoundingClientRect().height)
-                            .map(c => (c.querySelector('.qname h3') || {}).textContent)).size""")
+                            /* by the face's ESPN id: two starters share a surname
+                               (Jayden and Jalon Daniels, Sep 29, 2026) */
+                            .map(c => ((c.querySelector('img[data-ring]') || {}).dataset || {}).ring + '|' +
+                                      (c.querySelector('.qname h3') || {}).textContent)).size""")
                         seen.append("All %d" % n)
                         if n != 32:
                             wrong.append("the All tab shows %d passers, not 32" % n)

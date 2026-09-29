@@ -98,6 +98,14 @@ def passers():
             st = ((wire.get(pid) or {}).get("status") or "").lower()
             if pid and st in STOP:
                 wrong.append(("starters", "%s %s is named for game %s and the wire has him %s" % (club, g[i], g[1], st)))
+            # the card's passer is the man whose prices it carries: one QB
+            # DraftKings prices for this club, by id, and the card names
+            # another -- Daniels over Mariota's prices (Sep 29, 2026)
+            import starters
+            book = starters.book_of(str(g[1]), club, depth)
+            bst = ((wire.get(book[0][0]) or {}).get("status") or "").lower() if len(book) == 1 else ""
+            if len(book) == 1 and book[0][0] != pid and bst not in STOP:
+                wrong.append(("starters", "%s card names %s for game %s and DraftKings prices %s" % (club, g[i], g[1], book[0][1])))
     return wrong
 
 
@@ -277,7 +285,13 @@ def live():
         r, t = get("/?%d" % dt.datetime.now().timestamp()), get("/build.txt?%d" % dt.datetime.now().timestamp())
         if r is None or t is None or r.status_code != 200 or t.status_code != 200:
             return False
-        return r.text.replace(t.text.strip(), "__BUILD__") == pagefile.DOC + pagefile.read() + "\n</body>\n</html>\n"
+        st = t.text.split()
+        if not st:
+            return False
+        body = r.text.replace(st[0], "__BUILD__")
+        if len(st) > 1:
+            body = body.replace(st[1], "__DATA__")
+        return body == pagefile.DOC + pagefile.read() + "\n</body>\n</html>\n"
     if not same():
         print("   mending: the site does not carry main's page -- building and deploying it")
         pagefile.deployable(pagefile.read())

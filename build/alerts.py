@@ -123,9 +123,26 @@ def main():
             except ValueError:
                 continue
             if NOW - dt.timedelta(hours=5) < k < NOW + dt.timedelta(days=8):
-                games.append((str(r[1]), lg))
+                games.append((str(r[1]), lg, r[3], r[4]))
     out, hurts = {}, []
-    for gid, lg in games:
+    # the NFL's whole report, every club and every man on it: a game's summary
+    # stops at five a side, so Jalen Coker (Q) was never read (Jose, Sep 29,
+    # 2026: "did you check that or did you just talk about it?")
+    league = {}
+    try:
+        lj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries",
+                    impersonate="chrome124", timeout=30).json()
+        for t in lj.get("injuries") or []:
+            for i in t.get("injuries") or []:
+                a = i.get("athlete") or {}
+                ab = ((a.get("team") or {}).get("abbreviation")) or ""
+                if not a.get("id"):
+                    m = re.search(r"/id/(\d+)", json.dumps(a.get("links") or []))
+                    a = dict(a, id=m.group(1) if m else None)
+                league.setdefault(ab, []).append(dict(i, athlete=a))
+    except Exception:
+        league = {}
+    for gid, lg, away, home in games:
         try:
             d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
                        impersonate="chrome124", timeout=20).json()
@@ -161,7 +178,10 @@ def main():
                     for x in cat.get("leaders") or []:
                         lead[str((x.get("athlete") or {}).get("id"))] = "receiving" if cat["name"] == "receivingYards" else "rushing"
         hurt = []
-        for t in d.get("injuries") or []:
+        rep = d.get("injuries") or []
+        if lg == "nfl" and league.get(away) is not None and league.get(home) is not None:
+            rep = [{"team": {"abbreviation": ab}, "injuries": league.get(ab) or []} for ab in (away, home)]
+        for t in rep:
             ab = ((t.get("team") or {}).get("abbreviation")) or ""
             for i in t.get("injuries") or []:
                 a = i.get("athlete") or {}
