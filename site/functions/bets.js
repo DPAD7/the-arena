@@ -43,6 +43,11 @@ export async function onRequest({ request, env }) {
     if (new URL(request.url).searchParams.get("jar")) return ok({ jar: await env.ARENA.get("dkbets:jar") });
     /* the login his own browser sent (tools/dk-bets): handed back only to the
        reader, which holds ASK_SECRET -- never to the page */
+    /* what login is held, without a single value: how many cookies and when */
+    if (new URL(request.url).searchParams.get("loginmeta")) {
+      const l = JSON.parse((await env.ARENA.get("dkbets:login")) || "{}");
+      return ok({ cookies: Object.keys(l.cookies || {}).length, at: l.at || 0 });
+    }
     if (new URL(request.url).searchParams.get("login")) {
       if (!env.ASK_SECRET || request.headers.get("x-ask-secret") !== env.ASK_SECRET) return ok({ error: "no" }, 403);
       const l = await env.ARENA.get("dkbets:login");
