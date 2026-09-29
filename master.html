@@ -4177,42 +4177,6 @@
     return out;
   }
   window.qbRisks = qbRisks;
-  /* every leg on the slip, checked the moment he sends it to DraftKings
-     (Jose, Sep 29, 2026: "add it to be triggered for the bet button"). Each
-     leg finds its game and side by DraftKings' own id, so a leg off another
-     day's card is checked too. A passing leg takes the passer's list; a
-     rushing touchdown his own mark, his line and the weather; a moneyline
-     those and any teammate with 15% of the club's targets and carries. */
-  function slipRisks() {
-    var map = typeof legMap === "function" ? legMap() : {}, seen = {}, out = [];
-    Object.keys(saved || {}).forEach(function (id) {
-      var v = map[id], leg = saved[id] || {};
-      if (!v || v.fight || typeof trkRow !== "function") return;
-      var row = trkRow(v.g);
-      if (!row) return;
-      var g = row.g, club = v.s === 1 ? g[4] : g[3], qbId = v.s === 1 ? g[8] : g[6];
-      var rs = qbRisks(club, qbId);
-      if (v.k === "atd") rs = rs.filter(function (x) { return !/targets/.test(x.why); });
-      if (v.k === "ml") {
-        rs = rs.filter(function (x) { return !/targets/.test(x.why); });
-        var a = (ALERTS || {})[String(v.g)] || {};
-        (a.out || []).forEach(function (x) {
-          if (x.team !== club || x.pos === "QB" || !(x.sh >= 0.15)) return;
-          rs.push({ say: x.name + " (" + x.pos + ") is " + x.status.toLowerCase().replace("injured reserve", "on injured reserve") + ".",
-                    why: Math.round(x.sh * 100) + "% of the " + club + " touches: " + (x.tg ? x.tg + " targets, " : "") + (x.car || 0) + " carries a game." });
-        });
-      }
-      var lab = String(leg.l || "").split(" \u00b7 ")[0];
-      rs.forEach(function (x) {
-        var key = x.say;
-        if (seen[key]) { if (seen[key].legs.indexOf(lab) < 0) seen[key].legs.push(lab); return; }
-        seen[key] = { x: x, legs: [lab] };
-        out.push(seen[key]);
-      });
-    });
-    return out.map(function (r) { return ["out", r.x.say, r.legs.join(", ") + " \u2014 " + r.x.why]; });
-  }
-  window.slipRisks = slipRisks;
   function qsFold(hd) {
     var f = hd.closest(".qsform"); if (!f) return;
     var shut = !f.classList.contains("shut");
@@ -5163,14 +5127,6 @@
     if (kind) kind.textContent = on.length > 1 ? "parlay" : "single";
     var outs = on.map(function (b) { return b.id.replace(/#/g, "%23"); }).join("+");
     document.getElementById("sliplink").href = "https://sportsbook.draftkings.com/?outcomes=" + outs;
-    var sl = document.getElementById("sliplink");
-    if (!sl._risk) {
-      sl._risk = true;
-      sl.addEventListener("click", function () {
-        var says = typeof slipRisks === "function" ? slipRisks() : [];
-        if (says.length) showAlert("Consider \u00b7 your slip", says);
-      });
-    }
     document.getElementById("sliplink").textContent = "Add to betslip (" + on.length + ")";
     var list = document.getElementById("sliplist");
     list.innerHTML = "";
@@ -11200,14 +11156,6 @@
     }
     box.addEventListener("pointerup", letGo);
     box.addEventListener("pointercancel", letGo);
-  }
-  /* the first thing that can sink him, and how many more, on the card's corner */
-  function riskChip(club, id) {
-    var rs = typeof qbRisks === "function" ? qbRisks(club, id) : [];
-    if (!rs.length) return "";
-    var t = rs[0].tag, cls = t === "Q" ? "q" : t === "D" ? "d" : t === "WX" ? "wx" : "out";
-    return '<span class="qrisk qrisk--' + cls + '" title="' + esc(rs.map(function (x) { return x.say; }).join(" ")) + '">' +
-      esc(rs[0].who) + " " + esc(t === "WX" ? "" : t) + (rs.length > 1 ? " +" + (rs.length - 1) : "") + "</span>";
   }
   function qcard(r, rank, rec) {
     var club = String(r.club || ""), w, l;
