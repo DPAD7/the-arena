@@ -128,20 +128,22 @@ def main():
     # the NFL's whole report, every club and every man on it: a game's summary
     # stops at five a side, so Jalen Coker (Q) was never read (Jose, Sep 29,
     # 2026: "did you check that or did you just talk about it?")
-    league = {}
-    try:
-        lj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries",
-                    impersonate="chrome124", timeout=30).json()
-        for t in lj.get("injuries") or []:
-            for i in t.get("injuries") or []:
-                a = i.get("athlete") or {}
-                ab = ((a.get("team") or {}).get("abbreviation")) or ""
-                if not a.get("id"):
-                    m = re.search(r"/id/(\d+)", json.dumps(a.get("links") or []))
-                    a = dict(a, id=m.group(1) if m else None)
-                league.setdefault(ab, []).append(dict(i, athlete=a))
-    except Exception:
-        league = {}
+    # college the same way: its game summaries carry no injuries at all
+    league = {"nfl": {}, "college-football": {}}
+    for lg0 in league:
+        try:
+            lj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/injuries" % lg0,
+                        impersonate="chrome124", timeout=30).json()
+            for t in lj.get("injuries") or []:
+                for i in t.get("injuries") or []:
+                    a = i.get("athlete") or {}
+                    ab = ((a.get("team") or {}).get("abbreviation")) or ""
+                    if not a.get("id"):
+                        m = re.search(r"/id/(\d+)", json.dumps(a.get("links") or []))
+                        a = dict(a, id=m.group(1) if m else None)
+                    league[lg0].setdefault(ab, []).append(dict(i, athlete=a))
+        except Exception:
+            league[lg0] = {}
     for gid, lg, away, home in games:
         try:
             d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
@@ -179,8 +181,8 @@ def main():
                         lead[str((x.get("athlete") or {}).get("id"))] = "receiving" if cat["name"] == "receivingYards" else "rushing"
         hurt = []
         rep = d.get("injuries") or []
-        if lg == "nfl" and league.get(away) is not None and league.get(home) is not None:
-            rep = [{"team": {"abbreviation": ab}, "injuries": league.get(ab) or []} for ab in (away, home)]
+        if league[lg]:
+            rep = [{"team": {"abbreviation": ab}, "injuries": league[lg].get(ab) or []} for ab in (away, home)]
         for t in rep:
             ab = ((t.get("team") or {}).get("abbreviation")) or ""
             for i in t.get("injuries") or []:
