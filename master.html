@@ -4128,6 +4128,8 @@
      rain at BC, "if I add something to the betslip ... an alert saying this
      to consider"). */
   var ALERTS = null;
+  /* each club's five up front and its defense, and who of them is hurt */
+  var ALERTLU = {};
   /* What can sink a passer's legs in his club's next game, for the search card
      and the Form card (Jose, Sep 29, 2026: "they should also be on the search
      ... and on the stack button"): the same rules the leg alert keeps for a
@@ -4200,17 +4202,27 @@
     document.querySelectorAll("#qsearch .qsform").forEach(function (x) { x.classList.toggle("shut", shut); });
     try { localStorage.setItem("arena.qsform", shut ? "shut" : "open"); } catch (e) {}
   }
-  fetch("alerts.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (j) { ALERTS = j || {}; alertsIn(); }).catch(function () { ALERTS = {}; });
+  /* read again on coming back to the app and every five minutes: the sweep
+     rewrites the injury report through the day, and a page left open kept
+     the one it opened with (Jose, Sep 29, 2026: "does it update automatically
+     if someone's on the injury report") */
+  function alertsPull() {
+    fetch("alerts.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j) { ALERTS = j; alertsIn(); } else if (!ALERTS) ALERTS = {}; })
+      .catch(function () { if (!ALERTS) ALERTS = {}; });
+    fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { if (j) ALERTLU = j; }).catch(function () {});
+  }
+  alertsPull();
+  setInterval(alertsPull, 300000);
+  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") alertsPull(); });
   /* the Form cards wear what can sink each passer; they may be drawn before
      the file lands, so they are drawn again once it has */
   function alertsIn() {
     if (typeof sport !== "undefined" && sport === "form" && typeof render === "function") render();
   }
   /* each club's five up front and who of them is hurt, for the line check */
-  var ALERTLU = {};
-  fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (j) { ALERTLU = j || {}; if (ALERTS) alertsIn(); }).catch(function () {});
+
   function legAlert(btn, card) {
     if (!card || !ALERTS) return;
     var gid = card.dataset.espn || "", a = ALERTS[gid] || {}, says = [];
@@ -17941,10 +17953,12 @@
         sug = document.getElementById("qssug"), out = document.getElementById("qsout"),
         bar = document.getElementById("qsbar"), hint = document.getElementById("qspull");
     if (!box) return;
-    var DATA = null, picked = [], LU = null;
+    var DATA = null, picked = [], LU = null, LUAT = 0;
     function load() {
-      if (!LU) fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-        .then(function (j) { LU = j || {}; if (box.classList.contains("open")) draw(); }).catch(function () { LU = {}; });
+      /* the lineup is asked again once it is five minutes old: a man on the
+         injury report since it was read shows on the next open */
+      if (!LU || Date.now() - (LUAT || 0) > 300000) fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+        .then(function (j) { LU = j || {}; LUAT = Date.now(); if (box.classList.contains("open")) draw(); }).catch(function () { LU = LU || {}; });
       if (DATA) return Promise.resolve(DATA);
       return fetch("qbsearch.json", { cache: "no-store" }).then(function (r) { return r.json(); })
         .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
