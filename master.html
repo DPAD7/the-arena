@@ -493,11 +493,13 @@
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff;
   }
   .cashsheet[hidden] { display: none; }
-  #legalert { position: fixed; left: 16px; right: 16px; bottom: calc(100px + env(safe-area-inset-bottom)); z-index: 80;
+  /* from the top, like a notification: at the bottom it sat over the slip
+     (Jose, Sep 29, 2026) */
+  #legalert { position: fixed; left: 16px; right: 16px; top: calc(10px + env(safe-area-inset-top)); z-index: 80;
     padding: 14px 40px 12px 14px; border-radius: 16px; background: rgba(28, 28, 30, 0.94);
     -webkit-backdrop-filter: blur(22px); backdrop-filter: blur(22px); border: 1px solid rgba(255, 255, 255, 0.18);
     box-shadow: 0 14px 34px rgba(0, 0, 0, 0.6); color: #fff; font-family: Barlow, "Helvetica Neue", Arial, sans-serif;
-    opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
+    opacity: 0; transform: translateY(-16px); pointer-events: none; transition: opacity .25s ease, transform .25s ease; }
   #legalert.on { opacity: 1; transform: none; pointer-events: auto; }
   #legalert .lahead { display: block; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif;
     letter-spacing: .08em; color: #8e8e93; text-transform: uppercase; }   /* the board's gray, not QB Spy's gold (Jose, Sep 29, 2026) */
@@ -4132,6 +4134,18 @@
      passing leg -- a teammate with 15% of the targets or a quarter of the
      touchdown catches, a starting lineman down, his own mark, the weather.
      [{tag, who, say, why}] */
+  /* a club's defensive starters out or questionable, off the lineup: every
+     one of them, or only the ones who cover and rush the passer */
+  function defDown(gid, club, passOnly) {
+    var lu = (typeof ALERTLU === "object" && ALERTLU[String(gid)] || {})[club];
+    return ((lu && lu.def) || []).filter(function (m) {
+      if (m.s !== "out" && m.s !== "q") return false;
+      return !passOnly || /^(CB|S|DE)$/.test(m.p) || /cb|ss|fs|de/.test(m.k);
+    }).map(function (m) {
+      return (m.p || String(m.k).toUpperCase()) + " " + (m.was || m.nm) + (m.s === "out" ? " out" : " questionable");
+    });
+  }
+  window.defDown = defDown;
   function qbRisks(club, qbId, qbName) {
     var now = Date.now(), g = null;
     (typeof SCHED === "object" ? SCHED : []).forEach(function (r) {
@@ -4169,6 +4183,9 @@
                  say: club + " " + SPOT[m.k] + " " + nm + (m.s === "out" ? " is out" + (m.was && m.nm ? ", " + m.nm + " in" : "") : " is questionable") + ".",
                  why: "Less time to throw and fewer holes near the goal line." });
     });
+    var opp = g[3] === club ? g[4] : g[3], dd = defDown(g[1], opp, true);
+    if (dd.length) out.push({ tag: "DEF", who: opp + " D", say: opp + " defense: " + dd.join("; ") + ".",
+                              why: "Fewer of their starters covering and rushing: easier for " + qn + " to throw." });
     var w = a.wx || {};
     if (!w.in && ((w.g || 0) >= 20 || (w.p || 0) >= 60))
       out.push({ tag: "WX", who: (w.p || 0) >= 60 ? "Rain" : "Wind",
@@ -4291,7 +4308,24 @@
                         : "Fewer holes near the goal line for " + (famName(qbName) || "him") + " to run it in."]);
       }
     }
-    /* 6. already on an open DraftKings slip */
+    /* 6. the defenses: on a passing leg, the other side's secondary and
+       rush down helps him; on a moneyline, his own club's defensive starters
+       down hurt it -- a starting safety out, a corner questionable (Jose,
+       Sep 29, 2026) */
+    if (team) {
+      var other = (logos[0] || {}).alt === team ? (logos[1] || {}).alt : (logos[0] || {}).alt;
+      if (passing && other) {
+        var od = defDown(gid, other, true);
+        if (od.length) says.push(["def", other + " defense: " + od.join("; ") + ".",
+                                  "Fewer of their starters covering and rushing: easier for " + (famName(qbName) || "him") + " to throw."]);
+      }
+      if (isML) {
+        var md = defDown(gid, team, false);
+        if (md.length) says.push(["def", team + " defense: " + md.join("; ") + ".",
+                                  "Starters down on defense: harder to hold the other side."]);
+      }
+    }
+    /* 7. already on an open DraftKings slip */
     if (typeof DKB === "object" && DKB && DKB.bets && DKB.bets.some(function (b0) {
           return (b0.legs || []).some(function (lg) { return lg.sel === btn.dataset.oid; }); })) {
       says.push(["dup", "Already on an open DraftKings slip.", "A second bet on it doubles the same risk."]);
