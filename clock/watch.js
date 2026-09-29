@@ -9,7 +9,9 @@
    here is made the way a browser makes it -- the site's /espn relay does the
    same (Jose, Sep 17, 2026). Without this the clock's reads failed quietly. */
 export function espnGet(u) {
-  return fetch(u, { headers: {
+  /* through the site's own relay (/espn), the path the phone uses: ESPN's
+     edge turned the Worker's own calls away even dressed as a browser */
+  return fetch("https://the-arenasports.pages.dev/espn?u=" + encodeURIComponent(u), { headers: {
     accept: "application/json, text/plain, */*", "accept-language": "en-US,en;q=0.9",
     "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
     referer: "https://www.espn.com/", origin: "https://www.espn.com" } });
@@ -96,7 +98,7 @@ export async function readGame(gid, lg, board) {
   }
   if (g.state !== "pre") {
     try {
-      const d = await (await espnGet("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/summary?event=" + gid)).json();
+      const d = await (await espnGet("https://site.web.api.espn.com/apis/site/v2/sports/football/" + lg + "/summary?event=" + gid)).json();
       for (const t of ((d.boxscore || {}).players) || []) {
         for (const st of t.statistics || []) {
           if (st.name !== "passing" && st.name !== "rushing") continue;
