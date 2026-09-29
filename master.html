@@ -4235,6 +4235,14 @@
     var tR = sideR || mlAt === 1, tL = sideL || mlAt === 0;
     var logos = card.querySelectorAll(".ghead .gteam img.glogo");
     var team = tR ? (logos[1] || {}).alt : tL ? (logos[0] || {}).alt : "";
+    /* a moneyline rides on its passer too: Allen questionable is the first
+       thing to know about a Buffalo moneyline (Jose, Sep 29, 2026) */
+    if (isML && !qb) {
+      var mq = mlAt === 1 ? card.dataset.rqbid : card.dataset.lqbid, mn = mlAt === 1 ? card.dataset.rqb : card.dataset.lqb;
+      var mh = mq && typeof WIRE === "object" ? WIRE[String(mq)] : null;
+      if (mh && mh.status) says.push(["qb", famName(mn) + " is " + mh.status.toLowerCase().replace("injured reserve", "on injured reserve") + ".",
+                                      "If he doesn't start, the moneyline rides on his backup."]);
+    }
     (a.out || []).forEach(function (x) {
       if (x.id === String(qb) || x.pos === "QB") return;
       if (team && x.team !== team) return;
