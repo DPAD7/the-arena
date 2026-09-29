@@ -166,12 +166,12 @@ export function news(slips, idx, games, prev, rows) {
     const open = legs.filter(x => x.st === "open");
     const odds = String(bet.odds || "");
     if (!open.length && legs.length) {
-      out.push({ key: "won@" + bet.id, type: "slip", title: "You won", body: "Your " + odds + " slip hit: $" + (+bet.topay || 0).toFixed(2) + ".", url: "/#slip=" + bet.id });
+      out.push({ tag: "slip:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won", body: "Your " + odds + " slip hit: $" + (+bet.topay || 0).toFixed(2) + ".", url: "/#slip=" + bet.id });
       continue;
     }
     if (open.length === 1 && legs.length > 1) {
       const x = open[0], g = x.g;
-      out.push({ key: "one@" + bet.id + "@" + x.lg.sel, type: "slip", title: "One leg left",
+      out.push({ tag: "slip:" + bet.id, key: "one@" + bet.id + "@" + x.lg.sel, type: "slip", title: "One leg left",
                  body: "On your " + odds + " slip: " + lab(x.lg, x.v) + (g && g.clock ? " · " + g.clock : "") + ".", url: "/#slip=" + bet.id });
     }
   }
@@ -184,14 +184,14 @@ export function news(slips, idx, games, prev, rows) {
     if (v.fight) {
       if (g.state === "in" && !seen["fon@" + v.gid]) {
         seen["fon@" + v.gid] = 1;
-        out.push({ key: "fon@" + v.gid, type: "fight", title: r[4] + " vs " + r[5], body: "Your fight is on" + (g.period ? " · R" + g.period : "") + ".", url: "/#bout=" + v.gid });
+        out.push({ tag: "slip:" + bet.id, key: "fon@" + v.gid, type: "fight", title: r[4] + " vs " + r[5], body: "Your fight is on" + (g.period ? " · R" + g.period : "") + ".", url: "/#bout=" + v.gid });
       }
       if (g.state === "post" && !seen["ffin@" + v.gid]) {
         seen["ffin@" + v.gid] = 1;
         const won = g.winner === String(r[6]) ? r[4] : g.winner === String(r[7]) ? r[5] : "";
         const said = (bet.legs || []).map(l => ({ l, w: idx[l.sel] })).filter(x => x.w && x.w.gid === v.gid)
           .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, null, r) === "won" ? "hit" : legState(x.w, g, null, r) === "lost" ? "missed" : "")).join(" · ");
-        out.push({ key: "ffin@" + v.gid, type: "fight", title: "Final: " + (won ? won + " wins" : r[4] + " vs " + r[5]) + (g.how ? " by " + g.how : ""),
+        out.push({ tag: "slip:" + bet.id, key: "ffin@" + v.gid, type: "fight", title: "Final: " + (won ? won + " wins" : r[4] + " vs " + r[5]) + (g.how ? " by " + g.how : ""),
                    body: (g.period ? "R" + g.period + " " + g.clock + ". " : "") + said + ".", url: "/#bout=" + v.gid });
       }
       continue;
@@ -205,7 +205,7 @@ export function news(slips, idx, games, prev, rows) {
           seen[k] = 1;
           const mine = (bet.legs || []).map(l => idx[l.sel]).filter(w => w && w.kind === "ptd" && w.qb === v.qb).map(w => w.n);
           const hit = mine.filter(n => n <= q.ptd), next = mine.filter(n => n > q.ptd).sort((a, b) => a - b)[0];
-          out.push({ key: k, type: "td", title: last(v.qbName) + " TD pass (" + q.ptd + ")",
+          out.push({ tag: "slip:" + bet.id, key: k, type: "td", title: last(v.qbName) + " TD pass (" + q.ptd + ")",
                      body: [hit.length ? hit.sort().pop() + "+ PTD hit." : "", next ? "Next: " + next + "+ needs " + (next - q.ptd) + " more." : "",
                             away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + "."].filter(Boolean).join(" "),
                      url: "/#game=" + v.gid });
@@ -213,7 +213,7 @@ export function news(slips, idx, games, prev, rows) {
       }
       if (v.kind === "atd" && q.rtd > (q0.rtd || 0)) {
         const k = "rtd@" + v.gid + "@" + v.qb + "@" + q.rtd;
-        if (!seen[k]) { seen[k] = 1; out.push({ key: k, type: "td", title: last(v.qbName) + " rushing TD", body: q.rtd + "+ rushing TD hit. " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + ".", url: "/#game=" + v.gid }); }
+        if (!seen[k]) { seen[k] = 1; out.push({ tag: "slip:" + bet.id, key: k, type: "td", title: last(v.qbName) + " rushing TD", body: q.rtd + "+ rushing TD hit. " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + ".", url: "/#game=" + v.gid }); }
       }
     }
     // red zone, for his club on the ball
@@ -221,7 +221,7 @@ export function news(slips, idx, games, prev, rows) {
       const k = "rz@" + v.gid + "@" + v.team + "@" + g.sc[0] + "-" + g.sc[1] + "@" + (g.clock || "").split(" ").pop().slice(0, 2);
       if (!seen["rz@" + v.gid + v.team] && !p["rz" + v.team]) {
         seen["rz@" + v.gid + v.team] = 1;
-        out.push({ key: k, type: "redzone", title: v.team + " in the red zone", body: (g.down ? g.down + ". " : "") + (v.qbName ? last(v.qbName) + " " + (v.kind === "ptd" ? v.n + "+ PTD" : v.kind === "atd" ? "1+ rushing TD" : "") : v.team + " ML") + " · " + g.clock + ".", url: "/#game=" + v.gid });
+        out.push({ tag: "slip:" + bet.id, key: k, type: "redzone", title: v.team + " in the red zone", body: (g.down ? g.down + ". " : "") + (v.qbName ? last(v.qbName) + " " + (v.kind === "ptd" ? v.n + "+ PTD" : v.kind === "atd" ? "1+ rushing TD" : "") : v.team + " ML") + " · " + g.clock + ".", url: "/#game=" + v.gid });
       }
     }
     // win chance, once each way, on a moneyline
@@ -229,7 +229,7 @@ export function news(slips, idx, games, prev, rows) {
       const mine = v.side ? g.wpHome : 1 - g.wpHome, pct = Math.round(mine * 100);
       for (const [edge, word, test] of [["low", "down to", mine <= 0.25], ["high", "up to", mine >= 0.8]]) {
         const k = "wp" + edge + "@" + v.gid + "@" + v.team;
-        if (test && !seen[k]) { seen[k] = 1; out.push({ key: k, type: "wp", title: v.team + " win chance " + word + " " + pct + "%", body: away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + " · " + g.clock + ".", url: "/#game=" + v.gid }); }
+        if (test && !seen[k]) { seen[k] = 1; out.push({ tag: "slip:" + bet.id, key: k, type: "wp", title: v.team + " win chance " + word + " " + pct + "%", body: away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + " · " + g.clock + ".", url: "/#game=" + v.gid }); }
       }
     }
     // the final, once a game
@@ -239,7 +239,7 @@ export function news(slips, idx, games, prev, rows) {
         seen[k] = 1;
         const said = (bet.legs || []).map(l => ({ l, w: idx[l.sel] })).filter(x => x.w && x.w.gid === v.gid)
           .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, x.w.side ? r[7] : r[9], r) === "won" ? "hit" : "missed")).join(" · ");
-        out.push({ key: k, type: "final", title: "Final: " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home, body: said + ".", url: "/#game=" + v.gid });
+        out.push({ tag: "slip:" + bet.id, key: k, type: "final", title: "Final: " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home, body: said + ".", url: "/#game=" + v.gid });
       }
     }
   }

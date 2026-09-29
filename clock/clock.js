@@ -437,7 +437,9 @@ export class Clock {
       sent[m.key] = Date.now();
       for (const [ep, sub] of Object.entries(subs)) {
         try {
-          const st = await sendPush(sub, { title: m.title, body: m.body, url: m.url, tag: m.key, type: m.type, badge }, jwk);
+          // one alert per slip that replaces itself as its legs move -- the free
+          // stand-in for DraftKings' Live Activity (Jose, Sep 29, 2026)
+          const st = await sendPush(sub, { title: m.title, body: m.body, url: m.url, tag: m.tag || m.key, type: m.type, badge }, jwk);
           if (st === 404 || st === 410) delete subs[ep]; else n++;
         } catch (e) {}
       }
