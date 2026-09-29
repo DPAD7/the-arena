@@ -420,6 +420,12 @@
   #qsearch .qsform { margin-top: 8px; background: #1c1c1f; border-radius: 10px; padding: 9px 10px 8px; }
   #qsearch .qsform > span { display: block; font: 700 11px "Barlow Condensed", "Helvetica Neue", Arial, sans-serif;
     letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
+  #qsearch .qsrisk { margin-top: 8px; background: #1c1c1f; border-radius: 10px; padding: 9px 10px; }
+  #qsearch .qsrisk > span { display: block; font: 700 11px "Barlow Condensed", Arial, sans-serif; letter-spacing: .1em;
+    color: #8e8e93; text-transform: uppercase; margin-bottom: 4px; }
+  #qsearch .qsrisk p { margin: 6px 0 0; }
+  #qsearch .qsrisk b { display: block; font: 600 14px/1.3 Barlow, Arial, sans-serif; color: #fff; }
+  #qsearch .qsrisk small { display: block; font: 500 12px/1.3 Barlow, Arial, sans-serif; color: #8e8e93; }
   /* the lineup folds shut under its own arrow, and stays how he left it */
   #qsearch .qsform > .qshd { display: flex; align-items: center; justify-content: space-between; cursor: pointer; }
   #qsearch .qsfold { width: 26px; height: 22px; border: 0; border-radius: 6px; background: rgba(255,255,255,.08);
@@ -2572,6 +2578,13 @@
   .qrank .hurt--corner svg { width: 22px; height: 22px; color: #fff; stroke: #fff; }
   .qrank:has(.hurt--corner) { opacity: 1 !important; color: #fff !important; }
   .qrank .hurt--corner, .qrank .hurt--corner * { opacity: 1 !important; }
+  /* what can sink his legs, on the card's corner (Jose, Sep 29, 2026) */
+  .qrisk { position: absolute; z-index: 4; left: 22px; top: 5px; max-width: 66%; overflow: hidden; text-overflow: ellipsis;
+    white-space: nowrap; padding: 2px 5px; border-radius: 5px; font: 800 10px/1.2 Barlow, Arial, sans-serif; }
+  .qrisk--out { background: #ff3b30; color: #fff; }
+  .qrisk--d { background: #ff9f0a; color: #000; }
+  .qrisk--q { background: #ffd60a; color: #000; }
+  .qrisk--wx { background: #3a3a3c; color: #fff; }
   .qrank { position: absolute; z-index: 2; left: 7px; top: 5px;
     font-weight: 800; font-size: 12px; color: rgba(255,255,255,0.75); }
   .qside { padding: 8px 6px 20px 0; position: relative; z-index: 2; display: grid;
@@ -4113,6 +4126,57 @@
      rain at BC, "if I add something to the betslip ... an alert saying this
      to consider"). */
   var ALERTS = null;
+  /* What can sink a passer's legs in his club's next game, for the search card
+     and the Form card (Jose, Sep 29, 2026: "they should also be on the search
+     ... and on the stack button"): the same rules the leg alert keeps for a
+     passing leg -- a teammate with 15% of the targets or a quarter of the
+     touchdown catches, a starting lineman down, his own mark, the weather.
+     [{tag, who, say, why}] */
+  function qbRisks(club, qbId, qbName) {
+    var now = Date.now(), g = null;
+    (typeof SCHED === "object" ? SCHED : []).forEach(function (r) {
+      var t = Date.parse(r[2]);
+      if (t < now - 5 * 3600000 || (r[3] !== club && r[4] !== club)) return;
+      if (!g || t < Date.parse(g[2])) g = r;
+    });
+    if (!g || !ALERTS) return [];
+    var a = ALERTS[String(g[1])] || {}, out = [];
+    /* only the man the card names for that game: a benched passer's club
+       news is not his */
+    var onCard = String(g[3] === club ? g[6] : g[8]);
+    if (qbId && onCard !== String(qbId)) return [];
+    var qn = famName(qbName || (g[3] === club ? g[5] : g[7])) || "him";
+    var TAG = { "Out": "OUT", "Injured Reserve": "IR", "Doubtful": "D", "Questionable": "Q", "Suspension": "SUSP" };
+    var h = typeof WIRE === "object" ? WIRE[String(qbId)] : null;
+    if (h && h.status && TAG[h.status]) out.push({ tag: TAG[h.status], who: qn, say: qn + " is " + h.status.toLowerCase() + (h.type ? " (" + String(h.type).toLowerCase() + ")" : "") + ".", why: "If he doesn't take the snaps, the leg is dead." });
+    (a.out || []).forEach(function (x) {
+      if (x.team !== club || x.pos === "QB" || x.sh == null) return;
+      if (!(x.tsh >= 0.15 || (x.tds >= 2 && x.rtd * 4 >= x.tds))) return;
+      var lo = Math.floor(x.tg), hi = Math.ceil(x.tg);
+      var tgs = (lo === hi ? "about " + lo : lo + " to " + hi) + " " + (x.tgw || "targets");
+      var ifs = /Questionable|Doubtful/.test(x.status) ? "If he sits, tougher" : "Tougher";
+      out.push({ tag: TAG[x.status] || x.status, who: famName(x.name) || x.name,
+                 say: x.name + " (" + x.pos + ") is " + x.status.toLowerCase().replace("injured reserve", "on injured reserve") + ".",
+                 why: "Usually gets " + tgs + " and " + (x.ryd || 0) + " yards a game" + (x.tds ? ", caught " + (x.rtd || 0) + " of " + x.team + "'s " + x.tds + " TD passes" : "") +
+                      ". " + ifs + " for " + qn + " to throw his." });
+    });
+    var lu = (typeof ALERTLU === "object" && ALERTLU[String(g[1])] || {})[club];
+    var SPOT = { lt: "LT", lg: "LG", c: "C", rg: "RG", rt: "RT" };
+    ((lu && lu.off) || []).forEach(function (m) {
+      if (!SPOT[m.k] || (m.s !== "out" && m.s !== "q")) return;
+      var nm = m.was || m.nm;
+      out.push({ tag: m.s === "out" ? "OUT" : "Q", who: SPOT[m.k] + " " + String(nm).replace(/^([A-Z]\.\s*)+/, ""),
+                 say: club + " " + SPOT[m.k] + " " + nm + (m.s === "out" ? " is out" + (m.was && m.nm ? ", " + m.nm + " in" : "") : " is questionable") + ".",
+                 why: "Less time to throw and fewer holes near the goal line." });
+    });
+    var w = a.wx || {};
+    if (!w.in && ((w.g || 0) >= 20 || (w.p || 0) >= 60))
+      out.push({ tag: "WX", who: (w.p || 0) >= 60 ? "Rain" : "Wind",
+                 say: [(w.p || 0) >= 60 ? "Rain likely (" + w.p + "%)" : "", (w.g || 0) >= 20 ? "gusts to " + w.g + " mph" : ""].filter(Boolean).join(", ") + ".",
+                 why: "Wind and rain cut passing TDs and yards." });
+    return out;
+  }
+  window.qbRisks = qbRisks;
   function qsFold(hd) {
     var f = hd.closest(".qsform"); if (!f) return;
     var shut = !f.classList.contains("shut");
@@ -4120,11 +4184,16 @@
     try { localStorage.setItem("arena.qsform", shut ? "shut" : "open"); } catch (e) {}
   }
   fetch("alerts.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (j) { ALERTS = j || {}; }).catch(function () { ALERTS = {}; });
+    .then(function (j) { ALERTS = j || {}; alertsIn(); }).catch(function () { ALERTS = {}; });
+  /* the Form cards wear what can sink each passer; they may be drawn before
+     the file lands, so they are drawn again once it has */
+  function alertsIn() {
+    if (typeof sport !== "undefined" && sport === "form" && typeof render === "function") render();
+  }
   /* each club's five up front and who of them is hurt, for the line check */
   var ALERTLU = {};
   fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-    .then(function (j) { ALERTLU = j || {}; }).catch(function () {});
+    .then(function (j) { ALERTLU = j || {}; if (ALERTS) alertsIn(); }).catch(function () {});
   function legAlert(btn, card) {
     if (!card || !ALERTS) return;
     var gid = card.dataset.espn || "", a = ALERTS[gid] || {}, says = [];
@@ -11088,6 +11157,14 @@
     box.addEventListener("pointerup", letGo);
     box.addEventListener("pointercancel", letGo);
   }
+  /* the first thing that can sink him, and how many more, on the card's corner */
+  function riskChip(club, id) {
+    var rs = typeof qbRisks === "function" ? qbRisks(club, id) : [];
+    if (!rs.length) return "";
+    var t = rs[0].tag, cls = t === "Q" ? "q" : t === "D" ? "d" : t === "WX" ? "wx" : "out";
+    return '<span class="qrisk qrisk--' + cls + '" title="' + esc(rs.map(function (x) { return x.say; }).join(" ")) + '">' +
+      esc(rs[0].who) + " " + esc(t === "WX" ? "" : t) + (rs.length > 1 ? " +" + (rs.length - 1) : "") + "</span>";
+  }
   function qcard(r, rank, rec) {
     var club = String(r.club || ""), w, l;
     if (rec) {
@@ -11105,7 +11182,7 @@
     return '<article class="qcard' + (RINGED[String(r.id)] ? " qcard--gold" : "") + (r.bench ? " qcard--bench" : "") + '">' +
       '<div class="qface" style="--hue:' + cardHue(club) + ';--mark:url(logos/nfl/' +
         club.toLowerCase() + '.png)">' + face +
-        '<span class="qrank">' + rank + "</span></div>" +
+        '<span class="qrank">' + rank + "</span></div>" + riskChip(club, r.id) +
       '<div class="qside">' +
         qline(CHIPW, "Club wins", w) + qline(CHIPL, "Club losses", l) +
         qline(BALLSVG, "Passing touchdowns", r.ptd) +
@@ -18103,6 +18180,13 @@
         if (e.target.closest && e.target.closest("#qsearch .qsj")) e.preventDefault();
       });
     })();
+    /* what can sink his legs this week, said in full on his card */
+    function riskList(club, id) {
+      var rs = typeof qbRisks === "function" ? qbRisks(club, id) : [];
+      if (!rs.length) return "";
+      return '<div class="qsrisk"><span>Consider</span>' + rs.map(function (x) {
+        return "<p><b>" + esc(x.say) + "</b><small>" + esc(x.why) + "</small></p>"; }).join("") + "</div>";
+    }
     /* both clubs' injury reports, his club first, each split offense and
        defense, the worst first (Jose, Sep 29, 2026) */
     function injList(gid, mine, theirs) {
@@ -18220,7 +18304,7 @@
           '<div class="qstile"><span>1+ PTD</span><b class="' + band(nx.px) + '">' + (nx.px ? show(nx.px) : "not posted") + "</b></div>" +
           '<div class="qstile"><span>' + esc(nx.o) + " allows</span><b>" + (nx.al === null || nx.al === undefined ? "—" : nx.al + " PTD/g") + "</b></div>" +
           '<div class="qstile"><span>Weather</span><b>' + esc(wxShort(nx.wx)) + "</b></div></div>" +
-          formation(nx.gid, q.t, nx.o);
+          riskList(q.t, id) + formation(nx.gid, q.t, nx.o);
         var one = slipLegs([id]).length;
         h += '<button type="button" class="qsadd"' + (one ? "" : " disabled") + ">" +
           (one ? "Add 1+ PTD to betslip" : "No price posted yet") + "</button>";
