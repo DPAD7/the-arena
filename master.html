@@ -5154,7 +5154,10 @@
        the wallet wears the logo the slip does, not "PHI" in type
        (Jose, Sep 28, 2026) */
     var club = /^([A-Z]{2,4})\s+[A-Z][a-z]/.exec(String(who || ""));
-    if (!hit && club) {
+    /* only for a leg off a game the board carries: letters alone are not a
+       club. "MIN Lynx" off a WNBA slip wore the Vikings (Jose, Sep 29, 2026:
+       "def not Minnesota Vikings") */
+    if (!hit && club && sportOf(gid)) {
       var save = who; who = club[1];
       hit = gamePic(gid, who) || (sport && look(m[sport])) || look(m.any);
       who = save;
