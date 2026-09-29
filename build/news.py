@@ -17,6 +17,12 @@
                 data/qb_named.json against the club's next game, which
                 starters.py puts on the card ahead of the chart
 
+   The insiders are read too: Adam Schefter, Ian Rapoport and Pete Thamel's
+   own ESPN pages carry their latest posts, and a post counts for a passer
+   when exactly one passer on the charts or the cards is named in it, whole
+   name, suffixes and accents aside (Jose, Sep 29, 2026, the three pages).
+   Their pages are drawn in a browser -- a plain fetch is turned away.
+
    A held mark whose return date has passed is let go.
 
        python3 build/news.py
@@ -58,6 +64,54 @@ def load(path):
         return {}
 
 
+INSIDERS = ("adam-schefter", "ian-rapoport", "pete-thamel")
+
+
+def insiders():
+    """The insiders' latest posts, off their ESPN pages: [{headline, published, byline}]."""
+    try:
+        from playwright.sync_api import sync_playwright
+    except ImportError:
+        return []
+    got = []
+    try:
+        with sync_playwright() as p:
+            b = None
+            for kw in ({"channel": "chrome"}, {}):
+                try:
+                    b = p.chromium.launch(**kw)
+                    break
+                except Exception:
+                    continue
+            if not b:
+                return []
+            pg = b.new_page()
+            for who in INSIDERS:
+                try:
+                    pg.goto("https://www.espn.com/contributor/" + who, wait_until="domcontentloaded", timeout=45000)
+                    pg.wait_for_timeout(3000)
+                    html = pg.content()
+                    i = html.find('"feed":[')
+                    if i < 0:
+                        continue
+                    feed, _ = json.JSONDecoder().raw_decode(html[i + 7:])
+                    got += [x for x in feed if isinstance(x, dict) and x.get("headline")]
+                except Exception:
+                    continue
+            b.close()
+    except Exception:
+        pass
+    return got
+
+
+def fold(n):
+    import unicodedata
+    n = unicodedata.normalize("NFD", n or "")
+    n = "".join(c for c in n if not unicodedata.combining(c))
+    n = re.sub(r"\b(jr|sr|ii|iii|iv)\b\.?", " ", n, flags=re.I)
+    return re.sub(r"[^a-z ]+", " ", n.lower()).split()
+
+
 def main():
     try:
         r = rq.get(FEED, impersonate="chrome", timeout=30)
@@ -81,6 +135,30 @@ def main():
             if g[i + 1]:
                 club_of.setdefault(str(g[i + 1]), (g[ci], g[i]))
 
+    # the college cards' passers too, for Thamel
+    m2 = re.search(r"  var CFB = (\[\[.*?\]\]);", s, re.S)
+    for g in json.loads(m2.group(1)) if m2 else []:
+        for i, ci in ((5, 3), (7, 4)):
+            if g[i + 1]:
+                club_of.setdefault(str(g[i + 1]), (g[ci], g[i]))
+
+    # the insiders' posts, each tied to the one passer it names in full
+    names = {}
+    for pid, (club, name) in club_of.items():
+        k = " ".join(fold(name))
+        if len(k.split()) >= 2:
+            names.setdefault(k, set()).add(pid)
+    for x in insiders():
+        words = " " + " ".join(fold(x.get("headline"))) + " "
+        who = set()
+        for k, pids in names.items():
+            if " " + k + " " in words:
+                who |= pids
+        if len(who) == 1:
+            arts.append({"type": "HeadlineNews", "headline": x["headline"], "published": x.get("published") or "",
+                         "categories": [{"type": "athlete", "athleteId": next(iter(who))}],
+                         "by": x.get("byline") or "insider"})
+
     held, named = load(HELD), load(NAMED)
     moved = []
     # oldest first, so a later headline about the same man has the last word
@@ -100,7 +178,7 @@ def main():
             continue
         if age > dt.timedelta(days=3):
             continue
-        src = "ESPN news, %s: %s" % (when, head)
+        src = "%s, %s: %s" % (a.get("by") or "ESPN news", when, head)
         if NOT_OUT.search(head):
             if pid in held and (held[pid].get("since") or "") < when and held[pid].get("src", "").startswith("ESPN news"):
                 del held[pid]
