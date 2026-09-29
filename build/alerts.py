@@ -31,21 +31,91 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "site", "alerts.json")
 NOW = dt.datetime.now(dt.timezone.utc)
 HURT = ("Out", "Doubtful", "Questionable", "Injured Reserve", "Suspension")
+SHARE = 0.10     # of the club's targets and carries, to be worth a warning
+
+
+def usage(rows, need):
+    """Each man's share of his club's targets and carries this season, off
+       ESPN's box score of every game the club has finished (targets in the
+       NFL, catches in college, where ESPN writes no targets). Each game is
+       read once and kept in data/usage.json; site/final keeps only the
+       passers, so it cannot say this. A man hurt before he did anything is
+       not news: Pacheco sat on the list all season without a snap (Jose,
+       Sep 29, 2026: "he hasn't done anything"). Nor is one who has missed
+       the club's last two games -- his passer's numbers already live
+       without him.  need: {(club, league)}.
+       {club: {id: {"g", "tg", "car", "sh", "recent"}}}"""
+    path = os.path.join(D, "data", "usage.json")
+    try:
+        cache = json.load(open(path))
+    except Exception:
+        cache = {}
+    use, grew = {}, False
+    for ab, lg in need:
+        gs = sorted((r for r in rows[lg] if ab in (r[3], r[4]) and
+                     dt.datetime.fromisoformat(r[2].replace("Z", "+00:00")) < NOW - dt.timedelta(hours=4)),
+                    key=lambda r: r[2])
+        per = []
+        for r in gs:
+            gid = str(r[1])
+            if gid not in cache:
+                try:
+                    d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
+                               impersonate="chrome124", timeout=20).json()
+                except Exception:
+                    continue
+                box = {}
+                for t in (d.get("boxscore") or {}).get("players") or []:
+                    men = box.setdefault((t.get("team") or {}).get("abbreviation") or "", {})
+                    for st in t.get("statistics") or []:
+                        if st.get("name") not in ("receiving", "rushing"):
+                            continue
+                        lb = st.get("labels") or []
+                        col = ("TGTS" if "TGTS" in lb else "REC") if st["name"] == "receiving" else "CAR"
+                        if col not in lb:
+                            continue
+                        for x in st.get("athletes") or []:
+                            try:
+                                n = int((x.get("stats") or [])[lb.index(col)])
+                            except (ValueError, IndexError):
+                                continue
+                            m = men.setdefault(str((x.get("athlete") or {}).get("id")), [0, 0])
+                            m[0 if st["name"] == "receiving" else 1] += n
+                if not box:
+                    continue
+                cache[gid] = box
+                grew = True
+            if ab in cache[gid]:
+                per.append(cache[gid][ab])
+        total = sum(sum(m) for men in per for m in men.values()) or 1
+        last = set(pid for men in per[-2:] for pid in men)
+        club = use.setdefault(ab, {})
+        for men in per:
+            for pid, m in men.items():
+                u = club.setdefault(pid, {"g": 0, "tg": 0, "car": 0})
+                u["g"] += 1; u["tg"] += m[0]; u["car"] += m[1]
+        for pid, u in club.items():
+            u["sh"] = round((u["tg"] + u["car"]) / total, 3)
+            u["recent"] = pid in last
+    if grew:
+        json.dump(cache, open(path, "w"), separators=(",", ":"), sort_keys=True)
+    return use
 
 
 def main():
     s = pagefile.read()
-    games = []
+    games, rows = [], {}
     for var, lg in (("SCHED", "nfl"), ("CFB", "college-football")):
         m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, s, re.S)
-        for r in json.loads(m.group(1)) if m else []:
+        rows[lg] = json.loads(m.group(1)) if m else []
+        for r in rows[lg]:
             try:
                 k = dt.datetime.fromisoformat(r[2].replace("Z", "+00:00"))
             except ValueError:
                 continue
             if NOW - dt.timedelta(hours=5) < k < NOW + dt.timedelta(days=8):
                 games.append((str(r[1]), lg))
-    out = {}
+    out, hurts = {}, []
     for gid, lg in games:
         try:
             d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
@@ -77,11 +147,30 @@ def main():
                 pos = ((a.get("position") or {}).get("abbreviation")) or ""
                 if st not in HURT or pos not in ("QB", "WR", "TE", "RB"):
                     continue
-                hurt.append({"id": str(a.get("id")), "name": a.get("displayName"), "pos": pos,
-                             "status": st, "team": ab, "lead": lead.get(str(a.get("id")), "")})
+                pid = str(a.get("id"))
+                hurt.append({"id": pid, "name": a.get("displayName"), "pos": pos,
+                             "status": st, "team": ab, "lead": lead.get(pid, ""), "lg": lg})
         if hurt:
             e["out"] = hurt
+            hurts.extend(hurt)
         out[gid] = e
+    use = usage(rows, set((x["team"], x["lg"]) for x in hurts if x["pos"] != "QB"))
+    for e in out.values():
+        keep = []
+        for x in e.get("out") or []:
+            lg = x.pop("lg")
+            u = (use.get(x["team"]) or {}).get(x["id"])
+            # a passer is judged on his own; anyone else has to matter now
+            if x["pos"] != "QB" and not (u and u["recent"] and u["sh"] >= SHARE):
+                continue
+            if u and u["g"] and x["pos"] != "QB":
+                x.update(sh=u["sh"], tg=round(u["tg"] / u["g"], 1), car=round(u["car"] / u["g"], 1),
+                         tgw="targets" if lg == "nfl" else "catches")
+            keep.append(x)
+        if keep:
+            e["out"] = keep
+        else:
+            e.pop("out", None)
     json.dump(out, open(OUT, "w"), separators=(",", ":"), sort_keys=True)
     print("alerts: %d games, %d in wind or rain, %d with injuries"
           % (len(out), sum(1 for x in out.values() if not x["wx"]["in"] and ((x["wx"]["g"] or 0) >= 15 or (x["wx"]["p"] or 0) >= 50)),
