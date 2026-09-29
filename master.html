@@ -14281,6 +14281,19 @@
     FEED[id] = box;
     return box.p;
   }
+  /* games this page saw go final, told to the site in one breath */
+  var FINALSEEN = {}, finalT = null;
+  function finalSeen(id) {
+    if (FINALSEEN[id]) return;
+    FINALSEEN[id] = 1;
+    clearTimeout(finalT);
+    finalT = setTimeout(function () {
+      var ids = Object.keys(FINALSEEN).filter(function (k) { return FINALSEEN[k] === 1; });
+      ids.forEach(function (k) { FINALSEEN[k] = 2; });
+      if (ids.length) fetch("final", { method: "POST", headers: { "content-type": "application/json" },
+                                       body: JSON.stringify({ games: ids }) }).catch(function () {});
+    }, 3000);
+  }
   function refresh(card) {
     var id = card.dataset.espn, lg = card.dataset.lg;
     if (!id) return;
@@ -14306,6 +14319,9 @@
            stayed open, because only the final file ever set this flag and the
            file is not written until hours later (Jose, Sep 18, 2026) */
         if (done) {
+          /* read final from ESPN, not from a saved file: the site is told
+             now, and saves it for every device (Jose, Sep 29, 2026) */
+          if (!((FEED || {})[String(id)] || {}).final) finalSeen(id);
           card.classList.add("done");
           card.dataset.settled = "1";
           markOver(card.dataset.espn);

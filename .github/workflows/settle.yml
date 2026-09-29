@@ -1,0 +1,79 @@
+# A game went final: save it now.
+#
+# Started by site/functions/final.js the moment a device sees ESPN call a game
+# final (Jose, Sep 29, 2026: "as soon as it says final ... it settles that
+# final and it's final"). It runs the after-game jobs refresh.py runs -- the
+# saved result, the passer who played, the Form tab's counts, the touchdown
+# clips -- and the QB search, then deploys and keeps what it wrote. It writes
+# the same files the sweep does, so it queues behind a running sweep.
+name: settle
+run-name: settle ${{ inputs.games }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      games:
+        description: "ESPN game ids a device saw go final, comma separated"
+        required: true
+
+concurrency:
+  group: sweep
+  cancel-in-progress: false
+
+jobs:
+  settle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: What the scripts need
+        run: pip install --quiet curl_cffi cryptography playwright
+
+      - name: The register, and somewhere to write
+        run: |
+          cp data/register.db data/qbspy.db
+          mkdir -p logs cache prices
+
+      - name: Save the finished games and count them in
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          NFL_CLIENT_ID: ${{ secrets.NFL_CLIENT_ID }}
+          NFL_CLIENT_KEY: ${{ secrets.NFL_CLIENT_KEY }}
+          NFL_CLIENT_SECRET: ${{ secrets.NFL_CLIENT_SECRET }}
+          NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
+          GAMES: ${{ inputs.games }}
+        run: |
+          echo "told final: $GAMES"
+          for job in settle played_qb starters ledger alt_ptd nfl_clips build_nflindex club_clips x_clips qb_search; do
+            if [ -f "build/$job.py" ]; then
+              echo "== $job"; python "build/$job.py" 2>&1 | tail -4 || true
+            fi
+          done
+          python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
+          cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main
+
+      - name: Keep what it wrote
+        run: |
+          rm -f data/qbspy.db
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git add -A
+          if git diff --cached --quiet; then
+            echo "nothing moved"
+            exit 0
+          fi
+          git commit -m "final $(date -u '+%Y-%m-%d %H:%M UTC')"
+          git pull --rebase --autostash
+          git push
