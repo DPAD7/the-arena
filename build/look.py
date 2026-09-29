@@ -246,6 +246,62 @@ def tracker(b, seen):
     return wrong
 
 
+def fight_tracker(b, seen):
+    """The same for a fight: the newest settled bout with a method and the
+    winner's method price, drawn from the night's file, must read FINAL and
+    keep its slip (a won leg), with no error (Sep 29, 2026)."""
+    import glob, re
+    prices = json.load(open(os.path.join(SITE, "prices.json")))
+    page = open(os.path.join(SITE, "index.html")).read()
+    pick = None
+    for f in sorted(glob.glob(os.path.join(SITE, "final", "mma-6*.json")), key=os.path.getmtime, reverse=True):
+        for e in json.load(open(f)).get("events") or []:
+            for c in e.get("competitions") or []:
+                how = str((c.get("how") or {}).get("type") or "").lower()
+                key = "sub" if "sub" in how else "dec" if "dec" in how else "ko" if ("ko" in how or "knock" in how) else ""
+                fp = ((prices.get("FPROPS") or {}).get(str(c["id"])) or {}).get(key) or []
+                w = [m["id"] for m in c.get("competitors") or [] if m.get("winner")]
+                row = re.search(r'\["[^"]*","%s","[^"]*","[^"]*","(\d*)","[^"]*","(\d*)"' % c["id"], page)
+                if key and len(fp) == 2 and w and row and w[0] in row.groups():
+                    s = row.groups().index(w[0])
+                    if fp[s] and fp[s][1]:
+                        pick = (str(c["id"]), fp[s][1]); break
+            if pick: break
+        if pick: break
+    if not pick:
+        seen.append("no settled bout to test the fight tracker on")
+        return []
+    bet = {"balance": 1, "at": 9e12, "bets": [{"id": "lookf", "odds": "+100", "wager": 1, "topay": 2, "legs": [
+        {"sel": pick[1], "pick": "", "market": "Method of Victory", "label": "", "odds": "+300", "status": "open"}]}]}
+    def serve2(route):
+        if "/bets" in route.request.url and route.request.method == "GET":
+            return route.fulfill(body=json.dumps(bet), content_type="application/json")
+        return serve(route)
+    c = b.new_context(viewport={"width": 430, "height": 932})
+    pg = c.new_page()
+    errs = []
+    pg.on("pageerror", lambda e: errs.append(str(e).splitlines()[0][:160]))
+    pg.route("**/*", serve2)
+    pg.goto(HOST + "/")
+    pg.wait_for_timeout(4000)
+    pg.evaluate("document.getElementById('cashsheet').hidden = false; window.bankDraw && bankDraw()")
+    pg.wait_for_timeout(1200)
+    pg.evaluate("document.querySelectorAll('#cashlegs .slview').forEach(b => slipOpen(b))")
+    pg.wait_for_timeout(3500)
+    got = pg.evaluate("""(() => { const t = document.querySelector('#cashlegs .slipcard--open .sltrk');
+        if (!t) return null; return { rows: t.querySelectorAll('.mw').length, fin: /FINAL/.test(t.innerText),
+        won: !!t.querySelector('.trkn--won') } })()""")
+    c.close()
+    wrong = ["the fight tracker threw: " + e for e in errs[:2]]
+    if not got or not got["rows"]:
+        wrong.append("the fight tracker did not draw bout %s (%s)" % (pick[0], got))
+    elif not got["fin"] or not got["won"]:
+        wrong.append("the fight tracker did not settle bout %s as won (%s)" % (pick[0], got))
+    else:
+        seen.append("fight tracker %s" % pick[0])
+    return wrong
+
+
 def main():
     try:
         from playwright.sync_api import sync_playwright
@@ -310,6 +366,7 @@ def main():
                 wrong += hot(b, seen)
                 wrong += fight_tab(b, seen)
                 wrong += tracker(b, seen)
+                wrong += fight_tracker(b, seen)
             for e in errs[:3]:
                 wrong.append("the page threw at %d wide: %s" % (W, e))
             c.close()

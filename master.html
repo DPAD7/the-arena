@@ -238,6 +238,35 @@
   .trkn--won { border-color: var(--green); color: var(--green); }
   .trkn--lost { border-color: #e2564d; color: #e2564d; }
   .trkn--pre { border-color: #2c2d33; color: #9a9aa0; }
+  .trkc.trkc--duo { display: flex; }
+  .trkc.trkc--duo img { width: 50%; flex: 0 0 50%; object-fit: cover; }
+  .mw { border-bottom: 1px dashed #2c2d33; padding-bottom: 10px; }
+  .mw:last-child { border-bottom: 0; }
+  .mw .trkr { border-bottom: 0; padding-bottom: 6px; }
+  .trkr.mr { grid-template-columns: 48px minmax(0, 1fr) auto; }
+  .mwimg { display: block; }
+  .mt { display: flex; flex-direction: column; line-height: 1.05; min-width: 0; }
+  .mt span { font: 700 17px "Barlow Condensed", sans-serif; color: #fff; }
+  .mt b { font: 800 21px "Barlow Condensed", sans-serif; color: var(--green); }
+  .kob { display: flex; align-items: center; gap: 6px; }
+  .kob .trkn { width: 56px; font-size: 17px; }
+  .mic { width: 34px; height: 34px; border-radius: 9px; background: #1f2026; border: 2px solid #2c2d33;
+    display: flex; align-items: center; justify-content: center; box-sizing: border-box; }
+  .mic svg { width: 22px; height: 22px; color: #fff; fill: #fff; }
+  .icg { display: grid; gap: 3px; }
+  .icg.ic1 { grid-template-columns: 34px; }
+  .icg.ic2 { grid-template-columns: 22px; grid-template-rows: 22px 22px; }
+  .icg.ic4 { grid-template-columns: 22px 22px; }
+  .icg.ic2 .mic, .icg.ic4 .mic { width: 22px; height: 22px; border-radius: 6px; border-width: 1.5px; }
+  .icg.ic2 .mic svg, .icg.ic4 .mic svg { width: 15px; height: 15px; }
+  .tlr { display: flex; align-items: center; gap: 8px; }
+  .tlb { position: relative; flex: 1; height: 8px; border-radius: 4px; background: #2c2d33; overflow: hidden; }
+  .tlb i { position: absolute; left: 0; top: 0; bottom: 0; background: #fff; border-radius: 4px; }
+  .tlb s { position: absolute; top: 0; bottom: 0; width: 2px; background: #15161a; }
+  .tlb b { position: absolute; top: 0; bottom: 0; right: 0; background: #e3b341; }
+  .tle { font: 700 13px "Barlow Condensed", sans-serif; color: #9a9aa0; white-space: nowrap; }
+  .trkt--fml { font-size: 22px; gap: 5px; }
+  .trkt--fml small { font-size: 13px; }
   .trkq { font: 600 12px Barlow, "Helvetica Neue", Arial, sans-serif; color: #9a9aa0; margin-top: 4px; }
   .trkloose { display: flex; justify-content: space-between; padding: 6px 0; color: #e6e6e6; font-size: 14px; }
   .slipcard .slview { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0;
@@ -4861,10 +4890,10 @@
     picks.forEach(function (b, i) {
       var m = legParts(b.l);
       var sh = m ? "" : shortLeg(b.l), ms = /\s(\d+\+)\s/.exec(" " + sh + " ");
-      var who = m ? m[1] : sh.split(" ")[0];
+      var who = b.fw || (m ? m[1] : sh.split(" ")[0]);
       var pic = b.pic ? '<img class="slpic slpic--face" alt="" loading="lazy" src="face/nfl/' + b.pic + '.png" data-next="' + espnHead(b.pic) + '" onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}else{this.remove();}">'
         : slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
-      var mk = markFor(m ? m[2] : "");
+      var mk = b.fmk || markFor(m ? m[2] : "");
       /* a leg with no card and no face says what it is, "40+", not the
          first letters of a name (Jose, Sep 27, 2026: "why does it say Jay") */
       if (!pic && ms) who = ms[1];
@@ -4898,7 +4927,7 @@
       var m = legParts(b.l);
       /* a leg with no card of its own reads as the book wrote it, whole:
          "Waddle + Adams 40+ Rec", not its first word */
-      var who = m ? m[1] : shortLeg(b.l);
+      var who = b.fw ? b.fw.split(" vs ").map(function (x) { return lastName(x) || x; }).join(" vs ") : m ? m[1] : shortLeg(b.l);
       if (!seen[who]) { seen[who] = 1; names.push(who); }
     });
     return names.join(", ");
@@ -16660,6 +16689,19 @@
           put(g[set[2] + 2], { g: String(g[1]), k: "ml", s: 1, lg: set[1] });
         });
       });
+    (typeof FIGHTS === "object" ? FIGHTS : []).forEach(function (f) {
+      put(f[9], { g: String(f[1]), k: "fml", s: 0, fight: 1 });
+      put(f[11], { g: String(f[1]), k: "fml", s: 1, fight: 1 });
+    });
+    if (typeof FPROPS === "object") Object.keys(FPROPS).forEach(function (bid) {
+      var fp = FPROPS[bid] || {};
+      Object.keys(fp).forEach(function (key) {
+        var v = fp[key];
+        if (!Array.isArray(v)) return;
+        var one = v.length === 1;
+        v.forEach(function (c, s) { if (c && c[1]) put(c[1], { g: String(bid), k: "fm", key: key, s: one ? -1 : s, fight: 1 }); });
+      });
+    });
     if (typeof PROPS === "object") Object.keys(PROPS).forEach(function (gid) {
       var p = PROPS[gid] || {};
       (p.h2h || []).forEach(function (c, s) { if (c && c[1]) put(c[1], { g: gid, k: "h2h", s: s }); });
@@ -16859,12 +16901,38 @@
   }
   function espnHead(id) { return "https://a.espncdn.com/i/headshots/nfl/players/full/" + id + ".png"; }
   /* one slip, drawn as its games */
+  /* a fight's moneyline the board holds without DraftKings' id: the bout is
+     the one another leg of the same DK event already found, or the one bout
+     whose two men are the two DK names on the event ("Raul Rosas Jr. vs
+     Raoni Barcelos", suffixes and accents out); the side is whichever of
+     those two the pick names, and a pick that fits both takes neither */
+  function trkFightOf(lg, byEv) {
+    if (!/moneyline|fight winner|to win|bout odds/i.test(String(lg.market || "") + " " + String(lg.label || ""))) return null;
+    var fold = function (x) { return String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\b(jr|sr|ii|iii|iv)\b\.?/ig, "").replace(/[^a-z ]/ig, "").replace(/\s+/g, " ").trim().toLowerCase(); };
+    var last = function (x) { return fold(x).split(" ").pop(); };
+    var f = null, all = typeof FIGHTS === "object" ? FIGHTS : [];
+    if (lg.ev && byEv[lg.ev]) f = trkFightRow(byEv[lg.ev]).g;
+    else {
+      var two = String(lg.evn || "").split(/\s+vs\.?\s+/i);
+      if (two.length !== 2) return null;
+      var a = fold(two[0]), b = fold(two[1]);
+      var near = all.filter(function (g) { return Math.abs(Date.parse(g[2]) - Date.now()) < 5 * 86400000; });
+      var hit = near.filter(function (g) { var l = fold(g[3]), r = fold(g[5]); return (l === a && r === b) || (l === b && r === a); });
+      if (!hit.length) hit = near.filter(function (g) { var l = last(g[3]), r = last(g[5]); return (l === last(a) && r === last(b)) || (l === last(b) && r === last(a)); });
+      if (hit.length !== 1) return null;
+      f = hit[0];
+    }
+    var p = fold(lg.pick), s = p === fold(f[3]) ? 0 : p === fold(f[5]) ? 1 : -1;
+    if (s < 0) { var l0 = last(p) === last(f[3]), l1 = last(p) === last(f[5]); s = l0 && !l1 ? 0 : l1 && !l0 ? 1 : -1; }
+    return s < 0 ? null : { g: String(f[1]), k: "fml", s: s, fight: 1 };
+  }
   function slipTrack(bet) {
-    var map = legMap(), games = {}, order = [], loose = [];
+    var map = legMap(), games = {}, order = [], loose = [], byEv = {};
+    (bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; if (v && v.fight && lg.ev) byEv[lg.ev] = v.g; });
     (bet.legs || []).forEach(function (lg) {
-      var v = map[lg.sel];
+      var v = map[lg.sel] || trkFightOf(lg, byEv);
       if (!v) { var pg = trkGameOf(lg); if (pg) v = { g: pg, k: "prop" }; }
-      var row = v && trkRow(v.g);
+      var row = v && (v.fight ? trkFightRow(v.g) : trkRow(v.g));
       if (!v || !row) { loose.push(lg); return; }
       if (!games[v.g]) { games[v.g] = { row: row, legs: [] }; order.push(v.g); }
       games[v.g].legs.push({ lg: lg, v: v });
@@ -16872,6 +16940,7 @@
     if (!order.length) return "";
     order.sort(function (a, b) { return Date.parse(games[a].row.g[2]) - Date.parse(games[b].row.g[2]); });
     var html = order.map(function (gid) {
+      if (games[gid].row.fight) return fightBlock(gid, games[gid]);
       var G = games[gid], g = G.row.g, lg = G.row.lg, r = TRKD[gid] || null;
       var away = g[3], home = g[4], kick = new Date(g[2]);
       var day = kick.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric", timeZone: "America/New_York" }).replace(",", "");
@@ -16951,6 +17020,8 @@
       (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; var g0 = v ? v.g : trkGameOf(lg); if (g0) want[g0] = 1; });
     });
     Object.keys(want).forEach(function (gid) {
+      var fr = trkFightRow(gid);
+      if (fr) { if (Date.parse(fr.g[2]) <= Date.now() + 20 * 60000) fightPull(fr.g); return; }
       var row = trkRow(gid);
       if (!row || Date.parse(row.g[2]) > Date.now() + 20 * 60000) return;
       gameFeed(gid, row.lg).then(function (d) {
@@ -16975,6 +17046,178 @@
     var sh = document.getElementById("cashsheet");
     if (sh && !sh.hidden && document.visibilityState === "visible") trkPull();
   }, 15000);
+  /* ---- the slip, tracked: fights (Jose, Sep 29, 2026) ----
+     Every fight leg is one row -- picture, name over the market, the
+     market's own marks, the price -- and the legs that ask about a window of
+     the fight carry a bar for just that window. The spec is in the notes as
+     wallet-slip-tracker. */
+  function trkFightRow(bid) {
+    var hit = null;
+    (typeof FIGHTS === "object" ? FIGHTS : []).some(function (f) { if (String(f[1]) === String(bid)) { hit = { g: f, fight: 1 }; return true; } return false; });
+    return hit;
+  }
+  /* each market: its words, its marks, and the stretch of the fight it asks
+     about, in seconds ([from, to]; "last" is the final round and the cards) */
+  function fightMarket(key, R) {
+    var m, rs = function (n) { return [(n - 1) * 300, n * 300]; };
+    var T = {
+      ko: ["KO", ["mko"]], sub: ["SUB", ["msub"]], dec: ["DEC", ["mdec"]], ud: ["UD", ["mud"]], sdmd: ["SD/MD", ["msd"]],
+      kosub: ["FINISH", ["mko", "msub"]], finish: ["FINISH", ["mko", "msub"]], kodec: ["KO OR DEC", ["mko", "mdec"]],
+      subdec: ["SUB OR DEC", ["msub", "mdec"]], cards: ["CARDS", ["mdec"]], koonly: ["KO ONLY", ["mko"]], subonly: ["SUB ONLY", ["msub"]],
+      deconly: ["DEC ONLY", ["mdec"]], finishonly: ["FINISH ONLY", ["mko", "msub"]], rd1only: ["R1 ONLY", ["r1"], rs(1)],
+      anyko: ["ANY KO", ["mko"]], anysub: ["ANY SUB", ["msub"]], anydec: ["ANY DEC", ["mdec"]], anyud: ["ANY UD", ["mud"]],
+      anysdmd: ["ANY SD/MD", ["msd"]], dist: ["GTD", ["gtd"], "all"], nodist: ["ITD", ["itd"], "all"],
+      first60: ["FIRST 60 SEC", ["s60"], [0, 60]], last10: ["LAST 10 RD", ["s10"], "last10"],
+      rd12: ["RD 1-2", ["mko", "msub", "r1", "r2"], [0, 600]], rdlastdec: ["R" + R + " OR DEC", ["r" + R, "mdec"], "last"]
+    };
+    if (T[key]) return T[key];
+    if ((m = /^rd(\d)$/.exec(key))) return ["RD " + m[1], ["r" + m[1]], rs(+m[1])];
+    if ((m = /^kord(\d)$/.exec(key))) return ["KO R" + m[1], ["mko", "r" + m[1]], rs(+m[1])];
+    if ((m = /^subrd(\d)$/.exec(key))) return ["SUB R" + m[1], ["msub", "r" + m[1]], rs(+m[1])];
+    if ((m = /^anykord(\d)$/.exec(key))) return ["ANY KO R" + m[1], ["mko", "r" + m[1]], rs(+m[1])];
+    if ((m = /^anysubrd(\d)$/.exec(key))) return ["ANY SUB R" + m[1], ["msub", "r" + m[1]], rs(+m[1])];
+    return [key.toUpperCase(), []];
+  }
+  /* the night's scoreboard, one read per night every five seconds at most */
+  var FNIGHT = {};
+  function fightPull(f) {
+    var k = new Date(Date.parse(f[2])).toLocaleDateString("en-CA", { timeZone: "America/New_York" }).replace(/-/g, "");
+    var box = FNIGHT[k];
+    if (box && Date.now() - box.at < 5000) return;
+    FNIGHT[k] = { at: Date.now() };
+    /* the night's file first: it carries theScore's method (Knockout, Split
+       Decision), where the scoreboard only ever says "Unofficial Winner" */
+    var saved = fetch("final/mma-" + f[0] + ".json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+    var live = fetch(espnUrl(MMA + "?dates=" + k)).then(function (r) { return r.json(); }).catch(function () { return {}; });
+    Promise.all([live, saved]).then(function (two) {
+      var d = { events: [].concat(two[0].events || [], two[1].events || []) };
+      (d.events || []).forEach(function (e) {
+        (e.competitions || []).forEach(function (c) {
+          var st = c.status || {}, ty = st.type || {}, per = st.period || 0, clk = String(st.displayClock || "0:00").split(":");
+          var secs = (+clk[0] || 0) * 60 + (+clk[1] || 0), out = { state: ty.state || "pre", period: per, clock: st.displayClock };
+          /* live, the clock is what is left of the round; over, it is when it ended */
+          out.gone = ty.state === "in" ? (per - 1) * 300 + (300 - secs) : ty.state === "post" ? (per - 1) * 300 + (st.clock || secs) : 0;
+          var said = "";
+          (c.details || []).forEach(function (dd) { var t = (dd.type || {}).text || ""; if (t.indexOf("Unofficial Winner") === 0) said = t.slice(17); });
+          out.result = String((c.how && c.how.type) || (st.result || {}).name || said).toLowerCase();
+          var was = TRKD["f" + c.id];
+          if (was && was.state === "post" && ty.state !== "post") return;
+          if (was && was.result && !out.result && ty.state === "post") out.result = was.result;
+          out.cards = (c.how && c.how.scorecard) || (was && was.cards) || "";
+          out.winner = null;
+          (c.competitors || []).forEach(function (m) { if (m.winner) out.winner = String(m.id); });
+          TRKD["f" + c.id] = out;
+          /* over with no method in either: UFC Stats' own word, off the
+             rewind anim_rebuild.py cut from it */
+          if (ty.state === "post" && !out.result && !out.asked) {
+            out.asked = 1;
+            fetch("anim/" + c.id + ".json").then(function (r) { return r.ok ? r.json() : {}; }).then(function (a) {
+              if (a && a.how) { out.result = String(a.how).toLowerCase(); if (typeof bankDraw === "function") bankDraw(); }
+            }).catch(function () {});
+          }
+        });
+      });
+      if (typeof bankDraw === "function") bankDraw();
+    }).catch(function () {});
+  }
+  /* did it land: the winner, the way, the round and the second */
+  function fightSettle(key, s, f, r, R) {
+    if (!r || r.state !== "post") return "";
+    var side = s === 0 ? String(f[4]) : s === 1 ? String(f[6]) : null;
+    var mine = side === null ? !!r.winner : r.winner === side;
+    var how = /sub/.test(r.result) ? "sub" : /dec/.test(r.result) ? "dec" : /ko|knock/.test(r.result) ? "ko" : "";
+    var dec = how === "dec", fin = how === "ko" || how === "sub", rd = r.period;
+    var ud = /unan/.test(r.result), sm = /split|major/.test(r.result), m;
+    var ok = {
+      ko: mine && how === "ko", sub: mine && how === "sub", dec: mine && dec, ud: mine && ud, sdmd: mine && sm,
+      kosub: mine && fin, finish: mine && fin, kodec: mine && (how === "ko" || dec), subdec: mine && (how === "sub" || dec),
+      cards: mine && dec, koonly: mine && how === "ko", subonly: mine && how === "sub", deconly: mine && dec, finishonly: mine && fin,
+      rd1only: mine && fin && rd === 1, anyko: how === "ko", anysub: how === "sub", anydec: dec, anyud: ud, anysdmd: sm,
+      dist: dec, nodist: fin, first60: fin && r.gone <= 60, last10: fin && (r.gone % 300 >= 290 || r.gone % 300 === 0),
+      rd12: mine && fin && rd <= 2, rdlastdec: mine && (dec || (fin && rd === R))
+    }[key];
+    if (ok === undefined) {
+      if ((m = /^rd(\d)$/.exec(key))) ok = mine && fin && rd === +m[1];
+      else if ((m = /^kord(\d)$/.exec(key))) ok = mine && how === "ko" && rd === +m[1];
+      else if ((m = /^subrd(\d)$/.exec(key))) ok = mine && how === "sub" && rd === +m[1];
+      else if ((m = /^anykord(\d)$/.exec(key))) ok = how === "ko" && rd === +m[1];
+      else if ((m = /^anysubrd(\d)$/.exec(key))) ok = how === "sub" && rd === +m[1];
+    }
+    return ok === undefined ? "" : ok ? "won" : "lost";
+  }
+  /* a window the fight has run past with nothing to show: the leg is lost
+     now, not at the final bell (Jose, Sep 29, 2026: "as soon as that 60
+     seconds hits ... it should just be removed") */
+  function fightPast(win, r, R) {
+    if (!r || r.state !== "in" || !win || win === "all") return false;
+    if (win === "last") return false;
+    if (win === "last10") return false;
+    return r.gone >= win[1];
+  }
+  var TRKLOST = {};
+  function fightBlock(bid, G) {
+    var f = G.row.g, r = TRKD["f" + bid] || null, R = parseInt(((typeof FPROPS === "object" && FPROPS[bid]) || {}).rounds, 10) || 3;
+    var L = f[3], Rn = f[5], kick = new Date(f[2]);
+    var day = kick.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric", timeZone: "America/New_York" }).replace(",", "");
+    var tm = kick.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+    var chip = !r || r.state === "pre" ? '<span class="trkst trkst--pre">PRE</span>' : r.state === "post" ? '<span class="trkst trkst--fin">FINAL</span>'
+      : '<span class="trkst">LIVE R' + r.period + " " + esc(r.clock || "") + "</span>";
+    var out = '<div class="trkg"><div class="trkh">' + esc(day) + " · " + esc(tm) + " · " + esc(f[7] || "") + " " + chip + "</div>";
+    var pic = function (who) { var h = gamePic(bid, who); return h ? h.src : ""; };
+    var sur = function (n) { return esc(lastName(n) || n); };
+    var faceL = trkFace(pic(L)), faceR = trkFace(pic(Rn));
+    G.legs.forEach(function (x) {
+      var st0 = (BANK.legs[x.lg.sel] || {}).st || String(x.lg.status || "").toLowerCase();
+      st0 = st0 === "won" ? "won" : st0 === "lost" ? "lost" : "";
+      if (x.v.k === "fml") {
+        var imp = function (p) { return trkImplied(p); }, pa = imp(f[8]), pb = imp(f[10]);
+        var wa = pa != null && pb != null ? Math.round(pa / (pa + pb) * 100) : 50;
+        var won = st0 || (r && r.state === "post" && r.winner ? (r.winner === String(x.v.s === 0 ? f[4] : f[6]) ? "won" : "lost") : "");
+        out += '<div class="trkr trkr--two' + (won ? " trkr--" + won : "") + '"><span class="trkc' + (x.v.s === 0 ? " trkc--mine" : "") + '">' + faceL +
+          '</span><div class="trkm"><div class="trkt trkt--fml"><small>(' + wa + "%)</small><b>" + esc(String(f[8] || "").replace("-", "−")) +
+          '</b><em>–</em><b class="dim">' + esc(String(f[10] || "").replace("-", "−")) + "</b><small>(" + (100 - wa) + "%)</small></div>" +
+          '<div class="trkbar"><i style="width:' + wa + '%;background:#d12a2a"></i><i style="flex:1;background:#2a6bd1"></i></div></div>' +
+          '<span class="trkc' + (x.v.s === 1 ? " trkc--mine" : "") + '">' + faceR + "</span></div>";
+        return;
+      }
+      var M = fightMarket(x.v.key, R), win = M[2], any = x.v.s === -1;
+      var st = st0 || fightSettle(x.v.key, x.v.s, f, r, R);
+      if (!st && fightPast(win, r, R)) st = "lost";
+      if (st === "lost") TRKLOST[x.lg.sel] = 1;
+      var img = any ? '<span class="trkc trkc--duo">' + faceL + faceR + "</span>" : '<span class="trkc">' + (x.v.s === 0 ? faceL : faceR) + "</span>";
+      var name = any ? sur(L) + " / " + sur(Rn) : sur(x.v.s === 0 ? L : Rn);
+      var n = M[1].length, grid = n <= 1 ? "ic1" : n === 2 ? "ic2" : "ic4";
+      var icons = M[1].map(function (k0) { return '<span class="mic"><svg><use href="#' + k0 + '"/></svg></span>'; }).join("");
+      var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : " trkn--pre";
+      var bar = "";
+      if (win) {
+        var from = 0, to = R * 300, lab = "", ticks = [], goneNow = r ? r.gone : 0, zone = null;
+        if (Array.isArray(win)) { from = win[0]; to = win[1]; }
+        else if (win === "last") { from = (R - 1) * 300; to = R * 300; }
+        else if (win === "last10") { var cur = r && r.period ? r.period : 1; from = (cur - 1) * 300; to = cur * 300; zone = 290; }
+        var len = to - from;
+        for (var t = from + 300; t < to; t += 300) ticks.push((t - from) / len * 100);
+        var inWin = Math.max(0, Math.min(len, goneNow - from));
+        var rdEnd = Math.ceil(to / 300), left = to - goneNow;
+        var mmss = function (sec) { sec = Math.max(0, Math.round(sec)); return Math.floor(sec / 60) + ":" + ("0" + sec % 60).slice(-2); };
+        if (win === "last10") lab = "R" + rdEnd + " · last 10 in " + mmss(to - 10 - goneNow);
+        else if (goneNow < from) lab = (to === 60 ? "60 SEC" : "R" + rdEnd + (win === "last" ? " + cards" : "")) + " · starts in " + mmss(from - goneNow);
+        else lab = (to === 60 ? "60 SEC" : "R" + rdEnd + (win === "last" ? " + cards" : "")) + " · " + mmss(left);
+        if (st === "won") lab = lab.split(" · ")[0];
+        bar = '<div class="tlr"><div class="tlb"><i style="width:' + (st === "won" ? 100 : inWin / len * 100).toFixed(1) + "%" +
+          (st === "won" ? ";background:var(--green)" : "") + '"></i>' +
+          ticks.map(function (p) { return '<s style="left:' + p.toFixed(2) + '%"></s>'; }).join("") +
+          (zone ? '<b style="left:' + (zone / 300 * 100).toFixed(2) + '%"></b>' : "") + '</div><span class="tle">' + esc(lab) + "</span></div>";
+      }
+      /* gone the distance: the judges' three cards under the row */
+      if (r && r.state === "post" && r.cards && /dec|ud|sdmd|cards|dist/.test(x.v.key) && x.v.key !== "nodist")
+        bar = '<div class="tlr"><span class="tle">' + esc(String(r.cards).split(/,\s*/).join(" · ")) + "</span></div>";
+      out += '<div class="mw"><div class="trkr mr"><span class="mwimg">' + img + '</span><div class="mt"><span>' + name + "</span><b>" + esc(M[0]) +
+        '</b></div><div class="kob"><div class="icg ' + grid + '">' + icons + '</div><span class="trkn' + box + '">' +
+        esc(String(x.lg.odds || "").replace("-", "−")) + "</span></div></div>" + bar + "</div>";
+    });
+    return out + "</div>";
+  }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -17106,7 +17349,7 @@
            on its own, without waiting on the next read of the book (Jose,
            Sep 26, 2026: "it should drop automatically") */
         .filter(function (bet) {
-          return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost"; });
+          return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; });
         });
       var LMAP = legMap();
       box.innerHTML = open.map(function (bet) {
@@ -17129,8 +17372,18 @@
               lab = (famName(P0.who || "") + " " + (P0.yes !== undefined ? (P0.yes ? "YES" : "NO") : P0.over === false ? "U" + (P0.line || "") : (P0.n || "") + "+")).trim() + " \u00b7 ";
             }
           }
+          /* a fight leg wears its fighter, or both men for a leg on the fight,
+             off the bout it was placed on, and the market's own mark */
+          var fv = (LMAP[lg.sel] && LMAP[lg.sel].fight) ? LMAP[lg.sel] : trkFightOf(lg, {}), fw = "", fmk = "";
+          var fr0 = fv && trkFightRow(fv.g);
+          if (fr0) {
+            gid = String(fv.g);
+            fw = fv.s === 0 ? fr0.g[3] : fv.s === 1 ? fr0.g[5] : fr0.g[3] + " vs " + fr0.g[5];
+            fmk = fv.k === "fml" ? markFor("ML") : (fightMarket(fv.key, parseInt(((typeof FPROPS === "object" && FPROPS[fv.g]) || {}).rounds, 10) || 3)[1] || []).slice(0, 1).map(function (k0) {
+              return '<i class="slmk slmk--m"><svg aria-hidden="true"><use href="#' + k0 + '"/></svg></i>'; }).join("");
+          }
           return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
-                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "", pic: pic0 };
+                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "", pic: pic0, fw: fw, fmk: fmk };
         });
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way
@@ -17160,6 +17413,9 @@
           '<span>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</span><span>Amount</span><span>Total payout</span>' +
           '</div></div>';
       }).join("");
+      /* a leg the tracker just saw lose is only known once its slip is drawn:
+         draw again at once, and the dead slip is gone */
+      if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel]; }); })) setTimeout(bankDraw, 0);
       /* the day's totals stand still under the slips, which scroll between
          the balance and them (Jose, Sep 26, 2026) */
       var dayEl = document.getElementById("cashday");
