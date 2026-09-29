@@ -5,6 +5,15 @@
    Every leg is tied to its game by DraftKings' own selection id against the
    board's prices (site/prices.json), never by a written name -- the same rule
    the wallet's tracker keeps. */
+/* ESPN's edge is Akamai and turns away a bare machine call, so every read
+   here is made the way a browser makes it -- the site's /espn relay does the
+   same (Jose, Sep 17, 2026). Without this the clock's reads failed quietly. */
+export function espnGet(u) {
+  return fetch(u, { headers: {
+    accept: "application/json, text/plain, */*", "accept-language": "en-US,en;q=0.9",
+    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+    referer: "https://www.espn.com/", origin: "https://www.espn.com" } });
+}
 const SITE = "https://the-arenasports.pages.dev";
 const MIN = 60000;
 
@@ -87,7 +96,7 @@ export async function readGame(gid, lg, board) {
   }
   if (g.state !== "pre") {
     try {
-      const d = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/summary?event=" + gid)).json();
+      const d = await (await espnGet("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/summary?event=" + gid)).json();
       for (const t of ((d.boxscore || {}).players) || []) {
         for (const st of t.statistics || []) {
           if (st.name !== "passing" && st.name !== "rushing") continue;

@@ -21,7 +21,7 @@
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
 import { sendPush } from "./push.js";
-import { legIndex, readGame, readBout, news, liveLegs, slipState, risks } from "./watch.js";
+import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true, fight: true, recap: true };
@@ -120,6 +120,16 @@ export class Clock {
       const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Stacked", body: "Alerts are on. This is what they look like.", url: "/" }], 0);
       return Response.json({ sent: n });
     }
+    if (url.pathname.endsWith("/debug")) {
+      let sched = [];
+      try { sched = await (await fetch(SITE + "/schedule.json")).json(); } catch (e) { sched = []; }
+      let res = null, err = null;
+      try { res = await this.livePush(sched, Date.now()); } catch (e) { err = String(e); }
+      let probe = null;
+      try { const r = await espnGet("https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + etParts(Date.now()).date.replace(/-/g, "")); probe = r.status + " " + (await r.text()).slice(0, 160); } catch (e) { probe = "ERR " + e; }
+      const cards = sched.filter(r => r[0] === "card" && r[3] === "mma" && Date.parse(r[2]) <= Date.now() + 10 * MIN && Date.now() - Date.parse(r[2]) < 7 * 60 * MIN).map(r => r[1]);
+      return Response.json({ sockets: this.ctx.getWebSockets().length, sched: sched.length, cards, livePush: res, err, probe });
+    }
     if (url.pathname.endsWith("/status")) {
       const done = (await this.ctx.storage.get("done")) || {};
       const at = await this.ctx.storage.getAlarm();
@@ -149,7 +159,7 @@ export class Clock {
     const fsig = (await this.ctx.storage.get("fightsig")) || {}, bouts = [];
     for (const ymd of new Set(cards.map(r => etParts(Date.parse(r[2])).date.replace(/-/g, "")))) {
       try {
-        const j = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd)).json();
+        const j = await (await espnGet("https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd)).json();
         for (const e of j.events || []) for (const c of e.competitions || []) {
           const st = c.status || {}, state = (st.type || {}).state;
           if (state === "in") fighting = true;
@@ -168,7 +178,7 @@ export class Clock {
     for (const a of asks) {
       const [lg, ymd] = a.split("|");
       try {
-        const j = await (await fetch("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/scoreboard?dates=" + ymd + (lg === "college-football" ? "&groups=80&limit=400" : ""))).json();
+        const j = await (await espnGet("https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/scoreboard?dates=" + ymd + (lg === "college-football" ? "&groups=80&limit=400" : ""))).json();
         for (const e of j.events || []) {
           const c = (e.competitions || [])[0] || {}, st = c.status || {};
           if (((st.type || {}).state) === "in") playing = true;
@@ -272,7 +282,7 @@ export class Clock {
       const url = "https://site.api.espn.com/apis/site/v2/sports/football/" + lg + "/scoreboard?dates=" + ymd +
                   (lg === "college-football" ? "&groups=80&limit=400" : "");
       try {
-        const j = await (await fetch(url)).json();
+        const j = await (await espnGet(url)).json();
         for (const e of j.events || []) {
           const st = ((((e.competitions || [])[0] || {}).status || {}).type) || {};
           if (want.has(String(e.id)) && (st.state === "post" || st.completed)) seenFinal.push(String(e.id));
@@ -358,7 +368,7 @@ export class Clock {
           const u = r[0] === "bout"
             ? "https://site.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd
             : "https://site.api.espn.com/apis/site/v2/sports/football/" + r[3] + "/scoreboard?dates=" + ymd + (r[3] === "college-football" ? "&groups=80&limit=400" : "");
-          try { boards[k] = await (await fetch(u)).json(); } catch (e) { boards[k] = {}; }
+          try { boards[k] = await (await espnGet(u)).json(); } catch (e) { boards[k] = {}; }
         }
         games[gid] = r[0] === "bout" ? readBout(gid, boards[k]) : await readGame(gid, r[3], boards[k]);
       }

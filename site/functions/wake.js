@@ -25,7 +25,8 @@ export async function onRequest({ request, env }) {
     if (!env.CLOCK) return ok({ error: "no clock bound" }, 500);
     const stub = env.CLOCK.get(env.CLOCK.idFromName("board"));
     // ?arm sets it going (or going again): one tick, then its own alarm
-    return stub.fetch(new URL(request.url).searchParams.has("arm") ? "https://clock/arm" : "https://clock/status");
+    const q = new URL(request.url).searchParams;
+    return stub.fetch(q.has("arm") ? "https://clock/arm" : q.has("debug") ? "https://clock/debug" : "https://clock/status");
   }
   if (request.method !== "POST") return ok({ error: "no" }, 405);
   if (!env.ARENA || !env.GH_TOKEN) return ok({ error: "not set up" }, 500);
