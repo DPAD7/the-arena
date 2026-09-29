@@ -14290,7 +14290,7 @@
     finalT = setTimeout(function () {
       var ids = Object.keys(FINALSEEN).filter(function (k) { return FINALSEEN[k] === 1; });
       ids.forEach(function (k) { FINALSEEN[k] = 2; });
-      if (ids.length) fetch("final", { method: "POST", headers: { "content-type": "application/json" },
+      if (ids.length) fetch("settled", { method: "POST", headers: { "content-type": "application/json" },
                                        body: JSON.stringify({ games: ids }) }).catch(function () {});
     }, 3000);
   }

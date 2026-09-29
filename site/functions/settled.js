@@ -4,12 +4,13 @@
    Nothing used to be written then -- the card was final on that screen only,
    and the saved result (site/final/<id>.json, which the Form tab and the QB
    search are counted from) waited for a sweep hours later. Now the first
-   device that sees a game go final says so here, and this starts
+   device that sees a game go final says so here (/settled: /final is the
+   folder of saved games, and a POST there never reached a function), and this starts
    .github/workflows/settle.yml, which saves every finished game still without
    a file, counts them in, and deploys (Jose, Sep 29, 2026: "as soon as it
    says final from ESPN ... it settles that final and it's final").
 
-     POST /final   {"games": ["401872948", ...]}  -> {"started": [...], "had": [...]}
+     POST /settled {"games": ["401872948", ...]}  -> {"started": [...], "had": [...]}
 
    Each game starts a run once: ARENA holds final:<id> after the first word
    of it, so twelve games ending at twelve moments on three devices start at
