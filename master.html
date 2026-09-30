@@ -7994,6 +7994,7 @@
           STARS = window.STARS = j.stars;
           try { localStorage.setItem("arena.stars", JSON.stringify(STARS)); } catch (e) {}
           if (window.qsRow) window.qsRow();
+          if (window.clipsDraw) window.clipsDraw();
         } else if (!j.stars && Object.keys(STARS).length) pushState();
         if (j.hidden && JSON.stringify(j.hidden) !== JSON.stringify(hid)) {
           hid = j.hidden;
@@ -11394,6 +11395,8 @@
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
       .then(function (j) { QBCLIPS = j || {}; draw(); }).catch(function () { page.innerHTML = ""; });
+    /* a star set in the search, or on another device, repaints the row */
+    window.clipsDraw = function () { if (page.isConnected && QBCLIPS) draw(); };
     page.addEventListener("click", function (e) {
       var s0 = e.target.closest("[data-star]");
       if (s0) {
@@ -13111,7 +13114,10 @@
      never to the board's swipe and never to the pull-down search (Jose, Sep
      28, 2026: "I hold the wallet and swipe down and it thinks I'm swiping
      down for the search"). One list, read by both. */
-  var OWNDRAG = window.OWNDRAG = ".fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, #qsearch, input, textarea";
+  /* the clips rows slide on their own, and a swipe down on a story leaves it
+     (Jose, Sep 29, 2026: the row took him to the next week, and the swipe
+     down out of a clip opened the search) */
+  var OWNDRAG = window.OWNDRAG = ".fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, #qsearch, input, textarea, .cliprow, .gamerow, #clipstory, #clipshow";
   (function () {
     var x0 = 0, y0 = 0, t0 = 0, ok = false, drag = false, dx = 0, sides = {};
     function width() { return TRACK.getBoundingClientRect().width; }
@@ -18735,6 +18741,8 @@
         try { localStorage.setItem("arena.stars", JSON.stringify(st)); } catch (e2) {}
         if (typeof pushState === "function") pushState();
         qsRow();
+        /* the same star on Clips (Jose, Sep 29, 2026: "so the fav button works together") */
+        if (window.clipsDraw) window.clipsDraw();
         return;
       }
       /* in the search, the way picking his name there would: a second man
