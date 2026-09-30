@@ -590,6 +590,13 @@
       return;
     }
     var shut = btn.dataset.shut === "1";
+    /* the game page has no double tap: a tap is the slip, and placed comes
+       from the wallet's own read (Jose, Sep 30, 2026) */
+    if (btn.closest(".gamepage")) {
+      if (shut) { e.preventDefault(); return; }
+      setPick(btn, !btn.classList.contains("on"), true);
+      return;
+    }
     var now = Date.now();
     if (TAPON === btn && now - TAPAT < 400) {
       TAPAT = 0; TAPON = null;

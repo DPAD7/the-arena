@@ -1593,22 +1593,29 @@
         if (s2.n < 1) s2.n = 1;
         h += '<div class="gpsep"></div><div class="gpttl">' + k[1] + '</div>' +
           '<div class="gpsl"><input type="range" min="1" max="' + mx + '" step="1" value="' + s2.n + '" data-kind="' + kind + '" style="--p:' + (mx > 1 ? (s2.n - 1) / (mx - 1) * 100 : 0) + '%">' +
-          '<div class="gplab"><small>MIN 1</small><small>MAX ' + mx + '</small></div><div class="gpval">' + s2.n + '</div></div>' +
-          '<div class="gpfaces">' +
+          '<div class="gplab"><small>MIN 1</small><small>MAX ' + mx + '</small></div><div class="gpval">' + s2.n + '</div></div>';
+        /* one row: the two faces, then the lit man's name, his rung and his
+           price in the same line (Jose, Sep 30, 2026: "in line, in one row");
+           a second lit man takes a second row under, lined up with the first */
+        var lit = ["away", "home"].filter(function (w) { return s2[w]; });
+        var info = function (w) {
+          var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
+          return '<b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small>' +
+            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
+        };
+        h += '<div class="gprow">' +
           '<img class="gpface' + (s2.away ? " on" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.home ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt=""></div>';
-        ["away", "home"].forEach(function (w, i) {
-          if (!s2[w]) return;
-          var slot = ((pr[kind] || [])[i] || [])[s2.n - 1];
-          var who = famName(side[w].qb);
-          h += '<div class="gpline"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small>' +
-            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div></div>';
+          '<img class="gpface' + (s2.home ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+          (lit.length ? info(lit[0]) : '<b class="gpnone"></b>') + '</div>';
+        if (lit.length > 1) h += '<div class="gprow gprow--2"><span class="gpgap"></span>' + info(lit[1]) + '</div>';
+        lit.forEach(function (w) {
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
           h += box(c.call, c.text);
         });
         h += "";
       });
-      h += '<button type="button" class="gpadd">ADD TO BETSLIP</button><div class="gpfoot"></div>';
+      /* no button at the foot: a price on the page is the slip already (Jose, Sep 30, 2026) */
+      h += '<div class="gpfoot"></div>';
       root.innerHTML = h;
       root.querySelectorAll("button.price").forEach(function (b) {
         if (window.slipHas && window.slipHas(b.dataset.oid)) b.classList.add("on");
@@ -1632,11 +1639,6 @@
         if (f && f.dataset.pick) {
           var kv = f.dataset.pick.split(":");
           st[kv[0]][kv[1]] = !st[kv[0]][kv[1]]; keep(); draw(SUGGEST); return;
-        }
-        if (e.target.closest(".gpadd")) {
-          /* every price on the page not yet on the slip goes on, then the page closes */
-          root.querySelectorAll("button.price[data-sel]").forEach(function (b) { if (!b.classList.contains("on")) b.click(); });
-          setTimeout(function () { dlg.close(); }, 150);
         }
       });
       root.addEventListener("input", function (e) {
