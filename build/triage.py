@@ -73,6 +73,10 @@ def logs_of(run):
         except Exception as e:
             text = "log unreadable: %s" % e
         lines = [re.sub(r"^\S+Z ", "", l) for l in str(text).splitlines()]
+        # the runner's own chatter is not the fault: group marks, warnings
+        # about actions, git's config lines
+        lines = [l for l in lines if not re.match(r"^##\[(group|endgroup|warning|notice|debug)\]", l)
+                 and not l.startswith("[command]") and "Node.js" not in l]
         # a line that carries a cookie's value is dropped; a line that only
         # speaks of cookies (dk_bets: "the cookies no longer mint a token") stays
         lines = [l for l in lines if not re.search(r"cookie\S*\s*[:=]\s*\S", l, re.I)]
@@ -88,8 +92,11 @@ def name_it(lines):
         m = re.search(r"python3? (build/\S+\.py)", l)
         if m:
             script = m.group(1)
-    if re.search(r"LOGIN EXPIRED|no longer mint a token|\b401\b.*token|token.*\b401\b", text):
-        return "login", script, "DraftKings logged you out: export the login again; the bets pull waits for it."
+    if re.search(r"LOGIN EXPIRED|no longer mint a token|login has expired|\b401\b.*token|token.*\b401\b", text):
+        return "login", script, "DraftKings logged you out: open DraftKings in Chrome on the Mac and the extension sends a fresh login."
+    # a sweep that could not put its commit on top of another push: the next one will
+    if re.search(r"could not apply [0-9a-f]+|CONFLICT \(|rejected\].*fetch first|non-fast-forward", text):
+        return "transient", script, "Two runs wrote at once; the next one carries it."
     tb = None
     m = list(re.finditer(r"Traceback \(most recent call last\):", text))
     if m:
@@ -103,7 +110,10 @@ def name_it(lines):
             return "transient", script, err.strip()[:160]
         return "code", script, tb
     errs = [l for l in lines if "##[error]" in l or re.search(r"\berror\b", l, re.I)]
-    tail = [l for l in lines if l.strip()][-15:]
+    tail = [l for l in lines if l.strip() and not l.startswith("##[")][-15:]
+    said = [l for l in lines if re.match(r"^\s*(GUARD|LOOK|STOPPED):", l)]
+    if said:
+        return "code", script, "\n".join(said)
     if re.search(r"Timeout|timed out|Connection reset|503|502|504|rate limit", "\n".join(tail), re.I):
         return "transient", script, (errs[-1] if errs else tail[-1]).strip()[:160]
     return "unknown", script, "\n".join(tail)
@@ -188,8 +198,16 @@ def main():
                 "find the cause, fix it, prove it (run the script dry where it has a dry mode, build the page, "
                 "run build/guard.py), then ship with build/ship.sh and close this issue with one line on what it was."
                 % (RUN_NAME, RUN_URL, HEAD_SHA, job, said[-6000:], kind))
-        issue(title, body)
+        num = issue(title, body)
         alert("code@" + title, "The board hit a fault in %s" % where, first + " -- filed for mending.")
+        # an issue filed by a run does not start another run on its own (GitHub's
+        # rule for the run's token), so the mender is set going by hand
+        if num:
+            try:
+                gh("/repos/%s/actions/workflows/mend.yml/dispatches" % REPO, {"ref": "main", "inputs": {"issue": str(num)}})
+                print("mend dispatched for #%s" % num)
+            except Exception as e:
+                print("could not start mend:", e)
     return 0
 
 

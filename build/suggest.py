@@ -118,6 +118,16 @@ def rushing(j, qid):
     return n_of(l, "TD", "rushingTouchdowns"), n_of(l, "CAR", "rushingAttempts"), n_of(l, "YDS", "rushingYards")
 
 
+def long_scores(j, qb):
+    """His passing scores from outside the red zone, 20 yards and up, in this game."""
+    n = 0
+    for p in j.get("scoringPlays") or []:
+        m = re.match(r"^.+? (\d+) Yd pass from %s\b" % re.escape(qb), p.get("text") or "")
+        if m and int(m.group(1)) >= 20:
+            n += 1
+    return n
+
+
 def drives(j, club, opp, qb):
     """(drives, red-zone trips, drives his passes finished with a touchdown, his passing scores by the half)."""
     sq = short(qb)
@@ -247,6 +257,12 @@ def ptd_case(qb, club, opp, n, rows, oalw, oppw, wx):
     s = "%d+ in %d of %d. %s gets %.0f red-zone trips a game and his passes finish %d of %d this year" % (n, k, g, club, rz, fin, trips)
     last = rows[-1]
     s += ", %d of %d last week." % (last[2], last[1])
+    # not every score is a red-zone score: the long ones, and the points the
+    # club puts up (Jose, Sep 30, 2026: "they don't always score in the red zone")
+    longs = sum(r[7] for r in rows)
+    tot = sum(r[0] for r in rows)
+    pts = sum(r[8] for r in rows) / g
+    s += " %d of his %d passing scores came from outside the red zone; %s scores %.0f a game." % (longs, tot, club, pts)
     if oalw:
         s += " %s gives up %.1f passing scores and %.0f passing yards a game." % (opp, oalw["ptd"], oalw["yds"])
     if oppw:
@@ -312,7 +328,7 @@ def main():
                 if not p:
                     continue
                 d, rz, fin, half = drives(g[4], club, g[1], qb)
-                rows[side].append((p[2], rz, fin, d, half, g[0], g[1]))
+                rows[side].append((p[2], rz, fin, d, half, g[0], g[1], long_scores(g[4], qb), g[2]))
                 runs[side].append(rushing(g[4], qid))
         for side, (qb, qid, club, opp) in men.items():
             other = "home" if side == "away" else "away"
@@ -328,12 +344,17 @@ def main():
         lean = {"ml": None, "h2h": None, "ptd": {}, "atd": {}}
         gap = {}
         net = {w: (sum(g[2] - g[3] for g in gs[w]) / len(gs[w])) if gs[w] else None for w in men}
-        if net["away"] is not None and net["home"] is not None and abs(net["away"] - net["home"]) >= 3:
-            lean["ml"] = "away" if net["away"] > net["home"] else "home"
+        if net["away"] is not None and net["home"] is not None:
+            # the better margin; level, the better record; level again, the home side
+            if net["away"] != net["home"]:
+                lean["ml"] = "away" if net["away"] > net["home"] else "home"
+            else:
+                wa = sum(1 for g in gs["away"] if g[2] > g[3]); wh = sum(1 for g in gs["home"] if g[2] > g[3])
+                lean["ml"] = "away" if wa > wh else "home"
             gap["ml"] = abs(net["away"] - net["home"])
         ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
-        if ypg["away"] is not None and ypg["home"] is not None and abs(ypg["away"] - ypg["home"]) >= 20:
-            lean["h2h"] = "away" if ypg["away"] > ypg["home"] else "home"
+        if ypg["away"] is not None and ypg["home"] is not None:
+            lean["h2h"] = "away" if ypg["away"] >= ypg["home"] else "home"
             gap["h2h"] = abs(ypg["away"] - ypg["home"])
         for w in men:
             other = "home" if w == "away" else "away"
