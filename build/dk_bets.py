@@ -234,6 +234,10 @@ def main():
         return 0 if r.status_code == 200 and "token" in r.text else 1
     if r.status_code != 200 or "token" not in r.text:
         print("dk_bets: LOGIN EXPIRED -- the cookies no longer mint a token (%d); export them again" % r.status_code)
+        # what DraftKings said and which cookies were offered -- names only,
+        # never a value -- so the cause can be read off the run (Sep 30, 2026)
+        print("dk_bets: said %s" % re.sub(r'"token"\s*:\s*"[^"]+"', '"token":"-"', r.text)[:200].replace("\n", " "))
+        print("dk_bets: cookies offered (%d): %s" % (len(jar), " ".join(sorted(jar))[:600]))
         if not DRY:
             rq.post(BOARD, data=json.dumps({"expired": True}), headers={"content-type": "application/json"},
                     impersonate="chrome124", timeout=30)
