@@ -7,6 +7,7 @@
 
      the three sweeps           9, 15, 21 ET           (refresh.py SWEEP_ET)
      the hubs                   10 ET                  (HUB_ET)
+     the DraftKings login touch  11 ET                  (KEEP_ET)
      before each start          120, 60, 30 minutes    (BEFORE: prices, inactives)
      the injury report          3:30-7 p.m. ET, each half hour, on each
                                 game's three practice-report days (REPORT_DAYS)
@@ -27,6 +28,9 @@ const SITE = "https://the-arenasports.pages.dev";
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true, fight: true, recap: true };
 const SWEEP_ET = [9, 15, 21];
 const HUB_ET = [10];
+// the daily touch of the DraftKings login, so it never expires on him
+// (Jose, Sep 30, 2026: the wallet went red after two weeks without a read)
+const KEEP_ET = [11];
 const BEFORE = [120, 60, 30];
 // the NFL's practice reports, by kickoff weekday (0 = Sunday): the report days
 const REPORT_DAYS = { 0: [3, 4, 5], 1: [4, 5, 6], 4: [1, 2, 3], 5: [2, 3, 4], 6: [2, 3, 4], 3: [0, 1, 2] };
@@ -223,10 +227,16 @@ export class Clock {
     for (const k of Object.keys(done)) if (now - done[k] > 3 * 86400000) delete done[k];
     const moments = this.moments(sched, now);
     // every moment that has come and not been served: one run serves them all
-    const due = moments.filter(m => m.at <= now + 30000 && m.at > now - 20 * MIN && !done[m.key]);
+    const came = moments.filter(m => m.at <= now + 30000 && m.at > now - 20 * MIN && !done[m.key]);
+    const keep = came.filter(m => m.key.startsWith("keep@")), due = came.filter(m => !m.key.startsWith("keep@"));
     if (due.length) {
       const ok = await this.wake("due");
       if (ok) for (const m of due) done[m.key] = now;
+    }
+    // the login's daily touch is its own run (dkbets.yml --keep), not a sweep
+    if (keep.length) {
+      const ok = await this.wake("keep");
+      if (ok) for (const m of keep) done[m.key] = now;
     }
     // finals, with no phone needed
     const watch = await this.finals(sched, now, done);
@@ -258,6 +268,7 @@ export class Clock {
       const [y, m, d] = date.split("-").map(Number);
       for (const h of SWEEP_ET) out.push({ key: "sweep@" + date + " " + h, at: etMs(y, m, d, h, 0) });
       for (const h of HUB_ET) out.push({ key: "hub@" + date + " " + h, at: etMs(y, m, d, h, 0) });
+      for (const h of KEEP_ET) out.push({ key: "keep@" + date + " " + h, at: etMs(y, m, d, h, 0) });
       // the injury report: this date is a report day for some NFL game
       const wd = new Date(date + "T12:00:00Z").getUTCDay();
       const report = sched.some(r => {

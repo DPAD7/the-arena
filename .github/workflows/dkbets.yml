@@ -13,6 +13,9 @@ on:
       key:
         description: "the tap's key"
         required: false
+      keep:
+        description: "1: only touch the login so it stays alive (the clock, daily)"
+        required: false
 
 concurrency:
   group: dkbets
@@ -39,4 +42,4 @@ jobs:
         env:
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
-        run: python build/dk_bets.py
+        run: python build/dk_bets.py ${{ inputs.keep == '1' && '--keep' || '' }}
