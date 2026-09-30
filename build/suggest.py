@@ -190,7 +190,7 @@ def ml_case(club, games, home, offw):
     return s
 
 
-def h2h_case(qb, lines, other, olines, oalw, oppw):
+def h2h_case(qb, lines, other, olines, oalw, oppw, opp):
     if not lines:
         return "No game on record yet this year for %s." % fam(qb)
     y = sum(x[0] for x in lines) / len(lines)
@@ -202,9 +202,9 @@ def h2h_case(qb, lines, other, olines, oalw, oppw):
         s += ", %s %.0f on %.0f" % (fam(other), oy, oa)
     s += ". His games: %s." % ", ".join(str(x[0]) for x in lines)
     if oalw:
-        s += " The defense across from him gives up %.0f passing yards a game." % oalw["yds"]
+        s += " %s's defense gives up %.0f passing yards a game." % (opp, oalw["yds"])
     if oppw:
-        s += " On it: %s." % oppw
+        s += " %s's defense on the wire: %s." % (opp, oppw)
     return s
 
 
@@ -250,7 +250,7 @@ def ptd_case(qb, club, opp, n, rows, oalw, oppw, wx):
     if oalw:
         s += " %s gives up %.1f passing scores and %.0f passing yards a game." % (opp, oalw["ptd"], oalw["yds"])
     if oppw:
-        s += " On its defense: %s." % oppw
+        s += " %s's defense on the wire: %s." % (opp, oppw)
     try:
         if wx and int(wx.get("g") or 0) >= 15:
             s += " Wind %s mph." % wx["g"]
@@ -317,7 +317,7 @@ def main():
         for side, (qb, qid, club, opp) in men.items():
             other = "home" if side == "away" else "away"
             game["ml"][side] = ml_case(club, gs[side], side == "home", wr[side][1])
-            game["h2h"][side] = h2h_case(qb, lines[side], men[other][0], lines[other], alw[other], wr[other][0])
+            game["h2h"][side] = h2h_case(qb, lines[side], men[other][0], lines[other], alw[other], wr[other][0], opp)
             game["ptd"][side], game["atd"][side] = {}, {}
             for n in range(1, 7):
                 c, t = ptd_case(qb, club, opp, n, rows[side], alw[other], wr[other][0], wx)

@@ -1643,8 +1643,8 @@
             /* the price, not the man: too heavy to take at this rung, whatever
                the numbers say (Jose, Sep 30, 2026: "why the -1440 as a take") */
             var up = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n];
-            h += box("heavy", "Too heavy at " + String(slot[0]).replace("-", "\u2212") + " for the " + s2.n + "+." +
-              (has(up) ? " The " + (s2.n + 1) + "+ is the rung at " + String(up[0]).replace("-", "\u2212") + "." : "") + " " + (c.text || ""));
+            h += box("pass", String(slot[0]).replace("-", "\u2212") + " for the " + s2.n + "+ is a pass: bet it to win back a hundred." +
+              (has(up) ? " The " + (s2.n + 1) + "+ at " + String(up[0]).replace("-", "\u2212") + " is the rung." : "") + " " + (c.text || ""));
             return;
           }
           h += box(c.call === "pass" && cold(side[w].qid) ? "cold" : c.call, c.text);
