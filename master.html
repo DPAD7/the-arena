@@ -2473,6 +2473,13 @@
      like one thing"). The bars lose their own glass under HOT and keep only
      their squares and the sliding mark. */
   .forkbox { position: relative; width: 274px; margin: 0 auto; }
+  /* the formation stands farther up the field, and smaller with the depth:
+     the rush box up on the line he marked, the linemen, the receivers and
+     the quarterback's spot keeping their places around it, all at the
+     field's width there (Jose, Sep 29, 2026: "follow the depth of the
+     field"). FSCALE in the script is the same number: every drag, throw and
+     parking spot is measured through it. */
+  .forkbox.fork-on { transform: translateY(-56px) scale(.82); transform-origin: 50% 106px; }
   .forkwrap { position: absolute; left: 0; top: 0; width: 274px; height: 209px; z-index: 0;
     pointer-events: none; filter: drop-shadow(0 14px 34px rgba(0, 0, 0, 0.6)); }
   .fork { position: absolute; inset: 0;
@@ -10873,6 +10880,10 @@
     [[164, 135], [121, 70], [152, 6]]
   ];
   var POSTFOOT = 205;
+  /* the formation's size on the field (the .forkbox.fork-on transform): a
+     point y down the formation stands at forkbox.top + y * FSCALE on the
+     screen, and x across it at the middle + x * FSCALE */
+  var FSCALE = 0.82;
   /* a point a fraction of the way along a polyline */
   function alongPts(P, f) {
     var L = [], T = 0;
@@ -10969,19 +10980,19 @@
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ' + W + ' ' + H + '">' + o.join("") + '</svg>';
   }
   function forkPath(forkbox) {
-    var r = forkbox.getBoundingClientRect();
-    var top = r.top, left = r.left + (r.width - 274) / 2;
-    var mid = top + 94, foot = top + 209;
+    var r = forkbox.getBoundingClientRect(), s = FSCALE;
+    var top = r.top, left = r.left + (r.width - 274 * s) / 2;
+    var mid = top + 94 * s, foot = top + 209 * s;
     return {
-      post: { x: left + 137, from: foot, to: mid },
-      bar: { y: mid, from: left + 137 },
-      ups: [{ x: left + 34.5, tier: "1" }, { x: left + 239.5, tier: "2" }],
+      post: { x: left + 137 * s, from: foot, to: mid },
+      bar: { y: mid, from: left + 137 * s },
+      ups: [{ x: left + 34.5 * s, tier: "1" }, { x: left + 239.5 * s, tier: "2" }],
       /* the chip's middle at the upright's top edge: half of him through the
          opening, and no further -- letting go there drops him in (Jose,
          Sep 23, 2026: "it doesn't go past 50% of the indicator until I let
          go") */
       wordY: mid, upTop: top,
-      ox: left + 137, oy: top
+      ox: left + 137 * s, oy: top
     };
   }
   function wirePick(box, slots, ptdbar, forkbox) {
@@ -11116,22 +11127,22 @@
       var lift = y0 - e.clientY;
       var toFoot = Math.max(1, y0 - path.post.from);
       var p = Math.max(0, Math.min(1, lift / toFoot));
-      var w = w0 + (cw - w0) * p, h = h0 + (ch - h0) * p;
+      var w = w0 + (cw * FSCALE - w0) * p, h = h0 + (ch * FSCALE - h0) * p;
       shed(p);
       var cx, cy;
       /* Up to the quarterback's spot behind the centre, then straight out of
          it: left is one passing touchdown, right is two, up is the rush. No
          diagonals -- the first clear direction from the spot is the play
          (Jose, Sep 23, 2026). */
-      var spotX = path.ox, spotY = path.oy + 185;
+      var spotX = path.ox, spotY = path.oy + 185 * FSCALE;
       if (stage === 0) {
         cx = e.clientX + (spotX - e.clientX) * p; cy = Math.max(spotY, e.clientY);
         if (e.clientY <= spotY + 8) { stage = 1; ax = e.clientX; ay = e.clientY; dir = null; }
       }
       var hit = null;
       if (stage === 1) {
-        var st = fromSpot(e.clientX - ax, e.clientY - ay);
-        cx = spotX + st.x; cy = spotY + st.y; hit = st.hit;
+        var st = fromSpot((e.clientX - ax) / FSCALE, (e.clientY - ay) / FSCALE);
+        cx = spotX + st.x * FSCALE; cy = spotY + st.y * FSCALE; hit = st.hit;
       }
       aim(cx, cy, w, h);
       over = hit;
@@ -11185,12 +11196,12 @@
       if (!im) return;
       var ir = im.getBoundingClientRect(), fb = forkbox.getBoundingClientRect();
       /* from his hand: wherever he stands when he lets it go */
-      var ax0 = from ? from[0] : fb.left + fb.width / 2, ay0 = from ? from[1] : fb.top + 185;
+      var ax0 = from ? from[0] : fb.left + fb.width / 2, ay0 = from ? from[1] : fb.top + 185 * FSCALE;
       /* thrown to where he will be at the end of his route, and he runs
          there in the same time the ball takes */
       var route = RECEIVERS[tier === "1" ? 0 : 1], f0 = im._f || 0;
       var endAt = alongPts(route, 1), nowAt = alongPts(route, f0);
-      var bx = ir.left + ir.width / 2 + (endAt[0] - nowAt[0]), by = ir.top + ir.height / 2 + (endAt[1] - nowAt[1]);
+      var bx = ir.left + ir.width / 2 + (endAt[0] - nowAt[0]) * FSCALE, by = ir.top + ir.height / 2 + (endAt[1] - nowAt[1]) * FSCALE;
       var peak = 70 + Math.hypot(bx - ax0, by - ay0) * 0.25;
       var NS = "http://www.w3.org/2000/svg";
       var svg = document.createElementNS(NS, "svg");
@@ -11270,7 +11281,7 @@
       g.classList.remove("pickghost--home"); g.classList.add("pickghost--parked");
       spotName(g);
       var fb = forkbox.getBoundingClientRect();
-      var hold = ghost; ghost = g; place(fb.left + fb.width / 2, fb.top + 185, cw, ch); ghost = hold;
+      var hold = ghost; ghost = g; place(fb.left + fb.width / 2, fb.top + 185 * FSCALE, cw * FSCALE, ch * FSCALE); ghost = hold;
       /* he rides with the field: a scroll or another tab must not leave him
          floating over other cards (Jose, Sep 25, 2026: "leaking into other
          pages") */
@@ -11282,7 +11293,7 @@
           var on = r.width && forkbox.classList.contains("fork-on");
           if (!on) { sendHome(p); return; }
           var t = p.style.transition; p.style.transition = "none";
-          var hold2 = ghost; ghost = p; place(r.left + r.width / 2, r.top + 185, cw, ch); ghost = hold2;
+          var hold2 = ghost; ghost = p; place(r.left + r.width / 2, r.top + 185 * FSCALE, cw * FSCALE, ch * FSCALE); ghost = hold2;
           void p.offsetWidth; p.style.transition = t;
         };
         window.addEventListener("scroll", park._ride, true);
@@ -11300,8 +11311,8 @@
         if (!down) return;
         if (ev.cancelable) ev.preventDefault();
         var fb2 = forkbox.getBoundingClientRect();
-        var st = fromSpot(ev.clientX - sx, ev.clientY - sy);
-        var hold2 = ghost; ghost = g; place(fb2.left + fb2.width / 2 + st.x, fb2.top + 185 + st.y, cw, ch); ghost = hold2;
+        var st = fromSpot((ev.clientX - sx) / FSCALE, (ev.clientY - sy) / FSCALE);
+        var hold2 = ghost; ghost = g; place(fb2.left + fb2.width / 2 + st.x * FSCALE, fb2.top + (185 + st.y) * FSCALE, cw * FSCALE, ch * FSCALE); ghost = hold2;
         g._hit = st.hit;
       });
       var up = function () {
@@ -12078,8 +12089,12 @@
                the icons. The cards fit in it: if they ever do not, they are
                made smaller once and keep that -- they never grow back, so
                nothing flips -- and they sit in the middle of it */
-            var ceil = turf.getBoundingClientRect().bottom + 6, room = iconTop - 6 - ceil;
-            var want = Math.max(ceil, ceil + (room - r.height) / 2);
+            /* the cards stand right under the quarterback's spot and his
+               name, their own size, never on the icons (Jose, Sep 29, 2026:
+               "move the carousel of the players below the QB placeholder") */
+            var fbr = forkbox.getBoundingClientRect();
+            var ceil = fbr.top + (185 + 27.5 + 2 + 14) * FSCALE + 10;
+            var want = Math.min(ceil, iconTop - 6 - r.height);
             box.style.marginTop = ((parseFloat(getComputedStyle(box).marginTop) || 0) + (want - r.top) / z) + "px";
             if (box._seatFirst && !box._seated) { box._seated = true; box._seatFirst(); }
           }
