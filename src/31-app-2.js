@@ -526,8 +526,20 @@
      clubs and the two passers with every price and the case for each
      (Jose, Sep 30, 2026: "when I click that it opens this for the specific
      game and has the odds there") */
+  /* a pregame thing, and the NFL's alone for now: none on a college card,
+     and gone from a card once its game kicks off (Jose, Sep 30, 2026: "it
+     should disappear once a game's live and final ... only be on NFL") */
+  function ticketDue(card) {
+    return card.dataset.lg === "nfl" && !!card.dataset.kick && Date.now() < Date.parse(card.dataset.kick);
+  }
+  setInterval(function () {
+    document.querySelectorAll(".gtix").forEach(function (t) {
+      var c = t.closest(".gcard");
+      if (!c || !ticketDue(c)) t.remove();
+    });
+  }, 60000);
   function seatTicket(card) {
-    if (!card || card.dataset.bout) return;
+    if (!card || card.dataset.bout || !ticketDue(card)) return;
     var top = card.querySelector(".gtop");
     if (!top || top.querySelector(".gtix")) return;
     var b = document.createElement("button");
