@@ -109,6 +109,16 @@ export class Clock {
       const subs = (await this.ctx.storage.get("subs")) || {};
       return Response.json({ prefs, subs: Object.keys(subs).length, opened: (await this.ctx.storage.get("opened")) || {} });
     }
+    if (url.pathname.endsWith("/cliplog")) {
+      const log = (await this.ctx.storage.get("cliplog")) || [];
+      if (request.method === "POST") {
+        const b = await request.json();
+        log.unshift(Object.assign({ at: new Date().toISOString() }, b));
+        await this.ctx.storage.put("cliplog", log.slice(0, 120));
+        return Response.json({ ok: true });
+      }
+      return Response.json(log);
+    }
     if (url.pathname.endsWith("/opened") && request.method === "POST") {
       // which alerts he opens, to cut the ones he never does
       const b = await request.json(), op = (await this.ctx.storage.get("opened")) || {};

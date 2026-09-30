@@ -11436,6 +11436,17 @@
       var ask = c.mcp ? "clip?mcp=" + encodeURIComponent(c.mcp) : "clip?game=" + encodeURIComponent(c.gid) + "&ext=" + encodeURIComponent(c.ext);
       return fetch(ask).then(function (r) { return r.json(); }).then(function (j) { return j.accessUrl || ""; });
     };
+    /* each clip reports how it went, so a failure on the phone can be read
+       back and fixed rather than guessed at (Sep 29, 2026) */
+    var report = function (c, how, extra) {
+      try {
+        fetch("push", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ cliplog: Object.assign({
+          how: how, qb: q0name(), gid: c.gid, kind: c.kind, from: c.src ? "x" : c.mcp ? "club" : "nfl",
+          err: v.error ? v.error.code : null, ready: v.readyState, net: v.networkState, t: +v.currentTime.toFixed(1),
+          ua: navigator.userAgent.slice(0, 60) }, extra || {}) }) });
+      } catch (e) {}
+    };
+    var q0name = function () { var q = QBCLIPS[order[qi]]; return q ? famName(q.name) : ""; };
     var play = function () {
       if (!alive) return;
       if (qi < 0) qi = 0;
@@ -11452,8 +11463,10 @@
       box.dataset.want = want;
       urlOf(c).then(function (u) {
         if (box.dataset.want !== want || !alive) return;
-        if (!u) { ci++; play(); return; }
+        if (!u) { report(c, "nolink"); ci++; play(); return; }
         v.src = u; v.load();
+        var cNow = c, playedOnce = false;
+        v.onplaying = function () { if (!playedOnce && box.dataset.want === want) { playedOnce = true; report(cNow, "played"); } };
         v.play().catch(function () {});
         /* a clip that loaded but never started, or never loaded, is nudged
            and then passed over -- one stuck clip left the rest dark (Jose,
@@ -11463,7 +11476,7 @@
           if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) v.play().catch(function () {});
         }, 2500);
         box._skip = setTimeout(function () {
-          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) { ci++; play(); }
+          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) { report(c, "stuck"); ci++; play(); }
         }, 9000);
       }).catch(function () { ci++; play(); });
     };
@@ -11474,7 +11487,13 @@
     v.onended = function () { ci++; play(); };
     /* started the moment it can, and a clip that will not play is skipped */
     v.oncanplay = function () { if (!box._held && v.paused) v.play().catch(function () {}); };
-    v.onerror = function () { if (alive && v.getAttribute("src")) { ci++; play(); } };
+    v.onerror = function () {
+      if (alive && v.getAttribute("src")) {
+        var q = QBCLIPS[order[qi]], c = q && q.clips[ci];
+        if (c) report(c, "error", { msg: v.error ? String(v.error.message || "").slice(0, 80) : "" });
+        ci++; play();
+      }
+    };
     /* the gestures */
     var x0 = 0, y0 = 0, held = false, holdT = null;
     box.onpointerdown = function (e) {

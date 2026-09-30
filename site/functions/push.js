@@ -15,6 +15,7 @@ export async function onRequest({ request, env }) {
   if (!env.CLOCK) return Response.json({ error: "no clock bound" }, { status: 500 });
   const stub = env.CLOCK.get(env.CLOCK.idFromName("board"));
   const json = (x, s) => new Response(JSON.stringify(x), { status: s || 200, headers: { "content-type": "application/json", "cache-control": "no-store" } });
+  if (request.method === "GET" && new URL(request.url).searchParams.has("cliplog")) return stub.fetch("https://clock/cliplog");
   if (request.method === "GET") {
     const r = await (await stub.fetch("https://clock/prefs")).json();
     return json(Object.assign(r, { key: KEY }));
@@ -27,5 +28,6 @@ export async function onRequest({ request, env }) {
   if (b.prefs) return json(await (await post("prefs", b.prefs)).json());
   if (b.test) return json(await (await post("test", {})).json());
   if (b.opened) return json(await (await post("opened", { type: b.opened })).json());
+  if (b.cliplog) return json(await (await post("cliplog", b.cliplog)).json());
   return json({ error: "nothing asked" }, 400);
 }
