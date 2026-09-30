@@ -1540,7 +1540,7 @@
       dlg.dataset.espn = id;
       dlg.innerHTML = '<div class="sheet__head"><button class="sheet__x" type="button" data-shut aria-label="Back">' +
         '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
-        '<h2 class="sheet__title">' + esc(g[3]) + ' @ ' + esc(g[4]) + '</h2></div><div class="sheet__scroll"><div class="gp"></div></div>';
+        '</div><div class="sheet__scroll"><div class="gp"></div></div>';
       document.body.appendChild(dlg);
     }
     dlg._card = card;
@@ -1600,7 +1600,7 @@
         var lit = ["away", "home"].filter(function (w) { return s2[w]; });
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
-          return '<b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small>' +
+          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small></span>' +
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
         };
         h += '<div class="gprow">' +
