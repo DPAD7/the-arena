@@ -43,6 +43,7 @@ jobs:
             .github
             build
             data
+            src
 
       - uses: actions/setup-python@v5
         with:
