@@ -81,5 +81,21 @@ export async function onRequestGet({ request, env }) {
   });
   if (!r.ok) return say({ error: "asset " + r.status }, 502);
   const j = await r.json();
-  return say({ accessUrl: j.accessUrl, headline: headline });
+  /* the sharpest rendition of the stream, read off its master playlist, so
+     a story starts clear instead of climbing up from a blur (Jose, Sep 29,
+     2026: "it's blurry then loads the next clip"); the master stays the
+     fallback */
+  let best = "";
+  try {
+    const m = await (await fetch(j.accessUrl)).text();
+    let top = -1;
+    const lines = m.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      const bw = /^#EXT-X-STREAM-INF:.*?BANDWIDTH=(\d+)/.exec(lines[i]);
+      const next = (lines[i + 1] || "").trim();
+      // the sharpest that still starts quickly on a phone's connection
+      if (bw && next && !next.startsWith("#") && +bw[1] > top && +bw[1] <= 5000000) { top = +bw[1]; best = new URL(next, j.accessUrl).toString(); }
+    }
+  } catch (e) { best = ""; }
+  return say({ accessUrl: j.accessUrl, best: best, headline: headline });
 }

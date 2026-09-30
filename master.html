@@ -2652,6 +2652,7 @@
   #clipstory { position: fixed; inset: 0; z-index: 95; background: #000; touch-action: none; -webkit-user-select: none; user-select: none; }
   #clipstory[hidden] { display: none; }
   #clipstory video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  #clipstory video.cv--back { opacity: 0; pointer-events: none; }
   #clipstory .csound { position: absolute; right: 12px; top: calc(20px + env(safe-area-inset-top)); z-index: 3; width: 38px; height: 38px;
     border-radius: 10px; border: 0; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 0; cursor: pointer; }
   #clipstory .csound svg { width: 22px; height: 22px; }
@@ -11404,122 +11405,175 @@
     var box = document.getElementById("clipstory");
     if (!box) {
       box = document.createElement("div"); box.id = "clipstory"; box.hidden = true;
-      /* muted from the start, which a phone always lets play; the speaker
-         turns sound on for the rest of the stories. Waiting to fetch a clip
-         and then playing it with sound was blocked on the iPhone, so none
-         played (Jose, Sep 29, 2026) */
-      box.innerHTML = '<video playsinline muted autoplay preload="auto"></video><div class="cbars"></div><div class="cwho"></div>' +
-        '<button type="button" class="csound" aria-label="Sound"></button>';
+      /* two players, one behind the other: while one clip plays the next is
+         already loading in the other, so the change is a cut, not a wait
+         (Jose, Sep 29, 2026: "it's not smooth at all"). Muted from the start,
+         which a phone always lets play; the speaker turns sound on. */
+      box.innerHTML = '<video class="cv" playsinline muted autoplay preload="auto"></video>' +
+        '<video class="cv cv--back" playsinline muted preload="auto"></video>' +
+        '<div class="cbars"></div><div class="cwho"></div><button type="button" class="csound" aria-label="Sound"></button>';
       document.body.appendChild(box);
     }
     var how = document.getElementById("clipshow");
     var shown = false;
     try { shown = localStorage.getItem("arena.clipshow") === "1"; } catch (e) {}
-    var v = box.querySelector("video"), bars = box.querySelector(".cbars"), who = box.querySelector(".cwho");
-    var snd = box.querySelector(".csound");
+    var vids = box.querySelectorAll("video"), cur = vids[0], nxt = vids[1];
+    var bars = box.querySelector(".cbars"), who = box.querySelector(".cwho"), snd = box.querySelector(".csound");
+    var muted = true;
     var SPK = function (on) {
       return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/>' +
         (on ? '<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>'
             : '<path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>') + '</svg>';
     };
-    v.muted = true;
+    cur.muted = nxt.muted = true;
     snd.innerHTML = SPK(false);
     snd.onpointerdown = function (e) { e.stopPropagation(); };
     snd.onpointerup = function (e) { e.stopPropagation(); };
     snd.onclick = function (e) {
       e.stopPropagation();
-      v.muted = !v.muted; snd.innerHTML = SPK(!v.muted);
-      v.play().catch(function () {});
+      muted = !muted; cur.muted = muted; snd.innerHTML = SPK(!muted);
+      cur.play().catch(function () {});
     };
     var ci = 0, alive = true;
     var close = function () {
-      alive = false; v.pause(); v.removeAttribute("src"); v.load(); box.hidden = true;
+      alive = false;
+      [cur, nxt].forEach(function (v) { v.pause(); v.removeAttribute("src"); v.load(); v.dataset.for = ""; });
+      box.hidden = true;
       document.documentElement.classList.remove("cashlock");
       if (after) after();
     };
+    /* each clip's link, asked once and kept for ten minutes (nfl.com signs
+       them for fifteen), and the sharpest rendition when there is one */
+    var LINKS = clipStories._links || (clipStories._links = {});
     var urlOf = function (c) {
       if (c.src) return Promise.resolve(c.src);
+      var k = clipKey(c), got = LINKS[k];
+      if (got && Date.now() - got.at < 600000) return got.p;
       var ask = c.mcp ? "clip?mcp=" + encodeURIComponent(c.mcp) : "clip?game=" + encodeURIComponent(c.gid) + "&ext=" + encodeURIComponent(c.ext);
-      return fetch(ask).then(function (r) { return r.json(); }).then(function (j) { return j.accessUrl || ""; });
+      var p = fetch(ask).then(function (r) { return r.json(); }).then(function (j) { return j.best || j.accessUrl || ""; });
+      p.catch(function () { delete LINKS[k]; });
+      LINKS[k] = { at: Date.now(), p: p };
+      return p;
     };
-    /* each clip reports how it went, so a failure on the phone can be read
-       back and fixed rather than guessed at (Sep 29, 2026) */
+    /* the clip at a place in the run, rolling over to the next passer */
+    var at = function (q, c) {
+      if (q < 0) return null;
+      while (q < order.length) {
+        var list = QBCLIPS[order[q]].clips;
+        if (c < list.length) return { q: q, c: c, clip: list[c], key: q + ":" + c };
+        q++; c = 0;
+      }
+      return null;
+    };
+    var q0name = function () { var q = QBCLIPS[order[qi]]; return q ? famName(q.name) : ""; };
+    /* each clip reports how it went (Sep 29, 2026) */
     var report = function (c, how, extra) {
       try {
         fetch("push", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ cliplog: Object.assign({
           how: how, qb: q0name(), gid: c.gid, kind: c.kind, from: c.src ? "x" : c.mcp ? "club" : "nfl",
-          err: v.error ? v.error.code : null, ready: v.readyState, net: v.networkState, t: +v.currentTime.toFixed(1),
+          err: cur.error ? cur.error.code : null, ready: cur.readyState, net: cur.networkState, t: +cur.currentTime.toFixed(1),
           ua: navigator.userAgent.slice(0, 60) }, extra || {}) }) });
       } catch (e) {}
     };
-    var q0name = function () { var q = QBCLIPS[order[qi]]; return q ? famName(q.name) : ""; };
+    /* the next clip, loaded in the back player while this one plays */
+    var preload = function () {
+      var n = at(qi, ci + 1);
+      if (!n || nxt.dataset.for === n.key) return;
+      nxt.dataset.for = n.key;
+      urlOf(n.clip).then(function (u) {
+        if (!alive || nxt.dataset.for !== n.key || !u) return;
+        nxt.src = u; nxt.load();
+      }).catch(function () {});
+      // and the one after, asked for now so its link is ready
+      var n2 = at(qi, ci + 2);
+      if (n2) urlOf(n2.clip).catch(function () {});
+    };
+    var watch = function (want, c) {
+      clearTimeout(box._kick); clearTimeout(box._skip);
+      box._kick = setTimeout(function () {
+        if (box.dataset.want === want && alive && cur.currentTime < 0.1 && !box._held) cur.play().catch(function () {});
+      }, 2500);
+      box._skip = setTimeout(function () {
+        if (box.dataset.want === want && alive && cur.currentTime < 0.1 && !box._held) { report(c, "stuck"); ci++; play(); }
+      }, 9000);
+    };
     var play = function () {
       if (!alive) return;
-      if (qi < 0) qi = 0;
-      if (qi >= order.length) { close(); return; }
-      var q = QBCLIPS[order[qi]], list = q.clips;
-      if (ci < 0) { if (qi > 0) { qi--; ci = QBCLIPS[order[qi]].clips.length - 1; play(); return; } ci = 0; }
-      if (ci >= list.length) { qi++; ci = 0; play(); return; }
-      bars.innerHTML = list.map(function (c, i) { return '<i><b style="width:' + (i < ci ? 100 : 0) + '%"></b></i>'; }).join("");
+      if (ci < 0) { if (qi > 0) { qi--; ci = QBCLIPS[order[qi]].clips.length - 1; } else ci = 0; }
+      var here = at(qi, ci);
+      if (!here) { close(); return; }
+      qi = here.q; ci = here.c;
+      var q = QBCLIPS[order[qi]], list = q.clips, c = here.clip;
+      bars.innerHTML = list.map(function (x, i) { return '<i><b style="width:' + (i < ci ? 100 : 0) + '%"></b></i>'; }).join("");
       who.innerHTML = '<i style="background-image:url(face/nfl/' + order[qi] + '.png)"></i>' + esc(famName(q.name));
-      var c = list[ci], seen = clipSeen();
-      seen[clipKey(c)] = 1;
+      var seen = clipSeen(); seen[clipKey(c)] = 1;
       try { localStorage.setItem("arena.clipseen", JSON.stringify(seen)); } catch (e) {}
-      var want = qi + ":" + ci;
+      var want = here.key;
       box.dataset.want = want;
+      cur.pause();
+      if (nxt.dataset.for === want && nxt.getAttribute("src")) {
+        /* already loaded behind: swap the two players, a straight cut */
+        var t = cur; cur = nxt; nxt = t;
+        cur.classList.remove("cv--back"); nxt.classList.add("cv--back");
+        nxt.dataset.for = "";
+        cur.muted = muted;
+        try { if (cur.currentTime > 0) cur.currentTime = 0; } catch (e) {}
+        cur.play().catch(function () {});
+        watch(want, c);
+        preload();
+        return;
+      }
       urlOf(c).then(function (u) {
         if (box.dataset.want !== want || !alive) return;
         if (!u) { report(c, "nolink"); ci++; play(); return; }
-        v.src = u; v.load();
-        var cNow = c, playedOnce = false;
-        v.onplaying = function () { if (!playedOnce && box.dataset.want === want) { playedOnce = true; report(cNow, "played"); } };
-        v.play().catch(function () {});
-        /* a clip that loaded but never started, or never loaded, is nudged
-           and then passed over -- one stuck clip left the rest dark (Jose,
-           Sep 29, 2026: "I can watch 3 and the rest don't work") */
-        clearTimeout(box._kick); clearTimeout(box._skip);
-        box._kick = setTimeout(function () {
-          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) v.play().catch(function () {});
-        }, 2500);
-        box._skip = setTimeout(function () {
-          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) { report(c, "stuck"); ci++; play(); }
-        }, 9000);
+        cur.src = u; cur.dataset.for = want; cur.load(); cur.muted = muted;
+        cur.play().catch(function () {});
+        watch(want, c);
+        preload();
       }).catch(function () { ci++; play(); });
     };
-    v.ontimeupdate = function () {
-      var b = bars.querySelectorAll("b")[ci];
-      if (b && v.duration) b.style.width = (v.currentTime / v.duration * 100).toFixed(1) + "%";
-    };
-    v.onended = function () { ci++; play(); };
-    /* started the moment it can, and a clip that will not play is skipped */
-    v.oncanplay = function () { if (!box._held && v.paused) v.play().catch(function () {}); };
-    v.onerror = function () {
-      if (alive && v.getAttribute("src")) {
-        var q = QBCLIPS[order[qi]], c = q && q.clips[ci];
-        if (c) report(c, "error", { msg: v.error ? String(v.error.message || "").slice(0, 80) : "" });
-        ci++; play();
-      }
-    };
+    [cur, nxt].forEach(function (v) {
+      v.ontimeupdate = function () {
+        if (v !== cur) return;
+        var b = bars.querySelectorAll("b")[ci];
+        if (b && v.duration) b.style.width = (v.currentTime / v.duration * 100).toFixed(1) + "%";
+      };
+      v.onended = function () { if (v === cur) { ci++; play(); } };
+      v.oncanplay = function () { if (v === cur && !box._held && v.paused) v.play().catch(function () {}); };
+      v.onplaying = function () {
+        if (v !== cur || v._told === box.dataset.want) return;
+        v._told = box.dataset.want;
+        var h = at(qi, ci); if (h) report(h.clip, "played");
+      };
+      v.onerror = function () {
+        if (!alive || !v.getAttribute("src")) return;
+        if (v === cur) {
+          var h = at(qi, ci);
+          if (h) report(h.clip, "error", { msg: v.error ? String(v.error.message || "").slice(0, 80) : "" });
+          ci++; play();
+        } else { v.dataset.for = ""; }
+      };
+    });
     /* the gestures */
     var x0 = 0, y0 = 0, held = false, holdT = null;
     box.onpointerdown = function (e) {
       x0 = e.clientX; y0 = e.clientY; held = false;
-      holdT = setTimeout(function () { held = true; box._held = true; v.pause(); }, 260);
+      holdT = setTimeout(function () { held = true; box._held = true; cur.pause(); }, 260);
     };
     box.onpointerup = function (e) {
       clearTimeout(holdT);
       var dx = e.clientX - x0, dy = e.clientY - y0;
-      if (held) { held = false; box._held = false; v.play().catch(function () {}); return; }
+      if (held) { held = false; box._held = false; cur.play().catch(function () {}); return; }
       if (dy > 90 && Math.abs(dy) > Math.abs(dx)) { close(); return; }
-      if (Math.abs(dx) > 60) { qi += dx < 0 ? 1 : -1; ci = 0; play(); return; }
+      if (Math.abs(dx) > 60) { qi += dx < 0 ? 1 : -1; ci = 0; if (qi < 0) qi = 0; if (qi >= order.length) { close(); return; } play(); return; }
       if (e.clientX < innerWidth * 0.25) ci--; else ci++;
       play();
     };
     var go = function () {
       box.hidden = false;
       document.documentElement.classList.add("cashlock");
-      /* called inside his tap: the element is allowed to play from here on */
-      try { v.play().catch(function () {}); } catch (e) {}
+      /* called inside his tap: both players are allowed to play from here on */
+      try { cur.play().catch(function () {}); nxt.play().catch(function () {}); nxt.pause(); } catch (e) {}
       play();
     };
     if (shown) { go(); return; }
