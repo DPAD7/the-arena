@@ -65,9 +65,11 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}     # so `gh issue view` and `gh issue comment` work in its shell
         with:
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          show_full_output: true
           claude_args: "--max-turns 60 --allowedTools Bash,Read,Edit,Write,Grep,Glob"
           prompt: |
             You are mending the board (read CLAUDE.md first; every rule there holds). A run failed and
@@ -78,4 +80,5 @@ jobs:
             (`cd build && python3 -c "import pagefile; pagefile.deployable(pagefile.read())"`), and run
             `python3 build/guard.py`. If the fix holds, ship with `build/ship.sh "<one line on what it was>"`
             and close the issue with that same line as a comment. If it needs Jose (a login, a secret, a
-            decision), say exactly what in a comment and leave the issue open. Never print a cookie or a secret.
+            decision), say exactly what in a comment and leave the issue open. Always end by commenting on the
+            issue with `gh issue comment`, even when there was nothing to mend. Never print a cookie or a secret.
