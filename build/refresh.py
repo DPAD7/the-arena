@@ -227,13 +227,35 @@ def open_pass():
                      "DraftKings prices %s, not %s -- the card has him now." % (m.group(3), m.group(2)))
 
 
+BLOWOUT = -1000            # a favorite this heavy: DraftKings often skips the game's props
+
+
+def hidden_games():
+    """The games he has hidden on the board, by ESPN id, from the site's store."""
+    try:
+        from curl_cffi import requests as rq
+        k = re.search(r"ARENAOWN\s*=\s*[\"']([^\"']+)", pagefile.read())
+        r = rq.get(SITE_STATE + (("?k=" + k.group(1)) if k else ""), impersonate="chrome", timeout=30)
+        return set(str(x) for x in ((r.json() or {}).get("hidden") or {}))
+    except Exception:
+        return set()
+
+
+SITE_STATE = "https://the-arenasports.pages.dev/state"
+
+
 def count_misses():
-    """Every price pass, each side of a game inside MISS_HOURS with no passing-
-       touchdown price is counted; a side priced again is forgotten. On the
-       fifth empty pass DraftKings' own list of passers for that side says
-       which it is, and his phone is told once: another man priced, or no
-       passing props listed at all (Jose, Sep 30, 2026: "if the prices are
-       missing and we checked more than five times ... send a notification")."""
+    """College only. Every price pass, a college game inside MISS_HOURS where
+       DraftKings prices one passer and not the other is counted for the empty
+       side; a side priced again is forgotten. Left out: the NFL (its chart
+       names the starter, and a missing price there is only the book being
+       late), a game with neither side priced (the book has not posted it or
+       skips it), a favorite of BLOWOUT or heavier, and any game he has
+       hidden. On the fifth empty pass the sides that reached it go to his
+       phone in one alert: the passer DraftKings lists instead, or no passing
+       props listed (Jose, Sep 30, 2026: "not ... 1000 notifications about all
+       the quarterbacks that are on Saturday").
+    """
     f = D + "/data/price_misses.json"
     try:
         miss = json.load(open(f))
@@ -243,43 +265,51 @@ def count_misses():
         dkq = json.load(open(D + "/data/dk_qbs.json"))
     except (OSError, ValueError):
         dkq = {}
+    hid = hidden_games()
     page = pagefile.read()
-    now_open = {}
-    for var in ("SCHED", "CFB"):
-        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
-        for g in json.loads(m.group(1)) if m else []:
-            try:
-                kick = datetime.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
-            except (ValueError, AttributeError, IndexError):
+    now_open, lines = {}, []
+    m = re.search(r"  var CFB = (\[\[.*?\]\]);", page, re.S)
+    for g in json.loads(m.group(1)) if m else []:
+        try:
+            kick = datetime.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except (ValueError, AttributeError, IndexError):
+            continue
+        if not (NOW < kick <= NOW + datetime.timedelta(hours=MISS_HOURS)) or str(g[1]) in hid:
+            continue
+        try:
+            held = json.load(open(D + "/site/prices/%s.json" % g[1]))
+        except (OSError, ValueError):
+            continue
+        ptd = (held.get("props") or {}).get("ptd") or []
+        priced = [len(ptd) > i and any(x for x in ptd[i]) for i in (0, 1)]
+        if priced[0] == priced[1]:
+            continue
+        ml = held.get("ml") or []
+        try:
+            if min(int(str(ml[i]).replace("\u2212", "-")) for i in (0, 2) if len(ml) > i and ml[i]) <= BLOWOUT:
                 continue
-            if not (NOW < kick <= NOW + datetime.timedelta(hours=MISS_HOURS)):
-                continue
-            try:
-                ptd = (json.load(open(D + "/site/prices/%s.json" % g[1])).get("props") or {}).get("ptd") or []
-            except (OSError, ValueError):
-                ptd = []
-            for side in (0, 1):
-                if len(ptd) > side and any(x for x in ptd[side]):
-                    continue
-                key = "%s:%d" % (g[1], side)
-                was = miss.get(key) or {}
-                n = int(was.get("n", 0)) + 1
-                club, man = g[3 + side], g[5 + side * 2] or "no passer"
-                now_open[key] = {"n": n, "told": was.get("told", False)}
-                if n >= MISS_LIMIT and not was.get("told"):
-                    book = [x[1] for x in ((dkq.get(str(g[1])) or [[], []])[side]) if len(x) > 1]
-                    game = "%s/%s" % (g[3], g[4])
-                    if book:
-                        tell("props@" + key, "%s: DraftKings lists %s" % (club, ", ".join(book)),
-                             "%s has no prices for %s after %d checks; DraftKings prices %s." % (game, man, n, ", ".join(book)))
-                    else:
-                        tell("props@" + key, "No passing props listed for %s" % man,
-                             "%s: DraftKings lists no passing props for %s after %d checks." % (game, club, n))
-                    now_open[key]["told"] = True
-                    log("   price misses: %s side %d told after %d passes" % (game, side, n))
+        except ValueError:
+            pass
+        side = priced.index(False)
+        key = "%s:%d" % (g[1], side)
+        was = miss.get(key) or {}
+        n = int(was.get("n", 0)) + 1
+        now_open[key] = {"n": n, "told": was.get("told", False)}
+        if n >= MISS_LIMIT and not was.get("told"):
+            club, man = g[3 + side], g[5 + side * 2] or "no passer"
+            book = [x[1] for x in ((dkq.get(str(g[1])) or [[], []])[side]) if len(x) > 1]
+            lines.append("%s %s: DraftKings lists %s" % (club, man, ", ".join(book)) if book
+                         else "%s %s: no passing props listed" % (club, man))
+            now_open[key]["told"] = True
+    if lines:
+        tell("props@" + NOW.strftime("%Y-%m-%d %H"),
+             "No passing odds: %d college passer%s" % (len(lines), "" if len(lines) == 1 else "s"),
+             "; ".join(lines))
+        for l in lines:
+            log("   price misses told: " + l)
     if not DRY:
         json.dump(now_open, open(f, "w"), indent=1, sort_keys=True)
-    log("   price misses: %d sides inside %d hours still unpriced" % (len(now_open), MISS_HOURS))
+    log("   price misses: %d college sides counted" % len(now_open))
 
 
 def ranks_due(seen):
