@@ -8,6 +8,7 @@
      POST /push {prefs: {...}}     which kinds of alert are on
      POST /push {test: true}       send one now
      POST /push {opened: type}     he opened one of this kind
+     POST /push {fault: {...}}      x-ask-secret: a fault on the board, from GitHub's watcher
 */
 const KEY = "BMW0ZmiZS6joDa-NPhSXxdQzPVvFrLnx9ILj1wI95dbycBv0Z7Y577PoP1-8djkMjHwwGcR4U6Yy3fZ29z8SNZg";
 
@@ -29,5 +30,10 @@ export async function onRequest({ request, env }) {
   if (b.test) return json(await (await post("test", {})).json());
   if (b.opened) return json(await (await post("opened", { type: b.opened })).json());
   if (b.cliplog) return json(await (await post("cliplog", b.cliplog)).json());
+  /* a fault, from the watcher on GitHub, signed with the run's secret */
+  if (b.fault) {
+    if (!env.ASK_SECRET || request.headers.get("x-ask-secret") !== env.ASK_SECRET) return json({ error: "no" }, 403);
+    return json(await (await post("fault", b.fault)).json());
+  }
   return json({ error: "nothing asked" }, 400);
 }

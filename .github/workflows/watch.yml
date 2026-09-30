@@ -1,0 +1,36 @@
+# The watcher (Jose, Sep 30, 2026): when any run of the board's fails, read
+# its log, name the cause, alert his phone, run a sweep again if the trouble
+# was the network, and file an issue labeled "fault" for mend.yml when it was
+# the code. build/triage.py does the reading.
+name: watch
+
+on:
+  workflow_run:
+    workflows: [sweep, settle, ask, dkbets, fightlog, promote]
+    types: [completed]
+
+permissions:
+  actions: write       # read the failed run's log; run a sweep again
+  issues: write        # file the fault
+  contents: read
+
+jobs:
+  triage:
+    if: ${{ github.event.workflow_run.conclusion == 'failure' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Read the failure
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          RUN_NAME: ${{ github.event.workflow_run.name }}
+          RUN_URL: ${{ github.event.workflow_run.html_url }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+        run: python build/triage.py

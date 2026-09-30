@@ -126,6 +126,17 @@ export class Clock {
       await this.ctx.storage.put("opened", op);
       return Response.json({ ok: true });
     }
+    /* a fault on the board, from the watcher on GitHub (build/triage.py):
+       one alert per fault a day, on the phone with the rest (Jose, Sep 30,
+       2026: "add a notification system so if that happens it sends you") */
+    if (url.pathname.endsWith("/fault") && request.method === "POST") {
+      const b = await request.json();
+      const day = new Date().toISOString().slice(0, 10);
+      const n = await this.tell([{ key: "fault@" + (b.key || b.title || "") + "@" + day, type: "fault", tag: "fault",
+                                   title: String(b.title || "The board hit a fault").slice(0, 80),
+                                   body: String(b.body || "").slice(0, 200), url: b.url || "/" }], 0);
+      return Response.json({ sent: n });
+    }
     if (url.pathname.endsWith("/test") && request.method === "POST") {
       const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Alerts are on", body: "This is what they look like.", url: "/" }], 0);
       return Response.json({ sent: n });
