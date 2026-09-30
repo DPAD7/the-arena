@@ -181,6 +181,34 @@ def words(n):
     return {0: "no", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}.get(n, str(n))
 
 
+def last_starter(games, club):
+    """(name, id, completions/attempts, scores, won) of the man who threw most
+       for the club in its last game, from the settled box."""
+    if not games:
+        return None
+    g = games[-1]
+    abbr = {}
+    for t in (g[4].get("boxscore") or {}).get("players") or []:
+        if (t.get("team") or {}).get("abbreviation") != club:
+            continue
+        for st in t.get("statistics") or []:
+            if st.get("name") != "passing":
+                continue
+            keys = st.get("keys") or st.get("labels") or []
+            best = None
+            for a in st.get("athletes") or []:
+                l = dict(zip(keys, a.get("stats") or []))
+                att = n_of(l, "C/ATT", "completions/passingAttempts")
+                if not best or att > best[0]:
+                    best = (att, a.get("athlete") or {}, l)
+            if best:
+                l = best[2]
+                return (best[1].get("displayName") or "", str(best[1].get("id") or ""),
+                        l.get("C/ATT") or l.get("completions/passingAttempts") or "",
+                        n_of(l, "TD", "passingTouchdowns"), g[2] > g[3], g[1], g[2], g[3])
+    return None
+
+
 def fill_in(lineups, gid, club, qb, qid, lines):
     """A passer standing in: he has not started for the club this year (no
        game of 15 throws or more). Says whom he replaces, when the lineup
@@ -205,7 +233,7 @@ def fill_in(lineups, gid, club, qb, qid, lines):
     s = "%s%s makes his first start%s" % ("rookie " if rookie else "", fam(qb),
                                          (" in place of %s, who is out" % fam(was)) if was else "")
     s += ("; he has %d throws for %d yards this year." % (t, y)) if t else "; he has not thrown a pass this year."
-    return s[0].upper() + s[1:]
+    return s[0].upper() + s[1:], rookie
 
 
 def ml_case(club, games, home, offw, qb=None, threw=True):
@@ -369,13 +397,26 @@ def main():
                 rows[side].append((p[2], rz, fin, d, half, g[0], g[1], long_scores(g[4], qb), g[2]))
                 runs[side].append(rushing(g[4], qid))
         fills = {side: fill_in(lineups, gid, men[side][2], men[side][0], men[side][1], lines[side]) for side in men}
+        for side in men:
+            if not fills[side]:
+                continue
+            # the man who started last time, when that was somebody else: the
+            # Bears' third passer, Keenum, won 27-7 the week before DraftKings
+            # priced Bagent (Jose, Sep 30, 2026: "he threw 2 tds ... a 10+ year vet")
+            ls = last_starter(gs[side], men[side][2])
+            if ls and ls[1] != men[side][1] and ("place of %s," % fam(ls[0])) not in fills[side][0]:
+                text, rk = fills[side]
+                text += " %s started last time out, %s with %d passing score%s, a %d-%d %s against %s." % (
+                    fam(ls[0]), ls[2], ls[3], "" if ls[3] == 1 else "s", max(ls[6], ls[7]), min(ls[6], ls[7]),
+                    "win" if ls[4] else "loss", ls[5])
+                fills[side] = (text, rk)
         for side, (qb, qid, club, opp) in men.items():
             other = "home" if side == "away" else "away"
             game["ml"][side] = ml_case(club, gs[side], side == "home", wr[side][1], qb, bool(lines[side]))
             game["h2h"][side] = h2h_case(qb, lines[side], men[other][0], lines[other], alw[other], wr[other][0], opp)
             if fills[side]:
-                game["ml"][side] += " " + fills[side]
-                game["h2h"][side] += " " + fills[side]
+                game["ml"][side] += " " + fills[side][0]
+                game["h2h"][side] += " " + fills[side][0]
             game["ptd"][side], game["atd"][side] = {}, {}
             for n in range(1, 7):
                 c, t = ptd_case(qb, club, opp, n, rows[side], alw[other], wr[other][0], wx)
@@ -394,9 +435,11 @@ def main():
                 wa = sum(1 for g in gs["away"] if g[2] > g[3]); wh = sum(1 for g in gs["home"] if g[2] > g[3])
                 lean["ml"] = "away" if wa > wh else "home"
             gap["ml"] = abs(net["away"] - net["home"])
-        if bool(fills["away"]) != bool(fills["home"]):
-            # a first start against a starter: the lean goes to the starter's club
-            lean["ml"] = "home" if fills["away"] else "away"
+        rook = {w: bool(fills[w] and fills[w][1]) for w in men}
+        if rook["away"] != rook["home"]:
+            # a rookie's first start against a starter: the lean goes to the
+            # starter's club. A veteran standing in keeps the record's lean
+            lean["ml"] = "home" if rook["away"] else "away"
         ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
         if ypg["away"] is not None and ypg["home"] is not None:
             lean["h2h"] = "away" if ypg["away"] >= ypg["home"] else "home"
