@@ -12069,11 +12069,13 @@
             var natural = card.getBoundingClientRect().height / zNow;
             /* as tall as the band allows, and short enough to leave the sets
                their grass above the line */
-            var roomNow = (cardFloor - 6) - (turf.getBoundingClientRect().bottom + 6);
-            /* one size, always: the one in his 10:41 screenshot, 55px tall on
-               a 430px screen and in step with the width -- never shrunk for a
-               slip, which fits under it (Jose, Sep 28, 2026) */
-            HOTZ = window._hotz = Math.min(1, (55 * FW / 430) / natural);
+            /* one size, always, worked out once: as tall as the room between
+               the quarterback's spot and the top of the betslip, so the cards
+               fill it (Jose, Sep 29, 2026: "make the containers this height,
+               bottom on the line there and then the top of the bet slip") */
+            var fb0 = forkbox.getBoundingClientRect();
+            var roomNow = (cardFloor - 6) - (fb0.top + (185 + 27.5 + 2 + 14) * FSCALE + 10);
+            HOTZ = window._hotz = Math.min(1, Math.max(0.1, roomNow) / natural);
             document.documentElement.style.setProperty("--hotz", HOTZ);
           }
           if (HOTZ) box.style.zoom = HOTZ;
