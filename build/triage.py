@@ -38,6 +38,16 @@ ASK = os.environ.get("ASK_SECRET", "")
 API = "https://api.github.com"
 
 
+class _Bare(urllib.request.HTTPRedirectHandler):
+    """A log is handed over by a redirect to a signed store URL that refuses
+       GitHub's own token: the redirect is followed without it."""
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        return urllib.request.Request(newurl, method="GET")
+
+
+OPEN = urllib.request.build_opener(_Bare).open
+
+
 def gh(path, data=None, method=None):
     req = urllib.request.Request(API + path, data=json.dumps(data).encode() if data is not None else None,
                                  method=method or ("POST" if data is not None else "GET"))
@@ -45,7 +55,7 @@ def gh(path, data=None, method=None):
     req.add_header("Accept", "application/vnd.github+json")
     if data is not None:
         req.add_header("Content-Type", "application/json")
-    with urllib.request.urlopen(req, timeout=60) as r:
+    with OPEN(req, timeout=60) as r:
         body = r.read()
         return json.loads(body) if body.strip().startswith(b"{") or body.strip().startswith(b"[") else body.decode("utf-8", "replace")
 
@@ -63,7 +73,9 @@ def logs_of(run):
         except Exception as e:
             text = "log unreadable: %s" % e
         lines = [re.sub(r"^\S+Z ", "", l) for l in str(text).splitlines()]
-        lines = [l for l in lines if "cookie" not in l.lower()]
+        # a line that carries a cookie's value is dropped; a line that only
+        # speaks of cookies (dk_bets: "the cookies no longer mint a token") stays
+        lines = [l for l in lines if not re.search(r"cookie\S*\s*[:=]\s*\S", l, re.I)]
         out.append((j.get("name") or "job", lines))
     return out
 
