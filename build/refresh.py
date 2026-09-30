@@ -190,6 +190,98 @@ def hub_due(seen):
     return out
 
 
+MISS_LIMIT = 5             # price passes a side can come up empty before he hears
+MISS_HOURS = 48            # only games this close are counted
+
+
+def tell(key, title, body):
+    """A notification on his phone, through the clock (the watcher's route)."""
+    try:
+        import triage
+        triage.alert(key, title, body)
+    except Exception as e:
+        log("   alert not sent (%s)" % type(e).__name__)
+
+
+def open_pass():
+    """Straight after a price pass: starters.py ran ahead of the book in it, so
+       a passer DraftKings has just posted is put on his card now and read for
+       his prices, not at the next sweep. Each swap is told to his phone
+       (Jose, Sep 30, 2026: Tulsa kept last week's man with no prices while
+       DraftKings priced Baylor Hayes)."""
+    def run(job):
+        r = subprocess.run([sys.executable, D + "/build/" + job], capture_output=True, text=True, cwd=D)
+        out = (r.stdout + r.stderr).strip().splitlines()
+        for line in out[-4:]:
+            log("   %s: %s" % (job[:-3], line))
+        return out
+    said = run("starters.py")
+    swaps = [l for l in said if "(DraftKings)" in l]
+    if swaps:
+        pagefile.deployable(pagefile.read())
+        run("fill_week.py")
+        for l in swaps:
+            m = re.match(r"\s*(\S+)\s+(.+?)\s+->\s+(.+?)\s+\(DraftKings\)", l)
+            if m:
+                tell("swap@%s@%s" % (m.group(1), m.group(3)), "%s: %s starts" % (m.group(1), m.group(3)),
+                     "DraftKings prices %s, not %s -- the card has him now." % (m.group(3), m.group(2)))
+
+
+def count_misses():
+    """Every price pass, each side of a game inside MISS_HOURS with no passing-
+       touchdown price is counted; a side priced again is forgotten. On the
+       fifth empty pass DraftKings' own list of passers for that side says
+       which it is, and his phone is told once: another man priced, or no
+       passing props listed at all (Jose, Sep 30, 2026: "if the prices are
+       missing and we checked more than five times ... send a notification")."""
+    f = D + "/data/price_misses.json"
+    try:
+        miss = json.load(open(f))
+    except (OSError, ValueError):
+        miss = {}
+    try:
+        dkq = json.load(open(D + "/data/dk_qbs.json"))
+    except (OSError, ValueError):
+        dkq = {}
+    page = pagefile.read()
+    now_open = {}
+    for var in ("SCHED", "CFB"):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
+        for g in json.loads(m.group(1)) if m else []:
+            try:
+                kick = datetime.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+            except (ValueError, AttributeError, IndexError):
+                continue
+            if not (NOW < kick <= NOW + datetime.timedelta(hours=MISS_HOURS)):
+                continue
+            try:
+                ptd = (json.load(open(D + "/site/prices/%s.json" % g[1])).get("props") or {}).get("ptd") or []
+            except (OSError, ValueError):
+                ptd = []
+            for side in (0, 1):
+                if len(ptd) > side and any(x for x in ptd[side]):
+                    continue
+                key = "%s:%d" % (g[1], side)
+                was = miss.get(key) or {}
+                n = int(was.get("n", 0)) + 1
+                club, man = g[3 + side], g[5 + side * 2] or "no passer"
+                now_open[key] = {"n": n, "told": was.get("told", False)}
+                if n >= MISS_LIMIT and not was.get("told"):
+                    book = [x[1] for x in ((dkq.get(str(g[1])) or [[], []])[side]) if len(x) > 1]
+                    game = "%s/%s" % (g[3], g[4])
+                    if book:
+                        tell("props@" + key, "%s: DraftKings lists %s" % (club, ", ".join(book)),
+                             "%s has no prices for %s after %d checks; DraftKings prices %s." % (game, man, n, ", ".join(book)))
+                    else:
+                        tell("props@" + key, "No passing props listed for %s" % man,
+                             "%s: DraftKings lists no passing props for %s after %d checks." % (game, club, n))
+                    now_open[key]["told"] = True
+                    log("   price misses: %s side %d told after %d passes" % (game, side, n))
+    if not DRY:
+        json.dump(now_open, open(f, "w"), indent=1, sort_keys=True)
+    log("   price misses: %d sides inside %d hours still unpriced" % (len(now_open), MISS_HOURS))
+
+
 def ranks_due(seen):
     """The daily rankings read, if this is the hour for it."""
     from zoneinfo import ZoneInfo
@@ -702,6 +794,9 @@ elif "--if-due" in sys.argv:
             for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
                 log("   starters: " + line)
         price_drawn()
+        if not DRY:
+            open_pass()
+            count_misses()
     for _k, _n, _m, _fight in late:
         settle_late(_fight)
     if hub and not DRY:
