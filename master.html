@@ -2631,7 +2631,10 @@
      way the search row has them -- a face in a rounded square, the board's
      gold ring while he has clips not yet watched, grey once they all are,
      a star on every tile -- and his season's touchdowns as stories ---- */
-  .clipspage { background: #000; min-height: calc(100vh - 150px); }
+  .clipspage { background: #000; }
+  /* nothing under the row, so the page stands still; only the row slides
+     sideways (Jose, Sep 29, 2026: "why is there a scroll on there") */
+  html.clipsview, html.clipsview body { overflow: hidden; overscroll-behavior: none; height: 100%; }
   body:has(.clipspage) .cashfab { display: none; }
   .cliprow { display: flex; gap: 14px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
   .cliprow::-webkit-scrollbar { display: none; }
@@ -9600,6 +9603,7 @@
     });
   }
   function clearBoard() {
+    document.documentElement.classList.remove("clipsview");
     rememberScroll();
     BOARD.querySelectorAll(".gcard").forEach(function (c) {
       if (c.dataset.pooled) POOL.appendChild(c);
@@ -11350,6 +11354,8 @@
       });
   }
   function renderClips() {
+    document.documentElement.classList.add("clipsview");
+    window.scrollTo(0, 0);
     var page = document.createElement("div");
     page.className = "clipspage";
     BOARD.appendChild(page);
