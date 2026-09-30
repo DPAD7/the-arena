@@ -11453,7 +11453,18 @@
       urlOf(c).then(function (u) {
         if (box.dataset.want !== want || !alive) return;
         if (!u) { ci++; play(); return; }
-        v.src = u; v.play().catch(function () {});
+        v.src = u; v.load();
+        v.play().catch(function () {});
+        /* a clip that loaded but never started, or never loaded, is nudged
+           and then passed over -- one stuck clip left the rest dark (Jose,
+           Sep 29, 2026: "I can watch 3 and the rest don't work") */
+        clearTimeout(box._kick); clearTimeout(box._skip);
+        box._kick = setTimeout(function () {
+          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) v.play().catch(function () {});
+        }, 2500);
+        box._skip = setTimeout(function () {
+          if (box.dataset.want === want && alive && v.currentTime < 0.1 && !box._held) { ci++; play(); }
+        }, 9000);
       }).catch(function () { ci++; play(); });
     };
     v.ontimeupdate = function () {
@@ -11461,16 +11472,19 @@
       if (b && v.duration) b.style.width = (v.currentTime / v.duration * 100).toFixed(1) + "%";
     };
     v.onended = function () { ci++; play(); };
+    /* started the moment it can, and a clip that will not play is skipped */
+    v.oncanplay = function () { if (!box._held && v.paused) v.play().catch(function () {}); };
+    v.onerror = function () { if (alive && v.getAttribute("src")) { ci++; play(); } };
     /* the gestures */
     var x0 = 0, y0 = 0, held = false, holdT = null;
     box.onpointerdown = function (e) {
       x0 = e.clientX; y0 = e.clientY; held = false;
-      holdT = setTimeout(function () { held = true; v.pause(); }, 260);
+      holdT = setTimeout(function () { held = true; box._held = true; v.pause(); }, 260);
     };
     box.onpointerup = function (e) {
       clearTimeout(holdT);
       var dx = e.clientX - x0, dy = e.clientY - y0;
-      if (held) { held = false; v.play().catch(function () {}); return; }
+      if (held) { held = false; box._held = false; v.play().catch(function () {}); return; }
       if (dy > 90 && Math.abs(dy) > Math.abs(dx)) { close(); return; }
       if (Math.abs(dx) > 60) { qi += dx < 0 ? 1 : -1; ci = 0; play(); return; }
       if (e.clientX < innerWidth * 0.25) ci--; else ci++;
