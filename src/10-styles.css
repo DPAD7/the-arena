@@ -4050,6 +4050,8 @@
   .gpc { display: inline-block; margin-right: 8px; padding: 2px 8px; border-radius: 6px; background: #17c257; color: #000;
     font: 800 12px/1.3 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; vertical-align: 1px; }
   .gpc--lean { background: #c7c7cc; } .gpc--pass { background: #ff453a; color: #fff; } .gpc--side { background: #fff; }
+  .gpc--cold { background: #5ac8fa; color: #000; }
+  .gpbox--none { color: #9a9aa0; }
   .gpsep { height: 1px; background: rgba(255,255,255,.14); margin: 18px 0; }
   .gph2h { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .gph2h .gpp { flex: 1; max-width: 92px; }

@@ -1565,33 +1565,49 @@
     };
     var box = function (call, text, tag) {
       if (!text) return "";
-      var word = call === "take" ? "TAKE" : call === "lean" ? "LEAN" : call === "pass" ? "PASS" : (tag || "");
+      var word = call === "take" ? "TAKE" : call === "lean" ? "LEAN" : call === "pass" ? "PASS" : call === "cold" ? "COLD" : (tag || "");
       return '<div class="gpbox">' + (word ? '<b class="gpc gpc--' + (call || "side") + '">' + esc(word) + '</b>' : "") + esc(text) + '</div>';
+    };
+    var NONE = '<div class="gpbox gpbox--none">Odds not available yet.</div>';
+    var has = function (slot) { return !!(slot && slot[0]); };
+    /* a man on the board's cold list: the word is COLD in place of PASS, a
+       warning rather than a no (Jose, Sep 30, 2026) */
+    var cold = function (qid) { return typeof COLD === "object" && !!COLD[String(qid)]; };
+    /* a price too heavy to take, -600 and past it (the 1+ PTD notes): the
+       lean moves up a rung while the rung's price is that heavy */
+    var HEAVY = -600;
+    var num = function (o) { return parseInt(String(o || "").replace(/\u2212/g, "-"), 10); };
+    var bump = function (kind, w, n) {
+      var list = (pr[kind] || [])[w === "away" ? 0 : 1] || [];
+      if (!n) return n;
+      while (n < 6 && has(list[n - 1]) && num(list[n - 1][0]) <= HEAVY && has(list[n])) n++;
+      return has(list[n - 1]) ? n : null;
     };
     var draw = function (S) {
       var sg = (S || {})[id] || {}, lean = sg.lean || {}, call = sg.call || {};
       var h = "";
       /* the two clubs */
+      var mlHas = has(side.away.ml) || has(side.home.ml);
       h += '<div class="gpsides">';
       ["away", "home"].forEach(function (w) {
         var d = side[w];
-        h += '<div class="gpside' + (st.ml === w ? " on" : "") + (lean.ml === w ? " lean" : "") + '" data-side="' + w + '"><div class="gpclub">' +
+        h += '<div class="gpside' + (st.ml === w ? " on" : "") + (mlHas && lean.ml === w ? " lean" : "") + '" data-side="' + w + '"><div class="gpclub">' +
           ((w === "away" ? lg0 : lg1) ? '<img src="' + (w === "away" ? lg0 : lg1) + '" alt="">' : "") +
           esc(d.club) + '<small>' + (w === "away" ? "AWAY" : "HOME") + '</small></div>' +
           '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '</div></div>';
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
-      if (st.ml && (sg.ml || {})[st.ml]) h += box((call.ml || {})[st.ml], sg.ml[st.ml], side[st.ml].club);
+      if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
-      var hh = pr.h2h || [];
+      var hh = pr.h2h || [], hHas = has(hh[0]) || has(hh[1]);
       h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
-        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (hHas && lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
-        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (hHas && lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
         '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
-      if (st.h2h && (sg.h2h || {})[st.h2h]) h += box((call.h2h || {})[st.h2h], sg.h2h[st.h2h], famName(side[st.h2h].qb));
+      if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;
       /* the ladders */
       [["ptd", "PASSING TOUCHDOWNS", "PTD"], ["atd", "RUSHING TOUCHDOWNS", "ATD"]].forEach(function (k) {
         var kind = k[0], mx = rungs(kind), s2 = st[kind];
@@ -1608,19 +1624,22 @@
            price in the same line (Jose, Sep 30, 2026: "in line, in one row");
            a second lit man takes a second row under, lined up with the first */
         var lit = s2.who ? [s2.who] : [];
+        var ln_ = { away: bump(kind, "away", (lean[kind] || {}).away), home: bump(kind, "home", (lean[kind] || {}).home) };
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
-          var ln = (lean[kind] || {})[w];
+          var ln = ln_[w];
           return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small' + (ln === s2.n ? ' class="gold"' : "") + '>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>' + wheel;
         };
         h += '<div class="gprow">' +
-          '<img class="gpface' + (s2.who === "away" ? " on" : "") + ((lean[kind] || {}).away ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.who === "home" ? " on" : "") + ((lean[kind] || {}).home ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "away" ? " on" : "") + (ln_.away ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "home" ? " on" : "") + (ln_.home ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
           (lit.length ? info(lit[0]) : '<b class="gpnone"></b>' + wheel) + '</div>';
         lit.forEach(function (w) {
+          var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1];
+          if (!has(slot)) { h += NONE; return; }
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
-          h += box(c.call, c.text);
+          h += box(c.call === "pass" && cold(side[w].qid) ? "cold" : c.call, c.text);
         });
         h += "";
       });
