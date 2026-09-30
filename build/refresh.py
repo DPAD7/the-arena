@@ -218,6 +218,7 @@ def open_pass():
     said = run("starters.py")
     swaps = [l for l in said if "(DraftKings)" in l]
     if swaps:
+        run("suggest.py")
         pagefile.deployable(pagefile.read())
         run("fill_week.py")
         for l in swaps:

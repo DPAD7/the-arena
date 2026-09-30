@@ -121,6 +121,8 @@ def main():
         allp = json.load(open(dkp)) if os.path.exists(dkp) else {}
         allp.update(fill_week.NEWPINS)
         json.dump(allp, open(dkp, "w"), indent=1, sort_keys=True)
+    # the game page's cases are the new man's before the deploy
+    subprocess.run([sys.executable, os.path.join(D, "build", "suggest.py")], cwd=D)
     pagefile.deployable(pagefile.read())
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
                    cwd=D + "/site", capture_output=True, text=True)
