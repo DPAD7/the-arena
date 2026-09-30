@@ -115,12 +115,15 @@ def logins():
     raw = seed()
     base = json.loads(raw) if raw else {}
     out = []
-    k = kept(raw) if raw else None
-    if k:
-        out.append(("kept", k))
+    # the browser's own first: it is the login as it stands. The kept jar,
+    # DraftKings' re-issue merged over an older set, has answered 401 while
+    # the browser's minted (Sep 30, 2026, 11:47), so it is only a fallback
     fresh = sent()
     if fresh:
         out.append(("sent", dict(base, cookies=fresh["cookies"])))
+    k = kept(raw) if raw else None
+    if k:
+        out.append(("kept", k))
     if raw:
         out.append(("export", base))
     return out, raw
