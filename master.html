@@ -2632,6 +2632,7 @@
      gold ring while he has clips not yet watched, grey once they all are,
      a star on every tile -- and his season's touchdowns as stories ---- */
   .clipspage { background: #000; min-height: calc(100vh - 150px); }
+  body:has(.clipspage) .cashfab { display: none; }
   .cliprow { display: flex; gap: 14px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
   .cliprow::-webkit-scrollbar { display: none; }
   .cliptile { flex: none; width: 92px; display: flex; flex-direction: column; align-items: center; gap: 7px;
@@ -2648,6 +2649,9 @@
   #clipstory { position: fixed; inset: 0; z-index: 95; background: #000; touch-action: none; -webkit-user-select: none; user-select: none; }
   #clipstory[hidden] { display: none; }
   #clipstory video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
+  #clipstory .csound { position: absolute; right: 12px; top: calc(20px + env(safe-area-inset-top)); z-index: 3; width: 38px; height: 38px;
+    border-radius: 10px; border: 0; background: rgba(0,0,0,.45); display: grid; place-items: center; padding: 0; cursor: pointer; }
+  #clipstory .csound svg { width: 22px; height: 22px; }
   #clipstory .cbars { position: absolute; left: 10px; right: 10px; top: calc(10px + env(safe-area-inset-top)); display: flex; gap: 4px; z-index: 2; }
   #clipstory .cbars i { flex: 1; height: 3px; border-radius: 2px; background: rgba(255,255,255,.3); overflow: hidden; }
   #clipstory .cbars b { display: block; height: 100%; width: 0; background: #fff; }
@@ -11352,8 +11356,10 @@
     var draw = function () {
       var seen = clipSeen(), st = window.STARS || {};
       page.innerHTML = '<div class="cliprow">' + clipOrder().map(function (id) {
-        var q = QBCLIPS[id], fresh = q.clips.some(function (c) { return !seen[clipKey(c)]; });
-        return '<button type="button" class="cliptile' + (fresh ? "" : " seen") + '" data-qb="' + id + '">' +
+        /* gold is a favorite, the way the search row marks one; the rest are
+           grey and sit behind them (Jose, Sep 29, 2026) */
+        var q = QBCLIPS[id];
+        return '<button type="button" class="cliptile' + (st[id] ? "" : " seen") + '" data-qb="' + id + '">' +
           '<span class="cring"><span class="cface" style="background-image:url(face/nfl/' + id + '.png)"></span>' +
           '<span class="cstar" data-star="' + id + '">' + STARSVG(!!st[id]) + '</span></span>' +
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
@@ -11392,13 +11398,33 @@
     var box = document.getElementById("clipstory");
     if (!box) {
       box = document.createElement("div"); box.id = "clipstory"; box.hidden = true;
-      box.innerHTML = '<video playsinline preload="auto"></video><div class="cbars"></div><div class="cwho"></div>';
+      /* muted from the start, which a phone always lets play; the speaker
+         turns sound on for the rest of the stories. Waiting to fetch a clip
+         and then playing it with sound was blocked on the iPhone, so none
+         played (Jose, Sep 29, 2026) */
+      box.innerHTML = '<video playsinline muted autoplay preload="auto"></video><div class="cbars"></div><div class="cwho"></div>' +
+        '<button type="button" class="csound" aria-label="Sound"></button>';
       document.body.appendChild(box);
     }
     var how = document.getElementById("clipshow");
     var shown = false;
     try { shown = localStorage.getItem("arena.clipshow") === "1"; } catch (e) {}
     var v = box.querySelector("video"), bars = box.querySelector(".cbars"), who = box.querySelector(".cwho");
+    var snd = box.querySelector(".csound");
+    var SPK = function (on) {
+      return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="#fff"/>' +
+        (on ? '<path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>'
+            : '<path d="M16 9l5 6M21 9l-5 6" stroke="#fff" stroke-width="2" stroke-linecap="round"/>') + '</svg>';
+    };
+    v.muted = true;
+    snd.innerHTML = SPK(false);
+    snd.onpointerdown = function (e) { e.stopPropagation(); };
+    snd.onpointerup = function (e) { e.stopPropagation(); };
+    snd.onclick = function (e) {
+      e.stopPropagation();
+      v.muted = !v.muted; snd.innerHTML = SPK(!v.muted);
+      v.play().catch(function () {});
+    };
     var ci = 0, alive = true;
     var close = function () {
       alive = false; v.pause(); v.removeAttribute("src"); v.load(); box.hidden = true;
@@ -11453,6 +11479,8 @@
     var go = function () {
       box.hidden = false;
       document.documentElement.classList.add("cashlock");
+      /* called inside his tap: the element is allowed to play from here on */
+      try { v.play().catch(function () {}); } catch (e) {}
       play();
     };
     if (shown) { go(); return; }
