@@ -109,6 +109,24 @@ _HOW = {}
 _IDS = {}
 
 
+BFO = None
+
+
+def bfo_line(row):
+    """[left, right] from the archive's record of this bout, the first book
+       in bfo_odds.BOOK_ORDER that priced both men, or None."""
+    global BFO
+    if BFO is None:
+        f = D + "/data/bfo_odds.json"
+        BFO = json.load(open(f)) if os.path.exists(f) else {}
+    rec = BFO.get(str(row[1]))
+    if not rec:
+        return None
+    import bfo_odds
+    ln = bfo_odds.line_of({"names": rec["names"], "ml": rec["ml"], "props": {}}, rec["flip"])
+    return [ln[0], ln[1]] if ln else None
+
+
 def score_lines(iso):
     """theScore's stored moneylines for every bout it lists, keyed by the two
        men's names written plainly -- fetched once, every event, every fight."""
@@ -227,6 +245,10 @@ def main():
         if not c:
             # a bout theScore never priced takes ESPN's stored closing line
             c = closing(eid, row[1], row[4], row[6])
+        if not c:
+            # and failing ESPN, the line bestfightodds' archive kept
+            # (build/bfo_odds.py, data/bfo_odds.json; Sep 30, 2026)
+            c = bfo_line(row)
         if c:
             row[8], row[10] = c
         return bool(c)

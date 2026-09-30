@@ -140,9 +140,10 @@ def gestures(b, seen):
 
 
 def hot(b, seen):
-    """HOT at every screen he uses: the cards 55px tall on a 430 phone and in
-    step with the width, and the whole row above the nav -- on a short phone,
-    an iPad and a desktop as much as on his own (audit, Sep 28, 2026)."""
+    """HOT at every screen he uses: the cards standing right under the
+    quarterback's spot and reaching down to the betslip's room, and the whole
+    row above the nav -- on a short phone, an iPad and a desktop as much as
+    on his own (audit, Sep 28, 2026; the cards fill the room since Sep 29)."""
     wrong = []
     for W, H, phone in ((430, 932, True), (390, 844, True), (1024, 1366, False), (1280, 900, False)):
         c = b.new_context(viewport={"width": W, "height": H}, device_scale_factor=1)
@@ -157,14 +158,19 @@ def hot(b, seen):
         r = pv.evaluate("""(() => { const cs = [...document.querySelectorAll('.qcards--hot .qcard')]
             .map(c => c.getBoundingClientRect()).filter(r => r.height && r.right > 0 && r.left < innerWidth);
             const nav = document.getElementById('sportbar').getBoundingClientRect();
-            return cs.length ? { h: cs[0].height, bottom: Math.max(...cs.map(r => r.bottom)), nav: nav.top } : null })()""")
+            const fb = document.querySelector('.forkbox'); const fr = fb ? fb.getBoundingClientRect() : null;
+            const spot = fr ? fr.top + (185 + 27.5) * (window.FSCALE || 0.82) : null;
+            return cs.length ? { h: cs[0].height, top: Math.min(...cs.map(r => r.top)), bottom: Math.max(...cs.map(r => r.bottom)), nav: nav.top, spot: spot } : null })()""")
         if not r:
             wrong.append("HOT shows no cards at %dx%d" % (W, H))
         else:
             if phone:
                 seen.append("HOT %.1fpx at %d" % (r["h"], W))
-                if abs(r["h"] - 55 * W / 430) > 3:
-                    wrong.append("HOT cards are %.0fpx tall at %d, not %.0f" % (r["h"], W, 55 * W / 430))
+                # under the quarterback's spot, and down to the betslip's room (76 and its margins)
+                if r["spot"] is not None and r["top"] < r["spot"] - 1:
+                    wrong.append("HOT cards sit on the quarterback's spot at %d (%.0f above %.0f)" % (W, r["top"], r["spot"]))
+                if r["bottom"] < r["nav"] - 76 - 8 - 6 - 24:
+                    wrong.append("HOT cards stop short of the betslip at %d (%.0f, room to %.0f)" % (W, r["bottom"], r["nav"] - 90))
             if r["bottom"] > r["nav"] + 1:
                 wrong.append("the HOT row runs under the nav at %dx%d (%.0f past %.0f)" % (W, H, r["bottom"], r["nav"]))
         c.close()
