@@ -30,7 +30,7 @@ const SWEEP_ET = [9, 15, 21];
 const HUB_ET = [10];
 // the daily touch of the DraftKings login, so it never expires on him
 // (Jose, Sep 30, 2026: the wallet went red after two weeks without a read)
-const KEEP_ET = [11];
+const KEEP_ET = [];   // off until the daily touch is proven not to end his session (Sep 30, 2026)
 const BEFORE = [120, 60, 30];
 // the NFL's practice reports, by kickoff weekday (0 = Sunday): the report days
 const REPORT_DAYS = { 0: [3, 4, 5], 1: [4, 5, 6], 4: [1, 2, 3], 5: [2, 3, 4], 6: [2, 3, 4], 3: [0, 1, 2] };
