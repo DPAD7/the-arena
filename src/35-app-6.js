@@ -1565,7 +1565,7 @@
     };
     var box = function (call, text, tag) {
       if (!text) return "";
-      var word = call === "take" ? "TAKE" : call === "lean" ? "LEAN" : call === "pass" ? "PASS" : call === "cold" ? "COLD" : (tag || "");
+      var word = call === "take" ? "TAKE" : call === "lean" ? "LEAN" : call === "pass" ? "PASS" : call === "cold" ? "COLD" : call === "heavy" ? "HEAVY" : (tag || "");
       return '<div class="gpbox">' + (word ? '<b class="gpc gpc--' + (call || "side") + '">' + esc(word) + '</b>' : "") + esc(text) + '</div>';
     };
     var NONE = '<div class="gpbox gpbox--none">Odds not available yet.</div>';
@@ -1639,6 +1639,14 @@
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1];
           if (!has(slot)) { h += NONE; return; }
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
+          if (num(slot[0]) <= HEAVY) {
+            /* the price, not the man: too heavy to take at this rung, whatever
+               the numbers say (Jose, Sep 30, 2026: "why the -1440 as a take") */
+            var up = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n];
+            h += box("heavy", "Too heavy at " + String(slot[0]).replace("-", "\u2212") + " for the " + s2.n + "+." +
+              (has(up) ? " The " + (s2.n + 1) + "+ is the rung at " + String(up[0]).replace("-", "\u2212") + "." : "") + " " + (c.text || ""));
+            return;
+          }
           h += box(c.call === "pass" && cold(side[w].qid) ? "cold" : c.call, c.text);
         });
         h += "";
