@@ -106,27 +106,19 @@ def sent():
         return None
 
 
-def logins():
-    """Every login there is, newest first: the one DraftKings last re-issued
-       to the reader (kept), the browser's own (sent), then the export. Each
-       is tried in turn for a token; the first that mints is the one
-       (Sep 30, 2026: the browser's cookies, sent minutes before, would not
-       mint while the kept ones did, and the run gave up on the first)."""
+def login():
+    """The newest login there is: the browser's own, then the kept one, then
+       the export. Returns the login and the export it is keyed on."""
     raw = seed()
-    base = json.loads(raw) if raw else {}
-    out = []
-    # the browser's own first: it is the login as it stands. The kept jar,
-    # DraftKings' re-issue merged over an older set, has answered 401 while
-    # the browser's minted (Sep 30, 2026, 11:47), so it is only a fallback
     fresh = sent()
+    if not raw and not fresh:
+        return None, None, False
+    base = json.loads(raw) if raw else {}
     if fresh:
-        out.append(("sent", dict(base, cookies=fresh["cookies"])))
-    k = kept(raw) if raw else None
-    if k:
-        out.append(("kept", k))
-    if raw:
-        out.append(("export", base))
-    return out, raw
+        # the export still carries his account id; the browser's cookies are newer
+        return dict(base, cookies=fresh["cookies"]), raw, False
+    k = kept(raw)
+    return (k or base), raw, bool(k)
 
 
 def plain(o):
@@ -221,27 +213,25 @@ def legs_of(b):
 
 
 def main():
-    tries, raw = logins()
-    if not tries:
+    held, raw, was_kept = login()
+    if not held:
         print("dk_bets: no login held (DK_COOKIES), nothing read")
         return 0
-    held = jar = uid = s = r = None
-    for name, cand in tries:
-        held = cand
-        jar, uid = held.get("cookies") or {}, held.get("uid")
+    jar, uid = held.get("cookies") or {}, held.get("uid")
+    s = rq.Session(impersonate="chrome124")
+    r = s.get(JWT, cookies=jar, headers=HEAD, timeout=30)
+    if (r.status_code != 200 or "token" not in r.text) and was_kept:
+        # the kept login failed: try the export before calling it expired
+        held = json.loads(raw)
+        jar = held.get("cookies") or {}
         s = rq.Session(impersonate="chrome124")
         r = s.get(JWT, cookies=jar, headers=HEAD, timeout=30)
-        print("dk_bets: the %s login: %d" % (name, r.status_code))
-        if r.status_code == 200 and "token" in r.text:
-            break
     fresh = {c.name: c.value for c in s.cookies.jar}
     if r.status_code == 200 and "token" in r.text and fresh and not DRY and raw:
         keep(raw, held, fresh)
     if KEEP:
         # the daily touch: the login is kept alive, the bets are not read
-        alive = r.status_code == 200 and "token" in r.text
-        print("dk_bets: keep -- the login is %s" % ("alive and re-issued" if alive else "EXPIRED (%d); Jose signs in on Chrome" % r.status_code))
-        return 0 if alive else 1
+        return 0 if r.status_code == 200 and "token" in r.text else 1
     if r.status_code != 200 or "token" not in r.text:
         print("dk_bets: LOGIN EXPIRED -- the cookies no longer mint a token (%d); export them again" % r.status_code)
         # what DraftKings said and which cookies were offered -- names only,
