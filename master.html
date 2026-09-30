@@ -7221,67 +7221,96 @@
       '<span class="ptdline">' + n + '+</span>' +
       (slot && slot[0] ? priceSlot(slot[0], slot[1], true) : GHOST) + '</span>';
   }
-  function frame(g) {
-    var wk = g[0], id = g[1], kick = g[2], away = g[3], home = g[4];
+  /* ---- the football card: one template for the NFL and college ----
+     Every football card is this one layout, slot by slot, top to bottom:
+       head       the away club, its moneyline | the kickoff | the home club, its moneyline
+       h2h        the two passers' names, the head-to-head price each side, the yards bar
+       ptd        the passing touchdowns, 1+ and 2+ a side, the count between
+       atd        the rushing touchdowns
+       foot       the arrow, its sheet, the play button
+     A league changes what goes in a slot, never where the slot is (Jose, Sep
+     29, 2026: "a template ... literally plug and play"; "they vary slightly"):
+     college writes the ranking beside the club and the passers' names over
+     the touchdown rows, and always shows the rushing row with both rungs; the
+     NFL shows the club's badge and the rushing row, 1+ only, once it is priced. */
+  var FOOTBALL = {
+    "nfl": { ml: [9, 10, 11, 12], names: false, runAlways: false,
+             attrs: function (g) { return ' data-lhome="0"'; },
+             p4: function (g) { return ""; },
+             club: function (g, side) { return badge(side ? g[4] : g[3]); },
+             watch: function (g) { return watchLink(g[1]); } },
+    "college-football": { ml: [10, 11, 12, 13], names: true, runAlways: true,
+             attrs: function (g) { return ' data-sport="college-football" data-lhome="0" data-lab="' + g[3] + '" data-rab="' + g[4] + '"'; },
+             p4: function (g) { return ' data-p4="' + g[9] + '"'; },
+             club: function (g, side) { return side ? rank(g[15]) + g[4] : rank(g[14]) + g[3]; },
+             watch: function (g) { return cfbWatch(g[3], g[4], g[1]); } }
+  };
+  function footballFrame(g, lg) {
+    var T = FOOTBALL[lg];
+    var id = g[1], kick = g[2], away = g[3], home = g[4];
     var aq = g[5], aqid = g[6], hq = g[7], hqid = g[8];
     var p = etParts(kick);
     var pr = PROPS[id] || {};
-    var side = function (which) {
-      var mine = (pr.ptd || [])[which === "l" ? 0 : 1] || [];
-      return '<div class="ptdside ptdside--' + which + '">' +
-        ballChip(1, mine[0]) + ballChip(2, mine[1]) + '</div>';
-    };
-    /* the anytime row, 1+ only, the way a college card carries it: the runner
-       and one price a side. We capture both rungs but draw the first.
-       (Jose, Sep 16, 2026) */
-    var runSide = function (which) {
-      var mine = (pr.atd || [])[which === "l" ? 0 : 1] || [];
-      var slot = mine[0];
-      return '<div class="ptdside ptdside--' + which + '">' +
-        '<span class="ptdbtn ptdbtn--n1">' +
-        '<i class="ntick ntick--n1 ball ball--run">' + RUSHSVG + '</i>' +
-        '<span class="ptdline">1+</span>' +
-        (slot && slot[0] ? priceSlot(slot[0], slot[1], true) : GHOST) + '</span>' +
-        '<span class="ptdbtn ptdbtn--n2"></span></div>';
-    };
-    var anyRow = function () {
-      if (!(pr.atd || []).some(function (x) { return (x || [])[0]; })) return "";
-      return '<div class="ptdx ptdx--v2 ptdx--balls ptdx--run" data-scale="2" data-kind="ATD">' +
-        '<div class="ptdrow">' + runSide("l") +
-        '<span class="trkbox ptdcount">0</span><span class="trkbox ptdcount">0</span>' +
-        runSide("r") + '</div></div>';
-    };
+    /* the price where there is one, the empty slot where there is not: a game
+       DraftKings has not priced still shows the row, so every card reads alike */
     var h2h = function (i) {
       var slot = (pr.h2h || [])[i];
       return slot && slot[0] ? priceSlot(slot[0], slot[1]) : GHOST;
     };
-    return '<div class="gcard" data-espn="' + id + '" data-lg="nfl" data-lhome="0"' +
+    var names = function (lab) {
+      return '<div class="ptdhead"><span style="color:var(--amber)">' + last(aq) +
+        '</span><span class="gmk">' + lab + '</span>' +
+        '<span style="color:#ffffff">' + last(hq) + '</span></div>';
+    };
+    var counts = '<span class="trkbox ptdcount">0</span><span class="trkbox ptdcount">0</span>';
+    /* the anytime mark is Sportradar's runner (site/ico/rush.svg), the
+       football stays the passing mark (Jose, Sep 16, 2026) */
+    var chip = function (kind, n, slot) {
+      return '<span class="ptdbtn ptdbtn--n' + n + '">' +
+        '<i class="ntick ntick--n' + n + ' ball' + (kind === "ATD" ? " ball--run" : "") + '">' + (kind === "ATD" ? RUSHSVG : BALLSVG) + '</i>' +
+        '<span class="ptdline">' + n + '+</span>' +
+        (slot && slot[0] ? priceSlot(slot[0], slot[1], true) : GHOST) + '</span>';
+    };
+    var pane = function (kind, w, rungs) {
+      var mine = (pr[kind === "ATD" ? "atd" : "ptd"] || [])[w === "l" ? 0 : 1] || [];
+      return '<div class="ptdside ptdside--' + w + '">' + chip(kind, 1, mine[0]) +
+        (rungs === 2 ? chip(kind, 2, mine[1]) : '<span class="ptdbtn ptdbtn--n2"></span>') + '</div>';
+    };
+    var ptd = '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2" data-kind="PTD">' +
+      (T.names ? names("PTD") : "") +
+      '<div class="ptdrow">' + pane("PTD", "l", 2) + counts + pane("PTD", "r", 2) + '</div></div>';
+    /* the NFL's anytime row, 1+ only and only once priced: we capture both
+       rungs but draw the first (Jose, Sep 16, 2026) */
+    var atd = T.runAlways
+      ? '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2" data-kind="ATD">' + names("ATD") +
+        '<div class="ptdrow">' + pane("ATD", "l", 2) + counts + pane("ATD", "r", 2) + '</div></div>'
+      : ((pr.atd || []).some(function (x) { return (x || [])[0]; })
+        ? '<div class="ptdx ptdx--v2 ptdx--balls ptdx--run" data-scale="2" data-kind="ATD">' +
+          '<div class="ptdrow">' + pane("ATD", "l", 1) + counts + pane("ATD", "r", 1) + '</div></div>' : "");
+    return '<div class="gcard" data-espn="' + id + '" data-lg="' + lg + '"' + T.attrs(g) +
       ' data-lqb="' + aq + '" data-lqbid="' + aqid + '"' +
       ' data-rqb="' + hq + '" data-rqbid="' + hqid + '"' +
-      ' data-kick="' + kick + '">' +
+      T.p4(g) + ' data-kick="' + kick + '">' +
       '<div class="ghead"><span class="gteam gteam--flip"><span class="gml">' +
-      priceSlot(g[9], g[10]) +
-      '</span>' + badge(away) + '</span><span class="gtime">' + p.time + '</span>' +
-      '<span class="gteam">' + badge(home) + '<span class="gml">' +
-      priceSlot(g[11], g[12]) + '</span></span></div>' +
-      '<div class="h2hx"><div class="ptdhead"><span style="color:var(--amber)">' +
-      last(aq) + '</span><span class="gmk">H2H</span>' +
-      '<span style="color:#ffffff">' + last(hq) + '</span></div>' +
+      priceSlot(g[T.ml[0]], g[T.ml[1]]) +
+      '</span>' + T.club(g, 0) + '</span><span class="gtime">' + p.time + '</span>' +
+      '<span class="gteam">' + T.club(g, 1) + '<span class="gml">' +
+      priceSlot(g[T.ml[2]], g[T.ml[3]]) + '</span></span></div>' +
+      '<div class="h2hx">' + names("H2H") +
       '<div class="h2hrow"><span class="h2hend"><span class="trkbox">0</span>' +
       '<span class="h2hodds">' + h2h(0) + '</span></span><div class="h2hbar">' +
       '<i class="h2hzero"></i><div class="h2hfill" style="left:50%; width:0"></div>' +
       '<i class="h2htick" style="left:50%"><b></b></i></div>' +
       '<span class="h2hend"><span class="trkbox">0</span>' +
       '<span class="h2hodds">' + h2h(1) + '</span></span></div></div>' +
-      '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2" data-kind="PTD">' +
-      '<div class="ptdrow">' + side("l") +
-      '<span class="trkbox ptdcount">0</span><span class="trkbox ptdcount">0</span>' +
-      side("r") + '</div></div>' + anyRow() +
+      ptd + atd +
       '<button class="gmorebtn" type="button" aria-label="More">' +
       '<svg viewBox="0 0 24 24" width="18" height="18">' +
       '<polygon points="4,9 12,17 20,9" fill="var(--amber)"/></svg></button>' +
-      sheetFor(away + ' v ' + home, false, "nfl") + watchLink(id) + '</div>';   /* the sheet must follow its arrow */
+      sheetFor(away + ' v ' + home, false, lg) + T.watch(g) + '</div>';   /* the sheet must follow its arrow */
   }
+  function frame(g) { return footballFrame(g, "nfl"); }
+
   /* the game on theScore Bet, whose phone app streams the NFL (BetVision):
      the book's own event address, which opens the app on a phone. Only games
      score_watch.py has tied get the mark. (Jose, Sep 16, 2026: NFL first.) */
@@ -7373,67 +7402,7 @@
   /* a college card: moneyline, the head to head, passing and anytime touchdowns.
      DraftKings prices the passers' matchup for college too, under the same
      category, so the two boards are drawn the same (Jose, Sep 17, 2026). */
-  function cfbFrame(g) {
-    var id = g[1], kick = g[2], away = g[3], home = g[4];
-    var aq = g[5], aqid = g[6], hq = g[7], hqid = g[8];
-    var p = etParts(kick);
-    var pr = PROPS[id] || {};
-    /* the price where there is one, the empty slot where there is not: a game
-       DraftKings has not priced still shows the row, so every card reads alike */
-    var cfbH2h = function (i) {
-      var slot = (pr.h2h || [])[i];
-      return slot && slot[0] ? priceSlot(slot[0], slot[1]) : GHOST;
-    };
-    var sec = function (kind, lab) {
-      /* the anytime mark is Sportradar's runner (site/ico/rush.svg), the
-         football stays the passing mark (Jose, Sep 16, 2026) */
-      var mark = kind === "ATD" ? RUSHSVG : BALLSVG;
-      var rows = pr[kind === "ATD" ? "atd" : "ptd"] || [];
-      var chip = function (n, slot) {
-        return '<span class="ptdbtn ptdbtn--n' + n + '">' +
-          '<i class="ntick ntick--n' + n + ' ball' + (kind === "ATD" ? " ball--run" : "") + '">' + mark + '</i>' +
-          '<span class="ptdline">' + n + '+</span>' +
-          (slot && slot[0] ? priceSlot(slot[0], slot[1], true) : GHOST) + '</span>';
-      };
-      var pane = function (w) {
-        var mine = rows[w === "l" ? 0 : 1] || [];
-        return '<div class="ptdside ptdside--' + w + '">' + chip(1, mine[0]) + chip(2, mine[1]) + '</div>';
-      };
-      return '<div class="ptdx ptdx--v2 ptdx--balls" data-scale="2" data-kind="' +
-        kind + '">' +
-        '<div class="ptdhead"><span style="color:var(--amber)">' + last(aq) +
-        '</span><span class="gmk">' + lab + '</span>' +
-        '<span style="color:#ffffff">' + last(hq) + '</span></div>' +
-        '<div class="ptdrow">' + pane("l") +
-        '<span class="trkbox ptdcount">0</span><span class="trkbox ptdcount">0</span>' +
-        pane("r") + '</div></div>';
-    };
-    return '<div class="gcard" data-espn="' + id + '" data-lg="college-football"' +
-      ' data-sport="college-football" data-lhome="0"' +
-      ' data-lab="' + g[3] + '" data-rab="' + g[4] + '"' +
-      ' data-lqb="' + aq + '" data-lqbid="' + aqid + '"' +
-      ' data-rqb="' + hq + '" data-rqbid="' + hqid + '"' +
-      ' data-p4="' + g[9] + '" data-kick="' + kick + '">' +
-      '<div class="ghead"><span class="gteam gteam--flip"><span class="gml">' +
-      priceSlot(g[10], g[11]) + '</span>' + rank(g[14]) + away +
-      '</span><span class="gtime">' + p.time + '</span><span class="gteam">' +
-      rank(g[15]) + home + '<span class="gml">' +
-      priceSlot(g[12], g[13]) + '</span></span></div>' +
-      '<div class="h2hx"><div class="ptdhead"><span style="color:var(--amber)">' +
-      last(aq) + '</span><span class="gmk">H2H</span>' +
-      '<span style="color:#ffffff">' + last(hq) + '</span></div>' +
-      '<div class="h2hrow"><span class="h2hend"><span class="trkbox">0</span>' +
-      '<span class="h2hodds">' + cfbH2h(0) + '</span></span><div class="h2hbar">' +
-      '<i class="h2hzero"></i><div class="h2hfill" style="left:50%; width:0"></div>' +
-      '<i class="h2htick" style="left:50%"><b></b></i></div>' +
-      '<span class="h2hend"><span class="trkbox">0</span>' +
-      '<span class="h2hodds">' + cfbH2h(1) + '</span></span></div></div>' +
-      sec("PTD", "PTD") + sec("ATD", "ATD") +
-      '<button class="gmorebtn" type="button" aria-label="More">' +
-      '<svg viewBox="0 0 24 24" width="18" height="18">' +
-      '<polygon points="4,9 12,17 20,9" fill="var(--amber)"/></svg></button>' +
-      sheetFor(away + ' v ' + home, false, "college-football") + cfbWatch(away, home, id) + '</div>';
-  }
+  function cfbFrame(g) { return footballFrame(g, "college-football"); }
 
   /* One fight, as a card: the two men with a slot for each price. */
 
