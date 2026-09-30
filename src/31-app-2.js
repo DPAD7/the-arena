@@ -546,7 +546,7 @@
     b.className = "gtix";
     b.type = "button";
     b.setAttribute("aria-label", "The game");
-    b.innerHTML = '<img src="ico/ticket.png" alt="">';
+    b.innerHTML = '<img src="ico/ticket.svg" alt="">';
     b.addEventListener("click", function (e) {
       e.stopPropagation();
       if (typeof gamePage === "function") gamePage(card);
