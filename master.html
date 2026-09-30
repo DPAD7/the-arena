@@ -14040,6 +14040,21 @@
         if (!row._block) row._block = row[2];
         if (t && Date.parse(t) < Date.parse(row._block) - 30 * 60000) t = null;
         if (t && row[2] !== t) { row[2] = t; moved++; nowPlease++; }
+        /* the card already drawn takes the bout's own start too, and one that
+           locked on the block time reopens: Staines v Abushaar sat shut at the
+           card's 7 PM with DraftKings pricing it for 9:15 and ESPN still
+           calling it to come (Jose, Sep 29, 2026: "why aren't bets available") */
+        var bc = t && document.querySelector('.gcard[data-bout="' + row[1] + '"]');
+        if (bc) {
+          bc.dataset.kick = t;
+          if (bc.classList.contains("locked") && Date.now() < Date.parse(t) && !bc.classList.contains("live") &&
+              bc.dataset.settledBout !== "1" && !bc.classList.contains("done")) {
+            bc.classList.remove("locked");
+            bc.querySelectorAll('button.price[data-shut="1"]').forEach(function (b) {
+              delete b.dataset.shut; b.removeAttribute("aria-disabled");
+            });
+          }
+        }
       });
       /* the chips a card already draws are written onto the buttons that are
          already there: the touchdown rungs, both sides, and the head to head.
