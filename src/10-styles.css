@@ -4076,6 +4076,10 @@
   .gprow .gpwho b { padding: 0; }
   .gprow small { font-size: 12px; letter-spacing: .14em; color: #9a9aa0; white-space: nowrap; }
   .gprow .gpp { width: 88px; flex: none; }
+  .gpwheel { flex: none; width: 54px; height: 54px; border-radius: 12px; background: #0c0c0e; border: 1.5px solid rgba(255,255,255,.22);
+    overflow-y: auto; scroll-snap-type: y mandatory; scrollbar-width: none; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; touch-action: pan-y; }
+  .gpwheel::-webkit-scrollbar { display: none; }
+  .gpwn { height: 54px; scroll-snap-align: start; display: grid; place-items: center; font: 800 26px "Barlow Condensed", "Arial Narrow", sans-serif; }
   .gprow--2 { padding-top: 0; } .gpgap { width: 134px; flex: none; }
   .gpline { display: flex; align-items: center; gap: 12px; padding: 8px 4px 4px; font: 800 19px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .06em; }
   .gpline small { flex: 1; font-size: 12px; letter-spacing: .14em; color: #9a9aa0; }

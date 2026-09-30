@@ -1597,9 +1597,13 @@
         var kind = k[0], mx = rungs(kind), s2 = st[kind];
         if (s2.n > mx) s2.n = mx;
         if (s2.n < 1) s2.n = 1;
-        h += '<div class="gpsep"></div>' +
-          '<div class="gpsl"><input type="range" min="1" max="' + mx + '" step="1" value="' + s2.n + '" data-kind="' + kind + '" style="--p:' + (mx > 1 ? (s2.n - 1) / (mx - 1) * 100 : 0) + '%">' +
-          '<div class="gplab"><small>MIN 1</small><small>MAX ' + mx + '</small></div><div class="gpval">' + s2.n + '</div></div>';
+        h += '<div class="gpsep"></div>';
+        /* the rung is a wheel in the row, beside the price: it scrolls up and
+           down through 1, 2, 3 ... as far as the book prices (Jose, Sep 30,
+           2026: "a scroll in that section so I can go 1 2 3 vertically") */
+        var wheel = '<div class="gpwheel" data-kind="' + kind + '" data-n="' + s2.n + '">';
+        for (var r = 1; r <= mx; r++) wheel += '<div class="gpwn">' + r + '</div>';
+        wheel += '</div>';
         /* one row: the two faces, then the lit man's name, his rung and his
            price in the same line (Jose, Sep 30, 2026: "in line, in one row");
            a second lit man takes a second row under, lined up with the first */
@@ -1607,12 +1611,12 @@
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
           return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
-            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
+            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>' + wheel;
         };
         h += '<div class="gprow">' +
           '<img class="gpface' + (s2.who === "away" ? " on" : "") + (s2.n === 1 && lean[kind] === "away" ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
           '<img class="gpface' + (s2.who === "home" ? " on" : "") + (s2.n === 1 && lean[kind] === "home" ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
-          (lit.length ? info(lit[0]) : '<b class="gpnone"></b>') + '</div>';
+          (lit.length ? info(lit[0]) : '<b class="gpnone"></b>' + wheel) + '</div>';
         lit.forEach(function (w) {
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
           h += box(c.call, c.text);
@@ -1624,6 +1628,11 @@
       root.innerHTML = h;
       root.querySelectorAll("button.price").forEach(function (b) {
         if (window.slipHas && window.slipHas(b.dataset.oid)) b.classList.add("on");
+      });
+      /* each wheel stands on its rung */
+      root.querySelectorAll(".gpwheel").forEach(function (wh) {
+        var n = +wh.dataset.n || 1, one = wh.firstElementChild ? wh.firstElementChild.offsetHeight : 54;
+        wh.scrollTop = (n - 1) * one;
       });
       count();
     };
@@ -1646,11 +1655,18 @@
           st[kv[0]].who = st[kv[0]].who === kv[1] ? null : kv[1]; keep(); draw(SUGGEST); return;
         }
       });
-      root.addEventListener("input", function (e) {
-        var r = e.target.closest("input[type=range]");
-        if (!r) return;
-        st[r.dataset.kind].n = +r.value; keep(); draw(SUGGEST);
-      });
+      /* a wheel that has come to rest on a rung sets it; the row is drawn
+         again with that man's price for the rung */
+      root.addEventListener("scroll", function (e) {
+        var wh = e.target.closest && e.target.closest(".gpwheel");
+        if (!wh) return;
+        clearTimeout(wh._t);
+        wh._t = setTimeout(function () {
+          var one = wh.firstElementChild ? wh.firstElementChild.offsetHeight : 54;
+          var n = Math.round(wh.scrollTop / one) + 1;
+          if (n !== st[wh.dataset.kind].n) { st[wh.dataset.kind].n = n; keep(); draw(SUGGEST); }
+        }, 120);
+      }, true);
     }
     draw(SUGGEST || {});
     if (typeof openSheet === "function") openSheet(dlg); else dlg.show();
