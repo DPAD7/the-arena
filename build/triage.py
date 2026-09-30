@@ -113,12 +113,24 @@ def alert(key, title, body):
     if not ASK:
         print("no ASK_SECRET, no alert")
         return
-    req = urllib.request.Request(SITE + "/push", data=json.dumps({"fault": {"key": key, "title": title, "body": body, "url": "/"}}).encode(), method="POST")
-    req.add_header("content-type", "application/json")
-    req.add_header("x-ask-secret", ASK)
+    body_ = json.dumps({"fault": {"key": key, "title": title, "body": body, "url": "/"}})
+    heads = {"content-type": "application/json", "x-ask-secret": ASK}
     try:
-        with urllib.request.urlopen(req, timeout=30) as r:
-            print("alert:", r.read()[:80])
+        # the site's edge turns a bare library client away (403); it is
+        # asked as a browser, the way ask.yml asks /ask
+        from curl_cffi import requests as rq
+        r = rq.post(SITE + "/push", data=body_, headers=heads, impersonate="chrome", timeout=30)
+        print("alert:", r.status_code, r.text[:80])
+    except ImportError:
+        req = urllib.request.Request(SITE + "/push", data=body_.encode(), method="POST")
+        for k, v in heads.items():
+            req.add_header(k, v)
+        req.add_header("User-Agent", "Mozilla/5.0 (Macintosh) arena-triage")
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                print("alert:", r.read()[:80])
+        except Exception as e:
+            print("alert failed:", e)
     except Exception as e:
         print("alert failed:", e)
 
