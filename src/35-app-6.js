@@ -1525,8 +1525,14 @@
     for (var i = 0; i < rows.length; i++) if (String(rows[i][1]) === String(id)) { g = rows[i]; break; }
     if (!g) return;
     var T = FOOTBALL[lg], pr = PROPS[id] || {};
-    var KEY = "arena.gp." + id, st = { ml: null, h2h: null, ptd: { n: 1, away: false, home: false }, atd: { n: 1, away: false, home: false } };
+    var KEY = "arena.gp." + id, st = { ml: null, h2h: null, ptd: { n: 1, who: null }, atd: { n: 1, who: null } };
     try { st = Object.assign(st, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+    /* a ladder is one man or the other, like the rest (Jose, Sep 30, 2026:
+       "it's either or"); a pick kept the old way is read as that man */
+    ["ptd", "atd"].forEach(function (k) {
+      st[k] = st[k] || { n: 1, who: null };
+      if (st[k].who === undefined) st[k].who = st[k].away ? "away" : st[k].home ? "home" : null;
+    });
     var keep = function () { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
     var side = { away: { club: g[3], qb: g[5], qid: g[6], ml: [g[T.ml[0]], g[T.ml[1]]] },
                  home: { club: g[4], qb: g[7], qid: g[8], ml: [g[T.ml[2]], g[T.ml[3]]] } };
@@ -1597,17 +1603,16 @@
         /* one row: the two faces, then the lit man's name, his rung and his
            price in the same line (Jose, Sep 30, 2026: "in line, in one row");
            a second lit man takes a second row under, lined up with the first */
-        var lit = ["away", "home"].filter(function (w) { return s2[w]; });
+        var lit = s2.who ? [s2.who] : [];
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
           return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small></span>' +
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
         };
         h += '<div class="gprow">' +
-          '<img class="gpface' + (s2.away ? " on" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.home ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "away" ? " on" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "home" ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
           (lit.length ? info(lit[0]) : '<b class="gpnone"></b>') + '</div>';
-        if (lit.length > 1) h += '<div class="gprow gprow--2"><span class="gpgap"></span>' + info(lit[1]) + '</div>';
         lit.forEach(function (w) {
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
           h += box(c.call, c.text);
@@ -1638,7 +1643,7 @@
         if (f && f.dataset.h2h) { st.h2h = st.h2h === f.dataset.h2h ? null : f.dataset.h2h; keep(); draw(SUGGEST); return; }
         if (f && f.dataset.pick) {
           var kv = f.dataset.pick.split(":");
-          st[kv[0]][kv[1]] = !st[kv[0]][kv[1]]; keep(); draw(SUGGEST); return;
+          st[kv[0]].who = st[kv[0]].who === kv[1] ? null : kv[1]; keep(); draw(SUGGEST); return;
         }
       });
       root.addEventListener("input", function (e) {
