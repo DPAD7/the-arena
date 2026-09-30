@@ -31,6 +31,8 @@ import os
 import re
 import sys
 
+from curl_cffi import requests as rq
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
 
@@ -179,6 +181,33 @@ def words(n):
     return {0: "no", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}.get(n, str(n))
 
 
+def fill_in(lineups, gid, club, qb, qid, lines):
+    """A passer standing in: he has not started for the club this year (no
+       game of 15 throws or more). Says whom he replaces, when the lineup
+       names him, and whether he is a rookie. None for a starter.
+       (Jose, Sep 30, 2026: "are we doing anything about backup rookie QBs"
+       -- Jalon Daniels, 3 throws, for Mayfield out, and the board leaned Tampa.)"""
+    if any(x[1] >= 15 for x in lines):
+        return None
+    was = ""
+    for man in ((lineups.get(gid) or {}).get(club) or {}).get("off") or []:
+        if man.get("k") == "qb" and man.get("was"):
+            was = man["was"]
+    rookie = False
+    try:
+        a = rq.get("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/%s" % qid,
+                   impersonate="chrome", timeout=20).json()
+        rookie = (a.get("experience") or {}).get("years") == 0
+    except Exception:
+        pass
+    y = sum(x[0] for x in lines)
+    t = sum(x[1] for x in lines)
+    s = "%s%s makes his first start%s" % ("rookie " if rookie else "", fam(qb),
+                                         (" in place of %s, who is out" % fam(was)) if was else "")
+    s += ("; he has %d throws for %d yards this year." % (t, y)) if t else "; he has not thrown a pass this year."
+    return s[0].upper() + s[1:]
+
+
 def ml_case(club, games, home, offw, qb=None, threw=True):
     if not games:
         return "No game on record yet this year."
@@ -312,6 +341,10 @@ def main():
         alerts = json.load(open(os.path.join(D, "site", "alerts.json")))
     except Exception:
         alerts = {}
+    try:
+        lineups = json.load(open(os.path.join(D, "site", "lineups.json")))
+    except Exception:
+        lineups = {}
     out = {}
     for r in sched:
         start = T(r[2])
@@ -335,10 +368,14 @@ def main():
                 d, rz, fin, half = drives(g[4], club, g[1], qb)
                 rows[side].append((p[2], rz, fin, d, half, g[0], g[1], long_scores(g[4], qb), g[2]))
                 runs[side].append(rushing(g[4], qid))
+        fills = {side: fill_in(lineups, gid, men[side][2], men[side][0], men[side][1], lines[side]) for side in men}
         for side, (qb, qid, club, opp) in men.items():
             other = "home" if side == "away" else "away"
             game["ml"][side] = ml_case(club, gs[side], side == "home", wr[side][1], qb, bool(lines[side]))
             game["h2h"][side] = h2h_case(qb, lines[side], men[other][0], lines[other], alw[other], wr[other][0], opp)
+            if fills[side]:
+                game["ml"][side] += " " + fills[side]
+                game["h2h"][side] += " " + fills[side]
             game["ptd"][side], game["atd"][side] = {}, {}
             for n in range(1, 7):
                 c, t = ptd_case(qb, club, opp, n, rows[side], alw[other], wr[other][0], wx)
@@ -357,6 +394,9 @@ def main():
                 wa = sum(1 for g in gs["away"] if g[2] > g[3]); wh = sum(1 for g in gs["home"] if g[2] > g[3])
                 lean["ml"] = "away" if wa > wh else "home"
             gap["ml"] = abs(net["away"] - net["home"])
+        if bool(fills["away"]) != bool(fills["home"]):
+            # a first start against a starter: the lean goes to the starter's club
+            lean["ml"] = "home" if fills["away"] else "away"
         ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
         if ypg["away"] is not None and ypg["home"] is not None:
             lean["h2h"] = "away" if ypg["away"] >= ypg["home"] else "home"
