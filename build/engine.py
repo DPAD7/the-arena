@@ -6,10 +6,13 @@
    day, the week or the sport changes.
 """
 import os
+import sys
 import re
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-s = open(D + "/master.html").read()
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
+s = pagefile.read()
 before = s.count("data-oid")
 
 start = s.index("  var drawn = {1: true};")
@@ -346,7 +349,8 @@ s = s.replace("""  (function lockStarted() {
 
 assert s.count("data-oid") == before
 assert "function showweek" not in s and "function filterSport" not in s
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

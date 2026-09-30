@@ -16,6 +16,8 @@ import subprocess
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 CORE = ("http://sports.core.api.espn.com/v2/sports/football/leagues/%s"
         "/events/%s/competitions/%s/odds")
 
@@ -57,7 +59,7 @@ with cf.ThreadPoolExecutor(max_workers=16) as pool:
 print("college games with a DraftKings moneyline: %d of %d" % (len(got), len(want)))
 json.dump(got, open(D + "/data/odds.json", "w"))
 
-s = open(D + "/master.html").read()
+s = pagefile.read()
 m = re.search(r'  var CFB = (\[\[.*?\]\]);\n', s, re.S)
 cfb = json.loads(m.group(1))
 live = {g[1] for g in cfb if g[11]}      # a live DraftKings id: leave it alone
@@ -74,7 +76,8 @@ for g in cfb:
 print("%d already live from DraftKings, %d filled from ESPN, %d still blank"
       % (len(live), filled, sum(1 for g in cfb if not g[10])))
 s = s[:m.start()] + "  var CFB = " + json.dumps(cfb, separators=(",", ":")) + ";\n" + s[m.end():]
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

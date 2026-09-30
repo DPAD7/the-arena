@@ -31,6 +31,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import prices as pricefile
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DRY = "--dry" in sys.argv
 SITE = os.environ.get("ASK_SITE", "https://the-arenasports.pages.dev").rstrip("/")
 
@@ -119,7 +121,7 @@ def main():
     except Exception as e:
         print("the site did not answer: %s" % e)
         return
-    page = open(os.path.join(D, "master.html")).read()
+    page = pagefile.read()
     shelf = {}
     for var in ("SCHED", "CFB", "FIGHTS"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, page, re.S)

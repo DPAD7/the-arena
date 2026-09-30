@@ -20,6 +20,8 @@ from concurrent.futures import ThreadPoolExecutor
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DRY = "--dry" in sys.argv
 NOW = dt.datetime.now(dt.timezone.utc)
 ODDS = ("https://sports.core.api.espn.com/v2/sports/football/leagues/college-football/"
@@ -55,7 +57,7 @@ def one(eid):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     m = re.search(r"var CFB = (\[\[.*?\]\]);", s, re.S)
     C = json.loads(m.group(1))
     want = [g for g in C if dt.datetime.fromisoformat(g[2].replace("Z", "+00:00")) < NOW and not (g[10] and g[12])]
@@ -76,7 +78,8 @@ def main():
     if DRY or not filled:
         return
     s = s[:m.start(1)] + json.dumps(C, separators=(",", ":")) + s[m.end(1):]
-    open(D + "/master.html", "w").write(s)
+    if not pagefile.write(s):
+        print("page changed under us, not written")
     doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
            '<meta name="theme-color" content="#000000">\n'

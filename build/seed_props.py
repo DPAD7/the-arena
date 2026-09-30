@@ -14,11 +14,13 @@ import re
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DRY = "--dry" in sys.argv
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     props = json.loads(re.search(r"  var PROPS = (\{.*?\});\n", s, re.S).group(1))
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     added = []
@@ -60,7 +62,8 @@ def main():
         return
     old = re.search(r"  var PROPS = (\{.*?\});\n", s, re.S)
     s = s[:old.start()] + "  var PROPS = " + json.dumps(props, separators=(",", ":")) + ";\n" + s[old.end():]
-    open(D + "/master.html", "w").write(s)
+    if not pagefile.write(s):
+        print("page changed under us, not written")
     doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
            '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
            '<meta name="theme-color" content="#000000">\n'

@@ -1,0 +1,478 @@
+    function load() {
+      /* the lineup is asked again when the sweep has written a new one: a man
+         on the injury report since it was read shows on the next open */
+      if (!LU || LUAT !== (window.FILESTAMP || LUAT)) {
+        var stamp = window.FILESTAMP;
+        fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+          .then(function (j) { LU = j || {}; LUAT = stamp; if (box.classList.contains("open")) draw(); }).catch(function () { LU = LU || {}; });
+      }
+      if (DATA) return Promise.resolve(DATA);
+      return fetch("qbsearch.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+        .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
+    }
+    function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+    /* the search holds every QB the board holds, always: each club's man for
+       its next game and everyone on the season list, taken from the page's own
+       data every time it opens, so it never waits on a rebuild of the file
+       (Jose, Sep 28, 2026: "make it match once and for all") */
+    /* the games that are over: the board's own settled cards, and the
+       result the sweep writes to final/<id>.json within minutes of the end */
+    var ENDED = {};
+    function ended() {
+      var now = Date.now(), ask = [];
+      document.querySelectorAll('.gcard[data-settled="1"][data-espn]').forEach(function (c) { ENDED[c.dataset.espn] = 1; });
+      (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
+        var t = Date.parse(g[2]), id = String(g[1]);
+        if (t <= now && t > now - 6 * 3600000 && !ENDED[id]) ask.push(id);
+      });
+      return Promise.all(ask.map(function (id) {
+        return fetch("final/" + id + ".json", { cache: "no-store" }).then(function (r) {
+          if (r.ok && /json/.test(r.headers.get("content-type") || "")) ENDED[id] = 1;
+        }).catch(function () {});
+      }));
+    }
+    function fromBoard() {
+      var qs = DATA.qbs, now = Date.now(), next = {};
+      (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
+        var t = Date.parse(g[2]);
+        /* a game is his next until it is final -- then next week's -- not
+           until a clock runs out: four hours on, a game still being played
+           had gone, and a finished one sat there for hours (Jose, Sep 28,
+           2026: "says next week's game once it's done") */
+        if (ENDED[String(g[1])] || t < now - 6 * 3600000) return;
+        [[g[3], g[5], g[6], 0, g[4]], [g[4], g[7], g[8], 1, g[3]]].forEach(function (p) {
+          if (!p[2]) return;
+          if (!next[p[0]] || t < next[p[0]].t) next[p[0]] = { t: t, iso: g[2], gid: String(g[1]), n: p[1], id: String(p[2]), side: p[3], o: p[4] };
+        });
+      });
+      var add = function (id, n, club) {
+        var q = qs[id] || (qs[id] = { n: n, t: club, lg: "nfl", g: [], nx: null });
+        if (club) q.t = club;
+        return q;
+      };
+      try { if (typeof moneyRows === "function" && LEDGER) moneyRows().forEach(function (r) { add(String(r.id), r.name, qs[r.id] ? null : r.club); }); } catch (e) {}
+      Object.keys(next).forEach(function (club) {
+        var x = next[club], q = add(x.id, x.n, club);
+        var lad = ((((typeof PROPS === "object" && PROPS[x.gid]) || {}).ptd) || [])[x.side] || [];
+        /* the price is always the board's own, never the file's older copy */
+        if (q.nx && q.nx.gid === x.gid) { q.nx.px = (lad[0] && lad[0][0]) || q.nx.px; return; }
+        var et = new Date(new Date(x.iso).toLocaleString("en-US", { timeZone: "America/New_York" }));
+        var w = (typeof WIRE === "object" && WIRE[x.id]) || {};
+        q.nx = { d: x.iso, gid: x.gid, o: x.o, h: x.side === 1, px: (lad[0] && lad[0][0]) || "",
+                 sl: et.getDay() !== 0 ? 0 : et.getHours() < 14 ? 1 : et.getHours() < 18 ? 4 : 0,
+                 wx: ((typeof ALERTS === "object" && ALERTS[x.gid]) || {}).wx || {}, inj: w.status || "",
+                 al: q.nx && q.nx.o === x.o ? q.nx.al : null };
+      });
+      fromBoard.next = next;
+      /* a man another club now starts in his place has no next game of his own */
+      Object.keys(qs).forEach(function (id) {
+        var q = qs[id], x = q.nx && next[q.t];
+        if (x && x.gid === q.nx.gid && x.id !== id) q.nx = null;
+      });
+    }
+    /* the 32: each club's man for its next game, starred first (newest star
+       first), then by club. A tap puts him in the search; the star keeps him
+       at the front (Jose, Sep 28, 2026) */
+    var row = document.getElementById("qsrow");
+    var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="12,2.8 14.8,9 21.4,9.6 16.4,14 17.9,20.6 12,17.2 6.1,20.6 7.6,14 2.6,9.6 9.2,9"/></svg>';
+    function qsRow() {
+      if (!row || !DATA) return;
+      var nx = fromBoard.next || {}, st = window.STARS || {};
+      var men = Object.keys(nx).map(function (club) { return { club: club, id: nx[club].id, n: nx[club].n }; })
+        .filter(function (m) { return m.id; });
+      men.sort(function (a, b) {
+        var sa = st[a.id] || 0, sb = st[b.id] || 0;
+        if (sa || sb) return sb - sa;
+        return a.club < b.club ? -1 : a.club > b.club ? 1 : 0;
+      });
+      row.innerHTML = men.map(function (m) {
+        var tint = (typeof HUE === "object" && HUE[m.club]) || "#333";
+        var last = typeof famName === "function" ? famName(m.n) : String(m.n).split(" ").pop();
+        return '<button type="button" class="qst' + (picked.indexOf(m.id) >= 0 ? " on" : "") + '" data-id="' + esc(m.id) + '">' +
+          '<span class="qst-pic" style="--tint:' + tint + '">' + face(m.id, "nfl") +
+          '<span class="qst-star' + (st[m.id] ? " on" : "") + '" role="button" aria-label="Star ' + esc(m.n) + '">' + STAR + "</span></span>" +
+          "<b>" + esc(last) + "</b></button>";
+      }).join("");
+      row.hidden = !!inp.value.trim();
+    }
+    window.qsRow = qsRow;
+    if (row) row.addEventListener("click", function (e) {
+      var t = e.target.closest(".qst");
+      if (!t) return;
+      var id = t.dataset.id;
+      if (e.target.closest(".qst-star")) {
+        e.stopPropagation();
+        var st = window.STARS || {};
+        if (st[id]) delete st[id]; else st[id] = Date.now();
+        window.STARS = st;
+        try { localStorage.setItem("arena.stars", JSON.stringify(st)); } catch (e2) {}
+        if (typeof pushState === "function") pushState();
+        qsRow();
+        /* the same star on Clips (Jose, Sep 29, 2026: "so the fav button works together") */
+        if (window.clipsDraw) window.clipsDraw();
+        return;
+      }
+      /* in the search, the way picking his name there would: a second man
+         makes it a parlay, a man already in comes out */
+      var at = picked.indexOf(id);
+      if (at >= 0) picked.splice(at, 1); else picked.push(id);
+      inp.value = ""; draw();
+    });
+    function open() {
+      if (box.classList.contains("open")) return;
+      box.classList.add("open"); load().then(ended).then(function () { try { fromBoard(); } catch (e) {} draw(); });
+      setTimeout(function () { try { inp.focus(); } catch (e) {} }, 60);
+    }
+    function close() { box.classList.remove("open"); try { inp.blur(); } catch (e) {} }
+    window.openSearch = open;
+    document.getElementById("qsgrab").addEventListener("click", close);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") close();
+      if (e.key === "/" && !box.classList.contains("open") && !/INPUT|TEXTAREA/.test((e.target || {}).tagName || "")) { e.preventDefault(); open(); }
+    });
+    document.addEventListener("pointerdown", function (e) {
+      if (box.classList.contains("open") && !box.contains(e.target)) close();
+    });
+    /* pull down at the very top of the page; HOT and the sheets keep their own gestures */
+    var y0 = null;
+    addEventListener("touchstart", function (e) {
+      y0 = null;
+      if (box.classList.contains("open") || window.scrollY > 2 || document.documentElement.classList.contains("hotlock")) return;
+      if (document.querySelector("dialog[open]")) return;
+      /* a drag that starts on a card's hide corner is the hide, never the
+         search (Jose, Sep 28, 2026: "conflicting with the drag down to hide") */
+      if (e.target.closest && e.target.closest((window.OWNDRAG || ".gcorner") + ", .gcorner--pulling")) return;
+      /* nor while a sheet of the wallet's is up */
+      if (document.querySelector(".cashsheet:not([hidden]), .cashfab.drag")) return;
+      y0 = e.touches[0].clientY;
+    }, { passive: true });
+    addEventListener("touchmove", function (e) {
+      if (y0 === null) return;
+      var dy = e.touches[0].clientY - y0;
+      if (dy > 10) { hint.style.opacity = Math.min(1, dy / 70); hint.style.transform = "translate(-50%, " + Math.min(0, dy - 80) + "px)"; }
+    }, { passive: true });
+    addEventListener("touchend", function (e) {
+      if (y0 === null) return;
+      if (document.querySelector(".gcorner--pulling, .gcorner--armed, .cashfab.drag")) { y0 = null; hint.style.opacity = 0; hint.style.transform = ""; return; }
+      var dy = (e.changedTouches[0] || {}).clientY - y0;
+      hint.style.opacity = 0; hint.style.transform = "";
+      y0 = null;
+      if (dy > 70) open();
+    }, { passive: true });
+
+    function face(id, lg) { return '<img class="qsface" alt="" loading="lazy" src="face/' + (lg === "cfb" ? "college-football" : "nfl") + "/" + esc(id) + '.png" onerror="this.style.visibility=\'hidden\'">'; }
+    function num(p) { var n = parseInt(String(p || "").replace(/[−]/g, "-"), 10); return isNaN(n) ? null : n; }
+    function band(p) { var n = num(p); return n === null ? "pn" : n <= -600 ? "pr" : n <= -500 ? "py" : "pg"; }
+    function show(p) { return p ? String(p).replace("-", "−") : "—"; }
+    function dec(p) { var n = num(p); return n === null ? null : n > 0 ? 1 + n / 100 : 1 + 100 / -n; }
+    function when(iso, sl) {
+      var d = new Date(iso);
+      return d.toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" }) + " " +
+             d.toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" }) + " " +
+             d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
+    }
+    function wxSay(w) {
+      if (!w || w.t === undefined) return "—";
+      if (w.in) return "Indoors";
+      var s2 = w.t + "°";
+      if (w.g) s2 += ", gusts " + w.g + " mph";
+      if ((w.p || 0) >= 20) s2 += ", " + w.p + "% rain";
+      return s2;
+    }
+    function badWx(w) { return w && !w.in && ((w.g || 0) >= 15 || (w.p || 0) >= 50); }
+    function slotSay(sl) { return sl === 1 ? "1:00" : sl === 4 ? "4:00" : "other"; }
+
+    function match(q) {
+      var qs = DATA ? DATA.qbs : {}, t = q.trim().toLowerCase();
+      if (!t) return [];
+      var parts = t.split(/[\s.'-]+/).filter(Boolean), hits = [];
+      Object.keys(qs).forEach(function (id) {
+        if (picked.indexOf(id) >= 0) return;
+        var words = qs[id].n.toLowerCase().split(/[\s.'-]+/);
+        var ok = parts.every(function (pt) { return words.some(function (w) { return w.indexOf(pt) === 0; }); });
+        if (ok) hits.push(id);
+      });
+      hits.sort(function (a, b) {
+        var A = qs[a], B = qs[b];
+        return (A.lg === "nfl" ? 0 : 1) - (B.lg === "nfl" ? 0 : 1) || B.g.length - A.g.length || A.n.localeCompare(B.n);
+      });
+      return hits.slice(0, 8);
+    }
+    function draw() {
+      var qs = DATA ? DATA.qbs : {};
+      [].slice.call(bar.querySelectorAll(".qschip")).forEach(function (c) { c.remove(); });
+      picked.forEach(function (id) {
+        var c = document.createElement("button"); c.type = "button"; c.className = "qschip";
+        c.innerHTML = esc((qs[id] || {}).n || id) + " <i>×</i>";
+        c.addEventListener("click", function () { picked = picked.filter(function (x) { return x !== id; }); draw(); });
+        bar.insertBefore(c, inp);
+      });
+      inp.placeholder = picked.length ? "Add another" : "Search a QB, or a few for a parlay";
+      var hits = match(inp.value);
+      sug.innerHTML = hits.map(function (id) {
+        var q = qs[id];
+        return '<li data-id="' + esc(id) + '">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><br><span>' +
+               esc(q.t) + " · " + (q.lg === "nfl" ? "NFL" : "CFB") + "</span></div></li>";
+      }).join("");
+      /* a name it cannot find says so, never a blank (Jose, Sep 28, 2026: "this is awkward") */
+      if (!hits.length && DATA && inp.value.trim())
+        sug.innerHTML = '<li class="qsnone"><div><b>No QB called “' + esc(inp.value.trim()) + '”</b><br><span>NFL starters and anyone who has played this season</span></div></li>';
+      out.innerHTML = picked.length === 1 ? card(picked[0]) : picked.length > 1 ? parlay(picked) : "";
+      qsRow();
+    }
+    sug.addEventListener("click", function (e) {
+      var li = e.target.closest("li[data-id]"); if (!li) return;
+      picked.push(li.dataset.id); inp.value = ""; draw();
+      try { inp.focus(); } catch (e2) {}
+    });
+    inp.addEventListener("input", draw);
+    inp.addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { var li = sug.querySelector("li[data-id]"); if (li) { picked.push(li.dataset.id); inp.value = ""; draw(); } }
+      if (e.key === "Backspace" && !inp.value && picked.length) { picked.pop(); draw(); }
+    });
+
+    function wxShort(w) {
+      if (!w || w.t === undefined) return "—";
+      if (w.in) return "Indoors";
+      return w.t + "°" + (w.g ? " · " + w.g + " mph" : "");
+    }
+    /* his club's last lineup on offense against tonight's opponent's on
+       defense, off site/lineups.json (build/lineups.py) */
+    /* the spot a man holds, as it is said: LT, DE, OLB, CB */
+    function SPOTNAME(k, p) {
+      var b = String(k || "").replace(/[0-9]/g, "");
+      var n = { lde: "DE", rde: "DE", ldt: "DT", rdt: "DT", nt: "NT", lolb: "OLB", rolb: "OLB", lilb: "ILB", rilb: "ILB",
+                wlb: "LB", mlb: "LB", slb: "LB", lcb: "CB", rcb: "CB" }[b];
+      return n || (b ? b.toUpperCase() : String(p || ""));
+    }
+    /* hold a jersey and his name shows over it; lift the finger and it is
+       gone. A tap does nothing (Jose, Sep 28, 2026: "tap and hold is the
+       best and as soon as I take my finger off, it goes away") */
+    (function () {
+      var tip = null, hold = null, x0 = 0, y0 = 0;
+      function hide() { clearTimeout(hold); hold = null; if (tip) { tip.remove(); tip = null; } }
+      document.addEventListener("pointerdown", function (e) {
+        var j = e.target.closest && e.target.closest("#qsearch .qsj[data-nm]");
+        hide();
+        if (!j || !j.dataset.nm) return;
+        x0 = e.clientX; y0 = e.clientY;
+        hold = setTimeout(function () {
+          var r = j.getBoundingClientRect();
+          tip = document.createElement("div");
+          tip.className = "qstip";
+          tip.innerHTML = "<b>" + esc(j.dataset.nm) + "</b> " + esc(j.dataset.pos || "") +
+            (j.dataset.was ? "<span>in for " + esc(j.dataset.was) + "</span>" :
+             j.classList.contains("q") ? '<span class="q">questionable</span>' : "");
+          document.body.appendChild(tip);
+          var w = tip.getBoundingClientRect().width;
+          tip.style.left = Math.max(8, Math.min(innerWidth - w - 8, r.left + r.width / 2 - w / 2)) + "px";
+          tip.style.top = (r.top - tip.getBoundingClientRect().height - 8) + "px";
+        }, 220);
+      });
+      document.addEventListener("pointermove", function (e) {
+        if (hold && !tip && Math.hypot(e.clientX - x0, e.clientY - y0) > 8) hide();
+      });
+      ["pointerup", "pointercancel", "scroll"].forEach(function (ev) { document.addEventListener(ev, hide, true); });
+      document.addEventListener("contextmenu", function (e) {
+        if (e.target.closest && e.target.closest("#qsearch .qsj")) e.preventDefault();
+      });
+    })();
+    /* what can sink his legs this week, said in full on his card */
+    function riskList(club, id) {
+      var rs = typeof qbRisks === "function" ? qbRisks(club, id) : [];
+      if (!rs.length) return "";
+      return '<div class="qsrisk"><span>Consider</span>' + rs.map(function (x) {
+        return "<p><b>" + esc(x.say) + "</b><small>" + esc(x.why) + "</small></p>"; }).join("") + "</div>";
+    }
+    /* both clubs' injury reports, his club first, each split offense and
+       defense, the worst first (Jose, Sep 29, 2026) */
+    function injList(gid, mine, theirs) {
+      var all = ((typeof ALERTS === "object" && ALERTS && ALERTS[gid]) || {}).inj || [];
+      var OFF = /^(QB|RB|FB|WR|TE|OT|OG|OL|G|T|C|LS|K|PK|P)$/;
+      var RANK = { "Out": 0, "Injured Reserve": 1, "Suspension": 1, "Doubtful": 2, "Questionable": 3 };
+      var TAG = { "Out": ["out", "OUT"], "Injured Reserve": ["ir", "IR"], "Suspension": ["ir", "SUSP"], "Doubtful": ["d", "D"], "Questionable": ["q", "Q"] };
+      var side = function (club) {
+        var men = all.filter(function (x) { return x.t === club; })
+          .sort(function (a, b) { return (a.s in RANK ? RANK[a.s] : 9) - (b.s in RANK ? RANK[b.s] : 9); });
+        var rows = function (list) {
+          return list.length ? list.map(function (x) {
+            var tg = TAG[x.s] || ["q", x.s];
+            return "<p><i>" + esc(x.p) + "</i><span>" + esc(x.n) + '</span><b class="' + tg[0] + '">' + tg[1] + "</b></p>";
+          }).join("") : '<div class="none">None</div>';
+        };
+        return "<div><h5>" + esc(club) + "</h5><h6>OFFENSE</h6>" + rows(men.filter(function (x) { return OFF.test(x.p); })) +
+          "<h6>DEFENSE</h6>" + rows(men.filter(function (x) { return !OFF.test(x.p); })) + "</div>";
+      };
+      return '<div class="qsinj">' + side(mine) + side(theirs) + "</div>";
+    }
+    function formation(gid, mine, theirs) {
+      var g = (LU || {})[gid] || {}, o = (g[mine] || {}).off, d = (g[theirs] || {}).def;
+      if (!o || !o.length || !d || !d.length) return "";
+      var cut = function (list, ps) { return list.filter(function (m) { return ps.indexOf(m.p) >= 0; }); };
+      var spots = [], outs = 0, qs = 0;
+      var put = function (m, x, y, club) {
+        if (!m) return;
+        if (m.s === "out") outs++; else if (m.s === "q") qs++;
+        spots.push('<i class="qsj' + (m.s ? " " + m.s : "") + '" data-nm="' + esc(m.nm || "") + '" data-pos="' + esc(SPOTNAME(m.k, m.p)) +
+          '" data-was="' + esc(m.was || "") + '" style="left:' + x + "%;top:" + y + "px;background-image:url(ico/jersey/" +
+          esc(String(club).toLowerCase()) + '.png)"><em' + (m.n ? "" : ' class="pos"') + ">" +
+          /* a man signed this week has no number yet: his spot is written instead */
+          esc(m.n || SPOTNAME(m.k, m.p)) + "</em></i>");
+      };
+      // every man in his named spot off ESPN's chart (lt, lg, c ... lcb, fs);
+      // the defense faces the offense, so its left is the offense's right
+      /* the formations as they line up (Jose, Sep 28, 2026): on offense seven
+         on the line -- five linemen, the tight end on the right, the X
+         receiver split left -- the Z and the slot a step off it, the passer
+         under the centre and the back behind him. On defense a 4-3 is four
+         down, the strong-side backer over the tight end and the strong safety
+         his side; a 3-4 is two ends and the nose with its outside backers up
+         on the edges. The defense faces the offense, so its left is the
+         offense's right. */
+      var three4 = d.some(function (m) { return m.k === "nt" || m.k === "lilb"; });
+      /* every defender squared up on an offensive spot, the same spacing as
+         the line across from him (Jose, Sep 28, 2026: "why is defense
+         randomly spaced") */
+      /* the NFL's own diagrams (Jose, Sep 28, 2026, "Meet the defense"):
+         a 4-3 is DE DT DT DE even across the line, three backers even behind
+         them, then CB S S CB in one row; a 3-4 is DE DT DE, four backers in
+         one row with the corners out wide on it, the two safeties deep */
+      /* no fullback in the set: one back, offset to the two-receiver side;
+         the tight end on the other side, next to the left tackle, with the X
+         split outside him (Jose, Sep 28, 2026) */
+      var OFFX = { lt: 30, lg: 38, c: 46, rg: 54, rt: 62, te: 22, wr1: 5, wr2: 95, wr3: 80, qb: 46, rb: 56, fb: 56 };
+      var OFFY = { lt: 58, lg: 58, c: 58, rg: 58, rt: 58, te: 58, wr1: 58, wr2: 46, wr3: 46, qb: 32, rb: 6, fb: 6 };
+      var DX = three4
+        ? { rde: 30, nt: 46, lde: 62, slb: 22, rolb: 22, rilb: 38, lilb: 54, mlb: 46, wlb: 70, lolb: 70,
+            rcb: 5, lcb: 95, ss: 34, fs: 58 }
+        : { rde: 22, rdt: 38, ldt: 54, lde: 70, slb: 30, mlb: 46, wlb: 62,
+            rcb: 5, ss: 32, fs: 60, lcb: 95 };
+      var DY = three4
+        ? { rde: 92, nt: 92, lde: 92, wlb: 122, rolb: 122, rilb: 122, lilb: 122, mlb: 122, slb: 122, lolb: 122,
+            rcb: 122, lcb: 122, fs: 152, ss: 152 }
+        : { rde: 92, rdt: 92, ldt: 92, lde: 92, wlb: 122, mlb: 122, slb: 122,
+            rcb: 152, fs: 152, ss: 152, lcb: 152 };
+      var X = {}, Y = {};
+      [OFFX, DX].forEach(function (m) { Object.keys(m).forEach(function (k) { X[k] = m[k]; }); });
+      [OFFY, DY].forEach(function (m) { Object.keys(m).forEach(function (k) { Y[k] = m[k]; }); });
+      var place = function (list, club) {
+        list.forEach(function (m) {
+          var k = m.k || "";
+          if (X[k] === undefined || Y[k] === undefined) return;
+          put(m, X[k], Y[k], club);
+        });
+      };
+      place(o, mine);
+      place(d, theirs);
+      var key = (outs ? '<i style="border-color:#ff3b30"></i>starter out, backup in' : "") +
+                (qs ? '<i style="border-color:#ffd60a"></i>questionable' : "");
+      var shut = false;
+      try { shut = localStorage.getItem("arena.qsform") === "shut"; } catch (e) {}
+      return '<div class="qsform' + (shut ? " shut" : "") + '"><span class="qshd" onclick="qsFold(this)">' + esc(mine) + " offense vs " + esc(theirs) +
+        ' defense<button type="button" class="qsfold" aria-label="Fold the lineup"><svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button></span>' +
+        '<div class="qsfield"><div class="los"></div>' + spots.join("") + "</div>" + (key ? '<div class="qskey">' + key + "</div>" : "") +
+        injList(gid, mine, theirs) + "</div>";
+    }
+    function card(id) {
+      var q = DATA.qbs[id]; if (!q) return "";
+      var yd = 0, p = 0, ru = 0, hit = 0, priced = 0, wins = 0, losses = 0;
+      q.g.forEach(function (g) {
+        yd += g.yd; p += g.p; ru += g.ru; if (g.p > 0) hit++;
+        if (/^W/.test(g.r)) wins++; else if (/^L/.test(g.r)) losses++;
+      });
+      var h = '<div class="qscard"><div class="qswho">' + face(id, q.lg) + '<div><div class="qsnm">' + esc(q.n) +
+        '</div><div class="qssub">' + esc(q.t) + " · QB" + (q.g.length ? " · " + wins + "–" + losses : "") + "</div></div></div>";
+      h += '<div class="qssea"><div><b>' + yd + "</b><span>Pass yds</span></div><div><b>" + p + "</b><span>PTD</span></div><div><b>" +
+           ru + "</b><span>RTD</span></div><div><b>" + hit + "/" + q.g.length + "</b><span>1+ PTD</span></div></div>";
+      if (q.g.length) {
+        h += '<div class="qsh">This season</div><table><tr><th>Date</th><th>Opp</th><th class="r">Yds</th><th class="r">PTD</th><th class="r">RTD</th><th class="r">1+ PTD</th></tr>';
+        q.g.forEach(function (g) {
+          var d = new Date(g.d).toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" });
+          h += "<tr><td>" + d + "</td><td>" + (g.h ? "vs " : "@ ") + esc(g.o) + (g.r ? " · " + esc(g.r.split(" ")[0]) : "") +
+               '</td><td class="r">' + g.yd + '</td><td class="r">' + g.p + '</td><td class="r">' + g.ru + '</td><td class="r"><span class="qspx ' +
+               band(g.px) + '">' + show(g.px) + "</span> " + (g.p > 0 ? '<span class="ok">✓</span>' : '<span class="no">✕</span>') + "</td></tr>";
+        });
+        h += "</table>";
+      }
+      var nx = q.nx;
+      if (nx) {
+        /* under way: it says so, and gives way to next week's once final */
+        h += '<div class="qsh">' + (Date.parse(nx.d) <= Date.now() ? "Live · " : "Next · ") + (nx.h ? "vs " : "@ ") + esc(nx.o) + " · " + esc(when(nx.d)) + "</div><div class=\"qsnext\">" +
+          '<div class="qstile"><span>1+ PTD</span><b class="' + band(nx.px) + '">' + (nx.px ? show(nx.px) : "not posted") + "</b></div>" +
+          '<div class="qstile"><span>' + esc(nx.o) + " allows</span><b>" + (nx.al === null || nx.al === undefined ? "—" : nx.al + " PTD/g") + "</b></div>" +
+          '<div class="qstile"><span>Weather</span><b>' + esc(wxShort(nx.wx)) + "</b></div></div>" +
+          riskList(q.t, id) + formation(nx.gid, q.t, nx.o);
+        var one = slipLegs([id]).length;
+        h += '<button type="button" class="qsadd"' + (one ? "" : " disabled") + ">" +
+          (one ? "Add 1+ PTD to betslip" : "No price posted yet") + "</button>";
+      } else {
+        h += '<div class="qsnote">No game on the board for him this week.</div>';
+      }
+      return h + "</div>";
+    }
+    function parlay(ids) {
+      var d = 1, chance = 1, notes = [], priced = 0;
+      var legs = ids.map(function (id) {
+        var q = DATA.qbs[id]; if (!q) return "";
+        var nx = q.nx, px = nx && nx.px ? nx.px : "", last = q.g[0];
+        var hits = q.g.map(function (g) { return g.p > 0 ? "✓" : "✕"; }).reverse().join("");
+        var hit = q.g.filter(function (g) { return g.p > 0; }).length;
+        var dd = dec(px);
+        if (dd) { d *= dd; chance *= 1 / dd; priced++; }
+        var last2 = typeof famName === "function" ? famName(q.n) : q.n.split(" ").slice(-1)[0];
+        if (!nx) notes.push(last2 + " has no game this week.");
+        else {
+          if (!px) notes.push(last2 + "’s price isn’t posted yet.");
+          if (num(px) !== null && num(px) <= -600) notes.push(last2 + " is −600 or longer.");
+          if (nx.inj) notes.push(last2 + " is " + nx.inj.toLowerCase() + ".");
+          if (badWx(nx.wx)) notes.push(last2 + ": " + wxSay(nx.wx) + ".");
+        }
+        var slots = {};
+        q.g.forEach(function (g) { slots[slotSay(g.sl)] = (slots[slotSay(g.sl)] || 0) + 1; });
+        return '<div class="qsleg">' + face(id, q.lg) + '<div><div class="n2">' + esc(q.n) + '</div><div class="rec"><span class="ok">' +
+          hits.replace(/✕/g, '</span><span class="no">✕</span><span class="ok">') + "</span> " + hit + "/" + q.g.length +
+          (nx ? " · next " + (nx.h ? "vs " : "@ ") + esc(nx.o) + " " + esc(when(nx.d)) : "") + '</div></div><div class="qspx ' + band(px) + '">' +
+          (px ? show(px) : "—") + "</div></div>";
+      }).join("");
+      var price = priced === ids.length && priced ? (d >= 2 ? "+" + Math.round((d - 1) * 100) : "−" + Math.round(100 / (d - 1))) : "—";
+      var h = '<div class="qscard"><div class="qsh" style="margin-top:0">1+ PTD parlay · this week</div>' + legs +
+        '<div class="qstot"><div><b>' + ids.length + '</b><span>Legs</span></div><div><b class="pg">' + price + '</b><span>Parlay</span></div><div><b>' +
+        (priced === ids.length && priced ? Math.round(chance * 100) + "%" : "—") + "</b><span>All hit</span></div></div>";
+      if (notes.length) h += '<div class="qsnote">' + notes.map(esc).join("<br>") + "</div>";
+      var n = slipLegs(ids).length;
+      h += '<button type="button" class="qsadd"' + (n ? "" : " disabled") + ">" +
+        (!n ? "No prices posted yet" : n === ids.length ? "Add to betslip" : "Add " + n + " of " + ids.length + " to betslip") + "</button>";
+      return h + "</div>";
+    }
+    /* each man's 1+ PTD for his next game, price and id off the board itself;
+       a man whose price is not posted is left off */
+    function slipLegs(ids) {
+      var out = [];
+      ids.forEach(function (id) {
+        var q = DATA.qbs[id], nx = q && q.nx;
+        if (!nx || !nx.gid) return;
+        /* the slip is for games still to come: one under way is never added,
+           the same as the board locks its prices at kickoff (audit, Sep 28) */
+        if (Date.parse(nx.d) <= Date.now()) return;
+        var side = nx.h ? 1 : 0;
+        var r0 = ((((typeof PROPS === "object" && PROPS[nx.gid]) || {}).ptd || [])[side] || [])[0];
+        if (!r0 || !r0[0] || !r0[1]) return;
+        var row = null;
+        (typeof SCHED === "object" ? SCHED : []).forEach(function (g) { if (String(g[1]) === String(nx.gid)) row = g; });
+        var t = new Date(nx.d).toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+        out.push({ oid: r0[1], o: r0[0], g: nx.gid, gn: row ? row[3] + " @ " + row[4] : "",
+                   l: (typeof famName === "function" ? famName(q.n) : q.n) + " 1+ PTD \u00b7 " + t });
+      });
+      return out;
+    }
+    out.addEventListener("click", function (e) {
+      var b = e.target.closest(".qsadd");
+      if (!b || b.disabled || !window.addLegs) return;
+      var n = window.addLegs(slipLegs(picked));
+      b.textContent = n ? "Added " + n + " to betslip" : "No prices posted yet";
+      b.classList.add("qsadd--done");
+    });
+  })();
+</script>
+
+<!-- a push from a phone lands on the board by itself (tested Sep 19, 2026) -->

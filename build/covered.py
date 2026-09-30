@@ -27,13 +27,15 @@ import re
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 NOW = dt.datetime.now(dt.timezone.utc)
 # the week being played into: what is still ahead, plus what finished today
 AHEAD = dt.timedelta(hours=12)
 
 
 def arrays():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     out = {}
     for var in ("SCHED", "CFB"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S)

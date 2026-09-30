@@ -27,6 +27,8 @@ from concurrent.futures import ThreadPoolExecutor
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DRY = "--dry" in sys.argv
 CACHE = D + "/cache/dob.json"
 SEASON = "2026"
@@ -90,7 +92,7 @@ def birthday_game(dob, games, weeks):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     dob = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
     # each week's window: its first game day through the Tuesday after its last

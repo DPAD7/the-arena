@@ -14,11 +14,14 @@
 import json
 import math
 import os
+import sys
 import re
 import sqlite3
 import statistics
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "qbspy.db")
 VIG = 0.045          # the two sides of a matchup are priced to about 104.5%
 
@@ -96,7 +99,7 @@ def american(p):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     S = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     P = json.loads(re.search(r"  var PROPS = (\{.*?\});\n", s, re.S).group(1))
     db = sqlite3.connect(DB)

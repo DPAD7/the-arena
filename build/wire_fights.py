@@ -13,11 +13,14 @@
    Garcia v Benn has nothing to read. It stays as it is.
 """
 import os
+import sys
 import re
 import unicodedata
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-s = open(D + "/master.html").read()
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
+s = pagefile.read()
 before = s.count("data-oid")
 
 # our five bouts, as ESPN writes the names
@@ -161,7 +164,8 @@ once("  refreshVisible();\n  setInterval(refreshVisible, 30000);",
      "the refresh timers")
 
 assert s.count("data-oid") == before - dropped[0]
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

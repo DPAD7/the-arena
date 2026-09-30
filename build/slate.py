@@ -19,6 +19,8 @@ import sqlite3
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "qbspy.db")
 
 # What the favorite's quarterback has done, by how short the favorite was:
@@ -73,7 +75,7 @@ def attr(c, k):
 
 
 def read_board():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     out = []
     for mm in CARD.finditer(s):
         c = mm.group(0)

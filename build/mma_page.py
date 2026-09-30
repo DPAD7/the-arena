@@ -8,10 +8,12 @@
    than ESPN's live board, which only carries the day's own events.
 """
 import os
+import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-p = D + "/master.html"
-s = open(p).read()
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
+s = pagefile.read()
 n = 0
 
 
@@ -158,7 +160,8 @@ rep('''        settleFight(card, winner, how);
     fetch(MMA).then(function (r) { return r.json(); }).then(function (d) { applyBoard(live, d); }).catch(function () {});
   }
 ''')
-open(p, "w").write(s)
+if not pagefile.write(s):
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n<meta name="referrer" content="no-referrer">\n</head>\n<body>\n')

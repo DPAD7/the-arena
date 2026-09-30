@@ -31,6 +31,8 @@ from concurrent.futures import ThreadPoolExecutor
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "early.json")
 # the passer's own abbreviation as the play files write it: J.Allen
 SAYS = re.compile(r"([A-Z]\.[A-Za-z.'-]+) pass\b")
@@ -170,7 +172,7 @@ def main():
     want = None
     if "--week" in sys.argv:
         want = int(sys.argv[sys.argv.index("--week") + 1])
-    page = open(os.path.join(D, "master.html")).read()
+    page = pagefile.read()
     i = page.index("  var SCHED = [[")
     j = page.index("];", i)
     sched = json.loads(page[i + len("  var SCHED = "):j + 1])

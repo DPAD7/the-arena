@@ -156,7 +156,7 @@ HORIZON_DAYS = 8           # the same reach fill_week.py and fill_fights.py pric
 def board_events():
     """Every drawn game and bout on the page still to come inside the horizon,
        shaped like the hand-built events so due_now() can read them."""
-    page = open(D + "/master.html").read()
+    page = pagefile.read()
     out = []
     for var in ("SCHED", "CFB", "FIGHTS"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, page, re.S)
@@ -393,7 +393,7 @@ def card_running():
        every bout that is left -- a knockout in the first pulls the rest of the
        night forward -- so the prices and the clock are read on every pass
        rather than on the wakes alone (Jose, Sep 18, 2026)."""
-    page = open(D + "/master.html").read()
+    page = pagefile.read()
     m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", page, re.S)
     if not m:
         return None
@@ -421,7 +421,7 @@ def card_running():
 
 def boxing_running():
     """A Zuffa card under way: first bell 30 minutes ago to 8 hours after it."""
-    page = open(D + "/master.html").read()
+    page = pagefile.read()
     m = re.search(r"var BOXFIGHTS = (\[.*?\]);\n", page, re.S)
     if not m:
         return None
@@ -441,7 +441,7 @@ def game_running():
        throwing, so a card that named the wrong man is right within ten
        minutes of the snap rather than hours after the whistle
        (Jose, Sep 25, 2026: "we need 100% accurate qbs")."""
-    page = open(D + "/master.html").read()
+    page = pagefile.read()
     for var in ("SCHED", "CFB"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, page, re.S)
         if not m:

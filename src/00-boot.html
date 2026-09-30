@@ -1,0 +1,68 @@
+<meta name="theme-color" content="#000000">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.bstack{position:relative;width:200px;height:227px}.bstack img{position:absolute;left:0;width:200px;height:auto;opacity:0;animation:bdrop .55s cubic-bezier(.22,1,.36,1) forwards}.bstack .p1{top:65.5px;animation-delay:.2s}.bstack .p2{top:33.7px;animation-delay:.85s}.bstack .p3{top:0;animation-delay:1.5s}.bstack .bd{top:0;animation:bpop .6s cubic-bezier(.34,1.56,.64,1) 2.2s forwards}@keyframes bdrop{from{opacity:0;transform:translateY(-18px)}to{opacity:1;transform:none}}@keyframes bpop{from{opacity:0;transform:scale(.55)}to{opacity:1;transform:none}}</style>
+<div id="boot" aria-hidden="true"><div class="bstack"><img class="p1" src="ico/boot-plate.png" alt=""><img class="p2" src="ico/boot-plate.png" alt=""><img class="p3" src="ico/boot-plate.png" alt=""><img class="bd" src="ico/boot-dollar.png" alt=""></div></div>
+<script>
+/* the stack on black from the very first paint, built plate 1, 2, 3 and
+   then the $ (Jose, Sep 29, 2026), until the board is
+   drawn and every picture on screen has arrived (Jose, Sep 23, 2026: "it
+   should open once the images and page is loaded completely, not before") */
+(function () {
+  var t0 = Date.now();
+  /* a reload the board did itself, for new code, opens straight on the
+     board: the stack is for opening the app, not for an update (Jose, Sep 29,
+     2026: "shouldn't it just refresh without the animation again?") */
+  var quiet = false;
+  try { quiet = sessionStorage.getItem("arena.quiet") === "1"; sessionStorage.removeItem("arena.quiet"); } catch (e) {}
+  if (quiet) { var b0 = document.getElementById("boot"); if (b0) b0.remove(); return; }
+  /* opened from the home screen the page starts under the status bar, so its
+     middle is lower than the screen's: lift the mark by half the difference,
+     so it sits in the middle of the glass (Jose, Sep 23, 2026) */
+  try {
+    var im = document.querySelector("#boot .bstack"), gap = screen.height - innerHeight;
+    if (im && gap > 0 && gap < 120) im.style.transform = "translateY(" + (-gap / 2) + "px)";
+  } catch (e) {}
+  var go = function () {
+    var b = document.getElementById("boot"), d = document.getElementById("board");
+    if (!b) return;
+    var ready = d && d.children.length && document.readyState === "complete";
+    if (ready) {
+      var vh = innerHeight, imgs = d.querySelectorAll("img");
+      for (var k = 0; k < imgs.length; k++) {
+        var r = imgs[k].getBoundingClientRect();
+        if (r.bottom > 0 && r.top < vh && r.width && !imgs[k].complete) { ready = false; break; }
+      }
+    }
+    /* the stack is always built whole before the board opens, never rushed:
+       three plates, the $, and a beat on the finished stack (Jose, Sep 29, 2026) */
+    if (Date.now() - t0 < 3200) ready = false;
+    if (!ready && Date.now() - t0 < 10000) { setTimeout(go, 80); return; }
+    b.classList.add("boot--out"); setTimeout(function () { b.remove(); }, 400);
+  };
+  setTimeout(go, 80);
+})();
+</script>
+<title>Stacked</title>
+<!-- the app as the phone sees it: its name under the icon, full screen,
+     and black launch screens so opening it never flashes white
+     (Jose, Sep 29, 2026). The address stays the-arenasports. -->
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="apple-mobile-web-app-title" content="Stacked">
+<link rel="apple-touch-startup-image" media="(device-width: 440px) and (device-height: 956px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1320x2868.png">
+<link rel="apple-touch-startup-image" media="(device-width: 402px) and (device-height: 874px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1206x2622.png">
+<link rel="apple-touch-startup-image" media="(device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1290x2796.png">
+<link rel="apple-touch-startup-image" media="(device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1179x2556.png">
+<link rel="apple-touch-startup-image" media="(device-width: 428px) and (device-height: 926px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1284x2778.png">
+<link rel="apple-touch-startup-image" media="(device-width: 390px) and (device-height: 844px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1170x2532.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1125x2436.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1242x2688.png">
+<link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/828x1792.png">
+<link rel="apple-touch-startup-image" media="(device-width: 360px) and (device-height: 780px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)" href="launch/1080x2340.png">
+<link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2) and (orientation: portrait)" href="launch/750x1334.png">
+<meta name="referrer" content="no-referrer">
+<!-- the two typefaces are kept in site/font: a reader should not have to
+     ask Google for a font to read a scoreboard (Jose, Sep 18, 2026) -->
+<link rel="stylesheet" href="font/barlow.css">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icon-192.png">

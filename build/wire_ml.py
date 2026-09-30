@@ -8,11 +8,14 @@
 """
 import json
 import os
+import sys
 import re
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 ML = json.load(open("/tmp/ml.json"))
-s = open(D + "/master.html").read()
+s = pagefile.read()
 before = s.count("data-oid")
 
 
@@ -81,7 +84,9 @@ s = s.replace(cfb_old, """      '<div class="ghead"><span class="gteam gteam--fl
       p.time + '</span><span class="gteam">' + home + '<span class="gml">' +
       priceSlot(g[12], g[13]) + '</span></span></div>' + sec("PTD", "PTD") + sec("ATD", "ATD") +""", 1)
 
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

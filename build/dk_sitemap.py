@@ -35,6 +35,8 @@ import sys
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "data", "dk_people.json")
 DRY = "--dry" in sys.argv
 MAP = "https://sportsbook.draftkings.com/sitemaps/SportsbookPlayerUriProvider_0.xml"
@@ -65,7 +67,7 @@ def drawn():
        after -- Mariota's prices sat under Daniels's face for want of it
        (Jose, Sep 29, 2026: "we should get IDs for all ESPN quarterbacks and
        IDs for all DraftKings quarterbacks")"""
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     m = re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S)
     out = {}
     for g in json.loads(m.group(1)) if m else []:

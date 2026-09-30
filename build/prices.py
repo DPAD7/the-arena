@@ -31,6 +31,8 @@ import re
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "prices.json")
 
 # which columns of each row carry the two moneylines and their DraftKings ids
@@ -76,7 +78,7 @@ def event_ids():
     global _EVENTS
     if _EVENTS is None:
         try:
-            page = open(os.path.join(D, "master.html")).read()
+            page = pagefile.read()
             arr = rows(page, "FIGHTS") or []
         except Exception:
             arr = []
@@ -184,7 +186,7 @@ def from_page(page):
 
 def main():
     if "--from-page" in sys.argv:
-        page = open(os.path.join(D, "master.html")).read()
+        page = pagefile.read()
         d, n = from_page(page)
         write(d)
         print("prices.json: %d priced games and bouts, %d games in PROPS, %d bouts in FPROPS"

@@ -37,6 +37,8 @@ import re
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 LOG = os.path.join(D, "data", "fight_log.jsonl")
 PLAYS = os.path.join(D, "data", "fight_plays.jsonl")
 WON = os.path.join(D, "data", "fight_winners.json")
@@ -69,7 +71,7 @@ def clock_secs(s):
 
 def cards():
     """the card's own left and right, by ESPN id, per bout"""
-    s = open(os.path.join(D, "master.html"), encoding="utf-8").read()
+    s = pagefile.read()
     i = s.index("  var FIGHTS = [[")
     j = s.index("];", i)
     out = {}

@@ -8,7 +8,7 @@ This folder is `~/Desktop/the arena`. Everything the site is built from is
 in it and nothing it runs reaches outside it. It can be moved; only the
 LaunchAgent below names the path.
 
-    master.html   the page
+    src/          the page, in parts (pagefile.py joins them)
     site/         what deploys
     build/        every script, ours and the ones copied from QB Spy
     data/         every JSON and CSV the scripts read, and qbspy.db
@@ -18,13 +18,15 @@ LaunchAgent below names the path.
     shots/        working screenshots
     attic/        scripts that ran once while the page was being built
 
-    master.html          the page: markup, styles, script and the last known
-                         prices, in one file. pagefile.py is the only door
-                         into it -- it refuses a write against a copy that
-                         has moved, which is how a scheduled run stopped
-                         eating an edit made by hand.
-    site/                what wrangler ships. index.html is built from
-                         master.html by pagefile.deployable(), so it is never
+    src/                 the page, in parts: the boot screen, the styles, the
+                         markup, the script in seven slices and the search.
+                         pagefile.py is the only door -- read() joins them into
+                         the one page string, write() cuts it back into the
+                         parts, and it refuses a write against a copy that has
+                         moved, which is how a scheduled run stopped eating an
+                         edit made by hand.
+    site/                what wrangler ships. index.html is built from the
+                         joined page by pagefile.deployable(), so it is never
                          edited and never committed.
     site/prices.json     every price on the board, and when each bout starts.
                          Prices live here rather than in the page so a price

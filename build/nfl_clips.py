@@ -29,6 +29,8 @@ except ImportError:
     import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "nflclips.json")
 FORCE = "--force" in sys.argv
 
@@ -39,7 +41,7 @@ def get(u):
 
 
 def played():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     now = dt.datetime.now(dt.timezone.utc)
     arr = json.loads(re.search(r'var SCHED = (\[\[.*?\]\]);', s, re.S).group(1))
     return [g for g in arr if dt.datetime.fromisoformat(g[2].replace("Z", "+00:00")) < now]

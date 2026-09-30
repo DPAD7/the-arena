@@ -23,6 +23,8 @@ import sys
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 H = {"accept": "application/json"}
 AB = {"JAX": "JAC", "WSH": "WAS", "LAR": "LA"}
 DK, CONSENSUS = 30, 15
@@ -74,7 +76,7 @@ def rungs(props, surname):
 
 def main():
     led = json.load(open(D + "/site/ledger.json"))
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     clubs = {g[1]: (g[3], g[4]) for g in sched}
     week_of = {g[1]: g[0] for g in sched}

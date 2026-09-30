@@ -11,10 +11,13 @@
 """
 import json
 import os
+import sys
 import re
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-s = open(D + "/master.html").read()
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
+s = pagefile.read()
 ML = json.load(open("/tmp/ufc_ml.json"))
 DKEV = {e["id"]: e for e in json.load(open("/tmp/dk_ufc.json"))}
 DKSEL = json.load(open("/tmp/dkml_ufc.json"))
@@ -122,7 +125,9 @@ s = s.replace("  .caro {", """  .bill { display: flex; flex-direction: column; g
   .bill .gcard { width: auto; }
   .caro {""", 1)
 
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

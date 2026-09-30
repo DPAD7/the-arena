@@ -26,13 +26,15 @@ import x_clips as X
 from x_clips import T, get, in_game, resolve, FLOOR, WINDOW, SHORTEST, SHORT, NOT_A_TD, FOOTAGE, SCOREBUG
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "cfb_xindex.json")
 CACHE = os.path.join(D, "site", "cfb_xposts.json")
 FORCE = "--force" in sys.argv
 
 
 def board():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     arr = json.loads(re.search(r'var CFB = (\[\[.*?\]\]);', s, re.S).group(1))
     ids = json.loads(re.search(r'var CFBID = (\{.*?\});', s, re.S).group(1))
     return arr, ids

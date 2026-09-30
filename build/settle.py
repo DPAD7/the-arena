@@ -21,6 +21,8 @@ from concurrent.futures import ThreadPoolExecutor
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "final")
 FORCE = "--force" in sys.argv
 NOW = dt.datetime.now(dt.timezone.utc)
@@ -40,7 +42,7 @@ def get(u):
 
 
 def board():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     out = []
     for var, lg in (("SCHED", "nfl"), ("CFB", "college-football")):
         for g in json.loads(re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S).group(1)):

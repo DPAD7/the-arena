@@ -15,6 +15,8 @@ import subprocess
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "data", "results.csv")
 FIELDS = ["date", "league", "event", "game", "market", "side", "player",
           "price", "line", "result", "value", "opp_value",
@@ -49,7 +51,7 @@ def passing(box, surname):
     return None, None
 
 
-s = open(os.path.join(D, "master.html")).read()
+s = pagefile.read()
 CARD = re.compile(r'<div class="gcard"[^>]*>(?:(?!<div class="gcard").)*?\n      </div>', re.S)
 rows = []
 

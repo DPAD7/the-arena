@@ -9,10 +9,13 @@
 import concurrent.futures as cf
 import json
 import os
+import sys
 import re
 import subprocess
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 CORE = ("http://sports.core.api.espn.com/v2/sports/football/leagues/%s"
         "/events/%s/competitions/%s/odds")
 
@@ -37,7 +40,7 @@ def ask(lg, eid):
     return eid, None
 
 
-s = open(D + "/master.html").read()
+s = pagefile.read()
 m = re.search(r'  var CFB = (\[\[.*?\]\]);\n', s, re.S)
 cfb = json.loads(m.group(1))
 blank = [g for g in cfb if not g[10]]
@@ -103,7 +106,9 @@ s = s.replace("  .gml .price { margin: 0; }",
               "  .gml .price { margin: 0; }\n"
               "  .price--sp { color: var(--muted); font-style: italic; }", 1)
 
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+
+    print("page changed under us, not written")
 doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
        '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
        '<meta name="robots" content="noindex">\n</head>\n<body>\n')

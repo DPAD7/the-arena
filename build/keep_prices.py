@@ -17,9 +17,12 @@
 import datetime as dt
 import json
 import os
+import sys
 import re
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 NOW = dt.datetime.now(dt.timezone.utc)
 
 
@@ -28,7 +31,7 @@ def T(x):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     props = json.loads(re.search(r"  var PROPS = (\{.*?\});\n", s, re.S).group(1))
     kept, moved = 0, 0
     for var in ("SCHED", "CFB"):

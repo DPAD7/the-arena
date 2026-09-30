@@ -18,6 +18,8 @@ import time
 import urllib.request
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "fighters.json")
 DRY = "--dry" in sys.argv
 API = "http://sports.core.api.espn.com/v2/sports/mma/athletes/%s/records"
@@ -48,7 +50,7 @@ def record_of(athlete_id):
 
 def on_the_board():
     """Both men in every bout the page draws, with when the bout is."""
-    page = open(os.path.join(D, "master.html")).read()
+    page = pagefile.read()
     m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", page, re.S)
     if not m:
         return []

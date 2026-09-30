@@ -35,6 +35,8 @@ except ImportError:
     import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "clips.json")
 WIN, TAB = 1, 3
 KEY = "d15c5790-7cb0-4fe1-8782-25f4698d0739"
@@ -57,7 +59,7 @@ GRAB = """
 
 
 def played():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     now = dt.datetime.now(dt.timezone.utc)
     out = []
     for lg, var in (("nfl", "SCHED"), ("college-football", "CFB")):

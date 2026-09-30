@@ -57,6 +57,8 @@ import subprocess
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 NOTES = os.path.join(D, "notes")
 POOL = os.path.join(D, "data", "ptd_pool.json")
 CALLED = os.path.join(D, "data", "ptd10_called.json")
@@ -84,7 +86,7 @@ def read(path, fallback=None):
 
 def sched():
     """The board's own schedule, parsed out of the page it is written in."""
-    page = open(os.path.join(D, "master.html")).read()
+    page = pagefile.read()
     i = page.index("  var SCHED = [[")
     j = page.index("];", i)
     return json.loads(page[i + len("  var SCHED = "):j + 1])

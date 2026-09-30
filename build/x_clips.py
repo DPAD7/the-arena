@@ -31,6 +31,8 @@ except ImportError:
     import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "xindex.json")
 FORCE = "--force" in sys.argv
 HANDLES = {k: v["x"].lower() for k, v in json.load(open(os.path.join(D, "data", "clubs.json"))).items()}   # from nfl.com's team pages
@@ -78,7 +80,7 @@ def get(u, **kw):
 
 
 def played():
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     now = dt.datetime.now(dt.timezone.utc)
     arr = json.loads(re.search(r'var SCHED = (\[\[.*?\]\]);', s, re.S).group(1))
     return [g for g in arr if T(g[2]) < now]

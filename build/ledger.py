@@ -12,11 +12,14 @@
 import datetime as dt
 import json
 import os
+import sys
 import re
 
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 POSFILE = D + "/cache/positions.json"
 POS = json.load(open(POSFILE)) if os.path.exists(POSFILE) else {}
 
@@ -152,7 +155,7 @@ def stub(out, g):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     out = {}
     games = 0

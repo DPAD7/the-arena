@@ -1,15 +1,23 @@
-"""One door in and out of master.html.
+"""One door in and out of the page.
 
-   Every run that changes the page reads the whole file, edits the string it
-   is holding, and writes the whole file back. So a run that started before an
-   edit was saved will put the file back the way it was, with no error and
+   The page lives as parts under src/ (Sep 30, 2026): the boot screen, the
+   styles, the markup, the script in seven slices and the search. Each part
+   is a run of whole lines of the one page, cut at a line that appears in it
+   once (src/parts.json says which), so read() joins them back byte for byte
+   and write() cuts a written page at the same lines again. Nothing reads or
+   writes the parts but this module; a script asks for the page as one
+   string, edits it, and hands the string back, the way it always has.
+
+   Every run that changes the page reads the whole page, edits the string it
+   is holding, and writes the whole page back. So a run that started before an
+   edit was saved will put the page back the way it was, with no error and
    nothing in the log. On Sep 17, 2026 that ate the same edit twice and made a
    deploy ship a call to a function that did not exist.
 
-   The guard is one line of arithmetic: before writing, read the file again.
+   The guard is one line of arithmetic: before writing, read the page again.
    If it is not byte for byte what this run started from, somebody else has
    written since, and this run's copy is stale, so it does not write. Nothing
-   is lost by skipping -- the next wake reads the new file and does the same
+   is lost by skipping -- the next wake reads the new page and does the same
    work on it.
 
    Usage:
@@ -21,21 +29,59 @@
            print("page changed under us, not written")
            return
 
-   (Jose, Sep 17, 2026)
+   A write that cannot find a part's first line in the new page (the line was
+   edited away) raises rather than writing, so a mistake stops the run
+   instead of scrambling the parts; put the line back or move it in
+   src/parts.json.
+
+   (Jose, Sep 17, 2026; the parts, Sep 30, 2026)
 """
+import json
 import os
 import re
 import time
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(D, "master.html")
+SRC = os.path.join(D, "src")
+PARTS = os.path.join(SRC, "parts.json")
 LAST = None          # what the last read() returned, for the usual one-read run
+
+
+def parts():
+    return json.load(open(PARTS))
+
+
+def assemble():
+    """The page as one string, the parts joined in order."""
+    return "".join(open(os.path.join(SRC, p["file"])).read() for p in parts())
+
+
+def cut(page):
+    """The page as its parts, cut at each part's first line. Raises when a
+       first line is missing from the page or in it more than once."""
+    lines = page.split("\n")
+    ps = parts()
+    starts = [0]
+    for p in ps[1:]:
+        hits = [i for i, l in enumerate(lines) if l == p["at"]]
+        if len(hits) != 1:
+            raise ValueError("pagefile: the line %r that starts %s is %s in the page"
+                             % (p["at"], p["file"], "missing" if not hits else "there %d times" % len(hits)))
+        starts.append(hits[0])
+    if starts != sorted(starts):
+        raise ValueError("pagefile: the parts' first lines are out of order in the page")
+    out = []
+    for k, p in enumerate(ps):
+        lo = starts[k]
+        hi = starts[k + 1] if k + 1 < len(ps) else len(lines)
+        out.append((p["file"], "\n".join(lines[lo:hi]) + ("\n" if k + 1 < len(ps) else "")))
+    return out
 
 
 def read():
     """The page as it is now, remembered so write() can check it is unchanged."""
     global LAST
-    LAST = open(PAGE).read()
+    LAST = assemble()
     return LAST
 
 
@@ -48,9 +94,16 @@ def write(new, was=None):
         was = LAST
     if was is None:
         raise ValueError("pagefile.write needs the text this run started from")
-    if open(PAGE).read() != was:
+    if assemble() != was:
         return False
-    open(PAGE, "w").write(new)
+    pieces = cut(new)
+    for f, text in pieces:
+        path = os.path.join(SRC, f)
+        if os.path.exists(path) and open(path).read() == text:
+            continue
+        tmp = path + ".tmp"
+        open(tmp, "w").write(text)
+        os.replace(tmp, path)
     LAST = new
     return True
 

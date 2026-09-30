@@ -30,6 +30,8 @@ import time
 import urllib.request
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "data", "fight_log.jsonl")
 # the moments, as against the running totals: round start and end, takedowns
 # and attempts, knockdowns, a pause and why, the result. Each carries the time
@@ -71,7 +73,7 @@ def arg(flag, fallback=None):
 
 def tonights_event():
     """The fight card the board is showing for today, by its own rows."""
-    page = open(os.path.join(D, "master.html")).read()
+    page = pagefile.read()
     m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", page, re.S)
     if not m:
         return None

@@ -9,17 +9,20 @@
 """
 import json
 import os
+import sys
 import re
 from concurrent.futures import ThreadPoolExecutor
 
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 URL = "https://a.espncdn.com/combiner/i?img=/i/headshots/%s/players/full/%s.png&w=336&h=336&scale=crop"
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     want = []
     for var, lg in (("SCHED", "nfl"), ("CFB", "college-football")):
         rows = json.loads(re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S).group(1))

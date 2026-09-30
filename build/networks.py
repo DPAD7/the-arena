@@ -13,11 +13,14 @@
 import datetime as dt
 import json
 import os
+import sys
 import re
 import sqlite3
 import subprocess
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "qbspy.db")
 FEED = {"nfl": "https://api.thescore.com/nfl/events?limit=400",
         "ncaaf": "https://api.thescore.com/ncaaf/events?limit=1000"}
@@ -33,7 +36,7 @@ def get(u):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     db = sqlite3.connect(DB)
     club = {w: a for w, a in db.execute("select written, abbr from club_name")}
     cfb = json.load(open(D + "/data/cfb_names.json"))

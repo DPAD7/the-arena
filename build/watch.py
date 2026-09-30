@@ -35,6 +35,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 ONCE = "--once" in sys.argv
 DRY = "--dry" in sys.argv
 BEAT = 30                      # seconds between asks while a game is being played
@@ -72,7 +74,7 @@ def say(line):
 
 def drawn():
     """Every football game on the board: (league, espn id, kickoff)."""
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     out = []
     for var, lg in BOARD.items():
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S)
@@ -95,7 +97,7 @@ def bouts():
     """Every bout on the board: (event id, bout id, first bell). The settled
        file is the event's, not the bout's -- mma_year.py writes one for the
        whole card."""
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     m = re.search(r"var FIGHTS = (\[\[.*?\]\]);", s, re.S)
     out = []
     for g in json.loads(m.group(1)) if m else []:

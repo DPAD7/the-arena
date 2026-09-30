@@ -11,10 +11,13 @@
    on top changes to match; the pills below choose which.
 """
 import os
+import sys
 import re
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-s = open(D + "/master.html").read()
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
+s = pagefile.read()
 before = s.count("data-oid")
 CFB = open("/tmp/cfb_all.js").read()
 FIGHTS = open("/tmp/fights.js").read()
@@ -53,9 +56,10 @@ s = re.sub(r'  var CFB = \[\[3,.*?\];\n', "  var CFB = " + CFB + ";\n", s, count
 assert '"401858225"' in s, "college schedule did not land"
 
 now = s.count("data-oid")
-gone = len(re.findall(r'<div class="gcard"', open(D + "/master.html").read())) - \
+gone = len(re.findall(r'<div class="gcard"', pagefile.read())) - \
        len(re.findall(r'<div class="gcard"', s))
 assert gone == 1, "expected one card to go, %d went" % gone
-open(D + "/master.html", "w").write(s)
+if not pagefile.write(s):
+    print("page changed under us, not written")
 print("pool + board in place | prices %d -> %d | page %.0f KB"
       % (before, now, len(s) / 1024.0))

@@ -42,6 +42,8 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from read_dk import ask
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "data", "dk_people.json")
 DRY = "--dry" in sys.argv
 LEAGUE = {"nfl": 88808, "ncaaf": 87637}
@@ -52,7 +54,7 @@ CATS = (1000, 1003, 1185)
 def board():
     """Every drawn fixture, keyed by the two clubs, with the two passers and
        which side each is on."""
-    s = open(os.path.join(D, "master.html")).read()
+    s = pagefile.read()
     out = {}
     for var, league in (("SCHED", "nfl"), ("CFB", "ncaaf")):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S)

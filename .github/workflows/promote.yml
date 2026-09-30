@@ -50,7 +50,7 @@ jobs:
         run: |
           mkdir -p logs cache prices
           cd build
-          python -c "import pagefile; pagefile.deployable(open('../master.html').read())"
+          python -c "import pagefile; pagefile.deployable(pagefile.read())"
 
       - name: Put it on the board
         env:

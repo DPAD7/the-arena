@@ -21,6 +21,8 @@ import sqlite3
 import sys
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 DB = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "qbspy.db")
 DRY = "--dry" in sys.argv
 
@@ -31,7 +33,7 @@ def T(x):
 
 
 def main():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     db = sqlite3.connect(DB)
     person = {w: str(p) for w, p in db.execute("select written, person_id from person_name")}

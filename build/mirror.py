@@ -26,6 +26,8 @@ import sys
 from curl_cffi import requests as rq
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 ALL = "--all" in sys.argv
 H = {"accept": "image/png,image/*;q=0.8"}
 
@@ -41,7 +43,7 @@ SCORE_MAN = "https://assets-sports-gcp.thescore.com/mma/fighter/%s/w192xh192_hea
 
 
 def arrays():
-    s = open(D + "/master.html").read()
+    s = pagefile.read()
     out = {}
     for name in ("SCHED", "CFB", "FIGHTS"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % name, s, re.S)

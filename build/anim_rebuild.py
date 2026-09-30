@@ -39,6 +39,8 @@ import anim
 import log_fights
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(D, "build"))
+import pagefile
 OUT = os.path.join(D, "site", "anim")
 WON = os.path.join(D, "data", "fight_winners.json")
 NOW = dt.datetime.now(dt.timezone.utc)
@@ -55,7 +57,7 @@ def last(s):
 
 
 def fights():
-    s = open(os.path.join(D, "master.html"), encoding="utf-8").read()
+    s = pagefile.read()
     m = re.search(r"  var FIGHTS = (\[\[.*?\]\]);", s, re.S)
     return json.loads(m.group(1)) if m else []
 
