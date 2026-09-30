@@ -51,7 +51,9 @@ jobs:
         with:
           python-version: "3.12"
       - if: steps.gate.outputs.has == 'true'
-        run: pip install --quiet curl_cffi cryptography playwright && python -m playwright install --with-deps chromium webkit >/dev/null 2>&1 || true
+        # chromium alone, without the system packages: the full browser set
+        # with its packages took the first run more than ten minutes
+        run: pip install --quiet curl_cffi cryptography playwright pynacl && python -m playwright install chromium >/dev/null 2>&1 || true
       - uses: actions/setup-node@v4
         if: steps.gate.outputs.has == 'true'
         with:
