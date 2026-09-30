@@ -1569,7 +1569,7 @@
       return '<div class="gpbox">' + (word ? '<b class="gpc gpc--' + (call || "side") + '">' + esc(word) + '</b>' : "") + esc(text) + '</div>';
     };
     var draw = function (S) {
-      var sg = (S || {})[id] || {}, lean = sg.lean || {};
+      var sg = (S || {})[id] || {}, lean = sg.lean || {}, call = sg.call || {};
       var h = "";
       /* the two clubs */
       h += '<div class="gpsides">';
@@ -1581,7 +1581,7 @@
           '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '</div></div>';
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
-      if (st.ml && (sg.ml || {})[st.ml]) h += box(null, sg.ml[st.ml], side[st.ml].club);
+      if (st.ml && (sg.ml || {})[st.ml]) h += box((call.ml || {})[st.ml], sg.ml[st.ml], side[st.ml].club);
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
       var hh = pr.h2h || [];
@@ -1591,13 +1591,13 @@
         '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
         '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
-      if (st.h2h && (sg.h2h || {})[st.h2h]) h += box(null, sg.h2h[st.h2h], famName(side[st.h2h].qb));
+      if (st.h2h && (sg.h2h || {})[st.h2h]) h += box((call.h2h || {})[st.h2h], sg.h2h[st.h2h], famName(side[st.h2h].qb));
       /* the ladders */
       [["ptd", "PASSING TOUCHDOWNS", "PTD"], ["atd", "RUSHING TOUCHDOWNS", "ATD"]].forEach(function (k) {
         var kind = k[0], mx = rungs(kind), s2 = st[kind];
         if (s2.n > mx) s2.n = mx;
         if (s2.n < 1) s2.n = 1;
-        h += '<div class="gpsep"></div><div class="gpttl">' + k[1] + '</div>' +
+        h += '<div class="gpsep"></div>' +
           '<div class="gpsl"><input type="range" min="1" max="' + mx + '" step="1" value="' + s2.n + '" data-kind="' + kind + '" style="--p:' + (mx > 1 ? (s2.n - 1) / (mx - 1) * 100 : 0) + '%">' +
           '<div class="gplab"><small>MIN 1</small><small>MAX ' + mx + '</small></div><div class="gpval">' + s2.n + '</div></div>';
         /* one row: the two faces, then the lit man's name, his rung and his
@@ -1606,7 +1606,7 @@
         var lit = s2.who ? [s2.who] : [];
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
-          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small></span>' +
+          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
         };
         h += '<div class="gprow">' +

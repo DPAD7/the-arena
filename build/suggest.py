@@ -187,9 +187,11 @@ def leans(men, played, sched, wk, lines, rows, runs):
         net[w] = (sum(g[2] - g[3] for g in gs) / len(gs)) if gs else None
     if net["away"] is not None and net["home"] is not None and abs(net["away"] - net["home"]) >= 3:
         out["ml"] = "away" if net["away"] > net["home"] else "home"
+        out["ml_gap"] = abs(net["away"] - net["home"])
     ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
     if ypg["away"] is not None and ypg["home"] is not None and abs(ypg["away"] - ypg["home"]) >= 20:
         out["h2h"] = "away" if ypg["away"] > ypg["home"] else "home"
+        out["h2h_gap"] = abs(ypg["away"] - ypg["home"])
     def rate(xs, ok):
         return (sum(1 for x in xs if ok(x)) / len(xs)) if xs else 0
     p = {w: rate(rows[w], lambda r: r[0] >= 1) for w in men}
@@ -239,6 +241,15 @@ def main():
         # the board's own lean, one a market, or none: a gold ring on the page
         # (Jose, Sep 30, 2026: "which one I should take... if none then don't")
         game["lean"] = leans(men, played, sched, wk, lines, rows, runs)
+        # and a word on each side of the two choices, like the ladders wear:
+        # the leaned side takes TAKE when the gap is wide, LEAN when narrow,
+        # the other side PASS; no lean, no word
+        game["call"] = {}
+        for m, gap in (("ml", game["lean"].get("ml_gap")), ("h2h", game["lean"].get("h2h_gap"))):
+            l = game["lean"].get(m)
+            game["call"][m] = {w: (None if not l else ("pass" if w != l else ("take" if (gap or 0) >= (7 if m == "ml" else 40) else "lean"))) for w in ("away", "home")}
+        for k in ("ml_gap", "h2h_gap"):
+            game["lean"].pop(k, None)
         out[gid] = game
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     print("suggest: %d games" % len(out))
