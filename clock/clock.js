@@ -127,7 +127,7 @@ export class Clock {
       return Response.json({ ok: true });
     }
     if (url.pathname.endsWith("/test") && request.method === "POST") {
-      const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Stacked", body: "Alerts are on. This is what they look like.", url: "/" }], 0);
+      const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Alerts are on", body: "This is what they look like.", url: "/" }], 0);
       return Response.json({ sent: n });
     }
     if (url.pathname.endsWith("/debug")) {
