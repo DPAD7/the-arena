@@ -1545,10 +1545,12 @@
     }
     dlg._card = card;
     var root = dlg.querySelector(".gp");
-    var price = function (slot, leg) {
+    /* sel: whether this price is one he has chosen, which is what the
+       button at the foot adds -- a side he has not picked is not a leg */
+    var price = function (slot, leg, sel) {
       if (!slot || !slot[0]) return '<span class="ghost" aria-hidden="true"></span>';
       var h = priceSlot(slot[0], slot[1]);
-      return h.replace("<button ", '<button data-leg="' + esc(leg) + '" ');
+      return h.replace("<button ", '<button data-leg="' + esc(leg) + '"' + (sel ? ' data-sel="1"' : "") + ' ');
     };
     var rungs = function (kind) {
       var n = 1, arr = pr[kind] || [];
@@ -1570,18 +1572,18 @@
         h += '<div class="gpside' + (st.ml === w ? " on" : "") + '" data-side="' + w + '"><div class="gpclub">' +
           ((w === "away" ? lg0 : lg1) ? '<img src="' + (w === "away" ? lg0 : lg1) + '" alt="">' : "") +
           esc(d.club) + '<small>' + (w === "away" ? "AWAY" : "HOME") + '</small></div>' +
-          '<div class="gpml">' + price(d.ml, d.club + " ML") + '<i>ML</i></div></div>';
+          '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '<i>ML</i></div></div>';
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
       if (st.ml && (sg.ml || {})[st.ml]) h += box(null, sg.ml[st.ml], side[st.ml].club);
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
       var hh = pr.h2h || [];
-      h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H") + '<i>H2H</i></div>' +
+      h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
         '<img class="gpface' + (st.h2h === "away" ? " on" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
         '<img class="gpface' + (st.h2h === "home" ? " on" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
-        '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H") + '<i>H2H</i></div></div>' +
+        '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
       if (st.h2h && (sg.h2h || {})[st.h2h]) h += box(null, sg.h2h[st.h2h], famName(side[st.h2h].qb));
       /* the ladders */
@@ -1600,7 +1602,7 @@
           var slot = ((pr[kind] || [])[i] || [])[s2.n - 1];
           var who = famName(side[w].qb);
           h += '<div class="gpline"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small>' +
-            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2]) + '</div></div>';
+            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div></div>';
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
           h += box(c.call, c.text);
         });
@@ -1615,7 +1617,7 @@
     };
     var count = function () {
       var n = 0;
-      root.querySelectorAll("button.price").forEach(function (b) { if (!b.classList.contains("on")) n++; });
+      root.querySelectorAll("button.price[data-sel]").forEach(function (b) { if (!b.classList.contains("on")) n++; });
       var add = root.querySelector(".gpadd");
       if (add) add.textContent = "ADD TO BETSLIP" + (n ? " (" + n + ")" : "");
     };
@@ -1633,7 +1635,7 @@
         }
         if (e.target.closest(".gpadd")) {
           /* every price on the page not yet on the slip goes on, then the page closes */
-          root.querySelectorAll("button.price").forEach(function (b) { if (!b.classList.contains("on")) b.click(); });
+          root.querySelectorAll("button.price[data-sel]").forEach(function (b) { if (!b.classList.contains("on")) b.click(); });
           setTimeout(function () { dlg.close(); }, 150);
         }
       });
