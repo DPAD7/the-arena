@@ -1610,12 +1610,13 @@
         var lit = s2.who ? [s2.who] : [];
         var info = function (w) {
           var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
-          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
+          var ln = (lean[kind] || {})[w];
+          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small' + (ln === s2.n ? ' class="gold"' : "") + '>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>' + wheel;
         };
         h += '<div class="gprow">' +
-          '<img class="gpface' + (s2.who === "away" ? " on" : "") + (s2.n === 1 && lean[kind] === "away" ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.who === "home" ? " on" : "") + (s2.n === 1 && lean[kind] === "home" ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "away" ? " on" : "") + ((lean[kind] || {}).away ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "home" ? " on" : "") + ((lean[kind] || {}).home ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
           (lit.length ? info(lit[0]) : '<b class="gpnone"></b>' + wheel) + '</div>';
         lit.forEach(function (w) {
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};

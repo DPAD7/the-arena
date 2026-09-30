@@ -4059,6 +4059,7 @@
   /* the board's own lean wears the gold ring; his pick stays green */
   .gpside.lean, .gpface.lean { outline: 3px solid #e3b341; outline-offset: 3px; }
   .gpface.lean { opacity: .85; }
+  .gprow small.gold { color: #e3b341; }
   .gpnames { display: flex; justify-content: center; gap: 88px; margin: 6px 0 0; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .12em; color: #9a9aa0; }
   .gpttl { margin: 0 0 8px; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .16em; color: #9a9aa0; }
   .gpsl { display: grid; grid-template-columns: 1fr 54px; grid-template-rows: auto auto; column-gap: 12px; align-items: center; padding: 14px 14px 10px;

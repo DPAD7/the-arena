@@ -194,12 +194,15 @@ def leans(men, played, sched, wk, lines, rows, runs):
         out["h2h_gap"] = abs(ypg["away"] - ypg["home"])
     def rate(xs, ok):
         return (sum(1 for x in xs if ok(x)) / len(xs)) if xs else 0
-    p = {w: rate(rows[w], lambda r: r[0] >= 1) for w in men}
-    if max(p.values()) >= 0.67 and p["away"] != p["home"]:
-        out["ptd"] = "away" if p["away"] > p["home"] else "home"
-    r = {w: rate(runs[w], lambda x: x >= 1) for w in men}
-    if max(r.values()) >= 0.34 and r["away"] != r["home"]:
-        out["atd"] = "away" if r["away"] > r["home"] else "home"
+    # the ladders lean for each man on his own (Jose, Sep 30, 2026): the
+    # passing rung is 2 when he clears 2+ in two games of three, else 1,
+    # always at least 1; the rushing rung is 1 when he has run one in a
+    # third of his games, else nothing
+    out["ptd"] = {}
+    out["atd"] = {}
+    for w in men:
+        out["ptd"][w] = (2 if rate(rows[w], lambda r: r[0] >= 2) >= 0.67 else 1) if rows[w] else None
+        out["atd"][w] = 1 if rate(runs[w], lambda x: x >= 1) >= 0.34 else None
     return out
 
 
