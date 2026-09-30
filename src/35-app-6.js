@@ -1578,7 +1578,7 @@
         h += '<div class="gpside' + (st.ml === w ? " on" : "") + '" data-side="' + w + '"><div class="gpclub">' +
           ((w === "away" ? lg0 : lg1) ? '<img src="' + (w === "away" ? lg0 : lg1) + '" alt="">' : "") +
           esc(d.club) + '<small>' + (w === "away" ? "AWAY" : "HOME") + '</small></div>' +
-          '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '<i>ML</i></div></div>';
+          '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '</div></div>';
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
       if (st.ml && (sg.ml || {})[st.ml]) h += box(null, sg.ml[st.ml], side[st.ml].club);
