@@ -1569,13 +1569,13 @@
       return '<div class="gpbox">' + (word ? '<b class="gpc gpc--' + (call || "side") + '">' + esc(word) + '</b>' : "") + esc(text) + '</div>';
     };
     var draw = function (S) {
-      var sg = (S || {})[id] || {};
+      var sg = (S || {})[id] || {}, lean = sg.lean || {};
       var h = "";
       /* the two clubs */
       h += '<div class="gpsides">';
       ["away", "home"].forEach(function (w) {
         var d = side[w];
-        h += '<div class="gpside' + (st.ml === w ? " on" : "") + '" data-side="' + w + '"><div class="gpclub">' +
+        h += '<div class="gpside' + (st.ml === w ? " on" : "") + (lean.ml === w ? " lean" : "") + '" data-side="' + w + '"><div class="gpclub">' +
           ((w === "away" ? lg0 : lg1) ? '<img src="' + (w === "away" ? lg0 : lg1) + '" alt="">' : "") +
           esc(d.club) + '<small>' + (w === "away" ? "AWAY" : "HOME") + '</small></div>' +
           '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '</div></div>';
@@ -1586,9 +1586,9 @@
       /* the two passers, head to head */
       var hh = pr.h2h || [];
       h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
-        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
-        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
         '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
       if (st.h2h && (sg.h2h || {})[st.h2h]) h += box(null, sg.h2h[st.h2h], famName(side[st.h2h].qb));
@@ -1610,8 +1610,8 @@
             '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>';
         };
         h += '<div class="gprow">' +
-          '<img class="gpface' + (s2.who === "away" ? " on" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.who === "home" ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "away" ? " on" : "") + (s2.n === 1 && lean[kind] === "away" ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.who === "home" ? " on" : "") + (s2.n === 1 && lean[kind] === "home" ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
           (lit.length ? info(lit[0]) : '<b class="gpnone"></b>') + '</div>';
         lit.forEach(function (w) {
           var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};

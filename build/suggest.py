@@ -174,6 +174,33 @@ def rtd_case(qb, n, runs):
     return call, s
 
 
+def leans(men, played, sched, wk, lines, rows, runs):
+    """{"ml", "h2h", "ptd", "atd"}: "away" | "home" | None, each by a plain
+       rule on the finals. ML: the better points margin a game, three clear.
+       H2H: the more passing yards a game, twenty clear. 1+ PTD: the man who
+       cleared it in more games, two thirds at least. 1+ RTD: the man with
+       rushing scores in more games, a third at least."""
+    out = {"ml": None, "h2h": None, "ptd": None, "atd": None}
+    net = {}
+    for w, (qb, qid, club, opp) in men.items():
+        gs = played(sched, club, wk)
+        net[w] = (sum(g[2] - g[3] for g in gs) / len(gs)) if gs else None
+    if net["away"] is not None and net["home"] is not None and abs(net["away"] - net["home"]) >= 3:
+        out["ml"] = "away" if net["away"] > net["home"] else "home"
+    ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
+    if ypg["away"] is not None and ypg["home"] is not None and abs(ypg["away"] - ypg["home"]) >= 20:
+        out["h2h"] = "away" if ypg["away"] > ypg["home"] else "home"
+    def rate(xs, ok):
+        return (sum(1 for x in xs if ok(x)) / len(xs)) if xs else 0
+    p = {w: rate(rows[w], lambda r: r[0] >= 1) for w in men}
+    if max(p.values()) >= 0.67 and p["away"] != p["home"]:
+        out["ptd"] = "away" if p["away"] > p["home"] else "home"
+    r = {w: rate(runs[w], lambda x: x >= 1) for w in men}
+    if max(r.values()) >= 0.34 and r["away"] != r["home"]:
+        out["atd"] = "away" if r["away"] > r["home"] else "home"
+    return out
+
+
 def main():
     s = pagefile.read()
     sched = json.loads(re.search(r"  var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
@@ -209,6 +236,9 @@ def main():
                 game["ptd"][side][str(n)] = {"call": c, "text": t}
                 c, t = rtd_case(men[side][0], n, runs[side])
                 game["atd"][side][str(n)] = {"call": c, "text": t}
+        # the board's own lean, one a market, or none: a gold ring on the page
+        # (Jose, Sep 30, 2026: "which one I should take... if none then don't")
+        game["lean"] = leans(men, played, sched, wk, lines, rows, runs)
         out[gid] = game
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     print("suggest: %d games" % len(out))
