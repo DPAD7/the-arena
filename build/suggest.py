@@ -179,7 +179,7 @@ def words(n):
     return {0: "no", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six"}.get(n, str(n))
 
 
-def ml_case(club, games, home, offw):
+def ml_case(club, games, home, offw, qb=None, threw=True):
     if not games:
         return "No game on record yet this year."
     w = [g for g in games if g[2] > g[3]]
@@ -197,12 +197,17 @@ def ml_case(club, games, home, offw):
     s += " Last out it %s %s %d-%d." % ("beat" if last[2] > last[3] else "lost to", last[1], last[2], last[3])
     if offw:
         s += " On its line: %s." % offw
+    # a man the card names who has not thrown for the club this year: the
+    # games above were somebody else's (Jose, Sep 30, 2026: "nothing about
+    # that being his first start?")
+    if qb and not threw:
+        s += " %s has not thrown a pass for %s this year; those games were another passer's." % (fam(qb), club)
     return s
 
 
 def h2h_case(qb, lines, other, olines, oalw, oppw, opp):
     if not lines:
-        return "No game on record yet this year for %s." % fam(qb)
+        return "No game on record this year for %s: he has not thrown a pass in these games, so this would be his first." % fam(qb)
     y = sum(x[0] for x in lines) / len(lines)
     a = sum(x[1] for x in lines) / len(lines)
     s = "%s throws for %.0f a game on %.0f throws" % (fam(qb), y, a)
@@ -240,7 +245,7 @@ def call_of(exp, n):
 def ptd_case(qb, club, opp, n, rows, oalw, oppw, wx):
     """rows: [(ptd, rz trips, pass-td drives, drives, by the half, wk, opp)] per game."""
     if not rows:
-        return "none", "No game on record yet this year for %s." % fam(qb)
+        return "none", "No game on record this year for %s: he has not thrown a pass in these games, so this would be his first." % fam(qb)
     g = len(rows)
     k = sum(1 for r in rows if r[0] >= n)
     rz = sum(r[1] for r in rows) / g
@@ -332,7 +337,7 @@ def main():
                 runs[side].append(rushing(g[4], qid))
         for side, (qb, qid, club, opp) in men.items():
             other = "home" if side == "away" else "away"
-            game["ml"][side] = ml_case(club, gs[side], side == "home", wr[side][1])
+            game["ml"][side] = ml_case(club, gs[side], side == "home", wr[side][1], qb, bool(lines[side]))
             game["h2h"][side] = h2h_case(qb, lines[side], men[other][0], lines[other], alw[other], wr[other][0], opp)
             game["ptd"][side], game["atd"][side] = {}, {}
             for n in range(1, 7):
