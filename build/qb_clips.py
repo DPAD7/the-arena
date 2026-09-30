@@ -13,7 +13,7 @@
        nflindex.json    nfl.com: an external id /clip answers with the game
 
    Writes site/qbclips.json:
-       {espn id: {"name", "club", "clips": [{"gid", "wk", "kind": "ptd"|"rtd",
+       {espn id: {"name", "club", "clips": [{"gid", "wk", "seq", "kind": "ptd"|"rtd",
                   "text", "headline", "src" | "mcp" | "ext"}]}}
    oldest game first.
 
@@ -59,7 +59,7 @@ def main():
         except ValueError:
             continue
         men = [(g[5], str(g[6] or ""), g[3]), (g[7], str(g[8] or ""), g[4])]
-        for p in plays:
+        for seq, p in enumerate(plays):
             text = p.get("text") or ""
             kind, who = None, None
             mm = re.search(r" pass from (.+?) \(", text) or re.search(r" pass from (.+?)$", text)
@@ -75,7 +75,9 @@ def main():
             if len(hit) != 1:
                 continue
             name, pid, club = hit[0]
-            clip = {"gid": gid, "wk": wk, "kind": kind, "text": text, "headline": ""}
+            # seq is the play's place in the game, so a game's clips can run in
+            # the order they happened, both passers mixed (Jose, Sep 29, 2026)
+            clip = {"gid": gid, "wk": wk, "seq": seq, "kind": kind, "text": text, "headline": ""}
             for rows, key in ((xi, "src"), (ci, "mcp"), (ni, "ext")):
                 row = next((r for r in rows.get(gid) or [] if r.get("text") == text and r.get(key)), None)
                 if row:

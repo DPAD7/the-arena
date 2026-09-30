@@ -2649,6 +2649,29 @@
     background: #000; display: grid !important; place-items: center; }
   .cliptile .cstar svg { width: 16px; height: 16px; }
   .cliptile .cname { font: 700 14px Barlow, "Helvetica Neue", Arial, sans-serif; }
+  /* a week: its games as tiles, the two passers side by side with each
+     one's score in his top corner, the winner's in green, sliding sideways
+     the way the passers do; a tap plays the game's touchdowns in the order
+     they happened, both men mixed (Jose, Sep 29, 2026) */
+  .gamerow { display: flex; gap: 10px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
+  .gamerow::-webkit-scrollbar { display: none; }
+  .gtile { flex: none; width: 125px; height: 56px; display: grid; grid-template-columns: 1fr 1fr; position: relative;
+    padding: 0; border: 1px solid var(--edge); border-radius: 14px; overflow: hidden; background: var(--panel);
+    color: #fff; font: inherit; text-align: center; cursor: pointer; }
+  .gtile:not(.has) { opacity: .45; }
+  .gtile .mface { object-position: 50% 15%; }
+  .gtile .mname { font-size: 9px; bottom: 3px; }
+  .gtile .mscore { position: absolute; z-index: 5; top: 4px; font: 800 11px/1 "Barlow Condensed", "Arial Narrow", sans-serif;
+    color: #fff; text-shadow: 0 1px 3px rgba(0,0,0,.9); }
+  .gtile .mscore--l { left: 5px; }
+  .gtile .mscore--r { right: 5px; }
+  .gtile .mscore.won { color: #17c257; }
+  /* the gestures, under the row on every clips page (Jose, Sep 29, 2026) */
+  .cliphow { padding: 14px 24px 0; display: flex; flex-direction: column; color: #fff; font-family: Barlow, "Helvetica Neue", Arial, sans-serif; }
+  .cliphow .crow, #clipshow .crow { display: flex; align-items: center; gap: 18px; width: 100%; max-width: 360px; margin: 12px 0; }
+  .cliphow .crow svg, #clipshow .crow svg { width: 42px; height: 42px; flex: none; }
+  .cliphow .crow b, #clipshow .crow b { display: block; font-size: 20px; }
+  .cliphow .crow span, #clipshow .crow span { color: #9a9aa0; font-size: 15px; }
   #clipstory { position: fixed; inset: 0; z-index: 95; background: #000; touch-action: none; -webkit-user-select: none; user-select: none; }
   #clipstory[hidden] { display: none; }
   #clipstory video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; background: #000; }
@@ -2667,10 +2690,6 @@
   #clipshow[hidden] { display: none; }
   #clipshow h2 { margin: 0 0 10px; font-size: 26px; font-weight: 700; }
   #clipshow p.sub { margin: 0 0 30px; color: #9a9aa0; font-size: 16px; text-align: center; }
-  #clipshow .crow { display: flex; align-items: center; gap: 18px; width: 100%; max-width: 360px; margin: 12px 0; }
-  #clipshow .crow svg { width: 42px; height: 42px; flex: none; }
-  #clipshow .crow b { display: block; font-size: 20px; }
-  #clipshow .crow span { color: #9a9aa0; font-size: 15px; }
   #clipshow button { margin-top: 34px; width: 100%; max-width: 360px; padding: 14px 0; border: 0; border-radius: 10px;
     background: #fff; color: #000; font: 700 17px Barlow, "Helvetica Neue", Arial, sans-serif; cursor: pointer; }
   .qrank { position: absolute; z-index: 2; left: 7px; top: 5px;
@@ -11370,7 +11389,7 @@
           '<span class="cring"><span class="cface" style="background-image:url(face/nfl/' + id + '.png)"></span>' +
           '<span class="cstar" data-star="' + id + '">' + STARSVG(!!st[id]) + '</span></span>' +
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
-      }).join("") + "</div>";
+      }).join("") + "</div>" + clipHow();
     };
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
@@ -11392,6 +11411,67 @@
       if (t) clipStories(clipOrder(), clipOrder().indexOf(t.dataset.qb), draw);
     });
   }
+  /* a week on Stacked: the games as tiles across the top, a tap plays that
+     game's touchdowns in the order they happened, both passers mixed; a
+     swipe sideways is the next or last game (Jose, Sep 29, 2026) */
+  function renderWeekClips() {
+    document.documentElement.classList.add("clipsview");
+    window.scrollTo(0, 0);
+    var page = document.createElement("div");
+    page.className = "clipspage";
+    BOARD.appendChild(page);
+    var rows = formRows(), games = {};
+    rows.forEach(function (r) { if (r.game) (games[r.game] = games[r.game] || []).push(r); });
+    var when = {};
+    SCHED.forEach(function (g) { when[String(g[1])] = g[2]; });
+    var order = Object.keys(games).sort(function (a, b) { return String(when[a] || "") < String(when[b] || "") ? -1 : 1; });
+    /* the game's clips, both men's, in the order the plays came */
+    var pool = function () {
+      var out = {};
+      Object.keys(QBCLIPS || {}).forEach(function (id) {
+        (QBCLIPS[id].clips || []).forEach(function (c) {
+          if (!games[c.gid]) return;
+          var g = out[c.gid] || (out[c.gid] = { name: "", clips: [] });
+          g.clips.push(Object.assign({ qb: id, who: QBCLIPS[id].name }, c));
+        });
+      });
+      Object.keys(out).forEach(function (gid) { out[gid].clips.sort(function (a, b) { return (a.seq || 0) - (b.seq || 0); }); });
+      return out;
+    };
+    var draw = function () {
+      var P = pool();
+      var side = function (m, other, which) {
+        var face = /^\d+$/.test(String(m.id))
+          ? '<img class="qbface mface" alt="" loading="lazy" src="face/nfl/' + m.id + '.png" onerror="this.onerror=null;this.src=NOFACE">'
+          : '<img class="qbface mface" alt="" src="' + NOFACE + '">';
+        var has = m.score !== undefined && m.score !== null && other.score !== undefined && other.score !== null;
+        var won = has && m.score > other.score;
+        return '<span class="mside mside--' + which + '" style="--hue:' + cardHue(String(m.club || "")) +
+          ';--mark:url(logos/nfl/' + String(m.club || "").toLowerCase() + '.png)">' + face +
+          '<b class="mscore mscore--' + which + (won ? " won" : "") + '">' + (has ? m.score : "") + '</b>' +
+          '<span class="mname">' + esc(famName(m.name)) + '</span></span>';
+      };
+      page.innerHTML = '<div class="gamerow">' + order.map(function (gid) {
+        /* the man the board priced on each side; the road man on the left,
+           the home man on the right */
+        var all = games[gid].slice(), pair = all.filter(function (r) { return r.carded; });
+        if (pair.length < 2) pair = all.slice(0, 2);
+        pair.sort(function (a, b) { return (a.side || 0) - (b.side || 0); });
+        var L = pair[0], R = pair[1] || { name: "", club: "", id: "", score: null };
+        return '<button type="button" class="gtile' + (P[gid] ? " has" : "") + '" data-game="' + gid + '">' +
+          side(L, R, "l") + side(R, L, "r") + '</button>';
+      }).join("") + "</div>" + clipHow();
+    };
+    if (QBCLIPS) draw();
+    else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+      .then(function (j) { QBCLIPS = j || {}; draw(); }).catch(function () { QBCLIPS = QBCLIPS || {}; draw(); });
+    page.addEventListener("click", function (e) {
+      var t = e.target.closest(".gtile");
+      if (!t) return;
+      var P = pool(), run = order.filter(function (gid) { return P[gid]; });
+      if (P[t.dataset.game]) clipStories(run, run.indexOf(t.dataset.game), draw, P);
+    });
+  }
   /* his season, one touchdown after another, as stories: tap for the next,
      hold to pause, the left edge for the one before, a swipe sideways for
      the next or last passer, a swipe down to close (Jose, Sep 29, 2026) */
@@ -11399,9 +11479,18 @@
     tap: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 22V11a3 3 0 0 1 6 0v10m0-2a3 3 0 0 1 6 0v3m0-1a3 3 0 0 1 6 0v8c0 7-4 12-11 12h-2c-5 0-8-3-11-7l-4-6a3 3 0 0 1 5-3l3 3V22"/><path stroke="#e3b341" d="M23 3v3M14 7l2 2M32 7l-2 2M11 15h3M32 15h3"/></svg>',
     hold: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 22V13a3 3 0 0 1 6 0v8m0-2a3 3 0 0 1 6 0v3m0-1a3 3 0 0 1 6 0v8c0 7-4 12-11 12h-2c-5 0-8-3-11-7l-4-6a3 3 0 0 1 5-3l3 3V22"/><path stroke="#e3b341" d="M16 12a7 7 0 0 1 14 0M12 12a11 11 0 0 1 22 0"/></svg>',
     back: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l-3-3a3 3 0 0 1 4-4l8 8m-2-2 3-3a3 3 0 0 1 4 4l-2 2m-2 2 3-3a3 3 0 0 1 4 4l-2 2m0-1 2-2a3 3 0 0 1 4 4l-7 7c-5 5-11 5-15 1l-3-3c-3-3-3-7 0-10l4-4"/><path stroke="#e3b341" d="M6 6l3 3M4 14h4M12 2v4"/></svg>',
-    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 26V16a3 3 0 0 1 6 0v8m0-1a3 3 0 0 1 6 0v10c0 6-4 10-10 10h-1c-4 0-7-2-9-6l-3-6a3 3 0 0 1 5-3l2 3"/><path stroke="#e3b341" d="M6 9c10-6 26-6 36 0M6 9l2-4M6 9l4 2M42 9l-2-4M42 9l-4 2"/></svg>'
+    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 26V16a3 3 0 0 1 6 0v8m0-1a3 3 0 0 1 6 0v10c0 6-4 10-10 10h-1c-4 0-7-2-9-6l-3-6a3 3 0 0 1 5-3l2 3"/><path stroke="#e3b341" d="M6 9c10-6 26-6 36 0M6 9l2-4M6 9l4 2M42 9l-2-4M42 9l-4 2"/></svg>',
+    down: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 24V14a3 3 0 0 1 6 0v8m0-1a3 3 0 0 1 6 0v10c0 6-4 10-10 10h-1c-4 0-7-2-9-6l-3-6a3 3 0 0 1 5-3l2 3"/><path stroke="#e3b341" d="M8 6v30M8 36l-4-4M8 36l4-4"/></svg>'
   };
-  function clipStories(order, qi, after) {
+  /* the five gestures, on the how-to and under every clips row */
+  function clipHow() {
+    return '<div class="cliphow">' + [[HANDS.tap, "Go forward", "Tap the screen"], [HANDS.hold, "Pause", "Press and hold"],
+      [HANDS.back, "Go back", "Tap the left edge"], [HANDS.swipe, "Move between stories", "Swipe left or right"],
+      [HANDS.down, "Leave", "Swipe down"]]
+      .map(function (r) { return '<div class="crow">' + r[0] + '<div><b>' + r[1] + '</b><span>' + r[2] + '</span></div></div>'; }).join("") + '</div>';
+  }
+  function clipStories(order, qi, after, pool) {
+    var POOL = pool || QBCLIPS;
     var box = document.getElementById("clipstory");
     if (!box) {
       box = document.createElement("div"); box.id = "clipstory"; box.hidden = true;
@@ -11459,13 +11548,13 @@
     var at = function (q, c) {
       if (q < 0) return null;
       while (q < order.length) {
-        var list = QBCLIPS[order[q]].clips;
+        var list = POOL[order[q]].clips;
         if (c < list.length) return { q: q, c: c, clip: list[c], key: q + ":" + c };
         q++; c = 0;
       }
       return null;
     };
-    var q0name = function () { var q = QBCLIPS[order[qi]]; return q ? famName(q.name) : ""; };
+    var q0name = function () { var q = POOL[order[qi]]; return q ? famName(q.name) : ""; };
     /* each clip reports how it went (Sep 29, 2026) */
     var report = function (c, how, extra) {
       try {
@@ -11499,13 +11588,14 @@
     };
     var play = function () {
       if (!alive) return;
-      if (ci < 0) { if (qi > 0) { qi--; ci = QBCLIPS[order[qi]].clips.length - 1; } else ci = 0; }
+      if (ci < 0) { if (qi > 0) { qi--; ci = POOL[order[qi]].clips.length - 1; } else ci = 0; }
       var here = at(qi, ci);
       if (!here) { close(); return; }
       qi = here.q; ci = here.c;
-      var q = QBCLIPS[order[qi]], list = q.clips, c = here.clip;
+      var q = POOL[order[qi]], list = q.clips, c = here.clip;
       bars.innerHTML = list.map(function (x, i) { return '<i><b style="width:' + (i < ci ? 100 : 0) + '%"></b></i>'; }).join("");
-      who.innerHTML = '<i style="background-image:url(face/nfl/' + order[qi] + '.png)"></i>' + esc(famName(q.name));
+      /* a game's story names the man who scored each one */
+      who.innerHTML = '<i style="background-image:url(face/nfl/' + (c.qb || order[qi]) + '.png)"></i>' + esc(famName(c.who || q.name));
       var seen = clipSeen(); seen[clipKey(c)] = 1;
       try { localStorage.setItem("arena.clipseen", JSON.stringify(seen)); } catch (e) {}
       var want = here.key;
@@ -11580,10 +11670,7 @@
     if (!how) {
       how = document.createElement("div"); how.id = "clipshow";
       how.innerHTML = '<h2>Navigating Stories</h2><p class="sub">Use the following gestures to browse story content:</p>' +
-        [[HANDS.tap, "Go forward", "Tap the screen"], [HANDS.hold, "Pause", "Press and hold"],
-         [HANDS.back, "Go back", "Tap the left edge"], [HANDS.swipe, "Move between stories", "Swipe left or right"]]
-        .map(function (r) { return '<div class="crow">' + r[0] + '<div><b>' + r[1] + '</b><span>' + r[2] + '</span></div></div>'; }).join("") +
-        '<button type="button">Tap to Start</button>';
+        clipHow() + '<button type="button">Tap to Start</button>';
       document.body.appendChild(how);
     }
     how.hidden = false;
@@ -12082,6 +12169,10 @@
   }
   function renderForm() {
     if (formWeek === "clips") { clearBoard(); renderClips(); return; }
+    /* a week on Stacked is its games' clips now (Jose, Sep 29, 2026: "since
+       it's essentially the same, make it clips for that week"); the week
+       card below stays for the day he wants it back */
+    if (/^\d+$/.test(String(formWeek))) { clearBoard(); renderWeekClips(); return; }
     clearBoard();
     var rows = formRows();
     layLive(rows);
