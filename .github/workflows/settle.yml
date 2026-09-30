@@ -58,7 +58,7 @@ jobs:
           GAMES: ${{ inputs.games }}
         run: |
           echo "told final: $GAMES"
-          for job in settle played_qb starters ledger alt_ptd nfl_clips build_nflindex club_clips x_clips qb_search; do
+          for job in settle played_qb starters ledger alt_ptd nfl_clips build_nflindex club_clips x_clips qb_search qb_clips; do
             if [ -f "build/$job.py" ]; then
               echo "== $job"; python "build/$job.py" 2>&1 | tail -4 || true
             fi
