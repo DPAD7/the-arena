@@ -1501,3 +1501,150 @@
      after the NFL, because the board is what is on the tab (Jose, Sep 20,
      2026: "no more polling for non-live events after they are done -- thin
      for CFB on CFB days and NFL on NFL days"). */
+  /* ---- the game page (Jose, Sep 30, 2026) ----
+     Off the ticket on a card: the two clubs with their moneylines, the two
+     passers head to head, then the passing and the rushing ladders, a
+     slider over the rungs the book holds. The moneyline and the head to
+     head are one side or the other, and the side he taps gets its own
+     case, said from the board's finals (site/suggest.json, build/suggest.py);
+     the ladders can take both men, each with his own case for the rung. A
+     price on the page is the same button the card has, so a tap puts the
+     leg on the slip; what he picked is kept per game, so leaving and coming
+     back finds it as he left it. */
+  var SUGGEST = null;
+  function suggestLoad(cb) {
+    if (SUGGEST) { cb(SUGGEST); return; }
+    fetch("suggest.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { SUGGEST = j || {}; cb(SUGGEST); })
+      .catch(function () { SUGGEST = {}; cb(SUGGEST); });
+  }
+  function gamePage(card) {
+    var id = card.dataset.espn, lg = card.dataset.lg || "nfl";
+    var rows = lg === "college-football" ? (typeof CFB !== "undefined" ? CFB : []) : SCHED;
+    var g = null;
+    for (var i = 0; i < rows.length; i++) if (String(rows[i][1]) === String(id)) { g = rows[i]; break; }
+    if (!g) return;
+    var T = FOOTBALL[lg], pr = PROPS[id] || {};
+    var KEY = "arena.gp." + id, st = { ml: null, h2h: null, ptd: { n: 1, away: false, home: false }, atd: { n: 1, away: false, home: false } };
+    try { st = Object.assign(st, JSON.parse(localStorage.getItem(KEY) || "{}")); } catch (e) {}
+    var keep = function () { try { localStorage.setItem(KEY, JSON.stringify(st)); } catch (e) {} };
+    var side = { away: { club: g[3], qb: g[5], qid: g[6], ml: [g[T.ml[0]], g[T.ml[1]]] },
+                 home: { club: g[4], qb: g[7], qid: g[8], ml: [g[T.ml[2]], g[T.ml[3]]] } };
+    var logos = card.querySelectorAll(".gteam img.glogo");
+    var lg0 = logos[0] ? logos[0].getAttribute("src") : "", lg1 = logos[1] ? logos[1].getAttribute("src") : "";
+    var faceDir = lg === "college-football" ? "face/college-football/" : "face/nfl/";
+    var dlg = document.querySelector('dialog.gamepage[data-espn="' + id + '"]');
+    if (!dlg) {
+      dlg = document.createElement("dialog");
+      dlg.className = "sheet gsheet gamepage";
+      dlg.dataset.espn = id;
+      dlg.innerHTML = '<div class="sheet__head"><button class="sheet__x" type="button" data-shut aria-label="Back">' +
+        '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>' +
+        '<h2 class="sheet__title">' + esc(g[3]) + ' @ ' + esc(g[4]) + '</h2></div><div class="sheet__scroll"><div class="gp"></div></div>';
+      document.body.appendChild(dlg);
+    }
+    dlg._card = card;
+    var root = dlg.querySelector(".gp");
+    var price = function (slot, leg) {
+      if (!slot || !slot[0]) return '<span class="ghost" aria-hidden="true"></span>';
+      var h = priceSlot(slot[0], slot[1]);
+      return h.replace("<button ", '<button data-leg="' + esc(leg) + '" ');
+    };
+    var rungs = function (kind) {
+      var n = 1, arr = pr[kind] || [];
+      arr.forEach(function (list) { (list || []).forEach(function (x, k) { if (x && x[0] && k + 1 > n) n = k + 1; }); });
+      return Math.min(6, n);
+    };
+    var box = function (call, text, tag) {
+      if (!text) return "";
+      var word = call === "take" ? "TAKE" : call === "lean" ? "LEAN" : call === "pass" ? "PASS" : (tag || "");
+      return '<div class="gpbox">' + (word ? '<b class="gpc gpc--' + (call || "side") + '">' + esc(word) + '</b>' : "") + esc(text) + '</div>';
+    };
+    var draw = function (S) {
+      var sg = (S || {})[id] || {};
+      var h = "";
+      /* the two clubs */
+      h += '<div class="gpsides">';
+      ["away", "home"].forEach(function (w) {
+        var d = side[w];
+        h += '<div class="gpside' + (st.ml === w ? " on" : "") + '" data-side="' + w + '"><div class="gpclub">' +
+          ((w === "away" ? lg0 : lg1) ? '<img src="' + (w === "away" ? lg0 : lg1) + '" alt="">' : "") +
+          esc(d.club) + '<small>' + (w === "away" ? "AWAY" : "HOME") + '</small></div>' +
+          '<div class="gpml">' + price(d.ml, d.club + " ML") + '<i>ML</i></div></div>';
+      });
+      h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
+      if (st.ml && (sg.ml || {})[st.ml]) h += box(null, sg.ml[st.ml], side[st.ml].club);
+      h += '<div class="gpsep"></div>';
+      /* the two passers, head to head */
+      var hh = pr.h2h || [];
+      h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H") + '<i>H2H</i></div>' +
+        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+        '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
+        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+        '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H") + '<i>H2H</i></div></div>' +
+        '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
+      if (st.h2h && (sg.h2h || {})[st.h2h]) h += box(null, sg.h2h[st.h2h], famName(side[st.h2h].qb));
+      /* the ladders */
+      [["ptd", "PASSING TOUCHDOWNS", "PTD"], ["atd", "RUSHING TOUCHDOWNS", "ATD"]].forEach(function (k) {
+        var kind = k[0], mx = rungs(kind), s2 = st[kind];
+        if (s2.n > mx) s2.n = mx;
+        if (s2.n < 1) s2.n = 1;
+        h += '<div class="gpsep"></div><div class="gpttl">' + k[1] + '</div>' +
+          '<div class="gpsl"><input type="range" min="1" max="' + mx + '" step="1" value="' + s2.n + '" data-kind="' + kind + '" style="--p:' + (mx > 1 ? (s2.n - 1) / (mx - 1) * 100 : 0) + '%">' +
+          '<div class="gplab"><small>MIN 1</small><small>MAX ' + mx + '</small></div><div class="gpval">' + s2.n + '</div></div>' +
+          '<div class="gpfaces">' +
+          '<img class="gpface' + (s2.away ? " on" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+          '<img class="gpface' + (s2.home ? " on" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt=""></div>';
+        ["away", "home"].forEach(function (w, i) {
+          if (!s2[w]) return;
+          var slot = ((pr[kind] || [])[i] || [])[s2.n - 1];
+          var who = famName(side[w].qb);
+          h += '<div class="gpline"><b>' + esc(who).toUpperCase() + '</b><small>' + s2.n + ' OR MORE</small>' +
+            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2]) + '</div></div>';
+          var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
+          h += box(c.call, c.text);
+        });
+        h += "";
+      });
+      h += '<button type="button" class="gpadd">ADD TO BETSLIP</button><div class="gpfoot"></div>';
+      root.innerHTML = h;
+      root.querySelectorAll("button.price").forEach(function (b) {
+        if (window.slipHas && window.slipHas(b.dataset.oid)) b.classList.add("on");
+      });
+      count();
+    };
+    var count = function () {
+      var n = 0;
+      root.querySelectorAll("button.price").forEach(function (b) { if (!b.classList.contains("on")) n++; });
+      var add = root.querySelector(".gpadd");
+      if (add) add.textContent = "ADD TO BETSLIP" + (n ? " (" + n + ")" : "");
+    };
+    if (!root._wired) {
+      root._wired = true;
+      root.addEventListener("click", function (e) {
+        if (e.target.closest("button.price")) { setTimeout(count, 0); return; }
+        var sd = e.target.closest(".gpside");
+        if (sd) { st.ml = st.ml === sd.dataset.side ? null : sd.dataset.side; keep(); draw(SUGGEST); return; }
+        var f = e.target.closest("img.gpface");
+        if (f && f.dataset.h2h) { st.h2h = st.h2h === f.dataset.h2h ? null : f.dataset.h2h; keep(); draw(SUGGEST); return; }
+        if (f && f.dataset.pick) {
+          var kv = f.dataset.pick.split(":");
+          st[kv[0]][kv[1]] = !st[kv[0]][kv[1]]; keep(); draw(SUGGEST); return;
+        }
+        if (e.target.closest(".gpadd")) {
+          /* every price on the page not yet on the slip goes on, then the page closes */
+          root.querySelectorAll("button.price").forEach(function (b) { if (!b.classList.contains("on")) b.click(); });
+          setTimeout(function () { dlg.close(); }, 150);
+        }
+      });
+      root.addEventListener("input", function (e) {
+        var r = e.target.closest("input[type=range]");
+        if (!r) return;
+        st[r.dataset.kind].n = +r.value; keep(); draw(SUGGEST);
+      });
+    }
+    draw(SUGGEST || {});
+    if (typeof openSheet === "function") openSheet(dlg); else dlg.show();
+    suggestLoad(function (S) { if (dlg.open) draw(S); });
+  }
+  window.gamePage = gamePage;

@@ -609,6 +609,7 @@
   var placed = {};
   try { placed = JSON.parse(localStorage.getItem(PLACEDKEY) || "{}") || {}; } catch (e) { placed = {}; }
   window.isPlaced = function (oid) { return !!(oid && placed[oid]); };
+  window.slipHas = function (oid) { return !!(oid && saved[oid]); };
   function markSaved(root) {
     (root || document).querySelectorAll("button.price[data-oid]").forEach(function (b) {
       if (saved[b.dataset.oid]) b.classList.add("on");
@@ -928,6 +929,8 @@
     function done(who, what) {
       return (who + " " + what + " \u00b7 " + when).replace(/\s+/g, " ").trim();
     }
+    /* a price on the game page says its own leg (Sep 30, 2026) */
+    if (btn.dataset.leg) return (btn.dataset.leg + " \u00b7 " + when).replace(/\s+/g, " ").trim();
     /* the market may carry a middle dot of its own -- BY KO \u00b7 OTHER NO
        ACTION -- which is why the man is fenced off rather than parsed out */
     function fightDone(who, what, at) {

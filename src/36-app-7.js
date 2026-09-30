@@ -65,6 +65,7 @@
     if (typeof seatBday === "function") seatBday(c);
     if (typeof seatWant === "function") seatWant(c);
     if (typeof seatTrend === "function") seatTrend(c);
+    if (typeof seatTicket === "function") seatTicket(c);
     if (typeof seatTrack === "function") seatTrack(c);
     if (typeof orderTop === "function") orderTop(c);
     if (typeof pullCard === "function") pullCard(c);

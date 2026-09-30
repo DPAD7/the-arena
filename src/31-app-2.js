@@ -522,6 +522,27 @@
        the same spot") */
     top.appendChild(b);
   }
+  /* the ticket, beside the trend: it opens the game's own page, the two
+     clubs and the two passers with every price and the case for each
+     (Jose, Sep 30, 2026: "when I click that it opens this for the specific
+     game and has the odds there") */
+  function seatTicket(card) {
+    if (!card || card.dataset.bout) return;
+    var top = card.querySelector(".gtop");
+    if (!top || top.querySelector(".gtix")) return;
+    var b = document.createElement("button");
+    b.className = "gtix";
+    b.type = "button";
+    b.setAttribute("aria-label", "The game");
+    b.innerHTML = '<img src="ico/ticket.png" alt="">';
+    b.addEventListener("click", function (e) {
+      e.stopPropagation();
+      if (typeof gamePage === "function") gamePage(card);
+    });
+    var t = top.querySelector(".gtrend");
+    if (t) top.insertBefore(b, t); else top.appendChild(b);
+  }
+  window.seatTicket = seatTicket;
   /* the rewind and the live badge are built after the first paint, so the
      trend is sent to the back again once they exist */
   function orderTop(card) {
