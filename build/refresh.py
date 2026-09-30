@@ -485,7 +485,10 @@ def settle_late(fight):
        bout the board still shows unpriced."""
     jobs = ("mma_year.py",) if fight else (
         "settle.py", "played_qb.py", "starters.py", "ledger.py", "alt_ptd.py",
-        "nfl_clips.py", "build_nflindex.py", "club_clips.py", "x_clips.py")
+        "nfl_clips.py", "build_nflindex.py", "club_clips.py", "x_clips.py",
+        # then the passers' and the games' clips on Stacked, so a finished
+        # game's touchdowns are there the moment its clips are (Sep 29, 2026)
+        "qb_clips.py")
     for job in jobs:
         if not os.path.exists(D + "/build/" + job):
             log("   %s: not here, skipped" % job[:-3])
