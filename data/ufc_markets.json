@@ -15523,7 +15523,7 @@
   "right": "Payton Talbott",
   "rounds": 3,
   "start": "2026-10-04T01:45Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Deiveson Figueiredo": [
@@ -15567,11 +15567,11 @@
    },
    "Moneyline": {
     "Deiveson Figueiredo": [
-     "+440",
+     "+490",
      "0ML85998433_1"
     ],
     "Payton Talbott": [
-     "-600",
+     "-675",
      "0ML85998433_3"
     ]
    },
@@ -15607,11 +15607,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "-120",
+     "-125",
      "0OU86504611O250_1"
     ],
     "Under": [
-     "-110",
+     "-105",
      "0OU86504611U250_3"
     ]
    },
@@ -16619,7 +16619,7 @@
   "right": "Wang Cong",
   "rounds": 5,
   "start": "2026-10-04T02:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Natalia Silva": [
@@ -17283,16 +17283,86 @@
   "right": "Eric Nolan",
   "rounds": 3,
   "start": "2026-10-03T20:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Court McGee": [
+     "+360",
+     "0QA374817830#2304374220_13L9034Q11Q21"
+    ],
+    "Eric Nolan": [
+     "-600",
+     "0QA374817830#2304374487_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Court McGee": [
+     "+110",
+     "0QA374817835#2304374230_13L9034Q11Q21"
+    ],
+    "Eric Nolan": [
+     "-150",
+     "0QA374817835#2304374469_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Court McGee": [
+     "+425",
+     "0QA374817953#2304374354_13L9034Q10Q21"
+    ],
+    "Eric Nolan": [
+     "-700",
+     "0QA374817953#2304374420_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Court McGee": [
+     "-185",
+     "0QA374817949#2304374348_13L9034Q10Q21"
+    ],
+    "Eric Nolan": [
+     "+140",
+     "0QA374817949#2304374426_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Court McGee": [
-     "+215",
+     "+190",
      "0ML86448261_1"
     ],
     "Eric Nolan": [
-     "-265",
+     "-230",
      "0ML86448261_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Court McGee": [
+     "+900",
+     "0QA374817944#2304374336_13L9034Q10Q21"
+    ],
+    "Eric Nolan": [
+     "-3000",
+     "0QA374817944#2304374438_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Court McGee": [
+     "-115",
+     "0HC86534763P750_1"
+    ],
+    "Eric Nolan": [
+     "-115",
+     "0HC86534763N750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Court McGee": [
+     "+100",
+     "0HC86534764P550_1"
+    ],
+    "Eric Nolan": [
+     "-130",
+     "0HC86534764N550_3"
     ]
    },
    "Total Rounds": {
@@ -17304,6 +17374,442 @@
      "-115",
      "0OU86504608U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-220",
+     "0OU86534762O150_1"
+    ],
+    "Under": [
+     "+160",
+     "0OU86534762U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1200",
+     "0QA374817850#2304374240_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA374817850#2304374457_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA374817768#2304374150_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4500",
+     "0QA374817957#2304374366_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+170",
+     "0QA374817803#2304374190_13L9034Q11Q22"
+    ],
+    "No": [
+     "-225",
+     "0QA374817803#2304374523_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA374817808#2304374195_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA374817808#2304374517_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+110",
+     "0QA374817729#2304374121_13L9034Q10Q20"
+    ],
+    "No": [
+     "-145",
+     "0QA374817729#2304374588_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+255",
+     "0QA374817840#2304374225_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1100",
+     "0QA374817840#2304374481_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+425",
+     "0QA374817840#2304374660_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1800",
+     "0QA374817840#2304374698_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+750",
+     "0QA374817840#2304374786_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+3000",
+     "0QA374817840#2304374810_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+110",
+     "0QA374817840#2304375032_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Court McGee to Win in Rounds 1-2": [
+     "+900",
+     "0QA374817748#2304374140_13L9034Q11Q21"
+    ],
+    "Court McGee to Win in Round 3 or on Decision": [
+     "+290",
+     "0QA374817748#2304374618_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817748#2304374972_13L9034Q19Q29"
+    ],
+    "Eric Nolan to Win in Rounds 1-2": [
+     "+135",
+     "0QA374817748#2304374758_15L9034Q15Q25"
+    ],
+    "Eric Nolan to Win in Round 3 or on Decision": [
+     "+160",
+     "0QA374817748#2304374864_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Court McGee to Win by KO/TKO/DQ in Round 1": [
+     "+3500",
+     "0QA374817758#2304374135_13L9034Q11Q21"
+    ],
+    "Court McGee to Win by KO/TKO/DQ in Round 2": [
+     "+4500",
+     "0QA374817758#2304374576_13L9034Q12Q22"
+    ],
+    "Court McGee to Win by KO/TKO/DQ in Round 3": [
+     "+6000",
+     "0QA374817758#2304374612_13L9034Q13Q23"
+    ],
+    "Court McGee to Win by Submission in Round 1": [
+     "+2000",
+     "0QA374817758#2304374843_13L9034Q16Q26"
+    ],
+    "Court McGee to Win by Submission in Round 2": [
+     "+2500",
+     "0QA374817758#2304374858_13L9034Q17Q27"
+    ],
+    "Court McGee to Win by Submission in Round 3": [
+     "+3000",
+     "0QA374817758#2304374941_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+110",
+     "0QA374817758#2304375088_13L9034Q121Q221"
+    ],
+    "Eric Nolan to Win by KO/TKO/DQ in Round 1": [
+     "+265",
+     "0QA374817758#2304375027_15L9034Q111Q211"
+    ],
+    "Eric Nolan to Win by KO/TKO/DQ in Round 2": [
+     "+450",
+     "0QA374817758#2304375037_15L9034Q112Q212"
+    ],
+    "Eric Nolan to Win by KO/TKO/DQ in Round 3": [
+     "+850",
+     "0QA374817758#2304375052_15L9034Q113Q213"
+    ],
+    "Eric Nolan to Win by Submission in Round 1": [
+     "+2500",
+     "0QA374817758#2304375064_15L9034Q116Q216"
+    ],
+    "Eric Nolan to Win by Submission in Round 2": [
+     "+4000",
+     "0QA374817758#2304375069_15L9034Q117Q217"
+    ],
+    "Eric Nolan to Win by Submission in Round 3": [
+     "+7000",
+     "0QA374817758#2304375074_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Court McGee To Win And Under 0.5": [
+     "+3000",
+     "0QA374817783#2304374170_13L9034Q11Q21"
+    ],
+    "Court McGee To Win And Under 1.5": [
+     "+1100",
+     "0QA374817783#2304374648_13L9034Q11Q23"
+    ],
+    "Eric Nolan To Win And Under 0.5": [
+     "+600",
+     "0QA374817783#2304374541_14L9034Q12Q22"
+    ],
+    "Eric Nolan To Win And Under 1.5": [
+     "+170",
+     "0QA374817783#2304374704_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Court McGee To Win And Over 1.5": [
+     "+235",
+     "0QA374817788#2304374654_13L9034Q11Q23"
+    ],
+    "Court McGee To Win And Over 2.5": [
+     "+290",
+     "0QA374817788#2304374780_13L9034Q11Q25"
+    ],
+    "Eric Nolan To Win And Over 1.5": [
+     "+100",
+     "0QA374817788#2304374692_14L9034Q12Q24"
+    ],
+    "Eric Nolan To Win And Over 2.5": [
+     "+180",
+     "0QA374817788#2304374804_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-350",
+     "0QA374817793#2304374180_13L9034Q11Q22"
+    ],
+    "No": [
+     "+250",
+     "0QA374817793#2304374535_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-150",
+     "0QA374817798#2304374185_13L9034Q11Q22"
+    ],
+    "No": [
+     "+115",
+     "0QA374817798#2304374529_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Court McGee Round 1": [
+     "+1400",
+     "0QA374817738#2304374125_13L9034Q11Q20"
+    ],
+    "Court McGee Round 2": [
+     "+1900",
+     "0QA374817738#2304374600_13L9034Q11Q22"
+    ],
+    "Court McGee Round 3": [
+     "+2500",
+     "0QA374817738#2304374746_13L9034Q11Q24"
+    ],
+    "Court McGee By Decision": [
+     "+350",
+     "0QA374817738#2304375022_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817738#2304375047_15L9034Q10Q212"
+    ],
+    "Eric Nolan Round 1": [
+     "+260",
+     "0QA374817738#2304374594_14L9034Q12Q21"
+    ],
+    "Eric Nolan Round 2": [
+     "+425",
+     "0QA374817738#2304374740_14L9034Q12Q23"
+    ],
+    "Eric Nolan Round 3": [
+     "+800",
+     "0QA374817738#2304374850_14L9034Q12Q25"
+    ],
+    "Eric Nolan By Decision": [
+     "+250",
+     "0QA374817738#2304375042_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+250",
+     "0QA374817763#2304374145_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+350",
+     "0QA374817763#2304374566_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+600",
+     "0QA374817763#2304374624_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817763#2304374829_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+110",
+     "0QA374817763#2304374871_13L9034Q11Q25"
+    ]
+   },
+   "Eric Nolan to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-110",
+     "0QA374817855#2304374245_13L9034Q11Q22"
+    ],
+    "No": [
+     "-120",
+     "0QA374817855#2304374451_13L9034Q13Q24"
+    ]
+   },
+   "Court McGee to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+650",
+     "0QA374817860#2304374250_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA374817860#2304374444_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Court McGee to Win by KO/TKO/DQ or Decision": [
+     "+270",
+     "0QA374817753#2304374160_13L9034Q11Q21"
+    ],
+    "Court McGee to Win by KO/TKO/DQ or Submission": [
+     "+650",
+     "0QA374817753#2304374553_13L9034Q12Q22"
+    ],
+    "Court McGee to Win by Submission or Decision": [
+     "+220",
+     "0QA374817753#2304374630_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817753#2304374885_13L9034Q17Q27"
+    ],
+    "Eric Nolan to Win by KO/TKO/DQ or Decision": [
+     "-250",
+     "0QA374817753#2304374710_15L9034Q14Q24"
+    ],
+    "Eric Nolan to Win by KO/TKO/DQ or Submission": [
+     "-110",
+     "0QA374817753#2304374768_15L9034Q15Q25"
+    ],
+    "Eric Nolan to Win by Submission or Decision": [
+     "+190",
+     "0QA374817753#2304374822_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Court McGee to Win By KO/TKO/DQ or Eric Nolan to Win by Submission": [
+     "+800",
+     "0QA374817865#2304374342_13L9034Q10Q21"
+    ],
+    "Court McGee to Win By KO/TKO/DQ or Eric Nolan to Win by Decision": [
+     "+195",
+     "0QA374817865#2304374432_13L9034Q10Q22"
+    ],
+    "Court McGee to Win By Submission or Eric Nolan to Win by KO/TKO/DQ": [
+     "-150",
+     "0QA374817865#2304374667_13L9034Q10Q23"
+    ],
+    "Court McGee to Win By Submission or Eric Nolan to Win by Decision": [
+     "+155",
+     "0QA374817865#2304374686_13L9034Q10Q24"
+    ],
+    "Court McGee to Win By Decision or Eric Nolan to Win by KO/TKO/DQ": [
+     "-260",
+     "0QA374817865#2304374792_13L9034Q10Q25"
+    ],
+    "Court McGee to Win By Decision or Eric Nolan to Win by Submission": [
+     "+255",
+     "0QA374817865#2304374798_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817865#2304374906_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-110",
+     "0QA374817743#2304374130_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+600",
+     "0QA374817743#2304374582_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+110",
+     "0QA374817743#2304374606_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817743#2304374734_15L9034Q14Q24"
+    ]
+   },
+   "Court McGee to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA374817813#2304374200_13L9034Q11Q22"
+    ]
+   },
+   "Eric Nolan to Win by Unanimous Decision": {
+    "Yes": [
+     "+350",
+     "0QA374817815#2304374205_13L9034Q11Q22"
+    ]
+   },
+   "Court McGee to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1300",
+     "0QA374817820#2304374210_13L9034Q11Q22"
+    ]
+   },
+   "Eric Nolan to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA374817825#2304374215_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Court McGee": [
+     "+1900",
+     "0QA374817978#2304374372_13L9034Q11Q22"
+    ],
+    "Eric Nolan": [
+     "+100",
+     "0QA374817978#2304374402_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Court McGee": [
+     "+900",
+     "0QA374817980#2304374378_13L9034Q11Q22"
+    ],
+    "Eric Nolan": [
+     "+1600",
+     "0QA374817980#2304374396_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Court McGee": [
+     "+350",
+     "0QA374817982#2304374384_13L9034Q11Q22"
+    ],
+    "Eric Nolan": [
+     "+250",
+     "0QA374817982#2304374390_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -17313,8 +17819,48 @@
   "right": "Ismail Naurdiev",
   "rounds": 3,
   "start": "2026-10-03T21:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Marvin Vettori": [
+     "+155",
+     "0QA374817804#2304374120_13L9034Q11Q21"
+    ],
+    "Ismail Naurdiev": [
+     "-215",
+     "0QA374817804#2304374369_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Marvin Vettori": [
+     "-110",
+     "0QA374817809#2304374129_13L9034Q11Q21"
+    ],
+    "Ismail Naurdiev": [
+     "-125",
+     "0QA374817809#2304374351_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Marvin Vettori": [
+     "+165",
+     "0QA374817931#2304374242_13L9034Q10Q21"
+    ],
+    "Ismail Naurdiev": [
+     "-220",
+     "0QA374817931#2304374307_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Marvin Vettori": [
+     "-275",
+     "0QA374817924#2304374237_13L9034Q10Q21"
+    ],
+    "Ismail Naurdiev": [
+     "+200",
+     "0QA374817924#2304374313_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Marvin Vettori": [
      "+120",
@@ -17323,6 +17869,36 @@
     "Ismail Naurdiev": [
      "-142",
      "0ML86448262_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Marvin Vettori": [
+     "+300",
+     "0QA374817919#2304374227_13L9034Q10Q21"
+    ],
+    "Ismail Naurdiev": [
+     "-450",
+     "0QA374817919#2304374321_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Marvin Vettori": [
+     "-160",
+     "0HC86534754P350_1"
+    ],
+    "Ismail Naurdiev": [
+     "+120",
+     "0HC86534754N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Marvin Vettori": [
+     "-235",
+     "0HC86534755P750_1"
+    ],
+    "Ismail Naurdiev": [
+     "+175",
+     "0HC86534755N750_3"
     ]
    },
    "Total Rounds": {
@@ -17334,6 +17910,438 @@
      "+165",
      "0OU86504614U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-380",
+     "0OU86534753O150_1"
+    ],
+    "Under": [
+     "+260",
+     "0OU86534753U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1800",
+     "0QA374817824#2304374139_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA374817739#2304374091_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+6500",
+     "0QA374817936#2304374252_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+100",
+     "0QA374817774#2304374107_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA374817774#2304374405_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+350",
+     "0QA374817779#2304374110_13L9034Q11Q22"
+    ],
+    "No": [
+     "-550",
+     "0QA374817779#2304374399_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-170",
+     "0QA374817713#2304374080_13L9034Q10Q20"
+    ],
+    "No": [
+     "+130",
+     "0QA374817713#2304374471_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+450",
+     "0QA374817814#2304374124_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1200",
+     "0QA374817814#2304374363_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+700",
+     "0QA374817814#2304374543_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1800",
+     "0QA374817814#2304374578_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1000",
+     "0QA374817814#2304374669_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2500",
+     "0QA374817814#2304374693_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-170",
+     "0QA374817814#2304374919_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Marvin Vettori to Win in Rounds 1-2": [
+     "+600",
+     "0QA374817723#2304374088_13L9034Q11Q21"
+    ],
+    "Marvin Vettori to Win in Round 3 or on Decision": [
+     "+165",
+     "0QA374817723#2304374501_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817723#2304374841_13L9034Q19Q29"
+    ],
+    "Ismail Naurdiev to Win in Rounds 1-2": [
+     "+300",
+     "0QA374817723#2304374638_15L9034Q15Q25"
+    ],
+    "Ismail Naurdiev to Win in Round 3 or on Decision": [
+     "+140",
+     "0QA374817723#2304374747_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Marvin Vettori to Win by KO/TKO/DQ in Round 1": [
+     "+2000",
+     "0QA374817731#2304374087_13L9034Q11Q21"
+    ],
+    "Marvin Vettori to Win by KO/TKO/DQ in Round 2": [
+     "+2800",
+     "0QA374817731#2304374459_13L9034Q12Q22"
+    ],
+    "Marvin Vettori to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA374817731#2304374495_13L9034Q13Q23"
+    ],
+    "Marvin Vettori to Win by Submission in Round 1": [
+     "+1600",
+     "0QA374817731#2304374723_13L9034Q16Q26"
+    ],
+    "Marvin Vettori to Win by Submission in Round 2": [
+     "+2200",
+     "0QA374817731#2304374741_13L9034Q17Q27"
+    ],
+    "Marvin Vettori to Win by Submission in Round 3": [
+     "+3000",
+     "0QA374817731#2304374814_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-170",
+     "0QA374817731#2304375000_13L9034Q121Q221"
+    ],
+    "Ismail Naurdiev to Win by KO/TKO/DQ in Round 1": [
+     "+550",
+     "0QA374817731#2304374912_15L9034Q111Q211"
+    ],
+    "Ismail Naurdiev to Win by KO/TKO/DQ in Round 2": [
+     "+850",
+     "0QA374817731#2304374926_15L9034Q112Q212"
+    ],
+    "Ismail Naurdiev to Win by KO/TKO/DQ in Round 3": [
+     "+1300",
+     "0QA374817731#2304374947_15L9034Q113Q213"
+    ],
+    "Ismail Naurdiev to Win by Submission in Round 1": [
+     "+3500",
+     "0QA374817731#2304374970_15L9034Q116Q216"
+    ],
+    "Ismail Naurdiev to Win by Submission in Round 2": [
+     "+5000",
+     "0QA374817731#2304374976_15L9034Q117Q217"
+    ],
+    "Ismail Naurdiev to Win by Submission in Round 3": [
+     "+8000",
+     "0QA374817731#2304374982_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Marvin Vettori To Win And Under 0.5": [
+     "+2200",
+     "0QA374817754#2304374100_13L9034Q11Q21"
+    ],
+    "Marvin Vettori To Win And Under 1.5": [
+     "+750",
+     "0QA374817754#2304374531_13L9034Q11Q23"
+    ],
+    "Ismail Naurdiev To Win And Under 0.5": [
+     "+1100",
+     "0QA374817754#2304374423_14L9034Q12Q22"
+    ],
+    "Ismail Naurdiev To Win And Under 1.5": [
+     "+380",
+     "0QA374817754#2304374584_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Marvin Vettori To Win And Over 1.5": [
+     "+130",
+     "0QA374817759#2304374537_13L9034Q11Q23"
+    ],
+    "Marvin Vettori To Win And Over 2.5": [
+     "+165",
+     "0QA374817759#2304374662_13L9034Q11Q25"
+    ],
+    "Ismail Naurdiev To Win And Over 1.5": [
+     "+100",
+     "0QA374817759#2304374572_14L9034Q12Q24"
+    ],
+    "Ismail Naurdiev To Win And Over 2.5": [
+     "+145",
+     "0QA374817759#2304374687_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-650",
+     "0QA374817764#2304374103_13L9034Q11Q22"
+    ],
+    "No": [
+     "+390",
+     "0QA374817764#2304374417_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-270",
+     "0QA374817769#2304374105_13L9034Q11Q22"
+    ],
+    "No": [
+     "+200",
+     "0QA374817769#2304374411_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Marvin Vettori Round 1": [
+     "+1000",
+     "0QA374817716#2304374083_13L9034Q11Q20"
+    ],
+    "Marvin Vettori Round 2": [
+     "+1400",
+     "0QA374817716#2304374483_13L9034Q11Q22"
+    ],
+    "Marvin Vettori Round 3": [
+     "+2000",
+     "0QA374817716#2304374626_13L9034Q11Q24"
+    ],
+    "Marvin Vettori By Decision": [
+     "+200",
+     "0QA374817716#2304374905_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817716#2304374940_15L9034Q10Q212"
+    ],
+    "Ismail Naurdiev Round 1": [
+     "+500",
+     "0QA374817716#2304374477_14L9034Q12Q21"
+    ],
+    "Ismail Naurdiev Round 2": [
+     "+800",
+     "0QA374817716#2304374620_14L9034Q12Q23"
+    ],
+    "Ismail Naurdiev Round 3": [
+     "+1200",
+     "0QA374817716#2304374729_14L9034Q12Q25"
+    ],
+    "Ismail Naurdiev By Decision": [
+     "+185",
+     "0QA374817716#2304374933_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+390",
+     "0QA374817734#2304374089_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+500",
+     "0QA374817734#2304374447_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+750",
+     "0QA374817734#2304374507_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817734#2304374711_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-170",
+     "0QA374817734#2304374753_13L9034Q11Q25"
+    ]
+   },
+   "Ismail Naurdiev to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+235",
+     "0QA374817829#2304374144_13L9034Q11Q22"
+    ],
+    "No": [
+     "-330",
+     "0QA374817829#2304374333_13L9034Q13Q24"
+    ]
+   },
+   "Marvin Vettori to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+500",
+     "0QA374817834#2304374149_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA374817834#2304374327_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Marvin Vettori to Win by KO/TKO/DQ or Decision": [
+     "+140",
+     "0QA374817726#2304374095_13L9034Q11Q21"
+    ],
+    "Marvin Vettori to Win by KO/TKO/DQ or Submission": [
+     "+500",
+     "0QA374817726#2304374435_13L9034Q12Q22"
+    ],
+    "Marvin Vettori to Win by Submission or Decision": [
+     "+130",
+     "0QA374817726#2304374513_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817726#2304374765_13L9034Q17Q27"
+    ],
+    "Ismail Naurdiev to Win by KO/TKO/DQ or Decision": [
+     "-135",
+     "0QA374817726#2304374590_15L9034Q14Q24"
+    ],
+    "Ismail Naurdiev to Win by KO/TKO/DQ or Submission": [
+     "+235",
+     "0QA374817726#2304374650_15L9034Q15Q25"
+    ],
+    "Ismail Naurdiev to Win by Submission or Decision": [
+     "+155",
+     "0QA374817726#2304374705_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Marvin Vettori to Win By KO/TKO/DQ or Ismail Naurdiev to Win by Submission": [
+     "+600",
+     "0QA374817839#2304374232_13L9034Q10Q21"
+    ],
+    "Marvin Vettori to Win By KO/TKO/DQ or Ismail Naurdiev to Win by Decision": [
+     "+125",
+     "0QA374817839#2304374319_13L9034Q10Q22"
+    ],
+    "Marvin Vettori to Win By Submission or Ismail Naurdiev to Win by KO/TKO/DQ": [
+     "+155",
+     "0QA374817839#2304374549_13L9034Q10Q23"
+    ],
+    "Marvin Vettori to Win By Submission or Ismail Naurdiev to Win by Decision": [
+     "+120",
+     "0QA374817839#2304374568_13L9034Q10Q24"
+    ],
+    "Marvin Vettori to Win By Decision or Ismail Naurdiev to Win by KO/TKO/DQ": [
+     "-165",
+     "0QA374817839#2304374675_13L9034Q10Q25"
+    ],
+    "Marvin Vettori to Win By Decision or Ismail Naurdiev to Win by Submission": [
+     "+160",
+     "0QA374817839#2304374681_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817839#2304374784_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+185",
+     "0QA374817719#2304374085_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+600",
+     "0QA374817719#2304374465_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-170",
+     "0QA374817719#2304374489_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA374817719#2304374614_15L9034Q14Q24"
+    ]
+   },
+   "Marvin Vettori to Win by Unanimous Decision": {
+    "Yes": [
+     "+300",
+     "0QA374817784#2304374112_13L9034Q11Q22"
+    ]
+   },
+   "Ismail Naurdiev to Win by Unanimous Decision": {
+    "Yes": [
+     "+275",
+     "0QA374817789#2304374114_13L9034Q11Q22"
+    ]
+   },
+   "Marvin Vettori to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA374817794#2304374116_13L9034Q11Q22"
+    ]
+   },
+   "Ismail Naurdiev to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA374817799#2304374119_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Marvin Vettori": [
+     "+1000",
+     "0QA374817967#2304374257_13L9034Q11Q22"
+    ],
+    "Ismail Naurdiev": [
+     "+250",
+     "0QA374817967#2304374282_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Marvin Vettori": [
+     "+850",
+     "0QA374817970#2304374262_13L9034Q11Q22"
+    ],
+    "Ismail Naurdiev": [
+     "+2000",
+     "0QA374817970#2304374277_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Marvin Vettori": [
+     "+200",
+     "0QA374817973#2304374267_13L9034Q11Q22"
+    ],
+    "Ismail Naurdiev": [
+     "+185",
+     "0QA374817973#2304374272_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -17343,7 +18351,7 @@
   "right": "Alexander Hernandez",
   "rounds": 3,
   "start": "2026-10-03T21:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Rafael Dos Anjos": [
@@ -17427,11 +18435,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "-130",
+     "-145",
      "0OU86504615O250_1"
     ],
     "Under": [
-     "+100",
+     "+114",
      "0OU86504615U250_3"
     ]
    },
@@ -17879,7 +18887,7 @@
   "right": "Mick Parkin",
   "rounds": 3,
   "start": "2026-10-03T21:45Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Johnny Walker": [
@@ -18947,7 +19955,7 @@
   "right": "Damian Pinas",
   "rounds": 3,
   "start": "2026-10-03T23:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Damian Pinas": [
@@ -18991,11 +19999,11 @@
    },
    "Moneyline": {
     "Damian Pinas": [
-     "-550",
+     "-575",
      "0ML86448260_1"
     ],
     "Andrey Pulyaev": [
-     "+410",
+     "+425",
      "0ML86448260_3"
     ]
    },
@@ -19483,7 +20491,7 @@
   "right": "Imanol Rodriguez",
   "rounds": 3,
   "start": "2026-10-03T23:45Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Imanol Rodriguez": [
@@ -19527,11 +20535,11 @@
    },
    "Moneyline": {
     "Imanol Rodriguez": [
-     "-162",
+     "-155",
      "0ML86492426_1"
     ],
     "Alden Coria": [
-     "+136",
+     "+130",
      "0ML86492426_3"
     ]
    },
@@ -20015,7 +21023,7 @@
   "right": "Ateba Gautier",
   "rounds": 3,
   "start": "2026-10-04T00:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Ateba Gautier": [
@@ -20551,7 +21559,7 @@
   "right": "Khaos Williams",
   "rounds": 3,
   "start": "2026-10-04T00:45Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Roberto Soldic": [
@@ -20595,11 +21603,11 @@
    },
    "Moneyline": {
     "Roberto Soldic": [
-     "-278",
+     "-265",
      "0ML86492438_1"
     ],
     "Khaos Williams": [
-     "+225",
+     "+215",
      "0ML86492438_3"
     ]
    },
@@ -21087,7 +22095,7 @@
   "right": "Esteban Ribovics",
   "rounds": 3,
   "start": "2026-10-04T01:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "King Green": [
@@ -23767,15 +24775,15 @@
   "right": "Bruce Whitehead",
   "rounds": 3,
   "start": "2026-10-03T20:45Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Moneyline": {
     "Jacobe Smith": [
-     "-1000",
+     "-1050",
      "0ML86516088_1"
     ],
     "Bruce Whitehead": [
-     "+650",
+     "+675",
      "0ML86516088_3"
     ]
    },
@@ -23797,7 +24805,7 @@
   "right": "Lucas Armand",
   "rounds": 3,
   "start": "2026-10-03T22:15Z",
-  "read": "2026-09-30T19:04Z",
+  "read": "2026-10-01T01:05Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Anthony Wint": [
@@ -23841,11 +24849,11 @@
    },
    "Moneyline": {
     "Anthony Wint": [
-     "-520",
+     "-535",
      "0ML86448265_1"
     ],
     "Lucas Armand": [
-     "+390",
+     "+400",
      "0ML86448265_3"
     ]
    },
