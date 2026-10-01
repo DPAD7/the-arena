@@ -73,6 +73,13 @@ def full(eid):
             for r in rungs:
                 if len(side) <= r or not side[r]:
                     return False
+    # and the head to head, which DraftKings posts days after the rest: a game
+    # held without it sat unasked until the day before, while the book had
+    # Goff v Young and Penix v Shough up (Jose, Oct 1, 2026: "you didn't get
+    # these in the 3pm sweep?")
+    h2h = pr.get("h2h") or []
+    if len(h2h) < 2 or not all(isinstance(x, list) and x and x[0] for x in h2h[:2]):
+        return False
     return True
 
 
