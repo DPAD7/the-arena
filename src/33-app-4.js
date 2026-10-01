@@ -876,15 +876,31 @@
   var dayTapAt = 0, dayTapOn = null, nflTapAt = 0;
   /* heard on the page before the tab change's crossfade takes the tap and
      replays it; the replay is not a second tap */
+  var allTapAt = 0;
   document.addEventListener("click", function (e) {
     var sp = e.target.closest && e.target.closest(".sptab");
-    if (window._vtNow || !sp || sp.dataset.sp !== "nfl") return;
-    if (nflTapAt && e.timeStamp - nflTapAt < 420) {
-      nflTapAt = 0;
-      if (typeof window._askWeek === "function") window._askWeek(sp);
-      return;
+    if (window._vtNow || !sp) return;
+    if (sp.dataset.sp === "nfl") {
+      if (nflTapAt && e.timeStamp - nflTapAt < 420) {
+        nflTapAt = 0;
+        if (typeof window._askWeek === "function") window._askWeek(sp);
+        return;
+      }
+      nflTapAt = e.timeStamp;
     }
-    nflTapAt = e.timeStamp;
+    /* the day page's own icon, at the end of the nav: two taps ask
+       DraftKings for every price the day's cards are short of, the job the
+       Stacked mark's double tap did, with its fill on this icon (Jose, Oct 1,
+       2026: "the day tab next to the NFL logo in the nav") */
+    if (sp.dataset.sp === "all") {
+      if (allTapAt && e.timeStamp - allTapAt < 420) {
+        allTapAt = 0;
+        /* after the first tap has drawn the day */
+        setTimeout(function () { if (typeof window._askDay === "function") window._askDay(sp); }, 60);
+        return;
+      }
+      allTapAt = e.timeStamp;
+    }
   }, true);
   dbar.addEventListener("click", function (e) {
     var t = e.target.closest(".dtab");
@@ -1303,13 +1319,23 @@
       /* a day tab has no picture: the fill covers the tab and its words take
          the colour (Jose, Oct 1, 2026: "the green indicator goes to the nfl
          logo and the day") */
-      var img = fillTab.querySelector("img") || fillTab;
+      var img = fillTab.querySelector("img, svg") || fillTab;
       var r = img.getBoundingClientRect(), t = fillTab.getBoundingClientRect();
       fill.style.width = r.width + "px";
       fill.style.height = r.height + "px";
       fill.style.left = (r.left - t.left + r.width / 2) + "px";
       fill.style.top = (r.top - t.top + r.height / 2) + "px";
-      fill.style.setProperty("--m", img === fillTab ? "none" : "url('" + img.getAttribute("src") + "')");
+      var m = "none";
+      if (img.tagName === "IMG") m = "url('" + img.getAttribute("src") + "')";
+      else if (img.tagName.toLowerCase() === "svg") {
+        /* the day page's calendar is drawn inline: its own shape, as a picture,
+           is the mask, so the fill stays inside the icon */
+        var c = img.cloneNode(true);
+        c.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        c.setAttribute("width", r.width); c.setAttribute("height", r.height);
+        m = "url(\"data:image/svg+xml;utf8," + encodeURIComponent(new XMLSerializer().serializeToString(c)) + "\")";
+      }
+      fill.style.setProperty("--m", m);
     }
     function fillAt(pc, how) {
       fill.classList.remove("spfill--ok", "spfill--none", "spfill--bad");
