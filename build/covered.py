@@ -103,6 +103,18 @@ def main():
             print("     %s not priced: %s%s" % (label,
                   ", ".join("%s/%s" % (g[3], g[4]) for g in no_ml[:6]),
                   " ..." if len(no_ml) > 6 else ""))
+        # complete: the moneyline, 1+ and 2+ passing scores, the anytime score
+        # and the head to head, both sides -- fill_week's own test, so the
+        # count and the asking agree (Jose, Oct 1, 2026: "only fetch what's
+        # missing to get 100% completion")
+        import fill_week
+        whole = [g for g in week if fill_week.full(str(g[1]))]
+        print("     %s complete (ML, PTD 1+ 2+, ATD, H2H): %d/%d" % (label, len(whole), len(week)))
+        short = [g for g in week if g not in whole and g in got_ml]
+        if short:
+            print("     %s still short: %s%s" % (label,
+                  ", ".join("%s/%s" % (g[3], g[4]) for g in short[:8]),
+                  " ..." if len(short) > 8 else ""))
         bare = [g for g in week if g not in got_men]
         if bare:
             print("     %s no price on the men: %s%s" % (label,
