@@ -109,7 +109,9 @@ def insiders():
             pg = b.new_page(viewport={"width": 600, "height": 1400}, user_agent=(
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
                 "(KHTML, like Gecko) Chrome/128.0 Safari/537.36"))
-            for who, handle in X_HANDLES:
+            # X shows GitHub's runners nothing, and asking cost the sweep
+            # minutes it did not have (Oct 1, 2026): there the ESPN copy stands
+            for who, handle in (() if os.environ.get("GITHUB_ACTIONS") else X_HANDLES):
                 try:
                     pg.goto("https://x.com/" + handle, wait_until="domcontentloaded", timeout=45000)
                     pg.wait_for_selector("article", timeout=30000)

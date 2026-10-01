@@ -31,7 +31,11 @@ import sys
 # second copy while one is alive, so one stuck process silently swallowed the
 # 10:00, 11:00 and 11:30 pulls on Sep 12. Nothing here may outlive its own
 # interval.
-BUDGET = 540          # nine minutes, inside launchd's ten
+# On GitHub the job's own limit is twenty minutes and a later run queues
+# behind this one, so the old nine minutes, set for launchd's ten, only cut
+# full passes off mid-way: the 9 AM sweep of Oct 1, 2026 stopped in
+# fill_fights at 540 seconds with the commit and deploy still to come.
+BUDGET = 900          # fifteen minutes, inside the job's twenty
 
 
 def _out_of_time(_sig, _frame):
