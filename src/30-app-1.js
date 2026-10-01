@@ -45,6 +45,11 @@
                             .replace(/\{B\}/g, face(f[6], f[13], f[5]));
   }
   function fsPane(rows, f) {
+    /* BY KO, BY SUB and BY DEC are the card's own face rows -- the same
+       DraftKings selections, 24 of 24 -- so the sheet leaves them to the card
+       (Jose, Sep 30, 2026: "remove those from inside the modal since they are
+       duplicate") */
+    rows = rows.filter(function (r) { return !(r[3] === 2 && (r[0] === "ko" || r[0] === "sub" || r[0] === "dec")); });
     /* the across-blocks sit above the two names, because nobody's name is on
        them -- then the two-sided rows, then the rest, so every chip reads the
        same way down the page (Jose, Sep 18, 2026) */
