@@ -876,30 +876,50 @@
   var dayTapAt = 0, dayTapOn = null, nflTapAt = 0;
   /* heard on the page before the tab change's crossfade takes the tap and
      replays it; the replay is not a second tap */
-  var allTapAt = 0;
+  var allTapAt = 0, tapFreeAt = 0;
+  /* heard last, once the tab's own handlers have drawn the board */
+  document.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest(".sptab")) tapFreeAt = performance.now();
+  });
   document.addEventListener("click", function (e) {
     var sp = e.target.closest && e.target.closest(".sptab");
+    /* the first tap starts the tab change's crossfade, and on the phone the
+       second lands on the fade's picture, not on the icon: the tab is found
+       by where the finger is instead (Jose, Oct 1, 2026: "it's not filling
+       up like it did for the stacked logo") */
+    if (!sp && e.clientX != null) {
+      sbar.querySelectorAll(".sptab").forEach(function (x) {
+        var r = x.getBoundingClientRect();
+        if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) sp = x;
+      });
+    }
     if (window._vtNow || !sp) return;
+    /* the first tap redraws the board, and the second waits behind the
+       drawing: the gap is counted from when the drawing was done */
+    /* one clock for both: Safari stamps events on its own, not on
+       performance.now(), so a tap is timed when it is heard */
+    var heard = performance.now();
+    var since = function (at) { return heard - Math.max(at, tapFreeAt); };
     if (sp.dataset.sp === "nfl") {
-      if (nflTapAt && e.timeStamp - nflTapAt < 420) {
+      if (nflTapAt && since(nflTapAt) < 420) {
         nflTapAt = 0;
         if (typeof window._askWeek === "function") window._askWeek(sp);
         return;
       }
-      nflTapAt = e.timeStamp;
+      nflTapAt = heard;
     }
     /* the day page's own icon, at the end of the nav: two taps ask
        DraftKings for every price the day's cards are short of, the job the
        Stacked mark's double tap did, with its fill on this icon (Jose, Oct 1,
        2026: "the day tab next to the NFL logo in the nav") */
     if (sp.dataset.sp === "all") {
-      if (allTapAt && e.timeStamp - allTapAt < 420) {
+      if (allTapAt && since(allTapAt) < 420) {
         allTapAt = 0;
         /* after the first tap has drawn the day */
         setTimeout(function () { if (typeof window._askDay === "function") window._askDay(sp); }, 60);
         return;
       }
-      allTapAt = e.timeStamp;
+      allTapAt = heard;
     }
   }, true);
   dbar.addEventListener("click", function (e) {
