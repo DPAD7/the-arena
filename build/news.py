@@ -65,6 +65,8 @@ def load(path):
 
 
 INSIDERS = ("adam-schefter", "ian-rapoport", "pete-thamel")
+X_HANDLES = (("Adam Schefter", "AdamSchefter"), ("Ian Rapoport", "RapSheet"),
+             ("Mike Garafolo", "MikeGarafolo"), ("Pete Thamel", "PeteThamel"))
 
 
 def insiders():
@@ -96,6 +98,41 @@ def insiders():
                         continue
                     feed, _ = json.JSONDecoder().raw_decode(html[i + 7:])
                     got += [x for x in feed if isinstance(x, dict) and x.get("headline")]
+                except Exception:
+                    continue
+            # and their own X pages, which carry every post the moment it is
+            # made: ESPN's copy stopped at 5:55 PM while Schefter posted the
+            # Bears' quarterback "direction" at 7:31 (Jose, Sep 30, 2026: "you
+            # missed one from 42 mins ago"). X draws a profile's latest posts
+            # for a browser with no login
+            # X shows a headless browser nothing: it is asked as a desktop Chrome
+            pg = b.new_page(viewport={"width": 600, "height": 1400}, user_agent=(
+                "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 "
+                "(KHTML, like Gecko) Chrome/128.0 Safari/537.36"))
+            for who, handle in X_HANDLES:
+                try:
+                    pg.goto("https://x.com/" + handle, wait_until="domcontentloaded", timeout=45000)
+                    pg.wait_for_selector("article", timeout=30000)
+                    pg.wait_for_timeout(1500)
+                    for a in pg.query_selector_all("article"):
+                        # logged out, X draws a plain post: no clock on it, so
+                        # the time is read off the post's own number
+                        ids = [re.search(r"/%s/status/(\d+)" % handle, l.get_attribute("href") or "", re.I)
+                               for l in a.query_selector_all('a[href*="/status/"]')]
+                        ids = [m.group(1) for m in ids if m]
+                        lines = a.inner_text().split("\n")
+                        if not ids or len(lines) < 4 or lines[1].lower() != "@" + handle.lower():
+                            continue
+                        text = []
+                        for l in lines[3:]:
+                            if re.fullmatch(r"[\d.,]+[KM]?", l.strip()) or l.strip() == lines[0]:
+                                break
+                            text.append(l)
+                        when = dt.datetime.fromtimestamp(((int(ids[0]) >> 22) + 1288834974657) / 1000, dt.timezone.utc)
+                        if text:
+                            got.append({"headline": " ".join(x.strip() for x in text if x.strip()),
+                                        "published": when.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                                        "byline": who, "source": "x"})
                 except Exception:
                     continue
             b.close()
@@ -148,7 +185,9 @@ def main():
         k = " ".join(fold(name))
         if len(k.split()) >= 2:
             names.setdefault(k, set()).add(pid)
-    for x in insiders():
+    posts = insiders()
+    print("news: insiders %d posts, %d off X" % (len(posts), sum(1 for x in posts if x.get("source") == "x")))
+    for x in posts:
         words = " " + " ".join(fold(x.get("headline"))) + " "
         who = set()
         for k, pids in names.items():
