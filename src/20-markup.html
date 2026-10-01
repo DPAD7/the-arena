@@ -987,6 +987,19 @@
       return done(side ? (card.dataset.rab || "") : (card.dataset.lab || ""), "ML");
     }
 
+    /* a way the fight ends, on the card's own face: the KO, SUB and DEC
+       rows of the middle stack, each side the man on it. They were never
+       read, so a +400 by knockout reached the slip as "· 9:15 PM" and
+       nothing else (Jose, Sep 30, 2026: "what is this shit?") */
+    var fline = btn.closest(".gline");
+    var fmk = fline ? fline.querySelector(".gmk .grn") : null;
+    if (fmk && card && (card.dataset.lf || card.dataset.rf)) {
+      var fsides = fline.querySelectorAll(".gh2h");
+      var fright = fsides.length > 1 && fsides[1].contains(btn);
+      return fightDone(lastName(fright ? card.dataset.rf : card.dataset.lf),
+                       fmk.textContent.replace(/\s+/g, " ").trim(), when);
+    }
+
     /* a cell in an across-row: nobody's side, and its own words underneath */
     var cell5 = btn.closest(".fs5cell");
     if (cell5 && card) {
