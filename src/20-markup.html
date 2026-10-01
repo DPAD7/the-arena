@@ -1101,6 +1101,11 @@
     if (!card || !el) return "";
     var id = card.dataset.espn || card.dataset.bout || "";
     if (!id) return "";
+    /* a slot in the fight's sheet is not inside the card, and the sheet is
+       written afresh each time it opens: it is kept by what it is -- the tab,
+       the market and the side -- not by where it sits (Jose, Oct 1, 2026: "the
+       double click gold border for the modal, even the ones yet to be filled") */
+    if (el.closest("dialog.sheet")) return sheetKey(id, el);
     var all = card.querySelectorAll("button.price, .ghost");
     for (var i = 0; i < all.length; i++) {
       if (all[i] === el) return id + "#" + i;
@@ -1149,6 +1154,35 @@
     }
   }
   window.seatWant = seatWant;
+  function sheetKey(id, el) {
+    var row = el.closest("[data-mkt]");
+    if (!row) return "";
+    var pane = el.closest(".tpane");
+    var slots = [].filter.call(row.children, function (x) {
+      return x.matches("button.price, .ghost");
+    });
+    var side = slots.indexOf(el);
+    if (side < 0) side = 0;
+    return id + "#s:" + (pane ? pane.dataset.tab : "") + ":" + row.dataset.mkt + ":" + side;
+  }
+  /* the sheet's slots, once it is written: a marked box wears its mark, and a
+     box whose price has since landed becomes a real pick */
+  function seatSheetWant(root, card) {
+    if (!root || !card) return;
+    var id = card.dataset.espn || card.dataset.bout;
+    if (!id) return;
+    var over = typeof isOver === "function" && isOver(card);
+    root.querySelectorAll("button.price, .ghost").forEach(function (el) {
+      var k = sheetKey(id, el);
+      if (!k || !want[k]) return;
+      if (over) { delete want[k]; saveWant(); el.classList.remove("ghost--want"); return; }
+      if (el.classList.contains("ghost")) { el.classList.add("ghost--want"); return; }
+      delete want[k];
+      saveWant();
+      if (!el.classList.contains("on") && typeof setPick === "function") setPick(el, true);
+    });
+  }
+  window.seatSheetWant = seatSheetWant;
   function drop(id) {
     var btn = document.querySelector('button.price[data-oid="' +
               String(id).replace(/"/g, '\\"') + '"]');

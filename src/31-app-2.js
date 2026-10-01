@@ -901,6 +901,7 @@
             if (hits) scroll.appendChild(hits);
             scroll.insertAdjacentHTML("beforeend", fightSheet(row));
             if (typeof markSaved === "function") markSaved(scroll);
+            if (typeof seatSheetWant === "function") seatSheetWant(scroll, own);
             if (own._paid && typeof paidMethods === "function") {
               paidMethods(own, own._paid[0], own._paid[1], own._paid[2], own._paid[3]);
             }
