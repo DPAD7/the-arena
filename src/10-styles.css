@@ -83,6 +83,7 @@
   #daybar, .weekbar { position: absolute !important; width: 1px; height: 1px; overflow: hidden;
     clip: rect(0 0 0 0); margin: 0 !important; padding: 0 !important; border: 0 !important; }
   .dtab {
+    position: relative;   /* the double tap's fill sits over it */
     flex: none; appearance: none; background: none; border: 0; cursor: pointer;
     padding: 7px 13px 9px; border-bottom: 3px solid transparent;
     font-family: "Barlow Condensed", "Arial Narrow", sans-serif;

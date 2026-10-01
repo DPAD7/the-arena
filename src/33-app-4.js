@@ -869,9 +869,32 @@
       }
     });
   }
+  /* two taps on a day -- or a week, on the football rails -- ask DraftKings
+     for every price its cards are still short of, there and then: the job
+     the Stacked mark's double tap did, on the tab it is about (Jose, Oct 1,
+     2026). Timed by when the finger tapped, since the first tap redraws */
+  var dayTapAt = 0, dayTapOn = null, nflTapAt = 0;
+  /* heard on the page before the tab change's crossfade takes the tap and
+     replays it; the replay is not a second tap */
+  document.addEventListener("click", function (e) {
+    var sp = e.target.closest && e.target.closest(".sptab");
+    if (window._vtNow || !sp || sp.dataset.sp !== "nfl") return;
+    if (nflTapAt && e.timeStamp - nflTapAt < 420) {
+      nflTapAt = 0;
+      if (typeof window._askWeek === "function") window._askWeek(sp);
+      return;
+    }
+    nflTapAt = e.timeStamp;
+  }, true);
   dbar.addEventListener("click", function (e) {
     var t = e.target.closest(".dtab");
     if (!t) return;
+    if (dayTapOn === t.dataset.day && e.timeStamp - dayTapAt < 420) {
+      dayTapAt = 0; dayTapOn = null;
+      if (typeof window._askDay === "function") window._askDay(t);
+      return;
+    }
+    dayTapAt = e.timeStamp; dayTapOn = t.dataset.day;
     day = t.dataset.day;
     markDay();
     render();
@@ -1268,16 +1291,25 @@
     formTab.appendChild(fill);
     var fillBar = fill.querySelector("i");
 
+    /* the fill rides whichever icon was double tapped: the Stacked mark for
+       the open day, the NFL shield for the week ahead */
+    var fillTab = formTab;
+    function fillOn(tab) {
+      fillTab = tab;
+      if (fill.parentNode !== tab) tab.appendChild(fill);
+    }
     /* the fill is the picture's own shape, in the picture's own place */
     function fillSeat() {
-      var img = formTab.querySelector("img");
-      if (!img) return;
-      var r = img.getBoundingClientRect(), t = formTab.getBoundingClientRect();
+      /* a day tab has no picture: the fill covers the tab and its words take
+         the colour (Jose, Oct 1, 2026: "the green indicator goes to the nfl
+         logo and the day") */
+      var img = fillTab.querySelector("img") || fillTab;
+      var r = img.getBoundingClientRect(), t = fillTab.getBoundingClientRect();
       fill.style.width = r.width + "px";
       fill.style.height = r.height + "px";
       fill.style.left = (r.left - t.left + r.width / 2) + "px";
       fill.style.top = (r.top - t.top + r.height / 2) + "px";
-      fill.style.setProperty("--m", "url('" + img.getAttribute("src") + "')");
+      fill.style.setProperty("--m", img === fillTab ? "none" : "url('" + img.getAttribute("src") + "')");
     }
     function fillAt(pc, how) {
       fill.classList.remove("spfill--ok", "spfill--none", "spfill--bad");
@@ -1441,7 +1473,31 @@
         .catch(function () { fillDone("bad"); });
     }
 
-    function askDay() {
+    window._askDay = function (tab) { askDay(tab); };
+    /* the NFL shield, double tapped: every game of the week we are on that is
+       still short of a price, asked of DraftKings there and then, whatever day
+       is open; the fill rides the shield (Jose, Oct 1, 2026) */
+    window._askWeek = function (tab) {
+      fillOn(tab);
+      fillSeat();
+      fill.classList.add("spfill--on");
+      fillAt(0);
+      requestAnimationFrame(function () { fillAt(14); });
+      if (navigator.onLine === false) { fillDone("none"); return; }
+      var now = Date.now(), rows = (typeof SCHED === "object" ? SCHED : []).filter(function (r) {
+        return Date.parse(r[2]) > now;
+      });
+      if (!rows.length) { fillDone("none"); return; }
+      var wk = Math.min.apply(null, rows.map(function (r) { return r[0]; }));
+      var short = rows.filter(function (r) {
+        return r[0] === wk && !isWhole({ dataset: { espn: String(r[1]) } }, String(r[1]));
+      }).map(function (r) { return { dataset: { espn: String(r[1]) } }; });
+      if (!short.length) { fillDone("ok"); return; }
+      fillAt(28);
+      askDK(short);
+    };
+    function askDay(tab) {
+      fillOn(tab || dbar.querySelector('.dtab[aria-selected="true"]') || formTab);
       /* the first of the two taps lit this pill on the way down; the board
          never changed, so the light goes back to the sport that is open */
       sbar.querySelectorAll(".sptab").forEach(function (x) {
@@ -1584,9 +1640,12 @@
       if (tapPass) { tapPass = false; return; }   /* the held tap, let through */
       e.stopPropagation();
       if (e.cancelable) e.preventDefault();
-      if (tapWait) {                              /* the second one: this is the job */
+      /* the second tap reads the wallet now: the odds' double tap moved to
+         the day tab and the NFL shield, and the wallet gave up its own
+         (Jose, Oct 1, 2026: "the logo of the stack now does the wallet") */
+      if (tapWait) {
         clearTimeout(tapWait); tapWait = null;
-        askDay();
+        if (typeof window._walletPull === "function") window._walletPull();
         return;
       }
       tapWait = setTimeout(function () {

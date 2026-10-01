@@ -1519,6 +1519,7 @@
        helmet's does (Jose, Sep 26, 2026) */
     var wal = fab.querySelector(".wal"), fillEl = fab.querySelector(".wal-lv");
     var tapT = null, fadeT = null, popT = null;
+    window._walletPull = function () { pullNow(); };
     function pullNow() {
       clearTimeout(fadeT); clearTimeout(popT);
       wal.className = "wal filling";
@@ -1590,11 +1591,9 @@
       if (!down) return;
       down = false; fab.classList.remove("drag");
       if (moved) { settle(); return; }
-      if (tapT) { clearTimeout(tapT); tapT = null; pullNow(); return; }
-      tapT = setTimeout(function () {
-        tapT = null;
-        if (sheet.hidden) openSheet(); else sheet.hidden = true;
-      }, 450);                        /* a thumb's double tap, the helmet's own window */
+      /* its read is the Stacked mark's double tap now, so a tap opens it at
+         once (Jose, Oct 1, 2026: "now the wallet has no double tap") */
+      if (sheet.hidden) openSheet(); else sheet.hidden = true;
     }
     fab.addEventListener("pointerup", up);
     fab.addEventListener("pointercancel", up);
