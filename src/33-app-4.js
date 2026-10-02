@@ -1321,30 +1321,26 @@
      (Jose, Sep 23, 2026: "workds on the double tab"). */
   var formTab = sbar.querySelector('.sptab[data-sp="form"]');
   if (formTab) {
-    var fill = document.createElement("span");
-    fill.className = "spfill";
-    fill.innerHTML = "<i></i>";
-    formTab.appendChild(fill);
-    var fillBar = fill.querySelector("i");
-
-    /* the fill rides whichever icon was double tapped: the Stacked mark for
-       the open day, the NFL shield for the week ahead */
-    var fillTab = formTab;
-    function fillOn(tab) {
-      fillTab = tab;
-      if (fill.parentNode !== tab) tab.appendChild(fill);
+    /* each icon keeps its own fill, so the day, the NFL week and the wallet
+       can all be asking at once and each shows its own (Jose, Oct 1, 2026:
+       "why? it's so different asks") */
+    function fillFor(tab) {
+      if (tab._fill) return tab._fill;
+      var el = document.createElement("span");
+      el.className = "spfill";
+      el.innerHTML = "<i></i>";
+      tab.appendChild(el);
+      tab._fill = { el: el, bar: el.querySelector("i"), tab: tab };
+      return tab._fill;
     }
     /* the fill is the picture's own shape, in the picture's own place */
-    function fillSeat() {
-      /* a day tab has no picture: the fill covers the tab and its words take
-         the colour (Jose, Oct 1, 2026: "the green indicator goes to the nfl
-         logo and the day") */
-      var img = fillTab.querySelector("img, svg") || fillTab;
-      var r = img.getBoundingClientRect(), t = fillTab.getBoundingClientRect();
-      fill.style.width = r.width + "px";
-      fill.style.height = r.height + "px";
-      fill.style.left = (r.left - t.left + r.width / 2) + "px";
-      fill.style.top = (r.top - t.top + r.height / 2) + "px";
+    function fillSeat(u) {
+      var img = u.tab.querySelector("img, svg") || u.tab;
+      var r = img.getBoundingClientRect(), t = u.tab.getBoundingClientRect();
+      u.el.style.width = r.width + "px";
+      u.el.style.height = r.height + "px";
+      u.el.style.left = (r.left - t.left + r.width / 2) + "px";
+      u.el.style.top = (r.top - t.top + r.height / 2) + "px";
       var m = "none";
       if (img.tagName === "IMG") m = "url('" + img.getAttribute("src") + "')";
       else if (img.tagName.toLowerCase() === "svg") {
@@ -1355,17 +1351,25 @@
         c.setAttribute("width", r.width); c.setAttribute("height", r.height);
         m = "url(\"data:image/svg+xml;utf8," + encodeURIComponent(new XMLSerializer().serializeToString(c)) + "\")";
       }
-      fill.style.setProperty("--m", m);
+      u.el.style.setProperty("--m", m);
     }
-    function fillAt(pc, how) {
-      fill.classList.remove("spfill--ok", "spfill--none", "spfill--bad");
-      if (how) fill.classList.add("spfill--" + how);
-      fillBar.style.height = pc + "%";
+    function fillAt(u, pc, how) {
+      u.el.classList.remove("spfill--ok", "spfill--none", "spfill--bad");
+      if (how) u.el.classList.add("spfill--" + how);
+      u.bar.style.height = pc + "%";
     }
     /* the colour stays: it is the day's standing until the next asking, not
        a flash (Jose, Sep 23, 2026: "does it stay?") */
-    function fillDone(how) {
-      fillAt(100, how);
+    function fillDone(u, how) {
+      fillAt(u, 100, how);
+    }
+    function fillStart(tab) {
+      var u = fillFor(tab);
+      fillSeat(u);
+      u.el.classList.add("spfill--on");
+      fillAt(u, 0);
+      requestAnimationFrame(function () { fillAt(u, 14); });
+      return u;
     }
 
     /* what the board already holds for one event */
@@ -1473,7 +1477,7 @@
        red when the asking or the run failed (Jose, Sep 23, 2026: "while
        fetching it doesn't turn all the way green until it gets the status
        back") */
-    function askDK(cards) {
+    function askDK(cards, u) {
       var ids = [], seen = {};
       cards.forEach(function (c) {
         var id = c.dataset.espn || c.dataset.bout;
@@ -1482,14 +1486,14 @@
       var t0 = Date.now(), LIMIT = 240000;   /* the store can lag a minute behind a finished run: red only if it truly failed */
       var climb = function () {
         var p = Math.min(1, (Date.now() - t0) / 60000);
-        fillAt(Math.round(40 + 52 * (1 - Math.pow(1 - p, 2))), "ok");
+        fillAt(u, Math.round(40 + 52 * (1 - Math.pow(1 - p, 2))), "ok");
       };
-      fillAt(40, "ok");
+      fillAt(u, 40, "ok");
       fetch("ask", { method: "POST", headers: { "content-type": "application/json" },
                      body: JSON.stringify({ games: ids.slice(0, 40) }) })
         .then(function (r) { return r.ok ? r.json() : null; })
         .then(function (run) {
-          if (!run || !run.key) { fillDone("bad"); return; }
+          if (!run || !run.key) { fillDone(u, "bad"); return; }
           var look = function () {
             climb();
             fetch("ask?key=" + encodeURIComponent(run.key), { cache: "no-store" })
@@ -1503,20 +1507,20 @@
                    present and updated -- if not, then gray") */
                 if (st && st.state === "done") {
                   var whole = cards.every(function (c) { return isWhole(c, c.dataset.espn || c.dataset.bout); });
-                  fillDone(whole ? "ok" : "none"); return;
+                  fillDone(u, whole ? "ok" : "none"); return;
                 }
-                if (st && st.state === "failed") { fillDone("bad"); return; }
-                if (Date.now() - t0 > LIMIT) { fillDone("bad"); return; }
+                if (st && st.state === "failed") { fillDone(u, "bad"); return; }
+                if (Date.now() - t0 > LIMIT) { fillDone(u, "bad"); return; }
                 setTimeout(look, 3000);
               })
               .catch(function () {
-                if (Date.now() - t0 > LIMIT) { fillDone("bad"); return; }
+                if (Date.now() - t0 > LIMIT) { fillDone(u, "bad"); return; }
                 setTimeout(look, 3000);
               });
           };
           setTimeout(look, 2500);
         })
-        .catch(function () { fillDone("bad"); });
+        .catch(function () { fillDone(u, "bad"); });
     }
 
     window._askDay = function (tab) { askDay(tab); };
@@ -1524,26 +1528,21 @@
        still short of a price, asked of DraftKings there and then, whatever day
        is open; the fill rides the shield (Jose, Oct 1, 2026) */
     window._askWeek = function (tab) {
-      fillOn(tab);
-      fillSeat();
-      fill.classList.add("spfill--on");
-      fillAt(0);
-      requestAnimationFrame(function () { fillAt(14); });
-      if (navigator.onLine === false) { fillDone("none"); return; }
+      var u = fillStart(tab);
+      if (navigator.onLine === false) { fillDone(u, "none"); return; }
       var now = Date.now(), rows = (typeof SCHED === "object" ? SCHED : []).filter(function (r) {
         return Date.parse(r[2]) > now;
       });
-      if (!rows.length) { fillDone("none"); return; }
+      if (!rows.length) { fillDone(u, "none"); return; }
       var wk = Math.min.apply(null, rows.map(function (r) { return r[0]; }));
       var short = rows.filter(function (r) {
         return r[0] === wk && !isWhole({ dataset: { espn: String(r[1]) } }, String(r[1]));
       }).map(function (r) { return { dataset: { espn: String(r[1]) } }; });
-      if (!short.length) { fillDone("ok"); return; }
-      fillAt(28);
-      askDK(short);
+      if (!short.length) { fillDone(u, "ok"); return; }
+      fillAt(u, 28);
+      askDK(short, u);
     };
     function askDay(tab) {
-      fillOn(tab || dbar.querySelector('.dtab[aria-selected="true"]') || formTab);
       /* the first of the two taps lit this pill on the way down; the board
          never changed, so the light goes back to the sport that is open */
       sbar.querySelectorAll(".sptab").forEach(function (x) {
@@ -1558,22 +1557,19 @@
         spmark.classList.remove("spmark--back");
         spmark.removeEventListener("transitionend", off);
       });
-      fillSeat();
-      fill.classList.add("spfill--on");
-      fillAt(0);
-      requestAnimationFrame(function () { fillAt(14); });
+      var u = fillStart(tab || dbar.querySelector('.dtab[aria-selected="true"]') || formTab);
       /* nothing to ask with: grey, and no red, because nothing failed
          (Jose, Sep 23, 2026: "if offiline grey") */
-      if (navigator.onLine === false) { fillDone("none"); return; }
+      if (navigator.onLine === false) { fillDone(u, "none"); return; }
       var cards = stillOpen(), hops = 0;
       while (!cards.length && hops < 6 && stepDay()) { cards = stillOpen(); hops++; }
       /* nothing short of a price: the day is complete, and that is green */
       if (!cards.length) {
-        fillDone(document.querySelector(".gcard[data-espn], .gcard[data-bout]") ? "ok" : "none");
+        fillDone(u, document.querySelector(".gcard[data-espn], .gcard[data-bout]") ? "ok" : "none");
         return;
       }
       var done = 0, got = 0, bad = 0;
-      fillAt(28);
+      fillAt(u, 28);
       Promise.all(cards.map(function (c) {
         var id = c.dataset.espn || c.dataset.bout;
         var was = heldFor(id);
@@ -1584,14 +1580,14 @@
           if ((now.ml && !was.ml) || (now.props && !was.props)) got++;
         }).then(function () {
           done++;
-          fillAt(28 + Math.round(done / cards.length * 68));
+          fillAt(u, 28 + Math.round(done / cards.length * 68));
         });
       })).then(function () {
         /* green is the day complete -- 128 of 128 -- grey is some still
            missing after the asking, red is a fetch that failed
            (Jose, Sep 23, 2026: "once we get 128 out of 128... if not grey,
            if failing red") */
-        askDK(stillOpen());
+        askDK(stillOpen(), u);
       });
     }
 
