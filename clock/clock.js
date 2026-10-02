@@ -219,7 +219,16 @@ export class Clock {
     return fighting ? "fight" : playing;
   }
 
+  /* one pass at a time: the daily re-arm and the alarm fired together at
+     13:00 UTC, the 9 AM sweep, and each started a sweep -- the second one
+     then could not put its commit on the first's (Oct 1 and Oct 2, 2026) */
   async tick() {
+    if (this.ticking) return this.ticking;
+    this.ticking = this.tickOnce().finally(() => { this.ticking = null; });
+    return this.ticking;
+  }
+
+  async tickOnce() {
     const now = Date.now();
     let sched = [];
     try { sched = await (await fetch(SITE + "/schedule.json", { cf: { cacheTtl: 0 } })).json(); } catch (e) { sched = []; }
@@ -230,8 +239,11 @@ export class Clock {
     const came = moments.filter(m => m.at <= now + 30000 && m.at > now - 20 * MIN && !done[m.key]);
     const keep = came.filter(m => m.key.startsWith("keep@")), due = came.filter(m => !m.key.startsWith("keep@"));
     if (due.length) {
+      // claimed before the wake, so nothing else can start the same sweep
+      for (const m of due) done[m.key] = now;
+      await this.ctx.storage.put("done", done);
       const ok = await this.wake("due");
-      if (ok) for (const m of due) done[m.key] = now;
+      if (!ok) { for (const m of due) delete done[m.key]; await this.ctx.storage.put("done", done); }
     }
     // the login's daily touch is its own run (dkbets.yml --keep), not a sweep
     if (keep.length) {

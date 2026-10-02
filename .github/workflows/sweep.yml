@@ -57,7 +57,7 @@ jobs:
       - name: What the scripts need
         # playwright drives the runner's own Chrome for build/look.py, so no
         # browser is downloaded
-        run: pip install --quiet curl_cffi cryptography playwright
+        run: pip install --quiet curl_cffi cryptography playwright pillow
 
       - name: The register, and somewhere to write
         # logs/ is not in the repo -- a runner starts without it, and the first

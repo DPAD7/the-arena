@@ -14,7 +14,7 @@ tag = "v1"
 new_sqlite_classes = ["Clock"]
 
 [triggers]
-crons = ["0 13 * * *"]
+crons = ["37 12 * * *"]   # off the hour: at 13:00 it landed on the 9 AM sweep and started a second one
 
 # his DraftKings slips, which the wallet keeps in the board's store
 [[kv_namespaces]]
