@@ -133,7 +133,12 @@ def main():
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
                    cwd=D + "/site", capture_output=True, text=True)
     print("deployed")
+    from cares import cares
     for team, was, now in swaps:
+        # only a team he has starred or has something on (Oct 3, 2026)
+        if not cares(team):
+            print("not told (not starred, nothing on it): %s %s" % (team, now))
+            continue
         tell("swap@%s@%s" % (team, now), "%s: %s starts" % (team, now),
              "DraftKings prices %s, not %s -- the card has him and his odds now." % (now, was))
 

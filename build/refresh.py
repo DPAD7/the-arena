@@ -227,7 +227,10 @@ def open_pass():
         run("fill_week.py")
         for l in swaps:
             m = re.match(r"\s*(\S+)\s+(.+?)\s+->\s+(.+?)\s+\(DraftKings\)", l)
-            if m:
+            from cares import cares
+            if m and not cares(m.group(1)):
+                log("   swap not told (not starred, nothing on it): %s %s" % (m.group(1), m.group(3)))
+            elif m:
                 tell("swap@%s@%s" % (m.group(1), m.group(3)), "%s: %s starts" % (m.group(1), m.group(3)),
                      "DraftKings prices %s, not %s -- the card has him now." % (m.group(3), m.group(2)))
 
@@ -302,6 +305,10 @@ def count_misses():
         now_open[key] = {"n": n, "told": was.get("told", False)}
         if n >= MISS_LIMIT and not was.get("told"):
             club, man = g[3 + side], g[5 + side * 2] or "no passer"
+            from cares import cares
+            if not cares(club):
+                now_open[key]["told"] = True
+                continue
             book = [x[1] for x in ((dkq.get(str(g[1])) or [[], []])[side]) if len(x) > 1]
             lines.append("%s %s: DraftKings lists %s" % (club, man, ", ".join(book)) if book
                          else "%s %s: no passing props listed" % (club, man))
