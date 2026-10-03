@@ -423,6 +423,34 @@ export class Clock {
         games[gid] = r[0] === "bout" ? readBout(gid, boards[k]) : await readGame(gid, r[3], boards[k]);
       }
     }
+    // a fight on his slip is up next: the bout before it on ESPN's card (which
+    // lists them in fight order) has walked out or started, and his has not.
+    // A card's printed times are its segments' starts, not each fight's, so
+    // the order is the clock (Jose, Oct 3, 2026: "tell me before each fight")
+    const cards = {};
+    for (const bet of slips) {
+      if ((bet.legs || []).some(l => String(l.status || "").toLowerCase() === "lost")) continue;
+      for (const l of bet.legs || []) {
+        const v = idx[l.sel]; if (!v || !v.fight) continue;
+        const r = rows[v.gid]; if (!r || r[3] === "boxing") continue;
+        const st = Date.parse(r[2]);
+        if (now < st - 3 * 60 * MIN || now > st + 7 * 60 * MIN) continue;
+        const ymd = etParts(st).date.replace(/-/g, "");
+        if (!cards[ymd]) {
+          try { cards[ymd] = await (await espnGet("https://site.web.api.espn.com/apis/site/v2/sports/mma/ufc/scoreboard?dates=" + ymd)).json(); } catch (e) { cards[ymd] = {}; }
+        }
+        for (const ev of cards[ymd].events || []) {
+          const cs = ev.competitions || [], i = cs.findIndex(c => String(c.id) === String(v.gid));
+          if (i < 1) continue;
+          const me = ((cs[i].status || {}).type || {}).state, before = ((cs[i - 1].status || {}).type || {}).state;
+          if (me !== "pre" || (before !== "in" && before !== "post")) continue;
+          const nm = c => (c.competitors || []).map(m => ((m.athlete || {}).shortName || "").split(" ").pop()).join(" vs ");
+          out.push({ tag: "slip:" + bet.id, key: "next@" + v.gid, type: "pregame", title: "Up next: " + nm(cs[i]),
+                     body: nm(cs[i - 1]) + " is " + (before === "in" ? "on now" : "over") + ". Your " + ((l.label || l.pick || "").split(" \u00b7 ")[0] || "leg") + " is next.",
+                     url: "/#bout=" + v.gid });
+        }
+      }
+    }
     // changes on a leg after it was bet: a teammate ruled out, his passer
     // downgraded -- the first read of a leg is only remembered, never said
     const future = [];
