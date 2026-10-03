@@ -4246,5 +4246,6 @@
   .cashsheet .slipcard--nw .slnames { font-size: 17px; margin: 4px 0 2px; color: #fff; }
   .cashsheet .slipcard--nw .trkh { font: 700 13px/1.2 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   .cashsheet .slipcard--nw .slgrid { padding-top: 12px; border-top: 1px solid rgba(255,255,255,.13); text-align: center; }
+  .cashsheet .slipcard--nw.slipcard--open .slgrid { padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.13); }
   .cashsheet .slipcard--nw .slgrid b { font: 800 21px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
   .cashsheet .slipcard--nw .slgrid .slgodds { color: #fff; }

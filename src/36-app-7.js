@@ -1423,6 +1423,8 @@
     var o = String(bet.odds || "").replace("-", "\u2212"), m = /(\d+)%/.exec(bet.boost || "");
     var n = parseInt(o.replace("\u2212", "-"), 10);
     if (!m || !bet.boosted || isNaN(n) || !n) return o;
+    /* what it pays says the price exactly; DraftKings rounds its own legs */
+    if (bet.wager && bet.topay) { var r = bet.topay / bet.wager; if (r > 1) return r >= 2 ? "+" + Math.round((r - 1) * 100) : "\u2212" + Math.round(100 / (r - 1)); }
     var d = n > 0 ? 1 + n / 100 : 1 + 100 / -n, up = 1 + (d - 1) * (1 + m[1] / 100);
     return up >= 2 ? "+" + Math.round((up - 1) * 100) : "\u2212" + Math.round(100 / (up - 1));
   }
@@ -1744,15 +1746,17 @@
         return '<div class="slipcard slipcard--nw' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
           (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + top + avs +
           '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
-          (rows ? '<ul class="slpicks">' + rows + '</ul>' : "") + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
-          /* one line of three: the price, what went in, what it pays, with
-             what each is written underneath (Jose, Sep 26, 2026) */
+          /* the top of the card holds what DraftKings' does -- the price,
+             what went in, what it pays -- and the drop-down opens the legs
+             under it (Jose, Oct 3, 2026) */
           '<div class="slgrid">' +
           '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(boostedOdds(bet))) + '</b>' +
           '<b>' + cm(bet.wager || 0) + '</b>' +
           '<b class="cashpay">' + cm(bet.topay || 0) + '</b>' +
           '<span>Price</span><span>Amount</span><span>Total payout</span>' +
-          '</div></div>';
+          '</div>' +
+          (rows ? '<ul class="slpicks">' + rows + '</ul>' : "") + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
+          '</div>';
       }).join("");
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
