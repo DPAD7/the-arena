@@ -169,6 +169,52 @@ def schedule(page):
     _j.dump(out, open(os.path.join(D, "site", "schedule.json"), "w"), separators=(",", ":"))
 
 
+def catch_up(page):
+    """On GitHub, the page a run deploys takes in any change to src/ shipped
+       to main after the run checked out. A sweep that started before a ship
+       built the older page and deployed it over the new one (Oct 3, 2026: the
+       slip went back to "No boost" at 10:50). The run's own uncommitted
+       writes ride over the pull in a stash; anything that will not apply
+       cleanly leaves the run as it was, which is no worse than before."""
+    if not os.environ.get("GITHUB_ACTIONS"):
+        return page
+    import subprocess
+    def git(*a):
+        return subprocess.run(["git"] + list(a), cwd=D, capture_output=True, text=True)
+    try:
+        if git("fetch", "-q", "origin", "main").returncode:
+            return page
+        if git("merge-base", "--is-ancestor", "origin/main", "HEAD").returncode == 0:
+            return page
+        base = git("merge-base", "HEAD", "origin/main").stdout.strip()
+        if not base or git("diff", "--quiet", base, "origin/main", "--", "src").returncode == 0:
+            return page
+        if page != read():
+            print("pagefile: newer page on main, but this run holds unsaved edits; deploying its own")
+            return page
+        before = git("stash", "list").stdout
+        git("stash", "-q")
+        stashed = git("stash", "list").stdout != before
+        if git("rebase", "-q", "origin/main").returncode:
+            git("rebase", "--abort")
+            if stashed:
+                git("stash", "pop", "-q")
+            print("pagefile: could not take the newer page from main; deploying this run's")
+            return page
+        if stashed and git("stash", "pop", "-q").returncode:
+            # a clash: main's code in src/, the run's fresh data everywhere else
+            for f in git("diff", "--name-only", "--diff-filter=U").stdout.split():
+                git("checkout", "--ours" if f.startswith("src/") else "--theirs", "--", f)
+            git("reset", "-q")
+            git("stash", "drop", "-q")
+            print("pagefile: the run's writes clashed with main's; main's code kept, the run's data kept")
+        print("pagefile: took the newer page from main before deploying")
+        return read()
+    except Exception as e:
+        print("pagefile: catch-up skipped:", e)
+        return page
+
+
 def deployable(page):
     """The page wrapped as site/index.html, written ready to deploy.
 
@@ -177,6 +223,7 @@ def deployable(page):
        reloads itself when it has changed, so a new version reaches a phone
        that is already open without anybody pulling to refresh
        (Jose, Sep 19, 2026: "I don't want to have to refresh the page")."""
+    page = catch_up(page)
     code, data = stamps(page)
     page = page.replace("__BUILD__", code).replace("__DATA__", data)
     # a third stamp for the injury report and the lineups: the page reads
