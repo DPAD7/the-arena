@@ -25,7 +25,7 @@ import { sendPush } from "./push.js";
 import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
-const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, pregame: true, change: true, fight: true, recap: true };
+const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, leghit: true, pregame: true, change: true, fight: true, recap: true };
 const SWEEP_ET = [9, 15, 21];
 const HUB_ET = [10];
 // the daily touch of the DraftKings login, so it never expires on him

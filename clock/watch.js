@@ -169,6 +169,16 @@ export function news(slips, idx, games, prev, rows) {
       out.push({ tag: "slip:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won", body: "Your " + odds + " slip hit: $" + (+bet.topay || 0).toFixed(2) + ".", url: "/#slip=" + bet.id });
       continue;
     }
+    /* a leg that lands, with the count: "Carr 2+ PTD ✓ · 1 of 6 hit, 5 left"
+       (Jose, Oct 3, 2026). The last two are said by "One leg left" and "You won". */
+    if (open.length > 1) {
+      const hit = legs.filter(x => x.st === "won");
+      for (const x of hit) {
+        out.push({ tag: "slip:" + bet.id, key: "hit@" + bet.id + "@" + x.lg.sel, type: "leghit",
+                   title: lab(x.lg, x.v) + " \u2713",
+                   body: hit.length + " of " + legs.length + " hit, " + open.length + " left on your " + odds + " slip.", url: "/#slip=" + bet.id });
+      }
+    }
     if (open.length === 1 && legs.length > 1) {
       const x = open[0], g = x.g;
       out.push({ tag: "slip:" + bet.id, key: "one@" + bet.id + "@" + x.lg.sel, type: "slip", title: "One leg left",

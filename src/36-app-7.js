@@ -1451,7 +1451,7 @@
   }
   /* ---- the alerts: service worker, the bell, the settings, the landing ---- */
   var ALERTKINDS = [["td", "Touchdowns and your next rung"], ["redzone", "Red zone"], ["wp", "Win chance swings"],
-                    ["final", "Finals"], ["slip", "One leg left and you won"], ["pregame", "Before kickoff"],
+                    ["final", "Finals"], ["leghit", "Each leg that hits"], ["slip", "One leg left and you won"], ["pregame", "Before kickoff"],
                     ["change", "Changes after you bet"]];
   var SWREG = null;
   if ("serviceWorker" in navigator) {
