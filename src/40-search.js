@@ -122,7 +122,7 @@
        week -- its quarterback's face, his last name, the school under it --
        with a star, in the order they play. Starred teams are the ones the
        board shows. */
-    var CFBMODE = false, SCHOOLS = null, crow = document.getElementById("qscfb");
+    var CFBMODE = false, SCHOOLS = null, RANKS = null, crow = document.getElementById("qscfb");
     function tabNow() { var t = document.querySelector('.sptab[aria-selected="true"]'); return t ? t.dataset.sp : ""; }
     function cfbRow() {
       if (!crow) return;
@@ -140,13 +140,21 @@
       if (q) list = list.filter(function (m) { return (m.n + " " + m.school + " " + m.ab).toLowerCase().indexOf(q) >= 0; });
       /* in the order they play; a star marks a team, it does not move it
          (Jose, Oct 3, 2026) */
-      list.sort(function (a, b) { return a.t - b.t; });
+      /* starred first, by this week's rank (#1, #12, #14, then the unranked);
+         the rest in the order they play (Jose, Oct 3, 2026) */
+      var rk = RANKS || {};
+      list.sort(function (a, b) {
+        var sa = st["cfb:" + a.ab] ? 1 : 0, sb = st["cfb:" + b.ab] ? 1 : 0;
+        if (sa !== sb) return sb - sa;
+        if (sa) { var ra = rk[a.ab] || 99, rb = rk[b.ab] || 99; if (ra !== rb) return ra - rb; }
+        return a.t - b.t;
+      });
       crow.innerHTML = list.map(function (m) {
         var last = typeof famName === "function" ? famName(m.n) : String(m.n).split(" ").pop();
         return '<button type="button" class="qst qst--cfb" data-ab="' + esc(m.ab) + '" data-gid="' + esc(m.gid) + '">' +
           '<span class="qst-pic">' + (m.id ? face(m.id, "cfb") : "") +
           '<span class="qst-star' + (st["cfb:" + m.ab] ? " on" : "") + '" role="button" aria-label="Star ' + esc(m.school) + '">' + STAR + "</span></span>" +
-          "<b>" + esc(last || m.ab) + "</b><i>" + esc(m.school) + "</i></button>";
+          "<b>" + esc(last || m.ab) + "</b><i>" + ((RANKS || {})[m.ab] ? "<em>#" + RANKS[m.ab] + "</em> " : "") + esc(m.ab) + "</i></button>";
       }).join("") || '<div class="qsnone">No college games on this page</div>';
     }
     if (crow) crow.addEventListener("click", function (e) {
@@ -177,6 +185,8 @@
       if (crow) crow.hidden = !CFBMODE;
       if (row) row.hidden = CFBMODE;
       inp.placeholder = CFBMODE ? "Search a QB or a school" : "Search a QB, or a few for a parlay";
+      if (CFBMODE) fetch("ranks.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+        .then(function (j) { RANKS = j || {}; cfbRow(); }).catch(function () { RANKS = RANKS || {}; });
       if (CFBMODE && !SCHOOLS) fetch("cfb_schools.json").then(function (r) { return r.json(); })
         .then(function (j) { SCHOOLS = j || {}; cfbRow(); }).catch(function () { SCHOOLS = {}; });
       box.classList.add("open"); load().then(ended).then(function () { try { fromBoard(); } catch (e) {} draw(); });
