@@ -187,10 +187,21 @@ export function news(slips, idx, games, prev, rows) {
   }
   // per game, per passer and per club on his legs
   const seen = {};
+  /* a leg that has already hit or missed says nothing more, and a slip with a
+     leg lost says nothing at all (Jose, Oct 3, 2026: "these shouldn't be
+     notifying after my legs go thru") */
+  const stOf = (l) => {
+    const w = idx[l.sel], gg = w && games[w.gid], rr = w && rows[w.gid];
+    const d = String(l.status || "").toLowerCase();
+    if (d === "won" || d === "lost") return d;
+    return w && gg && rr ? legState(w, gg, w.fight ? null : (w.side ? rr[7] : rr[9]), rr) : "open";
+  };
   for (const bet of slips) for (const lg of bet.legs || []) {
     const v = idx[lg.sel]; if (!v) continue;
     const g = games[v.gid], p = prev[v.gid] || {}, r = rows[v.gid];
     if (!g || !r) continue;
+    if ((bet.legs || []).some(l => stOf(l) === "lost")) continue;
+    const done = stOf(lg) !== "open";
     if (v.fight) {
       if (g.state === "in" && !seen["fon@" + v.gid]) {
         seen["fon@" + v.gid] = 1;
@@ -209,7 +220,8 @@ export function news(slips, idx, games, prev, rows) {
     const away = r[4], home = r[5];
     if (v.kind === "ptd" || v.kind === "atd") {
       const q = g.qb[String(v.qb)] || { ptd: 0, rtd: 0 }, q0 = (p.qb || {})[String(v.qb)] || { ptd: 0, rtd: 0 };
-      if (v.kind === "ptd" && q.ptd > (q0.ptd || 0)) {
+      /* the touchdown that lands the rung is still told; any after it is not */
+      if (v.kind === "ptd" && q.ptd > (q0.ptd || 0) && (!done || (q0.ptd || 0) < (v.n || 1))) {
         const k = "td@" + v.gid + "@" + v.qb + "@" + q.ptd;
         if (!seen[k]) {
           seen[k] = 1;
@@ -221,13 +233,13 @@ export function news(slips, idx, games, prev, rows) {
                      url: "/#game=" + v.gid });
         }
       }
-      if (v.kind === "atd" && q.rtd > (q0.rtd || 0)) {
+      if (v.kind === "atd" && q.rtd > (q0.rtd || 0) && (!done || (q0.rtd || 0) < (v.n || 1))) {
         const k = "rtd@" + v.gid + "@" + v.qb + "@" + q.rtd;
         if (!seen[k]) { seen[k] = 1; out.push({ tag: "slip:" + bet.id, key: k, type: "td", title: last(v.qbName) + " rushing TD", body: q.rtd + "+ rushing TD hit. " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home + ".", url: "/#game=" + v.gid }); }
       }
     }
     // red zone, for his club on the ball
-    if (g.state === "in" && g.rz && g.teamId && g.teamId[g.poss] === v.team && v.kind !== "h2h") {
+    if (!done && g.state === "in" && g.rz && g.teamId && g.teamId[g.poss] === v.team && v.kind !== "h2h") {
       const k = "rz@" + v.gid + "@" + v.team + "@" + g.sc[0] + "-" + g.sc[1] + "@" + (g.clock || "").split(" ").pop().slice(0, 2);
       if (!seen["rz@" + v.gid + v.team] && !p["rz" + v.team]) {
         seen["rz@" + v.gid + v.team] = 1;
@@ -235,7 +247,7 @@ export function news(slips, idx, games, prev, rows) {
       }
     }
     // win chance, once each way, on a moneyline
-    if (v.kind === "ml" && g.state === "in" && g.wpHome != null) {
+    if (!done && v.kind === "ml" && g.state === "in" && g.wpHome != null) {
       const mine = v.side ? g.wpHome : 1 - g.wpHome, pct = Math.round(mine * 100);
       for (const [edge, word, test] of [["low", "down to", mine <= 0.25], ["high", "up to", mine >= 0.8]]) {
         const k = "wp" + edge + "@" + v.gid + "@" + v.team;
