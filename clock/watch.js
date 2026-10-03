@@ -135,6 +135,21 @@ export function legState(v, g, other, row) {
     if (k === "anysub") return how === "sub" ? "won" : "lost";
     if (k === "dist" || k === "anydec") return how === "dec" ? "won" : "lost";
     if (k === "nodist") return how && how !== "dec" ? "won" : "lost";
+    /* the round markets, off the round it ended in (Oct 3, 2026: Smith and
+       Wint won in round 1 and the alert counted them as open) */
+    const rd = +g.period || 0, fin = how === "ko" || how === "sub";
+    let m;
+    if (k === "kosub" || k === "finish") return mine && fin ? "won" : "lost";
+    if (k === "kodec") return mine && (how === "ko" || how === "dec") ? "won" : "lost";
+    if (k === "subdec") return mine && (how === "sub" || how === "dec") ? "won" : "lost";
+    if ((m = /^rd(\d+)$/.exec(k))) return mine && fin && rd === +m[1] ? "won" : "lost";
+    if ((m = /^kord(\d+)$/.exec(k))) return mine && how === "ko" && rd === +m[1] ? "won" : "lost";
+    if ((m = /^subrd(\d+)$/.exec(k))) return mine && how === "sub" && rd === +m[1] ? "won" : "lost";
+    if ((m = /^anykord(\d+)$/.exec(k))) return how === "ko" && rd === +m[1] ? "won" : "lost";
+    if ((m = /^anysubrd(\d+)$/.exec(k))) return how === "sub" && rd === +m[1] ? "won" : "lost";
+    if ((m = /^rg?(\d+)-?(\d+)$/.exec(k.replace("rd12", "r1-2").replace("rd34", "r3-4")))) return mine && fin && rd >= +m[1] && rd <= +m[2] ? "won" : "lost";
+    if (k === "rd1only") return fin && rd === 1 ? "won" : "lost";
+    if (k === "first60") { const t = String(g.clock || "").split(":"); return fin && rd === 1 && t.length === 2 && (+t[0] * 60 + +t[1]) <= 60 ? "won" : "lost"; }
     return "open";      // the rest wait on DraftKings' own word
   }
   const over = g.state === "post";
@@ -153,7 +168,7 @@ export function legState(v, g, other, row) {
    keeps it from being said twice */
 export function news(slips, idx, games, prev, rows) {
   const out = [];
-  const lab = (lg, v) => (lg.label || lg.pick || "").split(" · ")[0] || (v && v.qbName ? last(v.qbName) : "");
+  const lab = (lg, v) => ((lg.label || lg.pick || "").split(" · ")[0] || (v && v.qbName ? last(v.qbName) : "")).replace(/\s*\u2016\s*/g, " \u00b7 ");
   for (const bet of slips) {
     const legs = (bet.legs || []).map(lg => {
       const v = idx[lg.sel], g = v && games[v.gid], r = v && rows[v.gid];
