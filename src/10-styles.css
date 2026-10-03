@@ -4266,6 +4266,7 @@
     max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .qst--cfb { min-width: 0; }
   .qst--cfb i em { font-style: normal; color: #e3b341; }
+  html { touch-action: manipulation; }
   img.qbface { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; -webkit-user-drag: none; }
   .qblog { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 16px;
     background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
