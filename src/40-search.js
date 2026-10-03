@@ -120,8 +120,8 @@
     });
     /* the college page's own row (Jose, Oct 3, 2026): each team playing this
        week -- its quarterback's face, his last name, the school under it --
-       with a star. Starred teams lead (newest star first) and are the ones the
-       board shows; the rest follow in the order they play. */
+       with a star, in the order they play. Starred teams are the ones the
+       board shows. */
     var CFBMODE = false, SCHOOLS = null, crow = document.getElementById("qscfb");
     function tabNow() { var t = document.querySelector('.sptab[aria-selected="true"]'); return t ? t.dataset.sp : ""; }
     function cfbRow() {
@@ -138,11 +138,9 @@
         });
       });
       if (q) list = list.filter(function (m) { return (m.n + " " + m.school + " " + m.ab).toLowerCase().indexOf(q) >= 0; });
-      list.sort(function (a, b) {
-        var sa = st["cfb:" + a.ab] || 0, sb = st["cfb:" + b.ab] || 0;
-        if (sa || sb) return sb - sa;
-        return a.t - b.t;
-      });
+      /* in the order they play; a star marks a team, it does not move it
+         (Jose, Oct 3, 2026) */
+      list.sort(function (a, b) { return a.t - b.t; });
       crow.innerHTML = list.map(function (m) {
         var last = typeof famName === "function" ? famName(m.n) : String(m.n).split(" ").pop();
         return '<button type="button" class="qst qst--cfb" data-ab="' + esc(m.ab) + '" data-gid="' + esc(m.gid) + '">' +
