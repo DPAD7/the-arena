@@ -4232,6 +4232,7 @@
   .slkind { border: 1.5px solid #fff; border-radius: 8px; padding: 5px 8px; color: #fff;
     font: 800 13px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   .slkind--n { border-color: rgba(255,255,255,.2); color: #8e8e93; }
+  .slktop .slview { margin-left: auto; }
   .slkat { margin-left: auto; font: 700 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8e8e93; }
   .cashsheet .slipcard--nw .slavs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; gap: 12px; padding: 4px 8px 14px 2px; scrollbar-width: none; }
   .cashsheet .slipcard--nw .slavs::-webkit-scrollbar { display: none; }

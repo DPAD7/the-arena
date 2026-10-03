@@ -1734,12 +1734,13 @@
           'onclick="slipOpen(this)">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
         /* the arrow is pinned at the row's right end; the faces scroll under it */
-        var avs = '<div class="slavrow">' + slipAvatars(ls) + arrow + '</div>';
+        var avs = slipAvatars(ls);
         var trk = slipTrack(bet);
         var at = Date.parse(bet.placed || ""), kind = String(bet.type || (ls.length > 1 ? "Parlay" : "Single")).toUpperCase();
         var top = '<div class="slktop"><span class="slkind">' + esc(kind) + '</span><span class="slkind slkind--n">' + ls.length +
-          (ls.length > 1 ? " legs" : " leg") + '</span>' + (at ? '<span class="slkat">' + (bet.from === "board" ? "Tracked " : "Placed ") +
-          new Date(at).toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }) + '</span>' : "") + '</div>';
+          (ls.length > 1 ? " legs" : " leg") + '</span>' +
+          /* the drop-down where the time was: it opens the tracking (Jose, Oct 3, 2026) */
+          arrow + '</div>';
         return '<div class="slipcard slipcard--nw' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
           (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + top + avs +
           '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
