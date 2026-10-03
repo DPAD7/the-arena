@@ -1054,7 +1054,8 @@
          a finger on it and dragging along it, which is the same argument.The
          dollar button is dragged the same way (Jose, Sep 25, 2026). */
       ok = !e.target.closest(".pcar, .daybar, .weekbar, .tabbar, .fview, " + OWNDRAG) &&
-           !(caro && caro.scrollWidth > caro.clientWidth + 2);   /* a row that scrolls keeps the gesture */
+           !(caro && caro.scrollWidth > caro.clientWidth + 2) &&   /* a row that scrolls keeps the gesture */
+           !e.target.closest(".slavs, #cashsheet, #slipsheet");      /* so do the slip's and the wallet's faces */
       /* the search sits over the board: while it is open nothing under it is
          swiped (Jose, Sep 28, 2026: its row of quarterbacks swiped the page) */
       if (document.querySelector("#qsearch.open")) ok = false;

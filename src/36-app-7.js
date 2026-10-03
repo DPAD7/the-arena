@@ -1843,6 +1843,9 @@
       if (sheet.hidden) return;
       var list = document.getElementById("cashlegs");
       if (list && list.contains(e.target) && list.scrollHeight > list.clientHeight) return;
+      /* a row of faces wider than its card swipes sideways (Jose, Oct 3, 2026) */
+      var row = e.target.closest && e.target.closest(".slavs");
+      if (row && row.scrollWidth > row.clientWidth + 2) return;
       if (e.cancelable) e.preventDefault();
     }, { passive: false });
     document.addEventListener("wheel", function (e) {
