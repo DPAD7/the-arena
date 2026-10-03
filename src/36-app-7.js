@@ -1147,6 +1147,7 @@
         /* over, the score settles it: behind at FINAL, the slip is dead */
         var mst = legSt(x) || (r && r.state === "post" && +sa !== +sh ? ((s === 0 ? +sa > +sh : +sh > +sa) ? "won" : "lost") : "");
         if (mst === "lost") TRKLOST[x.lg.sel] = 1;
+        TRKST[x.lg.sel] = mst;
         out += '<div class="trkr trkr--two' + (mst ? " trkr--" + mst : "") + '">' +
           '<span class="trkc trkc--logo' + (s === 0 ? " trkc--mine" : "") + '">' + trkFace(pic(away)) + "</span>" +
           '<div class="trkm"><div class="trkt"><small>(' + wa + "%)</small><b>" + esc(sa) + "</b><em>–</em><b>" + esc(sh) + "</b><small>(" + wh + "%)</small></div>" +
@@ -1161,6 +1162,7 @@
         var gap = ym - yh, share = ym + yh ? Math.round(ym / (ym + yh) * 100) : 50;
         var hst = legSt(x) || (r && r.state === "post" && gap !== 0 ? (gap > 0 ? "won" : "lost") : "");
         if (hst === "lost") TRKLOST[x.lg.sel] = 1;
+        TRKST[x.lg.sel] = hst;
         out += '<div class="trkr trkr--two' + (hst ? " trkr--" + hst : "") + '">' +
           '<span class="trkc trkc--mine">' + trkFace(pic(me[0])) + "</span>" +
           '<div class="trkm"><div class="trkt trkt--h2h"><span>' + esc(famName(me[0])) + "</span><b>" + ym + "</b>" +
@@ -1185,6 +1187,7 @@
           var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : (!r || r.state === "pre") ? " trkn--pre" : "";
           var mk = x.v.k === "ptd" ? '<svg class="trkmk" viewBox="0 0 20 21"><use href="#fb"/></svg>' : '<svg class="trkmk" viewBox="0 0 52 47"><use href="#rush"/></svg>';
           var what = x.v.k === "ptd" ? "PTD" : "RTD", pct = Math.min(100, Math.round(have / n * 100));
+          TRKST[x.lg.sel] = st; TRKPC[x.lg.sel] = st === "won" ? 100 : pct;
           var bar = '<div class="trkbar trkbar--one"><i style="width:' + pct + "%;background:" + (st === "won" ? "var(--green)" : st === "lost" ? "#e2564d" : "#fff") + '"></i></div>';
           out += pair
             ? '<div class="trkr trkr--pair"><span class="trkc trkc--sm">' + trkFace(pic(qb[0])) + '</span><div class="trkl"><b>' + n + "+</b>" + what + mk + "</div>" + bar + '<span class="trkn' + box + '">' + have + "</span></div>"
@@ -1345,6 +1348,9 @@
     return r.gone >= win[1];
   }
   var TRKLOST = {};
+  /* each leg's state and how far along it is, as the tracker last saw it:
+     the faces fill by it and the badge counts by it (Jose, Oct 3, 2026) */
+  var TRKST = window.TRKST = {}, TRKPC = window.TRKPC = {};
   function fightBlock(bid, G) {
     var f = G.row.g, r = TRKD["f" + bid] || null, R = parseInt(((typeof FPROPS === "object" && FPROPS[bid]) || {}).rounds, 10) || 3;
     var L = f[3], Rn = f[5], kick = new Date(f[2]);
@@ -1736,8 +1742,9 @@
           'onclick="slipOpen(this)">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
         /* the arrow is pinned at the row's right end; the faces scroll under it */
-        var avs = slipAvatars(ls);
+        /* the tracker first, so the faces can fill by what it counted */
         var trk = slipTrack(bet);
+        var avs = slipAvatars(ls);
         var at = Date.parse(bet.placed || ""), kind = String(bet.type || (ls.length > 1 ? "Parlay" : "Single")).toUpperCase();
         var top = '<div class="slktop"><span class="slkind">' + esc(kind) + '</span><span class="slkind slkind--n">' + ls.length +
           (ls.length > 1 ? " legs" : " leg") + '</span>' +
@@ -1765,7 +1772,7 @@
          the open slips (the clock sets it while the app is closed) */
       try {
         var liveN = (DKB.bets || []).filter(function (b0) { return !(b0.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; }); })
-          .reduce(function (t, b0) { return t + (b0.legs || []).filter(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost"; }).length; }, 0);
+          .reduce(function (t, b0) { return t + (b0.legs || []).filter(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost" && TRKST[lg.sel] !== "won"; }).length; }, 0);
         if (navigator.setAppBadge) { if (liveN) navigator.setAppBadge(liveN); else navigator.clearAppBadge(); }
       } catch (e) {}
       /* the day's totals stand still under the slips, which scroll between

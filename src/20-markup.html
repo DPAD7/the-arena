@@ -1225,7 +1225,11 @@
       if (!pic && ms) who = ms[1];
       /* the earlier circle paints over the later one, so its own badge is
          never hidden by its neighbour (Jose, Sep 17, 2026) */
-      out += '<i class="slav' + (b.st ? " slav--" + b.st : "") + '" style="z-index:' + (picks.length - i) + '">' +
+      /* a leg partway there fills its face from the bottom: one of two
+         touchdowns is half full (Jose, Oct 3, 2026) */
+      var pc = (window.TRKPC || {})[b.id], st0 = b.st || (window.TRKST || {})[b.id] || "";
+      var fill = !st0 && pc > 0 && pc < 100 ? ";--fill:" + pc + "%" : "";
+      out += '<i class="slav' + (st0 ? " slav--" + st0 : "") + (fill ? " slav--fill" : "") + '" style="z-index:' + (picks.length - i) + fill + '">' +
              (pic || "<b>" + esc(who.slice(0, 3)) + "</b>") +
              (mk ? '<u class="slavmk">' + mk + "</u>" : "") + "</i>";
     });
