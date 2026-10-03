@@ -3357,6 +3357,8 @@
   .slleg .slmks { display: inline-flex; align-items: center; gap: 3px; flex: none; }
   .slleg .so { margin-left: auto; color: var(--amber); font-weight: 600; font-variant-numeric: tabular-nums; }
   .slleg .slwhen { display: none; }
+  .sltrap { font-style: normal; flex: none; border: 1.5px solid #e3b341; color: #e3b341; border-radius: 6px; padding: 2px 5px;
+    font: 800 11px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .06em; text-transform: uppercase; }
   .slword { font-style: normal; font-size: 13px; color: var(--muted); }
   .slat { font-style: normal; font-size: 11.5px; color: var(--muted); letter-spacing: 0.04em;
     text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;

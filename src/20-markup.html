@@ -1211,6 +1211,18 @@
   }
 
   var slipTab = "parlay";
+  /* a short SEC road favorite on the moneyline: flagged, not blocked (Jose,
+     Oct 3, 2026: "SEC on the road is a trap game"). Through week 5 such
+     favorites at -250 or shorter were 3-2 -- LSU at Ole Miss and Florida at
+     Missouri the two losses -- where their prices said about two in three. */
+  var SECTEAMS = { ALA: 1, ARK: 1, AUB: 1, FLA: 1, UGA: 1, UK: 1, LSU: 1, MISS: 1, MSST: 1, MIZ: 1, OU: 1, SC: 1, TENN: 1, TEX: 1, "TA&M": 1, VAN: 1 };
+  function secRoadTrap(b) {
+    if (!/^0ML/.test(b.id || "")) return false;
+    var row = (typeof CFB === "object" ? CFB : []).filter(function (r) { return String(r[1]) === String(b.g); })[0];
+    if (!row || row[11] !== b.id || !SECTEAMS[row[3]] || !SECTEAMS[row[4]]) return false;
+    var n = parseInt(String(b.o || "").replace(/\u2212/g, "-"), 10);
+    return n < 0 && n >= -250;
+  }
   function slipAvatars(all) {
     var out = "", picks = all.slice(0, 20), rest = all.length - picks.length;
     picks.forEach(function (b, i) {
@@ -1353,7 +1365,7 @@
       var row = document.createElement("div");
       row.className = "slleg";
       var lab = document.createElement("span");
-      lab.innerHTML = slipLabel(b.l, b.g);
+      lab.innerHTML = slipLabel(b.l, b.g) + (secRoadTrap(b) ? '<i class="sltrap">SEC road</i>' : "");
       var odds = document.createElement("span");
       odds.className = "so";
       odds.textContent = b.o;
