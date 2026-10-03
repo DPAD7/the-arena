@@ -1418,6 +1418,14 @@
   }
   /* the day is one button on the right of the balance: each tap goes
      today, tomorrow, yesterday and round again (Jose, Oct 3, 2026) */
+  /* a boosted bet's price is the one it pays at: the profit boost on top */
+  function boostedOdds(bet) {
+    var o = String(bet.odds || "").replace("-", "\u2212"), m = /(\d+)%/.exec(bet.boost || "");
+    var n = parseInt(o.replace("\u2212", "-"), 10);
+    if (!m || !bet.boosted || isNaN(n) || !n) return o;
+    var d = n > 0 ? 1 + n / 100 : 1 + 100 / -n, up = 1 + (d - 1) * (1 + m[1] / 100);
+    return up >= 2 ? "+" + Math.round((up - 1) * 100) : "\u2212" + Math.round(100 / (up - 1));
+  }
   function cashNext() {
     var d = CASHDAY === 0 ? 1 : CASHDAY === 1 ? -1 : 0;
     var b = document.querySelector('#cashdays button[data-d="' + d + '"]');
@@ -1725,7 +1733,8 @@
         var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
           'onclick="slipOpen(this)">' +
           '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
-        var avs = slipAvatars(ls).replace(/<\/div>$/, arrow + "</div>");
+        /* the arrow is pinned at the row's right end; the faces scroll under it */
+        var avs = '<div class="slavrow">' + slipAvatars(ls) + arrow + '</div>';
         var trk = slipTrack(bet);
         var at = Date.parse(bet.placed || ""), kind = String(bet.type || (ls.length > 1 ? "Parlay" : "Single")).toUpperCase();
         var top = '<div class="slktop"><span class="slkind">' + esc(kind) + '</span><span class="slkind slkind--n">' + ls.length +
@@ -1738,7 +1747,7 @@
           /* one line of three: the price, what went in, what it pays, with
              what each is written underneath (Jose, Sep 26, 2026) */
           '<div class="slgrid">' +
-          '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(String(bet.odds || "").replace("-", "\u2212"))) + '</b>' +
+          '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(boostedOdds(bet))) + '</b>' +
           '<b>' + cm(bet.wager || 0) + '</b>' +
           '<b class="cashpay">' + cm(bet.topay || 0) + '</b>' +
           '<span>Price</span><span>Amount</span><span>Total payout</span>' +
