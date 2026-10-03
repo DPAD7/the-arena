@@ -4271,6 +4271,15 @@
   .ql-card { width: min(420px, 100%); max-height: 80vh; overflow-y: auto; background: #17181c; border: 1px solid rgba(255,255,255,.13);
     border-radius: 20px; padding: 16px 14px 12px; color: #f4f4f5; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
   .ql-hd { display: flex; gap: 12px; align-items: center; }
+  .ql-card--in { padding: 8px 10px; border-radius: 16px; box-sizing: border-box; }
+  .ql-card--in .ql-hd { display: none; }
+  .ql-card--in .ql-sum { margin: 0 0 4px; }
+  .ql-card--in .ql-sum b { font-size: 19px; }
+  .ql-card--in .ql-sum span { font-size: 10px; }
+  .ql-card--in .ql-t th { padding: 3px 4px; font-size: 10px; }
+  .ql-card--in .ql-t td { padding: 4px; font-size: 15px; }
+  .ql-card--in .ql-t td i { display: none; }
+  .ql-card--in .ql-t td.ql-d, .ql-card--in .ql-sc { font-size: 12px; }
   .ql-hd .qsface { width: 60px; height: 60px; border-radius: 14px; background: #26272b; object-fit: cover; object-position: top; }
   .ql-hd b { display: block; font: 800 24px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
   .ql-hd i { font: 600 13px Barlow, sans-serif; font-style: normal; color: #8e8e93; }

@@ -585,27 +585,52 @@
         (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>Pass yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
                       : '<div class="ql-none">No games played yet</div>') + '</div>';
     }
-    function popOpen(id) {
+    function popOpen(id, at) {
       load().then(function () {
         var html = seasonOf(id);
         if (!html) return;
-        pop.innerHTML = html; pop.hidden = false;
+        pop.innerHTML = html; pop.hidden = false; openedAt = Date.now();
+        /* over the card he is holding, not the top of the screen (Jose, Oct 3,
+           2026: "I told you where I wanted it") */
+        var cd = pop.querySelector(".ql-card");
+        if (at && cd) {
+          /* the card's own size: the face and name are already on it, so the
+             season sits in its place, scrolling inside if it runs long */
+          cd.classList.add("ql-card--in");
+          cd.style.position = "fixed"; cd.style.left = at.left + "px"; cd.style.width = at.width + "px";
+          cd.style.top = at.top + "px"; cd.style.height = at.height + "px"; cd.style.maxHeight = "none";
+        }
         document.documentElement.classList.add("qblog-on");
       });
     }
     function popClose() { pop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
-    pop.addEventListener("click", function (e) { if (!e.target.closest(".ql-card")) popClose(); });
+    var openedAt = 0;
+    /* the lift that ends the hold can land as a tap on the backdrop: taps in
+       the first moment after it opens do not close it */
+    pop.addEventListener("click", function (e) { if (Date.now() - openedAt > 600 && !e.target.closest(".ql-card")) popClose(); });
     var hold = null, hx = 0, hy = 0, held = false;
     /* pointer events, which an iPhone reports for a held finger the same as
        a mouse; a move of more than a few pixels, or the page taking the
        finger for a scroll (pointercancel), lets it go */
     document.addEventListener("pointerdown", function (e) {
       var im = e.target.closest && e.target.closest('.gcard[data-lg="nfl"] img.qbface');
+      /* the right man's face sits under the hide corner: look through it to
+         the face (the corner keeps its own drag; a hold that never moves is
+         not a drag) */
+      if (!im && document.elementsFromPoint) {
+        im = document.elementsFromPoint(e.clientX, e.clientY).filter(function (x) {
+          return x.matches && x.matches('.gcard[data-lg="nfl"] img.qbface');
+        })[0] || null;
+      }
       held = false;
       clearTimeout(hold); hold = null;
       if (!im || !e.isPrimary) return;
       var m = /face\/nfl\/(\d+)\.png/.exec(im.getAttribute("src") || "");
       if (!m) return;
+      /* only the face's own section: not the strip with the travel mark and the
+         record above it, not the name and price under it (Jose, Oct 3, 2026) */
+      var r = im.getBoundingClientRect(), fy = (e.clientY - r.top) / (r.height || 1);
+      if (fy < 0.17 || fy > 0.78) return;
       hx = e.clientX; hy = e.clientY;
       hold = setTimeout(function () { hold = null; held = true; if (navigator.vibrate) navigator.vibrate(10); popOpen(m[1]); }, 450);
     }, true);
