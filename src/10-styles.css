@@ -4120,7 +4120,22 @@
   /* ---- the new betslip foot (Jose, Oct 3, 2026): price, stake chips and the
      amount, the keypad only when the amount is tapped, Place Bet over Track bet */
   .nsfoot { display: grid; gap: 8px; }
-  .nsbody { display: grid; gap: 10px; padding: 4px 0 8px; }
+  .nsbody { display: grid; gap: 10px; padding: 0; }
+  .nswas { font: 700 16px/1 "Barlow Condensed", "Arial Narrow", sans-serif; color: #8e8e93; margin-left: auto; }
+  .nswas:empty, .nsboosted:empty { display: none; }
+  .nsboosted { font: 800 22px/1 "Barlow Condensed", "Arial Narrow", sans-serif; color: #17c257; }
+  /* boosted: the plain price stays tappable, struck through, the boosted one beside it */
+  .nsodds.nsodds--under { margin-left: auto; width: 74px; font-size: 17px; color: #8e8e93; text-decoration: line-through; }
+  .nsrow .nsboosted { order: 3; }
+  .nsbst { display: flex; align-items: center; gap: 12px; width: 100%; padding: 10px 12px; border-radius: 12px; cursor: pointer; text-align: left;
+    border: 1.5px solid rgba(255,255,255,.2); background: rgba(255,255,255,.04); color: #fff; }
+  .nsbst.on { border-color: #17c257; background: rgba(23,194,87,.08); }
+  .nsbst b { display: block; font: 800 18px/1.1 "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .nsbst i { display: block; font: 500 12px/1.3 Barlow, sans-serif; color: #8e8e93; font-style: normal; }
+  .nstog { margin-left: auto; flex: none; position: relative; width: 50px; height: 30px; border-radius: 15px; background: #3a3a3c; transition: background .2s; }
+  .nstog::after { content: ""; position: absolute; left: 3px; top: 3px; width: 24px; height: 24px; border-radius: 50%; background: #fff; transition: transform .2s; }
+  .nsbst.on .nstog { background: #17c257; }
+  .nsbst.on .nstog::after { transform: translateX(20px); }
   #sliplist[data-tab="parlay"] .slfoot { display: none; }
   .nsrow { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
   .nslab { font: 700 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8e8e93; }
@@ -4193,6 +4208,9 @@
      neither leaves a gap under Track bet (Jose, Oct 3, 2026) */
   dialog#slipsheet { inset: 0 0 calc(var(--barstack, 0px) - 75px) 0; }
   #slipsheet .sheet__foot { padding-bottom: 12px; }
+  dialog#slipsheet.padon { inset: 0; z-index: 2147482000; max-height: calc(100vh - 40px); }
+  dialog#slipsheet.padon .sheet__foot { padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+  .nspad button { height: 44px; }
   @media (max-width: 700px) {
     dialog#slipsheet { max-height: calc(92vh - var(--barstack, 0px) + 75px); }
   }

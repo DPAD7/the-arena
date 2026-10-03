@@ -592,24 +592,37 @@
     var el = document.getElementById("swpay");
     if (el) el.dataset.pay = pay ? pay.toFixed(2) : "";
     var total = stake * Math.max(1, bets.length);
+    var wasEl = document.getElementById("nswas"), upEl = document.getElementById("nsboosted");
+    var d1 = bets.length === 1 ? decOf(document.getElementById("swodds").value) : null;
+    if (wasEl && upEl) {
+      var up = BOOST && d1 ? 1 + (d1 - 1) * (1 + BOOST.pct / 100) : 0;
+      wasEl.textContent = "";
+      upEl.textContent = up ? (up >= 2 ? "+" + Math.round((up - 1) * 100) : "\u2212" + Math.round(100 / (up - 1))) : "";
+      document.getElementById("swodds").classList.toggle("nsodds--under", !!up);
+    }
     var b = document.getElementById("nsplaceb"), i = document.getElementById("nspayl");
     if (b) b.textContent = "Place Bet " + cm2(total);
     if (i) i.textContent = pay ? "Total Payout: " + cm2(pay) + (BOOST ? " with the " + BOOST.pct + "% boost" : "") : "";
   }
+  /* the boost's cap: DraftKings' public list says $25, his own account
+     $100 (Jose, Oct 3, 2026), so his is the default */
+  function boostMax(p) {
+    var mine = 0; try { mine = money0(localStorage.getItem("arena.boostmax")) || 0; } catch (e) {}
+    return mine || Math.max(100, p.maxWager || 0);
+  }
+  var BOOSTOFF = false;
   function boostDraw() {
     var box = document.getElementById("swboost");
     if (!box) return;
     var bets = slipBets();
     var fit = bets.length === 1 ? boostsFor(bets[0], document.getElementById("swodds").value) : [];
     if (BOOST && !fit.some(function (p) { return p.id === BOOST.id; })) BOOST = null;
-    if (!BOOST && fit.length) BOOST = { id: fit[0].id, pct: fit[0].pct, max: fit[0].maxWager, head: fit[0].head };
+    if (!BOOST && fit.length && !BOOSTOFF) BOOST = { id: fit[0].id, pct: fit[0].pct, max: boostMax(fit[0]), head: fit[0].head };
+    var p = BOOST ? fit.filter(function (x) { return x.id === BOOST.id; })[0] : fit[0];
     /* no boost fits: nothing is offered at all */
-    box.innerHTML = fit.length ? fit.map(function (p) {
-      var on = BOOST && BOOST.id === p.id;
-      return '<button type="button" class="swb' + (on ? " on" : "") + '" data-id="' + p.id + '">' +
-             '<b>' + p.pct + '% boost</b><i>' + p.head.replace(/\s*\d+%.*$/, "") + '</i></button>' +
-             (on ? '<label class="swmax">Max $<input id="swmaxin" type="text" inputmode="decimal" value="' + (BOOST.max || "") + '"></label>' : "");
-    }).join("") + '<button type="button" class="swb' + (BOOST ? "" : " on") + '" data-id="">No boost</button>' : "";
+    box.innerHTML = p ? '<button type="button" class="nsbst' + (BOOST ? " on" : "") + '" data-id="' + p.id + '">' +
+      '<span><b>' + p.pct + '% ' + esc(p.head.replace(/\s*\d+%.*$/, "")) + ' Boost</b><i>Up to $' + boostMax(p) + ' wager · ' + p.pct + '% profit boost</i></span>' +
+      '<u class="nstog" aria-hidden="true"></u></button>' : "";
     payDraw();
   }
   var NSKEY = "", NSPAD = { typing: false, buf: "" };
@@ -620,7 +633,7 @@
     if (key !== NSKEY) {
       NSKEY = key;
       odds.value = window._slipPrice || "";
-      BOOST = null;
+      BOOST = null; BOOSTOFF = false;
       chkSet("idle");
     }
     if (!stakeOf()) {
@@ -639,15 +652,18 @@
   function padShow(on) {
     var pad = document.getElementById("nspad"), amt = document.getElementById("nsamt");
     pad.hidden = !on; amt.classList.toggle("on", on);
+    /* the keypad takes the room the nav had, so Track bet stays whole */
+    document.getElementById("slipsheet").classList.toggle("padon", on);
     NSPAD.typing = false; NSPAD.buf = "";
     payDraw();
   }
   document.addEventListener("click", function (e) {
-    var t = e.target.closest && e.target.closest(".swb, .nschip, #nsamt, #nspad button, #sliplink, #swsave");
+    var t = e.target.closest && e.target.closest(".nsbst, .nschip, #nsamt, #nspad button, #sliplink, #swsave");
     if (!t) return;
-    if (t.classList.contains("swb")) {
+    if (t.classList.contains("nsbst")) {
       var p = PROMOS.filter(function (x) { return x.id === t.dataset.id; })[0];
-      BOOST = p ? { id: p.id, pct: p.pct, max: p.maxWager, head: p.head } : null;
+      BOOSTOFF = !!BOOST;
+      BOOST = BOOSTOFF || !p ? null : { id: p.id, pct: p.pct, max: boostMax(p), head: p.head };
       boostDraw(); return;
     }
     if (t.classList.contains("nschip")) {
@@ -657,7 +673,6 @@
     if (t.id === "nsamt") {
       padShow(document.getElementById("nspad").hidden);
       /* the keypad opens in view, under the amount */
-      if (!document.getElementById("nspad").hidden) document.querySelector(".nsstakes").scrollIntoView({ block: "start", behavior: "smooth" });
       return;
     }
     if (t.dataset.k) {
