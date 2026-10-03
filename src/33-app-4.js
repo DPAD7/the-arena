@@ -1402,13 +1402,18 @@
       var key = u.tab && u.tab.dataset && u.tab.dataset.sp;
       if (!key) return;
       var G = greens();
-      if (how === "ok" && u.until > Date.now()) G[key] = u.until; else delete G[key];
+      /* green (complete) and grey (something still outstanding) are both kept,
+         each with its colour, until the games are over; red is not */
+      if ((how === "ok" || how === "none") && u.until > Date.now()) G[key] = { until: u.until, how: how }; else delete G[key];
       try { localStorage.setItem("arena.greens", JSON.stringify(G)); } catch (e) {}
     }
     function greens() {
       var G = {};
       try { G = JSON.parse(localStorage.getItem("arena.greens") || "{}") || {}; } catch (e) {}
-      Object.keys(G).forEach(function (k) { if (G[k] < Date.now()) delete G[k]; });
+      Object.keys(G).forEach(function (k) {
+        if (typeof G[k] === "number") G[k] = { until: G[k], how: "ok" };
+        if (!G[k] || G[k].until < Date.now()) delete G[k];
+      });
       return G;
     }
     /* the icons that are still green from an earlier tap, as the page opens
@@ -1420,8 +1425,8 @@
         if (G[k]) {
           var u = fillFor(t);
           if (u.done === false) return;          /* a tap is running */
-          fillSeat(u); u.el.classList.add("spfill--on"); u.done = true; u.until = G[k];
-          fillAt(u, 100, "ok");
+          fillSeat(u); u.el.classList.add("spfill--on"); u.done = true; u.until = G[k].until;
+          fillAt(u, 100, G[k].how);
         }
       });
     }
