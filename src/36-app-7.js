@@ -1045,6 +1045,8 @@
       }
       var fill = st ? 100 : q1 && r && r.period === 1 ? Math.round((900 - left) / 900 * 100) : 0;
       if (st === "lost") TRKLOST[x.lg.sel] = 1;
+      /* every kind of leg tells the faces how it stands, fights and props too */
+      TRKST[x.lg.sel] = st || "";
       var box = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
       return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + (P.yes ? "YES" : "NO") + "</b>" + name +
         ' <i>\u00b7 ' + what + '</i></div><div class="trkbar trkbar--one"><i style="width:' + fill + "%;background:" +
@@ -1064,6 +1066,8 @@
     if (!st && over) st = P.over === false ? "won" : have >= n ? "won" : "lost";
     var pct = Math.min(100, Math.round(have / n * 100));
     if (st === "lost") TRKLOST[x.lg.sel] = 1;
+      /* every kind of leg tells the faces how it stands, fights and props too */
+      TRKST[x.lg.sel] = st || "";
     var bx = st === "won" ? " trkn--won" : st === "lost" ? " trkn--lost" : pre ? " trkn--pre" : "";
     var lab = (P.over === false ? "U" + (P.line || n) : n + "+");
     return '<div class="trkr"><span class="trkc">' + face + '</span><div class="trkm"><div class="trkl"><b>' + esc(lab) + "</b>" + name +
@@ -1380,6 +1384,8 @@
       var st = st0 || fightSettle(x.v.key, x.v.s, f, r, R);
       if (!st && fightPast(win, r, R)) st = "lost";
       if (st === "lost") TRKLOST[x.lg.sel] = 1;
+      /* every kind of leg tells the faces how it stands, fights and props too */
+      TRKST[x.lg.sel] = st || "";
       var img = any ? '<span class="trkc trkc--duo">' + faceL + faceR + "</span>" : '<span class="trkc">' + (x.v.s === 0 ? faceL : faceR) + "</span>";
       var name = any ? sur(L) + " / " + sur(Rn) : sur(x.v.s === 0 ? L : Rn);
       var n = M[1].length, grid = n <= 1 ? "ic1" : n === 2 ? "ic2" : "ic4";
