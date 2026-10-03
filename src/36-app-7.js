@@ -621,6 +621,7 @@
       NSKEY = key;
       odds.value = window._slipPrice || "";
       BOOST = null;
+      chkSet("idle");
     }
     if (!stakeOf()) {
       var last = ""; try { last = localStorage.getItem("arena.stake") || ""; } catch (e1) {}
@@ -671,8 +672,94 @@
       lab0(); payDraw(); return;
     }
     if (t.id === "sliplink") { padShow(false); return; }
-    if (t.id === "swsave") track(t);
+    if (t.id === "swsave") {
+      if (CHK.phase === "idle") chkRun();
+      else if (CHK.phase === "ready") track(t);
+    }
   });
+  /* Track bet confirms the price first (Jose, Oct 3, 2026): the first tap
+     asks DraftKings again for every game on the slip, the way a double tap
+     does, and the button fills left to right while it does; then it reads
+     "Track at +812" with the fresh price, and the second tap keeps the bet */
+  var CHK = { phase: "idle", run: 0 };
+  function chkSet(phase, pc, text) {
+    var t = document.getElementById("swsave");
+    if (!t) return;
+    CHK.phase = phase;
+    if (phase === "idle") CHK.run++;
+    t.classList.toggle("chk", phase === "checking");
+    t.classList.toggle("rdy", phase === "ready");
+    t.style.setProperty("--p", (pc || 0) + "%");
+    t.disabled = phase === "checking";
+    t.textContent = text || (phase === "checking" ? "Checking DraftKings" : "Track bet");
+  }
+  /* a leg's price in what DraftKings sent back: each price sits just before
+     its own id, wherever it is in the answer */
+  function chkFind(j, sel) {
+    var out = "";
+    (function walk(x) {
+      if (out || !x || typeof x !== "object") return;
+      if (Array.isArray(x)) {
+        for (var i = 0; i + 1 < x.length; i++) {
+          if (x[i + 1] === sel && typeof x[i] === "string" && /^[+\-\u2212]?\d/.test(x[i])) { out = x[i]; return; }
+        }
+        x.forEach(walk);
+      } else Object.keys(x).forEach(function (k) { walk(x[k]); });
+    })(j);
+    return out.replace("-", "\u2212");
+  }
+  function chkReady(fresh) {
+    var bets = slipBets();
+    var odds = document.getElementById("swodds");
+    if (fresh) { odds.value = window._slipPrice || odds.value; boostDraw(); }
+    var say = bets.length === 1 ? "Track at " + (odds.value || "") : "Track " + bets.length + " bets";
+    chkSet("ready", 100, say + (fresh ? "" : " \u00b7 last price"));
+  }
+  function chkRun() {
+    var bets = slipBets(), gids = [], seen = {};
+    bets.forEach(function (g) { g.forEach(function (b) { if (b.g && !seen[b.g]) { seen[b.g] = 1; gids.push(String(b.g)); } }); });
+    if (!gids.length || navigator.onLine === false) { chkReady(false); return; }
+    var run = ++CHK.run, t0 = Date.now(), LIMIT = 240000;
+    chkSet("checking", 6);
+    var climb = function () {
+      if (run !== CHK.run) return;
+      var p = Math.min(1, (Date.now() - t0) / 60000);
+      chkSet("checking", Math.round(6 + 86 * (1 - Math.pow(1 - p, 2))));
+    };
+    var tick = setInterval(function () { if (run !== CHK.run || CHK.phase !== "checking") { clearInterval(tick); return; } climb(); }, 500);
+    var stop = function (fresh, st) {
+      clearInterval(tick);
+      if (run !== CHK.run) return;
+      if (fresh && st && st.prices) {
+        var moved = false;
+        bets.forEach(function (g) { g.forEach(function (b) {
+          var o = chkFind(st.prices[b.g], b.id);
+          if (o && saved[b.id] && saved[b.id].o !== o) { saved[b.id].o = o; moved = true; }
+        }); });
+        if (moved) { try { localStorage.setItem(KEY, JSON.stringify(saved)); } catch (e) {} slip(); }
+      }
+      chkReady(fresh);
+    };
+    fetch("ask", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ games: gids.slice(0, 40) }) })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (a) {
+        if (!a || !a.key) { stop(false); return; }
+        var look = function () {
+          if (run !== CHK.run) return;
+          fetch("ask?key=" + encodeURIComponent(a.key), { cache: "no-store" })
+            .then(function (r) { return r.ok ? r.json() : null; })
+            .then(function (st) {
+              if (st && st.prices && window._seatAsked) Object.keys(st.prices).forEach(function (id) { window._seatAsked(id, st.prices[id]); });
+              if (st && st.state === "done") { stop(true, st); return; }
+              if ((st && st.state === "failed") || Date.now() - t0 > LIMIT) { stop(false); return; }
+              setTimeout(look, 3000);
+            })
+            .catch(function () { if (Date.now() - t0 > LIMIT) stop(false); else setTimeout(look, 3000); });
+        };
+        setTimeout(look, 2500);
+      })
+      .catch(function () { stop(false); });
+  }
   function lab0() {
     var bets = slipBets();
     if (bets.length !== 1) document.getElementById("nslab").textContent = bets.length + " bets · " + cm2(stakeOf()) + " each";
@@ -728,7 +815,7 @@
       return dkPull();
     }).catch(function () {
       t.classList.add("bad"); setTimeout(function () { t.classList.remove("bad"); }, 600);
-    }).then(function () { t.disabled = false; });
+    }).then(function () { t.disabled = false; chkSet("idle"); });
   }
   function dkPull(done) {
     DKB_T = Date.now();

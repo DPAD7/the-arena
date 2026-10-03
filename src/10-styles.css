@@ -4160,6 +4160,11 @@
   .nstrack { height: 44px; border: 0; border-radius: 12px; cursor: pointer; color: #111; background: linear-gradient(180deg, #fafafa, #cfcfd4);
     font: 800 19px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   .nstrack.bad { box-shadow: 0 0 0 2px #e2564d; }
+  /* empty until it is asked, filling while it checks, white once the price is in */
+  .nstrack { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.85); }
+  .nstrack.chk { color: #111; border-color: transparent; opacity: 1 !important;
+    background: linear-gradient(90deg, #fafafa var(--p, 0%), rgba(255,255,255,.28) var(--p, 0%)); transition: background .4s linear; }
+  .nstrack.rdy { color: #111; border-color: transparent; background: linear-gradient(180deg, #fafafa, #cfcfd4); }
   .nstrack:disabled { opacity: .6; }
   .nstoast { position: fixed; left: 50%; top: calc(14px + env(safe-area-inset-top)); transform: translateX(-50%); z-index: 2147483000;
     width: min(400px, calc(100% - 32px)); box-sizing: border-box; display: flex; gap: 10px; align-items: center; padding: 12px 14px;
