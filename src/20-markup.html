@@ -45,7 +45,18 @@
   <div class="sliptabs" id="sliptabs"></div>
   <div class="sheet__scroll"><div id="sliplist"></div></div>
   <div class="sheet__foot">
-    <a id="sliplink" href="#" target="_blank" rel="noopener">Add to betslip</a>
+    <div class="slipacts">
+      <a id="sliplink" href="#" target="_blank" rel="noopener">Add to betslip</a>
+      <button type="button" id="slipwal">Add to wallet</button>
+    </div>
+    <div class="slipconf" id="slipconf" hidden>
+      <label>Price<input id="swodds" type="text" inputmode="text" autocomplete="off"></label>
+      <label>Stake<input id="swstake" type="text" inputmode="decimal" autocomplete="off"></label>
+      <div class="swboost" id="swboost"></div>
+      <div class="swpay" id="swpay"></div>
+      <button type="button" id="swsave">Save</button>
+      <button type="button" id="swcancel" class="ghostbtn">Cancel</button>
+    </div>
   </div>
 </dialog>
 <div class="scrim" id="scrim" hidden></div>
@@ -216,7 +227,7 @@
     var w = a.wx || {};
     if (!w.in && ((w.g || 0) >= 20 || (w.p || 0) >= 60))
       out.push({ tag: "WX", who: (w.p || 0) >= 60 ? "Rain" : "Wind",
-                 say: [(w.p || 0) >= 60 ? "Rain likely (" + w.p + "%)" : "", (w.g || 0) >= 20 ? "gusts to " + w.g + " mph" : ""].filter(Boolean).join(", ") + ".",
+                 say: [(w.p || 0) >= 60 ? "Rain likely (" + w.p + "%)" : "", (w.g || 0) >= (w.src === "hourly" ? 15 : 20) ? (w.src === "hourly" ? "wind " + w.g + " mph" : "gusts to " + w.g + " mph") : ""].filter(Boolean).join(", ") + ".",
                  why: "Wind and rain cut passing TDs and yards." });
     return out;
   }
@@ -262,7 +273,9 @@
     if (!w.in && ((w.g || 0) >= 20 || (w.p || 0) >= 60)) {
       var bits = [];
       if ((w.p || 0) >= 60) bits.push("rain likely (" + w.p + "%)");
-      if ((w.g || 0) >= 20) bits.push("gusts to " + w.g + " mph");
+      /* the stadium's steady wind through the game when the hourly forecast
+         gave it (15 mph is where passing suffers); ESPN's gust otherwise */
+      if (w.src === "hourly" ? (w.g || 0) >= 15 : (w.g || 0) >= 20) bits.push((w.src === "hourly" ? "wind " : "gusts to ") + w.g + " mph");
       says.push(["wx", bits.join(", ").replace(/^./, function (c) { return c.toUpperCase(); }) + ".",
                  passing ? "Wind and rain cut passing TDs and yards." : "Wind and rain mean lower scores and closer games."]);
     }
@@ -1282,6 +1295,8 @@
     if (kind) kind.textContent = on.length > 1 ? "parlay" : "single";
     var outs = on.map(function (b) { return b.id.replace(/#/g, "%23"); }).join("+");
     document.getElementById("sliplink").href = "https://sportsbook.draftkings.com/?outcomes=" + outs;
+    window._slipOn = on.map(function (b) { return { id: b.id, o: b.o, l: b.l, g: b.g, gn: b.gn }; });
+    window._slipPrice = parlay(on);
     document.getElementById("sliplink").textContent = "Add to betslip (" + on.length + ")";
     var list = document.getElementById("sliplist");
     list.innerHTML = "";

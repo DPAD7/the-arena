@@ -111,6 +111,30 @@ def usage(rows, need):
     return use
 
 
+STATE = {"AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California", "CO": "Colorado",
+         "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia", "FL": "Florida", "GA": "Georgia",
+         "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois", "IN": "Indiana", "IA": "Iowa", "KS": "Kansas",
+         "KY": "Kentucky", "LA": "Louisiana", "ME": "Maine", "MD": "Maryland", "MA": "Massachusetts",
+         "MI": "Michigan", "MN": "Minnesota", "MS": "Mississippi", "MO": "Missouri", "MT": "Montana",
+         "NE": "Nebraska", "NV": "Nevada", "NH": "New Hampshire", "NJ": "New Jersey", "NM": "New Mexico",
+         "NY": "New York", "NC": "North Carolina", "ND": "North Dakota", "OH": "Ohio", "OK": "Oklahoma",
+         "OR": "Oregon", "PA": "Pennsylvania", "RI": "Rhode Island", "SC": "South Carolina", "SD": "South Dakota",
+         "TN": "Tennessee", "TX": "Texas", "UT": "Utah", "VT": "Vermont", "VA": "Virginia", "WA": "Washington",
+         "WV": "West Virginia", "WI": "Wisconsin", "WY": "Wyoming"}
+GEOF = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "data", "geo.json")
+
+
+def load_geo():
+    try:
+        return json.load(open(GEOF))
+    except (OSError, ValueError):
+        return {}
+
+
+def save_geo(g):
+    json.dump(g, open(GEOF, "w"), indent=0, sort_keys=True)
+
+
 def main():
     s = pagefile.read()
     games, rows = [], {}
@@ -144,6 +168,55 @@ def main():
                     league[lg0].setdefault(ab, []).append(dict(i, athlete=a))
         except Exception:
             league[lg0] = {}
+    GEO = load_geo()
+    FCST = {}
+
+    def hourly(v, d):
+        """The stadium's worst hour of rain chance and wind (mph) from kickoff
+           to three and a half hours on, off Open-Meteo's free forecast."""
+        addr = v.get("address") or {}
+        place = "%s, %s" % (addr.get("city") or "", addr.get("state") or "")
+        if not addr.get("city"):
+            return None
+        if place not in GEO:
+            try:
+                g = rq.get("https://geocoding-api.open-meteo.com/v1/search", params={
+                    "name": addr["city"], "count": 10, "country": "US"}, timeout=20).json().get("results") or []
+                g = [x for x in g if not addr.get("state") or (x.get("admin1") or "").lower().startswith(STATE.get(addr["state"], addr["state"]).lower())] or g
+                GEO[place] = [g[0]["latitude"], g[0]["longitude"]] if g else None
+            except Exception:
+                return None
+            save_geo(GEO)
+        ll = GEO.get(place)
+        kick = ((d.get("header") or {}).get("competitions") or [{}])[0].get("date")
+        if not ll or not kick:
+            return None
+        k = dt.datetime.fromisoformat(kick.replace("Z", "+00:00"))
+        key = "%.3f,%.3f" % (ll[0], ll[1])
+        f = FCST.get(key)
+        # one forecast a stadium, asked again once if the service is busy
+        for _try in range(3):
+            if f:
+                break
+            try:
+                r = rq.get("https://api.open-meteo.com/v1/forecast", params={
+                    "latitude": ll[0], "longitude": ll[1], "hourly": "precipitation_probability,wind_speed_10m",
+                    "wind_speed_unit": "mph", "timezone": "UTC", "forecast_days": 4}, timeout=20)
+                if r.status_code == 200:
+                    f = FCST[key] = r.json()["hourly"]
+                else:
+                    import time; time.sleep(2)
+            except Exception:
+                import time; time.sleep(2)
+        if not f:
+            return None
+        rain, gust = [], []
+        for t, pp, wg in zip(f["time"], f["precipitation_probability"], f["wind_speed_10m"]):
+            at = dt.datetime.fromisoformat(t + "+00:00")
+            if k - dt.timedelta(minutes=30) <= at <= k + dt.timedelta(hours=3, minutes=30):
+                rain.append(pp or 0); gust.append(wg or 0)
+        return (max(rain), round(max(gust))) if rain else None
+
     for gid, lg, away, home in games:
         try:
             d = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (lg, gid),
@@ -167,6 +240,14 @@ def main():
             indoor = ROOF[v["id"]]
         e = {"wx": {"c": w.get("conditionId"), "t": w.get("temperature"), "g": w.get("gust"),
                     "p": w.get("precipitation"), "in": 1 if indoor else 0}}
+        # ESPN's figure is the day's chance for the whole area; the rain and
+        # wind that matter are the stadium's, hour by hour, while the game is
+        # played (Jose, Oct 3, 2026: a "rain likely 63%" for Starkville that an
+        # hourly forecast had at 2-10% through the game)
+        if not indoor:
+            hw = hourly(v, d)
+            if hw:
+                e["wx"]["p"], e["wx"]["g"], e["wx"]["src"] = hw[0], hw[1], "hourly"
         pc = (d.get("pickcenter") or [{}])[0] or {}
         if pc.get("spread") is not None:
             e["spread"] = abs(float(pc["spread"]))

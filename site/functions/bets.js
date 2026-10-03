@@ -55,7 +55,10 @@ export async function onRequest({ request, env }) {
       return ok(l ? JSON.parse(l) : {});
     }
     const held = await store(env).get(SLOT);
-    return ok(held ? JSON.parse(held) : { balance: null, bets: [], at: 0 });
+    const out = held ? JSON.parse(held) : { balance: null, bets: [], at: 0 };
+    try { out.sent = JSON.parse((await store(env).get("dkbets:sent")) || "[]"); } catch (e) { out.sent = []; }
+    try { out.wallet = JSON.parse((await store(env).get("dkbets:wallet")) || "null"); } catch (e) { out.wallet = null; }
+    return ok(out);
   }
 
   if (request.method === "POST") {
@@ -87,6 +90,27 @@ export async function onRequest({ request, env }) {
       if (txt.length > 60000) return ok({ error: "big" }, 400);
       await store(env).put("dkbets:login", txt);
       return ok({ login: true });
+    }
+    /* a slip the board handed to DraftKings ("Add to betslip"), kept so the
+       wallet tracks it with no DraftKings login (Oct 3, 2026); the last sixty,
+       and one can be taken back off */
+    /* his balance, confirmed once by hand; the wallet counts from it */
+    if (body && typeof body.wallet === "number" && isFinite(body.wallet)) {
+      await store(env).put("dkbets:wallet", JSON.stringify({ bal: Math.round(body.wallet * 100) / 100, at: Date.now() }));
+      return ok({ wallet: true });
+    }
+    if (body && (body.sent || body.unsent)) {
+      let list = [];
+      try { list = JSON.parse((await store(env).get("dkbets:sent")) || "[]"); } catch (e) { list = []; }
+      if (body.unsent) list = list.filter(b => b.id !== body.unsent);
+      if (body.sent && typeof body.sent === "object" && Array.isArray(body.sent.legs)) {
+        list.push(body.sent);
+        list = list.slice(-60);
+      }
+      const txt = JSON.stringify(list);
+      if (txt.length > 200000) return ok({ error: "big" }, 400);
+      await store(env).put("dkbets:sent", txt);
+      return ok({ sent: list.length });
     }
     if (body && typeof body.jar === "string") {
       if (body.jar.length > 60000) return ok({ error: "big" }, 400);

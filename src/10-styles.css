@@ -3985,6 +3985,28 @@
     border-top: 1px solid rgba(255, 255, 255, 0.13);
   }
   .sheet__foot #sliplink { margin-top: 0; }
+  .slipacts { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  #slipwal { font-family: "Barlow Condensed", "Arial Narrow", sans-serif; font-weight: 700; font-size: 16px;
+    letter-spacing: 0.06em; text-transform: uppercase; color: #fff; background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.28); border-radius: 8px; padding: 10px 12px; }
+  .slipconf { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .slipconf label { display: grid; gap: 4px; font: 700 11px/1 "Barlow Condensed", sans-serif; letter-spacing: .08em;
+    text-transform: uppercase; color: rgba(255,255,255,.6); }
+  .slipconf input, .cashset input { font: 700 17px/1.2 "Barlow Condensed", sans-serif; color: #fff; background: #111;
+    border: 1px solid rgba(255,255,255,.25); border-radius: 8px; padding: 9px 10px; width: 100%; box-sizing: border-box; }
+  .slipconf button, .cashset button { font: 700 15px/1 "Barlow Condensed", sans-serif; letter-spacing: .06em; text-transform: uppercase;
+    border-radius: 8px; padding: 11px; border: 0; background: var(--goldgrad); color: var(--chip-ink); }
+  .slipconf .ghostbtn { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.28); }
+  .slipconf--bad input { border-color: #ff5b5b; }
+  .swboost { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 6px; }
+  .swb { display: grid; text-align: left; gap: 2px; border-radius: 8px; padding: 7px 10px; background: #111;
+    color: #fff; border: 1px solid rgba(255,255,255,.25); font: 700 13px/1.1 "Barlow Condensed", sans-serif; }
+  .swb i { font-style: normal; font-weight: 600; font-size: 11px; color: rgba(255,255,255,.65); }
+  .swb.on { border: 2px solid #e3b341; }
+  .swmax { display: flex !important; align-items: center; gap: 4px; }
+  .swmax input { width: 70px !important; }
+  .swpay { grid-column: 1 / -1; font: 700 16px/1 "Barlow Condensed", sans-serif; color: #17c257; min-height: 16px; }
+  .cashset { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin: 6px 0 10px; }
   @media (max-width: 700px) {
     dialog.sheet {
       width: 100%; max-width: 100%; height: fit-content;

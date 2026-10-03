@@ -369,7 +369,13 @@ export class Clock {
       const own = await this.ctx.storage.get("kv:dkbets");
       held = JSON.parse((own && own.v) || (await this.env.ARENA.get("dkbets")) || "null");
     } catch (e) { held = null; }
-    const slips = ((held && held.bets) || []).filter(b => (b.legs || []).length);
+    // and the slips he added to the wallet himself (Oct 3, 2026)
+    let sent = [];
+    try {
+      const s0 = await this.ctx.storage.get("kv:dkbets:sent");
+      sent = JSON.parse((s0 && s0.v) || (await this.env.ARENA.get("dkbets:sent")) || "[]");
+    } catch (e) { sent = []; }
+    const slips = ((held && held.bets) || []).concat(sent).filter(b => (b.legs || []).length);
     if (!slips.length) return false;
     const rows = {};
     for (const r of sched) if (r[0] === "game" || r[0] === "bout") rows[r[1]] = r;

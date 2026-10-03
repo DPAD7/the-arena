@@ -47,14 +47,6 @@ def tell(key, title, body):
 def main():
     asked = [x.strip() for x in arg("--games").split(",") if x.strip()]
     page = pagefile.read()
-    m = re.search(r"  var CFB = (\[\[.*?\]\]);\n", page, re.S)
-    cfb = json.loads(m.group(1)) if m else []
-    rows = [g for g in cfb if str(g[1]) in asked
-            and fill_week.T(g[2]) > NOW
-            and not os.path.exists(os.path.join(D, "site", "final", "%s.json" % g[1]))]
-    if not rows:
-        print("ask_swap: no college game to kick among the tapped")
-        return
     reg = os.path.join(D, "data", "register.db")
     if os.path.exists(reg) and not os.path.exists(fill_week.DB):
         fill_week.DB = reg
@@ -62,58 +54,72 @@ def main():
     dkp = os.path.join(D, "data", "dk_people.json")
     dkpeople = json.load(open(dkp)) if os.path.exists(dkp) else {}
     names = json.load(open(D + "/data/cfb_names.json"))
-    events = fill_week.dk_events("ncaaf")
-    keyed = fill_week.tie_events("ncaaf", events, club, names)
     book = pricefile.read()
     qf = os.path.join(D, "data", "dk_qbs.json")
     try:
         dkq_all = json.load(open(qf))
     except (OSError, ValueError):
         dkq_all = {}
-    swaps = []
-    for g in rows:
-        gid = str(g[1])
-        e, how = fill_week.event_for(g, "ncaaf", keyed, events, club, names, loose=False)
-        if not e:
+    swaps, arrays = [], {}
+    # college and, since Oct 3, 2026, the NFL too: a card that holds one man
+    # while DraftKings prices another -- the Bears' Bagent and Keenum
+    for var, league in (("CFB", "ncaaf"), ("SCHED", "nfl")):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);\n" % var, page, re.S)
+        arr = json.loads(m.group(1)) if m else []
+        arrays[var] = (m, arr)
+        rows = [g for g in arr if str(g[1]) in asked
+                and fill_week.T(g[2]) > NOW
+                and not os.path.exists(os.path.join(D, "site", "final", "%s.json" % g[1]))]
+        if not rows:
             continue
-        ml, entry = fill_week.price_event(e, [g[6], g[8]], "ncaaf", dkpeople, [g[5], g[7]])
-        dkq = [[], []]
-        for role, men in (entry.pop("_qb", {}) or {}).items():
-            side = 0 if role == "away" else 1
-            if how == "flipped":
-                side = 1 - side
-            for pid, nm in men.items():
-                espn = (dkpeople.get(pid) or {}).get("espn") or ""
-                dkq[side].append([str(espn), nm])
-        dkq_all[gid] = dkq
-        moved = []
-        for side in (0, 1):
-            priced = [x for x in dkq[side] if x[0]]
-            if len(priced) == 1 and priced[0][0] != str(g[6 + side * 2]):
-                was = g[5 + side * 2]
-                g[5 + side * 2], g[6 + side * 2] = priced[0][1], priced[0][0]
-                moved.append((g[3 + side], was, priced[0][1]))
-        if not moved:
-            continue
-        # the card's new man, read for his prices
-        ml, entry = fill_week.price_event(e, [g[6], g[8]], "ncaaf", dkpeople, [g[5], g[7]])
-        entry.pop("_qb", None)
-        book["PROPS"][gid] = entry
-        if ml:
-            row = list(book["CFB"].get(gid) or ["", "", "", ""])
-            for i, (price, oid) in ml.items():
-                row[i * 2], row[i * 2 + 1] = price, oid
-            book["CFB"][gid] = row
-        for team, was, now in moved:
-            swaps.append((team, was, now))
-            print("ask_swap: %s %s -> %s (DraftKings)" % (team, was, now))
+        cfb = names if league == "ncaaf" else {}
+        events = fill_week.dk_events(league)
+        keyed = fill_week.tie_events(league, events, club, cfb)
+        for g in rows:
+            gid = str(g[1])
+            e, how = fill_week.event_for(g, league, keyed, events, club, cfb, loose=False)
+            if not e:
+                continue
+            ml, entry = fill_week.price_event(e, [g[6], g[8]], league, dkpeople, [g[5], g[7]])
+            dkq = [[], []]
+            for role, men in (entry.pop("_qb", {}) or {}).items():
+                side = 0 if role == "away" else 1
+                if how == "flipped":
+                    side = 1 - side
+                for pid, nm in men.items():
+                    espn = (dkpeople.get(pid) or {}).get("espn") or ""
+                    dkq[side].append([str(espn), nm])
+            dkq_all[gid] = dkq
+            moved = []
+            for side in (0, 1):
+                priced = [x for x in dkq[side] if x[0]]
+                if len(priced) == 1 and priced[0][0] != str(g[6 + side * 2]):
+                    was = g[5 + side * 2]
+                    g[5 + side * 2], g[6 + side * 2] = priced[0][1], priced[0][0]
+                    moved.append((g[3 + side], was, priced[0][1]))
+            if not moved:
+                continue
+            ml, entry = fill_week.price_event(e, [g[6], g[8]], league, dkpeople, [g[5], g[7]])
+            entry.pop("_qb", None)
+            book["PROPS"][gid] = entry
+            if ml:
+                row = list(book[var].get(gid) or ["", "", "", ""])
+                for i, (price, oid) in ml.items():
+                    row[i * 2], row[i * 2 + 1] = price, oid
+                book[var][gid] = row
+            for team, was, now in moved:
+                swaps.append((team, was, now))
+                print("ask_swap: %s %s -> %s (DraftKings)" % (team, was, now))
     if not swaps:
-        print("ask_swap: every tapped college card holds the passer DraftKings prices")
+        print("ask_swap: every tapped card holds the passer DraftKings prices")
         return
     if DRY:
         print("dry run -- nothing written")
         return
-    page = page[:m.start()] + "  var CFB = %s;\n" % json.dumps(cfb, separators=(",", ":")) + page[m.end():]
+    for var, (m, arr) in arrays.items():
+        if m:
+            page = re.sub(r"  var %s = \[\[.*?\]\];\n" % var,
+                          lambda _m: "  var %s = %s;\n" % (var, json.dumps(arr, separators=(",", ":"))), page, count=1, flags=re.S)
     pagefile.write(page)
     pricefile.write(book)
     json.dump(dkq_all, open(qf, "w"))

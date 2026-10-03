@@ -441,7 +441,18 @@
     /* the book's balance is the balance, every time it is read -- a unit taken
        off before the read landed stayed off, and the wallet said $150.22 with
        $250.22 on DraftKings (Jose, Sep 28, 2026) */
-    if (DKB && typeof DKB.balance === "number" && BANK.bal !== DKB.balance) { BANK.bal = DKB.balance; bankFix = true; }
+    var wal = DKB && DKB.wallet;
+    if (wal && typeof wal.bal === "number" && wal.at >= (DKB.bookAt || 0)) {
+      var b0 = wal.bal;
+      (DKB.sent || []).forEach(function (bet) {
+        if ((Date.parse(bet.placed) || 0) < wal.at) return;
+        b0 -= bet.wager || 0;
+        var legs = bet.legs || [];
+        if (legs.length && legs.every(function (lg) { return (BANK.legs[lg.sel] || {}).st === "won"; })) b0 += bet.topay || 0;
+      });
+      b0 = Math.round(b0 * 100) / 100;
+      if (BANK.bal !== b0) { BANK.bal = b0; bankFix = true; }
+    } else if (DKB && typeof DKB.balance === "number" && BANK.bal !== DKB.balance) { BANK.bal = DKB.balance; bankFix = true; }
     if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) { var f0 = bankFix; bankFix = false; return f0; }
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
     (DKB.bets || []).forEach(function (bet) {
@@ -466,7 +477,7 @@
         });
       });
     });
-    if (typeof DKB.balance === "number") BANK.bal = DKB.balance;
+    if (typeof DKB.balance === "number" && !(DKB.wallet && DKB.wallet.at >= (DKB.bookAt || 0))) BANK.bal = DKB.balance;
     BANK.dkAt = DKB.at;
     return true;
   }
@@ -486,7 +497,7 @@
             .then(function (b) {
               /* a fresh sync wins: an expiry flagged by an older read never
                  turns a good one red (Jose, Sep 29, 2026) */
-              if (b && b.at && b.at >= j.asked) { DKB = b; DKB_T = Date.now(); bankDraw(); done(true, true); return; }
+              if (b && b.at && b.at >= j.asked) { DKB = withSent(b); DKB_T = Date.now(); bankDraw(); done(true, true); return; }
               if (b && b.expired && b.expired >= j.asked && b.expired > (b.at || 0)) { done(false, false); return; }   /* login gone: red */
               if (++tries > 75 || Date.now() - t0 > 150000) { done(true, false); return; }
               if (done.step) done.step(Math.min(92, 20 + tries * 2));
@@ -498,12 +509,139 @@
       }).catch(function () { done(false, false); });
   }
   window._dkFresh = dkFresh;
+  /* the slips the board itself handed to DraftKings: kept by the site the
+     moment "Add to betslip" is tapped, so the wallet tracks them with no
+     DraftKings login at all (Jose, Oct 3, 2026: "the bets I build outside
+     wouldn't be the bets we track"). A slip DraftKings' own read also
+     carries, the same legs, is shown once, as DraftKings has it. */
+  function withSent(j) {
+    var bets = (j.bets || []).slice(), seen = {};
+    bets.forEach(function (b) {
+      seen[(b.legs || []).map(function (l) { return l.sel; }).sort().join("|")] = 1;
+    });
+    (j.sent || []).forEach(function (b) {
+      var k = (b.legs || []).map(function (l) { return l.sel; }).sort().join("|");
+      if (!seen[k]) bets.push(b);
+    });
+    var out = {};
+    for (var key in j) out[key] = j[key];
+    out.bets = bets;
+    out.bookAt = j.at || 0;
+    (j.sent || []).forEach(function (b) { var t = Date.parse(b.placed) || 0; if (t > (out.at || 0)) out.at = t; });
+    if (j.wallet && j.wallet.at > (out.at || 0)) out.at = j.wallet.at;
+    return out;
+  }
+  /* "Add to wallet": the slip's legs, the price DraftKings filled it at and
+     the stake, confirmed by him, kept by the site; from then on the wallet
+     tracks it and the balance moves with it (Jose, Oct 3, 2026: "add to
+     betslip and add to wallet, then I confirm the balance one time") */
+  function money0(v) { var n = parseFloat(String(v).replace(/[^0-9.\-]/g, "")); return isNaN(n) ? null : n; }
+  function decOf(o) {
+    var n = parseInt(String(o || "").replace(/\u2212|\u2013/g, "-").replace(/[^\-0-9]/g, ""), 10);
+    return isNaN(n) || !n ? null : (n > 0 ? 1 + n / 100 : 1 + 100 / -n);
+  }
+  var confEl = document.getElementById("slipconf");
+  var PROMOS = [], BOOST = null;
+  function promoLoad() {
+    return fetch("promos.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (j) { PROMOS = j || []; }).catch(function () { PROMOS = []; });
+  }
+  function sportOf(gid) {
+    if ((typeof SCHED === "object" ? SCHED : []).some(function (r) { return String(r[1]) === String(gid); })) return "nfl";
+    if ((typeof CFB === "object" ? CFB : []).some(function (r) { return String(r[1]) === String(gid); })) return "college-football";
+    return "";
+  }
+  /* a boost fits a slip when it is running now, every leg is in its league
+     (or on its one game), the slip has its fewest legs, and the price is at
+     its minimum odds or longer */
+  function boostsFor(legs, odds) {
+    var now = Date.now(), d = decOf(odds), gids = legs.map(function (b) { return String(b.g || ""); });
+    return PROMOS.filter(function (p) {
+      if (Date.parse(p.start) > now || Date.parse(p.end) < now) return false;
+      if (legs.length < (p.minLegs || 1)) return false;
+      if (p.minOdds && d && d < decOf(p.minOdds)) return false;
+      if (p.gid) return gids.every(function (g) { return g === String(p.gid); });
+      if (p.sport) return gids.every(function (g) { return sportOf(g) === p.sport; });
+      return false;
+    }).sort(function (a, b) { return (b.gid ? 1 : 0) - (a.gid ? 1 : 0) || b.pct - a.pct; });
+  }
+  function payDraw() {
+    var stake = money0(document.getElementById("swstake").value), d = decOf(document.getElementById("swodds").value);
+    var el = document.getElementById("swpay");
+    if (!el) return;
+    if (!stake || !d) { el.textContent = ""; return; }
+    var pay = stake * d;
+    if (BOOST) pay += (d - 1) * Math.min(stake, BOOST.max || stake) * BOOST.pct / 100;
+    el.textContent = "Pays $" + pay.toFixed(2) + (BOOST ? " with the " + BOOST.pct + "% boost" : "");
+    el.dataset.pay = pay.toFixed(2);
+  }
+  function boostDraw() {
+    var box = document.getElementById("swboost");
+    if (!box) return;
+    var fit = boostsFor(window._slipOn || [], document.getElementById("swodds").value);
+    if (BOOST && !fit.some(function (p) { return p.id === BOOST.id; })) BOOST = null;
+    if (!BOOST && fit.length) BOOST = { id: fit[0].id, pct: fit[0].pct, max: fit[0].maxWager, head: fit[0].head };
+    box.innerHTML = fit.length ? fit.map(function (p) {
+      var on = BOOST && BOOST.id === p.id;
+      return '<button type="button" class="swb' + (on ? " on" : "") + '" data-id="' + p.id + '">' +
+             '<b>' + p.pct + '% boost</b><i>' + p.head.replace(/\s*\d+%.*$/, "") + '</i></button>' +
+             (on ? '<label class="swmax">Max $<input id="swmaxin" type="text" inputmode="decimal" value="' + (BOOST.max || "") + '"></label>' : "");
+    }).join("") + '<button type="button" class="swb' + (BOOST ? "" : " on") + '" data-id="">No boost</button>' : "";
+    payDraw();
+  }
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".swb");
+    if (!b) return;
+    var p = PROMOS.filter(function (x) { return x.id === b.dataset.id; })[0];
+    BOOST = p ? { id: p.id, pct: p.pct, max: p.maxWager, head: p.head } : null;
+    boostDraw();
+  });
+  document.addEventListener("input", function (e) {
+    if (!e.target || !e.target.id) return;
+    if (e.target.id === "swmaxin" && BOOST) BOOST.max = money0(e.target.value);
+    if (e.target.id === "swodds") { boostDraw(); return; }
+    if (/^sw(stake|maxin)$/.test(e.target.id)) payDraw();
+  });
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest("#slipwal, #swsave, #swcancel");
+    if (!t || !confEl) return;
+    if (t.id === "swcancel") { confEl.hidden = true; return; }
+    if (t.id === "slipwal") {
+      if (!window._slipOn || !window._slipOn.length) return;
+      document.getElementById("swodds").value = window._slipPrice || "";
+      var last = ""; try { last = localStorage.getItem("arena.stake") || ""; } catch (e1) {}
+      document.getElementById("swstake").value = last;
+      BOOST = null;
+      confEl.hidden = false;
+      promoLoad().then(boostDraw);
+      return;
+    }
+    var odds = document.getElementById("swodds").value.trim().replace("-", "\u2212");
+    var stake = money0(document.getElementById("swstake").value), d = decOf(odds);
+    if (!stake || !d) { confEl.classList.add("slipconf--bad"); setTimeout(function () { confEl.classList.remove("slipconf--bad"); }, 600); return; }
+    try { localStorage.setItem("arena.stake", String(stake)); } catch (e2) {}
+    var legs = window._slipOn.map(function (b) {
+      return { sel: b.id, pick: b.l, label: String(b.l || "").split(" \u00b7 ")[0], market: "",
+               odds: b.o, g: b.g, evn: b.gn, status: "open", sgp: "" };
+    });
+    var bet = { id: "board-" + Date.now(), type: legs.length > 1 ? "Parlay" : "Single",
+                odds: odds, was: odds, wager: stake,
+                topay: Math.round(parseFloat(document.getElementById("swpay").dataset.pay || stake * d) * 100) / 100,
+                boost: BOOST ? BOOST.pct + "% Profit Boost" : "", boosted: !!BOOST,
+                placed: new Date().toISOString(), status: "open", from: "board", legs: legs };
+    t.disabled = true;
+    fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST",
+          headers: { "content-type": "application/json" }, body: JSON.stringify({ sent: bet }) })
+      .then(function (r) { if (!r.ok) throw 0; confEl.hidden = true; return dkPull(); })
+      .catch(function () { confEl.classList.add("slipconf--bad"); })
+      .then(function () { t.disabled = false; });
+  });
   function dkPull(done) {
     DKB_T = Date.now();
     return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        if (j && j.at) { DKB = j; bankDraw(); }
+        if (j && (j.at || (j.sent && j.sent.length))) { DKB = withSent(j); bankDraw(); }
         /* read, and was the last sync from the book recent: six hours */
         if (done) done(!!j, !!(j && j.at && Date.now() - j.at < 6 * 3600000));
       })
@@ -621,6 +759,7 @@
   fetch("dkevents.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { DKEVENTS = j || {}; }).catch(function () {});
   function trkGameOf(lg) {
+    if (lg.g) return String(lg.g);
     if (lg.ev && DKEVENTS[lg.ev]) return DKEVENTS[lg.ev];
     var m = /^([A-Z]{2,4})\s+\S.*?\s@\s([A-Z]{2,4})\s/.exec(String(lg.evn || "") + " ");
     if (!m) return "";
@@ -1498,6 +1637,22 @@
         amtEl.addEventListener(ev, function () { clearTimeout(holdT); });
       });
       amtEl.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+      amtEl.addEventListener("click", function () {
+        if (CASHHIDE || document.getElementById("cashset")) return;
+        var f = document.createElement("div");
+        f.id = "cashset"; f.className = "cashset";
+        f.innerHTML = '<input type="text" inputmode="decimal" placeholder="Your DraftKings balance">' +
+          '<button type="button">Set</button>';
+        amtEl.insertAdjacentElement("afterend", f);
+        var inp = f.querySelector("input"); inp.value = BANK.bal != null ? String(BANK.bal) : ""; inp.focus();
+        f.querySelector("button").addEventListener("click", function () {
+          var n = parseFloat(String(inp.value).replace(/[^0-9.]/g, ""));
+          if (isNaN(n)) { f.remove(); return; }
+          fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST",
+                headers: { "content-type": "application/json" }, body: JSON.stringify({ wallet: n }) })
+            .then(function () { f.remove(); return dkPull(); }).catch(function () { f.remove(); });
+        });
+      });
       amtEl.style.webkitUserSelect = amtEl.style.userSelect = "none";
       amtEl.style.webkitTouchCallout = "none";
     }
@@ -1520,6 +1675,10 @@
     var wal = fab.querySelector(".wal"), fillEl = fab.querySelector(".wal-lv");
     var tapT = null, fadeT = null, popT = null;
     window._walletPull = function () { pullNow(); };
+    /* the wallet opens off the Stacked mark's double tap; its floating button
+       is gone (Jose, Oct 3, 2026: "move the fab to the stacked logo") */
+    window._walletOpen = function () { if (sheet.hidden) openSheet(); else sheet.hidden = true; };
+    if (fab) fab.style.display = "none";
     function pullNow() {
       clearTimeout(fadeT); clearTimeout(popT);
       wal.className = "wal filling";

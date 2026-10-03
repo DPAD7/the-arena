@@ -546,7 +546,12 @@
       .catch(function () {});
     pullWire();
   }
+  /* when the board last finished drawing: a double tap on a sport icon is
+     timed from here, since the first tap's drawing holds the second one up */
   function render() {
+    try { return render0.apply(this, arguments); } finally { window._drawnAt = performance.now(); }
+  }
+  function render0() {
     /* HOT's field, scoreboard and scroll lock belong to HOT alone: any other
        board drawn -- a week's cards on Form, another sport -- takes them down,
        or the field and the black scoreboard showed through behind a week's
@@ -876,7 +881,20 @@
   var dayTapAt = 0, dayTapOn = null, nflTapAt = 0;
   /* heard on the page before the tab change's crossfade takes the tap and
      replays it; the replay is not a second tap */
-  var allTapAt = 0, tapFreeAt = 0;
+  var tapFreeAt = 0, tapStamp = {}, tapsAt = {}, downs = {};
+  /* the moment each finger touched an icon, by the phone's own clock: a touch
+     is stamped when it lands, even while the board is busy drawing, so two
+     touches a moment apart are a double tap however late their clicks come */
+  document.addEventListener("pointerdown", function (e) {
+    var hit = null;
+    sbar.querySelectorAll(".sptab").forEach(function (x) {
+      var r = x.getBoundingClientRect();
+      if (e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom) hit = x;
+    });
+    if (!hit) return;
+    var k = hit.dataset.sp, L = downs[k] || (downs[k] = []);
+    L.push(e.timeStamp); if (L.length > 2) L.shift();
+  }, true);
   /* heard last, once the tab's own handlers have drawn the board */
   document.addEventListener("click", function (e) {
     if (e.target.closest && e.target.closest(".sptab")) tapFreeAt = performance.now();
@@ -899,28 +917,31 @@
     /* one clock for both: Safari stamps events on its own, not on
        performance.now(), so a tap is timed when it is heard */
     var heard = performance.now();
-    var since = function (at) { return heard - Math.max(at, tapFreeAt); };
-    if (sp.dataset.sp === "nfl") {
-      if (nflTapAt && since(nflTapAt) < 420) {
-        nflTapAt = 0;
-        if (typeof window._askWeek === "function") window._askWeek(sp);
-        return;
-      }
-      nflTapAt = heard;
+    var since = function (at) { return heard - Math.max(at, tapFreeAt, window._drawnAt || 0); };
+    /* and by the finger's own clock: a phone stamps each tap when it is made,
+       so two taps a moment apart read as a moment apart however long the
+       board took to draw between them */
+    var near = function (sp0) {
+      var L = downs[sp0] || [];
+      if (L.length === 2 && L[1] - L[0] >= 0 && L[1] - L[0] < 420) return true;
+      var t0 = tapStamp[sp0]; return e.isTrusted && t0 != null && e.timeStamp - t0 >= 0 && e.timeStamp - t0 < 420;
+    };
+    /* each icon's double tap: the NFL shield, the college playoff mark and
+       the ROUND card ask for their own league's week (the fights: the next
+       card); the calendar asks for the day open (Jose, Oct 3, 2026) */
+    var JOB = { "nfl": "nfl", "college-football": "cfb", "mma": "mma", "all": "day" };
+    var key = sp.dataset.sp, job = JOB[key];
+    if (!job) return;
+    if (tapsAt[key] && (since(tapsAt[key]) < 420 || near(key))) {
+      tapsAt[key] = 0; downs[key] = [];
+      /* after the first tap has drawn its page */
+      setTimeout(function () {
+        if (job === "day") { if (typeof window._askDay === "function") window._askDay(sp); }
+        else if (typeof window._askWeek === "function") window._askWeek(sp, job);
+      }, 60);
+      return;
     }
-    /* the day page's own icon, at the end of the nav: two taps ask
-       DraftKings for every price the day's cards are short of, the job the
-       Stacked mark's double tap did, with its fill on this icon (Jose, Oct 1,
-       2026: "the day tab next to the NFL logo in the nav") */
-    if (sp.dataset.sp === "all") {
-      if (allTapAt && since(allTapAt) < 420) {
-        allTapAt = 0;
-        /* after the first tap has drawn the day */
-        setTimeout(function () { if (typeof window._askDay === "function") window._askDay(sp); }, 60);
-        return;
-      }
-      allTapAt = heard;
-    }
+    tapsAt[key] = heard; if (e.isTrusted) tapStamp[key] = e.timeStamp;
   }, true);
   dbar.addEventListener("click", function (e) {
     var t = e.target.closest(".dtab");
@@ -1527,17 +1548,35 @@
     /* the NFL shield, double tapped: every game of the week we are on that is
        still short of a price, asked of DraftKings there and then, whatever day
        is open; the fill rides the shield (Jose, Oct 1, 2026) */
-    window._askWeek = function (tab) {
+    window._askWeek = function (tab, league) {
       var u = fillStart(tab);
       if (navigator.onLine === false) { fillDone(u, "none"); return; }
-      var now = Date.now(), rows = (typeof SCHED === "object" ? SCHED : []).filter(function (r) {
-        return Date.parse(r[2]) > now;
-      });
-      if (!rows.length) { fillDone(u, "none"); return; }
-      var wk = Math.min.apply(null, rows.map(function (r) { return r[0]; }));
-      var short = rows.filter(function (r) {
-        return r[0] === wk && !isWhole({ dataset: { espn: String(r[1]) } }, String(r[1]));
-      }).map(function (r) { return { dataset: { espn: String(r[1]) } }; });
+      var now = Date.now(), short = [];
+      if (league === "mma") {
+        /* the next card: every bout on it still to start and short of a price */
+        var bouts = (typeof FIGHTS === "object" ? FIGHTS : []).filter(function (f) { return Date.parse(f[2]) > now; });
+        if (!bouts.length) { fillDone(u, "none"); return; }
+        var first = bouts.reduce(function (a, f) { return Date.parse(f[2]) < Date.parse(a[2]) ? f : a; });
+        short = bouts.filter(function (f) { return f[0] === first[0] && !isWhole({ dataset: { bout: String(f[1]) } }, String(f[1])); })
+          .map(function (f) { return { dataset: { bout: String(f[1]) } }; });
+      } else {
+        var src = league === "cfb" ? (typeof CFB === "object" ? CFB : []) : (typeof SCHED === "object" ? SCHED : []);
+        var rows = src.filter(function (r) { return Date.parse(r[2]) > now; });
+        if (!rows.length) { fillDone(u, "none"); return; }
+        var wk = Math.min.apply(null, rows.map(function (r) { return r[0]; }));
+        short = rows.filter(function (r) {
+          return r[0] === wk && !isWhole({ dataset: { espn: String(r[1]) } }, String(r[1]));
+        }).map(function (r) { return { dataset: { espn: String(r[1]) } }; });
+      }
+      /* every game of the week goes too, short ones first, so the tap's run
+         checks each card's quarterback against the one DraftKings prices
+         (Jose, Oct 3, 2026: "remember the Bagent thing") */
+      if (league !== "mma") {
+        var have = {}; short.forEach(function (c) { have[c.dataset.espn] = 1; });
+        rows.filter(function (r) { return r[0] === wk && !have[String(r[1])]; })
+          .forEach(function (r) { short.push({ dataset: { espn: String(r[1]) } }); });
+        short = short.slice(0, 40);
+      }
       if (!short.length) { fillDone(u, "ok"); return; }
       fillAt(u, 28);
       askDK(short, u);
@@ -1687,7 +1726,7 @@
          (Jose, Oct 1, 2026: "the logo of the stack now does the wallet") */
       if (tapWait) {
         clearTimeout(tapWait); tapWait = null;
-        if (typeof window._walletPull === "function") window._walletPull();
+        if (typeof window._walletOpen === "function") window._walletOpen();
         return;
       }
       tapWait = setTimeout(function () {
@@ -1855,7 +1894,11 @@
      The stack's own tab keeps its double tap untouched. */
   sbar.addEventListener("click", function (e) {
     var t = e.target.closest(".sptab");
-    if (!t || window._vtNow || t.dataset.sp === "form" || !document.startViewTransition ||
+    /* the NFL shield and the day page's calendar carry a double tap: their
+       change is not faded, because on the phone the second tap landed on the
+       fade's picture and never reached the icon (Jose, Oct 3, 2026: "it's not
+       even loading anything, just the page") */
+    if (!t || window._vtNow || t.dataset.sp === "form" || t.dataset.sp === "nfl" || t.dataset.sp === "all" || t.dataset.sp === "college-football" || t.dataset.sp === "mma" || !document.startViewTransition ||
         (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches)) return;
     e.stopImmediatePropagation(); e.preventDefault();
     var vt0 = document.startViewTransition(function () { window._vtNow = true; try { t.click(); } finally { window._vtNow = false; } });
