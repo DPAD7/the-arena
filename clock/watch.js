@@ -142,6 +142,7 @@ export function legState(v, g, other, row) {
     if (k === "kosub" || k === "finish") return mine && fin ? "won" : "lost";
     if (k === "kodec") return mine && (how === "ko" || how === "dec") ? "won" : "lost";
     if (k === "subdec") return mine && (how === "sub" || how === "dec") ? "won" : "lost";
+    if (k === "rd12" || k === "rd34") { const a = k === "rd12" ? 1 : 3; return mine && fin && rd >= a && rd <= a + 1 ? "won" : "lost"; }
     if ((m = /^rd(\d+)$/.exec(k))) return mine && fin && rd === +m[1] ? "won" : "lost";
     if ((m = /^kord(\d+)$/.exec(k))) return mine && how === "ko" && rd === +m[1] ? "won" : "lost";
     if ((m = /^subrd(\d+)$/.exec(k))) return mine && how === "sub" && rd === +m[1] ? "won" : "lost";
