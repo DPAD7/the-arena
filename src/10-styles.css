@@ -4174,7 +4174,7 @@
   .nstoast i { display: block; font: 500 12px/1.3 Barlow, sans-serif; color: #9fd9b2; font-style: normal; letter-spacing: 0; }
   .nstoast.off { opacity: 0; }
   /* the faces ride one row across the slip; more than fit, the row scrolls */
-  #slipsheet .slavs { flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x mandatory; gap: 12px; padding: 4px 8px 10px 2px;
+  #slipsheet .slavs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; scroll-snap-type: x mandatory; gap: 12px; padding: 4px 8px 14px 2px;
     scrollbar-width: none; -webkit-overflow-scrolling: touch; }
   #slipsheet .slavs::-webkit-scrollbar { display: none; }
   #slipsheet .slav { width: 62px; height: 62px; border-radius: 14px; scroll-snap-align: start; }
@@ -4188,6 +4188,14 @@
   #slipsheet .slleg .so { color: #fff; font: 700 19px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
   #slipsheet .slleg .slipx { width: 34px; height: 34px; border-radius: 9px; font-size: 16px; margin-left: 12px; }
   #slipsheet .slgame { font-size: 13px; margin: 12px 0 6px; }
+  /* the slip sits right on the nav: the slot kept for the slip bar is empty
+     while the slip is open, and the foot is never at the screen's edge, so
+     neither leaves a gap under Track bet (Jose, Oct 3, 2026) */
+  dialog#slipsheet { inset: 0 0 calc(var(--barstack, 0px) - 75px) 0; }
+  #slipsheet .sheet__foot { padding-bottom: 12px; }
+  @media (max-width: 700px) {
+    dialog#slipsheet { max-height: calc(92vh - var(--barstack, 0px) + 75px); }
+  }
   /* ---- the wallet in the slip's look (Jose, Oct 3, 2026): the balance on the
      left, the day and the bell on the right; each card says what it is and
      when it was tracked, the faces and the arrow, the names, then the numbers */
@@ -4207,7 +4215,7 @@
     font: 800 13px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; text-transform: uppercase; }
   .slkind--n { border-color: rgba(255,255,255,.2); color: #8e8e93; }
   .slkat { margin-left: auto; font: 700 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8e8e93; }
-  .cashsheet .slipcard--nw .slavs { flex-wrap: nowrap; overflow-x: auto; gap: 12px; padding: 2px 8px 8px 2px; scrollbar-width: none; }
+  .cashsheet .slipcard--nw .slavs { flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; overscroll-behavior-x: contain; gap: 12px; padding: 4px 8px 14px 2px; scrollbar-width: none; }
   .cashsheet .slipcard--nw .slavs::-webkit-scrollbar { display: none; }
   .cashsheet .slipcard--nw .slav { width: 62px; height: 62px; border-radius: 14px; }
   .cashsheet .slipcard--nw .slav img { width: 42px; height: 42px; }
