@@ -644,10 +644,6 @@
     document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
     window._qbLog = popOpen;
-    /* the board is an app: no pinch or double-tap zoom. iPhone Safari ignores
-       user-scalable=no, so the pinch itself is refused (Jose, Oct 3, 2026) */
-    ["gesturestart", "gesturechange"].forEach(function (k) { document.addEventListener(k, function (e) { e.preventDefault(); }, { passive: false }); });
-    document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
   })();
 </script>
 
