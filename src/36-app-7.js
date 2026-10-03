@@ -587,6 +587,8 @@
   }
   function payDraw() {
     var bets = slipBets(), stake = stakeOf(), pay = payOf();
+    /* the switch flipped after the check: the button follows */
+    if (typeof CHK === "object" && CHK.phase === "ready") setTimeout(function () { if (CHK.phase === "ready") chkReady(false, true); }, 0);
     var amt = document.getElementById("nsamtv");
     if (amt && !NSPAD.typing) amt.textContent = stake ? stake.toFixed(2) : "0.00";
     var el = document.getElementById("swpay");
@@ -723,11 +725,14 @@
     })(j);
     return out.replace("-", "\u2212");
   }
-  function chkReady(fresh) {
+  function chkReady(fresh, quiet) {
     var bets = slipBets();
     var odds = document.getElementById("swodds");
     if (fresh) { odds.value = window._slipPrice || odds.value; boostDraw(); }
-    var say = bets.length === 1 ? "Track at " + (odds.value || "") : "Track " + bets.length + " bets";
+    /* with a boost on, the price it pays at, the way DraftKings shows it */
+    var up = document.getElementById("nsboosted").textContent;
+    var say = bets.length === 1 ? "Track at " + ((BOOST && up) || odds.value || "") : "Track " + bets.length + " bets";
+    if (quiet) { var t0 = document.getElementById("swsave"); if (t0) t0.textContent = say + (/last price/.test(t0.textContent) ? " \u00b7 last price" : ""); return; }
     chkSet("ready", 100, say + (fresh ? "" : " \u00b7 last price"));
   }
   function chkRun() {
