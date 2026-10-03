@@ -894,7 +894,23 @@
     if (!hit) return;
     var k = hit.dataset.sp, L = downs[k] || (downs[k] = []);
     L.push(e.timeStamp); if (L.length > 2) L.shift();
+    /* the second touch is the double tap: acted on as the finger lands, so a
+       phone that never sends the second click still gets it */
+    if (L.length === 2 && L[1] - L[0] >= 0 && L[1] - L[0] < 420) runTap(hit);
   }, true);
+  var firedAt = {};
+  function runTap(sp) {
+    var key = sp.dataset.sp, job = { "nfl": "nfl", "college-football": "cfb", "mma": "mma", "all": "day" }[key];
+    if (!job) return false;
+    var t = performance.now();
+    if (firedAt[key] && t - firedAt[key] < 800) return true;      /* once per double tap */
+    firedAt[key] = t; tapsAt[key] = 0; downs[key] = [];
+    setTimeout(function () {
+      if (job === "day") { if (typeof window._askDay === "function") window._askDay(sp); }
+      else if (typeof window._askWeek === "function") window._askWeek(sp, job);
+    }, 60);
+    return true;
+  }
   /* heard last, once the tab's own handlers have drawn the board */
   document.addEventListener("click", function (e) {
     if (e.target.closest && e.target.closest(".sptab")) tapFreeAt = performance.now();
@@ -932,13 +948,9 @@
     var JOB = { "nfl": "nfl", "college-football": "cfb", "mma": "mma", "all": "day" };
     var key = sp.dataset.sp, job = JOB[key];
     if (!job) return;
+    if (firedAt[key] && heard - firedAt[key] < 800) return;   /* the touch already ran it */
     if (tapsAt[key] && (since(tapsAt[key]) < 420 || near(key))) {
-      tapsAt[key] = 0; downs[key] = [];
-      /* after the first tap has drawn its page */
-      setTimeout(function () {
-        if (job === "day") { if (typeof window._askDay === "function") window._askDay(sp); }
-        else if (typeof window._askWeek === "function") window._askWeek(sp, job);
-      }, 60);
+      runTap(sp);
       return;
     }
     tapsAt[key] = heard; if (e.isTrusted) tapStamp[key] = e.timeStamp;
@@ -1382,14 +1394,49 @@
     /* the colour stays: it is the day's standing until the next asking, not
        a flash (Jose, Sep 23, 2026: "does it stay?") */
     function fillDone(u, how) {
+      u.done = true;
       fillAt(u, 100, how);
+      /* complete: the icon stays green until the last game it asked about is
+         over, through reloads, so he knows it is up to date and need not tap
+         again (Jose, Oct 3, 2026) */
+      var key = u.tab && u.tab.dataset && u.tab.dataset.sp;
+      if (!key) return;
+      var G = greens();
+      if (how === "ok" && u.until > Date.now()) G[key] = u.until; else delete G[key];
+      try { localStorage.setItem("arena.greens", JSON.stringify(G)); } catch (e) {}
     }
+    function greens() {
+      var G = {};
+      try { G = JSON.parse(localStorage.getItem("arena.greens") || "{}") || {}; } catch (e) {}
+      Object.keys(G).forEach(function (k) { if (G[k] < Date.now()) delete G[k]; });
+      return G;
+    }
+    /* the icons that are still green from an earlier tap, as the page opens
+       and every minute after (each goes when its games are over) */
+    function greensDraw() {
+      var G = greens();
+      sbar.querySelectorAll(".sptab").forEach(function (t) {
+        var k = t.dataset.sp;
+        if (G[k]) {
+          var u = fillFor(t);
+          if (u.done === false) return;          /* a tap is running */
+          fillSeat(u); u.el.classList.add("spfill--on"); u.done = true; u.until = G[k];
+          fillAt(u, 100, "ok");
+        }
+      });
+    }
+    setTimeout(greensDraw, 600);
+    setInterval(greensDraw, 60000);
     function fillStart(tab) {
       var u = fillFor(tab);
+      u.done = false;
       fillSeat(u);
       u.el.classList.add("spfill--on");
       fillAt(u, 0);
-      requestAnimationFrame(function () { fillAt(u, 14); });
+      /* a fetch that has nothing to ask finishes before the next frame: the
+         opening rise must not pull a finished fill back down (Oct 3, 2026:
+         the ROUND card's fill sat at the bottom) */
+      requestAnimationFrame(function () { if (!u.done) fillAt(u, 14); });
       return u;
     }
 
@@ -1557,6 +1604,7 @@
         var bouts = (typeof FIGHTS === "object" ? FIGHTS : []).filter(function (f) { return Date.parse(f[2]) > now; });
         if (!bouts.length) { fillDone(u, "none"); return; }
         var first = bouts.reduce(function (a, f) { return Date.parse(f[2]) < Date.parse(a[2]) ? f : a; });
+        u.until = Math.max.apply(null, bouts.filter(function (f) { return f[0] === first[0]; }).map(function (f) { return Date.parse(f[2]); })) + 4 * 3600000;
         short = bouts.filter(function (f) { return f[0] === first[0] && !isWhole({ dataset: { bout: String(f[1]) } }, String(f[1])); })
           .map(function (f) { return { dataset: { bout: String(f[1]) } }; });
       } else {
@@ -1564,6 +1612,7 @@
         var rows = src.filter(function (r) { return Date.parse(r[2]) > now; });
         if (!rows.length) { fillDone(u, "none"); return; }
         var wk = Math.min.apply(null, rows.map(function (r) { return r[0]; }));
+        u.until = Math.max.apply(null, rows.filter(function (r) { return r[0] === wk; }).map(function (r) { return Date.parse(r[2]); })) + 4 * 3600000;
         short = rows.filter(function (r) {
           return r[0] === wk && !isWhole({ dataset: { espn: String(r[1]) } }, String(r[1]));
         }).map(function (r) { return { dataset: { espn: String(r[1]) } }; });
@@ -1597,6 +1646,12 @@
         spmark.removeEventListener("transitionend", off);
       });
       var u = fillStart(tab || dbar.querySelector('.dtab[aria-selected="true"]') || formTab);
+      /* the day: until its last start, plus four hours */
+      u.until = 0;
+      document.querySelectorAll(".gcard[data-kick]").forEach(function (c) {
+        var k0 = Date.parse(c.dataset.kick) + 4 * 3600000;
+        if (k0 > u.until) u.until = k0;
+      });
       /* nothing to ask with: grey, and no red, because nothing failed
          (Jose, Sep 23, 2026: "if offiline grey") */
       if (navigator.onLine === false) { fillDone(u, "none"); return; }
