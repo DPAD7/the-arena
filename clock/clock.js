@@ -443,10 +443,12 @@ export class Clock {
           const cs = ev.competitions || [], i = cs.findIndex(c => String(c.id) === String(v.gid));
           if (i < 1) continue;
           const me = ((cs[i].status || {}).type || {}).state, before = ((cs[i - 1].status || {}).type || {}).state;
-          if (me !== "pre" || (before !== "in" && before !== "post")) continue;
+          /* the bout before it has just ended: his walkout is about five
+             minutes off (Jose, Oct 3, 2026: "five minutes before walkout") */
+          if (me !== "pre" || before !== "post") continue;
           const nm = c => (c.competitors || []).map(m => ((m.athlete || {}).shortName || "").split(" ").pop()).join(" vs ");
-          out.push({ tag: "slip:" + bet.id, key: "next@" + v.gid, type: "pregame", title: "Up next: " + nm(cs[i]),
-                     body: nm(cs[i - 1]) + " is " + (before === "in" ? "on now" : "over") + ". Your " + ((l.label || l.pick || "").split(" \u00b7 ")[0] || "leg") + " is next.",
+          out.push({ tag: "slip:" + bet.id, key: "walk@" + v.gid, type: "pregame", title: nm(cs[i]) + " walks out in about 5 minutes",
+                     body: nm(cs[i - 1]) + " just ended. Your " + ((l.label || l.pick || "").split(" \u00b7 ")[0] || "leg") + " is next.",
                      url: "/#bout=" + v.gid });
         }
       }
