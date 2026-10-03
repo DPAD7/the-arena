@@ -596,20 +596,25 @@
     function popClose() { pop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
     pop.addEventListener("click", function (e) { if (!e.target.closest(".ql-card")) popClose(); });
     var hold = null, hx = 0, hy = 0, held = false;
-    document.addEventListener("touchstart", function (e) {
+    /* pointer events, which an iPhone reports for a held finger the same as
+       a mouse; a move of more than a few pixels, or the page taking the
+       finger for a scroll (pointercancel), lets it go */
+    document.addEventListener("pointerdown", function (e) {
       var im = e.target.closest && e.target.closest('.gcard[data-lg="nfl"] img.qbface');
       held = false;
-      if (!im || e.touches.length !== 1) return;
+      clearTimeout(hold); hold = null;
+      if (!im || !e.isPrimary) return;
       var m = /face\/nfl\/(\d+)\.png/.exec(im.getAttribute("src") || "");
       if (!m) return;
-      hx = e.touches[0].clientX; hy = e.touches[0].clientY;
-      clearTimeout(hold);
-      hold = setTimeout(function () { held = true; if (navigator.vibrate) navigator.vibrate(10); popOpen(m[1]); }, 500);
-    }, { passive: true });
-    document.addEventListener("touchmove", function (e) {
-      if (hold && (Math.abs(e.touches[0].clientX - hx) > 10 || Math.abs(e.touches[0].clientY - hy) > 10)) { clearTimeout(hold); hold = null; }
-    }, { passive: true });
-    document.addEventListener("touchend", function () { clearTimeout(hold); hold = null; }, { passive: true });
+      hx = e.clientX; hy = e.clientY;
+      hold = setTimeout(function () { hold = null; held = true; if (navigator.vibrate) navigator.vibrate(10); popOpen(m[1]); }, 450);
+    }, true);
+    document.addEventListener("pointermove", function (e) {
+      if (hold && (Math.abs(e.clientX - hx) > 12 || Math.abs(e.clientY - hy) > 12)) { clearTimeout(hold); hold = null; }
+    }, true);
+    ["pointerup", "pointercancel"].forEach(function (k) {
+      document.addEventListener(k, function () { clearTimeout(hold); hold = null; }, true);
+    });
     /* the tap that ends a hold is not also a tap on the card */
     document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
