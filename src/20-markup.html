@@ -24,7 +24,7 @@
 </div>
 <nav class="tabbar" id="sportbar" role="tablist" aria-label="Sport"></nav>
 <button class="cashfab" id="cashfab" type="button" aria-label="Balance"><i class="wal" aria-hidden="true"><i class="wal-in"><i class="wal-lv"></i></i><i class="wal-ln"></i><i class="wal-cw"><i class="wal-cd"></i></i></i></button>
-<div class="cashsheet" id="cashsheet" hidden><button type="button" class="cashbell" id="cashbell" aria-label="Alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v3.6L4.4 15.4c-.4.7.1 1.6.9 1.6h13.4c.8 0 1.3-.9.9-1.6L18 12.6V9a6 6 0 0 0-6-6zm-2.4 15.5a2.4 2.4 0 0 0 4.8 0z" fill="currentColor"/></svg></button><div class="cashamt" id="cashamt">&mdash;</div><div class="alertset" id="alertset" hidden></div><div class="cashdays" id="cashdays" role="tablist"><button type="button" data-d="-1" onclick="cashDay(this)">Yesterday</button><button type="button" data-d="0" class="on" onclick="cashDay(this)">Today</button><button type="button" data-d="1" onclick="cashDay(this)">Tomorrow</button></div><div id="cashlegs"></div><div id="cashday"></div></div>
+<div class="cashsheet" id="cashsheet" hidden><div class="cashhead"><div class="cashbal"><span class="cashbl">Balance</span><div class="cashamt" id="cashamt">&mdash;</div></div><div class="cashright"><button type="button" class="cashpill" id="cashpill" onclick="cashNext()">Today</button><button type="button" class="cashbell" id="cashbell" aria-label="Alerts"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3a6 6 0 0 0-6 6v3.6L4.4 15.4c-.4.7.1 1.6.9 1.6h13.4c.8 0 1.3-.9.9-1.6L18 12.6V9a6 6 0 0 0-6-6zm-2.4 15.5a2.4 2.4 0 0 0 4.8 0z" fill="currentColor"/></svg></button></div></div><div class="alertset" id="alertset" hidden></div><div class="cashdays" id="cashdays" role="tablist"><button type="button" data-d="-1" onclick="cashDay(this)">Yesterday</button><button type="button" data-d="0" class="on" onclick="cashDay(this)">Today</button><button type="button" data-d="1" onclick="cashDay(this)">Tomorrow</button></div><div id="cashlegs"></div><div id="cashday"></div></div>
 <dialog class="sheet" id="vidsheet" aria-labelledby="vidtitle">
   <div class="sheet__head">
     <button class="sheet__x" type="button" data-shuts="vidsheet" aria-label="Back"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M14.5 5.5L8 12l6.5 6.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
@@ -43,19 +43,18 @@
     <button id="slipclear" type="button">Clear all</button>
   </div>
   <div class="sliptabs" id="sliptabs"></div>
-  <div class="sheet__scroll"><div id="sliplist"></div></div>
+  <div class="sheet__scroll"><div id="sliplist"></div><div class="nsbody" id="nsbody">
+    <div class="nsrow"><span class="nslab" id="nslab">Price</span><input id="swodds" class="nsodds" type="text" inputmode="text" autocomplete="off" aria-label="Price"></div>
+    <div class="swboost" id="swboost"></div>
+    <div class="nsstakes"><button type="button" class="nschip" data-add="25">+$25</button><button type="button" class="nschip" data-add="50">+$50</button><button type="button" class="nschip" data-add="75">+$75</button><button type="button" class="nsamt" id="nsamt" aria-label="Amount"><span>$</span><em id="nsamtv">25.00</em></button></div>
+    <input id="swstake" type="hidden">
+    <div class="nspad" id="nspad" hidden><button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button><button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" data-k=".">.</button><button type="button" data-k="0">0</button><button type="button" data-k="back" aria-label="Delete"><svg viewBox="0 0 26 18" width="26" height="18" aria-hidden="true"><path d="M8 1h16v16H8L1 9z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M13 6l6 6M19 6l-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button></div>
+    <div class="swpay" id="swpay" hidden></div>
+  </div></div>
   <div class="sheet__foot">
-    <div class="slipacts">
-      <a id="sliplink" href="#" target="_blank" rel="noopener">Add to betslip</a>
-      <button type="button" id="slipwal">Add to wallet</button>
-    </div>
-    <div class="slipconf" id="slipconf" hidden>
-      <label>Price<input id="swodds" type="text" inputmode="text" autocomplete="off"></label>
-      <label>Stake<input id="swstake" type="text" inputmode="decimal" autocomplete="off"></label>
-      <div class="swboost" id="swboost"></div>
-      <div class="swpay" id="swpay"></div>
-      <button type="button" id="swsave">Save</button>
-      <button type="button" id="swcancel" class="ghostbtn">Cancel</button>
+    <div class="nsfoot">
+      <a id="sliplink" class="nsplace" href="#" target="_blank" rel="noopener"><b id="nsplaceb">Place Bet</b><i id="nspayl"></i></a>
+      <button type="button" id="swsave" class="nstrack">Track bet</button>
     </div>
   </div>
 </dialog>
@@ -1297,7 +1296,7 @@
     document.getElementById("sliplink").href = "https://sportsbook.draftkings.com/?outcomes=" + outs;
     window._slipOn = on.map(function (b) { return { id: b.id, o: b.o, l: b.l, g: b.g, gn: b.gn }; });
     window._slipPrice = parlay(on);
-    document.getElementById("sliplink").textContent = "Add to betslip (" + on.length + ")";
+    window._slipDrop = drop;
     var list = document.getElementById("sliplist");
     list.innerHTML = "";
     /* three views, the way a book lays them out: the lot as one ticket, each
@@ -1319,6 +1318,15 @@
        nothing to choose between either */
     var lone = on.length < 2;
     var shown = lone ? "singles" : slipTab;
+    /* the bets the shown tab makes, for the foot: the lot as one parlay, each
+       game's picks as its own SGP (a lone pick a single), or one bet a pick */
+    window._slipShown = shown;
+    window._slipBets = shown === "parlay" ? [on] : shown === "sgp"
+      ? sgpOrder.map(function (k) { return bySgp[k]; })
+      : on.map(function (b) { return [b]; });
+    window._slipBets = window._slipBets.map(function (g) { return g.map(function (b) { return { id: b.id, o: b.o, l: b.l, g: b.g, gn: b.gn }; }); });
+    window._slipPrice = window._slipBets.length === 1 ? parlay(window._slipBets[0]) : "";
+    if (window._slipFoot) window._slipFoot();
     var tabs = document.getElementById("sliptabs");
     tabs.innerHTML = "";
     [["parlay", "Parlay"], ["sgp", "SGP"], ["singles", "Singles"]].forEach(function (t) {

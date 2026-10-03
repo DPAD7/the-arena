@@ -540,9 +540,10 @@
     var n = parseInt(String(o || "").replace(/\u2212|\u2013/g, "-").replace(/[^\-0-9]/g, ""), 10);
     return isNaN(n) || !n ? null : (n > 0 ? 1 + n / 100 : 1 + 100 / -n);
   }
-  var confEl = document.getElementById("slipconf");
-  var PROMOS = [], BOOST = null;
+  var PROMOS = [], BOOST = null, PROMOT = 0;
   function promoLoad() {
+    if (Date.now() - PROMOT < 300000) return Promise.resolve();
+    PROMOT = Date.now();
     return fetch("promos.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : []; })
       .then(function (j) { PROMOS = j || []; }).catch(function () { PROMOS = []; });
   }
@@ -565,22 +566,44 @@
       return false;
     }).sort(function (a, b) { return (b.gid ? 1 : 0) - (a.gid ? 1 : 0) || b.pct - a.pct; });
   }
+  /* the slip's foot, the way DraftKings' reads: the price, the stake chips
+     and the amount (the keypad only when the amount is tapped), a boost only
+     when one fits, then Place Bet with the amount and the total payout, which
+     opens DraftKings with these legs, and under it Track bet, which keeps the
+     bet on the wallet (Jose, Oct 3, 2026) */
+  function slipBets() { return window._slipBets || []; }
+  function stakeOf() { return money0(document.getElementById("swstake").value) || 0; }
+  function cm2(n) { return "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+  function payOf() {
+    var bets = slipBets(), stake = stakeOf();
+    if (bets.length === 1) {
+      var d = decOf(document.getElementById("swodds").value);
+      if (!d) return null;
+      var pay = stake * d;
+      if (BOOST) pay += (d - 1) * Math.min(stake, BOOST.max || stake) * BOOST.pct / 100;
+      return pay;
+    }
+    return bets.reduce(function (t, g) { return t + stake * (decOf(parlay(g)) || 1); }, 0);
+  }
   function payDraw() {
-    var stake = money0(document.getElementById("swstake").value), d = decOf(document.getElementById("swodds").value);
+    var bets = slipBets(), stake = stakeOf(), pay = payOf();
+    var amt = document.getElementById("nsamtv");
+    if (amt && !NSPAD.typing) amt.textContent = stake ? stake.toFixed(2) : "0.00";
     var el = document.getElementById("swpay");
-    if (!el) return;
-    if (!stake || !d) { el.textContent = ""; return; }
-    var pay = stake * d;
-    if (BOOST) pay += (d - 1) * Math.min(stake, BOOST.max || stake) * BOOST.pct / 100;
-    el.textContent = "Pays $" + pay.toFixed(2) + (BOOST ? " with the " + BOOST.pct + "% boost" : "");
-    el.dataset.pay = pay.toFixed(2);
+    if (el) el.dataset.pay = pay ? pay.toFixed(2) : "";
+    var total = stake * Math.max(1, bets.length);
+    var b = document.getElementById("nsplaceb"), i = document.getElementById("nspayl");
+    if (b) b.textContent = "Place Bet " + cm2(total);
+    if (i) i.textContent = pay ? "Total Payout: " + cm2(pay) + (BOOST ? " with the " + BOOST.pct + "% boost" : "") : "";
   }
   function boostDraw() {
     var box = document.getElementById("swboost");
     if (!box) return;
-    var fit = boostsFor(window._slipOn || [], document.getElementById("swodds").value);
+    var bets = slipBets();
+    var fit = bets.length === 1 ? boostsFor(bets[0], document.getElementById("swodds").value) : [];
     if (BOOST && !fit.some(function (p) { return p.id === BOOST.id; })) BOOST = null;
     if (!BOOST && fit.length) BOOST = { id: fit[0].id, pct: fit[0].pct, max: fit[0].maxWager, head: fit[0].head };
+    /* no boost fits: nothing is offered at all */
     box.innerHTML = fit.length ? fit.map(function (p) {
       var on = BOOST && BOOST.id === p.id;
       return '<button type="button" class="swb' + (on ? " on" : "") + '" data-id="' + p.id + '">' +
@@ -589,53 +612,124 @@
     }).join("") + '<button type="button" class="swb' + (BOOST ? "" : " on") + '" data-id="">No boost</button>' : "";
     payDraw();
   }
-  document.addEventListener("click", function (e) {
-    var b = e.target.closest && e.target.closest(".swb");
-    if (!b) return;
-    var p = PROMOS.filter(function (x) { return x.id === b.dataset.id; })[0];
-    BOOST = p ? { id: p.id, pct: p.pct, max: p.maxWager, head: p.head } : null;
-    boostDraw();
-  });
-  document.addEventListener("input", function (e) {
-    if (!e.target || !e.target.id) return;
-    if (e.target.id === "swmaxin" && BOOST) BOOST.max = money0(e.target.value);
-    if (e.target.id === "swodds") { boostDraw(); return; }
-    if (/^sw(stake|maxin)$/.test(e.target.id)) payDraw();
-  });
-  document.addEventListener("click", function (e) {
-    var t = e.target.closest && e.target.closest("#slipwal, #swsave, #swcancel");
-    if (!t || !confEl) return;
-    if (t.id === "swcancel") { confEl.hidden = true; return; }
-    if (t.id === "slipwal") {
-      if (!window._slipOn || !window._slipOn.length) return;
-      document.getElementById("swodds").value = window._slipPrice || "";
-      var last = ""; try { last = localStorage.getItem("arena.stake") || ""; } catch (e1) {}
-      document.getElementById("swstake").value = last;
+  var NSKEY = "", NSPAD = { typing: false, buf: "" };
+  window._slipFoot = function () {
+    var bets = slipBets();
+    var key = window._slipShown + ":" + bets.map(function (g) { return g.map(function (b) { return b.id; }).join("+"); }).join("|");
+    var odds = document.getElementById("swodds"), lab = document.getElementById("nslab");
+    if (key !== NSKEY) {
+      NSKEY = key;
+      odds.value = window._slipPrice || "";
       BOOST = null;
-      confEl.hidden = false;
-      promoLoad().then(boostDraw);
+    }
+    if (!stakeOf()) {
+      var last = ""; try { last = localStorage.getItem("arena.stake") || ""; } catch (e1) {}
+      document.getElementById("swstake").value = money0(last) || 25;
+    }
+    /* one bet: its price, which a tap can set to what DraftKings shows; more
+       than one: how many, each at its own price */
+    odds.hidden = bets.length !== 1;
+    /* the one parlay's price is the row below, not twice */
+    document.getElementById("sliplist").dataset.tab = window._slipShown || "";
+    lab.textContent = bets.length === 1 ? "Price" : bets.length + " bets · " + cm2(stakeOf()) + " each";
+    boostDraw();
+    promoLoad().then(boostDraw);
+  };
+  function padShow(on) {
+    var pad = document.getElementById("nspad"), amt = document.getElementById("nsamt");
+    pad.hidden = !on; amt.classList.toggle("on", on);
+    NSPAD.typing = false; NSPAD.buf = "";
+    payDraw();
+  }
+  document.addEventListener("click", function (e) {
+    var t = e.target.closest && e.target.closest(".swb, .nschip, #nsamt, #nspad button, #sliplink, #swsave");
+    if (!t) return;
+    if (t.classList.contains("swb")) {
+      var p = PROMOS.filter(function (x) { return x.id === t.dataset.id; })[0];
+      BOOST = p ? { id: p.id, pct: p.pct, max: p.maxWager, head: p.head } : null;
+      boostDraw(); return;
+    }
+    if (t.classList.contains("nschip")) {
+      document.getElementById("swstake").value = stakeOf() + (+t.dataset.add);
+      NSPAD.typing = false; window._slipFoot(); return;
+    }
+    if (t.id === "nsamt") {
+      padShow(document.getElementById("nspad").hidden);
+      /* the keypad opens in view, under the amount */
+      if (!document.getElementById("nspad").hidden) document.querySelector(".nsstakes").scrollIntoView({ block: "start", behavior: "smooth" });
       return;
     }
-    var odds = document.getElementById("swodds").value.trim().replace("-", "\u2212");
-    var stake = money0(document.getElementById("swstake").value), d = decOf(odds);
-    if (!stake || !d) { confEl.classList.add("slipconf--bad"); setTimeout(function () { confEl.classList.remove("slipconf--bad"); }, 600); return; }
-    try { localStorage.setItem("arena.stake", String(stake)); } catch (e2) {}
-    var legs = window._slipOn.map(function (b) {
-      return { sel: b.id, pick: b.l, label: String(b.l || "").split(" \u00b7 ")[0], market: "",
-               odds: b.o, g: b.g, evn: b.gn, status: "open", sgp: "" };
-    });
-    var bet = { id: "board-" + Date.now(), type: legs.length > 1 ? "Parlay" : "Single",
-                odds: odds, was: odds, wager: stake,
-                topay: Math.round(parseFloat(document.getElementById("swpay").dataset.pay || stake * d) * 100) / 100,
-                boost: BOOST ? BOOST.pct + "% Profit Boost" : "", boosted: !!BOOST,
-                placed: new Date().toISOString(), status: "open", from: "board", legs: legs };
-    t.disabled = true;
-    fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST",
-          headers: { "content-type": "application/json" }, body: JSON.stringify({ sent: bet }) })
-      .then(function (r) { if (!r.ok) throw 0; confEl.hidden = true; return dkPull(); })
-      .catch(function () { confEl.classList.add("slipconf--bad"); })
-      .then(function () { t.disabled = false; });
+    if (t.dataset.k) {
+      /* the first key starts the amount over, the way a book's pad does */
+      var k = t.dataset.k, buf = NSPAD.typing ? NSPAD.buf : "";
+      if (k === "back") buf = buf.slice(0, -1);
+      else if (k === "." ? buf.indexOf(".") < 0 : !/\.\d\d$/.test(buf)) buf += k;
+      NSPAD.typing = true; NSPAD.buf = buf;
+      document.getElementById("nsamtv").textContent = buf || "0";
+      document.getElementById("swstake").value = money0(buf) || 0;
+      try { if (money0(buf)) localStorage.setItem("arena.stake", String(money0(buf))); } catch (e0) {}
+      lab0(); payDraw(); return;
+    }
+    if (t.id === "sliplink") { padShow(false); return; }
+    if (t.id === "swsave") track(t);
   });
+  function lab0() {
+    var bets = slipBets();
+    if (bets.length !== 1) document.getElementById("nslab").textContent = bets.length + " bets · " + cm2(stakeOf()) + " each";
+  }
+  document.addEventListener("input", function (e) {
+    if (!e.target || !e.target.id) return;
+    if (e.target.id === "swmaxin" && BOOST) { BOOST.max = money0(e.target.value); payDraw(); }
+    if (e.target.id === "swodds") boostDraw();
+  });
+  function trackSay(text) {
+    var el = document.createElement("div");
+    el.className = "nstoast";
+    el.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><circle cx="12" cy="12" r="11" fill="#17c257"/><path d="M7 12.5l3.2 3.2L17 9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div>Bet tracked<i></i></div>';
+    el.querySelector("i").textContent = text;
+    document.body.appendChild(el);
+    setTimeout(function () { el.classList.add("off"); }, 2400);
+    setTimeout(function () { el.remove(); }, 2900);
+  }
+  /* Track bet: each bet the tab makes is kept by the site, the wallet tracks
+     it from then on, and its legs leave the slip so it cannot be tracked twice */
+  function track(t) {
+    var bets = slipBets(), stake = stakeOf(), kind = window._slipShown;
+    var one = bets.length === 1, odds1 = document.getElementById("swodds").value.trim().replace("-", "−");
+    if (!stake || !bets.length || (one && !decOf(odds1))) {
+      t.classList.add("bad"); setTimeout(function () { t.classList.remove("bad"); }, 600); return;
+    }
+    try { localStorage.setItem("arena.stake", String(stake)); } catch (e2) {}
+    var now = Date.now();
+    var list = bets.map(function (g, n) {
+      var odds = one ? odds1 : String(parlay(g)).replace("-", "−"), d = decOf(odds);
+      var legs = g.map(function (b) {
+        return { sel: b.id, pick: b.l, label: String(b.l || "").split(" · ")[0], market: "",
+                 odds: b.o, g: b.g, evn: b.gn, status: "open", sgp: kind === "sgp" && g.length > 1 ? "1" : "" };
+      });
+      var pay = one ? payOf() : stake * d;
+      return { id: "board-" + (now + n), type: legs.length < 2 ? "Single" : kind === "sgp" ? "SGP" : "Parlay",
+               odds: odds, was: odds, wager: stake, topay: Math.round(pay * 100) / 100,
+               boost: one && BOOST ? BOOST.pct + "% Profit Boost" : "", boosted: !!(one && BOOST),
+               placed: new Date(now).toISOString(), status: "open", from: "board", legs: legs };
+    });
+    t.disabled = true;
+    list.reduce(function (p, bet) {
+      return p.then(function () {
+        return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST",
+          headers: { "content-type": "application/json" }, body: JSON.stringify({ sent: bet }) })
+          .then(function (r) { if (!r.ok) throw 0; });
+      });
+    }, Promise.resolve()).then(function () {
+      var total = list.reduce(function (s0, b) { return s0 + b.topay; }, 0);
+      trackSay(cm2(stake * list.length) + (one ? " at " + list[0].odds : " on " + list.length + " bets") + " · pays " + cm2(total));
+      padShow(false);
+      bets.forEach(function (g) { g.forEach(function (b) { if (window._slipDrop) window._slipDrop(b.id); }); });
+      return dkPull();
+    }).catch(function () {
+      t.classList.add("bad"); setTimeout(function () { t.classList.remove("bad"); }, 600);
+    }).then(function () { t.disabled = false; });
+  }
   function dkPull(done) {
     DKB_T = Date.now();
     return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
@@ -1211,8 +1305,18 @@
   function cashDay(b) {
     CASHDAY = +b.dataset.d;
     [].forEach.call(b.parentNode.children, function (x) { x.classList.toggle("on", x === b); });
+    var pill = document.getElementById("cashpill");
+    if (pill) pill.textContent = ["Yesterday", "Today", "Tomorrow"][CASHDAY + 1];
     bankDraw();
   }
+  /* the day is one button on the right of the balance: each tap goes
+     today, tomorrow, yesterday and round again (Jose, Oct 3, 2026) */
+  function cashNext() {
+    var d = CASHDAY === 0 ? 1 : CASHDAY === 1 ? -1 : 0;
+    var b = document.querySelector('#cashdays button[data-d="' + d + '"]');
+    if (b) cashDay(b);
+  }
+  window.cashNext = cashNext;
   /* -1, 0 or 1: yesterday or before, today, tomorrow or after, by the first
      kickoff or first bell among the slip's legs that the board can place */
   function slipDay(bet, kickOf) {
@@ -1506,8 +1610,7 @@
            DraftKings' own slip does (Jose, Sep 26, 2026) */
         /* the names as one line, the way the slip always read; the legs'
            prices stay behind the page (Jose, Sep 26, 2026) */
-        var rows = '<li class="slnamerow">' + esc(slipNames(ls)) + '</li>' +
-          (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span>' +
+        var rows = (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span>' +
             /* the price before the boost, beside the boost itself */
             (bet.was && !CASHHIDE ? '<b><s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s></b>' : "") + '</li>' : "");
         /* the arrow rides right after the last icon, however many there are,
@@ -1517,16 +1620,21 @@
           '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
         var avs = slipAvatars(ls).replace(/<\/div>$/, arrow + "</div>");
         var trk = slipTrack(bet);
-        return '<div class="slipcard' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
-          (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + avs +
-          '<ul class="slpicks">' + rows + '</ul>' + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
+        var at = Date.parse(bet.placed || ""), kind = String(bet.type || (ls.length > 1 ? "Parlay" : "Single")).toUpperCase();
+        var top = '<div class="slktop"><span class="slkind">' + esc(kind) + '</span><span class="slkind slkind--n">' + ls.length +
+          (ls.length > 1 ? " legs" : " leg") + '</span>' + (at ? '<span class="slkat">' + (bet.from === "board" ? "Tracked " : "Placed ") +
+          new Date(at).toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }) + '</span>' : "") + '</div>';
+        return '<div class="slipcard slipcard--nw' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
+          (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + top + avs +
+          '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
+          (rows ? '<ul class="slpicks">' + rows + '</ul>' : "") + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
           /* one line of three: the price, what went in, what it pays, with
              what each is written underneath (Jose, Sep 26, 2026) */
           '<div class="slgrid">' +
           '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(String(bet.odds || "").replace("-", "\u2212"))) + '</b>' +
           '<b>' + cm(bet.wager || 0) + '</b>' +
           '<b class="cashpay">' + cm(bet.topay || 0) + '</b>' +
-          '<span>' + ls.length + (ls.length > 1 ? " legs" : " leg") + '</span><span>Amount</span><span>Total payout</span>' +
+          '<span>Price</span><span>Amount</span><span>Total payout</span>' +
           '</div></div>';
       }).join("");
       /* a leg the tracker just saw lose is only known once its slip is drawn:
