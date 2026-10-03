@@ -992,7 +992,10 @@
          on the UFC tab, where the list is a month and there are always fights
          still to come (Jose, Sep 20, 2026: "they get placed back in the order
          of events"). */
-      var put = (hid[it[1]] || cfbOff(it)) && !OVER[String(it[1])] && !dayOver;
+      /* a college game that is over stays where it is: the star decides
+         what is to come, not what has been played (Jose, Oct 3, 2026: Notre
+         Dame "jumps above the Thursday and Friday games") */
+      var put = (hid[it[1]] || (cfbOff(it) && !finished(it))) && !OVER[String(it[1])] && !dayOver;
       if (hid[it[1]] && !put) { delete hid[it[1]]; saveHidden(); }
       (put ? away : items).push(it);
     });
