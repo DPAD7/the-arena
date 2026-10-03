@@ -4261,4 +4261,28 @@
     max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .qst--cfb { min-width: 0; }
   .qst--cfb i em { font-style: normal; color: #e3b341; }
+  img.qbface { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .qblog { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 16px;
+    background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .qblog[hidden] { display: none; }
+  .ql-card { width: min(420px, 100%); max-height: 80vh; overflow-y: auto; background: #17181c; border: 1px solid rgba(255,255,255,.13);
+    border-radius: 20px; padding: 16px 14px 12px; color: #f4f4f5; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .ql-hd { display: flex; gap: 12px; align-items: center; }
+  .ql-hd .qsface { width: 60px; height: 60px; border-radius: 14px; background: #26272b; object-fit: cover; object-position: top; }
+  .ql-hd b { display: block; font: 800 24px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .ql-hd i { font: 600 13px Barlow, sans-serif; font-style: normal; color: #8e8e93; }
+  .ql-sum { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin: 14px 0 8px; text-align: center; }
+  .ql-sum b { display: block; font: 800 22px/1 "Barlow Condensed", sans-serif; }
+  .ql-sum span { font: 700 11px "Barlow Condensed", sans-serif; letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; }
+  .ql-t { width: 100%; border-collapse: collapse; font-variant-numeric: tabular-nums; }
+  .ql-t th { font: 700 11px "Barlow Condensed", sans-serif; letter-spacing: .1em; color: #8e8e93; text-transform: uppercase; text-align: right;
+    padding: 6px 4px; border-bottom: 1px solid rgba(255,255,255,.13); }
+  .ql-t th:nth-child(-n+3) { text-align: left; }
+  .ql-t td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,.07); font: 700 17px "Barlow Condensed", sans-serif; }
+  .ql-t td.ql-n { text-align: right; } .ql-t td.ql-d { color: #8e8e93; font-size: 14px; } .ql-t td.ql-o { white-space: nowrap; }
+  .ql-wl { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; font: 800 13px "Barlow Condensed", sans-serif; }
+  .ql-wl.w { background: #17c257; color: #000; } .ql-wl.l { background: #e2564d; color: #fff; }
+  .ql-sc { color: #8e8e93; font-size: 14px; } .ql-t .up { color: #17c257; } .ql-t .dn { color: #e2564d; }
+  .ql-t td i { display: block; font: 600 11px Barlow, sans-serif; color: #8e8e93; font-style: normal; }
+  .ql-t b.hit { color: #17c257; } .ql-none { color: #8e8e93; padding: 12px 0; text-align: center; }
   .qscfb .qsnone { color: #8e8e93; padding: 10px 4px; font: 600 14px Barlow, sans-serif; }

@@ -543,6 +543,77 @@
       b.textContent = n ? "Added " + n + " to betslip" : "No prices posted yet";
       b.classList.add("qsadd--done");
     });
+
+    /* ---- hold a QB's face: his season, game by game (Jose, Oct 3, 2026) ----
+       Half a second on an NFL card's face lifts his season over the blurred
+       board, the way theScore's long press does: the record, yards a game,
+       touchdowns, then each game -- result, opponent, passing yards, the
+       margin over the other passer, passing and rushing touchdowns. A finger
+       that moves is a scroll or a swipe, and the hold lets it go. */
+    var pop = document.createElement("div");
+    pop.className = "qblog"; pop.hidden = true;
+    document.body.appendChild(pop);
+    function etDay(iso) { return new Date(iso).toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" }); }
+    function seasonOf(id) {
+      var qs = DATA.qbs, q = qs[id];
+      if (!q) return "";
+      var games = (q.g || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
+      var tot = { yd: 0, p: 0, ru: 0, w: 0, l: 0 };
+      var rows = games.map(function (g) {
+        var oy = null, on = "";
+        Object.keys(qs).forEach(function (k) {
+          var x = qs[k];
+          if (x.t !== g.o) return;
+          (x.g || []).forEach(function (y) { if (y.d === g.d && y.o === q.t) { oy = y.yd; on = x.n; } });
+        });
+        var w = /^W/.test(g.r || ""), m = oy === null ? null : (g.yd || 0) - oy;
+        tot.yd += g.yd || 0; tot.p += g.p || 0; tot.ru += g.ru || 0; if (w) tot.w++; else if (/^L/.test(g.r || "")) tot.l++;
+        var lastOn = on ? (typeof famName === "function" ? famName(on) : on.split(" ").pop()) : "";
+        return '<tr><td class="ql-d">' + etDay(g.d) + '</td>' +
+          '<td><span class="ql-wl ' + (w ? "w" : "l") + '">' + esc((g.r || " ").charAt(0)) + '</span> <span class="ql-sc">' + esc(String(g.r || "").slice(2)) + '</span></td>' +
+          '<td class="ql-o">' + (g.h ? "vs " : "@ ") + esc(g.o) + '</td>' +
+          '<td class="ql-n">' + (g.yd || 0) + '</td>' +
+          '<td class="ql-n ' + (m > 0 ? "up" : m < 0 ? "dn" : "") + '">' + (m === null ? "—" : (m > 0 ? "+" : m < 0 ? "−" : "") + Math.abs(m)) + (lastOn ? "<i>" + esc(lastOn) + "</i>" : "") + '</td>' +
+          '<td class="ql-n"><b' + ((g.p || 0) > 0 ? ' class="hit"' : "") + '>' + (g.p || 0) + '</b></td>' +
+          '<td class="ql-n"><b' + ((g.ru || 0) > 0 ? ' class="hit"' : "") + '>' + (g.ru || 0) + '</b></td></tr>';
+      }).join("");
+      var n = games.length || 1, nx = q.nx;
+      var next = nx ? "next: " + (nx.h ? "vs " : "@ ") + esc(nx.o) + ", " + new Date(nx.d).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }) : "";
+      return '<div class="ql-card"><div class="ql-hd">' + face(id, "nfl") + '<div><b>' + esc(q.n) + '</b><i>' + esc(q.t || "") + (next ? " · " + next : "") + '</i></div></div>' +
+        '<div class="ql-sum"><div><b>' + tot.w + "-" + tot.l + '</b><span>Record</span></div><div><b>' + Math.round(tot.yd / n) + '</b><span>Yds / game</span></div>' +
+        '<div><b>' + tot.p + '</b><span>Pass TD</span></div><div><b>' + tot.ru + '</b><span>Rush TD</span></div></div>' +
+        (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>Pass yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
+                      : '<div class="ql-none">No games played yet</div>') + '</div>';
+    }
+    function popOpen(id) {
+      load().then(function () {
+        var html = seasonOf(id);
+        if (!html) return;
+        pop.innerHTML = html; pop.hidden = false;
+        document.documentElement.classList.add("qblog-on");
+      });
+    }
+    function popClose() { pop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
+    pop.addEventListener("click", function (e) { if (!e.target.closest(".ql-card")) popClose(); });
+    var hold = null, hx = 0, hy = 0, held = false;
+    document.addEventListener("touchstart", function (e) {
+      var im = e.target.closest && e.target.closest('.gcard[data-lg="nfl"] img.qbface');
+      held = false;
+      if (!im || e.touches.length !== 1) return;
+      var m = /face\/nfl\/(\d+)\.png/.exec(im.getAttribute("src") || "");
+      if (!m) return;
+      hx = e.touches[0].clientX; hy = e.touches[0].clientY;
+      clearTimeout(hold);
+      hold = setTimeout(function () { held = true; if (navigator.vibrate) navigator.vibrate(10); popOpen(m[1]); }, 500);
+    }, { passive: true });
+    document.addEventListener("touchmove", function (e) {
+      if (hold && (Math.abs(e.touches[0].clientX - hx) > 10 || Math.abs(e.touches[0].clientY - hy) > 10)) { clearTimeout(hold); hold = null; }
+    }, { passive: true });
+    document.addEventListener("touchend", function () { clearTimeout(hold); hold = null; }, { passive: true });
+    /* the tap that ends a hold is not also a tap on the card */
+    document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
+    window._qbLog = popOpen;
   })();
 </script>
 
