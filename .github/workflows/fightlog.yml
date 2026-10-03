@@ -39,26 +39,32 @@ jobs:
           node-version: "22"
       - run: pip install --quiet curl_cffi
 
-      - name: Record the card
-        run: python build/log_fights.py --event "${{ inputs.event }}" --every 6 --hours 5.75
-
-      - name: Cut the rewinds and keep them
-        run: |
-          python build/anim.py
-          git config user.name "the arena"
-          git config user.email "185117539+DPAD7@users.noreply.github.com"
-          git add data/fight_log.jsonl data/fight_plays.jsonl site/anim
-          if git diff --cached --quiet; then echo "nothing recorded"; exit 0; fi
-          git commit -m "rewinds for card ${{ inputs.event }}"
-          for i in 1 2 3 4 5; do
-            git pull --rebase --autostash && git push && break
-            sleep 20
-          done
-
-      - name: Put them on the board
+      - name: Record the card, and put each rewind up as its bout ends
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
-          python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
-          cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          # the rewinds go up a bout at a time, not at the end of the card
+          # (Jose, Oct 3, 2026: "where are the rewind buttons, those should be live too")
+          python build/log_fights.py --event "${{ inputs.event }}" --every 6 --hours 5.75 &
+          LOG=$!
+          cut() {
+            python build/anim.py || return 0
+            git add data/fight_log.jsonl data/fight_plays.jsonl site/anim
+            if git diff --cached --quiet; then return 0; fi
+            git commit -q -m "rewinds for card ${{ inputs.event }}"
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash -q && git push -q && break
+              sleep 20
+            done
+            python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
+            (cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main) || true
+          }
+          while kill -0 $LOG 2>/dev/null; do
+            sleep 300
+            cut
+          done
+          wait $LOG || true
+          cut
