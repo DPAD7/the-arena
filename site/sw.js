@@ -52,11 +52,17 @@ self.addEventListener("fetch", function (e) {
       }).catch(function () { return caches.match("/"); }));
       return;
     }
+    /* the newest page first: the saved copy only when the network is slow
+       or gone. Opening on the saved copy and swapping later left him on an
+       old version whenever he started using it at once (Jose, Oct 3, 2026:
+       "if we're doing updates it should show us") */
     e.respondWith(caches.open(SHELL).then(function (c) {
+      var fresh = fetch("/", { cache: "no-store" }).then(function (r) { if (r.ok) c.put("/", r.clone()); return r; });
       return c.match("/").then(function (hit) {
-        var fresh = fetch("/", { cache: "no-store" }).then(function (r) { if (r.ok) c.put("/", r.clone()); return r; });
-        if (hit) { e.waitUntil(fresh.catch(function () {})); return hit; }
-        return fresh;
+        if (!hit) return fresh;
+        var slow = new Promise(function (res) { setTimeout(function () { res(hit); }, 2500); });
+        e.waitUntil(fresh.catch(function () {}));
+        return Promise.race([fresh.then(function (r) { return r.ok ? r : hit; }, function () { return hit; }), slow]);
       });
     }));
     return;
