@@ -644,6 +644,21 @@
     document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
     window._qbLog = popOpen;
+    /* the board never zooms (Jose, Oct 3, 2026: "I don't want it to zoom").
+       iPhone Safari ignores user-scalable=no, so the pinch is refused, and a
+       page that is zoomed anyway is snapped back to its own size by writing
+       the viewport tag again */
+    ["gesturestart", "gesturechange"].forEach(function (k) { document.addEventListener(k, function (e) { e.preventDefault(); }, { passive: false }); });
+    document.addEventListener("touchmove", function (e) { if (e.touches && e.touches.length > 1) e.preventDefault(); }, { passive: false });
+    function unzoom() {
+      var vv = window.visualViewport, m = document.querySelector('meta[name="viewport"]');
+      if (!vv || !m || vv.scale <= 1.01) return;
+      var c = m.getAttribute("content");
+      m.setAttribute("content", c.replace(/maximum-scale=[\d.]+/, "maximum-scale=1.0001"));
+      setTimeout(function () { m.setAttribute("content", c); }, 50);
+    }
+    if (window.visualViewport) window.visualViewport.addEventListener("resize", unzoom);
+    unzoom();
   })();
 </script>
 
