@@ -29,6 +29,8 @@ jobs:
     timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main      # a run queued behind another starts from main as it is now (Oct 3, 2026)
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"

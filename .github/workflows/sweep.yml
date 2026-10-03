@@ -45,6 +45,8 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: main      # a run queued behind another starts from main as it is now (Oct 3, 2026)
 
       - uses: actions/setup-python@v5
         with:
@@ -106,5 +108,5 @@ jobs:
             exit 0
           fi
           git commit -m "sweep $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git pull --rebase --autostash
+          git pull --rebase --autostash || { git rebase --abort; git pull --rebase --autostash -X theirs; }
           git push
