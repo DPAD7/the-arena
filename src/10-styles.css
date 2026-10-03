@@ -4196,6 +4196,9 @@
   #slipsheet .slav .slpic--face { border-radius: 13px; }
   #slipsheet .slav img { width: 42px; height: 42px; }
   #slipsheet .slav .slpic--face { width: 100%; height: 100%; }
+  /* a fight leg on both men: two halves of the one square, not two squares */
+  #slipsheet .slav .slpair, .cashsheet .slipcard--nw .slav .slpair { overflow: hidden; border-radius: 13px; }
+  #slipsheet .slav .slpair .slpic--face, .cashsheet .slipcard--nw .slav .slpair .slpic--face { width: 50%; height: 100%; border-radius: 0; }
   #slipsheet .slavmk { right: -6px; bottom: -6px; height: 22px; min-width: 24px; border-color: #fff; border-width: 1.5px; }
   #slipsheet .slavmk .slmk, #slipsheet .slavmk .slmk svg { width: 14px; height: 14px; }
   #slipsheet .slnames { font-size: 17px; margin-top: 6px; }
