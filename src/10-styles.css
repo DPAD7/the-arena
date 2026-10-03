@@ -4249,3 +4249,8 @@
   .cashsheet .slipcard--nw.slipcard--open .slgrid { padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.13); }
   .cashsheet .slipcard--nw .slgrid b { font: 800 21px/1 "Barlow Condensed", "Arial Narrow", sans-serif; }
   .cashsheet .slipcard--nw .slgrid .slgodds { color: #fff; }
+  /* the college row: the school under the name */
+  .qst--cfb i { display: block; margin-top: 3px; font: 600 12px/1.2 Barlow, sans-serif; font-style: normal; color: #8e8e93;
+    max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .qst--cfb { min-width: 0; }
+  .qscfb .qsnone { color: #8e8e93; padding: 10px 4px; font: 600 14px Barlow, sans-serif; }

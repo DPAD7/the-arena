@@ -93,7 +93,7 @@
           '<span class="qst-star' + (st[m.id] ? " on" : "") + '" role="button" aria-label="Star ' + esc(m.n) + '">' + STAR + "</span></span>" +
           "<b>" + esc(last) + "</b></button>";
       }).join("");
-      row.hidden = !!inp.value.trim();
+      row.hidden = CFBMODE || !!inp.value.trim();
     }
     window.qsRow = qsRow;
     if (row) row.addEventListener("click", function (e) {
@@ -118,8 +118,69 @@
       if (at >= 0) picked.splice(at, 1); else picked.push(id);
       inp.value = ""; draw();
     });
+    /* the college page's own row (Jose, Oct 3, 2026): each team playing this
+       week -- its quarterback's face, his last name, the school under it --
+       with a star. Starred teams lead (newest star first) and are the ones the
+       board shows; the rest follow in the order they play. */
+    var CFBMODE = false, SCHOOLS = null, crow = document.getElementById("qscfb");
+    function tabNow() { var t = document.querySelector('.sptab[aria-selected="true"]'); return t ? t.dataset.sp : ""; }
+    function cfbRow() {
+      if (!crow) return;
+      var st = window.STARS || {}, q = inp.value.trim().toLowerCase(), list = [], seen = {};
+      var on = {};
+      document.querySelectorAll('.gcard[data-lg="college-football"][data-espn]').forEach(function (c) { on[c.dataset.espn] = 1; });
+      (typeof CFB === "object" ? CFB : []).forEach(function (g) {
+        if (!on[String(g[1])]) return;
+        [[g[3], g[5], g[6]], [g[4], g[7], g[8]]].forEach(function (p) {
+          if (seen[p[0]]) return; seen[p[0]] = 1;
+          list.push({ ab: p[0], n: p[1] || "", id: p[2] || "", gid: String(g[1]), t: Date.parse(g[2]) || 0,
+                      school: (SCHOOLS && SCHOOLS[p[0]]) || p[0] });
+        });
+      });
+      if (q) list = list.filter(function (m) { return (m.n + " " + m.school + " " + m.ab).toLowerCase().indexOf(q) >= 0; });
+      list.sort(function (a, b) {
+        var sa = st["cfb:" + a.ab] || 0, sb = st["cfb:" + b.ab] || 0;
+        if (sa || sb) return sb - sa;
+        return a.t - b.t;
+      });
+      crow.innerHTML = list.map(function (m) {
+        var last = typeof famName === "function" ? famName(m.n) : String(m.n).split(" ").pop();
+        return '<button type="button" class="qst qst--cfb" data-ab="' + esc(m.ab) + '" data-gid="' + esc(m.gid) + '">' +
+          '<span class="qst-pic">' + (m.id ? face(m.id, "cfb") : "") +
+          '<span class="qst-star' + (st["cfb:" + m.ab] ? " on" : "") + '" role="button" aria-label="Star ' + esc(m.school) + '">' + STAR + "</span></span>" +
+          "<b>" + esc(last || m.ab) + "</b><i>" + esc(m.school) + "</i></button>";
+      }).join("") || '<div class="qsnone">No college games on this page</div>';
+    }
+    if (crow) crow.addEventListener("click", function (e) {
+      var t = e.target.closest(".qst--cfb");
+      if (!t) return;
+      if (e.target.closest(".qst-star")) {
+        e.stopPropagation();
+        var st = window.STARS || {}, k = "cfb:" + t.dataset.ab;
+        if (st[k]) delete st[k]; else st[k] = Date.now();
+        window.STARS = st;
+        try { localStorage.setItem("arena.stars", JSON.stringify(st)); } catch (e2) {}
+        if (typeof pushState === "function") pushState();
+        cfbRow();
+        if (window._render) window._render();
+        return;
+      }
+      /* a tap goes to the game */
+      var card = document.querySelector('.gcard[data-espn="' + t.dataset.gid + '"]');
+      close();
+      if (card && !card.closest(".hidebox")) card.scrollIntoView({ block: "center", behavior: "smooth" });
+    });
     function open() {
       if (box.classList.contains("open")) return;
+      var tab = tabNow();
+      if (tab !== "nfl" && tab !== "college-football") return;
+      CFBMODE = tab === "college-football";
+      box.classList.toggle("qs--cfb", CFBMODE);
+      if (crow) crow.hidden = !CFBMODE;
+      if (row) row.hidden = CFBMODE;
+      inp.placeholder = CFBMODE ? "Search a QB or a school" : "Search a QB, or a few for a parlay";
+      if (CFBMODE && !SCHOOLS) fetch("cfb_schools.json").then(function (r) { return r.json(); })
+        .then(function (j) { SCHOOLS = j || {}; cfbRow(); }).catch(function () { SCHOOLS = {}; });
       box.classList.add("open"); load().then(ended).then(function () { try { fromBoard(); } catch (e) {} draw(); });
       setTimeout(function () { try { inp.focus(); } catch (e) {} }, 60);
     }
@@ -138,6 +199,7 @@
     addEventListener("touchstart", function (e) {
       y0 = null;
       if (box.classList.contains("open") || window.scrollY > 2 || document.documentElement.classList.contains("hotlock")) return;
+      if (tabNow() !== "nfl" && tabNow() !== "college-football") return;
       if (document.querySelector("dialog[open]")) return;
       /* a drag that starts on a card's hide corner is the hide, never the
          search (Jose, Sep 28, 2026: "conflicting with the drag down to hide") */
@@ -199,6 +261,7 @@
       return hits.slice(0, 8);
     }
     function draw() {
+      if (CFBMODE) { cfbRow(); sug.innerHTML = ""; out.innerHTML = ""; return; }
       var qs = DATA ? DATA.qbs : {};
       [].slice.call(bar.querySelectorAll(".qschip")).forEach(function (c) { c.remove(); });
       picked.forEach(function (id) {

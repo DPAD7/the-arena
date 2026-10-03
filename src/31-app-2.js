@@ -748,8 +748,12 @@
      of the day when there is no shelf yet, still needs the board drawn --
      and then whatever he was looking at is put back on the same spot. */
   function flipHide(card, id) {
-    var hiding = !hid[id];
+    var hiding = !(hid[id] || card.closest(".hidebox"));
     if (hiding) hid[id] = 1; else delete hid[id];
+    if (card.dataset.lg === "college-football" && cfbStarred()) {
+      cfbStar(id, !hiding);
+      if (!hiding) { var y0 = window.scrollY; saveHidden(); render(); window.scrollTo(0, y0); return; }
+    }
     saveHidden();
     var box = BOARD.querySelector(".hidebox"), label = BOARD.querySelector(".hidebar span");
     var row = card.closest(".caro, .bill"), slot = card.closest(".board");
@@ -988,7 +992,7 @@
          on the UFC tab, where the list is a month and there are always fights
          still to come (Jose, Sep 20, 2026: "they get placed back in the order
          of events"). */
-      var put = hid[it[1]] && !OVER[String(it[1])] && !dayOver;
+      var put = (hid[it[1]] || cfbOff(it)) && !OVER[String(it[1])] && !dayOver;
       if (hid[it[1]] && !put) { delete hid[it[1]]; saveHidden(); }
       (put ? away : items).push(it);
     });
@@ -1321,6 +1325,35 @@
 
   function nflItems(list) {
     return list.map(function (g) { return ["nfl", g[1], g[2], frame(g)]; });
+  }
+  /* the college board is the teams he has starred (Jose, Oct 3, 2026: "if I
+     star it that means I wanna see it, if I don't that means I don't"). With
+     no college star at all, everything shows, so the page is never empty. */
+  function cfbStarred() {
+    var st = window.STARS || {};
+    for (var k in st) if (k.indexOf("cfb:") === 0) return st;
+    return null;
+  }
+  function cfbOff(it) {
+    if (it[0] !== "college-football") return false;
+    var st = cfbStarred();
+    if (!st) return false;
+    for (var i = 0; i < CFB.length; i++) {
+      var g = CFB[i];
+      if (String(g[1]) === String(it[1])) return !st["cfb:" + g[3]] && !st["cfb:" + g[4]];
+    }
+    return false;
+  }
+  function cfbStar(gid, on) {
+    var st = window.STARS || {};
+    CFB.forEach(function (g) {
+      if (String(g[1]) !== String(gid)) return;
+      [g[3], g[4]].forEach(function (ab) { if (on) st["cfb:" + ab] = Date.now(); else delete st["cfb:" + ab]; });
+    });
+    window.STARS = st;
+    try { STARS = st; } catch (e) {}
+    try { localStorage.setItem("arena.stars", JSON.stringify(st)); } catch (e) {}
+    if (typeof pushState === "function") pushState();
   }
   function cfbItems(list) {
     return list.map(function (g) {

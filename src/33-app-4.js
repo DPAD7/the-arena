@@ -548,6 +548,7 @@
   }
   /* when the board last finished drawing: a double tap on a sport icon is
      timed from here, since the first tap's drawing holds the second one up */
+  window._render = function () { var y = window.scrollY; render(); window.scrollTo(0, y); };
   function render() {
     try { return render0.apply(this, arguments); } finally { window._drawnAt = performance.now(); }
   }
