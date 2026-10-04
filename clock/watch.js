@@ -182,7 +182,9 @@ export function news(slips, idx, games, prev, rows) {
     const open = legs.filter(x => x.st === "open");
     const odds = String(bet.odds || "");
     if (!open.length && legs.length) {
-      out.push({ tag: "slip:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won \u00b7 +$" + Math.max(0, (+bet.topay || 0) - (+bet.wager || 0)).toFixed(2),
+      /* its own alert, never folded into the slip's running one, so the win
+         is never just a quiet replacement of "one leg left" (Oct 3, 2026) */
+      out.push({ tag: "won:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won \u00b7 +$" + Math.max(0, (+bet.topay || 0) - (+bet.wager || 0)).toFixed(2),
                  body: "Your " + odds + " slip hit for $" + (+bet.topay || 0).toFixed(2) + ". Keep stacking.", url: "/#slip=" + bet.id });
       continue;
     }
