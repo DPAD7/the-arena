@@ -44,7 +44,7 @@ self.addEventListener("notificationclick", function (e) {
    with ?v= on the address and is always read from the network, so a saved
    copy can never hold an update back. Pictures, fonts and icons are kept;
    prices, marks and every function are always asked of the site. */
-var SHELL = "stacked-shell-v1", STATIC = "stacked-static-v3";
+var SHELL = "stacked-shell-v1", STATIC = "stacked-static-v4";
 self.addEventListener("fetch", function (e) {
   var req = e.request, url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== self.location.origin) return;
