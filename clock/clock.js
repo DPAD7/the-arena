@@ -22,7 +22,7 @@
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
 import { sendPush } from "./push.js";
-import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet } from "./watch.js";
+import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, leghit: true, pregame: true, change: true, fight: true, recap: true };
@@ -467,6 +467,27 @@ export class Clock {
         }
       }
     }
+    // the result written onto the slips he tracked himself, so every device
+    // opens on it settled, not after its own reading of every game (Oct 3,
+    // 2026: all six won and his phone still showed Smith open)
+    try {
+      let moved = false;
+      for (const bet of sent) {
+        for (const l of bet.legs || []) {
+          const v = idx[l.sel], g = v && games[v.gid], r = v && rows[v.gid];
+          if (!v || !g) continue;
+          const st = legState(v, g, v.fight || !r ? null : (v.side ? r[7] : r[9]), r);
+          if ((st === "won" || st === "lost") && String(l.status || "").toLowerCase() !== st) { l.status = st; moved = true; }
+        }
+        const ls = (bet.legs || []).map(l => String(l.status || "").toLowerCase());
+        const bs = ls.includes("lost") ? "lost" : ls.length && ls.every(x => x === "won") ? "won" : "open";
+        if (bet.status !== bs) { bet.status = bs; moved = true; }
+      }
+      if (moved) {
+        const s1 = await this.ctx.storage.get("kv:dkbets:sent");
+        await this.ctx.storage.put("kv:dkbets:sent", { v: JSON.stringify(sent), exp: (s1 && s1.exp) || 0 });
+      }
+    } catch (e) {}
     // changes on a leg after it was bet: a teammate ruled out, his passer
     // downgraded -- the first read of a leg is only remembered, never said
     const future = [];
