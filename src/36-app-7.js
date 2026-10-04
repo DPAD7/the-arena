@@ -1094,6 +1094,18 @@
      Raoni Barcelos", suffixes and accents out); the side is whichever of
      those two the pick names, and a pick that fits both takes neither */
   function trkFightOf(lg, byEv) {
+    /* a moneyline tracked from the board carries its bout: when DraftKings
+       moves the price and its id with it, the bout and the name still say
+       which man it is (Oct 3, 2026: Silva drew as "PM" with no tracking) */
+    if (lg.g && /\u2016\s*ML\b/.test(String(lg.label || lg.pick || ""))) {
+      var fr0 = (typeof FIGHTS === "object" ? FIGHTS : []).filter(function (x) { return String(x[1]) === String(lg.g); })[0];
+      if (fr0) {
+        var who0 = String(lg.label || lg.pick).split("\u2016")[0].trim().toLowerCase();
+        var la = String(fr0[3]).toLowerCase().split(" ").pop(), lb = String(fr0[5]).toLowerCase().split(" ").pop();
+        var s0 = who0.indexOf(la) >= 0 && who0.indexOf(lb) < 0 ? 0 : who0.indexOf(lb) >= 0 && who0.indexOf(la) < 0 ? 1 : -1;
+        if (s0 >= 0) return { g: String(fr0[1]), k: "fml", s: s0, fight: 1 };
+      }
+    }
     if (!/moneyline|fight winner|to win|bout odds/i.test(String(lg.market || "") + " " + String(lg.label || ""))) return null;
     var fold = function (x) { return String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\b(jr|sr|ii|iii|iv)\b\.?/ig, "").replace(/[^a-z ]/ig, "").replace(/\s+/g, " ").trim().toLowerCase(); };
     var last = function (x) { return fold(x).split(" ").pop(); };
