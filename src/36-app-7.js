@@ -405,7 +405,11 @@
      on the slip, $2.79 short (Jose, Sep 26, 2026: "math is off"). A sync from
      My Bets (tools/dk-bets) is the truth: its balance is the balance, its
      fills are the legs' prices, and a day it has settled is not paid twice. */
+  /* the last read of the bets, kept on the phone, so the wallet opens on the
+     settled slip and the right balance at once and not a moment later
+     (Oct 3, 2026: "it's loading as this then loads settled") */
   var DKB = null, DKB_T = 0;
+  try { var k0 = JSON.parse(localStorage.getItem("arena.bets") || "null"); if (k0) DKB = k0; } catch (e) {}
   function dkDay(placed) {
     var m = /([A-Z][a-z]{2})[a-z]* (\d{1,2}), (\d{4})/.exec(placed || "");
     if (!m) return "";
@@ -442,20 +446,24 @@
        off before the read landed stayed off, and the wallet said $150.22 with
        $250.22 on DraftKings (Jose, Sep 28, 2026) */
     var wal = DKB && DKB.wallet;
-    /* no balance set yet: the tracked slips still count from nothing, so a
-       win shows as money in (Oct 3, 2026: $0.00 after an $810 win) */
-    if ((!wal || typeof wal.bal !== "number") && DKB && (DKB.sent || []).length && !(typeof DKB.balance === "number")) wal = { bal: 0, at: 0 };
-    if (wal && typeof wal.bal === "number" && wal.at >= (DKB.bookAt || 0)) {
-      var b0 = wal.bal;
+    /* the balance: the one he set, or else the book's last read, or else
+       nothing -- and every slip tracked from the board since then moves it,
+       its stake out and, once every leg has won, its payout in (Oct 3, 2026:
+       $0.00 after an $810 win) */
+    if (DKB) {
+      var base = wal && typeof wal.bal === "number" ? [wal.bal, wal.at || 0]
+               : typeof DKB.balance === "number" ? [DKB.balance, DKB.bookAt || 0] : [0, 0];
+      var b0 = base[0];
       (DKB.sent || []).forEach(function (bet) {
-        if ((Date.parse(bet.placed) || 0) < wal.at) return;
+        if ((Date.parse(bet.placed) || 0) < base[1]) return;
         b0 -= bet.wager || 0;
         var legs = bet.legs || [];
-        if (legs.length && legs.every(function (lg) { return (BANK.legs[lg.sel] || {}).st === "won" || (window.TRKST || {})[lg.sel] === "won"; })) b0 += bet.topay || 0;
+        if (bet.status === "won" || (legs.length && legs.every(function (lg) {
+          return String(lg.status || "").toLowerCase() === "won" || (BANK.legs[lg.sel] || {}).st === "won" || (window.TRKST || {})[lg.sel] === "won"; }))) b0 += bet.topay || 0;
       });
       b0 = Math.round(b0 * 100) / 100;
       if (BANK.bal !== b0) { BANK.bal = b0; bankFix = true; }
-    } else if (DKB && typeof DKB.balance === "number" && BANK.bal !== DKB.balance) { BANK.bal = DKB.balance; bankFix = true; }
+    }
     if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) { var f0 = bankFix; bankFix = false; return f0; }
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
     (DKB.bets || []).forEach(function (bet) {
@@ -845,7 +853,11 @@
     return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        if (j && (j.at || (j.sent && j.sent.length))) { DKB = withSent(j); bankDraw(); }
+        if (j && (j.at || (j.sent && j.sent.length))) {
+          DKB = withSent(j);
+          try { localStorage.setItem("arena.bets", JSON.stringify(DKB)); } catch (e) {}
+          bankDraw();
+        }
         /* read, and was the last sync from the book recent: six hours */
         if (done) done(!!j, !!(j && j.at && Date.now() - j.at < 6 * 3600000));
       })
@@ -1721,7 +1733,7 @@
           /* a result the clock wrote onto the slip settles the leg on every
              device at once (Oct 3, 2026) */
           var ls0 = String(lg.status || "").toLowerCase();
-          if (!v.st && (ls0 === "won" || ls0 === "lost")) v = Object.assign({}, v, { st: ls0 });
+          if (v.st !== "won" && v.st !== "lost" && (ls0 === "won" || ls0 === "lost")) v = Object.assign({}, v, { st: ls0 });
           /* the leg's own game, off its card: the picture is settled by the
              game, not the first word of a name ("Kansas" for Kansas State --
              Jose, Sep 26, 2026) */
