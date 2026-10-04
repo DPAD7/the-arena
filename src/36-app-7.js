@@ -1715,6 +1715,10 @@
       else box.innerHTML = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
+          /* a result the clock wrote onto the slip settles the leg on every
+             device at once (Oct 3, 2026) */
+          var ls0 = String(lg.status || "").toLowerCase();
+          if (!v.st && (ls0 === "won" || ls0 === "lost")) v = Object.assign({}, v, { st: ls0 });
           /* the leg's own game, off its card: the picture is settled by the
              game, not the first word of a name ("Kansas" for Kansas State --
              Jose, Sep 26, 2026) */
