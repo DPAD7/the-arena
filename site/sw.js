@@ -13,8 +13,8 @@ self.addEventListener("activate", function (e) {
 
 self.addEventListener("push", function (e) {
   var m = {};
-  try { m = e.data ? e.data.json() : {}; } catch (err) { m = { title: "Stacked", body: e.data ? e.data.text() : "" }; }
-  var work = [self.registration.showNotification(m.title || "Stacked", {
+  try { m = e.data ? e.data.json() : {}; } catch (err) { m = { title: "Stax", body: e.data ? e.data.text() : "" }; }
+  var work = [self.registration.showNotification(m.title || "Stax", {
     body: m.body || "", tag: m.tag || undefined, renotify: !!m.tag, icon: "icon-192.png", badge: "icon-192.png",
     data: { url: m.url || "/", type: m.type || "" }
   })];
