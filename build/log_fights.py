@@ -170,13 +170,20 @@ def log_plays(bout, fh, have):
 
 def one_pass(bouts, fh, done):
     """A reading of every bout being fought. Returns how many are still on,
-       and how many are still to come. A bout in `done` has had its result
-       written and is not asked about again."""
-    live, ahead = 0, 0
-    for b in bouts:
-        if b["bout"] in done:
-            continue
-        st = ask(b["status"].replace("https://", "http://")) if b["status"] else {}
+       how many are still to come, and the bouts read this pass. A bout in
+       `done` has had its result written and is not asked about again.
+
+       Every bout is asked at once, and each live man's numbers at once: one
+       at a time, a pass over a fourteen-bout card took a minute and a half,
+       so a fight was sampled three or four times and its rewind had a
+       handful of strikes (Oct 3, 2026: Pinas, 13 strikes in four minutes)."""
+    from concurrent.futures import ThreadPoolExecutor
+    todo = [b for b in bouts if b["bout"] not in done]
+    with ThreadPoolExecutor(16) as ex:
+        sts = list(ex.map(lambda b: ask(b["status"].replace("https://", "http://")) if b["status"] else {}, todo))
+    live, ahead, read = 0, 0, []
+    rows = []
+    for b, st in zip(todo, sts):
         t = (st.get("type") or {})
         state = t.get("state")
         rd = st.get("period") or 0
@@ -189,6 +196,11 @@ def one_pass(bouts, fh, done):
         else:
             ahead += 1
             continue
+        rows.append((b, st, state, rd))
+    with ThreadPoolExecutor(16) as ex:
+        stats = list(ex.map(lambda m: read_stats(m["stats"]), [m for b, _, _, _ in rows for m in b["men"]]))
+    i = 0
+    for b, st, state, rd in rows:
         row = {"at": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
                "bout": b["bout"], "state": state, "round": rd,
                "clock": st.get("displayClock"), "secs": st.get("clock"),
@@ -196,12 +208,14 @@ def one_pass(bouts, fh, done):
                "men": []}
         for m in b["men"]:
             row["men"].append({"id": m["id"], "name": name_of(m["id"]),
-                               "order": m.get("order"), "stats": read_stats(m["stats"])})
+                               "order": m.get("order"), "stats": stats[i]})
+            i += 1
+        read.append(b["bout"])
         if not any(mm["stats"] for mm in row["men"]) and state == "post":
             continue
         fh.write(json.dumps(row, separators=(",", ":")) + "\n")
         fh.flush()
-    return live, ahead
+    return live, ahead, read
 
 
 def main():
@@ -222,11 +236,16 @@ def main():
     print("plays already on file: %d" % len(have))
     started = time.time()
     done = set()
+    played = set()
     while True:
-        live, ahead = one_pass(bouts, fh, done)
+        live, ahead, read = one_pass(bouts, fh, done)
+        # the moments of the bouts read this pass only: every finished bout's
+        # list again on every pass is what made a pass take minutes
         for b in bouts:
-            if b["bout"] not in done or live:
+            if b["bout"] in read and b["bout"] not in played:
                 log_plays(b, ph, have)
+                if b["bout"] in done:
+                    played.add(b["bout"])
         if "--once" in sys.argv:
             break
         # The card is over the moment its last bout is: nothing on, nothing

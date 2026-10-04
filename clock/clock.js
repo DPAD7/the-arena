@@ -382,6 +382,16 @@ export class Clock {
     let prices = {};
     try { prices = await (await fetch(SITE + "/prices.json")).json(); } catch (e) { return false; }
     const idx = legIndex(prices, sched);
+    // a fight moneyline whose DraftKings id moved with its price: the bout it
+    // was tracked on and the name on it still say which man (Oct 3, 2026: Silva)
+    for (const bet of slips) for (const l of bet.legs || []) {
+      if (idx[l.sel] || !l.g || !/\u2016\s*ML\b/.test(String(l.label || l.pick || ""))) continue;
+      const r = rows[l.g]; if (!r || r[0] !== "bout") continue;
+      const who = String(l.label || l.pick).split("\u2016")[0].trim().toLowerCase();
+      const a = String(r[4]).toLowerCase().split(" ").pop(), b = String(r[5]).toLowerCase().split(" ").pop();
+      const side = who.includes(a) && !who.includes(b) ? 0 : who.includes(b) && !who.includes(a) ? 1 : -1;
+      if (side >= 0) idx[l.sel] = { gid: String(l.g), kind: "fml", side, fight: 1, who: side ? r[5] : r[4] };
+    }
     const out = [];
     // the half hour before a slip's first game: a reminder, with anything on
     // the injury wire about the passers on it
