@@ -4,7 +4,12 @@
    this shows it, puts the count of live legs on the icon, and a tap opens the
    board on the slip or the game it is about. */
 self.addEventListener("install", function (e) { self.skipWaiting(); });
-self.addEventListener("activate", function (e) { e.waitUntil(self.clients.claim()); });
+/* a new version of the kept pictures drops the old ones (the $ turned, Oct 3, 2026) */
+self.addEventListener("activate", function (e) {
+  e.waitUntil(caches.keys().then(function (ks) {
+    return Promise.all(ks.filter(function (k) { return /^stacked-static-/.test(k) && k !== STATIC; }).map(function (k) { return caches.delete(k); }));
+  }).then(function () { return self.clients.claim(); }));
+});
 
 self.addEventListener("push", function (e) {
   var m = {};
@@ -39,7 +44,7 @@ self.addEventListener("notificationclick", function (e) {
    with ?v= on the address and is always read from the network, so a saved
    copy can never hold an update back. Pictures, fonts and icons are kept;
    prices, marks and every function are always asked of the site. */
-var SHELL = "stacked-shell-v1", STATIC = "stacked-static-v1";
+var SHELL = "stacked-shell-v1", STATIC = "stacked-static-v2";
 self.addEventListener("fetch", function (e) {
   var req = e.request, url = new URL(req.url);
   if (req.method !== "GET" || url.origin !== self.location.origin) return;
