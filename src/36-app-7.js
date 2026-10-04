@@ -448,7 +448,7 @@
         if ((Date.parse(bet.placed) || 0) < wal.at) return;
         b0 -= bet.wager || 0;
         var legs = bet.legs || [];
-        if (legs.length && legs.every(function (lg) { return (BANK.legs[lg.sel] || {}).st === "won"; })) b0 += bet.topay || 0;
+        if (legs.length && legs.every(function (lg) { return (BANK.legs[lg.sel] || {}).st === "won" || (window.TRKST || {})[lg.sel] === "won"; })) b0 += bet.topay || 0;
       });
       b0 = Math.round(b0 * 100) / 100;
       if (BANK.bal !== b0) { BANK.bal = b0; bankFix = true; }
@@ -1224,7 +1224,9 @@
      open slips drawn again as each answer lands */
   function trkPull() {
     var map = legMap(), want = {};
-    document.querySelectorAll("#cashlegs .slipcard--open[data-bet]").forEach(function (c) {
+    /* every slip on the wallet, open or not: a slip settles in the
+       background, not only once its legs are looked at (Oct 3, 2026) */
+    document.querySelectorAll("#cashlegs .slipcard[data-bet]").forEach(function (c) {
       var bet = (DKB && DKB.bets || []).filter(function (b) { return String(b.id) === c.dataset.bet; })[0];
       (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; var g0 = v ? v.g : trkGameOf(lg); if (g0) want[g0] = 1; });
     });
@@ -1385,6 +1387,8 @@
         var imp = function (p) { return trkImplied(p); }, pa = imp(f[8]), pb = imp(f[10]);
         var wa = pa != null && pb != null ? Math.round(pa / (pa + pb) * 100) : 50;
         var won = st0 || (r && r.state === "post" && r.winner ? (r.winner === String(x.v.s === 0 ? f[4] : f[6]) ? "won" : "lost") : "");
+        TRKST[x.lg.sel] = won || "";
+        if (won === "lost") TRKLOST[x.lg.sel] = 1;
         out += '<div class="trkr trkr--two' + (won ? " trkr--" + won : "") + '"><span class="trkc' + (x.v.s === 0 ? " trkc--mine" : "") + '">' + faceL +
           '</span><div class="trkm"><div class="trkt trkt--fml"><small>(' + wa + "%)</small><b>" + esc(String(f[8] || "").replace("-", "−")) +
           '</b><em>–</em><b class="dim">' + esc(String(f[10] || "").replace("-", "−")) + "</b><small>(" + (100 - wa) + "%)</small></div>" +
@@ -1744,7 +1748,10 @@
               return '<i class="slmk slmk--m"><svg aria-hidden="true"><use href="#' + k0 + '"/></svg></i>'; }).join("");
           }
           return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
-                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : "", pic: pic0, fw: fw, fmk: fmk };
+                   /* what DraftKings said, or else what the tracker settled
+                      it as: a slip tracked from the board has nobody else to
+                      say (Oct 3, 2026: all six won and the card sat open) */
+                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : (TRKST[lg.sel] || ""), pic: pic0, fw: fw, fmk: fmk };
         });
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way
