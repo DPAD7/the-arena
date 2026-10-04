@@ -119,5 +119,9 @@ jobs:
             exit 0
           fi
           git commit -m "tap $(date -u '+%Y-%m-%d %H:%M UTC')"
-          git pull --rebase --autostash || { git rebase --abort; git pull --rebase --autostash -X theirs; }
-          git push
+          # a push can lose a race with another writer: pull and try again
+          for i in 1 2 3 4 5; do
+            git pull --rebase --autostash || { git rebase --abort; git pull --rebase --autostash -X theirs; }
+            git push && break
+            sleep $((i * 5))
+          done
