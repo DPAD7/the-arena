@@ -103,6 +103,11 @@ export class Clock {
       await this.ctx.storage.put("subs", subs);
       return Response.json({ subs: Object.keys(subs).length });
     }
+    // which alerts went out, newest first, for checking one was sent
+    if (url.pathname.endsWith("/sent")) {
+      const sent = (await this.ctx.storage.get("sent")) || {};
+      return Response.json(Object.entries(sent).sort((a, b) => b[1] - a[1]).slice(0, 40));
+    }
     if (url.pathname.endsWith("/prefs")) {
       let prefs = Object.assign({}, PREFS, (await this.ctx.storage.get("prefs")) || {});
       if (request.method === "POST") {

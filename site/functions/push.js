@@ -17,6 +17,7 @@ export async function onRequest({ request, env }) {
   const stub = env.CLOCK.get(env.CLOCK.idFromName("board"));
   const json = (x, s) => new Response(JSON.stringify(x), { status: s || 200, headers: { "content-type": "application/json", "cache-control": "no-store" } });
   if (request.method === "GET" && new URL(request.url).searchParams.has("cliplog")) return stub.fetch("https://clock/cliplog");
+  if (request.method === "GET" && new URL(request.url).searchParams.has("sent")) return stub.fetch("https://clock/sent");
   if (request.method === "GET") {
     const r = await (await stub.fetch("https://clock/prefs")).json();
     return json(Object.assign(r, { key: KEY }));
