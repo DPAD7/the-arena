@@ -449,18 +449,33 @@
 
   /* which bouts we hold the moments for, read once from the site */
   var ANIMS = null, ANIMWAIT = [];
+  window.animPath = function (id) { var a = (window.ANIMS || {})[id]; return "anim/" + ((a && a.dir) || "") + id + ".json"; };
   function animList(then) {
     if (ANIMS) return then(ANIMS);
     ANIMWAIT.push(then);
     if (ANIMWAIT.length > 1) return;
-    fetch("anim/index.json").then(function (r) { return r.ok ? r.json() : {}; })
-      .then(function (j) { ANIMS = j || {}; })
+    /* the card's own recorder, and the second one started mid-card, which
+       keeps its rewinds in anim/live/ (Oct 3, 2026) */
+    var get = function (u) { return fetch(u, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }); };
+    Promise.all([get("anim/index.json"), get("anim/live/index.json")])
+      .then(function (two) {
+        ANIMS = two[0] || {};
+        Object.keys(two[1] || {}).forEach(function (k) { if (!ANIMS[k]) { ANIMS[k] = two[1][k]; ANIMS[k].dir = "live/"; } });
+        window.ANIMS = ANIMS;
+      })
       .catch(function () { ANIMS = {}; })
       .then(function () { var w = ANIMWAIT; ANIMWAIT = []; w.forEach(function (f) { f(ANIMS); }); });
   }
   var REWIND = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="6" width="2.6" height="12" rx="0.8" fill="currentColor"/>' +
                '<polygon points="19,6 9,12 19,18" fill="currentColor"/></svg>';
   /* the rewind, beside FINAL, on a bout that has a file; and what it opens */
+  /* while a card is being fought, its rewinds land a bout at a time: the
+     list is read again every two minutes and finished bouts get their button */
+  setInterval(function () {
+    if (!document.querySelector('.gcard[data-bout]')) return;
+    ANIMS = null;
+    document.querySelectorAll('.gcard[data-bout]').forEach(function (c) { armRewind(c); });
+  }, 120000);
   function armRewind(card) {
     if (!card || !card.dataset.bout) return;
     var gt = card.querySelector(".gtime");
@@ -495,7 +510,7 @@
            rail is the next, so it goes between them */
         var head = card.querySelector(":scope > .ghead");
         if (head && head.nextSibling) head.parentNode.insertBefore(box, head.nextSibling); else card.appendChild(box);
-        fetch("anim/" + card.dataset.bout + ".json").then(function (r) { return r.ok ? r.json() : null; })
+        fetch(animPath(card.dataset.bout)).then(function (r) { return r.ok ? r.json() : null; })
           .then(function (d) {
             if (!d || !card.contains(box)) return;
             /* the card knows how many rounds the bout was for; the file may

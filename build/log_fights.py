@@ -32,11 +32,15 @@ import urllib.request
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 import pagefile
-OUT = os.path.join(D, "data", "fight_log.jsonl")
+# ARENA_LIVE=1: a second recorder started mid-card keeps its own files, so it
+# can never clash with the one already running (Oct 3, 2026)
+SUB = "live" if os.environ.get("ARENA_LIVE") else ""
+os.makedirs(os.path.join(D, "data", SUB), exist_ok=True)
+OUT = os.path.join(D, "data", SUB, "fight_log.jsonl")
 # the moments, as against the running totals: round start and end, takedowns
 # and attempts, knockdowns, a pause and why, the result. Each carries the time
 # it happened, which a total never can (Jose, Sep 19, 2026)
-PLAYS = os.path.join(D, "data", "fight_plays.jsonl")
+PLAYS = os.path.join(D, "data", SUB, "fight_plays.jsonl")
 # plain http on purpose: this core host answers either way, and https through
 # urllib fails on a Mac without a certificate bundle, which is where this runs
 CORE = "http://sports.core.api.espn.com/v2/sports/mma/leagues/ufc"

@@ -39,10 +39,11 @@ import sys
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 import pagefile
-LOG = os.path.join(D, "data", "fight_log.jsonl")
-PLAYS = os.path.join(D, "data", "fight_plays.jsonl")
+SUB = "live" if os.environ.get("ARENA_LIVE") else ""
+LOG = os.path.join(D, "data", SUB, "fight_log.jsonl")
+PLAYS = os.path.join(D, "data", SUB, "fight_plays.jsonl")
 WON = os.path.join(D, "data", "fight_winners.json")
-OUT = os.path.join(D, "site", "anim")
+OUT = os.path.join(D, "site", "anim", SUB)
 
 HOW = {"ko/tko": "TKO", "ko": "KO", "tko": "TKO", "submission": "SUB", "sub": "SUB",
        "decision - unanimous": "UD", "decision - split": "SD", "decision - majority": "MD",

@@ -1308,7 +1308,7 @@
              rewind anim_rebuild.py cut from it */
           if (ty.state === "post" && !out.result && !out.asked) {
             out.asked = 1;
-            fetch("anim/" + c.id + ".json").then(function (r) { return r.ok ? r.json() : {}; }).then(function (a) {
+            fetch(animPath(c.id)).then(function (r) { return r.ok ? r.json() : {}; }).then(function (a) {
               if (a && a.how) { out.result = String(a.how).toLowerCase(); if (typeof bankDraw === "function") bankDraw(); }
             }).catch(function () {});
           }

@@ -1,0 +1,63 @@
+# A second fight recorder for a card already under way (Oct 3, 2026): it keeps
+# its own files (data/live, site/anim/live) so it never clashes with the first,
+# and puts each bout's rewind up about five minutes after the bout ends.
+# Started by pushing the card's ESPN event id to data/live/card.txt.
+name: fightlive
+run-name: fightlive
+
+on:
+  push:
+    branches: [main]
+    paths: [data/live/card.txt]
+
+concurrency:
+  group: fightlive
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: pip install --quiet curl_cffi
+      - name: Record and post each rewind as its bout ends
+        env:
+          ARENA_LIVE: "1"
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          EV=$(tr -d '[:space:]' < data/live/card.txt)
+          python build/log_fights.py --event "$EV" --every 6 --hours 5.75 &
+          LOG=$!
+          cut() {
+            python build/anim.py || return 0
+            git add data/live site/anim/live
+            if git diff --cached --quiet; then return 0; fi
+            git commit -q -m "live rewinds for card $EV"
+            for i in 1 2 3 4 5; do
+              git pull --rebase --autostash -q && git push -q && break
+              sleep 20
+            done
+            python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
+            (cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main) || true
+          }
+          while kill -0 $LOG 2>/dev/null; do
+            sleep 300
+            cut
+          done
+          wait $LOG || true
+          cut
