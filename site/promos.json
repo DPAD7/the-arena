@@ -1,21 +1,5 @@
 [
  {
-  "id": "0KYW25",
-  "head": "NFL Week 4 Sunday 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-02T10:30:00.0000000Z",
-  "end": "2026-10-05T03:59:00.0000000Z",
-  "sport": "nfl",
-  "game": "",
-  "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
   "id": "X8XNO6",
   "head": "NFL 50% Parlay Boost",
   "pct": 50,
@@ -34,6 +18,23 @@
   ]
  },
  {
+  "id": "ZZXN31",
+  "head": "First TD 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-04T14:30:00.0000000Z",
+  "end": "2026-10-05T00:20:00.0000000Z",
+  "sport": "",
+  "game": "",
+  "gid": "",
+  "minOdds": "",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "single",
+   "parlay"
+  ]
+ },
+ {
   "id": "EP8Y24",
   "head": "DET Lions @ CAR Panthers 30% SGP Boost",
   "pct": 30,
@@ -47,6 +48,22 @@
   "maxWager": 25.0,
   "types": [
    "sgp"
+  ]
+ },
+ {
+  "id": "0KYW25",
+  "head": "NFL Week 4 Sunday 50% Profit Boost",
+  "pct": 50,
+  "start": "2026-10-02T10:30:00.0000000Z",
+  "end": "2026-10-05T03:59:00.0000000Z",
+  "sport": "nfl",
+  "game": "",
+  "gid": "",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "any"
   ]
  }
 ]
