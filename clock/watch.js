@@ -182,7 +182,8 @@ export function news(slips, idx, games, prev, rows) {
     const open = legs.filter(x => x.st === "open");
     const odds = String(bet.odds || "");
     if (!open.length && legs.length) {
-      out.push({ tag: "slip:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won", body: "Your " + odds + " slip hit: $" + (+bet.topay || 0).toFixed(2) + ".", url: "/#slip=" + bet.id });
+      out.push({ tag: "slip:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won \u00b7 +$" + Math.max(0, (+bet.topay || 0) - (+bet.wager || 0)).toFixed(2),
+                 body: "Your " + odds + " slip hit for $" + (+bet.topay || 0).toFixed(2) + ". Keep stacking.", url: "/#slip=" + bet.id });
       continue;
     }
     /* a leg that lands, with the count: "Carr 2+ PTD ✓ · 1 of 6 hit, 5 left"
