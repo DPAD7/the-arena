@@ -415,7 +415,11 @@ export class Clock {
     for (const bet of slips) for (const l of bet.legs || []) {
       const v = idx[l.sel]; if (!v) continue;
       const st = Date.parse(rows[v.gid][2]);
-      if (now >= st - 5 * MIN && now < st + (v.fight ? 7 : 5) * 60 * MIN) want.add(v.gid);
+      /* a slip is only settled when its last leg is, so every leg on it is
+         read until then: a fight from the 4 PM prelims had dropped out of
+         the window by the time the main event ended, and the win was never
+         said (Oct 3, 2026: Silva won and no alert came) */
+      if (now >= st - 5 * MIN && now < st + 16 * 60 * MIN) want.add(v.gid);
     }
     const prev = (await this.ctx.storage.get("prev")) || {};
     const games = {};
