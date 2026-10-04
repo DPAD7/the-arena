@@ -442,6 +442,9 @@
        off before the read landed stayed off, and the wallet said $150.22 with
        $250.22 on DraftKings (Jose, Sep 28, 2026) */
     var wal = DKB && DKB.wallet;
+    /* no balance set yet: the tracked slips still count from nothing, so a
+       win shows as money in (Oct 3, 2026: $0.00 after an $810 win) */
+    if ((!wal || typeof wal.bal !== "number") && DKB && (DKB.sent || []).length && !(typeof DKB.balance === "number")) wal = { bal: 0, at: 0 };
     if (wal && typeof wal.bal === "number" && wal.at >= (DKB.bookAt || 0)) {
       var b0 = wal.bal;
       (DKB.sent || []).forEach(function (bet) {
