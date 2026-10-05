@@ -17,6 +17,7 @@
 """
 import datetime as dt
 import html
+import clipcheck
 import json
 import os
 import re
@@ -235,6 +236,11 @@ def main():
                 print("  %-9s %-46s not on %s" % (club.upper(), text[:46], dom))
                 continue
             title, mcp, poster = cache[dom][hit[0]]
+            # a title naming another club, another yardage, or a reel is not this play
+            # (Oct 4, 2026: Bowers' 20-yarder wore a Saints-game 4-yard clip)
+            if clipcheck.wrong(html.unescape(title), text, [g[3], g[4]]):
+                print("  %-9s %-46s skipped, the clip is another play: %s" % (club.upper(), text[:46], html.unescape(title)[:50]))
+                continue
             v = {"mcp": mcp, "headline": html.unescape(title), "poster": poster} if mcp else page(dom, hit[0])
             if not v:
                 print("  %-9s %-46s page without an mcp id" % (club.upper(), text[:46]))

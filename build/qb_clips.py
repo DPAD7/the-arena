@@ -26,6 +26,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
+import clipcheck
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(D, "site")
@@ -79,7 +80,10 @@ def main():
             # the order they happened, both passers mixed (Jose, Sep 29, 2026)
             clip = {"gid": gid, "wk": wk, "seq": seq, "kind": kind, "text": text, "headline": ""}
             for rows, key in ((xi, "src"), (ci, "mcp"), (ni, "ext")):
-                row = next((r for r in rows.get(gid) or [] if r.get("text") == text and r.get(key)), None)
+                # a clip whose title says it is another game or another play is not his
+                # (Oct 4, 2026: a Saints-game Bowers clip, a Sights & Sounds reel)
+                row = next((r for r in rows.get(gid) or [] if r.get("text") == text and r.get(key)
+                            and not clipcheck.wrong(r.get("headline"), text, [g[3], g[4]])), None)
                 if row:
                     clip[key] = row[key]
                     clip["headline"] = row.get("headline") or ""
