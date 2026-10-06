@@ -262,6 +262,8 @@ export class Clock {
     // his slips: what their games are doing, and what is worth a push
     let live = false;
     try { live = await this.slips(sched, now); } catch (e) { live = false; }
+    // his gold marks and the board's leans, kept for the week's recap
+    try { await this.picks(sched, now); } catch (e) {}
     await this.ctx.storage.put("done", done);
     // the next alarm: the next moment, or the next final check
     let next = now + 6 * 60 * MIN;
@@ -531,20 +533,6 @@ export class Clock {
       if (!hist[bet.id]) hist[bet.id] = { res: st, wager: +bet.wager || 0, pay: +bet.topay || 0, at: now };
       else hist[bet.id].res = st;
     }
-    const et = etParts(now);
-    /* the week is Tuesday through Monday Night Football; it is told on
-       Tuesday from 10 AM, once nothing he bet that week is still being
-       played (Jose, Oct 6, 2026) */
-    const stillOn = slips.some(bet => slipState(bet, idx, games, rows) === "open" && now - Date.parse(bet.placed || 0) < 8 * 86400000);
-    if (et.wd === 2 && et.h >= 10 && !stillOn) {
-      const wk = Object.values(hist).filter(h => now - h.at < 7 * 86400000);
-      if (wk.length) {
-        const won = wk.filter(h => h.res === "won"), lost = wk.filter(h => h.res === "lost");
-        const net = won.reduce((t, h) => t + h.pay, 0) - wk.reduce((t, h) => t + h.wager, 0);
-        out.push({ key: "recap@" + et.date, type: "recap", title: "Your week",
-                   body: won.length + " won, " + lost.length + " lost · " + (net >= 0 ? "+$" : "−$") + Math.abs(net).toFixed(2) + ".", url: "/" });
-      }
-    }
     for (const k of Object.keys(hist)) if (now - hist[k].at > 60 * 86400000) delete hist[k];
     await this.ctx.storage.put("hist", hist);
     for (const m of news(slips, idx, games, prev, rows)) out.push(m);
@@ -555,6 +543,119 @@ export class Clock {
     await this.ctx.storage.put("prev", Object.assign(prev, keep));
     if (Object.entries(games).some(([gid, g]) => rows[gid] && rows[gid][0] === "bout" && g.state === "in")) return "fight";
     return Object.values(games).some(g => g.state === "in") || [...want].some(gid => !games[gid] || games[gid].state === "pre");
+  }
+
+  /* The week's account (Jose, Oct 6, 2026): "if I mark something gold and it
+     wins... my picks, and then board picks... we were right about this, wrong
+     about that, and a parlay is separate". A gold mark is kept the moment it
+     is seen -- the marks clear at the day's end -- with what it is a price on;
+     the board's lean on each game is kept until kickoff and frozen there. Both
+     are graded from the game's final on the site. The week is Tuesday (the
+     Contender Series) through Monday Night Football, told Tuesday from 10 AM
+     once nothing he tracked that week is still open. */
+  async picks(sched, now) {
+    const rows = {};
+    for (const r of sched) if (r[0] === "game" || r[0] === "bout") rows[r[1]] = r;
+    const P = (await this.ctx.storage.get("picks")) || { gold: {}, board: {} };
+    let state = null;
+    try { state = await (await fetch(SITE + "/state?k=arena-001bff8ddf784985", { cf: { cacheTtl: 0 } })).json(); } catch (e) { state = null; }
+    const fresh = state && state.placed ? Object.keys(state.placed).filter(k => state.placed[k] === true && !P.gold[k]) : [];
+    if (fresh.length) {
+      let prices = null;
+      try { prices = await (await fetch(SITE + "/prices.json")).json(); } catch (e) { prices = null; }
+      if (prices) {
+        const idx = legIndex(prices, sched);
+        for (const sel of fresh) {
+          const v = idx[sel];
+          if (!v || !rows[v.gid] || v.fight) continue;
+          P.gold[sel] = { gid: String(v.gid), kind: v.kind, side: v.side, n: v.n || 1, qb: v.qb ? String(v.qb) : "", start: rows[v.gid][2], at: now };
+        }
+      }
+    }
+    let sug = null;
+    try { sug = await (await fetch(SITE + "/suggest.json")).json(); } catch (e) { sug = null; }
+    for (const [gid, g] of Object.entries(sug || {})) {
+      const r = rows[gid];
+      if (!r || !g || !g.lean || Date.parse(r[2]) <= now) continue;
+      const q = g.qb || {};
+      P.board[gid] = { start: r[2], lean: g.lean, qb: [String((q.away || {}).id || ""), String((q.home || {}).id || "")] };
+    }
+    for (const T of [P.gold, P.board]) for (const k of Object.keys(T)) if (now - Date.parse(T[k].start) > 21 * 86400000) delete T[k];
+    await this.ctx.storage.put("picks", P);
+
+    const et = etParts(now);
+    if (et.wd !== 2 || et.h < 10) return;
+    let sent = [];
+    try { const s0 = await this.ctx.storage.get("kv:dkbets:sent"); sent = JSON.parse((s0 && s0.v) || "[]"); } catch (e) { sent = []; }
+    if (sent.some(b => String(b.status || "open").toLowerCase() === "open" && now - Date.parse(b.placed || 0) < 8 * 86400000)) return;
+    const from = now - 7 * 86400000;
+    const inWeek = (x) => { const t = Date.parse(x.start); return t >= from && t < now; };
+    const finals = {};
+    const final = async (gid) => {
+      if (gid in finals) return finals[gid];
+      let j = null;
+      try { const r0 = await fetch(SITE + "/final/" + gid + ".json"); j = r0.ok ? await r0.json() : null; } catch (e) { j = null; }
+      if (!j) return (finals[gid] = null);
+      const comp = ((j.header || {}).competitions || [])[0] || {};
+      const sc = [0, 0], teamSide = {};
+      for (const c of comp.competitors || []) {
+        const i = c.homeAway === "home" ? 1 : 0;
+        sc[i] = +c.score || 0; teamSide[String((c.team || {}).abbreviation || "")] = i;
+      }
+      const qb = {}, top = [0, 0];
+      for (const t of (j.boxscore || {}).players || []) {
+        const side = teamSide[String((t.team || {}).abbreviation || "")];
+        for (const st of t.statistics || []) {
+          const L = st.labels || [];
+          for (const a of st.athletes || []) {
+            const id = String((a.athlete || {}).id || ""), x = qb[id] || (qb[id] = { pyd: 0, ptd: 0, rtd: 0 });
+            if (st.name === "passing") {
+              x.pyd = +a.stats[L.indexOf("YDS")] || 0; x.ptd = +a.stats[L.indexOf("TD")] || 0;
+              if (side !== undefined && x.pyd > top[side]) top[side] = x.pyd;
+            }
+            if (st.name === "rushing") x.rtd = +a.stats[L.indexOf("TD")] || 0;
+          }
+        }
+      }
+      const done = (((comp.status || {}).type || {}).completed) !== false;
+      return (finals[gid] = done ? { sc, qb, top } : null);
+    };
+    const grade = (F, kind, side, n, qb) => {
+      if (!F) return null;
+      const me = F.qb[qb] || { pyd: 0, ptd: 0, rtd: 0 };
+      if (kind === "ml") return F.sc[side] === F.sc[1 - side] ? null : F.sc[side] > F.sc[1 - side];
+      if (kind === "h2h") { const a = qb ? me.pyd : F.top[side], b = F.top[1 - side]; return a === b ? null : a > b; }
+      if (kind === "ptd") return me.ptd >= (n || 1);
+      if (kind === "atd") return me.rtd >= (n || 1);
+      return null;
+    };
+    const mine = [0, 0], board = [0, 0];
+    for (const g of Object.values(P.gold)) {
+      if (!inWeek(g)) continue;
+      const r = grade(await final(g.gid), g.kind, g.side, g.n, g.qb);
+      if (r !== null) mine[r ? 0 : 1]++;
+    }
+    for (const [gid, b] of Object.entries(P.board)) {
+      if (!inWeek(b)) continue;
+      const F = await final(gid), L = b.lean || {};
+      const one = (r) => { if (r !== null && r !== undefined) board[r ? 0 : 1]++; };
+      if (L.ml) one(grade(F, "ml", L.ml === "home" ? 1 : 0));
+      if (L.h2h) one(grade(F, "h2h", L.h2h === "home" ? 1 : 0, 1, ""));
+      for (const [w, i] of [["away", 0], ["home", 1]]) {
+        if ((L.ptd || {})[w]) one(grade(F, "ptd", i, L.ptd[w], b.qb[i]));
+        if ((L.atd || {})[w]) one(grade(F, "atd", i, L.atd[w], b.qb[i]));
+      }
+    }
+    const hist = (await this.ctx.storage.get("hist")) || {};
+    const wk = Object.values(hist).filter(h => now - h.at < 7 * 86400000);
+    const won = wk.filter(h => h.res === "won"), lost = wk.filter(h => h.res === "lost");
+    const net = won.reduce((t, h) => t + h.pay, 0) - wk.reduce((t, h) => t + h.wager, 0);
+    const parts = [];
+    if (wk.length) parts.push("Parlays " + won.length + "–" + lost.length + " · " + (net >= 0 ? "+$" : "−$") + Math.abs(net).toFixed(2));
+    if (mine[0] + mine[1]) parts.push("Your picks " + mine[0] + "–" + mine[1]);
+    if (board[0] + board[1]) parts.push("Board picks " + board[0] + "–" + board[1]);
+    if (!parts.length) return;
+    await this.tell([{ key: "recap@" + et.date, type: "recap", title: "Your week", body: parts.join(". ") + ".", url: "/" }]);
   }
 
   /* send what has not been sent, of the kinds he has on */
