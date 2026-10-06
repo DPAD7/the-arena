@@ -149,7 +149,18 @@ def dk_bouts():
                 # each man alone, for a bout whose opponent has changed
                 out.setdefault("_one", {})[sa] = (b, str(e["id"]), when)
                 out["_one"][sb] = (a, str(e["id"]), when)
+            # and by the two last names alone: same card, same day, same last
+            # names is the same fight, however long the first name runs --
+            # DraftKings' "Sal Everett" is ESPN's "Salhahuddin Everett"
+            # (Jose, Oct 6, 2026)
+            out.setdefault("_last", []).append((surname(a), surname(b), str(e["id"]), when))
     return out
+
+
+def surname(n):
+    """The last name, folded, with Jr./Sr./II-IV left off."""
+    w = [x for x in re.sub(r"[^a-z ]", "", fold(n)).split() if x not in ("jr", "sr", "ii", "iii", "iv")]
+    return w[-1] if w else ""
 
 
 def squash(n):
@@ -166,10 +177,20 @@ def same(a, b):
     return squash(a) == squash(b) or turned(a) == turned(b)
 
 
-def find(bouts, a, b):
-    """This bout on DraftKings: exactly, or by the names run together."""
-    return (bouts.get((whoname.key(a), whoname.key(b))) or bouts.get((squash(a), squash(b))) or
-            bouts.get((turned(a), turned(b))))
+def find(bouts, a, b, when=""):
+    """This bout on DraftKings: exactly, by the names run together, or -- on
+       the same day -- by the two last names."""
+    hit = (bouts.get((whoname.key(a), whoname.key(b))) or bouts.get((squash(a), squash(b))) or
+           bouts.get((turned(a), turned(b))))
+    if hit or not when:
+        return hit
+    pair = {surname(a), surname(b)}
+    if len(pair) < 2:
+        return None
+    for la, lb, eid, w in bouts.get("_last", []):
+        if {la, lb} == pair and w and abs((T(w) - T(when)).total_seconds()) <= 36 * 3600:
+            return (eid, w)
+    return None
 
 
 SCORE_CARDS = None
@@ -315,7 +336,7 @@ def times_only():
     theirs = dk_bouts()
     kicks, moved = {}, []
     for f in fights:
-        got = find(theirs, f[3], f[5])
+        got = find(theirs, f[3], f[5], f[2])
         if not got or not got[1]:
             continue
         # never ahead of the bout's own block by more than half an hour: a
@@ -368,7 +389,7 @@ def main():
     for f in due:
         left, right = f[3], f[5]
         held = pins.get(str(f[1]))
-        eid, when = (held, live[held]) if held in live else (find(bouts, left, right) or (None, ""))
+        eid, when = (held, live[held]) if held in live else (find(bouts, left, right, f[2]) or (None, ""))
         if eid and not held:
             pins[str(f[1])] = eid
         if not eid:
@@ -401,11 +422,14 @@ def main():
             continue
         # the book's own spelling of each man, for its market labels
         dkl, dkr = left, right
+        # and by last name when the two men's differ -- Sal Everett is
+        # Salhahuddin Everett (Jose, Oct 6, 2026: "naming should not be an issue")
+        two = surname(left) != surname(right)
         for lab, got in (dig(mkts, "Moneyline") or {}).items():
-            if fold(lab) == fold(left) or same(lab, left):
+            if fold(lab) == fold(left) or same(lab, left) or (two and surname(lab) == surname(left)):
                 f[8], f[9] = got
                 dkl = lab
-            elif fold(lab) == fold(right) or same(lab, right):
+            elif fold(lab) == fold(right) or same(lab, right) or (two and surname(lab) == surname(right)):
                 f[10], f[11] = got
                 dkr = lab
         if when and when != f[2]:
