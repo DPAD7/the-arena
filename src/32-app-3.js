@@ -1181,13 +1181,18 @@
   /* his season, one touchdown after another, as stories: tap for the next,
      hold to pause, the left edge for the one before, a swipe sideways for
      the next or last passer, a swipe down to close (Jose, Sep 29, 2026) */
+  /* one hand for all five -- index up, three fingers curled, the thumb --
+     only the gold mark changes (Jose, Oct 6, 2026: "some have 5 fingers,
+     some have 2-3") */
+  var HAND = '<g transform="translate(2 4) scale(.9)"><path d="M20 22V11a3 3 0 0 1 6 0v10m0-2a3 3 0 0 1 6 0v3m0-1a3 3 0 0 1 6 0v8c0 7-4 12-11 12h-2c-5 0-8-3-11-7l-4-6a3 3 0 0 1 5-3l3 3V22"/></g>';
   var HANDS = {
-    tap: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 22V11a3 3 0 0 1 6 0v10m0-2a3 3 0 0 1 6 0v3m0-1a3 3 0 0 1 6 0v8c0 7-4 12-11 12h-2c-5 0-8-3-11-7l-4-6a3 3 0 0 1 5-3l3 3V22"/><path stroke="#e3b341" d="M23 3v3M14 7l2 2M32 7l-2 2M11 15h3M32 15h3"/></svg>',
-    hold: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 22V13a3 3 0 0 1 6 0v8m0-2a3 3 0 0 1 6 0v3m0-1a3 3 0 0 1 6 0v8c0 7-4 12-11 12h-2c-5 0-8-3-11-7l-4-6a3 3 0 0 1 5-3l3 3V22"/><path stroke="#e3b341" d="M16 12a7 7 0 0 1 14 0M12 12a11 11 0 0 1 22 0"/></svg>',
-    back: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M16 17l-3-3a3 3 0 0 1 4-4l8 8m-2-2 3-3a3 3 0 0 1 4 4l-2 2m-2 2 3-3a3 3 0 0 1 4 4l-2 2m0-1 2-2a3 3 0 0 1 4 4l-7 7c-5 5-11 5-15 1l-3-3c-3-3-3-7 0-10l4-4"/><path stroke="#e3b341" d="M6 6l3 3M4 14h4M12 2v4"/></svg>',
-    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 26V16a3 3 0 0 1 6 0v8m0-1a3 3 0 0 1 6 0v10c0 6-4 10-10 10h-1c-4 0-7-2-9-6l-3-6a3 3 0 0 1 5-3l2 3"/><path stroke="#e3b341" d="M6 9c10-6 26-6 36 0M6 9l2-4M6 9l4 2M42 9l-2-4M42 9l-4 2"/></svg>',
-    down: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 24V14a3 3 0 0 1 6 0v8m0-1a3 3 0 0 1 6 0v10c0 6-4 10-10 10h-1c-4 0-7-2-9-6l-3-6a3 3 0 0 1 5-3l2 3"/><path stroke="#e3b341" d="M8 6v30M8 36l-4-4M8 36l4-4"/></svg>'
+    tap: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M22.7 2.5v3.5M15 5l2.2 2.2M30.4 5l-2.2 2.2"/></svg>',
+    hold: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M17.2 9.5a5.6 5.6 0 0 1 11 0M13.4 9.5a9.4 9.4 0 0 1 18.6 0"/></svg>',
+    back: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M4 8v32M22.7 2.5v3.5M15 5l2.2 2.2M30.4 5l-2.2 2.2"/></svg>',
+    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M9 6.5c9-4 21-4 30 0M9 6.5l1.5-3.5M9 6.5l3.6 1.2M39 6.5l-1.5-3.5M39 6.5l-3.6 1.2"/></svg>',
+    down: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M4.5 9v26M4.5 35l-3.2-3.2M4.5 35l3.2-3.2"/></svg>'
   };
+
   /* the five gestures, on the how-to and under every clips row */
   function clipHow() {
     return '<div class="cliphow">' + [[HANDS.tap, "Go forward", "Tap the screen"], [HANDS.hold, "Pause", "Press and hold"],
