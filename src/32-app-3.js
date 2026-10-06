@@ -1184,15 +1184,17 @@
   /* one hand for all five -- index up, three fingers curled, the thumb --
      only the gold mark changes (Jose, Oct 6, 2026: "some have 5 fingers,
      some have 2-3"; Oct 6 again: the first one read like a middle finger --
-     this is the Lucide "pointer" hand, ISC) */
-  var HAND = '<g transform="translate(5 10) scale(1.6)" stroke-width="1.5"><path d="M22 14a8 8 0 0 1-8 8"/><path d="M18 11v-1a2 2 0 0 0-2-2a2 2 0 0 0-2 2"/><path d="M14 10V9a2 2 0 0 0-2-2a2 2 0 0 0-2 2v1"/><path d="M10 9.5V4a2 2 0 0 0-2-2a2 2 0 0 0-2 2v10"/><path d="M18 11a2 2 0 1 1 4 0v3a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"/></g>';
+     now a foam finger, our own drawing, after his picture) */
+  var HAND = '<g transform="translate(0 3)" stroke-width="2.1"><path d="M15 22V6.5a2.5 2.5 0 0 1 5 0V17.5c0-1.6 1.2-2.8 2.75-2.8s2.75 1.2 2.75 2.8V19c0-1.5 1.1-2.6 2.5-2.6s2.5 1.1 2.5 2.6V21.5c0-1.3 1-2.3 2.25-2.3s2.25 1 2.25 2.3V31c0 3-1.5 5.3-4 7v7H17v-7c-2.8-1.9-5-4.6-5-8.5V25c0-1.7 1.3-3 3-3Z"/><path d="M12.4 29c4-2.2 8.7-2.8 13-2.2M20 17.6v6M25.5 19v6.2M30.5 21.4v5.2M17 38h14"/></g>';
   var HANDS = {
-    tap: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M17.8 3.5v3.5M10.5 6.5l2.2 2.2M25.1 6.5l-2.2 2.2"/></svg>',
-    hold: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M12.3 10a5.5 5.5 0 0 1 11 0M8.5 10a9.3 9.3 0 0 1 18.6 0"/></svg>',
-    back: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M2.5 10v32M17.8 3.5v3.5M10.5 6.5l2.2 2.2M25.1 6.5l-2.2 2.2"/></svg>',
-    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M6 7c9-4 21-4 30 0M6 7l1.5-3.5M6 7l3.6 1.2M36 7l-1.5-3.5M36 7l-3.6 1.2"/></svg>',
-    down: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M2.5 11v24M2.5 35l-2-2.6M2.5 35l2-2.6"/></svg>'
+    tap: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M17.5 1v3M11.5 3l2 2M23.5 3l-2 2"/></svg>',
+    hold: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M14 5.5a3.5 3.5 0 0 1 7 0M11.5 6a6 6 0 0 1 12 0"/></svg>',
+    back: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M5 10v32M17.5 1v3M11.5 3l2 2M23.5 3l-2 2"/></svg>',
+    swipe: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M6 5c7.5-3 15.5-3 23 0M6 5l1.4-3.3M6 5l3.5 1M29 5l-1.4-3.3M29 5l-3.5 1"/></svg>',
+    down: '<svg viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">' + HAND + '<path stroke="#e3b341" d="M5.5 12v24M5.5 36l-3-3M5.5 36l3-3"/></svg>'
   };
+
+
 
 
   /* the five gestures, on the how-to and under every clips row */
