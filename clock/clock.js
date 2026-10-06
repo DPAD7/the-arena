@@ -380,7 +380,10 @@ export class Clock {
       const s0 = await this.ctx.storage.get("kv:dkbets:sent");
       sent = JSON.parse((s0 && s0.v) || (await this.env.ARENA.get("dkbets:sent")) || "[]");
     } catch (e) { sent = []; }
-    const slips = ((held && held.bets) || []).concat(sent).filter(b => (b.legs || []).length);
+    /* only the slips he tracks: the DraftKings read was retired Oct 3, and its
+       last copy (an Oct 1 parlay still "open") was counted in the first recap
+       (Jose, Oct 6, 2026: "we already moved away from that") */
+    const slips = sent.filter(b => (b.legs || []).length);
     if (!slips.length) return false;
     const rows = {};
     for (const r of sched) if (r[0] === "game" || r[0] === "bout") rows[r[1]] = r;
@@ -519,11 +522,21 @@ export class Clock {
     // each slip's end, kept for the week's recap
     const hist = (await this.ctx.storage.get("hist")) || {};
     for (const bet of slips) {
-      const st = slipState(bet, idx, games, rows);
-      if ((st === "won" || st === "lost") && !hist[bet.id]) hist[bet.id] = { res: st, wager: +bet.wager || 0, pay: +bet.topay || 0, at: now };
+      /* the slip's own settled status first, and a result that changes is
+         rewritten rather than kept from its first read -- the Oct 3 parlay
+         was read as lost mid-settle (Jose, Oct 6, 2026) */
+      const own = String(bet.status || "").toLowerCase();
+      const st = own === "won" || own === "lost" ? own : slipState(bet, idx, games, rows);
+      if (st !== "won" && st !== "lost") continue;
+      if (!hist[bet.id]) hist[bet.id] = { res: st, wager: +bet.wager || 0, pay: +bet.topay || 0, at: now };
+      else hist[bet.id].res = st;
     }
     const et = etParts(now);
-    if (et.wd === 2 && et.h >= 10) {
+    /* the week is Tuesday through Monday Night Football; it is told on
+       Tuesday from 10 AM, once nothing he bet that week is still being
+       played (Jose, Oct 6, 2026) */
+    const stillOn = slips.some(bet => slipState(bet, idx, games, rows) === "open" && now - Date.parse(bet.placed || 0) < 8 * 86400000);
+    if (et.wd === 2 && et.h >= 10 && !stillOn) {
       const wk = Object.values(hist).filter(h => now - h.at < 7 * 86400000);
       if (wk.length) {
         const won = wk.filter(h => h.res === "won"), lost = wk.filter(h => h.res === "lost");
