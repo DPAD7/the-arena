@@ -809,6 +809,25 @@
       }
     });
   }, 1000);
+  function startedNow(card) {
+    var k = Date.parse(card.dataset.kick || "");
+    if (!k || k <= Date.now() + 60000) return;
+    var at = new Date(Math.floor(Date.now() / 60000) * 60000).toISOString().slice(0, 16) + "Z";
+    card.dataset.kick = at;
+    FIGHTS.forEach(function (row) { if (String(row[1]) === card.dataset.bout) { row[2] = at; row._began = 1; } });
+    var takeIt = function () {
+      if (busy() || (!document.hidden && Date.now() - LASTTOUCH < 12000)) {
+        clearTimeout(window._buildWait);
+        window._buildWait = setTimeout(takeIt, 15000);
+        return;
+      }
+      var wasY = window.scrollY;
+      render();
+      window.scrollTo(0, wasY);
+    };
+    clearTimeout(window._buildWait);
+    window._buildWait = setTimeout(takeIt, 500);
+  }
   function settleBoutCard(card, c) {
         var st = ((c.status || {}).type) || {};
         /* ESPN calls a bout "in" from the walkouts, with round 0 and the word
@@ -819,6 +838,11 @@
         var rd = parseInt((c.status || {}).period, 10) || 0;
         var going = st.state === "post" || (st.state === "in" && rd >= 1);
         card.classList.toggle("live", st.state === "in" && rd >= 1);
+        /* a bout that has started started now, whatever the book's clock
+           said: DraftKings had Onley v Bierley at 9:15 and it opened the card,
+           so a LIVE bout sat under a 9:15 heading at the foot of the day
+           (Jose, Oct 6, 2026: "why is it saying 9:15 but live?") */
+        if (going) startedNow(card);
         if (going) {
           card.classList.add("locked");
           card.querySelectorAll("button.price").forEach(function (b) { shutPrice(b); });
@@ -971,6 +995,20 @@
           if (waiting.length && !/^zb-/.test(eid)) askNight(waiting);
         })
         .catch(function () { if (!/^zb-/.test(eid)) askNight(byEvent[eid]); });
+    });
+    /* the rest of a night that is already under way rides along: it is the
+       same one read, and the book's order is not the cage's -- Onley v
+       Bierley opened the card while DraftKings had it at 9:15, so it was
+       never asked about (Jose, Oct 6, 2026: "why is it saying 9:15 but live?") */
+    var nights = {};
+    live.forEach(function (c) {
+      var t = c.dataset.kick ? Date.parse(c.dataset.kick) : 0;
+      if (c.dataset.event && t && t < now) nights[c.dataset.event] = 1;
+    });
+    cards.forEach(function (card) {
+      if (card.dataset.settledBout || live.indexOf(card) >= 0) return;
+      var t = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
+      if (nights[card.dataset.event] && t && t < now + 8 * 3600000) live.push(card);
     });
     askNight(live);
   }

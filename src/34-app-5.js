@@ -398,6 +398,8 @@
            fight") */
         if (!row._block) row._block = row[2];
         if (t && Date.parse(t) < Date.parse(row._block) - 30 * 60000) t = null;
+        /* and never once it has started: its real start is already on it */
+        if (row._began) t = null;
         if (t && row[2] !== t) { row[2] = t; moved++; nowPlease++; }
         /* the card already drawn takes the bout's own start too, and one that
            locked on the block time reopens: Staines v Abushaar sat shut at the

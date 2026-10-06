@@ -134,6 +134,13 @@ def dk_bouts():
             a, b = [ours(x.strip()) for x in name.split(" vs ", 1)]
             when = (e.get("startEventDate") or "")[:16]
             when = (when + "Z") if when else ""
+            # a bout DraftKings calls started started now, whatever its clock
+            # still says: Onley v Bierley opened the card while their board
+            # had it at 9:15 (Jose, Oct 6, 2026: "check DraftKings to make
+            # sure we are live with them")
+            now = dt.datetime.now(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+            if e.get("status") == "STARTED" and when > now:
+                when = now
             # keyed by what two spellings of a man have in common, so Edgar
             # Chairez finds Édgar Cháirez and a Jr. finds his own bout
             # (Jose, Sep 19, 2026)
