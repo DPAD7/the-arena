@@ -559,7 +559,10 @@ export class Clock {
     const P = (await this.ctx.storage.get("picks")) || { gold: {}, board: {} };
     let state = null;
     try { state = await (await fetch(SITE + "/state?k=arena-001bff8ddf784985", { cf: { cacheTtl: 0 } })).json(); } catch (e) { state = null; }
-    const fresh = state && state.placed ? Object.keys(state.placed).filter(k => state.placed[k] === true && !P.gold[k]) : [];
+    /* a gold mark, and a price put on the slip from a game or fight page --
+       both are his picks (Jose, Oct 6, 2026: "there should not be any gaps") */
+    const marked = state ? Object.keys(state.placed || {}).filter(k => state.placed[k] === true).concat(Object.keys(state.picks || {})) : [];
+    const fresh = [...new Set(marked)].filter(k => !P.gold[k]);
     if (fresh.length) {
       let prices = null;
       try { prices = await (await fetch(SITE + "/prices.json")).json(); } catch (e) { prices = null; }
@@ -567,8 +570,9 @@ export class Clock {
         const idx = legIndex(prices, sched);
         for (const sel of fresh) {
           const v = idx[sel];
-          if (!v || !rows[v.gid] || v.fight) continue;
-          P.gold[sel] = { gid: String(v.gid), kind: v.kind, side: v.side, n: v.n || 1, qb: v.qb ? String(v.qb) : "", start: rows[v.gid][2], at: now };
+          if (!v || !rows[v.gid]) continue;
+          P.gold[sel] = { gid: String(v.gid), kind: v.kind, side: v.side, n: v.n || 1, qb: v.qb ? String(v.qb) : "", start: rows[v.gid][2], at: now,
+                          fight: v.fight ? 1 : 0, v: v.fight ? v : undefined, r: v.fight ? rows[v.gid] : undefined };
         }
       }
     }
@@ -630,9 +634,27 @@ export class Clock {
       return null;
     };
     const mine = [0, 0], board = [0, 0];
+    /* a fight is graded the way his slips' fights are: the card off ESPN's
+       scoreboard and legState, every market it settles (ML, KO, SUB, DEC,
+       the rounds) */
+    const cards = {};
+    const fightState = async (g) => {
+      const r = g.r || rows[g.gid];
+      if (!r || !g.v) return null;
+      const ymd = etParts(Date.parse(r[2])).date.replace(/-/g, "");
+      const sport = r[3] === "boxing" ? "boxing" : "mma/ufc";
+      const k = sport + ymd;
+      if (!(k in cards)) {
+        try { cards[k] = await (await espnGet("https://site.web.api.espn.com/apis/site/v2/sports/" + sport + "/scoreboard?dates=" + ymd)).json(); } catch (e) { cards[k] = {}; }
+      }
+      const bout = readBout(g.gid, cards[k]);
+      if (!bout || bout.state !== "post") return null;
+      const st = legState(g.v, bout, null, r);
+      return st === "won" ? true : st === "lost" ? false : null;
+    };
     for (const g of Object.values(P.gold)) {
       if (!inWeek(g)) continue;
-      const r = grade(await final(g.gid), g.kind, g.side, g.n, g.qb);
+      const r = g.fight ? await fightState(g) : grade(await final(g.gid), g.kind, g.side, g.n, g.qb);
       if (r !== null) mine[r ? 0 : 1]++;
     }
     for (const [gid, b] of Object.entries(P.board)) {
