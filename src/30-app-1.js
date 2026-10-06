@@ -1114,7 +1114,7 @@
   var MKO = '<svg viewBox="0 0 50 50" aria-hidden="true"><use href="#mko"/></svg>';
   var MSUB = '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#msub"/></svg>';
   var MDEC = '<svg viewBox="0 0 66 32" aria-hidden="true"><use href="#mdec"/></svg>';
-  var MLMK = '<img src="ico/moneyline.svg?v=2" alt="" width="21" height="9">';
+  var MLMK = '<img src="ico/moneyline.svg?v=3" alt="" width="21" height="9">';
   /* His record, once, on the head. The board re-renders a card's name block
      after it has been laid out -- the next event's cards most of all -- and
      each pass puts a fresh copy back beside his surname, so this runs on
@@ -1513,7 +1513,7 @@
       row.className = "gline";
       var a = document.createElement("span"); a.className = "gh2h"; a.appendChild(mls[0]);
       var m = document.createElement("i"); m.className = "gmk";
-      m.innerHTML = '<img src="ico/moneyline.svg?v=2" alt="" width="21" height="9">';
+      m.innerHTML = '<img src="ico/moneyline.svg?v=3" alt="" width="21" height="9">';
       var b = document.createElement("span"); b.className = "gh2h"; b.appendChild(mls[1]);
       row.appendChild(a); row.appendChild(m); row.appendChild(b);
       stack.appendChild(row);

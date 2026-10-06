@@ -37,7 +37,7 @@
     });
     var BALL = '<i class="fmk fmk--ball">' + BALLSVG + "</i>", RUN = '<i class="fmk fmk--run">' + RUSHSVG + "</i>";
     var VS = '<i class="fmk fmk--vs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>';
-    var MLP = '<img class="fmk--ml" src="ico/moneyline.svg" alt="Moneyline" width="34" height="13">';
+    var MLP = '<img class="fmk--ml" src="ico/moneyline.svg?v=3" alt="Moneyline" width="34" height="13">';
     var W = function (lab) {
       if (lab === "H2H") return '<b class="wl wl--w wl--vs">' + VS + '</b>';
       if (lab === "ML") return '<b class="wl wl--w wl--ml">' + MLP + '</b>';

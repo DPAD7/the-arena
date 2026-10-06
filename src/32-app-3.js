@@ -90,7 +90,7 @@
   var MBALL = '<i class="fmk fmk--ball">' + BALLSVG + "</i>";
   var MRUN = '<i class="fmk fmk--run">' + RUSHSVG + "</i>";
   var MVS = '<i class="fmk fmk--vs"><svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg></i>';
-  var MML = '<img class="fmk--ml" src="ico/moneyline.svg" alt="Moneyline" width="34" height="13">';
+  var MML = '<img class="fmk--ml" src="ico/moneyline.svg?v=3" alt="Moneyline" width="34" height="13">';
   function MTIMES(mark, v) {
     return '<span class="fgrp' + (v ? "" : " fgrp--zero") + '">' + mark + '<em>\u00d7' + (v || 0) + '</em></span>';
   }
