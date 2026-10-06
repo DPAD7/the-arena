@@ -814,6 +814,15 @@ elif "--if-due" in sys.argv:
             r = subprocess.run([sys.executable, D + "/build/fill_fights.py"], capture_output=True, text=True)
             for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
                 log("   fill_fights: " + line)
+            # and the book's clock for the bouts already on tonight: the pass
+            # above skips a card whose block time has gone, so tonight's clock
+            # was never read again, and this run's stale copy won the merge
+            # over a fresh one -- LaGrange v Ariano back at 7:15 when the book
+            # had moved it to 9:20 (Jose, Oct 6, 2026: "Fix it!")
+            r = subprocess.run([sys.executable, D + "/build/fill_fights.py", "--times"],
+                               capture_output=True, text=True, cwd=D + "/build")
+            for line in (r.stdout + r.stderr).strip().splitlines()[-3:]:
+                log("   fill_fights --times: " + line)
     if drawn:
         # The league posts its inactives ninety minutes before kickoff, so the
         # sixty-minute wake is the first one that can read that list instead of
