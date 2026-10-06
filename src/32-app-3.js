@@ -1054,15 +1054,25 @@
   };
   function clipSeen() { try { return JSON.parse(localStorage.getItem("arena.clipseen") || "{}") || {}; } catch (e) { return {}; } }
   function clipKey(c) { return c.gid + "|" + c.text; }
+  /* the ranked men first, in HOT's order -- the field is parked and its
+     ranking is what the clips page opens on (Jose, Oct 6, 2026: "the number
+     one clip, number two, then everything else") -- then everyone else,
+     favorites first */
+  var CLIPRANK = null;
   function clipOrder() {
     var st = window.STARS || {};
-    return Object.keys(QBCLIPS || {}).filter(function (id) { return (QBCLIPS[id].clips || []).length; })
+    var has = function (id) { return QBCLIPS[id] && (QBCLIPS[id].clips || []).length; };
+    var top = (CLIPRANK || []).filter(has);
+    var rest = Object.keys(QBCLIPS || {}).filter(function (id) { return has(id) && top.indexOf(id) < 0; })
       .sort(function (a, b) {
         var sa = st[a] ? 0 : 1, sb = st[b] ? 0 : 1;
         return sa - sb || QBCLIPS[b].clips.length - QBCLIPS[a].clips.length;
       });
+    clipOrder.top = top.length;
+    return top.concat(rest);
   }
-  function renderClips() {
+  function renderClips(rank) {
+    if (rank) CLIPRANK = rank.map(String).slice(0, 12);
     document.documentElement.classList.add("clipsview");
     window.scrollTo(0, 0);
     var page = document.createElement("div");
@@ -1070,15 +1080,20 @@
     BOARD.appendChild(page);
     var draw = function () {
       var seen = clipSeen(), st = window.STARS || {};
-      page.innerHTML = '<div class="cliprow">' + clipOrder().map(function (id) {
+      var all = clipOrder(), n = clipOrder.top;
+      var tile = function (id, i) {
         /* gold is a favorite, the way the search row marks one; the rest are
            grey and sit behind them (Jose, Sep 29, 2026) */
         var q = QBCLIPS[id];
         return '<button type="button" class="cliptile' + (st[id] ? "" : " seen") + '" data-qb="' + id + '">' +
           '<span class="cring"><span class="cface" style="background-image:url(face/nfl/' + id + '.png)"></span>' +
+          (i < n ? '<span class="crank">' + (i + 1) + '</span>' : "") +
           '<span class="cstar" data-star="' + id + '">' + STARSVG(!!st[id]) + '</span></span>' +
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
-      }).join("") + "</div>" + clipHow();
+      };
+      page.innerHTML = (n ? '<h3 class="cliphead">Top QBs</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
+        (all.length > n ? '<h3 class="cliphead">' + (n ? "Everyone else" : "Clips") + '</h3><div class="cliprow">' +
+          all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "") + clipHow();
     };
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
@@ -1443,6 +1458,14 @@
       if (hb !== ha) return hb - ha;
       return a.name < b.name ? -1 : 1;
     });
+    /* the field is parked: the season opens on the clips, in this order
+       (Jose, Oct 6, 2026). Its code stays below, untouched, for when it comes
+       back -- set window.HOTFIELD = true to see it. */
+    if (formWeek === "season" && !window.HOTFIELD) {
+      document.documentElement.classList.remove("hotlock");
+      renderClips(rows.filter(function (r) { return !r.bench && !hurtAt(r.id); }).map(function (r) { return r.id; }));
+      return;
+    }
     var box = document.createElement("div");
     box.className = "form money";
     if (!rows.length) {

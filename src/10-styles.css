@@ -2578,6 +2578,11 @@
   body:has(.clipspage) .cashfab { display: none; }
   .cliprow { display: flex; gap: 14px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
   .cliprow::-webkit-scrollbar { display: none; }
+  .cliphead { margin: 18px 16px 0; font: 800 13px Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
+  .cliphead + .cliprow { padding-top: 10px; }
+  .cliptile .crank { position: absolute; left: -5px; top: -5px; min-width: 26px; height: 26px; padding: 0 6px; box-sizing: border-box;
+    border-radius: 8px; background: #fff; color: #000; display: grid; place-items: center;
+    font: 800 14px Barlow, "Helvetica Neue", Arial, sans-serif; border: 2px solid #000; }
   .cliptile { flex: none; width: 92px; display: flex; flex-direction: column; align-items: center; gap: 7px;
     background: none; border: 0; padding: 0; color: #fff; cursor: pointer; }
   .cliptile .cring, .cliptile .cface, .cliptile .cstar { display: block; }
