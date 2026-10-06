@@ -1092,7 +1092,7 @@
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
       };
       page.innerHTML = (n ? '<h3 class="cliphead">Top QBs</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
-        (all.length > n ? '<h3 class="cliphead">' + (n ? "Everyone else" : "Clips") + '</h3><div class="cliprow">' +
+        (all.length > n ? '<h3 class="cliphead">' + "Around the League" + '</h3><div class="cliprow">' +
           all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "") + clipHow();
     };
     if (QBCLIPS) draw();
