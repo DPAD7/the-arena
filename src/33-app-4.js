@@ -3,7 +3,7 @@
     return rec[String((r && r.club) || "")] || [0, 0];
   }
   function renderForm() {
-    if (formWeek === "clips") { clearBoard(); renderClips(); return; }
+    if (formWeek === "clips") { renderMoney(); return; }
     /* a week on Stacked is its games' clips now (Jose, Sep 29, 2026: "since
        it's essentially the same, make it clips for that week"); the week
        card below stays for the day he wants it back */
@@ -1982,7 +1982,8 @@
     dbar.hidden = sport === "form";
     /* the Stacked button lands on the field every time; CLIPS and the weeks
        are reached from the bar under it (Jose, Sep 29, 2026) */
-    if (sport === "form") { formWeek = "season"; formTabs(); render(); return; }
+    /* the field is parked: the button lands on CLIPS, ranked (Jose, Oct 6, 2026) */
+    if (sport === "form") { formWeek = window.HOTFIELD ? "season" : "clips"; formTabs(); render(); return; }
     /* the rail counts in days on the calendar, weeks on the football and
        months on the fights, so the key is translated when the sport changes
        rather than carried over (Jose, Sep 18, 2026) */

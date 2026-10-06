@@ -1382,7 +1382,7 @@
      Ranked by touchdowns, passing over rushing, then the head to head, then
      the moneyline. Read from site/ledger.json (ledger.py, on the sweep).
      (Jose, Sep 16, 2026) */
-  var LEDGER = null, formWeek = "season";
+  var LEDGER = null, formWeek = window.HOTFIELD ? "season" : "clips";
   /* ---- the wire ----
      Who is hurt, by ESPN id, from site/wire.json (build/wire.py on the sweep).
      A man ESPN says nothing about is not in the file at all -- an absence is

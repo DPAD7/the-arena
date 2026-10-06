@@ -1388,8 +1388,11 @@
   }
   function renderMoney() {
     clearBoard();
-    if (formWeek === "clips") { renderClips(); return; }
+    /* CLIPS ranks on the season's totals, so the rows are read as the season */
+    var fw0 = formWeek;
+    if (formWeek === "clips") formWeek = "season";
     var rows = moneyRows();
+    formWeek = fw0;
     /* a man who came on in garbage time or for an injury is not a week's card:
        Pickett threw one and Bennett three (Jose, Sep 17, 2026) */
     rows = rows.filter(function (r) { return r.priced || r.ptd > 0 || r.atd > 0; });
@@ -1461,7 +1464,7 @@
     /* the field is parked: the season opens on the clips, in this order
        (Jose, Oct 6, 2026). Its code stays below, untouched, for when it comes
        back -- set window.HOTFIELD = true to see it. */
-    if (formWeek === "season" && !window.HOTFIELD) {
+    if (formWeek === "clips" || (formWeek === "season" && !window.HOTFIELD)) {
       document.documentElement.classList.remove("hotlock");
       renderClips(rows.filter(function (r) { return !r.bench && !hurtAt(r.id); }).map(function (r) { return r.id; }));
       return;
