@@ -219,7 +219,23 @@ export function news(slips, idx, games, prev, rows) {
     const v = idx[lg.sel]; if (!v) continue;
     const g = games[v.gid], p = prev[v.gid] || {}, r = rows[v.gid];
     if (!g || !r) continue;
-    if ((bet.legs || []).some(l => stOf(l) === "lost")) continue;
+    if ((bet.legs || []).some(l => stOf(l) === "lost")) {
+      /* a dead slip still gets its game's final -- the score and nothing
+         else, no legs, no loss -- because that push is what carries the
+         icon's count down to nothing (Jose, Oct 6, 2026: "if the parlay
+         loses, just say the final score") */
+      if (g.state === "post") {
+        const k = (v.fight ? "ffin@" : "fin@") + v.gid;
+        if (!seen[k]) {
+          seen[k] = 1;
+          const title = v.fight
+            ? "Final: " + (g.winner === String(r[6]) ? r[4] + " wins" : g.winner === String(r[7]) ? r[5] + " wins" : r[4] + " vs " + r[5]) + (g.how ? " by " + g.how : "")
+            : "Final: " + r[4] + " " + g.sc[0] + "–" + g.sc[1] + " " + r[5];
+          out.push({ tag: "slip:" + bet.id, key: k, type: v.fight ? "fight" : "final", title, body: "", url: v.fight ? "/#bout=" + v.gid : "/#game=" + v.gid });
+        }
+      }
+      continue;
+    }
     const done = stOf(lg) !== "open";
     if (v.fight) {
       if (g.state === "in" && !seen["fon@" + v.gid]) {
