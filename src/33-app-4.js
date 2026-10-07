@@ -295,14 +295,19 @@
      and not a picture (Jose, Oct 6, 2026). The flags are our own copies,
      written by records_mma.py, so the page never asks ESPN for one */
   var FIGHTFLAG = {};
+  /* beside his name now, on the UFC and Contender Series cards alike
+     (Jose, Oct 7, 2026: "put the flag next to their name") */
   function fightFlags(card) {
     var head = card && card.querySelector(".ghead--fight");
     if (!head) return;
+    head.querySelectorAll(":scope > .fflag").forEach(function (x) { x.remove(); });
+    var sides = head.querySelectorAll(".gteam");
     [card.dataset.lfid, card.dataset.rfid].forEach(function (id, i) {
-      var w = i === 0 ? "l" : "r", code = FIGHTFLAG[id];
-      var el = head.querySelector(":scope > .fflag--" + w);
+      var nm = sides[i] && sides[i].querySelector(".fname");
+      if (!nm) return;
+      var code = FIGHTFLAG[id], el = nm.querySelector(".fflag");
       if (!code) { if (el) el.remove(); return; }
-      if (!el) { el = document.createElement("img"); el.className = "fflag fflag--" + w; el.alt = ""; head.appendChild(el); }
+      if (!el) { el = document.createElement("img"); el.className = "fflag"; el.alt = ""; nm.insertBefore(el, nm.firstChild); }
       var src = "ico/flags/" + code + ".png";
       if (el.getAttribute("src") !== src) el.setAttribute("src", src);
     });

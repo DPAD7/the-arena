@@ -1765,12 +1765,10 @@
     font-variant-numeric: tabular-nums; text-shadow: 0 1px 3px rgba(0,0,0,.9); }
   .gcard.gcard--bout > .ghead--fight > .frec--l { right: calc(50% + 76px); }
   .gcard.gcard--bout > .ghead--fight > .frec--r { left: calc(50% + 76px); }
-  /* his flag, faint, halfway between his rank and his record */
-  .gcard.gcard--bout > .ghead--fight > .fflag { position: absolute; z-index: 7; top: 10px;
-    height: 13px; width: auto; max-width: 22px; border-radius: 2px; opacity: .45;
-    pointer-events: none; }
-  .gcard.gcard--bout > .ghead--fight > .fflag--l { left: calc((50% - 76px + 40px) / 2); transform: translateX(-50%); }
-  .gcard.gcard--bout > .ghead--fight > .fflag--r { right: calc((50% - 76px + 40px) / 2); transform: translateX(50%); }
+  /* his flag, faint, just before his name */
+  .gcard.gcard--bout .gside .fname .fflag { display: inline-block; vertical-align: middle;
+    height: 12px; width: auto; max-width: 20px; margin: -3px 6px 0 0; border-radius: 2px;
+    opacity: .6; box-shadow: 0 1px 3px rgba(0,0,0,.6); pointer-events: none; }
   /* his number in the outer corner, where the travel mark rides on football */
   .gcard.gcard--bout .gdiv { position: absolute; z-index: 3; top: 8px;
     font-style: normal; font-size: 12px; letter-spacing: .09em; font-weight: 800;
