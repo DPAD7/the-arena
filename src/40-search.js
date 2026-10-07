@@ -659,6 +659,24 @@
     }
     if (window.visualViewport) window.visualViewport.addEventListener("resize", unzoom);
     unzoom();
+    /* the bars sit on the glass's bottom, not the page's: iOS can leave the
+       layout viewport shorter than the screen (after a keyboard, or with a
+       call running), and a fixed bar then floats halfway up the board
+       (Jose, Oct 6, 2026: "what's up with the NAV?"). The gap between the two
+       is measured and the bars are dropped by it. */
+    function keepBars() {
+      var vv = window.visualViewport;
+      if (!vv) return;
+      var gap = Math.round(vv.offsetTop + vv.height - window.innerHeight);
+      document.documentElement.style.setProperty("--vvdrop", (gap > 2 ? gap : 0) + "px");
+    }
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", keepBars);
+      window.visualViewport.addEventListener("scroll", keepBars);
+    }
+    window.addEventListener("resize", keepBars);
+    window.addEventListener("pageshow", keepBars);
+    keepBars();
   })();
 </script>
 

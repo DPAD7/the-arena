@@ -101,7 +101,7 @@
      pixels proud of it (Jose, Sep 22, 2026, mock_nav.html). */
   .tabbar {
     position: fixed; left: 12px; right: 12px; z-index: 40;
-    bottom: calc(14px + env(safe-area-inset-bottom));
+    bottom: calc(14px + env(safe-area-inset-bottom) - var(--vvdrop, 0px));
     display: flex; align-items: stretch;
     padding: 6px 4px;
     background: rgba(28, 28, 30, 0.72);
@@ -3833,7 +3833,7 @@
   body.slipon { --barstack: calc(14px + 67px + 8px + 67px + 8px + env(safe-area-inset-bottom)); }
   .slipbar {
     position: fixed; left: 12px; right: 12px; z-index: 39;
-    bottom: calc(14px + 67px + 8px + env(safe-area-inset-bottom));
+    bottom: calc(14px + 67px + 8px + env(safe-area-inset-bottom) - var(--vvdrop, 0px));
     display: flex; align-items: center; height: 67px; padding: 0;
     background: rgba(28, 28, 30, 0.72);
     -webkit-backdrop-filter: blur(22px) saturate(1.6);
