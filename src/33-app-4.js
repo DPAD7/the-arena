@@ -1393,8 +1393,14 @@
     function fillSeat(u) {
       var img = u.tab.querySelector("img, svg") || u.tab;
       var r = img.getBoundingClientRect(), t = u.tab.getBoundingClientRect();
-      u.el.style.width = r.width + "px";
-      u.el.style.height = r.height + "px";
+      /* the picture's own box, not its padding and ring: measured with them,
+         the fill came out a quarter bigger than the logo on every icon
+         (Jose, Oct 6, 2026: "why the fill is larger than the logo?") */
+      var cs = getComputedStyle(img), px = function (v) { return parseFloat(v) || 0; };
+      var w = r.width - px(cs.paddingLeft) - px(cs.paddingRight) - px(cs.borderLeftWidth) - px(cs.borderRightWidth);
+      var h = r.height - px(cs.paddingTop) - px(cs.paddingBottom) - px(cs.borderTopWidth) - px(cs.borderBottomWidth);
+      u.el.style.width = w + "px";
+      u.el.style.height = h + "px";
       u.el.style.left = (r.left - t.left + r.width / 2) + "px";
       u.el.style.top = (r.top - t.top + r.height / 2) + "px";
       var m = "none";
@@ -1404,7 +1410,7 @@
            is the mask, so the fill stays inside the icon */
         var c = img.cloneNode(true);
         c.setAttribute("xmlns", "http://www.w3.org/2000/svg");
-        c.setAttribute("width", r.width); c.setAttribute("height", r.height);
+        c.setAttribute("width", w); c.setAttribute("height", h);
         m = "url(\"data:image/svg+xml;utf8," + encodeURIComponent(new XMLSerializer().serializeToString(c)) + "\")";
       }
       u.el.style.setProperty("--m", m);

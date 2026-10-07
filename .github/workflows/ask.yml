@@ -73,8 +73,12 @@ jobs:
     timeout-minutes: 10
     permissions:
       contents: write
+    # each tap saves in a queue of its own: in the sweep's queue GitHub kept
+    # one run waiting and cancelled the rest, so a CFB tap and an MMA tap a
+    # moment apart both lost their save (Jose, Oct 6, 2026: "all the double
+    # taps should work on their own"). A push that loses a race folds again.
     concurrency:
-      group: sweep
+      group: ask-save-${{ inputs.key }}
       cancel-in-progress: false
     steps:
       - uses: actions/checkout@v4
@@ -110,6 +114,10 @@ jobs:
           python build/ask_swap.py --games "$GAMES"
 
       - name: Keep what it wrote
+        env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: |
           git config user.name "the arena"
           git config user.email "185117539+DPAD7@users.noreply.github.com"
@@ -125,3 +133,12 @@ jobs:
             git push && break
             sleep $((i * 5))
           done
+          # still not on main: start from main as it is now and fold again --
+          # the fold reads every tap the site holds, so it is the same answer
+          git fetch origin main
+          if ! git merge-base --is-ancestor HEAD origin/main; then
+            git reset --hard origin/main
+            python build/ask_fold.py
+            git add site/prices.json site/prices
+            git diff --cached --quiet || { git commit -m "tap $(date -u '+%Y-%m-%d %H:%M UTC') (folded again)"; git pull --rebase --autostash -X theirs; git push; }
+          fi
