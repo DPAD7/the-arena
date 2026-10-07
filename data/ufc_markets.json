@@ -27625,25 +27625,25 @@
   "right": "Ernesta Kareckaite",
   "rounds": 3,
   "start": "2026-10-10T21:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Moneyline": {
     "Ernesta Kareckaite": [
-     "-105",
+     "-108",
      "0ML86559073_1"
     ],
     "Melissa Gatto": [
-     "-115",
+     "-112",
      "0ML86559073_3"
     ]
    },
    "Total Rounds": {
     "Over": [
-     "-375",
+     "-395",
      "0OU86612277O250_1"
     ],
     "Under": [
-     "+270",
+     "+280",
      "0OU86612277U250_3"
     ]
    }
@@ -27655,8 +27655,48 @@
   "right": "Alice Pereira",
   "rounds": 3,
   "start": "2026-10-10T21:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Alice Pereira": [
+     "-165",
+     "0QA376880080#2312422371_13L9034Q11Q21"
+    ],
+    "Daria Zhelezniakova": [
+     "+120",
+     "0QA376880080#2312422431_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Alice Pereira": [
+     "-150",
+     "0QA376880082#2312422375_13L9034Q11Q21"
+    ],
+    "Daria Zhelezniakova": [
+     "+110",
+     "0QA376880082#2312422425_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Alice Pereira": [
+     "-170",
+     "0QA376880098#2312422389_13L9034Q10Q21"
+    ],
+    "Daria Zhelezniakova": [
+     "+130",
+     "0QA376880098#2312422409_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Alice Pereira": [
+     "-125",
+     "0QA376880096#2312422387_13L9034Q10Q21"
+    ],
+    "Daria Zhelezniakova": [
+     "-105",
+     "0QA376880096#2312422411_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Alice Pereira": [
      "-142",
@@ -27665,6 +27705,36 @@
     "Daria Zhelezniakova": [
      "+120",
      "0ML86559072_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Alice Pereira": [
+     "-165",
+     "0QA376880094#2312422385_13L9034Q10Q21"
+    ],
+    "Daria Zhelezniakova": [
+     "+125",
+     "0QA376880094#2312422413_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Alice Pereira": [
+     "+125",
+     "0HC86639739N350_1"
+    ],
+    "Daria Zhelezniakova": [
+     "-170",
+     "0HC86639739P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Alice Pereira": [
+     "-450",
+     "0HC86639744P750_1"
+    ],
+    "Daria Zhelezniakova": [
+     "+300",
+     "0HC86639744N750_3"
     ]
    },
    "Total Rounds": {
@@ -27676,6 +27746,468 @@
      "+185",
      "0OU86613429U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-475",
+     "0OU86639736O150_1"
+    ],
+    "Under": [
+     "+300",
+     "0OU86639736U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2000",
+     "0QA376880086#2312422377_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA376880058#2312422347_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+6500",
+     "0QA376880100#2312422391_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-125",
+     "0QA376880068#2312422359_13L9034Q11Q22"
+    ],
+    "No": [
+     "-105",
+     "0QA376880068#2312422449_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA376880070#2312422361_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA376880070#2312422446_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-200",
+     "0QA376880043#2312422335_13L9034Q10Q20"
+    ],
+    "No": [
+     "+150",
+     "0QA376880043#2312422476_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+500",
+     "0QA376880084#2312422373_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+2200",
+     "0QA376880084#2312422407_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+600",
+     "0QA376880084#2312422506_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+2800",
+     "0QA376880084#2312422515_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1000",
+     "0QA376880084#2312422564_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+4500",
+     "0QA376880084#2312422573_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-200",
+     "0QA376880084#2312422681_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Alice Pereira to Win in Rounds 1-2": [
+     "+380",
+     "0QA376880050#2312422343_13L9034Q11Q21"
+    ],
+    "Alice Pereira to Win in Round 3 or on Decision": [
+     "+120",
+     "0QA376880050#2312422491_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880050#2312422648_13L9034Q19Q29"
+    ],
+    "Daria Zhelezniakova to Win in Rounds 1-2": [
+     "+600",
+     "0QA376880050#2312422549_15L9034Q15Q25"
+    ],
+    "Daria Zhelezniakova to Win in Round 3 or on Decision": [
+     "+175",
+     "0QA376880050#2312422603_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Alice Pereira to Win by KO/TKO/DQ in Round 1": [
+     "+700",
+     "0QA376880054#2312422341_13L9034Q11Q21"
+    ],
+    "Alice Pereira to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA376880054#2312422470_13L9034Q12Q22"
+    ],
+    "Alice Pereira to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA376880054#2312422488_13L9034Q13Q23"
+    ],
+    "Alice Pereira to Win by Submission in Round 1": [
+     "+3500",
+     "0QA376880054#2312422591_13L9034Q16Q26"
+    ],
+    "Alice Pereira to Win by Submission in Round 2": [
+     "+4500",
+     "0QA376880054#2312422600_13L9034Q17Q27"
+    ],
+    "Alice Pereira to Win by Submission in Round 3": [
+     "+8000",
+     "0QA376880054#2312422636_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-200",
+     "0QA376880054#2312422717_13L9034Q121Q221"
+    ],
+    "Daria Zhelezniakova to Win by KO/TKO/DQ in Round 1": [
+     "+1100",
+     "0QA376880054#2312422678_15L9034Q111Q211"
+    ],
+    "Daria Zhelezniakova to Win by KO/TKO/DQ in Round 2": [
+     "+1400",
+     "0QA376880054#2312422684_15L9034Q112Q212"
+    ],
+    "Daria Zhelezniakova to Win by KO/TKO/DQ in Round 3": [
+     "+2000",
+     "0QA376880054#2312422693_15L9034Q113Q213"
+    ],
+    "Daria Zhelezniakova to Win by Submission in Round 1": [
+     "+4000",
+     "0QA376880054#2312422702_15L9034Q116Q216"
+    ],
+    "Daria Zhelezniakova to Win by Submission in Round 2": [
+     "+5000",
+     "0QA376880054#2312422705_15L9034Q117Q217"
+    ],
+    "Daria Zhelezniakova to Win by Submission in Round 3": [
+     "+7500",
+     "0QA376880054#2312422708_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Alice Pereira To Win And Under 0.5": [
+     "+1400",
+     "0QA376880060#2312422349_13L9034Q11Q21"
+    ],
+    "Alice Pereira To Win And Under 1.5": [
+     "+475",
+     "0QA376880060#2312422500_13L9034Q11Q23"
+    ],
+    "Daria Zhelezniakova To Win And Under 0.5": [
+     "+2200",
+     "0QA376880060#2312422458_14L9034Q12Q22"
+    ],
+    "Daria Zhelezniakova To Win And Under 1.5": [
+     "+700",
+     "0QA376880060#2312422521_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Alice Pereira To Win And Over 1.5": [
+     "-110",
+     "0QA376880062#2312422503_13L9034Q11Q23"
+    ],
+    "Alice Pereira To Win And Over 2.5": [
+     "+120",
+     "0QA376880062#2312422558_13L9034Q11Q25"
+    ],
+    "Daria Zhelezniakova To Win And Over 1.5": [
+     "+140",
+     "0QA376880062#2312422518_14L9034Q12Q24"
+    ],
+    "Daria Zhelezniakova To Win And Over 2.5": [
+     "+180",
+     "0QA376880062#2312422576_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Alice Pereira": [
+     "-225",
+     "0HC86639746P150_1"
+    ],
+    "Daria Zhelezniakova": [
+     "+170",
+     "0HC86639746N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Alice Pereira": [
+     "-225",
+     "0HC86639750P150_1"
+    ],
+    "Daria Zhelezniakova": [
+     "+170",
+     "0HC86639750N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Alice Pereira": [
+     "-225",
+     "0HC86639752P150_1"
+    ],
+    "Daria Zhelezniakova": [
+     "+170",
+     "0HC86639752N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-750",
+     "0QA376880064#2312422355_13L9034Q11Q22"
+    ],
+    "No": [
+     "+450",
+     "0QA376880064#2312422455_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-300",
+     "0QA376880066#2312422357_13L9034Q11Q22"
+    ],
+    "No": [
+     "+220",
+     "0QA376880066#2312422452_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Alice Pereira Round 1": [
+     "+650",
+     "0QA376880046#2312422337_13L9034Q11Q20"
+    ],
+    "Alice Pereira Round 2": [
+     "+900",
+     "0QA376880046#2312422482_13L9034Q11Q22"
+    ],
+    "Alice Pereira Round 3": [
+     "+1600",
+     "0QA376880046#2312422543_13L9034Q11Q24"
+    ],
+    "Alice Pereira By Decision": [
+     "+150",
+     "0QA376880046#2312422675_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880046#2312422690_15L9034Q10Q212"
+    ],
+    "Daria Zhelezniakova Round 1": [
+     "+900",
+     "0QA376880046#2312422479_14L9034Q12Q21"
+    ],
+    "Daria Zhelezniakova Round 2": [
+     "+1200",
+     "0QA376880046#2312422540_14L9034Q12Q23"
+    ],
+    "Daria Zhelezniakova Round 3": [
+     "+1800",
+     "0QA376880046#2312422594_14L9034Q12Q25"
+    ],
+    "Daria Zhelezniakova By Decision": [
+     "+215",
+     "0QA376880046#2312422687_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+450",
+     "0QA376880056#2312422345_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+500",
+     "0QA376880056#2312422464_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+850",
+     "0QA376880056#2312422494_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880056#2312422585_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-200",
+     "0QA376880056#2312422606_13L9034Q11Q25"
+    ]
+   },
+   "Daria Zhelezniakova to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+450",
+     "0QA376880088#2312422379_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA376880088#2312422419_13L9034Q13Q24"
+    ]
+   },
+   "Alice Pereira to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+300",
+     "0QA376880090#2312422383_13L9034Q11Q22"
+    ],
+    "No": [
+     "-450",
+     "0QA376880090#2312422415_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Alice Pereira to Win by KO/TKO/DQ or Decision": [
+     "-135",
+     "0QA376880052#2312422351_13L9034Q11Q21"
+    ],
+    "Alice Pereira to Win by KO/TKO/DQ or Submission": [
+     "+300",
+     "0QA376880052#2312422461_13L9034Q12Q22"
+    ],
+    "Alice Pereira to Win by Submission or Decision": [
+     "+125",
+     "0QA376880052#2312422497_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880052#2312422612_13L9034Q17Q27"
+    ],
+    "Daria Zhelezniakova to Win by KO/TKO/DQ or Decision": [
+     "+125",
+     "0QA376880052#2312422524_15L9034Q14Q24"
+    ],
+    "Daria Zhelezniakova to Win by KO/TKO/DQ or Submission": [
+     "+450",
+     "0QA376880052#2312422555_15L9034Q15Q25"
+    ],
+    "Daria Zhelezniakova to Win by Submission or Decision": [
+     "+180",
+     "0QA376880052#2312422582_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Alice Pereira to Win By KO/TKO/DQ or Daria Zhelezniakova to Win by Submission": [
+     "+275",
+     "0QA376880092#2312422381_13L9034Q10Q21"
+    ],
+    "Alice Pereira to Win By KO/TKO/DQ or Daria Zhelezniakova to Win by Decision": [
+     "-115",
+     "0QA376880092#2312422417_13L9034Q10Q22"
+    ],
+    "Alice Pereira to Win By Submission or Daria Zhelezniakova to Win by KO/TKO/DQ": [
+     "+370",
+     "0QA376880092#2312422509_13L9034Q10Q23"
+    ],
+    "Alice Pereira to Win By Submission or Daria Zhelezniakova to Win by Decision": [
+     "+175",
+     "0QA376880092#2312422512_13L9034Q10Q24"
+    ],
+    "Alice Pereira to Win By Decision or Daria Zhelezniakova to Win by KO/TKO/DQ": [
+     "-130",
+     "0QA376880092#2312422567_13L9034Q10Q25"
+    ],
+    "Alice Pereira to Win By Decision or Daria Zhelezniakova to Win by Submission": [
+     "+125",
+     "0QA376880092#2312422570_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880092#2312422621_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+180",
+     "0QA376880048#2312422339_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+1000",
+     "0QA376880048#2312422473_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-200",
+     "0QA376880048#2312422485_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880048#2312422537_15L9034Q14Q24"
+    ]
+   },
+   "Alice Pereira to Win by Unanimous Decision": {
+    "Yes": [
+     "+180",
+     "0QA376880072#2312422363_13L9034Q11Q22"
+    ]
+   },
+   "Daria Zhelezniakova to Win by Unanimous Decision": {
+    "Yes": [
+     "+250",
+     "0QA376880074#2312422365_13L9034Q11Q22"
+    ]
+   },
+   "Alice Pereira to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA376880076#2312422367_13L9034Q11Q22"
+    ]
+   },
+   "Daria Zhelezniakova to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA376880078#2312422369_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Alice Pereira": [
+     "+350",
+     "0QA376880112#2312422393_13L9034Q11Q22"
+    ],
+    "Daria Zhelezniakova": [
+     "+500",
+     "0QA376880112#2312422403_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Alice Pereira": [
+     "+2000",
+     "0QA376880113#2312422395_13L9034Q11Q22"
+    ],
+    "Daria Zhelezniakova": [
+     "+2200",
+     "0QA376880113#2312422401_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Alice Pereira": [
+     "+150",
+     "0QA376880114#2312422397_13L9034Q11Q22"
+    ],
+    "Daria Zhelezniakova": [
+     "+215",
+     "0QA376880114#2312422399_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -27685,16 +28217,86 @@
   "right": "RJ Harris",
   "rounds": 3,
   "start": "2026-10-10T22:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Allen Frye": [
+     "+275",
+     "0QA376880075#2312422372_13L9034Q11Q21"
+    ],
+    "RJ Harris": [
+     "-425",
+     "0QA376880075#2312422433_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Allen Frye": [
+     "+165",
+     "0QA376880077#2312422376_13L9034Q11Q21"
+    ],
+    "RJ Harris": [
+     "-235",
+     "0QA376880077#2312422427_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Allen Frye": [
+     "+275",
+     "0QA376880093#2312422390_13L9034Q10Q21"
+    ],
+    "RJ Harris": [
+     "-400",
+     "0QA376880093#2312422410_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Allen Frye": [
+     "+500",
+     "0QA376880091#2312422388_13L9034Q10Q21"
+    ],
+    "RJ Harris": [
+     "-900",
+     "0QA376880091#2312422412_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Allen Frye": [
-     "+260",
+     "+270",
      "0ML86559069_1"
     ],
     "RJ Harris": [
-     "-325",
+     "-340",
      "0ML86559069_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Allen Frye": [
+     "+225",
+     "0QA376880089#2312422386_13L9034Q10Q21"
+    ],
+    "RJ Harris": [
+     "-310",
+     "0QA376880089#2312422414_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Allen Frye": [
+     "+140",
+     "0HC86639738P750_1"
+    ],
+    "RJ Harris": [
+     "-190",
+     "0HC86639738N750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Allen Frye": [
+     "+155",
+     "0HC86639743P550_1"
+    ],
+    "RJ Harris": [
+     "-205",
+     "0HC86639743N550_3"
     ]
    },
    "Total Rounds": {
@@ -27706,6 +28308,472 @@
      "-115",
      "0OU86613428U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+200",
+     "0OU86639735O250_1"
+    ],
+    "Under": [
+     "-280",
+     "0OU86639735U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+800",
+     "0QA376880081#2312422378_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA376880081#2312422424_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA376880053#2312422348_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA376880095#2312422392_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+350",
+     "0QA376880063#2312422360_13L9034Q11Q22"
+    ],
+    "No": [
+     "-550",
+     "0QA376880063#2312422451_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA376880065#2312422362_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA376880065#2312422448_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+275",
+     "0QA376880041#2312422336_13L9034Q10Q20"
+    ],
+    "No": [
+     "-400",
+     "0QA376880041#2312422478_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+200",
+     "0QA376880079#2312422374_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+425",
+     "0QA376880079#2312422408_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+400",
+     "0QA376880079#2312422508_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+800",
+     "0QA376880079#2312422517_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+750",
+     "0QA376880079#2312422565_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1400",
+     "0QA376880079#2312422574_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+275",
+     "0QA376880079#2312422682_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Allen Frye to Win in Rounds 1-2": [
+     "+475",
+     "0QA376880045#2312422344_13L9034Q11Q21"
+    ],
+    "Allen Frye to Win in Round 3 or on Decision": [
+     "+600",
+     "0QA376880045#2312422493_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880045#2312422649_13L9034Q19Q29"
+    ],
+    "RJ Harris to Win in Rounds 1-2": [
+     "-125",
+     "0QA376880045#2312422550_15L9034Q15Q25"
+    ],
+    "RJ Harris to Win in Round 3 or on Decision": [
+     "+240",
+     "0QA376880045#2312422604_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Allen Frye to Win by KO/TKO/DQ in Round 1": [
+     "+800",
+     "0QA376880049#2312422342_13L9034Q11Q21"
+    ],
+    "Allen Frye to Win by KO/TKO/DQ in Round 2": [
+     "+1400",
+     "0QA376880049#2312422472_13L9034Q12Q22"
+    ],
+    "Allen Frye to Win by KO/TKO/DQ in Round 3": [
+     "+2200",
+     "0QA376880049#2312422490_13L9034Q13Q23"
+    ],
+    "Allen Frye to Win by Submission in Round 1": [
+     "+2800",
+     "0QA376880049#2312422592_13L9034Q16Q26"
+    ],
+    "Allen Frye to Win by Submission in Round 2": [
+     "+5000",
+     "0QA376880049#2312422601_13L9034Q17Q27"
+    ],
+    "Allen Frye to Win by Submission in Round 3": [
+     "+8000",
+     "0QA376880049#2312422637_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+275",
+     "0QA376880049#2312422718_13L9034Q121Q221"
+    ],
+    "RJ Harris to Win by KO/TKO/DQ in Round 1": [
+     "+275",
+     "0QA376880049#2312422679_15L9034Q111Q211"
+    ],
+    "RJ Harris to Win by KO/TKO/DQ in Round 2": [
+     "+500",
+     "0QA376880049#2312422685_15L9034Q112Q212"
+    ],
+    "RJ Harris to Win by KO/TKO/DQ in Round 3": [
+     "+1000",
+     "0QA376880049#2312422694_15L9034Q113Q213"
+    ],
+    "RJ Harris to Win by Submission in Round 1": [
+     "+450",
+     "0QA376880049#2312422703_15L9034Q116Q216"
+    ],
+    "RJ Harris to Win by Submission in Round 2": [
+     "+850",
+     "0QA376880049#2312422706_15L9034Q117Q217"
+    ],
+    "RJ Harris to Win by Submission in Round 3": [
+     "+1600",
+     "0QA376880049#2312422709_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Allen Frye To Win And Under 0.5": [
+     "+1600",
+     "0QA376880055#2312422350_13L9034Q11Q21"
+    ],
+    "Allen Frye To Win And Under 1.5": [
+     "+550",
+     "0QA376880055#2312422502_13L9034Q11Q23"
+    ],
+    "RJ Harris To Win And Under 0.5": [
+     "+450",
+     "0QA376880055#2312422460_14L9034Q12Q22"
+    ],
+    "RJ Harris To Win And Under 1.5": [
+     "+110",
+     "0QA376880055#2312422523_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Allen Frye To Win And Over 1.5": [
+     "+450",
+     "0QA376880057#2312422505_13L9034Q11Q23"
+    ],
+    "Allen Frye To Win And Over 2.5": [
+     "+700",
+     "0QA376880057#2312422559_13L9034Q11Q25"
+    ],
+    "RJ Harris To Win And Over 1.5": [
+     "+130",
+     "0QA376880057#2312422520_14L9034Q12Q24"
+    ],
+    "RJ Harris To Win And Over 2.5": [
+     "+300",
+     "0QA376880057#2312422577_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Allen Frye": [
+     "+140",
+     "0HC86639745P150_1"
+    ],
+    "RJ Harris": [
+     "-185",
+     "0HC86639745N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Allen Frye": [
+     "+115",
+     "0HC86639749P150_1"
+    ],
+    "RJ Harris": [
+     "-150",
+     "0HC86639749N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Allen Frye": [
+     "+105",
+     "0HC86639751P150_1"
+    ],
+    "RJ Harris": [
+     "-135",
+     "0HC86639751N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-185",
+     "0QA376880059#2312422356_13L9034Q11Q22"
+    ],
+    "No": [
+     "+140",
+     "0QA376880059#2312422457_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+145",
+     "0QA376880061#2312422358_13L9034Q11Q22"
+    ],
+    "No": [
+     "-190",
+     "0QA376880061#2312422454_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Allen Frye Round 1": [
+     "+700",
+     "0QA376880042#2312422338_13L9034Q11Q20"
+    ],
+    "Allen Frye Round 2": [
+     "+1200",
+     "0QA376880042#2312422484_13L9034Q11Q22"
+    ],
+    "Allen Frye Round 3": [
+     "+2000",
+     "0QA376880042#2312422544_13L9034Q11Q24"
+    ],
+    "Allen Frye By Decision": [
+     "+900",
+     "0QA376880042#2312422676_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880042#2312422691_15L9034Q10Q212"
+    ],
+    "RJ Harris Round 1": [
+     "+180",
+     "0QA376880042#2312422481_14L9034Q12Q21"
+    ],
+    "RJ Harris Round 2": [
+     "+330",
+     "0QA376880042#2312422541_14L9034Q12Q23"
+    ],
+    "RJ Harris Round 3": [
+     "+650",
+     "0QA376880042#2312422595_14L9034Q12Q25"
+    ],
+    "RJ Harris By Decision": [
+     "+450",
+     "0QA376880042#2312422688_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+140",
+     "0QA376880051#2312422346_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+250",
+     "0QA376880051#2312422466_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA376880051#2312422496_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880051#2312422586_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+275",
+     "0QA376880051#2312422607_13L9034Q11Q25"
+    ]
+   },
+   "RJ Harris to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-175",
+     "0QA376880083#2312422380_13L9034Q11Q22"
+    ],
+    "No": [
+     "+130",
+     "0QA376880083#2312422421_13L9034Q13Q24"
+    ]
+   },
+   "Allen Frye to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+400",
+     "0QA376880085#2312422384_13L9034Q11Q22"
+    ],
+    "No": [
+     "-650",
+     "0QA376880085#2312422416_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Allen Frye to Win by KO/TKO/DQ or Decision": [
+     "+285",
+     "0QA376880047#2312422352_13L9034Q11Q21"
+    ],
+    "Allen Frye to Win by KO/TKO/DQ or Submission": [
+     "+400",
+     "0QA376880047#2312422463_13L9034Q12Q22"
+    ],
+    "Allen Frye to Win by Submission or Decision": [
+     "+550",
+     "0QA376880047#2312422499_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880047#2312422613_13L9034Q17Q27"
+    ],
+    "RJ Harris to Win by KO/TKO/DQ or Decision": [
+     "-140",
+     "0QA376880047#2312422526_15L9034Q14Q24"
+    ],
+    "RJ Harris to Win by KO/TKO/DQ or Submission": [
+     "-175",
+     "0QA376880047#2312422556_15L9034Q15Q25"
+    ],
+    "RJ Harris to Win by Submission or Decision": [
+     "+125",
+     "0QA376880047#2312422583_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Allen Frye to Win By KO/TKO/DQ or RJ Harris to Win by Submission": [
+     "+115",
+     "0QA376880087#2312422382_13L9034Q10Q21"
+    ],
+    "Allen Frye to Win By KO/TKO/DQ or RJ Harris to Win by Decision": [
+     "+175",
+     "0QA376880087#2312422418_13L9034Q10Q22"
+    ],
+    "Allen Frye to Win By Submission or RJ Harris to Win by KO/TKO/DQ": [
+     "+115",
+     "0QA376880087#2312422511_13L9034Q10Q23"
+    ],
+    "Allen Frye to Win By Submission or RJ Harris to Win by Decision": [
+     "+330",
+     "0QA376880087#2312422514_13L9034Q10Q24"
+    ],
+    "Allen Frye to Win By Decision or RJ Harris to Win by KO/TKO/DQ": [
+     "-105",
+     "0QA376880087#2312422568_13L9034Q10Q25"
+    ],
+    "Allen Frye to Win By Decision or RJ Harris to Win by Submission": [
+     "+160",
+     "0QA376880087#2312422571_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880087#2312422622_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-130",
+     "0QA376880044#2312422340_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+215",
+     "0QA376880044#2312422475_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+275",
+     "0QA376880044#2312422487_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880044#2312422538_15L9034Q14Q24"
+    ]
+   },
+   "Allen Frye to Win by Unanimous Decision": {
+    "Yes": [
+     "+1100",
+     "0QA376880067#2312422364_13L9034Q11Q22"
+    ]
+   },
+   "RJ Harris to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA376880069#2312422366_13L9034Q11Q22"
+    ]
+   },
+   "Allen Frye to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA376880071#2312422368_13L9034Q11Q22"
+    ]
+   },
+   "RJ Harris to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA376880073#2312422370_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Allen Frye": [
+     "+450",
+     "0QA376880107#2312422394_13L9034Q11Q22"
+    ],
+    "RJ Harris": [
+     "+140",
+     "0QA376880107#2312422404_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Allen Frye": [
+     "+1800",
+     "0QA376880109#2312422396_13L9034Q11Q22"
+    ],
+    "RJ Harris": [
+     "+250",
+     "0QA376880109#2312422402_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Allen Frye": [
+     "+900",
+     "0QA376880111#2312422398_13L9034Q11Q22"
+    ],
+    "RJ Harris": [
+     "+450",
+     "0QA376880111#2312422400_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -27715,16 +28783,86 @@
   "right": "Felipe Franco",
   "rounds": 3,
   "start": "2026-10-10T22:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Felipe Franco": [
+     "-525",
+     "0QA376880133#2312422474_13L9034Q11Q21"
+    ],
+    "Brendson Ribeiro": [
+     "+320",
+     "0QA376880133#2312422557_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Felipe Franco": [
+     "-195",
+     "0QA376880134#2312422480_13L9034Q11Q21"
+    ],
+    "Brendson Ribeiro": [
+     "+140",
+     "0QA376880134#2312422551_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Felipe Franco": [
+     "-600",
+     "0QA376880142#2312422501_13L9034Q10Q21"
+    ],
+    "Brendson Ribeiro": [
+     "+380",
+     "0QA376880142#2312422530_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Felipe Franco": [
+     "-750",
+     "0QA376880141#2312422498_13L9034Q10Q21"
+    ],
+    "Brendson Ribeiro": [
+     "+450",
+     "0QA376880141#2312422533_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Felipe Franco": [
-     "-375",
+     "-345",
      "0ML86559067_1"
     ],
     "Brendson Ribeiro": [
-     "+295",
+     "+275",
      "0ML86559067_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Felipe Franco": [
+     "-360",
+     "0QA376880140#2312422495_13L9034Q10Q21"
+    ],
+    "Brendson Ribeiro": [
+     "+255",
+     "0QA376880140#2312422536_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Felipe Franco": [
+     "-275",
+     "0HC86639719N550_1"
+    ],
+    "Brendson Ribeiro": [
+     "+195",
+     "0HC86639719P550_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Felipe Franco": [
+     "-600",
+     "0HC86639720P750_1"
+    ],
+    "Brendson Ribeiro": [
+     "+380",
+     "0HC86639720N750_3"
     ]
    },
    "Total Rounds": {
@@ -27736,6 +28874,468 @@
      "-180",
      "0OU86612279U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+300",
+     "0OU86639718O250_1"
+    ],
+    "Under": [
+     "-475",
+     "0OU86639718U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+600",
+     "0QA376880136#2312422483_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA376880136#2312422548_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA376880122#2312422438_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2500",
+     "0QA376880143#2312422504_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA376880127#2312422456_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA376880127#2312422575_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA376880128#2312422459_13L9034Q11Q22"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+400",
+     "0QA376880115#2312422420_13L9034Q10Q20"
+    ],
+    "No": [
+     "-650",
+     "0QA376880115#2312422602_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+180",
+     "0QA376880135#2312422477_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+215",
+     "0QA376880135#2312422527_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+550",
+     "0QA376880135#2312422632_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+600",
+     "0QA376880135#2312422641_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1400",
+     "0QA376880135#2312422689_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1600",
+     "0QA376880135#2312422698_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+400",
+     "0QA376880135#2312422748_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Felipe Franco to Win in Rounds 1-2": [
+     "-200",
+     "0QA376880118#2312422432_13L9034Q11Q21"
+    ],
+    "Felipe Franco to Win in Round 3 or on Decision": [
+     "+380",
+     "0QA376880118#2312422617_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880118#2312422737_13L9034Q19Q29"
+    ],
+    "Brendson Ribeiro to Win in Rounds 1-2": [
+     "+450",
+     "0QA376880118#2312422674_15L9034Q15Q25"
+    ],
+    "Brendson Ribeiro to Win in Round 3 or on Decision": [
+     "+750",
+     "0QA376880118#2312422722_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Felipe Franco to Win by KO/TKO/DQ in Round 1": [
+     "+240",
+     "0QA376880120#2312422429_13L9034Q11Q21"
+    ],
+    "Felipe Franco to Win by KO/TKO/DQ in Round 2": [
+     "+700",
+     "0QA376880120#2312422596_13L9034Q12Q22"
+    ],
+    "Felipe Franco to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA376880120#2312422614_13L9034Q13Q23"
+    ],
+    "Felipe Franco to Win by Submission in Round 1": [
+     "+240",
+     "0QA376880120#2312422716_13L9034Q16Q26"
+    ],
+    "Felipe Franco to Win by Submission in Round 2": [
+     "+700",
+     "0QA376880120#2312422721_13L9034Q17Q27"
+    ],
+    "Felipe Franco to Win by Submission in Round 3": [
+     "+1800",
+     "0QA376880120#2312422733_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+400",
+     "0QA376880120#2312422760_13L9034Q121Q221"
+    ],
+    "Brendson Ribeiro to Win by KO/TKO/DQ in Round 1": [
+     "+900",
+     "0QA376880120#2312422747_15L9034Q111Q211"
+    ],
+    "Brendson Ribeiro to Win by KO/TKO/DQ in Round 2": [
+     "+2000",
+     "0QA376880120#2312422749_15L9034Q112Q212"
+    ],
+    "Brendson Ribeiro to Win by KO/TKO/DQ in Round 3": [
+     "+3500",
+     "0QA376880120#2312422752_15L9034Q113Q213"
+    ],
+    "Brendson Ribeiro to Win by Submission in Round 1": [
+     "+1600",
+     "0QA376880120#2312422755_15L9034Q116Q216"
+    ],
+    "Brendson Ribeiro to Win by Submission in Round 2": [
+     "+3500",
+     "0QA376880120#2312422756_15L9034Q117Q217"
+    ],
+    "Brendson Ribeiro to Win by Submission in Round 3": [
+     "+6000",
+     "0QA376880120#2312422757_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Felipe Franco To Win And Under 0.5": [
+     "+300",
+     "0QA376880123#2312422441_13L9034Q11Q21"
+    ],
+    "Felipe Franco To Win And Under 1.5": [
+     "-150",
+     "0QA376880123#2312422626_13L9034Q11Q23"
+    ],
+    "Brendson Ribeiro To Win And Under 0.5": [
+     "+1400",
+     "0QA376880123#2312422584_14L9034Q12Q22"
+    ],
+    "Brendson Ribeiro To Win And Under 1.5": [
+     "+500",
+     "0QA376880123#2312422647_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Felipe Franco To Win And Over 1.5": [
+     "+215",
+     "0QA376880124#2312422629_13L9034Q11Q23"
+    ],
+    "Felipe Franco To Win And Over 2.5": [
+     "+475",
+     "0QA376880124#2312422683_13L9034Q11Q25"
+    ],
+    "Brendson Ribeiro To Win And Over 1.5": [
+     "+550",
+     "0QA376880124#2312422644_14L9034Q12Q24"
+    ],
+    "Brendson Ribeiro To Win And Over 2.5": [
+     "+900",
+     "0QA376880124#2312422701_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Felipe Franco": [
+     "-400",
+     "0HC86639721P150_1"
+    ],
+    "Brendson Ribeiro": [
+     "+275",
+     "0HC86639721N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Felipe Franco": [
+     "-320",
+     "0HC86639722P150_1"
+    ],
+    "Brendson Ribeiro": [
+     "+230",
+     "0HC86639722N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Felipe Franco": [
+     "-295",
+     "0HC86639723P150_1"
+    ],
+    "Brendson Ribeiro": [
+     "+215",
+     "0HC86639723N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-115",
+     "0QA376880125#2312422450_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA376880125#2312422581_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+225",
+     "0QA376880126#2312422453_13L9034Q11Q22"
+    ],
+    "No": [
+     "-310",
+     "0QA376880126#2312422578_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Felipe Franco Round 1": [
+     "+130",
+     "0QA376880116#2312422423_13L9034Q11Q20"
+    ],
+    "Felipe Franco Round 2": [
+     "+350",
+     "0QA376880116#2312422608_13L9034Q11Q22"
+    ],
+    "Felipe Franco Round 3": [
+     "+1000",
+     "0QA376880116#2312422668_13L9034Q11Q24"
+    ],
+    "Felipe Franco By Decision": [
+     "+700",
+     "0QA376880116#2312422746_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880116#2312422751_15L9034Q10Q212"
+    ],
+    "Brendson Ribeiro Round 1": [
+     "+650",
+     "0QA376880116#2312422605_14L9034Q12Q21"
+    ],
+    "Brendson Ribeiro Round 2": [
+     "+1400",
+     "0QA376880116#2312422665_14L9034Q12Q23"
+    ],
+    "Brendson Ribeiro Round 3": [
+     "+2500",
+     "0QA376880116#2312422719_14L9034Q12Q25"
+    ],
+    "Brendson Ribeiro By Decision": [
+     "+1100",
+     "0QA376880116#2312422750_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "-115",
+     "0QA376880121#2312422435_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+275",
+     "0QA376880121#2312422590_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+700",
+     "0QA376880121#2312422620_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880121#2312422710_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+400",
+     "0QA376880121#2312422723_13L9034Q11Q25"
+    ]
+   },
+   "Brendson Ribeiro to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+400",
+     "0QA376880137#2312422486_13L9034Q11Q22"
+    ],
+    "No": [
+     "-650",
+     "0QA376880137#2312422545_13L9034Q13Q24"
+    ]
+   },
+   "Felipe Franco to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-225",
+     "0QA376880138#2312422492_13L9034Q11Q22"
+    ],
+    "No": [
+     "+165",
+     "0QA376880138#2312422539_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Felipe Franco to Win by KO/TKO/DQ or Decision": [
+     "+100",
+     "0QA376880119#2312422444_13L9034Q11Q21"
+    ],
+    "Felipe Franco to Win by KO/TKO/DQ or Submission": [
+     "-225",
+     "0QA376880119#2312422587_13L9034Q12Q22"
+    ],
+    "Felipe Franco to Win by Submission or Decision": [
+     "+100",
+     "0QA376880119#2312422623_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880119#2312422725_13L9034Q17Q27"
+    ],
+    "Brendson Ribeiro to Win by KO/TKO/DQ or Decision": [
+     "+400",
+     "0QA376880119#2312422650_15L9034Q14Q24"
+    ],
+    "Brendson Ribeiro to Win by KO/TKO/DQ or Submission": [
+     "+400",
+     "0QA376880119#2312422680_15L9034Q15Q25"
+    ],
+    "Brendson Ribeiro to Win by Submission or Decision": [
+     "+500",
+     "0QA376880119#2312422707_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Felipe Franco to Win By KO/TKO/DQ or Brendson Ribeiro to Win by Submission": [
+     "+115",
+     "0QA376880139#2312422489_13L9034Q10Q21"
+    ],
+    "Felipe Franco to Win By KO/TKO/DQ or Brendson Ribeiro to Win by Decision": [
+     "+115",
+     "0QA376880139#2312422542_13L9034Q10Q22"
+    ],
+    "Felipe Franco to Win By Submission or Brendson Ribeiro to Win by KO/TKO/DQ": [
+     "-110",
+     "0QA376880139#2312422635_13L9034Q10Q23"
+    ],
+    "Felipe Franco to Win By Submission or Brendson Ribeiro to Win by Decision": [
+     "+115",
+     "0QA376880139#2312422638_13L9034Q10Q24"
+    ],
+    "Felipe Franco to Win By Decision or Brendson Ribeiro to Win by KO/TKO/DQ": [
+     "+275",
+     "0QA376880139#2312422692_13L9034Q10Q25"
+    ],
+    "Felipe Franco to Win By Decision or Brendson Ribeiro to Win by Submission": [
+     "+380",
+     "0QA376880139#2312422695_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880139#2312422728_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-105",
+     "0QA376880117#2312422426_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+120",
+     "0QA376880117#2312422599_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+400",
+     "0QA376880117#2312422611_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880117#2312422662_15L9034Q14Q24"
+    ]
+   },
+   "Felipe Franco to Win by Unanimous Decision": {
+    "Yes": [
+     "+850",
+     "0QA376880129#2312422462_13L9034Q11Q22"
+    ]
+   },
+   "Brendson Ribeiro to Win by Unanimous Decision": {
+    "Yes": [
+     "+1400",
+     "0QA376880130#2312422465_13L9034Q11Q22"
+    ]
+   },
+   "Felipe Franco to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2500",
+     "0QA376880131#2312422468_13L9034Q11Q22"
+    ]
+   },
+   "Brendson Ribeiro to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA376880132#2312422471_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Felipe Franco": [
+     "+165",
+     "0QA376880149#2312422507_13L9034Q11Q22"
+    ],
+    "Brendson Ribeiro": [
+     "+600",
+     "0QA376880149#2312422522_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Felipe Franco": [
+     "+165",
+     "0QA376880150#2312422510_13L9034Q11Q22"
+    ],
+    "Brendson Ribeiro": [
+     "+1100",
+     "0QA376880150#2312422519_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Felipe Franco": [
+     "+700",
+     "0QA376880151#2312422513_13L9034Q11Q22"
+    ],
+    "Brendson Ribeiro": [
+     "+1100",
+     "0QA376880151#2312422516_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -27745,7 +29345,7 @@
   "right": "Francisco Prado",
   "rounds": 3,
   "start": "2026-10-10T23:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Francisco Prado": [
@@ -28311,7 +29911,7 @@
   "right": "Christian Leroy Duncan",
   "rounds": 5,
   "start": "2026-10-11T02:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Brendan Allen": [
@@ -28355,11 +29955,11 @@
    },
    "Moneyline": {
     "Brendan Allen": [
-     "-148",
+     "-130",
      "0ML86559064_1"
     ],
     "Christian Leroy Duncan": [
-     "+124",
+     "+110",
      "0ML86559064_3"
     ]
    },
@@ -28693,11 +30293,11 @@
    },
    "Round 1 Point Spread": {
     "Brendan Allen": [
-     "-265",
+     "-250",
      "0HC86630652P150_1"
     ],
     "Christian Leroy Duncan": [
-     "+195",
+     "+185",
      "0HC86630652N150_3"
     ]
    },
@@ -29025,7 +30625,7 @@
   "right": "Malcolm Wellmaker",
   "rounds": 3,
   "start": "2026-10-11T00:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Malcolm Wellmaker": [
@@ -29591,7 +31191,7 @@
   "right": "Julius Walker",
   "rounds": 3,
   "start": "2026-10-11T00:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Julius Walker": [
@@ -29635,11 +31235,11 @@
    },
    "Moneyline": {
     "Julius Walker": [
-     "-285",
+     "-290",
      "0ML86559065_1"
     ],
     "Gerald Meerschaert": [
-     "+230",
+     "+235",
      "0ML86559065_3"
     ]
    },
@@ -30153,7 +31753,7 @@
   "right": "Kai Kamaka III",
   "rounds": 3,
   "start": "2026-10-11T01:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Andre Fili": [
@@ -30197,11 +31797,11 @@
    },
    "Moneyline": {
     "Andre Fili": [
-     "-162",
+     "-148",
      "0ML86559068_1"
     ],
     "Kai Kamaka III": [
-     "+136",
+     "+124",
      "0ML86559068_3"
     ]
    },
@@ -30715,7 +32315,7 @@
   "right": "Lupita Godinez",
   "rounds": 3,
   "start": "2026-10-11T01:45Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Lupita Godinez": [
@@ -31247,7 +32847,7 @@
   "right": "Matheus Camilo",
   "rounds": 3,
   "start": "2026-10-11T02:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Matheus Camilo": [
@@ -31813,8 +33413,48 @@
   "right": "Leon Shahbazyan",
   "rounds": 3,
   "start": "2026-10-10T23:15Z",
-  "read": "2026-10-07T13:03Z",
+  "read": "2026-10-07T19:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Niko Price": [
+     "+140",
+     "0QA376880207#2312422891_13L9034Q11Q21"
+    ],
+    "Leon Shahbazyan": [
+     "-195",
+     "0QA376880207#2312422947_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Niko Price": [
+     "-180",
+     "0QA376880208#2312422895_13L9034Q11Q21"
+    ],
+    "Leon Shahbazyan": [
+     "+130",
+     "0QA376880208#2312422943_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Niko Price": [
+     "+185",
+     "0QA376880216#2312422909_13L9034Q10Q21"
+    ],
+    "Leon Shahbazyan": [
+     "-250",
+     "0QA376880216#2312422929_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Niko Price": [
+     "+380",
+     "0QA376880215#2312422907_13L9034Q10Q21"
+    ],
+    "Leon Shahbazyan": [
+     "-600",
+     "0QA376880215#2312422931_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Niko Price": [
      "+124",
@@ -31825,14 +33465,502 @@
      "0ML86573285_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Niko Price": [
+     "-185",
+     "0QA376880214#2312422905_13L9034Q10Q21"
+    ],
+    "Leon Shahbazyan": [
+     "+140",
+     "0QA376880214#2312422933_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Niko Price": [
+     "+110",
+     "0HC86639729P350_1"
+    ],
+    "Leon Shahbazyan": [
+     "-145",
+     "0HC86639729N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Niko Price": [
+     "+100",
+     "0HC86639730P750_1"
+    ],
+    "Leon Shahbazyan": [
+     "-130",
+     "0HC86639730N750_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "+175",
+     "+170",
      "0OU86612276O150_1"
     ],
     "Under": [
-     "-230",
+     "-220",
      "0OU86612276U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+350",
+     "0OU86639728O250_1"
+    ],
+    "Under": [
+     "-575",
+     "0OU86639728U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+500",
+     "0QA376880210#2312422897_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA376880210#2312422941_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA376880196#2312422867_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2200",
+     "0QA376880217#2312422911_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+600",
+     "0QA376880201#2312422879_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA376880201#2312422955_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+2200",
+     "0QA376880202#2312422881_13L9034Q11Q22"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+450",
+     "0QA376880189#2312422855_13L9034Q10Q20"
+    ],
+    "No": [
+     "-750",
+     "0QA376880189#2312422964_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+175",
+     "0QA376880209#2312422893_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+150",
+     "0QA376880209#2312422927_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+800",
+     "0QA376880209#2312422974_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+700",
+     "0QA376880209#2312422977_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1600",
+     "0QA376880209#2312422993_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1400",
+     "0QA376880209#2312422996_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+450",
+     "0QA376880209#2312423032_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Niko Price to Win in Rounds 1-2": [
+     "+200",
+     "0QA376880192#2312422863_13L9034Q11Q21"
+    ],
+    "Niko Price to Win in Round 3 or on Decision": [
+     "+500",
+     "0QA376880192#2312422969_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880192#2312423021_13L9034Q19Q29"
+    ],
+    "Leon Shahbazyan to Win in Rounds 1-2": [
+     "-120",
+     "0QA376880192#2312422988_15L9034Q15Q25"
+    ],
+    "Leon Shahbazyan to Win in Round 3 or on Decision": [
+     "+750",
+     "0QA376880192#2312423006_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Niko Price to Win by KO/TKO/DQ in Round 1": [
+     "+380",
+     "0QA376880194#2312422861_13L9034Q11Q21"
+    ],
+    "Niko Price to Win by KO/TKO/DQ in Round 2": [
+     "+850",
+     "0QA376880194#2312422962_13L9034Q12Q22"
+    ],
+    "Niko Price to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA376880194#2312422968_13L9034Q13Q23"
+    ],
+    "Niko Price to Win by Submission in Round 1": [
+     "+1200",
+     "0QA376880194#2312423002_13L9034Q16Q26"
+    ],
+    "Niko Price to Win by Submission in Round 2": [
+     "+2500",
+     "0QA376880194#2312423005_13L9034Q17Q27"
+    ],
+    "Niko Price to Win by Submission in Round 3": [
+     "+5000",
+     "0QA376880194#2312423017_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+450",
+     "0QA376880194#2312423044_13L9034Q121Q221"
+    ],
+    "Leon Shahbazyan to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA376880194#2312423031_15L9034Q111Q211"
+    ],
+    "Leon Shahbazyan to Win by KO/TKO/DQ in Round 2": [
+     "+2500",
+     "0QA376880194#2312423033_15L9034Q112Q212"
+    ],
+    "Leon Shahbazyan to Win by KO/TKO/DQ in Round 3": [
+     "+5500",
+     "0QA376880194#2312423036_15L9034Q113Q213"
+    ],
+    "Leon Shahbazyan to Win by Submission in Round 1": [
+     "+165",
+     "0QA376880194#2312423039_15L9034Q116Q216"
+    ],
+    "Leon Shahbazyan to Win by Submission in Round 2": [
+     "+1000",
+     "0QA376880194#2312423040_15L9034Q117Q217"
+    ],
+    "Leon Shahbazyan to Win by Submission in Round 3": [
+     "+2200",
+     "0QA376880194#2312423041_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Niko Price To Win And Under 0.5": [
+     "+750",
+     "0QA376880197#2312422869_13L9034Q11Q21"
+    ],
+    "Niko Price To Win And Under 1.5": [
+     "+240",
+     "0QA376880197#2312422972_13L9034Q11Q23"
+    ],
+    "Leon Shahbazyan To Win And Under 0.5": [
+     "+300",
+     "0QA376880197#2312422958_14L9034Q12Q22"
+    ],
+    "Leon Shahbazyan To Win And Under 1.5": [
+     "-115",
+     "0QA376880197#2312422979_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Niko Price To Win And Over 1.5": [
+     "+330",
+     "0QA376880198#2312422973_13L9034Q11Q23"
+    ],
+    "Niko Price To Win And Over 2.5": [
+     "+600",
+     "0QA376880198#2312422991_13L9034Q11Q25"
+    ],
+    "Leon Shahbazyan To Win And Over 1.5": [
+     "+475",
+     "0QA376880198#2312422978_14L9034Q12Q24"
+    ],
+    "Leon Shahbazyan To Win And Over 2.5": [
+     "+900",
+     "0QA376880198#2312422997_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Niko Price": [
+     "-110",
+     "0HC86639731P150_1"
+    ],
+    "Leon Shahbazyan": [
+     "-120",
+     "0HC86639731N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Niko Price": [
+     "-250",
+     "0HC86639732P150_1"
+    ],
+    "Leon Shahbazyan": [
+     "+185",
+     "0HC86639732N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Niko Price": [
+     "-270",
+     "0HC86639733P150_1"
+    ],
+    "Leon Shahbazyan": [
+     "+200",
+     "0HC86639733N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "+110",
+     "0QA376880199#2312422875_13L9034Q11Q22"
+    ],
+    "No": [
+     "-150",
+     "0QA376880199#2312422957_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+275",
+     "0QA376880200#2312422877_13L9034Q11Q22"
+    ],
+    "No": [
+     "-400",
+     "0QA376880200#2312422956_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Niko Price Round 1": [
+     "+300",
+     "0QA376880190#2312422857_13L9034Q11Q20"
+    ],
+    "Niko Price Round 2": [
+     "+700",
+     "0QA376880190#2312422966_13L9034Q11Q22"
+    ],
+    "Niko Price Round 3": [
+     "+1400",
+     "0QA376880190#2312422986_13L9034Q11Q24"
+    ],
+    "Niko Price By Decision": [
+     "+800",
+     "0QA376880190#2312423030_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880190#2312423035_15L9034Q10Q212"
+    ],
+    "Leon Shahbazyan Round 1": [
+     "+120",
+     "0QA376880190#2312422965_14L9034Q12Q21"
+    ],
+    "Leon Shahbazyan Round 2": [
+     "+800",
+     "0QA376880190#2312422985_14L9034Q12Q23"
+    ],
+    "Leon Shahbazyan Round 3": [
+     "+1800",
+     "0QA376880190#2312423003_14L9034Q12Q25"
+    ],
+    "Leon Shahbazyan By Decision": [
+     "+1200",
+     "0QA376880190#2312423034_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "-150",
+     "0QA376880195#2312422865_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+350",
+     "0QA376880195#2312422960_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+800",
+     "0QA376880195#2312422970_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880195#2312423000_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+450",
+     "0QA376880195#2312423007_13L9034Q11Q25"
+    ]
+   },
+   "Leon Shahbazyan to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-125",
+     "0QA376880211#2312422899_13L9034Q11Q22"
+    ],
+    "No": [
+     "-105",
+     "0QA376880211#2312422939_13L9034Q13Q24"
+    ]
+   },
+   "Niko Price to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+175",
+     "0QA376880212#2312422903_13L9034Q11Q22"
+    ],
+    "No": [
+     "-235",
+     "0QA376880212#2312422935_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Niko Price to Win by KO/TKO/DQ or Decision": [
+     "+175",
+     "0QA376880193#2312422871_13L9034Q11Q21"
+    ],
+    "Niko Price to Win by KO/TKO/DQ or Submission": [
+     "+175",
+     "0QA376880193#2312422959_13L9034Q12Q22"
+    ],
+    "Niko Price to Win by Submission or Decision": [
+     "+380",
+     "0QA376880193#2312422971_13L9034Q13Q23"
+    ],
+    "Leon Shahbazyan to Win by KO/TKO/DQ or Decision": [
+     "+275",
+     "0QA376880193#2312422980_15L9034Q14Q24"
+    ],
+    "Leon Shahbazyan to Win by KO/TKO/DQ or Submission": [
+     "-125",
+     "0QA376880193#2312422990_15L9034Q15Q25"
+    ],
+    "Leon Shahbazyan to Win by Submission or Decision": [
+     "+105",
+     "0QA376880193#2312422999_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Niko Price to Win By KO/TKO/DQ or Leon Shahbazyan to Win by Submission": [
+     "-275",
+     "0QA376880213#2312422901_13L9034Q10Q21"
+    ],
+    "Niko Price to Win By KO/TKO/DQ or Leon Shahbazyan to Win by Decision": [
+     "+165",
+     "0QA376880213#2312422937_13L9034Q10Q22"
+    ],
+    "Niko Price to Win By Submission or Leon Shahbazyan to Win by KO/TKO/DQ": [
+     "+225",
+     "0QA376880213#2312422975_13L9034Q10Q23"
+    ],
+    "Niko Price to Win By Submission or Leon Shahbazyan to Win by Decision": [
+     "+450",
+     "0QA376880213#2312422976_13L9034Q10Q24"
+    ],
+    "Niko Price to Win By Decision or Leon Shahbazyan to Win by KO/TKO/DQ": [
+     "+225",
+     "0QA376880213#2312422994_13L9034Q10Q25"
+    ],
+    "Niko Price to Win By Decision or Leon Shahbazyan to Win by Submission": [
+     "-120",
+     "0QA376880213#2312422995_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880213#2312423012_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+115",
+     "0QA376880191#2312422859_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "-105",
+     "0QA376880191#2312422963_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+450",
+     "0QA376880191#2312422967_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA376880191#2312422984_15L9034Q14Q24"
+    ]
+   },
+   "Niko Price to Win by Unanimous Decision": {
+    "Yes": [
+     "+1000",
+     "0QA376880203#2312422883_13L9034Q11Q22"
+    ]
+   },
+   "Leon Shahbazyan to Win by Unanimous Decision": {
+    "Yes": [
+     "+1600",
+     "0QA376880204#2312422885_13L9034Q11Q22"
+    ]
+   },
+   "Niko Price to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA376880205#2312422887_13L9034Q11Q22"
+    ]
+   },
+   "Leon Shahbazyan to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA376880206#2312422889_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Niko Price": [
+     "+225",
+     "0QA376880223#2312422913_13L9034Q11Q22"
+    ],
+    "Leon Shahbazyan": [
+     "+400",
+     "0QA376880223#2312422923_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Niko Price": [
+     "+800",
+     "0QA376880224#2312422915_13L9034Q11Q22"
+    ],
+    "Leon Shahbazyan": [
+     "+130",
+     "0QA376880224#2312422921_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Niko Price": [
+     "+800",
+     "0QA376880225#2312422917_13L9034Q11Q22"
+    ],
+    "Leon Shahbazyan": [
+     "+1200",
+     "0QA376880225#2312422919_13L9034Q13Q24"
     ]
    }
   }
