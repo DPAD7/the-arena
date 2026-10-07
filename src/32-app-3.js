@@ -1282,7 +1282,13 @@
               badge(r.st) + esc(r.inj || r.st) + '</div></div><span class="qwsh"><strong>' + r.sh + "%</strong>of targets</span></div>";
           }).join("") + "</div></div>";
       }).join("");
-      page.insertAdjacentHTML("beforeend", '<div class="qbwire"><h3 class="cliphead">QB Wire</h3>' + html + "</div>");
+      page.insertAdjacentHTML("beforeend", '<div class="qbwire qwbox"><h3 class="cliphead">QB Wire</h3>' + html + "</div>");
+      var box = page.querySelector(".qbwire");
+      var fit = function () {
+        if (!box.isConnected) { window.removeEventListener("resize", fit); return; }
+        box.style.height = Math.max(160, window.innerHeight - box.getBoundingClientRect().top) + "px";
+      };
+      fit(); window.addEventListener("resize", fit);
     };
     if (QBWIRE) { draw(); return; }
     fetch("qbwire.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })

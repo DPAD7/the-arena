@@ -147,6 +147,12 @@ def main():
         note = v.get("note") or ""
         if note.strip().lower() == str(v["status"]).lower():
             note = ""
+        # a whole injury report pasted as one note: only the line about him
+        if len(note) > 220:
+            import re as _re
+            last = m["n"].split()[-1]
+            bits = [b.strip() for b in _re.split(r"(?<=[.!?])\s+", note) if last in b]
+            note = " ".join(bits)[:220] if bits else note[:220].rsplit(" ", 1)[0] + "\u2026"
         key = "st@%s@%s" % (pid, v["status"])
         cards.append({"k": "status", "key": key, "at": v.get("since") or seen.get(key) or STAMP,
                       "id": pid, "n": m["n"], "t": m["t"], "lg": m["lg"], "st": v["status"],

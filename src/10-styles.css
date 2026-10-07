@@ -2580,7 +2580,12 @@
      2026: "why is there a scroll on there"); the QB Wire is under them now,
      so it scrolls, without the bounce (Jose, Oct 7, 2026: "how am I supposed
      to see the stuff at the bottom?") */
-  html.clipsview, html.clipsview body { overscroll-behavior: none; }
+  html.clipsview, html.clipsview body { overflow: hidden; overscroll-behavior: none; height: 100%; }
+  /* the rows stand still and the wire scrolls in its own box, down to the
+     nav (Jose, Oct 7, 2026: "we need it for that bottom section") */
+  .qbwire.qwbox { padding-top: 0; overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch;
+    padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .qbwire.qwbox > .cliphead { position: sticky; top: 0; z-index: 2; margin: 0; padding: 14px 16px 6px; background: #000; }
   body:has(.clipspage) .cashfab { display: none; }
   .cliprow { display: flex; gap: 14px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
   .cliprow::-webkit-scrollbar { display: none; }
