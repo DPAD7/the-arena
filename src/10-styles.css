@@ -2584,6 +2584,18 @@
   .cliprow::-webkit-scrollbar { display: none; }
   .cliphead { margin: 18px 16px 0; font: 800 13px Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
   .cliphead + .cliprow { padding-top: 10px; }
+  .cliphead { display: flex; align-items: center; gap: 8px; }
+  .clipq { display: inline-grid; place-items: center; width: 22px; height: 22px; padding: 0; margin: 0;
+    border: 1.5px solid #5a5a60; border-radius: 7px; background: none; color: #8e8e93; cursor: pointer; }
+  #cliphowsheet { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 16px;
+    background: rgba(0,0,0,.55); opacity: 0; transition: opacity .25s ease; }
+  #cliphowsheet.on { opacity: 1; }
+  #cliphowsheet .chsbox { position: relative; width: 100%; max-width: 400px; background: #161618; border-radius: 22px;
+    padding: 6px 0 20px; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 20px 50px rgba(0,0,0,.7);
+    transform: scale(.94); transition: transform .25s ease; }
+  #cliphowsheet .chsx { position: absolute; top: 12px; right: 12px; width: 32px; height: 32px; display: grid; place-items: center;
+    padding: 0; border: 1.5px solid #3a3a3f; border-radius: 10px; background: none; color: #c7c7cc; cursor: pointer; }
+  #cliphowsheet.on .chsbox { transform: none; }
   .cliptile .crank { position: absolute; left: -5px; top: -5px; min-width: 26px; height: 26px; padding: 0 6px; box-sizing: border-box;
     border-radius: 8px; background: #fff; color: #000; display: grid; place-items: center;
     font: 800 14px Barlow, "Helvetica Neue", Arial, sans-serif; border: 2px solid #000; }

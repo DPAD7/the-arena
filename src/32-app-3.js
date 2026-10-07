@@ -1091,9 +1091,9 @@
           '<span class="cstar" data-star="' + id + '">' + STARSVG(!!st[id]) + '</span></span>' +
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
       };
-      page.innerHTML = (n ? '<h3 class="cliphead">Top QBs</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
-        (all.length > n ? '<h3 class="cliphead">' + "Around the League" + '</h3><div class="cliprow">' +
-          all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "") + clipHow();
+      page.innerHTML = (n ? '<h3 class="cliphead">Top QBs' + howBtn() + '</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
+        (all.length > n ? '<h3 class="cliphead">' + "Around the League" + (n ? "" : howBtn()) + '</h3><div class="cliprow">' +
+          all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "");
     };
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
@@ -1166,7 +1166,7 @@
         var L = pair[0], R = pair[1] || { name: "", club: "", id: "", score: null };
         return '<button type="button" class="gtile' + (P[gid] ? " has" : "") + '" data-game="' + gid + '">' +
           side(L, R, "l") + side(R, L, "r") + '</button>';
-      }).join("") + "</div>" + clipHow();
+      }).join("") + "</div>";
     };
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
@@ -1201,7 +1201,34 @@
 
 
 
-  /* the five gestures, on the how-to and under every clips row */
+  /* the how-to lives behind a small ? beside the heading now, not under every
+     row (Jose, Oct 7, 2026: "the one with the small ?") */
+  function howBtn() {
+    return '<button type="button" class="clipq" aria-label="How to watch">' +
+      '<svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round">' +
+      '<path d="M9.2 9.2a2.9 2.9 0 1 1 4.1 2.6c-.8.4-1.3 1-1.3 1.9v.6"/><circle cx="12" cy="17.6" r=".6" fill="currentColor"/></svg></button>';
+  }
+  document.addEventListener("click", function (e) {
+    var q = e.target.closest && e.target.closest(".clipq");
+    var open = document.getElementById("cliphowsheet");
+    if (q) {
+      e.stopPropagation();
+      if (!open) {
+        open = document.createElement("div"); open.id = "cliphowsheet";
+        open.innerHTML = '<div class="chsbox" role="dialog" aria-label="How to watch"><button type="button" class="chsx" aria-label="Close">' +
+          '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+          '</button><h3 class="cliphead">How to watch</h3>' + clipHow() + "</div>";
+        document.body.appendChild(open);
+      }
+      open.hidden = false;
+      requestAnimationFrame(function () { open.classList.add("on"); });
+      return;
+    }
+    if (open && !open.hidden && e.target.closest("#cliphowsheet")) {
+      open.classList.remove("on"); setTimeout(function () { open.hidden = true; }, 250);
+    }
+  }, true);
+  /* the five gestures, on the how-to sheet and the first-play card */
   function clipHow() {
     return '<div class="cliphow">' + [[HANDS.tap, "Go forward", "Tap the screen"], [HANDS.hold, "Pause", "Press and hold"],
       [HANDS.back, "Go back", "Tap the left edge"], [HANDS.swipe, "Move between stories", "Swipe left or right"],
