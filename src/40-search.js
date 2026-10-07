@@ -664,12 +664,56 @@
        call running), and a fixed bar then floats halfway up the board
        (Jose, Oct 6, 2026: "what's up with the NAV?"). The gap between the two
        is measured and the bars are dropped by it. */
-    function keepBars() {
-      var vv = window.visualViewport;
-      if (!vv) return;
-      var gap = Math.round(vv.offsetTop + vv.height - window.innerHeight);
-      document.documentElement.style.setProperty("--vvdrop", (gap > 2 ? gap : 0) + "px");
+    /* and against the screen itself: the bar floated up again with no call
+       on (Jose, Oct 6, 9:09 PM), so iOS had shrunk both viewports alike and
+       the gap above read nothing. What the page loses against the screen,
+       past what it lost when it opened, is put back under the bars -- never
+       while he is typing, when the keyboard is meant to take that room */
+    var GAP0 = null;
+    function typing() {
+      var a = document.activeElement;
+      return !!a && (a.tagName === "INPUT" || a.tagName === "TEXTAREA" || a.isContentEditable);
     }
+    function keepBars() {
+      var vv = window.visualViewport, drop = 0;
+      if (vv) {
+        var gap = Math.round(vv.offsetTop + vv.height - window.innerHeight);
+        if (gap > 2) drop = gap;
+      }
+      var lost = (screen.height || 0) - window.innerHeight;
+      if (GAP0 === null && !typing()) GAP0 = lost;
+      if (!drop && !typing() && GAP0 !== null && lost - GAP0 > 40) drop = lost - GAP0;
+      document.documentElement.style.setProperty("--vvdrop", drop + "px");
+    }
+    /* the keyboard going away is when iOS leaves it short: ask it to settle */
+    document.addEventListener("focusout", function () {
+      setTimeout(function () { window.scrollTo(window.scrollX, window.scrollY); keepBars(); }, 120);
+    });
+    document.addEventListener("visibilitychange", function () { if (!document.hidden) setTimeout(keepBars, 120); });
+    window.addEventListener("scroll", function () { if (!window._kbT) window._kbT = setTimeout(function () { window._kbT = 0; keepBars(); }, 250); }, { passive: true });
+    /* when the bar is seen floating, what the phone says about its own
+       screen is written to the state once, so the cause is read off the real
+       numbers instead of guessed (Jose, Oct 6, 2026: "it happens when I
+       scroll, anytime I scroll") */
+    var DIAGAT = 0;
+    function navProbe() {
+      var bar = document.getElementById("sportbar");
+      if (!bar || typing() || Date.now() - DIAGAT < 60000) return;
+      var r = bar.getBoundingClientRect(), vv = window.visualViewport || {};
+      if (r.bottom > (screen.height || 9999) - 160) return;
+      DIAGAT = Date.now();
+      var row = { ih: innerHeight, ch: document.documentElement.clientHeight, sh: screen.height,
+                  vh: Math.round(vv.height || 0), vt: Math.round(vv.offsetTop || 0), vs: vv.scale || 0,
+                  sy: Math.round(scrollY), top: Math.round(r.top), bot: Math.round(r.bottom), gap0: GAP0,
+                  drop: getComputedStyle(document.documentElement).getPropertyValue("--vvdrop"),
+                  sa: navigator.standalone ? 1 : 0, ua: navigator.userAgent.slice(-60) };
+      var set = {}; set[String(DIAGAT)] = row;
+      try {
+        fetch("state?k=" + encodeURIComponent(typeof ARENAKEY !== "undefined" ? ARENAKEY : "arena-001bff8ddf784985"), { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ patch: { navdiag: { set: set } } }) });
+      } catch (e) {}
+    }
+    window.addEventListener("scroll", function () { clearTimeout(window._npT); window._npT = setTimeout(navProbe, 400); }, { passive: true });
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", keepBars);
       window.visualViewport.addEventListener("scroll", keepBars);
