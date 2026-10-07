@@ -142,7 +142,8 @@ def main():
     # -- status: every passer on the wire
     for pid, v in wire.items():
         m = man(pid)
-        if not m or not v.get("status"):
+        # NFL only, like the clips above it (Jose, Oct 7, 2026: "it needs to be ONLY")
+        if not m or not v.get("status") or m.get("lg") != "nfl":
             continue
         note = v.get("note") or ""
         if note.strip().lower() == str(v["status"]).lower():
