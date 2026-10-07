@@ -117,8 +117,8 @@ COUNTRIES = os.path.join(D, "data", "countries.json")
 
 def sherdog_country(name):
     """A man's nationality off his Sherdog page, as the flag code ESPN uses."""
-    if not name:
-        return ""
+    if not name or re.search(r"\bTBA\b|\bTBD\b", name, re.I):
+        return ""        # a slot with no man in it has no country
     try:
         from curl_cffi import requests as rq
         names = json.load(open(COUNTRIES))
@@ -151,8 +151,8 @@ def flags():
     os.makedirs(FLAGDIR, exist_ok=True)
     new = 0
     for athlete_id in sorted(set(i for i, _ in on_the_board())):
-        if athlete_id in have:
-            continue
+        if have.get(athlete_id):
+            continue        # a blank is asked again, never kept as the answer
         try:
             a = ask("http://sports.core.api.espn.com/v2/sports/mma/athletes/%s" % athlete_id)
         except Exception as e:
