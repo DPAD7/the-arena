@@ -267,6 +267,39 @@ def main():
             key = "wx@%s@%s" % (st, nx.get("gid"))
             cards.append(dict(base, k="weather", key=key, at=seen.get(key) or STAMP,
                               wind=wx.get("g"), rain=wx.get("p"), temp=wx.get("t")))
+    # -- the offensive line, the lead back, a first start (Jose, Oct 7, 2026:
+    #    "definitely need [the offensive line], definitely need lead back,
+    #    first start")
+    lineups = load(os.path.join(SITE, "lineups.json"), {})
+    POS = {"lt": "LT", "lg": "LG", "c": "C", "rg": "RG", "rt": "RT"}
+    for club, row in depth.items():
+        st = row.get("starter")
+        q = qbs.get(st) if st else None
+        if not q or not (q.get("nx") or {}).get("gid"):
+            continue
+        nx = q["nx"]
+        base = {"t": club, "lg": "nfl", "id": st, "n": q["n"]}
+        side = (lineups.get(nx["gid"]) or {}).get(club) or {}
+        hurt = [x for x in side.get("off", []) if x.get("k") in POS and x.get("s") in ("q", "out")]
+        if hurt:
+            key = "ol@%s@%s" % (nx["gid"], ",".join(sorted(x["k"] + x["s"] for x in hurt)))
+            cards.append(dict(base, k="ol", key=key, at=seen.get(key) or STAMP,
+                              rows=[{"pos": POS[x["k"]], "n": x.get("nm") or "", "st": "Out" if x["s"] == "out" else "Questionable"} for x in hurt]))
+        if not (q.get("g") or []) and not past_clubs(st, teams):
+            key = "first@%s" % st
+            cards.append(dict(base, k="first", key=key, at=seen.get(key) or STAMP))
+    for gid, g in alerts.items():
+        for x in g.get("out") or []:
+            if x.get("pos") != "RB" or (x.get("sh") or 0) < 0.20:
+                continue
+            st = (depth.get(x["team"]) or {}).get("starter")
+            m = man(st) if st else None
+            if not m:
+                continue
+            keep_face(x["id"])
+            key = "rb@%s@%s" % (x["id"], x["status"])
+            cards.append({"k": "rb", "key": key, "at": seen.get(key) or STAMP, "t": x["team"], "lg": "nfl", "id": st, "n": m["n"],
+                          "rb": {"id": x["id"], "n": x["name"], "st": x["status"], "inj": x.get("why") or "", "sh": round(x["sh"] * 100)}})
     json.dump(teams, open(TEAMS, "w"), indent=0, sort_keys=True)
 
     for c in cards:
@@ -297,7 +330,28 @@ def main():
             c = dict(c, back=w.get("returns") or "", note=w.get("note") or "")
         g["facts"].append({k: v for k, v in c.items() if k not in ("t", "lg", "id", "n", "nx") or c["k"] in ("swap", "targets")})
         g["at"] = max(g["at"], c["at"])
-    ORDER = {"status": 0, "swap": 1, "targets": 2, "revenge": 3, "birthday": 4, "streak": 5, "cold": 5, "weather": 6}
+    ORDER = {"status": 0, "swap": 1, "first": 1, "targets": 2, "rb": 2, "ol": 3, "revenge": 4, "birthday": 5, "streak": 6, "cold": 6, "weather": 7}
+    # his 1+ and 2+ PTD prices as they stand now, off the price file
+    book = load(os.path.join(SITE, "prices.json"), {})
+    props = book.get("PROPS", {})
+    sched = {}
+    try:
+        import re as _re
+        import sys as _sys
+        _sys.path.insert(0, os.path.join(D, "build"))
+        import pagefile as _pf
+        for r in json.loads(_re.search(r"var SCHED = (\[\[.*?\]\]);", _pf.read(), _re.S).group(1)):
+            sched[str(r[1])] = r
+    except Exception:
+        pass
+    for club, g in groups.items():
+        gid = (qbs.get(g["id"]) or {}).get("nx", {}).get("gid")
+        r = sched.get(str(gid))
+        ptd = (props.get(str(gid)) or {}).get("ptd") or []
+        if r and len(ptd) == 2:
+            s0 = 0 if r[3] == club else 1 if r[4] == club else -1
+            rungs = ptd[s0] if s0 >= 0 else []
+            g["px"] = [(x[0] if x else "") for x in rungs[:2]]
     players = []
     for g in groups.values():
         if not g["nx"]:

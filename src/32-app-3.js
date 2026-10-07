@@ -1253,6 +1253,19 @@
                 badge(r.st) + esc(r.inj || r.st) + '</div></div><span class="qwsh"><strong>' + r.sh + "%</strong>of targets</span></div>";
             }).join("") + "</div>";
         }
+        if (f.k === "ol") {
+          var olOut = (f.rows || []).some(function (r) { return r.st === "Out"; });
+          return '<div class="qwfact">' + tag(olOut ? "#ff5b5b" : "#ffd60a", "Offensive line") + (f.rows || []).map(function (r) {
+            return '<div class="qwst">' + badge(r.st) + "<b class=\"qwwho\">" + esc(r.pos) + "</b> " + esc(r.n) + "</div>";
+          }).join("") + "</div>";
+        }
+        if (f.k === "rb") {
+          var rb = f.rb || {};
+          return '<div class="qwfact">' + tag(COL[rb.st] || "#ff5b5b", "Lead back " + ({ "Questionable": "questionable", "Doubtful": "doubtful", "Injured Reserve": "on IR" }[rb.st] || "out")) +
+            '<div class="qwrow qwtg">' + face("nfl", rb.id, "sm") + '<div class="qwtx"><div class="qwnm">' + esc(rb.n) + '</div><div class="qwst">' + badge(rb.st) +
+            esc(rb.inj || rb.st) + '</div></div><span class="qwsh"><strong>' + rb.sh + "%</strong>of touches</span></div></div>";
+        }
+        if (f.k === "first") return '<div class="qwfact">' + tag("var(--green)", "First start") + '<div class="qwst">His first NFL start</div></div>';
         if (f.k === "streak") return '<div class="qwfact">' + tag("var(--green)", "1+ PTD streak") + '<div class="qwst">TD pass in ' + f.hot + " straight" +
           (f.hot === f.of ? " (every game)" : "") + " \u00b7 " + (f.tds || []).slice().reverse().join(" \u00b7 ") + "</div></div>";
         if (f.k === "cold") return '<div class="qwfact">' + tag("#64d2ff", "Cold streak") + '<div class="qwst">No TD pass in ' + f.cold + " straight</div></div>";
@@ -1273,7 +1286,10 @@
       };
       var html = players.map(function (g) {
         return '<div class="qwcard"><div class="qwrow qwhead">' + face(g.lg, g.id) + '<div class="qwtx"><div class="qwnm">' + esc(g.n) +
-          "<small>" + esc(g.t) + ' QB</small></div><div class="qwst">' + kickoff(g.nx) + '</div></div></div><div class="qwfacts">' +
+          "<small>" + esc(g.t) + ' QB</small></div><div class="qwst">' + kickoff(g.nx) + "</div>" +
+          (g.px && g.px[0] ? '<div class="qwpx">1+ PTD <b>' + esc(String(g.px[0]).replace("-", "\u2212")) + "</b>" +
+            (g.px[1] ? " \u00b7 2+ <b>" + esc(String(g.px[1]).replace("-", "\u2212")) + "</b>" : "") + "</div>" : "") +
+          '</div></div><div class="qwfacts">' +
           (g.facts || []).map(fact).join("") + "</div></div>";
       }).join("");
       page.insertAdjacentHTML("beforeend", '<div class="qbwire qwbox"><h3 class="cliphead">QB Wire</h3>' + html + "</div>");
