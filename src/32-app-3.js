@@ -1209,8 +1209,7 @@
   function qbWire(page) {
     var draw = function () {
       var old = page.querySelector(".qbwire"); if (old) old.remove();
-      var cards = (QBWIRE && QBWIRE.cards) || [];
-      if (!cards.length) return;
+      if (!QBWIRE || !(QBWIRE.players || []).length) return;
       var COL = { "Out": "#ff5b5b", "Injured Reserve": "#ff5b5b", "Doubtful": "#ff9f0a", "Questionable": "#ffd60a" };
       var AB = { "Out": "O", "Injured Reserve": "IR", "Doubtful": "D", "Questionable": "Q" };
       var HEAD = { "Out": "Ruled out", "Injured Reserve": "Placed on IR", "Doubtful": "Listed doubtful", "Questionable": "Listed questionable" };
@@ -1226,61 +1225,56 @@
       var back = function (c) {
         return c.back && (c.st === "Out" || c.st === "Injured Reserve") ? " \u00b7 back ~" + c.back.slice(5).replace("-", "/") : "";
       };
-      var html = cards.map(function (c) {
-        if (c.k === "status") {
-          return '<div class="qwcard"><div class="qwhd" style="color:' + (COL[c.st] || "#8e8e93") + '">' + (HEAD[c.st] || esc(c.st)) +
-            "<i>" + when(c.at) + '</i></div><div class="qwrow qwtop">' + face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' +
-            esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">' + badge(c.st) + (c.inj ? esc(c.inj) + " \u00b7 " : "") +
-            esc(c.st) + back(c) + "</div>" + (c.note ? '<div class="qwnote">' + esc(c.note) + "</div>" : "") + "</div></div></div>";
+      var players = (QBWIRE && QBWIRE.players) || [];
+      var kickoff = function (x) {
+        if (!x || !x.d) return "";
+        var d = new Date(Date.parse(x.d));
+        return (x.h ? "vs " : "@ ") + esc(x.o) + " \u00b7 " +
+          d.toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" }) + " " +
+          d.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+      };
+      var tag = function (color, text) { return '<span class="qwtag" style="color:' + color + '">' + text + "</span>"; };
+      var fact = function (f) {
+        if (f.k === "status") {
+          return '<div class="qwfact">' + tag(COL[f.st] || "#8e8e93", HEAD[f.st] || esc(f.st)) + '<div class="qwst">' + badge(f.st) +
+            (f.inj ? esc(f.inj) + " \u00b7 " : "") + esc(f.st) + back(f) + "</div>" + (f.note ? '<div class="qwnote">' + esc(f.note) + "</div>" : "") + "</div>";
         }
-        if (c.k === "swap") {
-          return '<div class="qwcard"><div class="qwhd" style="color:var(--green)">Starter change<i>' + when(c.at) + '</i></div><div class="qwrow">' +
-            face(c.lg, c.out, "gone") + '<svg class="qwarr" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>' +
-            face(c.lg, c.id, "new") + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">Starts \u00b7 replaces <s>' +
-            esc(c.on) + "</s>" + (c.why ? " (" + esc(c.why) + ")" : "") + "</div></div></div></div>";
+        if (f.k === "swap") {
+          var bk = f.back ? " \u00b7 back ~" + f.back.slice(5).replace("-", "/") : "";
+          return '<div class="qwfact">' + tag("var(--green)", "Starter change") + '<div class="qwrow qwsw">' + face(f.lg, f.out, "gone sm") +
+            '<div class="qwst">Starts for <b class="qwwho">' + esc(f.on) + "</b>" + (f.why ? " (" + esc(f.why) + bk + ")" : "") + "</div></div>" +
+            (f.note ? '<div class="qwnote">' + esc(f.note) + "</div>" : "") + "</div>";
         }
-        var vs = function (x) {
-          return x && x.d ? (x.h ? "vs " : "@ ") + esc(x.o) + " " +
-            new Date(Date.parse(x.d)).toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" }) : "";
-        };
-        var plain = function (color, head, line) {
-          return '<div class="qwcard"><div class="qwhd" style="color:' + color + '">' + head + "<i>" + when(c.at) + '</i></div><div class="qwrow">' +
-            face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">' +
-            line + "</div></div></div></div>";
-        };
-        if (c.k === "streak") {
-          return plain("var(--green)", "1+ PTD streak", "TD pass in " + c.hot + " straight" + (c.hot === c.of ? " (every game)" : "") +
-            ' \u00b7 <span class="qwtds">' + (c.tds || []).slice().reverse().join(" \u00b7 ") + "</span> \u00b7 " + vs(c.nx));
+        if (f.k === "targets") {
+          var worst = (f.rows || []).some(function (r) { return r.st !== "Questionable"; });
+          return '<div class="qwfact">' + tag(worst ? "#ff5b5b" : "#ffd60a", worst ? "Top targets out" : "Top targets questionable") +
+            '<div class="qwst">' + f.share + "% of his targets</div>" + (f.rows || []).map(function (r) {
+              return '<div class="qwrow qwtg">' + face("nfl", r.id, "sm") + '<div class="qwtx"><div class="qwnm">' + esc(r.n) + '</div><div class="qwst">' +
+                badge(r.st) + esc(r.inj || r.st) + '</div></div><span class="qwsh"><strong>' + r.sh + "%</strong>of targets</span></div>";
+            }).join("") + "</div>";
         }
-        if (c.k === "cold") return plain("#64d2ff", "Cold streak", "No TD pass in " + c.cold + " straight \u00b7 " + vs(c.nx));
-        if (c.k === "birthday") {
-          var bd = new Date(c.on + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
-          return plain("#ff9fe0", c.day ? "Birthday game" : "Birthday week", "Turns " + c.age + " on " + bd + " \u00b7 " + vs(c.nx));
+        if (f.k === "streak") return '<div class="qwfact">' + tag("var(--green)", "1+ PTD streak") + '<div class="qwst">TD pass in ' + f.hot + " straight" +
+          (f.hot === f.of ? " (every game)" : "") + " \u00b7 " + (f.tds || []).slice().reverse().join(" \u00b7 ") + "</div></div>";
+        if (f.k === "cold") return '<div class="qwfact">' + tag("#64d2ff", "Cold streak") + '<div class="qwst">No TD pass in ' + f.cold + " straight</div></div>";
+        if (f.k === "birthday") {
+          var bd = new Date(f.on + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+          return '<div class="qwfact">' + tag("#ff9fe0", f.day ? "Birthday game" : "Birthday week") + '<div class="qwst">Turns ' + f.age + " on " + bd + "</div></div>";
         }
-        if (c.k === "revenge") {
-          return plain("#ff9f0a", "Revenge game", "Faces " + esc(c.was) + ", who he played for in " + esc((c.yrs || []).join(", ")) + " \u00b7 " + vs(c.nx));
-        }
-        if (c.k === "weather") {
+        if (f.k === "revenge") return '<div class="qwfact">' + tag("#ff9f0a", "Revenge game") + '<div class="qwst">Faces ' + esc(f.was) +
+          ", who he played for in " + esc((f.yrs || []).join(", ")) + "</div></div>";
+        if (f.k === "weather") {
           var bits = [];
-          if (c.wind >= 15) bits.push("Wind " + c.wind + " mph");
-          if (c.rain >= 50) bits.push("Rain " + c.rain + "%");
-          else if (c.rain) bits.push("rain " + c.rain + "%");
-          if (c.temp != null) bits.push(c.temp + "\u00b0");
-          return '<div class="qwcard"><div class="qwhd" style="color:#64d2ff">Weather<i>' + when(c.at) + '</i></div><div class="qwrow">' +
-            face(c.lg, c.id) + (c.also ? face("nfl", c.also.id) : "") + '<div class="qwtx"><div class="qwnm">' + esc(c.n) +
-            (c.also ? " \u00b7 " + esc(c.also.n) : "") + '</div><div class="qwst">' + bits.join(" \u00b7 ") + " \u00b7 " + esc(c.t) + " " + vs(c.nx) + "</div></div></div></div>";
+          if (f.wind >= 15) bits.push("Wind " + f.wind + " mph");
+          if (f.rain) bits.push((f.rain >= 50 ? "Rain " : "rain ") + f.rain + "%");
+          if (f.temp != null) bits.push(f.temp + "\u00b0");
+          return '<div class="qwfact">' + tag("#64d2ff", "Weather") + '<div class="qwst">' + bits.join(" \u00b7 ") + "</div></div>";
         }
-        var worst = (c.rows || []).some(function (r) { return r.st !== "Questionable"; });
-        var hc = worst ? "#ff5b5b" : "#ffd60a";
-        var nx = c.nx && c.nx.d ? " \u00b7 " + (c.nx.h ? "vs " : "@ ") + esc(c.nx.o) + " " +
-          new Date(Date.parse(c.nx.d)).toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" }) : "";
-        return '<div class="qwcard"><div class="qwhd" style="color:' + hc + '">' + (worst ? "Top targets out" : "Top targets questionable") +
-          "<i>" + when(c.at) + '</i></div><div class="qwrow">' + face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" +
-          esc(c.t) + ' QB</small></div><div class="qwst">' + c.share + "% of his targets " + (worst ? "are hurt" : "are questionable") + nx + "</div></div></div>" +
-          '<div class="qwtgs">' + (c.rows || []).map(function (r) {
-            return '<div class="qwrow qwtg">' + face("nfl", r.id) + '<div class="qwtx"><div class="qwnm">' + esc(r.n) + '</div><div class="qwst">' +
-              badge(r.st) + esc(r.inj || r.st) + '</div></div><span class="qwsh"><strong>' + r.sh + "%</strong>of targets</span></div>";
-          }).join("") + "</div></div>";
+        return "";
+      };
+      var html = players.map(function (g) {
+        return '<div class="qwcard"><div class="qwrow qwhead">' + face(g.lg, g.id) + '<div class="qwtx"><div class="qwnm">' + esc(g.n) +
+          "<small>" + esc(g.t) + ' QB</small></div><div class="qwst">' + kickoff(g.nx) + '</div></div></div><div class="qwfacts">' +
+          (g.facts || []).map(fact).join("") + "</div></div>";
       }).join("");
       page.insertAdjacentHTML("beforeend", '<div class="qbwire qwbox"><h3 class="cliphead">QB Wire</h3>' + html + "</div>");
       var box = page.querySelector(".qbwire");

@@ -264,20 +264,48 @@ def main():
         # weather that counts against a passing leg: 15+ mph wind or rain
         wx = nx.get("wx") or {}
         if wx and not wx.get("in") and ((wx.get("g") or 0) >= 15 or (wx.get("p") or 0) >= 50):
-            # one card a game, both passers on it
-            key = "wx@%s" % nx.get("gid")
-            have = [c for c in cards if c.get("key") == key]
-            if have:
-                have[0]["also"] = {"id": st, "n": q["n"], "t": club}
-            else:
-                cards.append(dict(base, k="weather", key=key, at=seen.get(key) or STAMP,
-                                  wind=wx.get("g"), rain=wx.get("p"), temp=wx.get("t")))
+            key = "wx@%s@%s" % (st, nx.get("gid"))
+            cards.append(dict(base, k="weather", key=key, at=seen.get(key) or STAMP,
+                              wind=wx.get("g"), rain=wx.get("p"), temp=wx.get("t")))
     json.dump(teams, open(TEAMS, "w"), indent=0, sort_keys=True)
 
     for c in cards:
         seen.setdefault(c["key"], c["at"])
     cards.sort(key=lambda c: c["at"], reverse=True)
-    json.dump({"at": STAMP, "cards": cards}, open(OUT, "w"), separators=(",", ":"))
+    # one card a passer, everything about him on it, by kickoff (Jose, Oct 7,
+    # 2026: "one card per player... so I don't have to search 20 different
+    # places for one quarterback"). A hurt man who is not starting rides on
+    # his club's starter, as the starter change.
+    groups = {}
+    for c in cards:
+        club = c.get("t")
+        st = (depth.get(club) or {}).get("starter")
+        if not st:
+            continue
+        if c["k"] == "status" and c["id"] != st:
+            continue        # a hurt backup, or the man the swap row names
+        g = groups.get(club)
+        if not g:
+            q = qbs.get(st) or {}
+            m = man(st) or {}
+            nx = q.get("nx") or {}
+            g = groups[club] = {"id": st, "n": m.get("n") or q.get("n") or "", "t": club, "lg": "nfl",
+                                "nx": {"o": nx.get("o"), "h": nx.get("h"), "d": nx.get("d")} if nx.get("d") else None,
+                                "at": c["at"], "facts": []}
+        if c["k"] == "swap":
+            w = wire.get(c["out"]) or {}
+            c = dict(c, back=w.get("returns") or "", note=w.get("note") or "")
+        g["facts"].append({k: v for k, v in c.items() if k not in ("t", "lg", "id", "n", "nx") or c["k"] in ("swap", "targets")})
+        g["at"] = max(g["at"], c["at"])
+    ORDER = {"status": 0, "swap": 1, "targets": 2, "revenge": 3, "birthday": 4, "streak": 5, "cold": 5, "weather": 6}
+    players = []
+    for g in groups.values():
+        if not g["nx"]:
+            continue
+        g["facts"].sort(key=lambda f: ORDER.get(f["k"], 9))
+        players.append(g)
+    players.sort(key=lambda g: (g["nx"]["d"], g["t"]))
+    json.dump({"at": STAMP, "players": players, "cards": cards}, open(OUT, "w"), separators=(",", ":"))
     json.dump(seen, open(SEEN, "w"), indent=0, sort_keys=True)
     json.dump(starters, open(STARTERS, "w"), indent=0, sort_keys=True)
     json.dump(people, open(PEOPLE, "w"), indent=0, sort_keys=True)
