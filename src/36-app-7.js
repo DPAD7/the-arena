@@ -1490,7 +1490,10 @@
     if (k >= 9e15) return 0;
     var day = function (ms) { return Date.parse(new Date(ms).toLocaleDateString("en-CA", { timeZone: "America/New_York" }) + "T00:00Z"); };
     var d = Math.round((day(k) - day(Date.now())) / 86400000);
-    return d < 0 ? -1 : d > 0 ? 1 : 0;
+    /* yesterday is yesterday: every older slip had been landing under it, so
+       Saturday's parlay read as Yesterday on a Tuesday (Jose, Oct 6, 2026:
+       "why is this listed as yesterday?") */
+    return d < -1 ? -9 : d < 0 ? -1 : d > 0 ? 1 : 0;
   }
   /* ---- the alerts: service worker, the bell, the settings, the landing ---- */
   var ALERTKINDS = [["td", "Touchdowns and your next rung"], ["redzone", "Red zone"], ["wp", "Win chance swings"],
