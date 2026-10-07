@@ -112,6 +112,31 @@ FLAGS = os.path.join(D, "site", "flags.json")
 FLAGDIR = os.path.join(D, "site", "ico", "flags")
 
 
+COUNTRIES = os.path.join(D, "data", "countries.json")
+
+
+def sherdog_country(name):
+    """A man's nationality off his Sherdog page, as the flag code ESPN uses."""
+    if not name:
+        return ""
+    try:
+        from curl_cffi import requests as rq
+        names = json.load(open(COUNTRIES))
+        last = name.split()[-1].lower()
+        r = rq.get("https://www.sherdog.com/stats/fightfinder", params={"SearchTxt": name},
+                   impersonate="chrome124", timeout=20)
+        hits = [l for l in re.findall(r'href="(/fighter/[^"]+)"', r.text) if last in l.lower()]
+        if not hits:
+            return ""
+        page = rq.get("https://www.sherdog.com" + hits[0], impersonate="chrome124", timeout=20).text
+        m = re.search(r'itemprop="nationality"[^>]*>([^<]+)<', page)
+        nat = (m.group(1).strip() if m else "")
+        return names.get(nat) or names.get({"United States": "USA"}.get(nat, nat)) or ""
+    except Exception as e:
+        print("   sherdog %s: %s" % (name, e))
+        return ""
+
+
 def flags():
     """Each man's flag, between his rank and his record on the card (Jose,
        Oct 6, 2026). ESPN keeps his citizenship on the athlete; it is asked
@@ -135,8 +160,18 @@ def flags():
             continue
         c = (a.get("citizenshipCountry") or {}).get("abbreviation") or ""
         href = (a.get("flag") or {}).get("href") or ""
-        if not c or not href:
-            have[athlete_id] = ""
+        if not c or not href or "blank" in href:
+            # ESPN keeps no country for some -- a Contender Series man before
+            # he is signed, most of all -- so the next source is asked, never
+            # left as a gap (Jose, Oct 7, 2026: "we have ESPN, theScore, UFC
+            # Stats, Tapology... what's the reason for the gap"). Sherdog
+            # answers a plain fetch and keeps every pro's nationality.
+            code = sherdog_country(a.get("displayName") or "")
+            if not code:
+                print("   flag %s %s: no country at ESPN or Sherdog" % (athlete_id, a.get("displayName")))
+                continue
+            have[athlete_id] = code
+            new += 1
             continue
         code = c.lower()
         path = os.path.join(FLAGDIR, code + ".png")
