@@ -366,7 +366,12 @@
         pair[1].forEach(function (row) {
           var v = by[String(row[key])];
           if (!v) return;
-          if (frozen(String(row[key]))) return;
+          /* frozen at what the file says, taken once -- the same rule as the
+             props above. A card the scoreboard settled before the first read
+             froze with no moneyline at all, and every finished bout lost its
+             prices (Jose, Oct 6, 2026: "why the fuck are the prices missing?") */
+          if (frozen(String(row[key])) && TOOK[pair[0] + row[key]]) return;
+          TOOK[pair[0] + row[key]] = 1;
           for (var i = 0; i < 4; i++) {
             while (row.length <= col[i]) row.push("");
             if (v[i] !== undefined && v[i] !== null && row[col[i]] !== v[i]) {
