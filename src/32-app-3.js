@@ -1239,6 +1239,37 @@
             face(c.lg, c.id, "new") + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">Starts \u00b7 replaces <s>' +
             esc(c.on) + "</s>" + (c.why ? " (" + esc(c.why) + ")" : "") + "</div></div></div></div>";
         }
+        var vs = function (x) {
+          return x && x.d ? (x.h ? "vs " : "@ ") + esc(x.o) + " " +
+            new Date(Date.parse(x.d)).toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" }) : "";
+        };
+        var plain = function (color, head, line) {
+          return '<div class="qwcard"><div class="qwhd" style="color:' + color + '">' + head + "<i>" + when(c.at) + '</i></div><div class="qwrow">' +
+            face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">' +
+            line + "</div></div></div></div>";
+        };
+        if (c.k === "streak") {
+          return plain("var(--green)", "1+ PTD streak", "TD pass in " + c.hot + " straight" + (c.hot === c.of ? " (every game)" : "") +
+            ' \u00b7 <span class="qwtds">' + (c.tds || []).slice().reverse().join(" \u00b7 ") + "</span> \u00b7 " + vs(c.nx));
+        }
+        if (c.k === "cold") return plain("#64d2ff", "Cold streak", "No TD pass in " + c.cold + " straight \u00b7 " + vs(c.nx));
+        if (c.k === "birthday") {
+          var bd = new Date(c.on + "T12:00:00Z").toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "UTC" });
+          return plain("#ff9fe0", c.day ? "Birthday game" : "Birthday week", "Turns " + c.age + " on " + bd + " \u00b7 " + vs(c.nx));
+        }
+        if (c.k === "revenge") {
+          return plain("#ff9f0a", "Revenge game", "Faces " + esc(c.was) + ", who he played for in " + esc((c.yrs || []).join(", ")) + " \u00b7 " + vs(c.nx));
+        }
+        if (c.k === "weather") {
+          var bits = [];
+          if (c.wind >= 15) bits.push("Wind " + c.wind + " mph");
+          if (c.rain >= 50) bits.push("Rain " + c.rain + "%");
+          else if (c.rain) bits.push("rain " + c.rain + "%");
+          if (c.temp != null) bits.push(c.temp + "\u00b0");
+          return '<div class="qwcard"><div class="qwhd" style="color:#64d2ff">Weather<i>' + when(c.at) + '</i></div><div class="qwrow">' +
+            face(c.lg, c.id) + (c.also ? face("nfl", c.also.id) : "") + '<div class="qwtx"><div class="qwnm">' + esc(c.n) +
+            (c.also ? " \u00b7 " + esc(c.also.n) : "") + '</div><div class="qwst">' + bits.join(" \u00b7 ") + " \u00b7 " + esc(c.t) + " " + vs(c.nx) + "</div></div></div></div>";
+        }
         var worst = (c.rows || []).some(function (r) { return r.st !== "Questionable"; });
         var hc = worst ? "#ff5b5b" : "#ffd60a";
         var nx = c.nx && c.nx.d ? " \u00b7 " + (c.nx.h ? "vs " : "@ ") + esc(c.nx.o) + " " +

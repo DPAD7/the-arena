@@ -64,6 +64,40 @@ def college_man(pid, people):
     return None
 
 
+TEAMS = os.path.join(D, "data", "qb_clubs.json")
+CLUB_ABBR = {}
+
+
+def past_clubs(pid, teams):
+    """{club: [seasons]} a passer has played for, from ESPN's season log,
+       asked once a week a man."""
+    held = teams.get(pid)
+    if held and held.get("at", "") > (NOW - dt.timedelta(days=7)).strftime("%Y-%m-%d"):
+        return held["clubs"]
+    if not CLUB_ABBR:
+        try:
+            d = json.loads(curl("https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams") or b"{}")
+            for t in d["sports"][0]["leagues"][0]["teams"]:
+                CLUB_ABBR[str(t["team"]["id"])] = t["team"]["abbreviation"]
+        except Exception:
+            return (held or {}).get("clubs", {})
+    clubs = {}
+    try:
+        log = json.loads(curl("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/athletes/%s/statisticslog" % pid) or b"{}")
+        for e in log.get("entries", []):
+            yr = (e.get("season") or {}).get("$ref", "").split("/seasons/")[-1][:4]
+            for st in e.get("statistics", []):
+                ref = (st.get("team") or {}).get("$ref", "")
+                if ref:
+                    ab = CLUB_ABBR.get(ref.split("/teams/")[-1].split("?")[0])
+                    if ab:
+                        clubs.setdefault(ab, []).append(yr)
+    except Exception:
+        return (held or {}).get("clubs", {})
+    teams[pid] = {"at": NOW.strftime("%Y-%m-%d"), "clubs": clubs}
+    return clubs
+
+
 def keep_face(pid):
     """A receiver's face on our own site, copied once."""
     path = os.path.join(SITE, "faces", "nfl", pid + ".png")
@@ -168,6 +202,70 @@ def main():
                       "share": round(sum(x.get("tsh") or 0 for x in rows) * 100),
                       "rows": [{"id": x["id"], "n": x["name"], "pos": x["pos"], "st": x["status"],
                                 "inj": x.get("why") or "", "sh": round((x.get("tsh") or 0) * 100)} for x in rows]})
+
+    # -- the rest of what goes into a call that is not a hit rate (Jose,
+    #    Oct 7, 2026: "birthday... revenge games... streaks hot cold... 1 PTD
+    #    streaks"): only the starter of each club, only his next game
+    births = (load(os.path.join(SITE, "birthdays.json"), {}) or {}).get("qb", {})
+    teams = load(TEAMS, {})
+    for club, row in depth.items():
+        st = row.get("starter")
+        q = qbs.get(st) if st else None
+        if not q or not q.get("nx") or not q["nx"].get("d"):
+            continue
+        nx = q["nx"]
+        kick = dt.datetime.strptime(nx["d"], "%Y-%m-%dT%H:%MZ").replace(tzinfo=dt.timezone.utc)
+        if kick < NOW or kick - NOW > dt.timedelta(days=8):
+            continue
+        base = {"t": club, "lg": "nfl", "id": st, "n": q["n"], "nx": {"o": nx.get("o"), "h": nx.get("h"), "d": nx.get("d")}}
+        # 1+ PTD run, and a cold one, over this season's games, newest first
+        games = sorted(q.get("g") or [], key=lambda g: g.get("d") or "", reverse=True)
+        hot = 0
+        for g in games:
+            if (g.get("p") or 0) >= 1:
+                hot += 1
+            else:
+                break
+        cold = 0
+        for g in games:
+            if (g.get("p") or 0) == 0:
+                cold += 1
+            else:
+                break
+        if hot >= 3:
+            key = "hot@%s@%d" % (st, hot)
+            cards.append(dict(base, k="streak", key=key, at=seen.get(key) or STAMP, hot=hot, of=len(games),
+                              tds=[g.get("p") or 0 for g in games[:hot]]))
+        if cold >= 2:
+            key = "cold@%s@%d" % (st, cold)
+            cards.append(dict(base, k="cold", key=key, at=seen.get(key) or STAMP, cold=cold))
+        # his birthday on game day, or in the week of it
+        for gid, men in births.items():
+            b = men.get(st)
+            if not b or not b.get("on"):
+                continue
+            on = dt.datetime.strptime(b["on"], "%Y-%m-%d").date()
+            if abs((on - kick.date()).days) <= 3:
+                key = "bday@%s@%s" % (st, b["on"])
+                cards.append(dict(base, k="birthday", key=key, at=seen.get(key) or STAMP, on=b["on"],
+                                  age=b.get("age"), day=on == kick.astimezone(dt.timezone(dt.timedelta(hours=-4))).date()))
+        # facing a club he played for
+        past = past_clubs(st, teams)
+        if nx.get("o") and nx["o"] in past and nx["o"] != club:
+            key = "rev@%s@%s" % (st, nx["o"])
+            cards.append(dict(base, k="revenge", key=key, at=seen.get(key) or STAMP, was=nx["o"], yrs=past[nx["o"]]))
+        # weather that counts against a passing leg: 15+ mph wind or rain
+        wx = nx.get("wx") or {}
+        if wx and not wx.get("in") and ((wx.get("g") or 0) >= 15 or (wx.get("p") or 0) >= 50):
+            # one card a game, both passers on it
+            key = "wx@%s" % nx.get("gid")
+            have = [c for c in cards if c.get("key") == key]
+            if have:
+                have[0]["also"] = {"id": st, "n": q["n"], "t": club}
+            else:
+                cards.append(dict(base, k="weather", key=key, at=seen.get(key) or STAMP,
+                                  wind=wx.get("g"), rain=wx.get("p"), temp=wx.get("t")))
+    json.dump(teams, open(TEAMS, "w"), indent=0, sort_keys=True)
 
     for c in cards:
         seen.setdefault(c["key"], c["at"])
