@@ -2576,9 +2576,11 @@
      gold ring while he has clips not yet watched, grey once they all are,
      a star on every tile -- and his season's touchdowns as stories ---- */
   .clipspage { background: #000; }
-  /* nothing under the row, so the page stands still; only the row slides
-     sideways (Jose, Sep 29, 2026: "why is there a scroll on there") */
-  html.clipsview, html.clipsview body { overflow: hidden; overscroll-behavior: none; height: 100%; }
+  /* the page stood still while there was nothing under the rows (Sep 29,
+     2026: "why is there a scroll on there"); the QB Wire is under them now,
+     so it scrolls, without the bounce (Jose, Oct 7, 2026: "how am I supposed
+     to see the stuff at the bottom?") */
+  html.clipsview, html.clipsview body { overscroll-behavior: none; }
   body:has(.clipspage) .cashfab { display: none; }
   .cliprow { display: flex; gap: 14px; padding: 18px 16px 10px; overflow-x: auto; scrollbar-width: none; }
   .cliprow::-webkit-scrollbar { display: none; }
