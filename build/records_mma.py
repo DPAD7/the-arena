@@ -105,6 +105,60 @@ def main():
         return
     json.dump(have, open(OUT, "w"), separators=(",", ":"), sort_keys=True)
     print("written: %s" % OUT)
+    flags()
+
+
+FLAGS = os.path.join(D, "site", "flags.json")
+FLAGDIR = os.path.join(D, "site", "ico", "flags")
+
+
+def flags():
+    """Each man's flag, between his rank and his record on the card (Jose,
+       Oct 6, 2026). ESPN keeps his citizenship on the athlete; it is asked
+       once a man, and the flag picture is kept on our own site, so the page
+       never asks ESPN for it."""
+    have = {}
+    if os.path.exists(FLAGS):
+        try:
+            have = json.load(open(FLAGS))
+        except Exception:
+            have = {}
+    os.makedirs(FLAGDIR, exist_ok=True)
+    new = 0
+    for athlete_id in sorted(set(i for i, _ in on_the_board())):
+        if athlete_id in have:
+            continue
+        try:
+            a = ask("http://sports.core.api.espn.com/v2/sports/mma/athletes/%s" % athlete_id)
+        except Exception as e:
+            print("   flag %s: %s" % (athlete_id, e))
+            continue
+        c = (a.get("citizenshipCountry") or {}).get("abbreviation") or ""
+        href = (a.get("flag") or {}).get("href") or ""
+        if not c or not href:
+            have[athlete_id] = ""
+            continue
+        code = c.lower()
+        path = os.path.join(FLAGDIR, code + ".png")
+        if not os.path.exists(path):
+            try:
+                import subprocess
+                raw = subprocess.run(["curl", "-sL", "--max-time", "20", href], capture_output=True).stdout
+                from io import BytesIO
+                from PIL import Image
+                im = Image.open(BytesIO(raw)).convert("RGBA")
+                bb = im.getbbox()
+                if bb:
+                    im = im.crop(bb)
+                im.thumbnail((72, 72), Image.LANCZOS)
+                im.save(path, optimize=True)
+            except Exception as e:
+                print("   flag picture %s: %s" % (code, e))
+                continue
+        have[athlete_id] = code
+        new += 1
+    json.dump(have, open(FLAGS, "w"), separators=(",", ":"), sort_keys=True)
+    print("flags: %d new, %d held" % (new, len(have)))
 
 
 if __name__ == "__main__":

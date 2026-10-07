@@ -289,7 +289,28 @@
       if (!old) { old = document.createElement("i"); old.className = "frec"; nm.appendChild(old); }
       old.textContent = say;
     }
+    fightFlags(card);
   }
+  /* his flag between his rank and his record, faint, so it reads as a mark
+     and not a picture (Jose, Oct 6, 2026). The flags are our own copies,
+     written by records_mma.py, so the page never asks ESPN for one */
+  var FIGHTFLAG = {};
+  function fightFlags(card) {
+    var head = card && card.querySelector(".ghead--fight");
+    if (!head) return;
+    [card.dataset.lfid, card.dataset.rfid].forEach(function (id, i) {
+      var w = i === 0 ? "l" : "r", code = FIGHTFLAG[id];
+      var el = head.querySelector(":scope > .fflag--" + w);
+      if (!code) { if (el) el.remove(); return; }
+      if (!el) { el = document.createElement("img"); el.className = "fflag fflag--" + w; el.alt = ""; head.appendChild(el); }
+      var src = "ico/flags/" + code + ".png";
+      if (el.getAttribute("src") !== src) el.setAttribute("src", src);
+    });
+  }
+  fetch("flags.json").then(function (r) { return r.json(); }).then(function (j) {
+    FIGHTFLAG = j;
+    document.querySelectorAll(".gcard[data-bout]").forEach(fightFlags);
+  }).catch(function () {});
   fetch("fighters.json").then(function (r) { return r.json(); }).then(function (j) {
     FIGHTREC = j;
     document.querySelectorAll(".gcard[data-bout]").forEach(fightRec);
