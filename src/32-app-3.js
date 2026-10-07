@@ -1094,6 +1094,7 @@
       page.innerHTML = (n ? '<h3 class="cliphead">Top QBs' + howBtn() + '</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
         (all.length > n ? '<h3 class="cliphead">' + "Around the League" + (n ? "" : howBtn()) + '</h3><div class="cliprow">' +
           all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "");
+      qbWire(page);
     };
     if (QBCLIPS) draw();
     else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
@@ -1201,6 +1202,61 @@
 
 
 
+  /* the QB Wire under the clips: a passer listed hurt, a club starting
+     another man, a passer whose top targets are questionable -- newest first,
+     from qbwire.json (Jose, Oct 7, 2026, mocked first) */
+  var QBWIRE = null;
+  function qbWire(page) {
+    var draw = function () {
+      var old = page.querySelector(".qbwire"); if (old) old.remove();
+      var cards = (QBWIRE && QBWIRE.cards) || [];
+      if (!cards.length) return;
+      var COL = { "Out": "#ff5b5b", "Injured Reserve": "#ff5b5b", "Doubtful": "#ff9f0a", "Questionable": "#ffd60a" };
+      var AB = { "Out": "O", "Injured Reserve": "IR", "Doubtful": "D", "Questionable": "Q" };
+      var HEAD = { "Out": "Ruled out", "Injured Reserve": "Placed on IR", "Doubtful": "Listed doubtful", "Questionable": "Listed questionable" };
+      var face = function (lg, id, cls) {
+        return '<span class="qwface' + (cls ? " " + cls : "") + '" style="background-image:url(face/' + (lg || "nfl") + "/" + id + '.png)"></span>';
+      };
+      var when = function (iso) {
+        var d = new Date(Date.parse(iso));
+        return d.toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short", month: "short", day: "numeric" }) +
+          " \u00b7 " + d.toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" });
+      };
+      var badge = function (st) { return '<b class="qwbd" style="background:' + (COL[st] || "#8e8e93") + '">' + (AB[st] || "") + "</b>"; };
+      var back = function (c) {
+        return c.back && (c.st === "Out" || c.st === "Injured Reserve") ? " \u00b7 back ~" + c.back.slice(5).replace("-", "/") : "";
+      };
+      var html = cards.map(function (c) {
+        if (c.k === "status") {
+          return '<div class="qwcard"><div class="qwhd" style="color:' + (COL[c.st] || "#8e8e93") + '">' + (HEAD[c.st] || esc(c.st)) +
+            "<i>" + when(c.at) + '</i></div><div class="qwrow qwtop">' + face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' +
+            esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">' + badge(c.st) + (c.inj ? esc(c.inj) + " \u00b7 " : "") +
+            esc(c.st) + back(c) + "</div>" + (c.note ? '<div class="qwnote">' + esc(c.note) + "</div>" : "") + "</div></div></div>";
+        }
+        if (c.k === "swap") {
+          return '<div class="qwcard"><div class="qwhd" style="color:var(--green)">Starter change<i>' + when(c.at) + '</i></div><div class="qwrow">' +
+            face(c.lg, c.out, "gone") + '<svg class="qwarr" viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13M13 6l6 6-6 6"/></svg>' +
+            face(c.lg, c.id, "new") + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" + esc(c.t) + ' QB</small></div><div class="qwst">Starts \u00b7 replaces <s>' +
+            esc(c.on) + "</s>" + (c.why ? " (" + esc(c.why) + ")" : "") + "</div></div></div></div>";
+        }
+        var worst = (c.rows || []).some(function (r) { return r.st !== "Questionable"; });
+        var hc = worst ? "#ff5b5b" : "#ffd60a";
+        var nx = c.nx && c.nx.d ? " \u00b7 " + (c.nx.h ? "vs " : "@ ") + esc(c.nx.o) + " " +
+          new Date(Date.parse(c.nx.d)).toLocaleDateString("en-US", { timeZone: "America/New_York", weekday: "short" }) : "";
+        return '<div class="qwcard"><div class="qwhd" style="color:' + hc + '">' + (worst ? "Top targets out" : "Top targets questionable") +
+          "<i>" + when(c.at) + '</i></div><div class="qwrow">' + face(c.lg, c.id) + '<div class="qwtx"><div class="qwnm">' + esc(c.n) + "<small>" +
+          esc(c.t) + ' QB</small></div><div class="qwst">' + c.share + "% of his targets " + (worst ? "are hurt" : "are questionable") + nx + "</div></div></div>" +
+          '<div class="qwtgs">' + (c.rows || []).map(function (r) {
+            return '<div class="qwrow qwtg">' + face("nfl", r.id) + '<div class="qwtx"><div class="qwnm">' + esc(r.n) + '</div><div class="qwst">' +
+              badge(r.st) + esc(r.inj || r.st) + '</div></div><span class="qwsh"><strong>' + r.sh + "%</strong>of targets</span></div>";
+          }).join("") + "</div></div>";
+      }).join("");
+      page.insertAdjacentHTML("beforeend", '<div class="qbwire"><h3 class="cliphead">QB Wire</h3>' + html + "</div>");
+    };
+    if (QBWIRE) { draw(); return; }
+    fetch("qbwire.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (j) { QBWIRE = j; if (page.isConnected) draw(); }).catch(function () {});
+  }
   /* the how-to lives behind a small ? beside the heading now, not under every
      row (Jose, Oct 7, 2026: "the one with the small ?") */
   function howBtn() {

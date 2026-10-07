@@ -61,7 +61,7 @@ def main():
     # a swapped passer gets his prices and his game page's cases in the same
     # pass, not at the next sweep (Jose, Sep 30, 2026: "if a starter is out,
     # then we swap it on the fly")
-    for job in ("news.py", "wire.py", "starters.py", "fill_week.py", "alerts.py", "lineups.py", "suggest.py"):
+    for job in ("news.py", "wire.py", "starters.py", "fill_week.py", "alerts.py", "lineups.py", "suggest.py", "qbwire.py"):
         r = subprocess.run([sys.executable, os.path.join(D, "build", job)], capture_output=True, text=True, cwd=D)
         for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
             print("   %s: %s" % (job[:-3], line))

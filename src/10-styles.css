@@ -2585,6 +2585,29 @@
   .cliphead { margin: 18px 16px 0; font: 800 13px Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
   .cliphead + .cliprow { padding-top: 10px; }
   .cliphead { display: flex; align-items: center; gap: 8px; }
+  .qbwire { padding: 4px 0 130px; }
+  .qbwire .qwcard { margin: 12px 16px; background: #161618; border: 1px solid rgba(255,255,255,.1); border-radius: 16px; overflow: hidden; }
+  .qwhd { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 11px 14px;
+    border-bottom: 1px solid rgba(255,255,255,.08); font: 800 13px Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .06em; text-transform: uppercase; }
+  .qwhd i { font-style: normal; color: #8e8e93; font-weight: 600; letter-spacing: .02em; text-transform: none; white-space: nowrap; }
+  .qwrow { display: flex; gap: 12px; padding: 12px 14px; align-items: center; }
+  .qwrow.qwtop { align-items: flex-start; }
+  .qwface { width: 52px; height: 52px; flex: none; border-radius: 13px; background: #232326 center / cover no-repeat; border: 1.5px solid #3a3a3f; }
+  .qwface.gone { opacity: .35; filter: grayscale(1); }
+  .qwface.new { border-color: var(--green); }
+  .qwarr { color: var(--green); flex: none; }
+  .qwtx { min-width: 0; }
+  .qwnm { font: 800 19px "Barlow Condensed", Barlow, Arial, sans-serif; color: #fff; }
+  .qwnm small { font: 700 12px Barlow, Arial, sans-serif; color: #8e8e93; margin-left: 6px; letter-spacing: .06em; }
+  .qwst { margin-top: 3px; font: 600 14px/1.35 Barlow, Arial, sans-serif; color: #c7c7cc; }
+  .qwst s { color: #8e8e93; }
+  b.qwbd { display: inline-block; padding: 1px 7px; margin-right: 6px; border-radius: 6px; font: 800 12px Barlow, Arial, sans-serif; color: #000; vertical-align: 1px; }
+  .qwnote { margin-top: 6px; font: 500 13px/1.35 Barlow, Arial, sans-serif; color: #8e8e93; }
+  .qwtgs { margin: 0 14px; border-top: 1px solid rgba(255,255,255,.06); padding: 4px 0 2px; }
+  .qwtgs .qwrow { padding: 8px 0; }
+  .qwtg .qwnm { font-size: 17px; }
+  .qwsh { margin-left: auto; text-align: right; color: #8e8e93; font: 700 13px Barlow, Arial, sans-serif; white-space: nowrap; }
+  .qwsh strong { display: block; color: #fff; font-size: 17px; }
   .clipq { display: inline-grid; place-items: center; width: 22px; height: 22px; padding: 0; margin: 0;
     border: 1.5px solid #5a5a60; border-radius: 7px; background: none; color: #8e8e93; cursor: pointer; }
   #cliphowsheet { position: fixed; inset: 0; z-index: 60; display: flex; align-items: center; justify-content: center; padding: 16px;
