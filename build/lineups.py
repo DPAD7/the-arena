@@ -155,6 +155,13 @@ def club(tid, hurt, qb=None):
     ros, ch = roster(tid), chart(tid)
     if not ch["off"] or not ch["def"]:
         return None
+    # ESPN's chart can still name a man the club has traded or who retired
+    # (Cam Jurgens at left guard the day he went to Baltimore, Oct 7, 2026):
+    # only men on the club's roster hold a spot
+    if ros:
+        for spots in ch.values():
+            for k in list(spots):
+                spots[k] = [x for x in spots[k] if x in ros]
     taken = set()
     for spots in ch.values():
         for ids in spots.values():

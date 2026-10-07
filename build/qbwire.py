@@ -98,6 +98,86 @@ def past_clubs(pid, teams):
     return clubs
 
 
+OLPOS = r"(?:OT|OG|OL|LT|LG|RT|RG|T|G|C)"
+
+
+def surname(name):
+    """The last name, without a suffix or a full stop: Smith Jr. is Smith."""
+    parts = [w for w in name.replace(".", " ").split() if w.lower() not in ("jr", "sr", "ii", "iii", "iv", "v")]
+    return parts[-1].lower() if parts else ""
+
+
+def line_moves():
+    """{club: [{"pos", "n", "st"}]}: a lineman who started the club's last
+       game and has since retired, been traded, released, waived or put on
+       injured reserve, read off ESPN's transactions (Jose, Oct 7, 2026: "two
+       lineman status change, 1 retired 1 traded. are you getting that?").
+       The feed is text, so a name is tied to a man only inside his own club's
+       starters from that game, by last name."""
+    import re
+    try:
+        d = json.loads(curl("https://site.api.espn.com/apis/site/v2/sports/football/nfl/transactions?limit=300") or b"{}")
+    except Exception:
+        return {}
+    since = (NOW - dt.timedelta(days=10)).strftime("%Y-%m-%d")
+    moves = {}
+    for t in d.get("transactions") or []:
+        if (t.get("date") or "") < since:
+            continue
+        ab, tid, s = (t.get("team") or {}).get("abbreviation"), str((t.get("team") or {}).get("id") or ""), t.get("description") or ""
+        hits = []
+        for m in re.finditer(r"\b%s ([A-Z][\w.'-]+(?: [A-Z][\w.'-]+)+?) announced his retirement" % OLPOS, s):
+            hits.append((m.group(1), "Retired"))
+        if s.startswith("Acquired"):
+            for m in re.finditer(r"\bfor %s ([A-Z][\w.'-]+(?: [A-Z][\w.'-]+)*?)\.?$" % OLPOS, s):
+                hits.append((m.group(1), "Traded"))
+        for m in re.finditer(r"\bTraded %s ([A-Z][\w.'-]+(?: [A-Z][\w.'-]+)*?) to " % OLPOS, s):
+            hits.append((m.group(1), "Traded"))
+        for verb, st in (("Released", "Released"), ("Waived", "Waived"), ("Placed", "Injured Reserve")):
+            for m in re.finditer(r"\b%s %s ([A-Z][\w.'-]+(?: [A-Z][\w.'-]+)*?)(?: on injured reserve|\.|,| from| and)" % (verb, OLPOS), s):
+                tail = s[m.end() - 1:m.end() + 40]
+                if verb == "Placed" and "injured reserve" not in tail:
+                    continue
+                if "practice squad" in tail:
+                    continue
+                hits.append((m.group(1), st))
+        for name, st in hits:
+            moves.setdefault((ab, tid), []).append((t.get("date") or "", name, st))
+    out = {}
+    for (ab, tid), rows in moves.items():
+        # his starters across the club's last three games: a man hurt the
+        # week before he retired still counts (Lane Johnson, Oct 6, 2026)
+        played = []
+        try:
+            for e in json.loads(curl("https://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/%s/schedule" % tid) or b"{}").get("events") or []:
+                c = (e.get("competitions") or [{}])[0]
+                if ((c.get("status") or {}).get("type") or {}).get("completed"):
+                    played.append((str(e["id"]), e.get("date") or ""))
+        except Exception:
+            continue
+        started = {}
+        for eid, _ in played[-3:]:
+            try:
+                ros = json.loads(curl("https://sports.core.api.espn.com/v2/sports/football/leagues/nfl/events/%s/competitions/%s/competitors/%s/roster"
+                                      % (eid, eid, tid)) or b"{}")
+            except Exception:
+                continue
+            for x in ros.get("entries") or []:
+                ref = (x.get("athlete") or {}).get("$ref")
+                if x.get("starter") and ref:
+                    started.setdefault(surname(x.get("displayName") or ""), set()).add(ref)
+        for when, name, st in rows:
+            if not played or when < played[-1][1][:10]:
+                continue
+            refs = started.get(surname(name)) or set()
+            if len(refs) != 1:
+                continue
+            a = json.loads(curl(next(iter(refs)).replace("http://", "https://")) or b"{}")
+            pos = (json.loads(curl(((a.get("position") or {}).get("$ref") or "").replace("http://", "https://")) or b"{}") if (a.get("position") or {}).get("$ref") else a.get("position") or {})
+            out.setdefault(ab, []).append({"pos": pos.get("abbreviation") or "OL", "n": a.get("displayName") or name, "st": st})
+    return out
+
+
 def keep_face(pid):
     """A receiver's face on our own site, copied once."""
     path = os.path.join(SITE, "faces", "nfl", pid + ".png")
@@ -272,6 +352,7 @@ def main():
     #    first start")
     lineups = load(os.path.join(SITE, "lineups.json"), {})
     POS = {"lt": "LT", "lg": "LG", "c": "C", "rg": "RG", "rt": "RT"}
+    gone = line_moves()
     for club, row in depth.items():
         st = row.get("starter")
         q = qbs.get(st) if st else None
@@ -280,11 +361,14 @@ def main():
         nx = q["nx"]
         base = {"t": club, "lg": "nfl", "id": st, "n": q["n"]}
         side = (lineups.get(nx["gid"]) or {}).get(club) or {}
-        hurt = [x for x in side.get("off", []) if x.get("k") in POS and x.get("s") in ("q", "out")]
-        if hurt:
-            key = "ol@%s@%s" % (nx["gid"], ",".join(sorted(x["k"] + x["s"] for x in hurt)))
+        moved = gone.get(club) or []
+        last = {surname(r["n"]) for r in moved}
+        hurt = [x for x in side.get("off", []) if x.get("k") in POS and x.get("s") in ("q", "out")
+                and surname(x.get("was") or x.get("nm") or "") not in last]
+        if hurt or moved:
+            key = "ol@%s@%s" % (nx["gid"], ",".join(sorted([x["k"] + x["s"] for x in hurt] + [r["n"] + r["st"] for r in moved])))
             cards.append(dict(base, k="ol", key=key, at=seen.get(key) or STAMP,
-                              rows=[{"pos": POS[x["k"]], "n": x.get("nm") or "", "st": "Out" if x["s"] == "out" else "Questionable"} for x in hurt]))
+                              rows=moved + [{"pos": POS[x["k"]], "n": x.get("was") or x.get("nm") or "", "st": "Out" if x["s"] == "out" else "Questionable"} for x in hurt]))
         if not (q.get("g") or []) and not past_clubs(st, teams):
             key = "first@%s" % st
             cards.append(dict(base, k="first", key=key, at=seen.get(key) or STAMP))

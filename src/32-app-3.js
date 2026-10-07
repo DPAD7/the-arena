@@ -1254,9 +1254,11 @@
             }).join("") + "</div>";
         }
         if (f.k === "ol") {
-          var olOut = (f.rows || []).some(function (r) { return r.st === "Out"; });
+          var olOut = (f.rows || []).some(function (r) { return r.st !== "Questionable"; });
           return '<div class="qwfact">' + tag(olOut ? "#ff5b5b" : "#ffd60a", "Offensive line") + (f.rows || []).map(function (r) {
-            return '<div class="qwst">' + badge(r.st) + "<b class=\"qwwho\">" + esc(r.pos) + "</b> " + esc(r.n) + "</div>";
+            // a roster move (traded, retired, released, waived) reads as a word, an injury as its badge
+            return '<div class="qwst">' + (AB[r.st] ? badge(r.st) : "") + "<b class=\"qwwho\">" + esc(r.pos) + "</b> " + esc(r.n) +
+              (AB[r.st] ? "" : ' <span style="color:#ff5b5b">· ' + esc(r.st) + "</span>") + "</div>";
           }).join("") + "</div>";
         }
         if (f.k === "rb") {
