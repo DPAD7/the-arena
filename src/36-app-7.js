@@ -1917,7 +1917,7 @@
         holdT = setTimeout(function () {
           CASHHIDE = !CASHHIDE;
           try { localStorage.setItem("arena.cashhide", CASHHIDE ? "1" : "0"); } catch (e) {}
-          if (window._buzz) window._buzz(); else if (navigator.vibrate) navigator.vibrate(12);
+          if (navigator.vibrate) navigator.vibrate(12);
           bankDraw();
         }, 450);
       });
