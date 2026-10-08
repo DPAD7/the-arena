@@ -1686,6 +1686,8 @@
           '<table class="gpvs3"><tr><th></th><th>' + esc(A) + '</th><th>' + esc(Hm) + '</th></tr>' +
           '<tr><td>Our model</td>' + cell("away", mOf("away")) + cell("home", mOf("home")) + '</tr>' +
           '<tr><td>Book</td>' + cell("away", bOf("away")) + cell("home", bOf("home")) + '</tr></table>' +
+          ((mlr.why || []).length ? '<div class="gpwhy"><div class="gpwhyhd">Why our model likes ' + esc(side[ps].club) + '</div>' +
+            mlr.why.map(function (t) { return '<div class="gpck ok"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>' + esc(t) + '</span></div>'; }).join("") + '</div>' : "") +
           '<div class="gpnote">' + (cl && mlr.won != null ? "Won before: past reads like this won <b>" + mlr.won + "%</b> (" + mlr.n + " games)." :
             "A call needs our model at 60+.") + "</div></div>";
       } else if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;

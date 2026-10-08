@@ -30,6 +30,25 @@ for r in g.itertuples():
     z['rest']=(r.home_rest or 0)-(r.away_rest or 0); z['div']=r.div_game
     Z=pd.DataFrame([z])[cols].fillna(0); p=m.predict_proba(Z)[0,1]
     pick,conf=(r.home_team,p) if p>=0.5 else (r.away_team,1-p)
-    out.append((round(conf,3),pick,r.away_team,r.home_team,an,hn,r.gameday))
-for o in sorted(out,reverse=True): print(o)
+    contrib=dict(zip(cols,m.coef_[0]*Z.values[0]))
+    sgn=1 if p>=0.5 else -1
+    LAB={'qe':('QB play (EPA per dropback)','{:+.2f}'),'o_sr':('Offense success rate','{:.0%}'),'d_epa':('Defense, EPA allowed per play','{:+.2f}'),'d_pepa':('Pass defense, EPA allowed','{:+.2f}'),
+         'l3_win':('Last 3 games, win %','{:.0%}'),'backup':('Backup QB starting','{:.0f}'),'o_sack':('Sacks taken per dropback','{:.1%}'),'win':('Win % this season','{:.0%}'),
+         'o_pepa':('Passing offense (EPA)','{:+.2f}'),'o_epa':('Offense EPA per play','{:+.2f}'),'d_sr':('Defense success rate allowed','{:.0%}'),'o_repa':('Rushing offense (EPA)','{:+.2f}'),
+         'pf':('Points per game','{:.1f}'),'pa':('Points allowed per game','{:.1f}'),'o_to':('Turnovers per game','{:.1f}'),'d_to':('Takeaways per game','{:.1f}'),'d_sack':('Sacks per dropback','{:.1%}'),'l3_pd':('Last 3 games, point margin','{:+.1f}')}
+    hv,av=h,a
+    why=[];against=[]
+    for k,v in sorted(contrib.items(),key=lambda kv:-abs(kv[1])):
+        if k not in LAB or v==0: continue
+        lab,f=LAB[k]; hh,aa=hv.get(k),av.get(k)
+        if hh is None or aa is None or hh!=hh or aa!=aa: continue
+        pk,ot=(r.home_team,r.away_team) if p>=0.5 else (r.away_team,r.home_team)
+        pv,ov=(hh,aa) if p>=0.5 else (aa,hh)
+        if k=='backup':
+            if ov==1 and pv==0: txt='%s is starting a backup QB'%ot
+            else: continue
+        else: txt='%s: %s %s, %s %s'%(lab,pk,f.format(pv),ot,f.format(ov))
+        (why if v*sgn>0 else against).append((abs(v),txt))
+    out.append((round(conf,3),pick,r.away_team,r.home_team,an,hn,r.gameday,[t for _,t in why[:4]],[t for _,t in against[:2]]))
+for o in sorted(out,reverse=True): print(o[:2],o[7],o[8])
 json.dump(out,open(B+f'ml/week{WK}.json','w'))

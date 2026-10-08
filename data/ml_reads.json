@@ -15,7 +15,13 @@
    "won": 84,
    "n": 50,
    "call": "take",
-   "rank": 1
+   "rank": 1,
+   "why": [
+    "Points allowed per game: JAX 13.2, PHI 23.2",
+    "Points per game: JAX 26.0, PHI 18.8",
+    "Last 3 games, win %: JAX 67%, PHI 33%",
+    "Offense success rate: JAX 49%, PHI 37%"
+   ]
   },
   {
    "gid": "401872980",
@@ -29,7 +35,13 @@
    "won": 83,
    "n": 81,
    "call": "take",
-   "rank": 2
+   "rank": 2,
+   "why": [
+    "Points per game: DAL 30.5, TB 19.0",
+    "TB is starting a backup QB",
+    "QB play (EPA per dropback): DAL +0.20, TB -0.14",
+    "Last 3 games, win %: DAL 67%, TB 0%"
+   ]
   },
   {
    "gid": "401872982",
@@ -43,7 +55,13 @@
    "won": 75,
    "n": 32,
    "call": "take",
-   "rank": 3
+   "rank": 3,
+   "why": [
+    "Points per game: CIN 24.2, MIA 11.5",
+    "Points allowed per game: CIN 21.2, MIA 25.2",
+    "QB play (EPA per dropback): CIN +0.13, MIA +0.00",
+    "Last 3 games, win %: CIN 33%, MIA 0%"
+   ]
   },
   {
    "gid": "401872989",
@@ -57,7 +75,13 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 4
+   "rank": 4,
+   "why": [
+    "Last 3 games, win %: DEN 67%, LAC 0%",
+    "Points allowed per game: DEN 23.5, LAC 26.5",
+    "Win % this season: DEN 50%, LAC 0%",
+    "Points per game: DEN 18.5, LAC 16.8"
+   ]
   },
   {
    "gid": "401872990",
@@ -71,7 +95,13 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 5
+   "rank": 5,
+   "why": [
+    "Points allowed per game: CHI 16.2, GB 26.2",
+    "Points per game: CHI 28.0, GB 18.2",
+    "Win % this season: CHI 75%, GB 50%",
+    "Offense success rate: CHI 48%, GB 39%"
+   ]
   },
   {
    "gid": "401872992",
@@ -85,7 +115,13 @@
    "won": 56,
    "n": 45,
    "call": "lean",
-   "rank": 6
+   "rank": 6,
+   "why": [
+    "SEA is starting a backup QB",
+    "Points per game: SF 30.5, SEA 26.2",
+    "Points allowed per game: SF 16.0, SEA 18.2",
+    "QB play (EPA per dropback): SF +0.25, SEA +0.11"
+   ]
   },
   {
    "gid": "401872987",
@@ -99,7 +135,13 @@
    "won": 52,
    "n": 25,
    "call": "lean",
-   "rank": 7
+   "rank": 7,
+   "why": [
+    "Points allowed per game: MIN 12.8, NO 32.0",
+    "Last 3 games, win %: MIN 100%, NO 33%",
+    "Win % this season: MIN 100%, NO 25%",
+    "Turnovers per game: MIN 0.5, NO 2.0"
+   ]
   },
   {
    "gid": "401872988",
@@ -113,7 +155,13 @@
    "won": 30,
    "n": 23,
    "call": "lean",
-   "rank": 8
+   "rank": 8,
+   "why": [
+    "Points allowed per game: NYG 19.8, WAS 30.5",
+    "Last 3 games, win %: NYG 67%, WAS 33%",
+    "Win % this season: NYG 75%, WAS 25%",
+    "Offense success rate: NYG 40%, WAS 38%"
+   ]
   },
   {
    "gid": "401872984",
@@ -127,7 +175,13 @@
    "won": 75,
    "n": 12,
    "call": null,
-   "rank": 9
+   "rank": 9,
+   "why": [
+    "Points per game: HOU 21.0, TEN 13.8",
+    "QB play (EPA per dropback): HOU +0.12, TEN -0.15",
+    "Passing offense (EPA): HOU +0.11, TEN -0.07",
+    "Rushing offense (EPA): HOU -0.32, TEN -0.08"
+   ]
   },
   {
    "gid": "401872991",
@@ -141,7 +195,13 @@
    "won": 61,
    "n": 119,
    "call": null,
-   "rank": 10
+   "rank": 10,
+   "why": [
+    "Points per game: DET 29.8, ARI 21.8",
+    "QB play (EPA per dropback): DET +0.17, ARI -0.01",
+    "Last 3 games, win %: DET 33%, ARI 0%",
+    "Win % this season: DET 50%, ARI 25%"
+   ]
   },
   {
    "gid": "401872985",
@@ -155,7 +215,13 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 11
+   "rank": 11,
+   "why": [
+    "Points allowed per game: PIT 21.8, IND 26.0",
+    "Last 3 games, point margin: PIT -5.7, IND +5.3",
+    "Turnovers per game: PIT 1.5, IND 2.0",
+    "Passing offense (EPA): PIT -0.08, IND -0.17"
+   ]
   },
   {
    "gid": "401872993",
@@ -169,7 +235,13 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 12
+   "rank": 12,
+   "why": [
+    "Points per game: BAL 29.0, ATL 24.0",
+    "Turnovers per game: BAL 0.5, ATL 2.0",
+    "Passing offense (EPA): BAL +0.35, ATL -0.08",
+    "Win % this season: BAL 75%, ATL 50%"
+   ]
   },
   {
    "gid": "401872994",
@@ -183,7 +255,13 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 13
+   "rank": 13,
+   "why": [
+    "Points per game: BUF 31.8, LA 21.2",
+    "Pass defense, EPA allowed: BUF +0.21, LA -0.09",
+    "Defense, EPA allowed per play: BUF +0.12, LA -0.11",
+    "Win % this season: BUF 75%, LA 50%"
+   ]
   },
   {
    "gid": "401872986",
@@ -197,7 +275,13 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 14
+   "rank": 14,
+   "why": [
+    "Points per game: LV 28.8, NE 16.2",
+    "Turnovers per game: LV 1.0, NE 2.5",
+    "Win % this season: LV 75%, NE 50%",
+    "Passing offense (EPA): LV +0.20, NE +0.03"
+   ]
   },
   {
    "gid": "401872983",
@@ -211,7 +295,13 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 15
+   "rank": 15,
+   "why": [
+    "Last 3 games, win %: CLE 100%, NYJ 0%",
+    "Win % this season: CLE 75%, NYJ 25%",
+    "Points per game: CLE 20.2, NYJ 19.0",
+    "QB play (EPA per dropback): CLE -0.09, NYJ -0.11"
+   ]
   }
  ]
 }

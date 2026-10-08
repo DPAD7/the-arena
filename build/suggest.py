@@ -473,7 +473,7 @@ def main():
         gap.pop("ml", None)
         if mr:
             side = "away" if mr["pick"] == away else "home"
-            game["mlread"] = {k: mr.get(k) for k in ("rank", "pick", "model", "book", "bookpick", "agree", "won", "n", "call")}
+            game["mlread"] = {k: mr.get(k) for k in ("rank", "pick", "model", "book", "bookpick", "agree", "won", "n", "call", "why")}
             game["mlread"]["side"] = side
             if mr.get("call") == "take":
                 lean["ml"] = side
