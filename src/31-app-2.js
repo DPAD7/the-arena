@@ -555,6 +555,49 @@
     if (t) top.insertBefore(b, t); else top.appendChild(b);
   }
   window.seatTicket = seatTicket;
+  /* the box pick's ticket on a fight card: the card's ranked pick (1 is the
+     strongest) from site/boxpicks.json, beside the trend; a tap opens the
+     boxes behind it. Only the ranked fights wear one (Jose, Oct 7, 2026:
+     "give me the top 4 add a ticket next to the play button and the trend
+     ... add the rank 1-4, others dont get it") */
+  var BOXPICKS = {};
+  fetch("boxpicks.json?t=" + Date.now()).then(function (r) { return r.ok ? r.json() : {}; }).then(function (j) {
+    BOXPICKS = (j && j.picks) || {};
+    document.querySelectorAll(".gcard[data-bout]").forEach(seatPick);
+  }).catch(function () {});
+  function seatPick(card) {
+    var p = card && card.dataset.bout && BOXPICKS[card.dataset.bout];
+    if (!p || card.classList.contains("done") || card.dataset.settledBout === "1") return;
+    var top = card.querySelector(".gtop");
+    if (!top || top.querySelector(".gpick")) return;
+    var b = document.createElement("button");
+    b.className = "gtix gpick";
+    b.type = "button";
+    b.setAttribute("aria-label", "Pick " + p.rank + ": " + p.pick);
+    b.innerHTML = '<img src="ico/ticket.svg" alt=""><b>' + p.rank + "</b>";
+    b.addEventListener("click", function (e) { e.stopPropagation(); pickSheet(p); });
+    var t = top.querySelector(".gtrend");
+    if (t) top.insertBefore(b, t); else top.appendChild(b);
+  }
+  window.seatPick = seatPick;
+  function pickSheet(p) {
+    var s = document.getElementById("picksheet");
+    if (!s) {
+      s = document.createElement("div"); s.id = "picksheet"; s.hidden = true;
+      s.addEventListener("click", function () { s.classList.remove("on"); setTimeout(function () { s.hidden = true; }, 250); });
+      document.body.appendChild(s);
+    }
+    var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
+    var li = function (x) { return "<li>" + esc(x) + "</li>"; };
+    s.innerHTML = '<div class="chsbox" role="dialog" aria-label="Box pick"><button type="button" class="chsx" aria-label="Close">' +
+      '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
+      '<div class="pkrank">Pick ' + p.rank + '</div><h3 class="pkname">' + esc(p.pick) + '</h3>' +
+      '<div class="pkline">' + p.box[0] + " boxes to " + p.box[1] + " vs " + esc(p.vs) + " · won " + p.won + "% at this lead since 2010</div>" +
+      '<ul class="pkwhy">' + (p.why || []).map(li).join("") + "</ul>" +
+      ((p.against || []).length ? '<ul class="pkwhy pkagainst">' + p.against.map(li).join("") + "</ul>" : "") + "</div>";
+    s.hidden = false;
+    requestAnimationFrame(function () { s.classList.add("on"); });
+  }
   /* the rewind and the live badge are built after the first paint, so the
      trend is sent to the back again once they exist */
   function orderTop(card) {
