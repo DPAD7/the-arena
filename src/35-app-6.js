@@ -1672,21 +1672,22 @@
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
       var mlr = sg.mlread;
       if (st.ml && mlHas && mlr) {
-        /* either team, tapped: our model and the book's implied % for that
-           team, the call (TAKE, LEAN, or none) and how often a read like it
-           won -- one box for every game, never the old paragraph (Jose, Oct 7,
-           2026: "what the fuck is this?") */
-        var mine = mlr.side === st.ml, club = side[st.ml].club;
-        var mdl = mine ? mlr.model : 100 - mlr.model;
-        var bk = mlr.bookpick === club ? (mine ? mlr.book : mlr.book) : 100 - mlr.book;
-        var cl = mine ? mlr.call : null, mw = cl === "take" ? "TAKE" : cl === "lean" ? "LEAN" : "NO CALL";
-        h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (cl || "none") + '">' + mw + '</b><span>' + esc(club) + '</span></div>' +
-          '<div class="gpnums"><div><b>' + mdl + '</b><span>Our model</span></div>' +
-          '<div><b>' + bk + '</b><span>Book</span></div>' +
-          '<div class="won won--' + (cl || "none") + '"><b>' + (cl && mlr.won != null ? mlr.won : "\u2013") + '</b><span>Won before</span></div></div>' +
-          '<div class="gpnote">' + (cl ? "Past reads like this won " + mlr.won + "% (" + mlr.n + " games)." :
-            mine ? "Our model has " + esc(club) + " at " + mdl + ", too close to call (a call needs 60+)." :
-            "Our model has " + esc(side[mlr.side].club) + " at " + mlr.model + ".") + "</div></div>";
+        /* both clubs at once, whichever is tapped: our model and the book's
+           implied % for each, the call on the read's team, and how often a
+           read like it won (Jose, Oct 7, 2026: "why arent you doing it for both
+           teams playing each other?") */
+        var A = side.away.club, Hm = side.home.club, ps = mlr.side;
+        var mOf = function (w) { return w === ps ? mlr.model : 100 - mlr.model; };
+        var bOf = function (w) { return side[w].club === mlr.bookpick ? mlr.book : 100 - mlr.book; };
+        var cl = mlr.call, mw = cl === "take" ? "TAKE" : cl === "lean" ? "LEAN" : "NO CALL";
+        var cell = function (w, v) { return '<td class="' + (w === ps && cl ? "pk" : "") + '">' + v + "</td>"; };
+        h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (cl || "none") + '">' + mw + '</b><span>' +
+          (cl ? esc(side[ps].club) : "Too close to call") + '</span></div>' +
+          '<table class="gpvs3"><tr><th></th><th>' + esc(A) + '</th><th>' + esc(Hm) + '</th></tr>' +
+          '<tr><td>Our model</td>' + cell("away", mOf("away")) + cell("home", mOf("home")) + '</tr>' +
+          '<tr><td>Book</td>' + cell("away", bOf("away")) + cell("home", bOf("home")) + '</tr></table>' +
+          '<div class="gpnote">' + (cl && mlr.won != null ? "Won before: past reads like this won <b>" + mlr.won + "%</b> (" + mlr.n + " games)." :
+            "A call needs our model at 60+.") + "</div></div>";
       } else if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */

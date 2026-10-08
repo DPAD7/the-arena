@@ -4183,6 +4183,11 @@
   .gpml3 .gpnote { margin-top: 8px; color: #aeaeb2; font-size: 14px; }
   .gpml3 .gpc--lean { background: #e3b341; color: #000; }
   .gpml3 .gpc--none { background: #3a3a3f; color: #fff; }
+  .gpvs3 { width: 100%; border-collapse: collapse; margin-top: 4px; }
+  .gpvs3 th { font: 800 15px "Barlow Condensed", Barlow, sans-serif; color: #aeaeb2; text-align: center; padding: 4px 0; }
+  .gpvs3 td { padding: 8px 0; border-top: 1px solid rgba(255,255,255,.08); text-align: center; font: 800 24px "Barlow Condensed", Barlow, sans-serif; color: #c7c7cc; }
+  .gpvs3 td:first-child { text-align: left; font: 700 12px Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
+  .gpvs3 td.pk { color: #fff; }
   .gprow small.gold { color: #e3b341; }
   .gpnames { display: flex; justify-content: center; gap: 88px; margin: 6px 0 0; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .12em; color: #9a9aa0; }
   .gpttl { margin: 0 0 8px; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .16em; color: #9a9aa0; }
