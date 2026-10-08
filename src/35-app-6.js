@@ -1736,7 +1736,9 @@
            made nearly every passer a LEAN (Jose, Oct 7, 2026) */
         if (kind === "ptd" && n === 1 && rd && rd.p1 != null) {
           if (rd.p1 >= 0.80 && p >= 0.85) return num(slot[0]) <= -1000 ? "heavy" : "take";
-          return rd.p1 >= 0.75 ? "lean" : "pass";
+          /* model 70-74 with the book at 80%+ threw a TD 80% of the time (25
+             games), so the book lifts it to a LEAN (Stroud, Oct 7, 2026) */
+          return rd.p1 >= 0.75 || (rd.p1 >= 0.70 && p >= 0.80) ? "lean" : "pass";
         }
         if (kind === "ptd" && n === 2 && rd && rd.two && rd.two.take) return num(slot[0]) <= -1000 ? "heavy" : "take";
         if (kind === "ptd" && n === 3) return p >= 0.30 ? "long" : "pass";
