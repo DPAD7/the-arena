@@ -264,7 +264,7 @@ def build(name, eid, opps):
         sum("KO" in (r.get("method") or "") for r in lo), sum("Sub" in (r.get("method") or "") for r in lo),
         sum("Dec" in (r.get("method") or "") for r in lo))) if lo else ""
     if cr:
-        rank = '<span class="rh-crk">%s<i>%s</i></span>' % ("CHAMP" if cr["r"] == "C" else "#%s" % cr["r"], esc(cr["d"].upper()))
+        rank = '<span class="rh-crk">%s<i>%s</i></span>' % ("CHAMP" if cr["r"] == "C" else "#%s" % cr["r"], esc(re.sub(r"^WOMEN'S ", "W ", cr["d"].upper())))
     else:
         rank = '<span class="rh-crk rh-nr">NR</span>'
     surname = esc(name.split()[-1].upper() if name.split()[-1].lower() not in ("jr", "jr.", "ii", "iii") else " ".join(name.split()[-2:]).upper())

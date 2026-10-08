@@ -4403,7 +4403,8 @@
     background: #1c1c1e; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 12px; color: #fff;
     box-shadow: 0 12px 30px rgba(0,0,0,.7); font-family: Barlow, "Helvetica Neue", Arial, sans-serif; }
   .rh-card h3 { margin: 0 0 8px; display: flex; align-items: center; font: 800 18px "Barlow Condensed", "Arial Narrow", sans-serif; }
-  .rh-card h3 small { flex: 1; font: 700 12px Barlow, sans-serif; color: #8e8e93; margin-left: 6px; }
+  .rh-card h3 small { flex: 1; font: 700 12px Barlow, sans-serif; color: #8e8e93; margin-left: 6px; white-space: nowrap; }
+  .rh-nm { white-space: nowrap; }
   .rh-hf { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; background: #2c2c2e; margin-right: 8px; display: inline-block; flex: none; }
   .rh-fc { width: 22px; height: 22px; border-radius: 7px; object-fit: cover; background: #2c2c2e; vertical-align: -6px; margin-right: 6px; display: inline-block; }
   .rh-crk { text-align: right; line-height: 1.1; font: 800 13px Barlow, sans-serif; color: #e3b341; letter-spacing: .04em; }
