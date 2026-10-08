@@ -1731,7 +1731,13 @@
       var tier = function (p) { return p >= 0.60 ? "lean" : p >= 0.45 ? "coin" : "pass"; };
       var wordOf = function (kind, n, slot, rd) {
         var p = pct(slot); if (p == null) return null;
-        if (kind === "ptd" && n === 1 && rd && rd.p1 != null && rd.p1 >= 0.80 && p >= 0.85) return num(slot[0]) <= -1000 ? "heavy" : "take";
+        /* the 1+ is our model's word, as tested: LEAN at 75+ (75-82% blind),
+           PASS under 75 (63-72%, priced like 80%+) -- the book's number alone
+           made nearly every passer a LEAN (Jose, Oct 7, 2026) */
+        if (kind === "ptd" && n === 1 && rd && rd.p1 != null) {
+          if (rd.p1 >= 0.80 && p >= 0.85) return num(slot[0]) <= -1000 ? "heavy" : "take";
+          return rd.p1 >= 0.75 ? "lean" : "pass";
+        }
         if (kind === "ptd" && n === 2 && rd && rd.two && rd.two.take) return num(slot[0]) <= -1000 ? "heavy" : "take";
         if (kind === "ptd" && n === 3) return p >= 0.30 ? "long" : "pass";
         return tier(p);
