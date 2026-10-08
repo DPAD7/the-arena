@@ -1718,49 +1718,60 @@
               (ok ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M7 7l10 10M17 7L7 17"/>') + '</svg><span>' + t + '</span></div>';
           }).join("") + '</div>';
       } else if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;
-      /* the ladders */
-      [["ptd", "PASSING TOUCHDOWNS", "PTD"], ["atd", "RUSHING TOUCHDOWNS", "ATD"]].forEach(function (k) {
-        var kind = k[0], mx = rungs(kind), s2 = st[kind];
-        if (s2.n > mx) s2.n = mx;
-        if (s2.n < 1) s2.n = 1;
-        h += '<div class="gpsep"></div>';
-        /* the rung is a wheel in the row, beside the price: it scrolls up and
-           down through 1, 2, 3 ... as far as the book prices (Jose, Sep 30,
-           2026: "a scroll in that section so I can go 1 2 3 vertically") */
-        var wheel = '<div class="gpwheel" data-kind="' + kind + '" data-n="' + s2.n + '">';
-        for (var r = 1; r <= mx; r++) wheel += '<div class="gpwn">' + r + '</div>';
-        wheel += '</div>';
-        /* one row: the two faces, then the lit man's name, his rung and his
-           price in the same line (Jose, Sep 30, 2026: "in line, in one row");
-           a second lit man takes a second row under, lined up with the first */
-        var lit = s2.who ? [s2.who] : [];
-        var ln_ = { away: bump(kind, "away", (lean[kind] || {}).away), home: bump(kind, "home", (lean[kind] || {}).home) };
-        var info = function (w) {
-          var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1], who = famName(side[w].qb);
-          var ln = ln_[w];
-          return '<span class="gpwho"><b>' + esc(who).toUpperCase() + '</b><small' + (ln === s2.n ? ' class="gold"' : "") + '>' + s2.n + ' ' + (kind === "atd" ? "RTD" : "PTD") + '</small></span>' +
-            '<div class="gpp">' + price(slot, who + " " + s2.n + "+ " + k[2], true) + '</div>' + wheel;
+      /* the touchdowns: one row a passer -- his face, 1+ 2+ 3+ passing, then
+         1+ 2+ rushing -- each a price that goes on the slip, a word under
+         every priced rung and nothing under one the book has not priced
+         (Jose, Oct 7, 2026: "wire it all ... unless odds aren't out yet keep it
+         blank"). TAKE: 1+ when our model is 80+ and the book 85%+ (about 90%
+         blind); 2+ when a rule that held 75%+ blind fires. HEAVY: a TAKE at
+         -1000 or past it. LONG SHOT: 3+ the book has at 30%+. Every other rung
+         by the book's own number: LEAN 60-74, COIN FLIP 45-59, PASS under 45 */
+      var tdr = sg.tdread || {};
+      var pct = function (slot) { if (!has(slot)) return null; var o = num(slot[0]); return o < 0 ? -o / (-o + 100) : 100 / (o + 100); };
+      var tier = function (p) { return p >= 0.60 ? "lean" : p >= 0.45 ? "coin" : "pass"; };
+      var wordOf = function (kind, n, slot, rd) {
+        var p = pct(slot); if (p == null) return null;
+        if (kind === "ptd" && n === 1 && rd && rd.p1 != null && rd.p1 >= 0.80 && p >= 0.85) return num(slot[0]) <= -1000 ? "heavy" : "take";
+        if (kind === "ptd" && n === 2 && rd && rd.two && rd.two.take) return num(slot[0]) <= -1000 ? "heavy" : "take";
+        if (kind === "ptd" && n === 3) return p >= 0.30 ? "long" : "pass";
+        return tier(p);
+      };
+      var LABEL = { take: "TAKE", heavy: "HEAVY", lean: "LEAN", coin: "COIN FLIP", pass: "PASS", long: "LONG SHOT" };
+      h += '<div class="gpsep"></div><div class="gptd"><div class="gptdhd"><span>PASSING TD</span> \u00b7 <span class="r">RUSHING TD</span></div>' +
+        '<div class="gptrow gptcols"><span class="gptfc"></span><b>1+</b><b>2+</b><b>3+</b><b class="r sp">1+</b><b class="r">2+</b></div>';
+      ["away", "home"].forEach(function (w) {
+        var d = side[w], who = famName(d.qb), rd = tdr[w], pl = (pr.ptd || [])[w === "away" ? 0 : 1] || [], al = (pr.atd || [])[w === "away" ? 0 : 1] || [];
+        var chip = function (kind, n, slot, leg, sp) {
+          var wd = wordOf(kind, n, slot, rd), gold = wd === "take" || wd === "heavy";
+          var tap = (wd === "take" || wd === "heavy" || wd === "long") ? ' data-tdwhy="' + w + ":" + kind + ":" + n + '"' : "";
+          return '<div class="gptc' + (sp ? " sp" : "") + (gold ? " gold" : "") + '">' +
+            (has(slot) ? price(slot, leg, false) : '<span class="ghost" aria-hidden="true"></span>') +
+            (wd ? '<i class="gptw gptw--' + wd + '"' + tap + '>' + LABEL[wd] + "</i>" : '<i class="gptw"></i>') + "</div>";
         };
-        h += '<div class="gprow">' +
-          '<img class="gpface' + (s2.who === "away" ? " on" : "") + (ln_.away ? " lean" : "") + '" data-pick="' + kind + ':away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
-          '<img class="gpface' + (s2.who === "home" ? " on" : "") + (ln_.home ? " lean" : "") + '" data-pick="' + kind + ':home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
-          (lit.length ? info(lit[0]) : '<b class="gpnone"></b>' + wheel) + '</div>';
-        lit.forEach(function (w) {
-          var slot = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n - 1];
-          if (!has(slot)) { h += NONE; return; }
-          var c = (((sg[kind] || {})[w] || {})[String(s2.n)]) || {};
-          if (num(slot[0]) <= HEAVY) {
-            /* the price, not the man: too heavy to take at this rung, whatever
-               the numbers say (Jose, Sep 30, 2026: "why the -1440 as a take") */
-            var up = ((pr[kind] || [])[w === "away" ? 0 : 1] || [])[s2.n];
-            h += box("pass", String(slot[0]).replace("-", "\u2212") + " for the " + s2.n + "+ is a pass: bet it to win back a hundred." +
-              (has(up) ? " The " + (s2.n + 1) + "+ at " + String(up[0]).replace("-", "\u2212") + " is the rung." : "") + " " + (c.text || ""));
-            return;
-          }
-          h += box(c.call === "pass" && cold(side[w].qid) ? "cold" : c.call, c.text);
-        });
-        h += "";
+        h += '<div class="gptrow"><span class="gptfc"><img class="gpface" src="' + faceDir + esc(d.qid) + '.png" alt=""><small>' + esc(who).toUpperCase() + '</small></span>' +
+          chip("ptd", 1, pl[0], who + " 1+ PTD") + chip("ptd", 2, pl[1], who + " 2+ PTD") + chip("ptd", 3, pl[2], who + " 3+ PTD") +
+          chip("atd", 1, al[0], who + " 1+ ATD", true) + chip("atd", 2, al[1], who + " 2+ ATD") + "</div>";
       });
+      h += "</div>";
+      /* the reason under a TAKE, HEAVY or LONG SHOT, when its word is tapped */
+      if (st.tdwhy) {
+        var tw = st.tdwhy.split(":"), wside = tw[0], wk = tw[1], wn = +tw[2], wrd = tdr[wside] || {}, wslot = ((pr[wk] || [])[wside === "away" ? 0 : 1] || [])[wn - 1];
+        var ww = wordOf(wk, wn, wslot, wrd), wp = pct(wslot), wname = famName(side[wside].qb);
+        if (ww) {
+          var lines = wn === 1 ? (wrd.why1 || []) : wn === 2 ? ((wrd.two || {}).why || []) : (wrd.why3 || []);
+          var foot = wn === 1 ? "Won before: our model 80+ with the book 85%+ threw a TD about 90% of the time (210 games)." :
+                     wn === 2 ? "Won before: " + ((wrd.two || {}).won || "") + "." :
+                     "Won before: when the book had 3+ at 30%+, it hit 31% (207 games). Priced about right, not a lock.";
+          h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (ww === "long" ? "none" : "take") + '">' + (ww === "long" ? "LONG SHOT" : "TAKE") + '</b><span>' +
+            esc(wname) + " " + wn + "+ passing TD" + (wn > 1 ? "s" : "") + '</span></div>' +
+            '<table class="gpvs3"><tr><th></th><th>' + esc(wname).toUpperCase() + '</th></tr>' +
+            (wn === 1 && wrd.p1 != null ? '<tr><td>Our model</td><td class="pk">' + Math.round(100 * wrd.p1) + "</td></tr>" : "") +
+            '<tr><td>Book</td><td class="pk">' + Math.round(100 * wp) + "</td></tr></table>" +
+            (lines.length ? '<div class="gpwhy"><div class="gpwhyhd">Why</div>' + lines.map(function (t) {
+              return '<div class="gpck ok"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>' + esc(t) + "</span></div>";
+            }).join("") + "</div>" : "") + '<div class="gpnote">' + foot + "</div></div>";
+        }
+      }
       /* no button at the foot: a price on the page is the slip already (Jose, Sep 30, 2026) */
       h += '<div class="gpfoot"></div>';
       root.innerHTML = h;
@@ -1787,6 +1798,8 @@
         var sd = e.target.closest(".gpside");
         if (sd) { st.ml = st.ml === sd.dataset.side ? null : sd.dataset.side; keep(); draw(SUGGEST); return; }
         var f = e.target.closest("img.gpface");
+        var tdw = e.target.closest && e.target.closest("[data-tdwhy]");
+        if (tdw) { st.tdwhy = st.tdwhy === tdw.dataset.tdwhy ? null : tdw.dataset.tdwhy; keep(); draw(SUGGEST); return; }
         if (f && f.dataset.h2h) { st.h2h = st.h2h === f.dataset.h2h ? null : f.dataset.h2h; keep(); draw(SUGGEST); return; }
         if (f && f.dataset.pick) {
           var kv = f.dataset.pick.split(":");

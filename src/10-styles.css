@@ -4189,6 +4189,26 @@
   .gpvs3 td:first-child { text-align: left; font: 700 12px Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
   .gpvs3 td.pk { color: #fff; }
   .gpwhy { margin-top: 10px; }
+  .gptdhd { font: 800 13px Barlow, sans-serif; letter-spacing: .1em; color: #8e8e93; margin-bottom: 8px; }
+  .gptdhd .r, .gptcols .r { color: #76CE4F; }
+  .gptrow { display: grid; grid-template-columns: 58px repeat(5, 1fr); gap: 5px; align-items: start; margin-bottom: 12px; }
+  .gptcols { margin-bottom: 4px; }
+  .gptcols b { text-align: center; font: 800 14px Barlow, sans-serif; color: #8e8e93; }
+  .gptfc { display: grid; justify-items: center; gap: 3px; }
+  .gptfc .gpface { width: 54px; height: 54px; border-radius: 16px; opacity: 1; cursor: default; }
+  .gptfc small { font: 800 12px "Barlow Condensed", Barlow, sans-serif; letter-spacing: .06em; color: #aeaeb2; }
+  .gptc { display: grid; gap: 4px; min-width: 0; }
+  .gptc button.price { width: 100%; min-width: 0; padding-left: 0; padding-right: 0; }
+  .gptc button.price { font-size: 17px; letter-spacing: -.02em; }
+  .gptc .ghost { display: block; height: 40px; border: 1.5px dashed #3a3a3f; border-radius: 11px; }
+  .gptc.sp { border-left: 1.5px solid #3a3a3f; padding-left: 5px; }
+  .gptcols .sp { border-left: 1.5px solid #3a3a3f; }
+  .gptw { display: block; height: 18px; border-radius: 6px; font: 800 11px/18px Barlow, sans-serif; letter-spacing: .06em; text-align: center; font-style: normal; }
+  .gptw { white-space: nowrap; overflow: hidden; box-sizing: border-box; cursor: default; }
+  .gptw--take { background: #17c257; color: #000; cursor: pointer; } .gptw--heavy { background: #ff9f0a; color: #000; cursor: pointer; }
+  .gptw--lean { background: #e3b341; color: #000; } .gptw--coin { background: #2c2c2e; color: #aeaeb2; font-size: 10px; }
+  .gptw--pass { background: #2c2c2e; color: #8e8e93; } .gptw--long { background: #2c2c2e; color: #76CE4F; font-size: 10px; cursor: pointer; }
+  .gptc.gold button.price { outline: 3px solid #e3b341; outline-offset: 2px; }
   .gpwhyhd { font: 700 12px Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; margin-bottom: 2px; }
   .gprow small.gold { color: #e3b341; }
   .gpnames { display: flex; justify-content: center; gap: 88px; margin: 6px 0 0; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .12em; color: #9a9aa0; }

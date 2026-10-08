@@ -374,6 +374,20 @@ def ml_read(away, home):
     return None
 
 
+def td_reads():
+    try:
+        return json.load(open(os.path.join(D, "data", "td_reads.json"))).get("reads", {})
+    except Exception:
+        return {}
+
+
+def ptd_reads():
+    try:
+        return json.load(open(os.path.join(D, "data", "ptd_reads.json"))).get("reads", {})
+    except Exception:
+        return {}
+
+
 def h2h_read(away_qb, home_qb):
     """This week's tested head-to-head read for the two passers, by last name."""
     try:
@@ -503,6 +517,11 @@ def main():
                     best = n
             lean["ptd"][w] = (best or 1) if rows[w] else None
             lean["atd"][w] = 1 if runs[w] and game["atd"][w]["1"]["call"] in ("take", "lean") else None
+        # the 1+ passing TD read for each passer, by his ESPN id (data/ptd_reads.json)
+        PR = ptd_reads()
+        game["ptdread"] = {w: (PR.get(str(men[w][1])) or {}).get("p") for w in men}
+        TR = td_reads()
+        game["tdread"] = {w: TR.get(str(men[w][1])) for w in men}
         game["lean"] = lean
         game["call"] = {}
         for m in ("ml", "h2h"):

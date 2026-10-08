@@ -162,7 +162,9 @@ def main():
         qbs, starter = [], None
         for q in rooms[abbr]:
             his = hurt.get(q["id"]) or {}
-            mark = q["mark"] or his.get("abbr")
+            # a man the wire has sitting sits, whatever the chart still says
+            # (Lamar: chart Q, wire O -- Jose, Oct 7, 2026: "lamar is out")
+            mark = his["abbr"] if (his.get("abbr") or "").upper() in SITS else (q["mark"] or his.get("abbr"))
             sits = (mark or "").upper() in SITS
             # where the two sources both speak, say so rather than pick
             if q["mark"] and his.get("abbr") and q["mark"] != his["abbr"]:
