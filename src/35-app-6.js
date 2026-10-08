@@ -1656,14 +1656,28 @@
       var hh = pr.h2h || [], hHas = has(hh[0]) || has(hh[1]);
       /* our tested read lights its man even when the book has pulled the price
          (Jose, Oct 7, 2026: "they dont have odds for prescott anymore") */
-      var hLit = hHas || !!sg.h2hread;
+      var hLit = hHas;   /* the read lights only while the book prices it (Jose, Oct 7, 2026) */
       h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
         '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (hLit && lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
         '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (hLit && lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
         '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
-      if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;
+      /* the read's man, selected: the four checks as a list, a tick for each
+         he passes (Jose, Oct 7, 2026: "why are you giving me a paragraph
+         versus a list of the ones he does") */
+      var CHK = ["Offense more efficient + receivers set 45+ yds higher", "Passing more efficient + receivers set 34+ yds higher",
+                 "Line gives up less pressure + receivers set 34+ yds higher", "His efficiency vs this defense + his yardage line 2+ higher"];
+      var rdx = sg.h2hread;
+      if (st.h2h && hHas && rdx && lean.h2h === st.h2h) {
+        var cw = (call.h2h || {})[st.h2h] === "take" ? "TAKE" : "LEAN", nOk = (rdx.checks || []).filter(Boolean).length;
+        h += '<div class="gpbox gpchecks"><div class="gpchd"><b class="gpc gpc--' + cw.toLowerCase() + '">' + cw + '</b><span>' + nOk + ' of 4 checks</span></div>' +
+          CHK.map(function (t, i) {
+            var ok = (rdx.checks || [])[i];
+            return '<div class="gpck' + (ok ? " ok" : "") + '"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
+              (ok ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M7 7l10 10M17 7L7 17"/>') + '</svg><span>' + t + '</span></div>';
+          }).join("") + '</div>';
+      } else if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;
       /* the ladders */
       [["ptd", "PASSING TOUCHDOWNS", "PTD"], ["atd", "RUSHING TOUCHDOWNS", "ATD"]].forEach(function (k) {
         var kind = k[0], mx = rungs(kind), s2 = st[kind];

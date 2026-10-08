@@ -462,7 +462,13 @@ def main():
         if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4:
             lean["h2h"] = "away" if fam(rd["pick"]) == fam(men["away"][0]) else "home"
             gap["h2h"] = rd["lead"]
-            game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"]}
+            game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"], "checks": rd.get("checks") or [0, 0, 0, 0]}
+            # the box under the faces says why, in the read's own terms
+            pk = lean["h2h"]
+            rate = "won 78-84% of blind games at a lead of 6+" if rd["lead"] >= 6 else "won about 73% of blind games at a lead of 4-5"
+            game["h2h"][pk] = "Our read: %s out-passes %s, a %d-point lead with every receiver line posted (%s). %s" % (
+                fam(rd["pick"]), fam(men["home" if pk == "away" else "away"][0]), rd["lead"], rate,
+                " ".join(x.rstrip(".") + "." for x in rd.get("why") or []))
         for w in men:
             other = "home" if w == "away" else "away"
             exp = expect(rows[w], alw[other])

@@ -25,7 +25,7 @@ team_of={norm(r.full_name):r.team for r in last.itertuples()}
 AL={'LAR':'LA','WSH':'WAS','JAC':'JAX'}; Tm=lambda t:AL.get(t,t)
 def imp(c):
     c=float(c); return -c/(-c+100) if c<0 else 100/(c+100)
-out=[]
+out=[]; READ=[]
 for yr,wk,eid,home,vis,when in json.load(open(B+'wk6/events.json')):
     Bk=json.load(open(B+f'wk6/{eid}.json')); h=[x for x in Bk.get('74',[]) if x.get('cost') is not None][:2]
     if len(h)<2: continue
@@ -61,4 +61,16 @@ for yr,wk,eid,home,vis,when in json.load(open(B+'wk6/events.json')):
     a,b=sides
     lead_i=0 if a['score']>=b['score'] else 1
     out.append((h[0]['name'],h[0]['cost'],h[1]['name'],h[1]['cost'],a['score'],b['score'],h[lead_i]['name'],abs(a['score']-b['score']),round(a['l_rec'],1),a['ncomplete']))
+    W=sides[lead_i]; nm=[h[0]['name'],h[1]['name']]; opp=nm[1-lead_i]; R=[]
+    if W['d_p_epa']==W['d_p_epa'] and W['d_p_epa']>=CUT['d_p_epa']: R.append('Faces the softer pass defense (EPA per pass allowed)')
+    if W['d_yac']==W['d_yac'] and W['d_yac']>=CUT['d_yac']: R.append('Faces a defense that gives up more yards after the catch')
+    if W['w_dwr1']==W['w_dwr1'] and W['w_dwr1']>=CUT['w_dwr1']: R.append('Opponent gives up more yards to the top receiver (%+.0f a game)'%W['w_dwr1'])
+    if W['o_epa']==W['o_epa'] and W['o_epa']>=CUT['o_epa']: R.append('His offense is more efficient (EPA per play)')
+    if W['l_rec']==W['l_rec'] and W['l_rec']>=CUT['l_rec']: R.append('His receivers are set %.1f yards higher in total on their lines'%W['l_rec'])
+    if W['box']: R.append('%d of 4 combined boxes checked'%W['box'])
+    if W['coach'] and not sides[1-lead_i]['coach']: R.append('New coach for the other side')
+    W['bx']=[int(W['o_epa']>=0.1 and W['l_rec']>=45.5),int(W['o_p_epa']>=0.207 and W['l_rec']>=33.5),int(W['o_scr']<=-1 and W['l_rec']>=33.5),int(W['m_qb_repa']>=0.378 and (W['l_cl'] or 0)>=2)]
+    READ.append(dict(bx=W['bx'],qbs=nm,pick=nm[lead_i],lead=float(abs(a['score']-b['score'])),complete=bool(a['ncomplete']),score=[float(a['score']),float(b['score'])],why=R))
 for r in sorted(out,key=lambda r:-r[7]): print(r)
+
+import json as _j; _j.dump(READ,open(B+'intang/h2h_reads_wk.json','w'),indent=1)

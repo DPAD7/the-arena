@@ -1,7 +1,7 @@
 {
  "at": "2026-10-08",
  "week": 6,
- "note": "edge score from research/nfl_h2h/thisweek2.py; a read only when the H2H and every receiver line on both sides are posted",
+ "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
   {
    "qbs": [
@@ -10,7 +10,20 @@
    ],
    "pick": "Dak Prescott",
    "lead": 10,
-   "complete": true
+   "complete": true,
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 68.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "missing": []
   },
   {
    "qbs": [
@@ -19,7 +32,22 @@
    ],
    "pick": "Kirk Cousins",
    "lead": 6,
-   "complete": true
+   "complete": false,
+   "why": [
+    "His receivers are set 48.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked",
+    "New coach for the other side"
+   ],
+   "checks": [
+    0,
+    1,
+    1,
+    0
+   ],
+   "missing": [
+    "NE D.Douglas (11%)",
+    "NE M.Hollins (17%)"
+   ]
   },
   {
    "qbs": [
@@ -28,7 +56,22 @@
    ],
    "pick": "Aaron Rodgers",
    "lead": 4,
-   "complete": true
+   "complete": false,
+   "why": [
+    "Opponent gives up more yards to the top receiver (+28 a game)",
+    "New coach for the other side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "missing": [
+    "PIT G.Bernard (10%)",
+    "PIT J.Warren (14%)",
+    "IND L.Treadwell (11%)"
+   ]
   },
   {
    "qbs": [
@@ -38,7 +81,18 @@
    "pick": "Tyler Huntley",
    "lead": 4,
    "complete": true,
-   "skip": "backup starting: his team numbers belong to the usual starter"
+   "skip": "backup starting: his team numbers belong to the usual starter",
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "New coach for the other side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "missing": []
   },
   {
    "qbs": [
@@ -47,7 +101,18 @@
    ],
    "pick": "Geno Smith",
    "lead": 2,
-   "complete": true
+   "complete": true,
+   "why": [
+    "His receivers are set 47.5 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "missing": []
   },
   {
    "qbs": [
@@ -56,7 +121,20 @@
    ],
    "pick": "Cam Ward",
    "lead": 2,
-   "complete": true
+   "complete": false,
+   "why": [
+    "Opponent gives up more yards to the top receiver (+38 a game)",
+    "New coach for the other side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "missing": [
+    "HOU J.Wayne (11%)"
+   ]
   },
   {
    "qbs": [
@@ -65,7 +143,18 @@
    ],
    "pick": "Sam Darnold",
    "lead": 2,
-   "complete": true
+   "complete": true,
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "Opponent gives up more yards to the top receiver (+27 a game)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "missing": []
   },
   {
    "qbs": [
@@ -74,7 +163,17 @@
    ],
    "pick": null,
    "lead": 0,
-   "complete": true
+   "complete": true,
+   "why": [
+    "His offense is more efficient (EPA per play)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "missing": []
   }
  ]
 }
