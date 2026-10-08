@@ -574,7 +574,11 @@
     b.className = "gtix gpick";
     b.type = "button";
     b.setAttribute("aria-label", "Pick " + p.rank + ": " + p.pick);
-    b.innerHTML = '<img src="ico/ticket.svg" alt=""><b>' + p.rank + "</b>";
+    /* the rank sits in the ticket's window (Jose, Oct 7, 2026, picking A of three) */
+    b.innerHTML = '<svg viewBox="0 0 24 40" width="15" height="25" aria-hidden="true" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round">' +
+      '<path d="M2 2H4A2 2 0 0 0 8 2H10A2 2 0 0 0 14 2H16A2 2 0 0 0 20 2H22V38H20A2 2 0 0 0 16 38H14A2 2 0 0 0 10 38H8A2 2 0 0 0 4 38H2Z"/>' +
+      '<path d="M4.5 10H19.5" stroke-dasharray="2.2 1.6"/><rect x="6" y="14" width="12" height="18" rx="1"/>' +
+      '<text x="12" y="28" text-anchor="middle" fill="#fff" stroke="none" font-family="Barlow Condensed, Barlow, sans-serif" font-weight="800" font-size="14">' + p.rank + "</text></svg>";
     b.addEventListener("click", function (e) { e.stopPropagation(); pickSheet(p); });
     var t = top.querySelector(".gtrend");
     if (t) top.insertBefore(b, t); else top.appendChild(b);
