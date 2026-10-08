@@ -4182,6 +4182,7 @@
   .gpnums .won--lean b { color: #e3b341; }
   .gpml3 .gpnote { margin-top: 8px; color: #aeaeb2; font-size: 14px; }
   .gpml3 .gpc--lean { background: #e3b341; color: #000; }
+  .gpml3 .gpc--none { background: #3a3a3f; color: #fff; }
   .gprow small.gold { color: #e3b341; }
   .gpnames { display: flex; justify-content: center; gap: 88px; margin: 6px 0 0; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .12em; color: #9a9aa0; }
   .gpttl { margin: 0 0 8px; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .16em; color: #9a9aa0; }

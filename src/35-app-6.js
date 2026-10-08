@@ -1671,16 +1671,22 @@
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
       var mlr = sg.mlread;
-      if (st.ml && mlHas && mlr && mlr.side === st.ml && mlr.call) {
-        /* the read's team, tapped: our model, the book's implied %, and how
-           often a read like it won (Jose, Oct 7, 2026) */
-        var mw = mlr.call === "take" ? "TAKE" : "LEAN", bkOther = mlr.bookpick !== mlr.pick;
-        h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + mlr.call + '">' + mw + '</b><span>' + esc(side[st.ml].club) + '</span></div>' +
-          '<div class="gpnums"><div><b>' + mlr.model + '</b><span>Our model</span></div>' +
-          '<div><b>' + mlr.book + '</b><span>Book' + (bkOther ? " \u00b7 " + esc(mlr.bookpick) : "") + '</span></div>' +
-          '<div class="won won--' + mlr.call + '"><b>' + (mlr.won == null ? "\u2013" : mlr.won) + '</b><span>Won before</span></div></div>' +
-          '<div class="gpnote">' + (bkOther ? "The book has " + esc(mlr.bookpick) + " at " + mlr.book + ". " : "") +
-          (mlr.won == null ? "" : "Past reads like this won " + mlr.won + "% (" + mlr.n + " games).") + "</div></div>";
+      if (st.ml && mlHas && mlr) {
+        /* either team, tapped: our model and the book's implied % for that
+           team, the call (TAKE, LEAN, or none) and how often a read like it
+           won -- one box for every game, never the old paragraph (Jose, Oct 7,
+           2026: "what the fuck is this?") */
+        var mine = mlr.side === st.ml, club = side[st.ml].club;
+        var mdl = mine ? mlr.model : 100 - mlr.model;
+        var bk = mlr.bookpick === club ? (mine ? mlr.book : mlr.book) : 100 - mlr.book;
+        var cl = mine ? mlr.call : null, mw = cl === "take" ? "TAKE" : cl === "lean" ? "LEAN" : "NO CALL";
+        h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (cl || "none") + '">' + mw + '</b><span>' + esc(club) + '</span></div>' +
+          '<div class="gpnums"><div><b>' + mdl + '</b><span>Our model</span></div>' +
+          '<div><b>' + bk + '</b><span>Book</span></div>' +
+          '<div class="won won--' + (cl || "none") + '"><b>' + (cl && mlr.won != null ? mlr.won : "\u2013") + '</b><span>Won before</span></div></div>' +
+          '<div class="gpnote">' + (cl ? "Past reads like this won " + mlr.won + "% (" + mlr.n + " games)." :
+            mine ? "Our model has " + esc(club) + " at " + mdl + ", too close to call (a call needs 60+)." :
+            "Our model has " + esc(side[mlr.side].club) + " at " + mlr.model + ".") + "</div></div>";
       } else if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
