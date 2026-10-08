@@ -1571,6 +1571,26 @@
       .then(function (j) { SUGGEST = j || {}; cb(SUGGEST); })
       .catch(function () { SUGGEST = {}; cb(SUGGEST); });
   }
+  /* the moneyline rank inside the NFL ticket's window, white on every game;
+     two digits set smaller (Jose, Oct 7, 2026: "A, same ticket, smaller two
+     digits ... they should be white") */
+  function rankTicket(n) {
+    var two = String(n).length > 1;
+    return '<svg viewBox="0 0 24 40" width="15" height="25" aria-hidden="true" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round">' +
+      '<path d="M2 2H4A2 2 0 0 0 8 2H10A2 2 0 0 0 14 2H16A2 2 0 0 0 20 2H22V38H20A2 2 0 0 0 16 38H14A2 2 0 0 0 10 38H8A2 2 0 0 0 4 38H2Z"/>' +
+      '<path d="M4.5 10H19.5" stroke-dasharray="2.2 1.6"/><rect x="' + (two ? 5 : 6) + '" y="14" width="' + (two ? 14 : 12) + '" height="18" rx="1"/>' +
+      '<text x="12" y="' + (two ? 27.5 : 28) + '" text-anchor="middle" fill="#fff" stroke="none" font-family="Barlow Condensed, Barlow, sans-serif" font-weight="800" font-size="' + (two ? 11 : 14) + '"' + (two ? ' letter-spacing="-.4"' : "") + '>' + n + "</text></svg>";
+  }
+  function rankTickets() {
+    suggestLoad(function (S) {
+      document.querySelectorAll(".gcard .gtix:not(.gpick)").forEach(function (t) {
+        var c = t.closest(".gcard"), r = c && S[c.dataset.espn] && S[c.dataset.espn].mlread;
+        if (r && r.rank && t.dataset.rank !== String(r.rank)) { t.innerHTML = rankTicket(r.rank); t.dataset.rank = r.rank; }
+      });
+    });
+  }
+  window.rankTickets = rankTickets;
+  setInterval(rankTickets, 5000);
   function gamePage(card) {
     var id = card.dataset.espn, lg = card.dataset.lg || "nfl";
     var rows = lg === "college-football" ? (typeof CFB !== "undefined" ? CFB : []) : SCHED;
@@ -1650,7 +1670,18 @@
           '<div class="gpml">' + price(d.ml, d.club + " ML", st.ml === w) + '</div></div>';
       });
       h += '<div class="gpvs"><svg><use href="#vs"/></svg></div></div>';
-      if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
+      var mlr = sg.mlread;
+      if (st.ml && mlHas && mlr && mlr.side === st.ml && mlr.call) {
+        /* the read's team, tapped: our model, the book's implied %, and how
+           often a read like it won (Jose, Oct 7, 2026) */
+        var mw = mlr.call === "take" ? "TAKE" : "LEAN", bkOther = mlr.bookpick !== mlr.pick;
+        h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + mlr.call + '">' + mw + '</b><span>' + esc(side[st.ml].club) + '</span></div>' +
+          '<div class="gpnums"><div><b>' + mlr.model + '</b><span>Our model</span></div>' +
+          '<div><b>' + mlr.book + '</b><span>Book' + (bkOther ? " \u00b7 " + esc(mlr.bookpick) : "") + '</span></div>' +
+          '<div class="won won--' + mlr.call + '"><b>' + (mlr.won == null ? "\u2013" : mlr.won) + '</b><span>Won before</span></div></div>' +
+          '<div class="gpnote">' + (bkOther ? "The book has " + esc(mlr.bookpick) + " at " + mlr.book + ". " : "") +
+          (mlr.won == null ? "" : "Past reads like this won " + mlr.won + "% (" + mlr.n + " games).") + "</div></div>";
+      } else if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
       var hh = pr.h2h || [], hHas = has(hh[0]) || has(hh[1]);

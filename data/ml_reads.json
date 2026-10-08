@@ -1,96 +1,217 @@
 {
  "at": "2026-10-08",
- "note": "NFL moneyline model (research/nfl_ml): trained 2016-21 on team stats + starting QB, no odds; a read at 75%+ only; blind 76% 2022-23, 80% 2024-25",
+ "week": 5,
+ "note": "rank by call then won-before; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "away": "TB",
-   "home": "DAL",
-   "pick": "DAL",
-   "conf": 0.85
-  },
-  {
+   "gid": "401872981",
    "away": "PHI",
    "home": "JAX",
    "pick": "JAX",
-   "conf": 0.779
+   "model": 78,
+   "book": 75,
+   "bookpick": "JAX",
+   "agree": true,
+   "won": 84,
+   "n": 50,
+   "call": "take",
+   "rank": 1
   },
   {
-   "away": "CHI",
-   "home": "GB",
-   "pick": "CHI",
-   "conf": 0.615
+   "gid": "401872980",
+   "away": "TB",
+   "home": "DAL",
+   "pick": "DAL",
+   "model": 85,
+   "book": 79,
+   "bookpick": "DAL",
+   "agree": true,
+   "won": 83,
+   "n": 81,
+   "call": "take",
+   "rank": 2
   },
   {
+   "gid": "401872982",
    "away": "CIN",
    "home": "MIA",
    "pick": "CIN",
-   "conf": 0.662
+   "model": 66,
+   "book": 73,
+   "bookpick": "CIN",
+   "agree": true,
+   "won": 75,
+   "n": 32,
+   "call": "take",
+   "rank": 3
   },
   {
-   "away": "LV",
-   "home": "NE",
-   "pick": "LV",
-   "conf": 0.506
-  },
-  {
-   "away": "MIN",
-   "home": "NO",
-   "pick": "MIN",
-   "conf": 0.653
-  },
-  {
-   "away": "CLE",
-   "home": "NYJ",
-   "pick": "CLE",
-   "conf": 0.502
-  },
-  {
-   "away": "IND",
-   "home": "PIT",
-   "pick": "PIT",
-   "conf": 0.558
-  },
-  {
-   "away": "HOU",
-   "home": "TEN",
-   "pick": "HOU",
-   "conf": 0.51
-  },
-  {
-   "away": "NYG",
-   "home": "WSH",
-   "pick": "NYG",
-   "conf": 0.606
-  },
-  {
+   "gid": "401872989",
    "away": "DEN",
    "home": "LAC",
    "pick": "DEN",
-   "conf": 0.615
+   "model": 62,
+   "book": 62,
+   "bookpick": "DEN",
+   "agree": true,
+   "won": 67,
+   "n": 78,
+   "call": "lean",
+   "rank": 4
   },
   {
-   "away": "DET",
-   "home": "ARI",
-   "pick": "DET",
-   "conf": 0.57
+   "gid": "401872990",
+   "away": "CHI",
+   "home": "GB",
+   "pick": "CHI",
+   "model": 62,
+   "book": 55,
+   "bookpick": "CHI",
+   "agree": true,
+   "won": 66,
+   "n": 61,
+   "call": "lean",
+   "rank": 5
   },
   {
+   "gid": "401872992",
    "away": "SF",
    "home": "SEA",
    "pick": "SF",
-   "conf": 0.708
+   "model": 71,
+   "book": 58,
+   "bookpick": "SEA",
+   "agree": false,
+   "won": 56,
+   "n": 45,
+   "call": "lean",
+   "rank": 6
   },
   {
+   "gid": "401872987",
+   "away": "MIN",
+   "home": "NO",
+   "pick": "MIN",
+   "model": 65,
+   "book": 54,
+   "bookpick": "MIN",
+   "agree": true,
+   "won": 52,
+   "n": 25,
+   "call": "lean",
+   "rank": 7
+  },
+  {
+   "gid": "401872988",
+   "away": "NYG",
+   "home": "WSH",
+   "pick": "NYG",
+   "model": 61,
+   "book": 61,
+   "bookpick": "WSH",
+   "agree": false,
+   "won": 30,
+   "n": 23,
+   "call": "lean",
+   "rank": 8
+  },
+  {
+   "gid": "401872984",
+   "away": "HOU",
+   "home": "TEN",
+   "pick": "HOU",
+   "model": 51,
+   "book": 77,
+   "bookpick": "HOU",
+   "agree": true,
+   "won": 75,
+   "n": 12,
+   "call": null,
+   "rank": 9
+  },
+  {
+   "gid": "401872991",
+   "away": "DET",
+   "home": "ARI",
+   "pick": "DET",
+   "model": 57,
+   "book": 69,
+   "bookpick": "DET",
+   "agree": true,
+   "won": 61,
+   "n": 119,
+   "call": null,
+   "rank": 10
+  },
+  {
+   "gid": "401872985",
+   "away": "IND",
+   "home": "PIT",
+   "pick": "PIT",
+   "model": 56,
+   "book": 57,
+   "bookpick": "PIT",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 11
+  },
+  {
+   "gid": "401872993",
    "away": "BAL",
    "home": "ATL",
    "pick": "BAL",
-   "conf": 0.549
+   "model": 55,
+   "book": 60,
+   "bookpick": "ATL",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 12
   },
   {
+   "gid": "401872994",
    "away": "BUF",
    "home": "LAR",
    "pick": "BUF",
-   "conf": 0.524
+   "model": 52,
+   "book": 59,
+   "bookpick": "LAR",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 13
+  },
+  {
+   "gid": "401872986",
+   "away": "LV",
+   "home": "NE",
+   "pick": "LV",
+   "model": 51,
+   "book": 64,
+   "bookpick": "NE",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 14
+  },
+  {
+   "gid": "401872983",
+   "away": "CLE",
+   "home": "NYJ",
+   "pick": "CLE",
+   "model": 50,
+   "book": 53,
+   "bookpick": "NYJ",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 15
   }
  ]
 }

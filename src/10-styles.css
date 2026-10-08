@@ -4174,6 +4174,14 @@
   .gpck svg { flex: none; stroke: #636366; }
   .gpck.ok { color: #fff; }
   .gpck.ok svg { stroke: #17c257; }
+  .gpnums { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .gpnums > div { background: #111; border-radius: 10px; padding: 8px 4px; text-align: center; }
+  .gpnums b { display: block; font: 800 26px/1.1 "Barlow Condensed", Barlow, sans-serif; color: #fff; }
+  .gpnums span { font: 700 11px Barlow, sans-serif; letter-spacing: .08em; text-transform: uppercase; color: #8e8e93; }
+  .gpnums .won--take b { color: #17c257; }
+  .gpnums .won--lean b { color: #e3b341; }
+  .gpml3 .gpnote { margin-top: 8px; color: #aeaeb2; font-size: 14px; }
+  .gpml3 .gpc--lean { background: #e3b341; color: #000; }
   .gprow small.gold { color: #e3b341; }
   .gpnames { display: flex; justify-content: center; gap: 88px; margin: 6px 0 0; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .12em; color: #9a9aa0; }
   .gpttl { margin: 0 0 8px; font: 800 13px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .16em; color: #9a9aa0; }

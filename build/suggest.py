@@ -465,17 +465,19 @@ def main():
             # a rookie's first start against a starter: the lean goes to the
             # starter's club. A veteran standing in keeps the record's lean
             lean["ml"] = "home" if rook["away"] else "away"
-        # the moneyline lean is the tested read (data/ml_reads.json): the model
-        # rates the game 75%+ or there is no lean at all (Jose, Oct 7, 2026)
+        # the moneyline read (data/ml_reads.json): our model's call, the book's
+        # implied % beside it as information, and how often a read like it won.
+        # The gold border is a TAKE only (Jose, Oct 7, 2026)
         mr = ml_read(away, home)
         lean["ml"] = None
         gap.pop("ml", None)
-        if mr and (mr.get("conf") or 0) >= 0.75:
-            lean["ml"] = "away" if mr["pick"] == away else "home"
-            gap["ml"] = 99
-            game["mlread"] = {"pick": mr["pick"], "conf": mr["conf"]}
-            game["ml"][lean["ml"]] = "Our read: %s wins. The model gives them %d%%; reads at 75%%+ won 76%% (2022-23) and 80%% (2024-25) blind. Built on team efficiency, point margin, recent form, sacks, turnovers, rest and the starting passer's own recent play, no odds." % (
-                mr["pick"], round(100 * mr["conf"]))
+        if mr:
+            side = "away" if mr["pick"] == away else "home"
+            game["mlread"] = {k: mr.get(k) for k in ("rank", "pick", "model", "book", "bookpick", "agree", "won", "n", "call")}
+            game["mlread"]["side"] = side
+            if mr.get("call") == "take":
+                lean["ml"] = side
+                gap["ml"] = 99
         # the head-to-head lean is the tested read (data/h2h_reads.json, the edge
         # score in research/nfl_h2h), and only where it says something: every
         # line posted on both sides, a lead of 4+, not a backup's borrowed numbers
@@ -506,6 +508,9 @@ def main():
         for m in ("ml", "h2h"):
             l = lean[m]
             game["call"][m] = {w: (None if not l else ("pass" if w != l else ("take" if gap.get(m, 0) >= (7 if m == "ml" else 6) else "lean"))) for w in men}
+        if game.get("mlread"):
+            mr2 = game["mlread"]
+            game["call"]["ml"] = {w: (mr2["call"] if w == mr2["side"] else None) for w in men}
         out[gid] = game
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     print("suggest: %d games" % len(out))
