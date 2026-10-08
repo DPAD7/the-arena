@@ -49,6 +49,8 @@ NOW = dt.datetime.now(dt.timezone.utc)
 # first and win, so "won't miss" and "cleared" never mark a man out
 NOT_OUT = re.compile(r"won'?t miss|not expected to miss|avoids|cleared|return(s|ing)? |set to return|"
                      r"no long-term|could play|expected to play|will play|practic", re.I)
+# back in the lineup: read before IR, since "activated from IR" names it
+ACTIVE = re.compile(r"\bactivat|\bwill play\b|\bset to play|cleared to play|expected to play|\bto play (thursday|friday|saturday|sunday|monday|tonight)", re.I)
 IR = re.compile(r"\b(IR|injured reserve)\b", re.I)
 OUT = re.compile(r"\)\s+out\b|\bout (for|at least|indefinitely|with|vs\.?|against|this|until|through|\d)|ruled out|will miss|to miss|expected to miss|sidelined|season-ending|"
                  r"torn|to sit|won'?t play|inactive", re.I)
@@ -202,6 +204,61 @@ def main():
 
     held, named = load(HELD), load(NAMED)
     moved = []
+    # everyone else on ESPN's injury report -- linemen, targets, backs, the
+    # men QB Wire names -- for a headline that puts him back in the lineup
+    # before the report catches up (Jose, Oct 8, 2026: Tyler Smith activated
+    # off IR at 2:53 PM for TNF, the wire still said Questionable at 6:30)
+    report = {}
+    try:
+        lj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/injuries", impersonate="chrome", timeout=30).json()
+        for t in lj.get("injuries") or []:
+            for i in t.get("injuries") or []:
+                a0 = i.get("athlete") or {}
+                # the report carries no id field: it is in the player's link
+                m0 = re.search(r"/id/(\d+)", json.dumps(a0.get("links") or []))
+                aid = str(a0.get("id") or (m0.group(1) if m0 else ""))
+                if aid:
+                    report[aid] = ((a0.get("team") or {}).get("abbreviation") or t.get("displayName") or "", a0.get("displayName") or "")
+    except Exception:
+        report = {}
+    # each club playing in the next two days, off its own feed: the league's
+    # feed does not carry a lineman's activation
+    soon = set()
+    for g in sched:
+        try:
+            t = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if NOW - dt.timedelta(hours=4) < t < NOW + dt.timedelta(days=2):
+            soon |= {g[3], g[4]}
+    seen_h = {a.get("headline") for a in arts}
+    for club in sorted(soon):
+        try:
+            tj = rq.get(FEED.split("?")[0] + "?team=%s&limit=15" % club.lower(), impersonate="chrome", timeout=20).json()
+        except Exception:
+            continue
+        for a in tj.get("articles") or []:
+            if a.get("headline") not in seen_h:
+                seen_h.add(a.get("headline")); arts.append(a)
+    for a in sorted(arts, key=lambda a: a.get("published") or ""):
+        ids = [str(c["athleteId"]) for c in a.get("categories") or [] if c.get("type") == "athlete" and c.get("athleteId")]
+        if not ids or ids[0] in club_of or ids[0] not in report:
+            continue
+        head, when = a.get("headline") or "", (a.get("published") or "")[:16] + "Z"
+        try:
+            if NOW - dt.datetime.fromisoformat(when.replace("Z", "+00:00")) > dt.timedelta(days=3):
+                continue
+        except ValueError:
+            continue
+        pid = ids[0]
+        if (held.get(pid) or {}).get("since", "") >= when:
+            continue
+        status = "Active" if ACTIVE.search(head) else None if NOT_OUT.search(head) else \
+            "Injured Reserve" if IR.search(head) else "Out" if OUT.search(head) else "Doubtful" if DOUBT.search(head) else None
+        if status:
+            held[pid] = {"status": status, "abbr": status[0], "type": None, "side": None, "since": when, "returns": None,
+                         "note": head, "src": "ESPN news, %s: %s" % (when, head)}
+            moved.append("%s %s %s (%s)" % (report[pid][0], report[pid][1], status, head))
     # oldest first, so a later headline about the same man has the last word
     for a in sorted(arts, key=lambda a: a.get("published") or ""):
         if a.get("type") != "HeadlineNews":
