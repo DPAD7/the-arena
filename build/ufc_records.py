@@ -276,6 +276,38 @@ def build(name, eid, opps):
         chips=chips, loss=lossline, rows=rows, uw=uw, ul=ul, lb=last_lb)
 
 
+def fetch_new(name):
+    """a man the board added after the pull: his gidstats page, read and kept
+    in the pull's own files so he is read from there from now on"""
+    import gidstats
+    from curl_cffi import requests
+    slug = nz(name).replace(" ", "_")
+    url = "https://gidstats.com/fighters/%s.html" % slug
+    try:
+        r = requests.get(url, headers={"User-Agent": "Mozilla/5.0"}, timeout=20)
+    except Exception:
+        return
+    if r.status_code != 200:
+        return
+    pg = gidstats.parse_gid(r.text)
+    if nz(pg.get("name")) != nz(name) or not pg.get("fights"):
+        return
+    fs = sorted(pg["fights"], key=lambda f: f["date"])
+    with open(os.path.join(D, "fights.csv"), "a", newline="") as f:
+        w = csv.DictWriter(f, gidstats.FCOLS)
+        for x in fs:
+            w.writerow(dict(page_url=url, source="gidstats", fighter=pg["name"], **x))
+    with open(os.path.join(D, "people.csv"), "a", newline="") as f:
+        csv.DictWriter(f, gidstats.PCOLS).writerow(dict(name=name, source="gidstats", page_url=url, gidstats_url=url,
+            page_name=pg["name"], n_fights=len(fs), first_fight=fs[0]["date"], last_fight=fs[-1]["date"],
+            matched_by="name", asof=date.today().isoformat()))
+    rows = [x for x in fs if x["result"] in ("win", "loss", "draw", "NC")]
+    for x in rows:
+        x["page_url"] = url
+    FBY[url] = rows
+    BYNAME.setdefault(nz(name), []).append(dict(name=name, page_url=url, last_fight=fs[-1]["date"]))
+
+
 def main():
     out = {}
     who = {}
@@ -292,6 +324,8 @@ def main():
                 who[str(i)][1].add(ln(on))
     miss = []
     for i, (n, opps) in sorted(who.items()):
+        if not page_for(n, opps) and "--dry" not in sys.argv:
+            fetch_new(n)
         r = build(n, i, opps)
         if r:
             out[i] = r
