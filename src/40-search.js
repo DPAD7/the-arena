@@ -679,6 +679,13 @@
         if (lb && x.lb && RHLB[lb] && Math.abs(lb - x.lb) >= 10) {
           tags += '<span class="rh-tg rh-wc">' + (lb > x.lb ? "&#8593; UP TO " : "&#8595; DOWN TO ") + lb + "</span>";
         }
+        /* missed weight and short notice for this bout, off the event's page */
+        if (kick && x.nx) {
+          [0, -1, 1].forEach(function (k) {
+            var d = new Date(kick.getTime() + k * 864e5).toLocaleDateString("en-CA", { timeZone: "America/New_York" });
+            if (x.nx[d] && tags.indexOf(x.nx[d]) < 0) tags += x.nx[d];
+          });
+        }
         var when = kick ? kick.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" }) + " '" + String(kick.getFullYear()).slice(2) : "";
         var next = '<div class="rh-r rh-nx"><b class="rh-nxb"><svg width="8" height="9" viewBox="0 0 8 9"><path d="M1 .5 7.5 4.5 1 8.5Z" fill="#fff"/></svg></b>' +
           '<div class="rh-o"><div>' + (oid ? '<img class="rh-fc" src="face/mma/' + oid + '.png" alt="" onerror="var s=document.createElement(\'span\');s.className=this.className;this.replaceWith(s)">' : '<span class="rh-fc"></span>') +
@@ -703,22 +710,28 @@
     function rhClose() { rhPop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
     var rhAt = 0, rhHold = null, rhX = 0, rhY = 0, rhHeld = false;
     rhPop.addEventListener("click", function (e) { if (Date.now() - rhAt > 600 && !e.target.closest(".rh-card")) rhClose(); });
-    /* the record is small: a finger anywhere on it, or just around it, counts */
+    /* his face, the same section the NFL card's hold uses (Jose, Oct 8,
+       2026: "Is that where it is on the NFL?"): looked through whatever
+       sits over it, and only the face itself -- not the strip above it or
+       the name and price under it */
     function rhAtPoint(x, y) {
-      var hit = null;
-      document.querySelectorAll('.gcard[data-sport="mma"] .ghead--fight > .frec').forEach(function (f) {
-        var r = f.getBoundingClientRect();
-        if (r.width && x >= r.left - 12 && x <= r.right + 12 && y >= r.top - 10 && y <= r.bottom + 10) hit = f;
-      });
-      return hit;
+      var im = (document.elementsFromPoint ? document.elementsFromPoint(x, y) : []).filter(function (el) {
+        return el.matches && el.matches('.gcard[data-sport="mma"] img.ffab');
+      })[0];
+      if (!im) return null;
+      var r = im.getBoundingClientRect(), fy = (y - r.top) / (r.height || 1);
+      return fy < 0.17 || fy > 0.78 ? null : im;
     }
     document.addEventListener("pointerdown", function (e) {
       rhHeld = false; clearTimeout(rhHold); rhHold = null;
       if (!e.isPrimary || !rhPop.hidden) return;
       var f = rhAtPoint(e.clientX, e.clientY);
       if (!f) return;
-      var card = f.closest(".gcard"), side = f.classList.contains("frec--l") ? "l" : f.classList.contains("frec--r") ? "r" : null;
-      if (!card || !side) return;
+      /* his half of the card is his side: the left face is the left man */
+      var card = f.closest(".gcard");
+      if (!card) return;
+      var cr = card.getBoundingClientRect(), fr = f.getBoundingClientRect();
+      var side = (fr.left + fr.width / 2) < (cr.left + cr.width / 2) ? "l" : "r";
       rhLoad();
       rhX = e.clientX; rhY = e.clientY;
       rhHold = setTimeout(function () { rhHold = null; rhHeld = true; if (navigator.vibrate) navigator.vibrate(10); rhOpen(card, side); }, 450);

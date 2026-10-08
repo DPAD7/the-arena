@@ -18,7 +18,7 @@ is never a card behind.
     python3 build/ufc_records.py        -> site/ufc_records.json
 """
 import csv, glob, html, json, os, re, sys, unicodedata
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
@@ -122,6 +122,37 @@ def rank_at(name, d):
 
 
 CR = json.load(open(os.path.join(ROOT, "site", "fighter_ranks.json")))
+
+# missed weight and short notice, off each event's Wikipedia page (ufc_notes.py)
+NOTES = {}
+try:
+    for e in json.load(open(os.path.join(D, "notes.json"))).values():
+        for who, v in e["notes"].items():
+            NOTES[(e["date"], who)] = v
+except Exception:
+    pass
+
+
+def note(d, name):
+    """the bout's note, by the same day (a day either side: the page writes
+       the local date) and the same last name"""
+    for k in (0, -1, 1):
+        dd = (date.fromisoformat(d) + timedelta(days=k)).isoformat()
+        v = NOTES.get((dd, ln(name)))
+        if v:
+            return v
+    return None
+
+
+def note_tags(v):
+    t = ""
+    if not v:
+        return t
+    if v.get("mw"):
+        t += '<span class="rh-tg rh-dn">MISSED WEIGHT · %s LB</span>' % v["mw"]
+    if v.get("days") is not None and v["days"] <= 21:
+        t += '<span class="rh-tg rh-sn">SHORT NOTICE · %d DAY%s</span>' % (v["days"], "" if v["days"] == 1 else "S")
+    return t
 
 
 def has_face(i):
@@ -252,6 +283,8 @@ def build(name, eid, opps):
         if o is not None:
             if r["result"] == "win" and o >= 100: up = '<span class="rh-tg rh-up">UPSET</span>'
             if r["result"] == "loss" and o <= -200: up = '<span class="rh-tg rh-dn">UPSET LOSS</span>'
+        if r["pr"] == "UFC":
+            up += note_tags(note(r["date"], name))
         rd = (" R%s" % r["round"]) if (r.get("round") or "").strip() else ""
         when = datetime.fromisoformat(r["date"]).strftime("%b %-d '%y")
         rows += ('<div class="rh-r"><b class="%s">%s</b><div class="rh-o"><div>%s%s<span class="rh-tg">%s</span>%s%s</div>'
@@ -273,7 +306,8 @@ def build(name, eid, opps):
         head='<h3>%s<span class="rh-nm">%s %s</span><small>%d pro fights</small>%s</h3>' % (face(name, "rh-hf"), surname, rec, len(g), rank),
         path=tiles,
         st='Streak <b class="%s">%s</b> · UFC overall %d-%d%s' % ("rh-sw" if st[:1] == "W" else "rh-sl", st or "–", uw, ul, "-%d" % ud if ud else ""),
-        chips=chips, loss=lossline, rows=rows, uw=uw, ul=ul, lb=last_lb)
+        chips=chips, loss=lossline, rows=rows, uw=uw, ul=ul, lb=last_lb,
+        nx={d: note_tags(v) for (d, w), v in NOTES.items() if w == ln(name) and d >= date.today().isoformat() and note_tags(v)})
 
 
 def fetch_new(name):

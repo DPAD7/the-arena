@@ -4398,7 +4398,7 @@
   .rh-pop { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 16px;
     background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .rh-pop[hidden] { display: none; }
-  .gcard[data-sport="mma"] .ghead--fight > .frec { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .gcard[data-sport="mma"] img.ffab { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
   .rh-card { width: min(380px, 100%); max-height: 78vh; box-sizing: border-box; display: flex; flex-direction: column;
     background: #1c1c1e; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 12px; color: #fff;
     box-shadow: 0 12px 30px rgba(0,0,0,.7); font-family: Barlow, "Helvetica Neue", Arial, sans-serif; }
@@ -4444,6 +4444,7 @@
   .rh-tg.rh-ti { border-color: #e3b341; color: #e3b341; }
   .rh-tg.rh-up { border-color: #17c257; color: #17c257; } .rh-tg.rh-dn { border-color: #ff453a; color: #ff453a; }
   .rh-tg.rh-wc { border-color: #5e5ce6; color: #a5a4ff; }
+  .rh-tg.rh-sn { border-color: #ffd60a; color: #ffd60a; }
   .rh-rk { color: #e3b341; font-weight: 700; }
   .ql-card { width: min(420px, 100%); max-height: 80vh; overflow-y: auto; background: #17181c; border: 1px solid rgba(255,255,255,.13);
     border-radius: 20px; padding: 16px 14px 12px; color: #f4f4f5; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
