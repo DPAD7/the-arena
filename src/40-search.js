@@ -730,6 +730,37 @@
     }
     function rhClose() { rhPop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
     var rhAt = 0, rhHold = null, rhX = 0, rhY = 0, rhHeld = false;
+    /* what a real finger on his phone does on a face, written to the state
+       once a minute so the hold is mended off the phone's own events
+       (Jose, Oct 8, 2026: "The press and hold doesn't work") */
+    var hd = null, hdAt = 0;
+    function hdNote(k, e) {
+      if (!hd) return;
+      hd.ev.push(k + "@" + Math.round(performance.now() - hd.t0) + (e && e.clientX != null ? ":" + Math.round(e.clientX - hd.x) + "," + Math.round(e.clientY - hd.y) : ""));
+      if (k === "up" || k === "cancel" || k === "open" || hd.ev.length > 30) hdSend();
+    }
+    function hdSend() {
+      var row = hd; hd = null;
+      if (!row || Date.now() - hdAt < 20000) return;
+      hdAt = Date.now();
+      var set = {}; set[String(hdAt)] = { ev: row.ev.join(" "), on: row.on, ua: navigator.userAgent.slice(-70), sa: navigator.standalone ? 1 : 0 };
+      try {
+        fetch("state?k=" + encodeURIComponent(typeof ARENAKEY !== "undefined" ? ARENAKEY : "arena-001bff8ddf784985"), { method: "POST", headers: { "content-type": "application/json" },
+          body: JSON.stringify({ patch: { holddiag: { set: set } } }) });
+      } catch (e) {}
+    }
+    document.addEventListener("pointerdown", function (e) {
+      var on = (document.elementsFromPoint ? document.elementsFromPoint(e.clientX, e.clientY) : []).slice(0, 4).map(function (x) { return (x.tagName + "." + String(x.className || "").split(" ")[0]).slice(0, 24); });
+      if (!on.some(function (x) { return /ffab|qbface/.test(x); })) return;
+      hd = { t0: performance.now(), x: e.clientX, y: e.clientY, ev: ["down:" + e.pointerType], on: on.join(">") };
+    }, true);
+    document.addEventListener("pointermove", function (e) { if (hd && hd.ev.length < 12) hdNote("move", e); }, true);
+    document.addEventListener("pointerup", function (e) { hdNote("up", e); }, true);
+    document.addEventListener("pointercancel", function (e) { hdNote("cancel", e); }, true);
+    ["touchstart", "touchend", "touchcancel", "contextmenu", "selectstart"].forEach(function (k) {
+      document.addEventListener(k, function () { if (hd) hd.ev.push(k + "@" + Math.round(performance.now() - hd.t0)); }, true);
+    });
+    window._hdNote = hdNote;
     rhPop.addEventListener("click", function (e) { if (Date.now() - rhAt > 600 && !e.target.closest(".rh-card")) rhClose(); });
     /* his face, the same section the NFL card's hold uses (Jose, Oct 8,
        2026: "Is that where it is on the NFL?"): looked through whatever
@@ -755,7 +786,7 @@
       var side = (fr.left + fr.width / 2) < (cr.left + cr.width / 2) ? "l" : "r";
       rhLoad();
       rhX = e.clientX; rhY = e.clientY;
-      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; buzz(); rhOpen(card, side); }, 450);
+      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; hdNote("open"); buzz(); rhOpen(card, side); }, 450);
     }, true);
     document.addEventListener("pointermove", function (e) {
       if (rhHold && (Math.abs(e.clientX - rhX) > 12 || Math.abs(e.clientY - rhY) > 12)) { clearTimeout(rhHold); rhHold = null; }
