@@ -550,27 +550,10 @@
        touchdowns, then each game -- result, opponent, passing yards, the
        margin over the other passer, passing and rushing touchdowns. A finger
        that moves is a scroll or a swipe, and the hold lets it go. */
-    /* the little tap a hold gives, the way theScore's does (Jose, Oct 8,
-       2026). Android takes navigator.vibrate; iPhone Safari ignores it but,
-       from iOS 18, taps the hand when a switch is flipped -- so a switch no
-       one sees is flipped instead */
-    var buzzSw = null;
-    function buzz() {
-      if (navigator.vibrate && navigator.vibrate(10)) return;
-      try {
-        if (!buzzSw) {
-          buzzSw = document.createElement("label");
-          buzzSw.setAttribute("aria-hidden", "true"); buzzSw.dataset.buzz = "1";
-          buzzSw.style.cssText = "position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none";
-          var sw = document.createElement("input");
-          sw.type = "checkbox"; sw.setAttribute("switch", ""); sw.tabIndex = -1;
-          buzzSw.appendChild(sw);
-          document.body.appendChild(buzzSw);
-        }
-        buzzSw.click();
-      } catch (e) {}
-    }
-    window._buzz = buzz;
+    /* the little tap a hold gives, where the phone allows it: Android does;
+       an iPhone lets a page buzz only as a finger lands or lifts, never half
+       a second into a hold (Jose, Oct 8, 2026) */
+    function buzz() { if (navigator.vibrate) navigator.vibrate(10); }
     var pop = document.createElement("div");
     pop.className = "qblog"; pop.hidden = true;
     document.body.appendChild(pop);
@@ -662,7 +645,7 @@
       document.addEventListener(k, function () { clearTimeout(hold); hold = null; }, true);
     });
     /* the tap that ends a hold is not also a tap on the card */
-    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-buzz]")) return; if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
     window._qbLog = popOpen;
 
@@ -730,37 +713,6 @@
     }
     function rhClose() { rhPop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
     var rhAt = 0, rhHold = null, rhX = 0, rhY = 0, rhHeld = false;
-    /* what a real finger on his phone does on a face, written to the state
-       once a minute so the hold is mended off the phone's own events
-       (Jose, Oct 8, 2026: "The press and hold doesn't work") */
-    var hd = null, hdAt = 0;
-    function hdNote(k, e) {
-      if (!hd) return;
-      hd.ev.push(k + "@" + Math.round(performance.now() - hd.t0) + (e && e.clientX != null ? ":" + Math.round(e.clientX - hd.x) + "," + Math.round(e.clientY - hd.y) : ""));
-      if (k === "up" || k === "cancel" || k === "open" || hd.ev.length > 30) hdSend();
-    }
-    function hdSend() {
-      var row = hd; hd = null;
-      if (!row || Date.now() - hdAt < 20000) return;
-      hdAt = Date.now();
-      var set = {}; set[String(hdAt)] = { ev: row.ev.join(" "), on: row.on, ua: navigator.userAgent.slice(-70), sa: navigator.standalone ? 1 : 0 };
-      try {
-        fetch("state?k=" + encodeURIComponent(typeof ARENAKEY !== "undefined" ? ARENAKEY : "arena-001bff8ddf784985"), { method: "POST", headers: { "content-type": "application/json" },
-          body: JSON.stringify({ patch: { holddiag: { set: set } } }) });
-      } catch (e) {}
-    }
-    document.addEventListener("pointerdown", function (e) {
-      var on = (document.elementsFromPoint ? document.elementsFromPoint(e.clientX, e.clientY) : []).slice(0, 4).map(function (x) { return (x.tagName + "." + String(x.className || "").split(" ")[0]).slice(0, 24); });
-      if (!on.some(function (x) { return /ffab|qbface/.test(x); })) return;
-      hd = { t0: performance.now(), x: e.clientX, y: e.clientY, ev: ["down:" + e.pointerType], on: on.join(">") };
-    }, true);
-    document.addEventListener("pointermove", function (e) { if (hd && hd.ev.length < 12) hdNote("move", e); }, true);
-    document.addEventListener("pointerup", function (e) { hdNote("up", e); }, true);
-    document.addEventListener("pointercancel", function (e) { hdNote("cancel", e); }, true);
-    ["touchstart", "touchend", "touchcancel", "contextmenu", "selectstart"].forEach(function (k) {
-      document.addEventListener(k, function () { if (hd) hd.ev.push(k + "@" + Math.round(performance.now() - hd.t0)); }, true);
-    });
-    window._hdNote = hdNote;
     rhPop.addEventListener("click", function (e) { if (Date.now() - rhAt > 600 && !e.target.closest(".rh-card")) rhClose(); });
     /* his face, the same section the NFL card's hold uses (Jose, Oct 8,
        2026: "Is that where it is on the NFL?"): looked through whatever
@@ -786,7 +738,7 @@
       var side = (fr.left + fr.width / 2) < (cr.left + cr.width / 2) ? "l" : "r";
       rhLoad();
       rhX = e.clientX; rhY = e.clientY;
-      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; hdNote("open"); buzz(); rhOpen(card, side); }, 450);
+      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; buzz(); rhOpen(card, side); }, 450);
     }, true);
     document.addEventListener("pointermove", function (e) {
       if (rhHold && (Math.abs(e.clientX - rhX) > 12 || Math.abs(e.clientY - rhY) > 12)) { clearTimeout(rhHold); rhHold = null; }
@@ -794,7 +746,7 @@
     ["pointerup", "pointercancel"].forEach(function (k) {
       document.addEventListener(k, function () { clearTimeout(rhHold); rhHold = null; }, true);
     });
-    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-buzz]")) return; if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("click", function (e) { if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
     window._rhOpen = rhOpen;
     /* the board never zooms (Jose, Oct 3, 2026: "I don't want it to zoom").
        iPhone Safari ignores user-scalable=no, so the pinch is refused, and a
