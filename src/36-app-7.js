@@ -941,6 +941,11 @@
     out.detail = (st.state === "in") ? (st.shortDetail || "") : "";
     out.period = (comp.status || {}).period; out.clock = (comp.status || {}).displayClock;
     (comp.competitors || []).forEach(function (c) { out.sc[c.homeAway] = c.score; });
+    /* each quarter's points, for a leg settled at the half (HT/FT) */
+    out.ls = {};
+    (comp.competitors || []).forEach(function (c) {
+      out.ls[c.homeAway] = (c.linescores || []).map(function (q) { return parseFloat(q.displayValue != null ? q.displayValue : q.value) || 0; });
+    });
     var wp = d.winprobability || [];
     if (wp.length) out.wp = wp[wp.length - 1].homeWinPercentage;
     out.men = {};
@@ -1000,6 +1005,9 @@
     [/interceptions thrown|interceptions/i, [["passing", "INT"]], "INT"],
     [/tackles \+ assists|tackles and assists|total tackles/i, [["defensive", "TOT"]], "TKL+AST"],
     [/solo tackles/i, [["defensive", "SOLO"]], "SOLO"],
+    /* DraftKings' plain "Tackles" counts assists too (Oct 8, 2026: Trotter 4+) */
+    [/\btackles\b/i, [["defensive", "TOT"]], "TKL+AST"],
+    [/field goals? made|field goals?/i, [["kicking", "FG", 0]], "FG"],
     [/sacks/i, [["defensive", "SACKS"]], "SACKS"],
     [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]], "TD"]
   ];
@@ -1041,7 +1049,8 @@
     var st = (BANK.legs[x.lg.sel] || {}).st || String(x.lg.status || "").toLowerCase();
     st = st === "won" ? "won" : st === "lost" ? "lost" : "";
     var over = r && r.state === "post", pre = !r || r.state === "pre";
-    var face = man && man.id ? trkFace("face/nfl/" + man.id + ".png", espnHead(man.id)) : "";
+    var mid = man && man.id ? man.id : x.lg.pid ? String(x.lg.pid) : "";
+    var face = mid ? trkFace("face/nfl/" + mid + ".png", espnHead(mid)) : "";
     var name = esc(famName(P.who || ""));
     /* a yes or no that asks when: the first quarter, read off the plays */
     var q1 = /1st quarter|first quarter/i.test(P.mk || "");
@@ -1147,7 +1156,7 @@
     (bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; if (v && v.fight && lg.ev) byEv[lg.ev] = v.g; });
     (bet.legs || []).forEach(function (lg) {
       var v = map[lg.sel] || trkFightOf(lg, byEv);
-      if (!v) { var pg = trkGameOf(lg); if (pg) v = { g: pg, k: "prop" }; }
+      if (!v) { var pg = trkGameOf(lg); if (pg) v = { g: pg, k: /half ?time ?\/ ?full ?time/i.test(String(lg.market || "") + " " + String(lg.label || "")) ? "htft" : "prop" }; }
       var row = v && (v.fight ? trkFightRow(v.g) : trkRow(v.g));
       if (!v || !row) { loose.push(lg); return; }
       if (!games[v.g]) { games[v.g] = { row: row, legs: [] }; order.push(v.g); }
@@ -1203,6 +1212,36 @@
           '<b class="dim">' + yh + '</b><span class="dim">' + esc(famName(him[0])) + "</span></div>" +
           '<div class="trkbar"><i style="width:' + share + "%;background:" + trkHue(me[2]) + '"></i><i style="flex:1;background:' + trkHue(him[2]) + '"></i></div></div>' +
           '<span class="trkc">' + trkFace(pic(him[0])) + "</span></div>";
+      });
+      /* half time / full time (Jose, Oct 8, 2026): the game line with his club
+         ringed, then a box for the half and one for the full -- each green the
+         moment his club is ahead at that point, red when it is not. DraftKings
+         settles the full at the end of regulation, so overtime does not count */
+      G.legs.filter(function (x) { return x.v.k === "htft"; }).forEach(function (x) {
+        var two = String(x.lg.pick || x.lg.label || "").split(" \u00b7 ")[0].split("/");
+        var sideOf = function (t) { t = String(t || "").trim().toUpperCase(); return t.indexOf(away + " ") === 0 || t === away ? 0 : t.indexOf(home + " ") === 0 || t === home ? 1 : /^TIE|^DRAW/.test(t) ? 2 : -1; };
+        var hs = sideOf(two[0]), fs = sideOf(two[1]);
+        var sum = function (k, n) { return ((r && r.ls && r.ls[k]) || []).slice(0, n).reduce(function (a, b) { return a + b; }, 0); };
+        var who = function (n) { var a = sum("away", n), h = sum("home", n); return a > h ? 0 : h > a ? 1 : 2; };
+        var halfOver = r && (r.state === "post" || (r.period || 0) > 2 || /half/i.test(r.detail || ""));
+        var fullOver = r && (r.state === "post" || (r.period || 0) > 4);
+        var hst = halfOver ? (who(2) === hs ? "won" : "lost") : "";
+        var fst = fullOver ? (who(4) === fs ? "won" : "lost") : "";
+        var st = legSt(x) || (hst === "lost" || fst === "lost" ? "lost" : hst === "won" && fst === "won" ? "won" : "");
+        if (st === "lost") TRKLOST[x.lg.sel] = 1;
+        TRKST[x.lg.sel] = st;
+        var ph;
+        if (r && r.wp != null) ph = r.wp;
+        else { var pa = trkImplied(lg === "nfl" ? g[9] : g[10]), pb = trkImplied(lg === "nfl" ? g[11] : g[12]); ph = pa != null && pb != null ? pb / (pa + pb) : 0.5; }
+        var wa = Math.round((1 - ph) * 100), wh = 100 - wa, sa = r ? (r.sc.away || 0) : 0, sh = r ? (r.sc.home || 0) : 0;
+        var ab = function (k) { return k === 0 ? away : k === 1 ? home : "TIE"; };
+        var ck = function (lab, s2) { return '<span class="htck' + (s2 ? " htck--" + s2 : "") + '">' + lab + (s2 === "won" ? " \u2713" : s2 === "lost" ? " \u2717" : "") + "</span>"; };
+        if (!G.legs.some(function (y) { return y.v.k === "ml"; })) out += '<div class="trkr trkr--two">' +
+          '<span class="trkc trkc--logo' + (fs === 0 ? " trkc--mine" : "") + '">' + trkFace(pic(away)) + "</span>" +
+          '<div class="trkm"><div class="trkt"><small>(' + wa + "%)</small><b>" + esc(sa) + "</b><em>–</em><b>" + esc(sh) + "</b><small>(" + wh + "%)</small></div>" +
+          '<div class="trkbar"><i style="width:' + wa + "%;background:" + trkHue(away) + '"></i><i style="flex:1;background:' + trkHue(home) + '"></i></div></div>' +
+          '<span class="trkc trkc--logo' + (fs === 1 ? " trkc--mine" : "") + '">' + trkFace(pic(home)) + "</span></div>";
+        out += '<div class="htft"><span class="htl">HT/FT <b>' + esc(ab(hs)) + " / " + esc(ab(fs)) + "</b></span>" + ck("HALF", hst) + ck("FULL", fst) + "</div>";
       });
       /* the touchdown legs, by passer: both kinds on one man sit as a pair of
          short rows; one alone is the full row */
@@ -1746,19 +1785,24 @@
           var c2 = b2 && b2.closest(".gcard");
           var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LMAP[lg.sel] || {}).g || "";
           var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
-          var pic0 = "";
+          var pic0 = "", fw = "", fmk = "";
           if (!LMAP[lg.sel]) {
             var pg0 = trkGameOf(lg);
             if (pg0) {
               gid = gid || pg0;
               var P0 = propParse(lg), m0 = propMan(TRKD[pg0], P0.who);
-              if (m0 && m0.id) pic0 = m0.id;
+              if (m0 && m0.id) pic0 = m0.id; else if (lg.pid) pic0 = String(lg.pid);
+              if (/half ?time ?\/ ?full ?time/i.test(String(lg.market || ""))) {
+                var hr0 = trkRow(pg0), hp0 = String(lg.pick || "").split("/").map(function (t) { return t.trim().split(" ")[0]; });
+                lab = hp0.join("/") + " HT/FT \u00b7 ";
+                if (hr0) { fw = hp0[1] === hr0.g[3] ? hr0.g[3] : hr0.g[4]; gid = String(hr0.g[1]); fmk = markFor("ML"); }
+              } else
               lab = (famName(P0.who || "") + " " + (P0.yes !== undefined ? (P0.yes ? "YES" : "NO") : P0.over === false ? "U" + (P0.line || "") : (P0.n || "") + "+")).trim() + " \u00b7 ";
             }
           }
           /* a fight leg wears its fighter, or both men for a leg on the fight,
              off the bout it was placed on, and the market's own mark */
-          var fv = (LMAP[lg.sel] && LMAP[lg.sel].fight) ? LMAP[lg.sel] : trkFightOf(lg, {}), fw = "", fmk = "";
+          var fv = (LMAP[lg.sel] && LMAP[lg.sel].fight) ? LMAP[lg.sel] : trkFightOf(lg, {});
           var fr0 = fv && trkFightRow(fv.g), bv = LMAP[lg.sel], br0 = bv && !bv.fight && trkRow(bv.g);
           if (br0) {
             gid = String(bv.g);

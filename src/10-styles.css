@@ -223,6 +223,13 @@
   .trkt--fml { font-size: 22px; gap: 5px; }
   .trkt--fml small { font-size: 13px; }
   .trkq { font: 600 12px Barlow, "Helvetica Neue", Arial, sans-serif; color: #9a9aa0; margin-top: 4px; }
+  .htft { display: flex; align-items: center; gap: 8px; padding: 8px 0 10px; border-bottom: 1px dashed #2c2d33; }
+  .htft .htl { font: 700 18px "Barlow Condensed", sans-serif; color: #9a9aa0; margin-right: auto; white-space: nowrap; }
+  .htft .htl b { color: var(--green); font-weight: 800; }
+  .htck { font: 800 14px "Barlow Condensed", sans-serif; border: 2px solid #5a5b62; color: #9a9aa0; border-radius: 8px;
+    padding: 4px 9px; min-width: 54px; text-align: center; box-sizing: border-box; }
+  .htck--won { border-color: var(--green); color: var(--green); }
+  .htck--lost { border-color: #e2564d; color: #e2564d; }
   .trkloose { display: flex; justify-content: space-between; padding: 6px 0; color: #e6e6e6; font-size: 14px; }
   .slipcard .slview { display: inline-grid; place-items: center; width: 34px; height: 34px; padding: 0; border: 0;
     border-radius: 10px; background: rgba(255,255,255,.08); color: #c9ccd2; cursor: pointer; align-self: center; }

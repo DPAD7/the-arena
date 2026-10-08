@@ -56,7 +56,10 @@ def slim(d, v, qbids):
         "header": {"competitions": [{
             "id": comp.get("id"), "date": comp.get("date"), "status": comp.get("status"),
             "competitors": [{"id": c.get("id"), "homeAway": c.get("homeAway"), "winner": c.get("winner"),
-                             "score": c.get("score"), "team": {"id": (c.get("team") or {}).get("id"),
+                             "score": c.get("score"),
+                             # each quarter's points: an HT/FT leg settles off the half (Oct 8, 2026)
+                             "linescores": [{"displayValue": q.get("displayValue")} for q in c.get("linescores") or []],
+                             "team": {"id": (c.get("team") or {}).get("id"),
                                                                "abbreviation": (c.get("team") or {}).get("abbreviation")}}
                             for c in comp.get("competitors") or []]}]},
         "scoringPlays": [{"id": p.get("id"), "text": p.get("text"), "team": {"abbreviation": (p.get("team") or {}).get("abbreviation")}}
@@ -75,7 +78,7 @@ def slim(d, v, qbids):
     for team in ((d.get("boxscore") or {}).get("players")) or []:
         stats = []
         for c in team.get("statistics") or []:
-            if c.get("name") not in ("passing", "rushing", "receiving"):
+            if c.get("name") not in ("passing", "rushing", "receiving", "kicking", "defensive"):
                 continue
             # every man who threw is kept, not just the two the card names: a
             # starter who was hurt still has a line (Sam Darnold at Seattle,
@@ -83,7 +86,7 @@ def slim(d, v, qbids):
             # trimmed to the named passers, which is what the cards read.
             ath = [{"athlete": {"id": (a.get("athlete") or {}).get("id"), "displayName": (a.get("athlete") or {}).get("displayName")},
                     "stats": a.get("stats")} for a in c.get("athletes") or []
-                   if c.get("name") == "passing" or str((a.get("athlete") or {}).get("id")) in qbids]
+                   if c.get("name") in ("passing", "kicking", "defensive") or str((a.get("athlete") or {}).get("id")) in qbids]
             stats.append({"name": c.get("name"), "labels": c.get("labels"), "athletes": ath})
         keep["boxscore"]["players"].append({"team": {"abbreviation": (team.get("team") or {}).get("abbreviation")}, "statistics": stats})
     for x in (v or d.get("videos") or []):
