@@ -26,3 +26,13 @@ the base path before rerunning.
 - `finish.py` finish boxes (not yet at 75%); `model2.py` the gradient-boosting check (no better).
 - Weekly: rank every men's fight → `site/boxpicks.json` (ticket with the rank on the card),
   log in `data/boxpicks_log.csv`, fill results after the card.
+
+## nfl_ml — NFL moneyline (who wins), no odds
+- `build.py` pre-game team profiles 2016→ from nflverse pbp + games.csv (this season's earlier games,
+  blended with last season early on); `qb.py` adds the starting QB's own last-16-game EPA per dropback.
+- `boxes.py` the box version (blind 71–73%, not enough); `search.py` the models.
+- The read: logistic regression on home-minus-away differences, trained on 2016–21 only; take games
+  it rates 75%+. Blind: 76% (2022–23, 88 games), 80% (2024–25, 118), 90% (2026 to Week 4, 10);
+  shuffle test never close; ~3 games a week.
+- `week.py <week>` scores a week with the board's starting QBs (site/depth.json) → data/ml_reads.json;
+  build/suggest.py ml_read() puts the gold on the pick only at 75%+.

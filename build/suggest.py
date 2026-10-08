@@ -362,6 +362,18 @@ def rtd_case(qb, n, runs):
     return call, s
 
 
+def ml_read(away, home):
+    """This week's tested moneyline read for the game, by club."""
+    try:
+        reads = json.load(open(os.path.join(D, "data", "ml_reads.json"))).get("reads", [])
+    except Exception:
+        return None
+    for r in reads:
+        if {r.get("away"), r.get("home")} == {away, home}:
+            return r
+    return None
+
+
 def h2h_read(away_qb, home_qb):
     """This week's tested head-to-head read for the two passers, by last name."""
     try:
@@ -453,6 +465,17 @@ def main():
             # a rookie's first start against a starter: the lean goes to the
             # starter's club. A veteran standing in keeps the record's lean
             lean["ml"] = "home" if rook["away"] else "away"
+        # the moneyline lean is the tested read (data/ml_reads.json): the model
+        # rates the game 75%+ or there is no lean at all (Jose, Oct 7, 2026)
+        mr = ml_read(away, home)
+        lean["ml"] = None
+        gap.pop("ml", None)
+        if mr and (mr.get("conf") or 0) >= 0.75:
+            lean["ml"] = "away" if mr["pick"] == away else "home"
+            gap["ml"] = 99
+            game["mlread"] = {"pick": mr["pick"], "conf": mr["conf"]}
+            game["ml"][lean["ml"]] = "Our read: %s wins. The model gives them %d%%; reads at 75%%+ won 76%% (2022-23) and 80%% (2024-25) blind. Built on team efficiency, point margin, recent form, sacks, turnovers, rest and the starting passer's own recent play, no odds." % (
+                mr["pick"], round(100 * mr["conf"]))
         # the head-to-head lean is the tested read (data/h2h_reads.json, the edge
         # score in research/nfl_h2h), and only where it says something: every
         # line posted on both sides, a lead of 4+, not a backup's borrowed numbers

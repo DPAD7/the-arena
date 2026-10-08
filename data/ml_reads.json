@@ -1,0 +1,96 @@
+{
+ "at": "2026-10-08",
+ "note": "NFL moneyline model (research/nfl_ml): trained 2016-21 on team stats + starting QB, no odds; a read at 75%+ only; blind 76% 2022-23, 80% 2024-25",
+ "reads": [
+  {
+   "away": "TB",
+   "home": "DAL",
+   "pick": "DAL",
+   "conf": 0.85
+  },
+  {
+   "away": "PHI",
+   "home": "JAX",
+   "pick": "JAX",
+   "conf": 0.779
+  },
+  {
+   "away": "CHI",
+   "home": "GB",
+   "pick": "CHI",
+   "conf": 0.615
+  },
+  {
+   "away": "CIN",
+   "home": "MIA",
+   "pick": "CIN",
+   "conf": 0.662
+  },
+  {
+   "away": "LV",
+   "home": "NE",
+   "pick": "LV",
+   "conf": 0.506
+  },
+  {
+   "away": "MIN",
+   "home": "NO",
+   "pick": "MIN",
+   "conf": 0.653
+  },
+  {
+   "away": "CLE",
+   "home": "NYJ",
+   "pick": "CLE",
+   "conf": 0.502
+  },
+  {
+   "away": "IND",
+   "home": "PIT",
+   "pick": "PIT",
+   "conf": 0.558
+  },
+  {
+   "away": "HOU",
+   "home": "TEN",
+   "pick": "HOU",
+   "conf": 0.51
+  },
+  {
+   "away": "NYG",
+   "home": "WSH",
+   "pick": "NYG",
+   "conf": 0.606
+  },
+  {
+   "away": "DEN",
+   "home": "LAC",
+   "pick": "DEN",
+   "conf": 0.615
+  },
+  {
+   "away": "DET",
+   "home": "ARI",
+   "pick": "DET",
+   "conf": 0.57
+  },
+  {
+   "away": "SF",
+   "home": "SEA",
+   "pick": "SF",
+   "conf": 0.708
+  },
+  {
+   "away": "BAL",
+   "home": "ATL",
+   "pick": "BAL",
+   "conf": 0.549
+  },
+  {
+   "away": "BUF",
+   "home": "LAR",
+   "pick": "BUF",
+   "conf": 0.524
+  }
+ ]
+}
