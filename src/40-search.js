@@ -644,6 +644,93 @@
     document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
     window._qbLog = popOpen;
+
+    /* ---- hold a fighter's record: his whole career (Jose, Oct 8, 2026) ----
+       Half a second on the record over a UFC face lifts his pro record over
+       the blurred board: the path through the promotions, the streak and his
+       UFC record with CUT RISK, every fight newest first with its odds. The
+       career is ufc_records.json, written by build/ufc_records.py; the NEXT
+       row is read off the card he is holding, so its price is the live one. */
+    var RH = null, rhPop = document.createElement("div");
+    rhPop.className = "rh-pop"; rhPop.hidden = true;
+    document.body.appendChild(rhPop);
+    function rhLoad() {
+      if (!RH) RH = fetch("ufc_records.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { RH = null; return {}; });
+      return RH;
+    }
+    var RHLB = { 115: "Strawweight", 125: "Flyweight", 135: "Bantamweight", 145: "Featherweight", 155: "Lightweight",
+                 170: "Welterweight", 185: "Middleweight", 205: "Light Heavyweight", 265: "Heavyweight" };
+    function rhOpen(card, side) {
+      var mine = side === "l" ? "lf" : "rf", his = side === "l" ? "rf" : "lf";
+      var id = card.dataset[mine + "id"];
+      rhLoad().then(function (all) {
+        var x = all && all[id];
+        if (!x) return;
+        var kick = card.dataset.kick ? new Date(card.dataset.kick) : null;
+        var tue = kick && kick.toLocaleDateString("en-US", { weekday: "short", timeZone: "America/New_York" }) === "Tue";
+        var lbm = /(\d{3})/.exec(card.dataset.wt || ""), lb = lbm ? +lbm[1] : null;
+        /* his price: the price on his own half of the card */
+        var slots = card.querySelectorAll(".gml");
+        var slot = slots[side === "l" ? 0 : slots.length - 1];
+        var pm = slot && /[+−-]\d{3,}/.exec(slot.textContent || "");
+        var price = pm ? pm[0].replace("−", "-") : "–";
+        var opp = card.dataset[his] || "", oid = card.dataset[his + "id"];
+        var tags = '<span class="rh-tg">' + (tue ? "DWCS" : "UFC") + "</span>";
+        if (lb && x.lb && RHLB[lb] && Math.abs(lb - x.lb) >= 10) {
+          tags += '<span class="rh-tg rh-wc">' + (lb > x.lb ? "&#8593; UP TO " : "&#8595; DOWN TO ") + lb + "</span>";
+        }
+        var when = kick ? kick.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" }) + " '" + String(kick.getFullYear()).slice(2) : "";
+        var next = '<div class="rh-r rh-nx"><b class="rh-nxb"><svg width="8" height="9" viewBox="0 0 8 9"><path d="M1 .5 7.5 4.5 1 8.5Z" fill="#fff"/></svg></b>' +
+          '<div class="rh-o"><div>' + (oid ? '<img class="rh-fc" src="face/mma/' + oid + '.png" alt="" onerror="var s=document.createElement(\'span\');s.className=this.className;this.replaceWith(s)">' : '<span class="rh-fc"></span>') +
+          esc(opp) + tags + "</div><small>" + (lb && RHLB[lb] ? RHLB[lb] + " · " : "") + when + "</small></div>" +
+          '<div class="rh-od">' + esc(price) + "</div></div>";
+        var path = x.path, chips = x.chips;
+        if (tue) {
+          path += '<div class="rh-t rh-deb"><b>DWCS</b><span>Tue</span><small>' + when.replace(/ '\d+$/, "") + "</small></div>";
+          chips = '<span class="rh-chip rh-dw">DWCS TUESDAY</span>' + chips;
+        } else if (!x.uw && !x.ul) {
+          path += '<div class="rh-t rh-deb"><b>0-0</b><span>UFC</span><small>debut</small></div>';
+          chips = '<span class="rh-chip rh-debc">UFC DEBUT</span>' + chips;
+        }
+        rhPop.innerHTML = '<div class="rh-card">' + x.head + '<div class="rh-path">' + path + "</div>" +
+          '<div class="rh-st">' + x.st + chips + "</div>" + x.loss +
+          '<div class="rh-hd"><span></span><span>Opponent</span><span>Odds</span></div>' +
+          '<div class="rh-list">' + next + x.rows + "</div></div>";
+        rhPop.hidden = false; rhAt = Date.now();
+        document.documentElement.classList.add("qblog-on");
+      });
+    }
+    function rhClose() { rhPop.hidden = true; document.documentElement.classList.remove("qblog-on"); }
+    var rhAt = 0, rhHold = null, rhX = 0, rhY = 0, rhHeld = false;
+    rhPop.addEventListener("click", function (e) { if (Date.now() - rhAt > 600 && !e.target.closest(".rh-card")) rhClose(); });
+    /* the record is small: a finger anywhere on it, or just around it, counts */
+    function rhAtPoint(x, y) {
+      var hit = null;
+      document.querySelectorAll('.gcard[data-sport="mma"] .ghead--fight > .frec').forEach(function (f) {
+        var r = f.getBoundingClientRect();
+        if (r.width && x >= r.left - 12 && x <= r.right + 12 && y >= r.top - 10 && y <= r.bottom + 10) hit = f;
+      });
+      return hit;
+    }
+    document.addEventListener("pointerdown", function (e) {
+      rhHeld = false; clearTimeout(rhHold); rhHold = null;
+      if (!e.isPrimary || !rhPop.hidden) return;
+      var f = rhAtPoint(e.clientX, e.clientY);
+      if (!f) return;
+      var card = f.closest(".gcard"), side = f.classList.contains("frec--l") ? "l" : f.classList.contains("frec--r") ? "r" : null;
+      if (!card || !side) return;
+      rhLoad();
+      rhX = e.clientX; rhY = e.clientY;
+      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; if (navigator.vibrate) navigator.vibrate(10); rhOpen(card, side); }, 450);
+    }, true);
+    document.addEventListener("pointermove", function (e) {
+      if (rhHold && (Math.abs(e.clientX - rhX) > 12 || Math.abs(e.clientY - rhY) > 12)) { clearTimeout(rhHold); rhHold = null; }
+    }, true);
+    ["pointerup", "pointercancel"].forEach(function (k) {
+      document.addEventListener(k, function () { clearTimeout(rhHold); rhHold = null; }, true);
+    });
+    document.addEventListener("click", function (e) { if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    window._rhOpen = rhOpen;
     /* the board never zooms (Jose, Oct 3, 2026: "I don't want it to zoom").
        iPhone Safari ignores user-scalable=no, so the pinch is refused, and a
        page that is zoomed anyway is snapped back to its own size by writing

@@ -4394,6 +4394,56 @@
   .qblog { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 16px;
     background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
   .qblog[hidden] { display: none; }
+  /* the hold on a UFC record: his whole career (Jose, Oct 8, 2026) */
+  .rh-pop { position: fixed; inset: 0; z-index: 2147483000; display: grid; place-items: center; padding: 16px;
+    background: rgba(0,0,0,.45); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+  .rh-pop[hidden] { display: none; }
+  .gcard[data-sport="mma"] .ghead--fight > .frec { -webkit-touch-callout: none; -webkit-user-select: none; user-select: none; }
+  .rh-card { width: min(380px, 100%); max-height: 78vh; box-sizing: border-box; display: flex; flex-direction: column;
+    background: #1c1c1e; border: 1px solid rgba(255,255,255,.18); border-radius: 14px; padding: 12px; color: #fff;
+    box-shadow: 0 12px 30px rgba(0,0,0,.7); font-family: Barlow, "Helvetica Neue", Arial, sans-serif; }
+  .rh-card h3 { margin: 0 0 8px; display: flex; align-items: center; font: 800 18px "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .rh-card h3 small { flex: 1; font: 700 12px Barlow, sans-serif; color: #8e8e93; margin-left: 6px; }
+  .rh-hf { width: 34px; height: 34px; border-radius: 10px; object-fit: cover; background: #2c2c2e; margin-right: 8px; display: inline-block; flex: none; }
+  .rh-fc { width: 22px; height: 22px; border-radius: 7px; object-fit: cover; background: #2c2c2e; vertical-align: -6px; margin-right: 6px; display: inline-block; }
+  .rh-crk { text-align: right; line-height: 1.1; font: 800 13px Barlow, sans-serif; color: #e3b341; letter-spacing: .04em; }
+  .rh-crk i { display: block; font-style: normal; color: #8e8e93; font-size: 9px; }
+  .rh-crk.rh-nr { color: #8e8e93; }
+  .rh-path { display: flex; align-items: stretch; gap: 4px; }
+  .rh-t { flex: 1; background: #111; border-radius: 9px; padding: 6px 0; text-align: center; min-width: 0; }
+  .rh-t b { display: block; font: 800 16px "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .rh-t span { font: 700 8.5px Barlow, sans-serif; letter-spacing: .06em; color: #8e8e93; text-transform: uppercase; display: block; }
+  .rh-t small { display: block; font: 600 8.5px Barlow, sans-serif; color: #636366; }
+  .rh-t.rh-ufc { box-shadow: inset 0 0 0 1.5px rgba(255,255,255,.25); }
+  .rh-t.rh-deb { box-shadow: inset 0 0 0 1.5px #17c257; background: transparent; }
+  .rh-t.rh-deb b { color: #17c257; }
+  .rh-left { display: grid; place-items: center; font: 800 8px Barlow, sans-serif; letter-spacing: .06em; color: #ff453a; writing-mode: vertical-rl; transform: rotate(180deg); }
+  .rh-st { margin: 6px 0; font: 700 12px Barlow, sans-serif; color: #aeaeb2; }
+  .rh-st b { font: 800 15px "Barlow Condensed", "Arial Narrow", sans-serif; }
+  .rh-st b.rh-sl { color: #ff453a; } .rh-st b.rh-sw { color: #17c257; }
+  .rh-chip { display: inline-block; margin-left: 6px; font: 800 10px Barlow, sans-serif; letter-spacing: .04em; border-radius: 6px; padding: 2px 6px; vertical-align: 1px; }
+  .rh-risk { background: #ff9f0a; color: #000; } .rh-debc { background: #17c257; color: #000; } .rh-champ { background: #e3b341; color: #000; }
+  .rh-lay { background: #3a3a3f; color: #fff; } .rh-dw { background: #0a84ff; color: #fff; }
+  .rh-ret { background: #3a3a3f; color: #fff; box-shadow: inset 0 0 0 1.5px #ffd60a; }
+  .rh-loss { font: 600 11px Barlow, sans-serif; color: #8e8e93; margin: -2px 0 4px; }
+  .rh-hd, .rh-r { display: grid; grid-template-columns: 18px 1fr 44px; gap: 6px; }
+  .rh-hd { font: 700 9px Barlow, sans-serif; letter-spacing: .06em; color: #8e8e93; text-transform: uppercase; padding: 4px 0 3px; }
+  .rh-hd span:last-child { text-align: right; }
+  .rh-list { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  .rh-r { align-items: center; padding: 5px 0; border-top: 1px solid rgba(255,255,255,.07); font-size: 12px; }
+  .rh-r > b { display: flex; align-items: center; justify-content: center; height: 18px; font: 800 11px Barlow, sans-serif; border-radius: 5px; }
+  .rh-w { background: #17c257; color: #000; } .rh-l { background: #ff453a; color: #fff; }
+  .rh-d { background: #ffd60a; color: #000; } .rh-nc { background: #636366; color: #fff; font-size: 8px !important; }
+  .rh-nx { background: rgba(255,255,255,.05); }
+  .rh-nxb { box-shadow: inset 0 0 0 1.5px #fff; }
+  .rh-o { min-width: 0; }
+  .rh-o small { display: block; color: #8e8e93; font-size: 10px; }
+  .rh-od { font: 800 12px "Barlow Condensed", "Arial Narrow", sans-serif; text-align: right; }
+  .rh-tg { font: 700 8px Barlow, sans-serif; letter-spacing: .06em; color: #8e8e93; border: 1px solid #3a3a3f; border-radius: 4px; padding: 0 3px; margin-left: 4px; white-space: nowrap; }
+  .rh-tg.rh-ti { border-color: #e3b341; color: #e3b341; }
+  .rh-tg.rh-up { border-color: #17c257; color: #17c257; } .rh-tg.rh-dn { border-color: #ff453a; color: #ff453a; }
+  .rh-tg.rh-wc { border-color: #5e5ce6; color: #a5a4ff; }
+  .rh-rk { color: #e3b341; font-weight: 700; }
   .ql-card { width: min(420px, 100%); max-height: 80vh; overflow-y: auto; background: #17181c; border: 1px solid rgba(255,255,255,.13);
     border-radius: 20px; padding: 16px 14px 12px; color: #f4f4f5; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
   .ql-hd { display: flex; gap: 12px; align-items: center; }
