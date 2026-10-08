@@ -748,6 +748,28 @@
     });
     document.addEventListener("click", function (e) { if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
     window._rhOpen = rhOpen;
+    /* with a hold's card up, the board under it stays put: a finger moves only
+       the card's own list, and the board never scrolls behind it (Jose, Oct 8,
+       2026: "The scroll happened when the modal is open"). A list at its top
+       or bottom is held there rather than handing the drag to the board. */
+    var lockY = 0;
+    document.addEventListener("touchstart", function (e) {
+      if (e.touches && e.touches[0]) lockY = e.touches[0].clientY;
+    }, { passive: true, capture: true });
+    document.addEventListener("touchmove", function (e) {
+      if (!document.documentElement.classList.contains("qblog-on")) return;
+      var sc = e.target.closest && e.target.closest(".rh-list, .ql-card");
+      var y = e.touches && e.touches[0] ? e.touches[0].clientY : lockY, dy = y - lockY;
+      lockY = y;
+      if (sc && sc.scrollHeight > sc.clientHeight + 1) {
+        var atTop = sc.scrollTop <= 0, atEnd = sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 1;
+        if (!((dy > 0 && atTop) || (dy < 0 && atEnd))) return;
+      }
+      if (e.cancelable) e.preventDefault();
+    }, { passive: false, capture: true });
+    document.addEventListener("wheel", function (e) {
+      if (document.documentElement.classList.contains("qblog-on") && !(e.target.closest && e.target.closest(".rh-list, .ql-card"))) e.preventDefault();
+    }, { passive: false, capture: true });
     /* the board never zooms (Jose, Oct 3, 2026: "I don't want it to zoom").
        iPhone Safari ignores user-scalable=no, so the pinch is refused, and a
        page that is zoomed anyway is snapped back to its own size by writing
