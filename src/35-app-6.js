@@ -1654,10 +1654,13 @@
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
       var hh = pr.h2h || [], hHas = has(hh[0]) || has(hh[1]);
+      /* our tested read lights its man even when the book has pulled the price
+         (Jose, Oct 7, 2026: "they dont have odds for prescott anymore") */
+      var hLit = hHas || !!sg.h2hread;
       h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
-        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (hHas && lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (hLit && lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
-        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (hHas && lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
+        '<img class="gpface' + (st.h2h === "home" ? " on" : "") + (hLit && lean.h2h === "home" ? " lean" : "") + '" data-h2h="home" src="' + faceDir + esc(side.home.qid) + '.png" alt="">' +
         '<div class="gpp">' + price(hh[1], famName(side.home.qb) + " H2H", st.h2h === "home") + '<i>H2H</i></div></div>' +
         '<div class="gpnames"><span>' + esc(famName(side.away.qb)).toUpperCase() + '</span><span>' + esc(famName(side.home.qb)).toUpperCase() + '</span></div>';
       if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;

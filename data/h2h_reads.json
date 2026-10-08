@@ -1,0 +1,80 @@
+{
+ "at": "2026-10-08",
+ "week": 6,
+ "note": "edge score from research/nfl_h2h/thisweek2.py; a read only when the H2H and every receiver line on both sides are posted",
+ "reads": [
+  {
+   "qbs": [
+    "Jalon Daniels",
+    "Dak Prescott"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 10,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "Kirk Cousins",
+    "Drake Maye"
+   ],
+   "pick": "Kirk Cousins",
+   "lead": 6,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "Daniel Jones",
+    "Aaron Rodgers"
+   ],
+   "pick": "Aaron Rodgers",
+   "lead": 4,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "Michael Penix Jr.",
+    "Tyler Huntley"
+   ],
+   "pick": "Tyler Huntley",
+   "lead": 4,
+   "complete": true,
+   "skip": "backup starting: his team numbers belong to the usual starter"
+  },
+  {
+   "qbs": [
+    "Deshaun Watson",
+    "Geno Smith"
+   ],
+   "pick": "Geno Smith",
+   "lead": 2,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "C.J. Stroud",
+    "Cam Ward"
+   ],
+   "pick": "Cam Ward",
+   "lead": 2,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "Brock Purdy",
+    "Sam Darnold"
+   ],
+   "pick": "Sam Darnold",
+   "lead": 2,
+   "complete": true
+  },
+  {
+   "qbs": [
+    "Jared Goff",
+    "Jacoby Brissett"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true
+  }
+ ]
+}

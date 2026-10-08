@@ -362,6 +362,19 @@ def rtd_case(qb, n, runs):
     return call, s
 
 
+def h2h_read(away_qb, home_qb):
+    """This week's tested head-to-head read for the two passers, by last name."""
+    try:
+        reads = json.load(open(os.path.join(D, "data", "h2h_reads.json"))).get("reads", [])
+    except Exception:
+        return None
+    want = {fam(away_qb), fam(home_qb)}
+    for r in reads:
+        if {fam(q) for q in r.get("qbs", [])} == want:
+            return r
+    return None
+
+
 def main():
     s = pagefile.read()
     sched = json.loads(re.search(r"  var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
@@ -440,10 +453,16 @@ def main():
             # a rookie's first start against a starter: the lean goes to the
             # starter's club. A veteran standing in keeps the record's lean
             lean["ml"] = "home" if rook["away"] else "away"
-        ypg = {w: (sum(x[0] for x in lines[w]) / len(lines[w])) if lines[w] else None for w in men}
-        if ypg["away"] is not None and ypg["home"] is not None:
-            lean["h2h"] = "away" if ypg["away"] >= ypg["home"] else "home"
-            gap["h2h"] = abs(ypg["away"] - ypg["home"])
+        # the head-to-head lean is the tested read (data/h2h_reads.json, the edge
+        # score in research/nfl_h2h), and only where it says something: every
+        # line posted on both sides, a lead of 4+, not a backup's borrowed numbers
+        # (Jose, Oct 7, 2026: "the h2h needs to be highlighted in the ticket
+        # within the system we have"). No read, no lean.
+        rd = h2h_read(men["away"][0], men["home"][0])
+        if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4:
+            lean["h2h"] = "away" if fam(rd["pick"]) == fam(men["away"][0]) else "home"
+            gap["h2h"] = rd["lead"]
+            game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"]}
         for w in men:
             other = "home" if w == "away" else "away"
             exp = expect(rows[w], alw[other])
@@ -457,7 +476,7 @@ def main():
         game["call"] = {}
         for m in ("ml", "h2h"):
             l = lean[m]
-            game["call"][m] = {w: (None if not l else ("pass" if w != l else ("take" if gap.get(m, 0) >= (7 if m == "ml" else 40) else "lean"))) for w in men}
+            game["call"][m] = {w: (None if not l else ("pass" if w != l else ("take" if gap.get(m, 0) >= (7 if m == "ml" else 6) else "lean"))) for w in men}
         out[gid] = game
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     print("suggest: %d games" % len(out))
