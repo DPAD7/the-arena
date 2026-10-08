@@ -93,8 +93,12 @@ def main():
     wire = load(os.path.join(D, "site", "wire.json"), {})
     now = dt.datetime.now(dt.timezone.utc)
     qbs, allowed = {}, {}
-    # the NFL only, for now (Jose, Sep 28, 2026: "just for NFL now")
-    for lg, var in (("nfl", "SCHED"),):
+    nfl, nfl_allowed = qbs, allowed
+    # the NFL only, for now (Jose, Sep 28, 2026: "just for NFL now"); college
+    # goes to its own file below, for the hold on a college face (Oct 8, 2026)
+    cfb, cfb_allowed = {}, {}
+    for lg, var in (("nfl", "SCHED"), ("cfb", "CFB")):
+        qbs, allowed = (cfb, cfb_allowed) if lg == "cfb" else (qbs, allowed)
         for r in rows(s, var):
             gid, iso, away, home = str(r[1]), r[2], r[3], r[4]
             try:
@@ -132,6 +136,13 @@ def main():
                     w = wire.get(pid) or {}
                     q["nx"] = {"d": iso, "gid": gid, "o": them, "h": side == 1, "px": px, "sl": slot(iso),
                                "wx": wx, "inj": (w.get("status") or "") if w else ""}
+    qbs, allowed = nfl, nfl_allowed
+    for q in cfb.values():
+        q["g"].sort(key=lambda g: g["d"], reverse=True)
+        for g in q["g"]:
+            g.pop("att", None)
+    json.dump({"at": now.strftime("%Y-%m-%dT%H:%MZ"), "qbs": {k: v for k, v in cfb.items() if v["g"] or v["nx"]}},
+              open(os.path.join(D, "site", "qbsearch_cfb.json"), "w"), separators=(",", ":"))
     for q in qbs.values():
         q["g"].sort(key=lambda g: g["d"], reverse=True)
         if q["nx"]:

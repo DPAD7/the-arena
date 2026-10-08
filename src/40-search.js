@@ -558,8 +558,16 @@
     pop.className = "qblog"; pop.hidden = true;
     document.body.appendChild(pop);
     function etDay(iso) { return new Date(iso).toLocaleDateString("en-US", { month: "numeric", day: "numeric", timeZone: "America/New_York" }); }
-    function seasonOf(id) {
-      var qs = DATA.qbs, q = qs[id];
+    /* a college passer's season is its own file, so the NFL search stays the
+       NFL's (Jose, Oct 8, 2026: "add the record to the face of CFB like nfl") */
+    var CF = null;
+    function cfLoad() {
+      if (!CF) CF = fetch("qbsearch_cfb.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
+        .then(function (j) { return (j && j.qbs) || {}; }).catch(function () { CF = null; return {}; });
+      return CF;
+    }
+    function seasonOf(id, qs) {
+      var q = qs[id];
       if (!q) return "";
       var games = (q.g || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
       var tot = { yd: 0, p: 0, ru: 0, w: 0, l: 0 };
@@ -583,15 +591,15 @@
       }).join("");
       var n = games.length || 1, nx = q.nx;
       var next = nx ? "next: " + (nx.h ? "vs " : "@ ") + esc(nx.o) + ", " + new Date(nx.d).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }) : "";
-      return '<div class="ql-card"><div class="ql-hd">' + face(id, "nfl") + '<div><b>' + esc(q.n) + '</b><i>' + esc(q.t || "") + (next ? " · " + next : "") + '</i></div></div>' +
+      return '<div class="ql-card"><div class="ql-hd">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><i>' + esc(q.t || "") + (next ? " · " + next : "") + '</i></div></div>' +
         '<div class="ql-sum"><div><b>' + tot.w + "-" + tot.l + '</b><span>Record</span></div><div><b>' + Math.round(tot.yd / n) + '</b><span>Yds / game</span></div>' +
         '<div><b>' + tot.p + '</b><span>Pass TD</span></div><div><b>' + tot.ru + '</b><span>Rush TD</span></div></div>' +
         (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>Pass yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
                       : '<div class="ql-none">No games played yet</div>') + '</div>';
     }
-    function popOpen(id, at) {
-      load().then(function () {
-        var html = seasonOf(id);
+    function popOpen(id, at, lg) {
+      (lg === "cfb" ? cfLoad() : load().then(function () { return DATA.qbs; })).then(function (qs) {
+        var html = seasonOf(id, qs);
         if (!html) return;
         pop.innerHTML = html; pop.hidden = false; openedAt = Date.now();
         /* over the card he is holding, not the top of the screen (Jose, Oct 3,
@@ -617,26 +625,32 @@
        a mouse; a move of more than a few pixels, or the page taking the
        finger for a scroll (pointercancel), lets it go */
     document.addEventListener("pointerdown", function (e) {
-      var im = e.target.closest && e.target.closest('.gcard[data-lg="nfl"] img.qbface');
+      var SEL = '.gcard[data-lg="nfl"] img.qbface, .gcard[data-lg="college-football"] img.qbface';
+      var im = e.target.closest && e.target.closest(SEL);
       /* the right man's face sits under the hide corner: look through it to
          the face (the corner keeps its own drag; a hold that never moves is
          not a drag) */
       if (!im && document.elementsFromPoint) {
         im = document.elementsFromPoint(e.clientX, e.clientY).filter(function (x) {
-          return x.matches && x.matches('.gcard[data-lg="nfl"] img.qbface');
+          return x.matches && x.matches(SEL);
         })[0] || null;
       }
       held = false;
       clearTimeout(hold); hold = null;
       if (!im || !e.isPrimary) return;
-      var m = /face\/nfl\/(\d+)\.png/.exec(im.getAttribute("src") || "");
-      if (!m) return;
+      /* a college face may be a picture from anywhere: the man is the card's own
+         passer on that side, never the picture's name */
+      var card = im.closest(".gcard"), cfb = card.dataset.lg === "college-football";
+      var cr = card.getBoundingClientRect();
+      var m = cfb ? [0, e.clientX < cr.left + cr.width / 2 ? card.dataset.lqbid : card.dataset.rqbid]
+                  : /face\/nfl\/(\d+)\.png/.exec(im.getAttribute("src") || "");
+      if (!m || !m[1]) return;
       /* only the face's own section: not the strip with the travel mark and the
          record above it, not the name and price under it (Jose, Oct 3, 2026) */
       var r = im.getBoundingClientRect(), fy = (e.clientY - r.top) / (r.height || 1);
       if (fy < 0.17 || fy > 0.78) return;
       hx = e.clientX; hy = e.clientY;
-      hold = setTimeout(function () { hold = null; held = true; buzz(); popOpen(m[1]); }, 450);
+      hold = setTimeout(function () { hold = null; held = true; buzz(); popOpen(m[1], null, cfb ? "cfb" : "nfl"); }, 450);
     }, true);
     document.addEventListener("pointermove", function (e) {
       if (hold && (Math.abs(e.clientX - hx) > 12 || Math.abs(e.clientY - hy) > 12)) { clearTimeout(hold); hold = null; }
