@@ -550,6 +550,27 @@
        touchdowns, then each game -- result, opponent, passing yards, the
        margin over the other passer, passing and rushing touchdowns. A finger
        that moves is a scroll or a swipe, and the hold lets it go. */
+    /* the little tap a hold gives, the way theScore's does (Jose, Oct 8,
+       2026). Android takes navigator.vibrate; iPhone Safari ignores it but,
+       from iOS 18, taps the hand when a switch is flipped -- so a switch no
+       one sees is flipped instead */
+    var buzzSw = null;
+    function buzz() {
+      if (navigator.vibrate && navigator.vibrate(10)) return;
+      try {
+        if (!buzzSw) {
+          buzzSw = document.createElement("label");
+          buzzSw.setAttribute("aria-hidden", "true"); buzzSw.dataset.buzz = "1";
+          buzzSw.style.cssText = "position:fixed;left:-9999px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none";
+          var sw = document.createElement("input");
+          sw.type = "checkbox"; sw.setAttribute("switch", ""); sw.tabIndex = -1;
+          buzzSw.appendChild(sw);
+          document.body.appendChild(buzzSw);
+        }
+        buzzSw.click();
+      } catch (e) {}
+    }
+    window._buzz = buzz;
     var pop = document.createElement("div");
     pop.className = "qblog"; pop.hidden = true;
     document.body.appendChild(pop);
@@ -632,7 +653,7 @@
       var r = im.getBoundingClientRect(), fy = (e.clientY - r.top) / (r.height || 1);
       if (fy < 0.17 || fy > 0.78) return;
       hx = e.clientX; hy = e.clientY;
-      hold = setTimeout(function () { hold = null; held = true; if (navigator.vibrate) navigator.vibrate(10); popOpen(m[1]); }, 450);
+      hold = setTimeout(function () { hold = null; held = true; buzz(); popOpen(m[1]); }, 450);
     }, true);
     document.addEventListener("pointermove", function (e) {
       if (hold && (Math.abs(e.clientX - hx) > 12 || Math.abs(e.clientY - hy) > 12)) { clearTimeout(hold); hold = null; }
@@ -641,7 +662,7 @@
       document.addEventListener(k, function () { clearTimeout(hold); hold = null; }, true);
     });
     /* the tap that ends a hold is not also a tap on the card */
-    document.addEventListener("click", function (e) { if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-buzz]")) return; if (held) { held = false; e.stopPropagation(); e.preventDefault(); } }, true);
     document.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest("img.qbface")) e.preventDefault(); });
     window._qbLog = popOpen;
 
@@ -734,7 +755,7 @@
       var side = (fr.left + fr.width / 2) < (cr.left + cr.width / 2) ? "l" : "r";
       rhLoad();
       rhX = e.clientX; rhY = e.clientY;
-      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; if (navigator.vibrate) navigator.vibrate(10); rhOpen(card, side); }, 450);
+      rhHold = setTimeout(function () { rhHold = null; rhHeld = true; buzz(); rhOpen(card, side); }, 450);
     }, true);
     document.addEventListener("pointermove", function (e) {
       if (rhHold && (Math.abs(e.clientX - rhX) > 12 || Math.abs(e.clientY - rhY) > 12)) { clearTimeout(rhHold); rhHold = null; }
@@ -742,7 +763,7 @@
     ["pointerup", "pointercancel"].forEach(function (k) {
       document.addEventListener(k, function () { clearTimeout(rhHold); rhHold = null; }, true);
     });
-    document.addEventListener("click", function (e) { if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
+    document.addEventListener("click", function (e) { if (e.target.closest && e.target.closest("[data-buzz]")) return; if (rhHeld) { rhHeld = false; e.stopPropagation(); e.preventDefault(); } }, true);
     window._rhOpen = rhOpen;
     /* the board never zooms (Jose, Oct 3, 2026: "I don't want it to zoom").
        iPhone Safari ignores user-scalable=no, so the pinch is refused, and a
