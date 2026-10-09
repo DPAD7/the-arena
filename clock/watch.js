@@ -310,7 +310,13 @@ export function liveLegs(slips, idx, games, rows) {
     const st = (bet.legs || []).map(lg => {
       const v = idx[lg.sel], r = v && rows[v.gid];
       const dk = String(lg.status || "").toLowerCase();
-      return dk === "won" || dk === "lost" ? dk : legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
+      if (dk === "won" || dk === "lost") return dk;
+      /* a leg the board holds no price for (HT/FT, a kicker, tackles) has no
+         state here: once its game is five hours past kickoff it is not still
+         being played (Oct 9, 2026: the TB@DAL slip held the badge at 3) */
+      const r0 = !v && lg.g && rows[lg.g];
+      if (r0 && Date.now() > Date.parse(r0[2]) + 5 * 60 * MIN) return "done";
+      return legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
     });
     if (st.includes("lost")) continue;
     n += st.filter(s => s === "open").length;
