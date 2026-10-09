@@ -22,7 +22,7 @@
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
 import { sendPush } from "./push.js";
-import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState } from "./watch.js";
+import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState, looseState } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, leghit: true, pregame: true, change: true, fight: true, recap: true };
@@ -423,7 +423,9 @@ export class Clock {
     // the games on his legs being played now
     const want = new Set();
     for (const bet of slips) for (const l of bet.legs || []) {
-      const v = idx[l.sel]; if (!v) continue;
+      /* a leg off no board price reads the game it was tracked on */
+      const v = idx[l.sel] || (l.g && rows[String(l.g)] && String(l.status || "").toLowerCase() === "open" ? { gid: String(l.g) } : null);
+      if (!v) continue;
       const st = Date.parse(rows[v.gid][2]);
       /* a slip is only settled when its last leg is, so every leg on it is
          read until then: a fight from the 4 PM prelims had dropped out of
@@ -484,9 +486,9 @@ export class Clock {
       let moved = false;
       for (const bet of sent) {
         for (const l of bet.legs || []) {
-          const v = idx[l.sel], g = v && games[v.gid], r = v && rows[v.gid];
-          if (!v || !g) continue;
-          const st = legState(v, g, v.fight || !r ? null : (v.side ? r[7] : r[9]), r);
+          const v = idx[l.sel], g = v ? games[v.gid] : games[String(l.g || "")], r = v && rows[v.gid];
+          if (!g) continue;
+          const st = v ? legState(v, g, v.fight || !r ? null : (v.side ? r[7] : r[9]), r) : looseState(l, g);
           if ((st === "won" || st === "lost") && String(l.status || "").toLowerCase() !== st) { l.status = st; moved = true; }
         }
         const ls = (bet.legs || []).map(l => String(l.status || "").toLowerCase());

@@ -113,9 +113,66 @@ export async function readGame(gid, lg, board) {
       }
       const wp = d.winprobability || [];
       if (wp.length && g.wpHome == null) g.wpHome = wp[wp.length - 1].homeWinPercentage;
+      /* every man's line and each quarter's points, so a leg the board holds
+         no price for still settles off the game (Oct 9, 2026) */
+      g.box = {};
+      for (const t of ((d.boxscore || {}).players) || []) for (const st of t.statistics || []) {
+        const lb = st.labels || [];
+        for (const a of st.athletes || []) {
+          const nm = (a.athlete || {}).displayName || "", m = g.box[nm] = g.box[nm] || {};
+          const line = m[st.name] = {};
+          lb.forEach((l, i) => { line[l] = (a.stats || [])[i]; });
+        }
+      }
+      g.ls = {};
+      for (const c of ((((d.header || {}).competitions) || [{}])[0] || {}).competitors || [])
+        g.ls[(c.team || {}).abbreviation] = (c.linescores || []).map(q => +(q.displayValue != null ? q.displayValue : q.value) || 0);
     } catch (e) {}
   }
   return g;
+}
+
+/* a leg off no board price, settled once its game is over: half time / full
+   time off the quarters, a count prop off the man's own box-score line --
+   the same stats the wallet draws (Jose, Oct 9, 2026: "if the game is over
+   ... the markets within" settle) */
+const LOOSE = [
+  [/rush(ing)? \+ rec(eiving)? yards/i, [["rushing", "YDS"], ["receiving", "YDS"]]],
+  [/receiving yards|rec yds/i, [["receiving", "YDS"]]], [/longest reception/i, [["receiving", "LONG"]]],
+  [/receptions/i, [["receiving", "REC"]]], [/rushing yards|rush yds/i, [["rushing", "YDS"]]],
+  [/rushing attempts|carries/i, [["rushing", "CAR"]]], [/passing yards|pass yds/i, [["passing", "YDS"]]],
+  [/completions/i, [["passing", "C/ATT", 0]]], [/pass(ing)? attempts/i, [["passing", "C/ATT", 1]]],
+  [/interceptions/i, [["passing", "INT"]]], [/solo tackles/i, [["defensive", "SOLO"]]],
+  [/tackles/i, [["defensive", "TOT"]]], [/sacks/i, [["defensive", "SACKS"]]],
+  [/field goals?/i, [["kicking", "FG", 0]]], [/extra points?/i, [["kicking", "XP", 0]]],
+  [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]]]
+];
+export function looseState(l, g) {
+  if (!g || g.state !== "post") return "open";
+  const mk = String(l.market || ""), pick = String(l.pick || "").split(" \u00b7 ")[0].trim();
+  if (/half ?time ?\/ ?full ?time/i.test(mk)) {
+    const two = pick.split("/").map(t => t.trim().split(" ")[0].toUpperCase()), ab = Object.keys(g.ls || {});
+    if (ab.length !== 2) return "open";
+    const lead = n => { const a = (g.ls[ab[0]] || []).slice(0, n).reduce((x, y) => x + y, 0), b = (g.ls[ab[1]] || []).slice(0, n).reduce((x, y) => x + y, 0);
+      return a > b ? ab[0] : b > a ? ab[1] : "TIE"; };
+    const want = t => /^(TIE|DRAW)/.test(t) ? "TIE" : t;
+    return lead(2) === want(two[0]) && lead(4) === want(two[1]) ? "won" : "lost";
+  }
+  const stat = LOOSE.find(x => x[0].test(mk));
+  if (!stat || !g.box) return "open";
+  const fold = x => String(x).normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\b(jr|sr|ii|iii|iv)\b\.?/ig, "").replace(/[^a-z ]/ig, "").trim().toLowerCase();
+  const who = fold(mk.replace(stat[0], "").replace(/\b(made|o\/u|over\/under|milestones?|alt(ernate)?)\b/ig, ""));
+  let names = Object.keys(g.box).filter(n => fold(n) === who);
+  if (names.length !== 1) { const p = who.split(" "), last = p[p.length - 1], ini = (p[0] || "")[0];
+    names = Object.keys(g.box).filter(n => { const f = fold(n).split(" "); return f[f.length - 1] === last && f[0][0] === ini; }); }
+  if (names.length !== 1) return "open";
+  let have = 0;
+  for (const src of stat[1]) { let v = ((g.box[names[0]][src[0]] || {})[src[1]]); if (src[2] !== undefined && v) v = String(v).split("/")[src[2]]; have += parseFloat(v) || 0; }
+  let m;
+  if ((m = /^(\d+)\+$/.exec(pick))) return have >= +m[1] ? "won" : "lost";
+  if ((m = /^over\s+([\d.]+)$/i.exec(pick))) return have > +m[1] ? "won" : "lost";
+  if ((m = /^under\s+([\d.]+)$/i.exec(pick))) return have < +m[1] ? "won" : "lost";
+  return "open";
 }
 
 /* a leg's standing: won, lost or open */
@@ -314,6 +371,7 @@ export function liveLegs(slips, idx, games, rows) {
       /* a leg the board holds no price for (HT/FT, a kicker, tackles) has no
          state here: once its game is five hours past kickoff it is not still
          being played (Oct 9, 2026: the TB@DAL slip held the badge at 3) */
+      if (!v && lg.g && games[lg.g]) { const ls = looseState(lg, games[lg.g]); if (ls !== "open") return ls; }
       const r0 = !v && lg.g && rows[lg.g];
       if (r0 && Date.now() > Date.parse(r0[2]) + 5 * 60 * MIN) return "done";
       return legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
