@@ -306,7 +306,8 @@ def main():
                          "note": head, "src": src}
             moved.append("%s %s %s (%s)" % (club, name, status, head))
             continue
-        if START.search(head):
+        # "unsure whether he will be able to start" is not a naming
+        if START.search(head) and not OUT.search(head) and not re.search(r"unsure|whether|if he|may not|might not|not sure|questionable|hopeful|able to start", head, re.I):
             nxt = None
             for g in sorted(sched, key=lambda g: g[2]):
                 try:

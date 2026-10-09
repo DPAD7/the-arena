@@ -285,6 +285,11 @@ def main():
             # Keenum over Bagent on Sep 28, 2026, which the chart missed
             # (Jose: "how do you not catch this")
             held = NAMED.get("%s|%s" % (espn_id, club))
+            # a named start never outranks the wire: "unsure whether Lamar
+            # Jackson will be able to start" was held as his naming and kept
+            # him on the card after the Ravens ruled him out (Oct 9, 2026)
+            if held and (wire.get(str(held["id"])) or {}).get("status", "").lower() in STOP:
+                held = None
             if held:
                 if str(g[i + 1]) != str(held["id"]):
                     swaps.append("%-4s %-20s -> %-20s (named)" % (club, g[i], held["name"]))
