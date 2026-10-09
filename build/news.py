@@ -277,6 +277,13 @@ def main():
         if age > dt.timedelta(days=3):
             continue
         src = "%s, %s: %s" % (a.get("by") or "ESPN news", when, head)
+        # a post that lists several men is read only where it names him: "QB
+        # Kienholz is questionable" sat under "RB Rule is doubtful" and he was
+        # marked Doubtful for a week (Oct 9, 2026)
+        sur = (name.split() or [""])[-1]
+        parts = [x for x in re.split(r"[\n]+|(?<=[.!?])\s+", head) if sur and sur.lower() in x.lower()]
+        if parts:
+            head = " ".join(parts)
         if NOT_OUT.search(head):
             if pid in held and (held[pid].get("since") or "") < when and held[pid].get("src", "").startswith("ESPN news"):
                 del held[pid]

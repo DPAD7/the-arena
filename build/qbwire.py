@@ -429,7 +429,7 @@ def main():
     except Exception:
         pass
     for club, g in groups.items():
-        gid = (qbs.get(g["id"]) or {}).get("nx", {}).get("gid")
+        gid = ((qbs.get(g["id"]) or {}).get("nx") or {}).get("gid")
         r = sched.get(str(gid))
         ptd = (props.get(str(gid)) or {}).get("ptd") or []
         if r and len(ptd) == 2:

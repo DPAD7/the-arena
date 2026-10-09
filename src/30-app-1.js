@@ -1395,9 +1395,15 @@
       if (!want) { if (had) had.remove(); return; }
       if (had && had.dataset.said === want) return;
       if (had) had.remove();
-      nm.insertAdjacentHTML("beforeend", want);
+      /* beside the head-to-head price on its inner side, as on the NFL card --
+         at the end it fell under the school and sat mid-card (Jose, Oct 9, 2026) */
+      var od = nm.querySelector(".h2hodds");
+      if (od) od.insertAdjacentHTML(p[0] === "l" ? "afterend" : "beforebegin", want);
+      else nm.insertAdjacentHTML("beforeend", want);
       var mk = nm.querySelector(".hurt");
       if (mk) mk.dataset.said = want;
+      /* the mark takes room on the line: the name fits again around it */
+      fitName(nm);
     });
   }
   window.seatHurt = seatHurt;
