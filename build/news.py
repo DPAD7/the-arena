@@ -55,6 +55,9 @@ IR = re.compile(r"\b(IR|injured reserve)\b", re.I)
 OUT = re.compile(r"\)\s+out\b|\bout (for|at least|indefinitely|with|vs\.?|against|this|until|through|\d)|ruled out|will miss|to miss|expected to miss|sidelined|season-ending|"
                  r"torn|to sit|won'?t play|inactive", re.I)
 DOUBT = re.compile(r"\bdoubtful\b", re.I)
+# hurt and not ruled out: "has shoulder sprain, uncertain", "can't count on
+# him being ready" (Iowa's Hank Brown, Oct 6-8, 2026)
+QUEST = re.compile(r"\buncertain\b|can'?t count on|\bquestionable\b|game-time decision|day-to-day|\bsprain|\bbanged up|\blimited in practice", re.I)
 START = re.compile(r"\b(to start|will start|set to start|slated to start|gets the start|"
                    r"named (the )?starter|start(s|ing)? at QB)\b", re.I)
 
@@ -202,6 +205,37 @@ def main():
                          "categories": [{"type": "athlete", "athleteId": next(iter(who))}],
                          "by": x.get("byline") or "insider"})
 
+    # every college club playing in the next two days, off its own ESPN feed:
+    # college has no injury report to read, so the club's news is the report
+    # (Jose, Oct 9, 2026: "why aren't you doing the injury report and
+    # replacements")
+    cfb_soon = set()
+    for g in json.loads(m2.group(1)) if m2 else []:
+        try:
+            t = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if NOW - dt.timedelta(hours=4) < t < NOW + dt.timedelta(days=2):
+            cfb_soon.add(str(g[1]))
+    tids, seen_c = set(), {a.get("headline") for a in arts}
+    for gid in sorted(cfb_soon):
+        try:
+            sj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=" + gid,
+                        impersonate="chrome", timeout=20).json()
+            for c in ((((sj.get("header") or {}).get("competitions")) or [{}])[0]).get("competitors") or []:
+                tids.add(str((c.get("team") or {}).get("id")))
+        except Exception:
+            continue
+    for tid in sorted(tids):
+        try:
+            tj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/news?team=%s&limit=12" % tid,
+                        impersonate="chrome", timeout=20).json()
+        except Exception:
+            continue
+        for a in tj.get("articles") or []:
+            if a.get("headline") not in seen_c:
+                seen_c.add(a.get("headline")); arts.append(a)
+    print("news: %d college clubs' feeds read" % len(tids))
     held, named = load(HELD), load(NAMED)
     moved = []
     # everyone else on ESPN's injury report -- linemen, targets, backs, the
@@ -290,7 +324,7 @@ def main():
                 moved.append("%s %s cleared (%s)" % (club, name, head))
             continue
         status = "Injured Reserve" if IR.search(head) else "Out" if OUT.search(head) else \
-            "Doubtful" if DOUBT.search(head) else None
+            "Doubtful" if DOUBT.search(head) else "Questionable" if QUEST.search(head) else None
         if status:
             was = held.get(pid) or {}
             if (was.get("since") or "") >= when:

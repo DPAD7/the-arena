@@ -403,6 +403,12 @@ def main():
                 continue
             if club not in last or last[club][1] == str(g[i + 1]):
                 continue
+            # never back to a man the wire has out: the last start is only a
+            # guess, the injury is news (Oct 9, 2026)
+            if (wire.get(last[club][1]) or {}).get("status", "").lower() in STOP + ("doubtful",):
+                argued.append("%s %s started last and is %s; the card keeps %s"
+                              % (club, last[club][0], wire[last[club][1]]["status"], g[i]))
+                continue
             swaps.append("%-4s %-20s -> %-20s (last start)"
                          % (club, g[i], last[club][0]))
             g[i], g[i + 1] = last[club]
