@@ -1,5 +1,21 @@
 [
  {
+  "id": "W5248J",
+  "head": "College Football 50% Profit Boost",
+  "pct": 50,
+  "start": "2026-10-10T10:00:00.0000000Z",
+  "end": "2026-10-11T06:00:00.0000000Z",
+  "sport": "college-football",
+  "game": "",
+  "gid": "",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "any"
+  ]
+ },
+ {
   "id": "RR2P78",
   "head": "Georgia @ Alabama 50% Profit Boost",
   "pct": 50,
@@ -13,6 +29,23 @@
   "maxWager": 25.0,
   "types": [
    "any"
+  ]
+ },
+ {
+  "id": "QRP005",
+  "head": "Oklahoma @ Texas 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-10T10:00:00.0000000Z",
+  "end": "2026-10-10T16:00:00.0000000Z",
+  "sport": "",
+  "game": "Oklahoma @ Texas",
+  "gid": "",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "single",
+   "sgp"
   ]
  }
 ]
