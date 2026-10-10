@@ -881,7 +881,12 @@
     /* over his own half of the card -- the face or the club -- not the top
        of the screen (Jose, Oct 10, 2026: "place it over the image") */
     function say(who, card, s) {
-      box.innerHTML = '<b>Do-not-bet list</b><span>' + who + " is on your do-not-bet list.</span>";
+      /* a big red X in a red frame over his face, see-through (Jose, Oct 10,
+         2026: "like this over the image, opacity") */
+      box.innerHTML = '<svg viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true">' +
+        '<rect x="4" y="4" width="92" height="122" fill="none" stroke="#e8352a" stroke-width="8"/>' +
+        '<path d="M16 14h22l12 34 12-34h22L62 66l24 52H62L50 84 38 118H14l24-52Z" fill="#e8352a"/></svg>';
+      box.setAttribute("aria-label", who + " is on your do-not-bet list");
       /* the face's own strip: from the card's edge to the middle column */
       var c = card.getBoundingClientRect(), inL = c.left + c.width * 0.34, inR = c.right - c.width * 0.34;
       [].forEach.call(card.querySelectorAll("button.price"), function (p) {
@@ -890,8 +895,8 @@
         inL = Math.min(inL, q.left); inR = Math.max(inR, q.right);
       });
       var left = s === "l" ? c.left + 6 : inR + 6, right = s === "l" ? inL - 6 : c.right - 6;
-      box.style.left = left + "px"; box.style.width = Math.max(120, right - left) + "px";
-      box.style.top = (c.top + c.height / 2) + "px";
+      box.style.left = left + "px"; box.style.width = Math.max(90, right - left) + "px";
+      box.style.top = (c.top + 8) + "px"; box.style.height = (c.height - 16) + "px";
       box.hidden = false;
       clearTimeout(t); t = setTimeout(function () { box.hidden = true; }, 3500);
     }
