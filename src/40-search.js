@@ -862,6 +862,48 @@
     window.addEventListener("pageshow", keepBars);
     keepBars();
   })();
+
+  /* ---- his do-not-bet list (Jose, Oct 10, 2026: "if I click the money line
+     or any bets for them, say on the do not bet list") ----
+     A tap on any price for one of these clubs or men -- moneyline, touchdown
+     rung, head to head, a fight's method -- shows a notice. The price is
+     still taken; this only says so. The side is the half of the card the
+     price sits on: left is the away club or the left fighter. */
+  (function () {
+    var CLUBS = { FLA: "Florida", DAL: "Cowboys", VT: "Virginia Tech", PSU: "Penn State", MICH: "Michigan", NO: "Saints", LAC: "Chargers" };
+    var MEN = ["alden coria"];
+    var box = document.createElement("div");
+    box.className = "dnb"; box.hidden = true;
+    document.body.appendChild(box);
+    var t = null;
+    function say(who) {
+      box.innerHTML = '<b>Do-not-bet list</b><span>' + who + " is on your do-not-bet list.</span>";
+      box.hidden = false;
+      clearTimeout(t); t = setTimeout(function () { box.hidden = true; }, 3500);
+    }
+    function sideOf(card, el) {
+      var c = card.getBoundingClientRect(), r = el.getBoundingClientRect();
+      return (r.left + r.right) / 2 < (c.left + c.right) / 2 ? "l" : "r";
+    }
+    function clubOn(card, s) {
+      if (card.dataset[s + "ab"]) return card.dataset[s + "ab"];
+      var lg = card.querySelector(".gside--" + s + " img.glogo");
+      return lg ? String(lg.alt || "").toUpperCase() : "";
+    }
+    document.addEventListener("click", function (e) {
+      var b = e.target.closest && e.target.closest("button.price");
+      var card = b && b.closest(".gcard");
+      if (!card) return;
+      var s = sideOf(card, b);
+      if (card.dataset.bout || card.dataset.sport === "mma") {
+        var man = String(card.dataset[s === "l" ? "lf" : "rf"] || "").toLowerCase();
+        if (MEN.some(function (m) { return man.indexOf(m) >= 0; })) say(card.dataset[s === "l" ? "lf" : "rf"]);
+        return;
+      }
+      var ab = clubOn(card, s);
+      if (CLUBS[ab]) say(CLUBS[ab]);
+    }, true);
+  })();
 </script>
 
 <!-- a push from a phone lands on the board by itself (tested Sep 19, 2026) -->
