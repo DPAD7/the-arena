@@ -871,7 +871,8 @@
      price sits on: left is the away club or the left fighter. */
   (function () {
     var CLUBS = { FLA: "Florida", DAL: "Cowboys", VT: "Virginia Tech", PSU: "Penn State", MICH: "Michigan", NO: "Saints", LAC: "Chargers",
-                  CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers" };
+                  CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers",
+                  KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers" };
     var MEN = ["alden coria", "trevor peek", "dan hooker", "rafa garcia", "marwan rahiki", "joseph morales", "jose miguel delgado", "iwo baraniewski"];
     var box = document.createElement("div");
     box.className = "dnb"; box.hidden = true;
