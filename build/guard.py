@@ -338,15 +338,8 @@ def live():
             ok = False
         if not ok:
             wrong.append("%s does not answer JSON (%s)" % (path.split("?")[0], r.status_code if r is not None else "no answer"))
-    # the DraftKings login the wallet reads with: expired after its last good
-    # sync means every double tap will come back red until it is renewed
-    r = get("/bets?k=" + key)
-    try:
-        b = r.json() if r is not None and r.status_code == 200 else {}
-    except ValueError:
-        b = {}
-    if b.get("expired") and b["expired"] > (b.get("at") or 0):
-        wrong.append("the DraftKings login has expired: open DraftKings in Chrome so the extension sends a fresh one")
+    # (the DraftKings-login check is gone: the DK read was retired Oct 3, 2026,
+    # and Jose no longer logs the extension in -- "we don't use it", Oct 10)
     g = next((g for g, _ in soon("SCHED") if g[6]), None)
     if g:
         r = get("/face/nfl/%s.png" % g[6])

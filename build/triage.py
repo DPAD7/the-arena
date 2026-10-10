@@ -97,8 +97,11 @@ def name_it(lines):
     # (Oct 3, 2026: a midnight clash was sent to his phone as "logged you out")
     if RUN_NAME != "dkbets" and re.search(r"could not apply [0-9a-f]+|CONFLICT \(", text):
         return "transient", script, "Two runs wrote at once; the next one carries it."
-    if re.search(r"LOGIN EXPIRED|no longer mint a token|login has expired|\b401\b.*token|token.*\b401\b", text):
-        return "login", script, "DraftKings logged you out: open DraftKings in Chrome on the Mac and the extension sends a fresh login."
+    # a run that ran out its fifteen minutes: the next one carries on (the
+    # DraftKings-login reading is gone -- that read was retired Oct 3, 2026,
+    # and a timeout was being sent to his phone as "logged you out", Oct 9)
+    if re.search(r"passed its \d+s budget", text):
+        return "transient", script, "A sweep ran past 15 minutes and was stopped; the next one carries it."
     # a sweep that could not put its commit on top of another push: the next one will
     if re.search(r"could not apply [0-9a-f]+|CONFLICT \(|rejected\].*fetch first|non-fast-forward", text):
         return "transient", script, "Two runs wrote at once; the next one carries it."
