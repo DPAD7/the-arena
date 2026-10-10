@@ -874,31 +874,28 @@
                   CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers",
                   KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers" };
     var MEN = ["alden coria", "trevor peek", "dan hooker", "rafa garcia", "marwan rahiki", "joseph morales", "jose miguel delgado", "iwo baraniewski"];
-    var box = document.createElement("div");
-    box.className = "dnb"; box.hidden = true;
-    document.body.appendChild(box);
-    var t = null;
     /* over his own half of the card -- the face or the club -- not the top
        of the screen (Jose, Oct 10, 2026: "place it over the image") */
     function say(who, card, s) {
-      /* a big red X in a red frame over his face, see-through (Jose, Oct 10,
-         2026: "like this over the image, opacity") */
-      box.innerHTML = '<svg viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true">' +
+      /* a big red X in a red frame over his face, see-through, laid in the
+         card itself: over the picture, under the name, the record and the
+         icons (Jose, Oct 10, 2026: "under the record, name, icon but over the
+         image") */
+      var img = card.querySelector(".gside--" + s + " img.qbface") || card.querySelector(".gside--" + s + " img.ffab") ||
+                card.querySelector(".gside--" + s + " img");
+      var host = img && img.offsetParent;
+      if (!host) return;
+      var old = card.querySelector(".dnb"); if (old) old.remove();
+      var x = document.createElement("i");
+      x.className = "dnb";
+      x.setAttribute("aria-label", who + " is on your do-not-bet list");
+      x.innerHTML = '<svg viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true">' +
         '<rect x="4" y="4" width="92" height="122" fill="none" stroke="#e8352a" stroke-width="8"/>' +
         '<path d="M16 14h22l12 34 12-34h22L62 66l24 52H62L50 84 38 118H14l24-52Z" fill="#e8352a"/></svg>';
-      box.setAttribute("aria-label", who + " is on your do-not-bet list");
-      /* the face's own strip: from the card's edge to the middle column */
-      var c = card.getBoundingClientRect(), inL = c.left + c.width * 0.34, inR = c.right - c.width * 0.34;
-      [].forEach.call(card.querySelectorAll("button.price"), function (p) {
-        if (!p.offsetParent || p.closest(".h2hnm")) return;
-        var q = p.getBoundingClientRect();
-        inL = Math.min(inL, q.left); inR = Math.max(inR, q.right);
-      });
-      var left = s === "l" ? c.left + 6 : inR + 6, right = s === "l" ? inL - 6 : c.right - 6;
-      box.style.left = left + "px"; box.style.width = Math.max(90, right - left) + "px";
-      box.style.top = (c.top + 8) + "px"; box.style.height = (c.height - 16) + "px";
-      box.hidden = false;
-      clearTimeout(t); t = setTimeout(function () { box.hidden = true; }, 3500);
+      x.style.left = (img.offsetLeft + 6) + "px"; x.style.top = (img.offsetTop + 6) + "px";
+      x.style.width = (img.offsetWidth - 12) + "px"; x.style.height = (img.offsetHeight - 12) + "px";
+      host.appendChild(x);
+      setTimeout(function () { x.remove(); }, 3500);
     }
     function sideOf(card, el) {
       var c = card.getBoundingClientRect(), r = el.getBoundingClientRect();
