@@ -217,24 +217,33 @@ def main():
             continue
         if NOW - dt.timedelta(hours=4) < t < NOW + dt.timedelta(days=2):
             cfb_soon.add(str(g[1]))
+    # the club ids off one scoreboard per day, not a summary per game, and the
+    # feeds read side by side: one at a time it was ~200 requests and pushed
+    # the afternoon sweeps past their 15 minutes (Oct 9-10, 2026)
+    from concurrent.futures import ThreadPoolExecutor
     tids, seen_c = set(), {a.get("headline") for a in arts}
-    for gid in sorted(cfb_soon):
+    for day in sorted({(NOW + dt.timedelta(days=k)).strftime("%Y%m%d") for k in (0, 1, 2)}):
         try:
-            sj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/summary?event=" + gid,
-                        impersonate="chrome", timeout=20).json()
-            for c in ((((sj.get("header") or {}).get("competitions")) or [{}])[0]).get("competitors") or []:
-                tids.add(str((c.get("team") or {}).get("id")))
+            sb = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/scoreboard"
+                        "?groups=80&limit=300&dates=" + day, impersonate="chrome", timeout=20).json()
         except Exception:
             continue
-    for tid in sorted(tids):
+        for e in sb.get("events") or []:
+            if str(e.get("id")) in cfb_soon:
+                for c in ((e.get("competitions") or [{}])[0]).get("competitors") or []:
+                    tids.add(str((c.get("team") or {}).get("id")))
+
+    def feed(tid):
         try:
-            tj = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/news?team=%s&limit=12" % tid,
-                        impersonate="chrome", timeout=20).json()
+            return rq.get("https://site.api.espn.com/apis/site/v2/sports/football/college-football/news?team=%s&limit=12" % tid,
+                          impersonate="chrome", timeout=15).json().get("articles") or []
         except Exception:
-            continue
-        for a in tj.get("articles") or []:
-            if a.get("headline") not in seen_c:
-                seen_c.add(a.get("headline")); arts.append(a)
+            return []
+    with ThreadPoolExecutor(8) as ex:
+        for got in ex.map(feed, sorted(tids)):
+            for a in got:
+                if a.get("headline") not in seen_c:
+                    seen_c.add(a.get("headline")); arts.append(a)
     print("news: %d college clubs' feeds read" % len(tids))
     held, named = load(HELD), load(NAMED)
     moved = []
