@@ -878,8 +878,20 @@
     box.className = "dnb"; box.hidden = true;
     document.body.appendChild(box);
     var t = null;
-    function say(who) {
+    /* over his own half of the card -- the face or the club -- not the top
+       of the screen (Jose, Oct 10, 2026: "place it over the image") */
+    function say(who, card, s) {
       box.innerHTML = '<b>Do-not-bet list</b><span>' + who + " is on your do-not-bet list.</span>";
+      /* the face's own strip: from the card's edge to the middle column */
+      var c = card.getBoundingClientRect(), inL = c.left + c.width * 0.34, inR = c.right - c.width * 0.34;
+      [].forEach.call(card.querySelectorAll("button.price"), function (p) {
+        if (!p.offsetParent || p.closest(".h2hnm")) return;
+        var q = p.getBoundingClientRect();
+        inL = Math.min(inL, q.left); inR = Math.max(inR, q.right);
+      });
+      var left = s === "l" ? c.left + 6 : inR + 6, right = s === "l" ? inL - 6 : c.right - 6;
+      box.style.left = left + "px"; box.style.width = Math.max(120, right - left) + "px";
+      box.style.top = (c.top + c.height / 2) + "px";
       box.hidden = false;
       clearTimeout(t); t = setTimeout(function () { box.hidden = true; }, 3500);
     }
@@ -899,11 +911,11 @@
       var s = sideOf(card, b);
       if (card.dataset.bout || card.dataset.sport === "mma") {
         var man = String(card.dataset[s === "l" ? "lf" : "rf"] || "").toLowerCase();
-        if (MEN.some(function (m) { return man.indexOf(m) >= 0; })) say(card.dataset[s === "l" ? "lf" : "rf"]);
+        if (MEN.some(function (m) { return man.indexOf(m) >= 0; })) say(card.dataset[s === "l" ? "lf" : "rf"], card, s);
         return;
       }
       var ab = clubOn(card, s);
-      if (CLUBS[ab]) say(CLUBS[ab]);
+      if (CLUBS[ab]) say(CLUBS[ab], card, s);
     }, true);
   })();
 </script>
