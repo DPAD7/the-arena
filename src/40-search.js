@@ -865,38 +865,15 @@
 
   /* ---- his do-not-bet list (Jose, Oct 10, 2026: "if I click the money line
      or any bets for them, say on the do not bet list") ----
-     A tap on any price for one of these clubs or men -- moneyline, touchdown
-     rung, head to head, a fight's method -- shows a notice. The price is
-     still taken; this only says so. The side is the half of the card the
-     price sits on: left is the away club or the left fighter. */
+     Any price for one of these clubs or men -- moneyline, touchdown rung,
+     head to head, a fight's method -- turns red when picked. The price is
+     still taken; the color only says so. The side is the half of the card
+     the price sits on: left is the away club or the left fighter. */
   (function () {
     var CLUBS = { FLA: "Florida", DAL: "Cowboys", VT: "Virginia Tech", PSU: "Penn State", MICH: "Michigan", NO: "Saints", LAC: "Chargers",
                   CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers",
                   KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers" };
     var MEN = ["alden coria", "trevor peek", "dan hooker", "rafa garcia", "marwan rahiki", "joseph morales", "jose miguel delgado", "iwo baraniewski"];
-    /* over his own half of the card -- the face or the club -- not the top
-       of the screen (Jose, Oct 10, 2026: "place it over the image") */
-    function say(who, card, s) {
-      /* a big red X in a red frame over his face, see-through, laid in the
-         card itself: over the picture, under the name, the record and the
-         icons (Jose, Oct 10, 2026: "under the record, name, icon but over the
-         image") */
-      var img = card.querySelector(".gside--" + s + " img.qbface") || card.querySelector(".gside--" + s + " img.ffab") ||
-                card.querySelector(".gside--" + s + " img");
-      var host = img && img.offsetParent;
-      if (!host) return;
-      var old = card.querySelector(".dnb"); if (old) old.remove();
-      var x = document.createElement("i");
-      x.className = "dnb";
-      x.setAttribute("aria-label", who + " is on your do-not-bet list");
-      x.innerHTML = '<svg viewBox="0 0 100 130" preserveAspectRatio="none" aria-hidden="true">' +
-        '<rect x="4" y="4" width="92" height="122" fill="none" stroke="#e8352a" stroke-width="8"/>' +
-        '<path d="M16 14h22l12 34 12-34h22L62 66l24 52H62L50 84 38 118H14l24-52Z" fill="#e8352a"/></svg>';
-      x.style.left = (img.offsetLeft + 6) + "px"; x.style.top = (img.offsetTop + 6) + "px";
-      x.style.width = (img.offsetWidth - 12) + "px"; x.style.height = (img.offsetHeight - 12) + "px";
-      host.appendChild(x);
-      setTimeout(function () { x.remove(); }, 3500);
-    }
     function sideOf(card, el) {
       var c = card.getBoundingClientRect(), r = el.getBoundingClientRect();
       return (r.left + r.right) / 2 < (c.left + c.right) / 2 ? "l" : "r";
@@ -906,19 +883,32 @@
       var lg = card.querySelector(".gside--" + s + " img.glogo");
       return lg ? String(lg.alt || "").toUpperCase() : "";
     }
-    document.addEventListener("click", function (e) {
-      var b = e.target.closest && e.target.closest("button.price");
-      var card = b && b.closest(".gcard");
-      if (!card) return;
-      var s = sideOf(card, b);
+    /* a price for one of them turns red, not white, when it is picked
+       (Jose, Oct 10, 2026: "just make the button red ... instead of white it
+       turns red"). Every price on his side of such a card is marked, each
+       time the cards are drawn. */
+    function isMine(card, s) {
       if (card.dataset.bout || card.dataset.sport === "mma") {
         var man = String(card.dataset[s === "l" ? "lf" : "rf"] || "").toLowerCase();
-        if (MEN.some(function (m) { return man.indexOf(m) >= 0; })) say(card.dataset[s === "l" ? "lf" : "rf"], card, s);
-        return;
+        return MEN.some(function (m) { return man.indexOf(m) >= 0; });
       }
-      var ab = clubOn(card, s);
-      if (CLUBS[ab]) say(CLUBS[ab], card, s);
-    }, true);
+      return !!CLUBS[clubOn(card, s)];
+    }
+    function mark() {
+      [].forEach.call(document.querySelectorAll(".gcard"), function (card) {
+        if (!card.offsetParent) return;
+        var l = isMine(card, "l"), r = isMine(card, "r");
+        if (!l && !r) return;
+        [].forEach.call(card.querySelectorAll("button.price"), function (b) {
+          b.classList.toggle("dnbp", sideOf(card, b) === "l" ? l : r);
+        });
+      });
+    }
+    var mt = null;
+    new MutationObserver(function () { clearTimeout(mt); mt = setTimeout(mark, 300); })
+      .observe(document.body, { childList: true, subtree: true });
+    document.addEventListener("click", function () { setTimeout(mark, 0); }, true);
+    setTimeout(mark, 1500);
   })();
 </script>
 
