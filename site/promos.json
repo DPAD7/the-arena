@@ -1,30 +1,14 @@
 [
  {
-  "id": "W5248J",
-  "head": "College Football 50% Profit Boost",
+  "id": "2X6NGR",
+  "head": "NFL Touchdown Scorers 50% Profit Boost",
   "pct": 50,
-  "start": "2026-10-10T10:00:00.0000000Z",
-  "end": "2026-10-11T06:00:00.0000000Z",
-  "sport": "college-football",
+  "start": "2026-10-10T21:00:00.0000000Z",
+  "end": "2026-10-12T03:59:00.0000000Z",
+  "sport": "nfl",
   "game": "",
   "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
-  "id": "RR2P78",
-  "head": "Georgia @ Alabama 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-09T14:30:00.0000000Z",
-  "end": "2026-10-11T03:00:00.0000000Z",
-  "sport": "college-football",
-  "game": "Georgia @ Alabama",
-  "gid": "401856712",
-  "minOdds": "-200",
+  "minOdds": "+100",
   "minLegs": 1,
   "maxWager": 25.0,
   "types": [
@@ -48,22 +32,6 @@
   ]
  },
  {
-  "id": "2X6NGR",
-  "head": "NFL Touchdown Scorers 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-10T21:00:00.0000000Z",
-  "end": "2026-10-12T03:59:00.0000000Z",
-  "sport": "nfl",
-  "game": "",
-  "gid": "",
-  "minOdds": "+100",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
   "id": "RR2QWV",
   "head": "NFL 50% Parlay Boost",
   "pct": 50,
@@ -79,6 +47,23 @@
    "sgp",
    "sgpx",
    "parlay"
+  ]
+ },
+ {
+  "id": "78993E",
+  "head": "Liverpool vs Man City 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-11T06:30:00.0000000Z",
+  "end": "2026-10-11T17:15:00.0000000Z",
+  "sport": "",
+  "game": "Liverpool vs Man City",
+  "gid": "",
+  "minOdds": "+100",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "single",
+   "sgp"
   ]
  }
 ]
