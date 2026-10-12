@@ -1887,7 +1887,9 @@
           if (fv0 === "all") fv0 = "hot";      /* ALL is parked; the field is the season's page */
           /* HOT, NOT and OUT live on the HOT page now; the hold is the
              weeks (Jose, Sep 25, 2026: "long press does weeks") */
-          items = [["hot", "FIELD"]].map(function (v) {
+          /* the field is parked (Oct 6, 2026): no FIELD in the menu unless it
+             comes back (Jose, Oct 12, 2026: "why is this still named field?") */
+          items = (window.HOTFIELD ? [["hot", "FIELD"]] : []).map(function (v) {
             return { key: v[0], label: v[1], view: v[0], season: seasonTab, cur: onSeason && fv0 === v[0] };
           }).concat(wk.filter(function (x) { return x !== seasonTab; }).map(function (x) {
             return { key: x.textContent, label: x.textContent.replace(/\s+/g, " ").trim(), el: x,
