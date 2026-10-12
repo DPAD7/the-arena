@@ -1861,11 +1861,10 @@
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
       if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel]; }); })) setTimeout(bankDraw, 0);
-      /* the icon's badge while the app is open: legs still being played on
-         the open slips (the clock sets it while the app is closed) */
+      /* the icon's badge while the app is open: slips still being played (the clock sets it while the app is closed) */
       try {
         var liveN = (DKB.bets || []).filter(function (b0) { return !(b0.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; }); })
-          .reduce(function (t, b0) { return t + (b0.legs || []).filter(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost" && TRKST[lg.sel] !== "won"; }).length; }, 0);
+          .reduce(function (t, b0) { return t + ((b0.legs || []).some(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost" && TRKST[lg.sel] !== "won"; }) ? 1 : 0); }, 0);   /* one a slip, not one a leg (Jose, Oct 12, 2026) */
         if (navigator.setAppBadge) { if (liveN) navigator.setAppBadge(liveN); else navigator.clearAppBadge(); }
       } catch (e) {}
       /* the day's totals stand still under the slips, which scroll between

@@ -360,7 +360,7 @@ export function news(slips, idx, games, prev, rows) {
   return out;
 }
 
-/* legs still being played, for the icon's badge */
+/* slips still being played, for the icon's badge */
 export function liveLegs(slips, idx, games, rows) {
   let n = 0;
   for (const bet of slips) {
@@ -377,7 +377,8 @@ export function liveLegs(slips, idx, games, rows) {
       return legState(v, v && games[v.gid], v && r && !v.fight ? (v.side ? r[7] : r[9]) : null, r);
     });
     if (st.includes("lost")) continue;
-    n += st.filter(s => s === "open").length;
+    /* one a slip, not one a leg: two 4-leg slips read 2, not 8 (Jose, Oct 12, 2026) */
+    if (st.includes("open")) n += 1;
   }
   return n;
 }
