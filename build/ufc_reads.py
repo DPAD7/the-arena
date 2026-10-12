@@ -1039,7 +1039,9 @@ def picks_json(card, us, scored, M):
         # Every card gets its top three men's bouts as tickets; only a 75%+ one
         # carries the tested rate, the rest say they are under the cutoff
         # (Jose, Oct 12, 2026: "what is the purpose if we're not getting picks")
-        if women_row(x["row"]) or (won is None and rank >= 3):
+        # every men's bout gets a winner (Jose, Oct 12, 2026: "for each one we
+        # should have a decision, winner and loser")
+        if women_row(x["row"]):
             continue
         rank += 1
         picks[x["bid"]] = dict(rank=rank, pick=x["pick"], vs=x["vs"], box=[pct, 100 - pct], p=pct, won=won,
