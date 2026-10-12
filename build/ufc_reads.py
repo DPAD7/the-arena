@@ -30,13 +30,23 @@
    has bouts newer than the model, it is refit on every bout before the card
    and the JSON rewritten; without it the committed JSON is used.
 
+   Fight-week facts (Oct 12, 2026): the card's Wikipedia page is read every run
+   from 7 days out until the first bell (cached in data/ufc_hist/wiki_<card>.json)
+   for replacements, the notice they took the fight on, short-notice UFC debuts
+   and missed weight. A men's 70-74% pick whose OPPONENT is a replacement on 14
+   days' notice or less, a short-notice debut, or missed weight -- while the pick
+   himself is none of these -- is tier 2: won 89 (blind 2022-26 90.0%, 20 bouts;
+   2015-21 86.7%, 15). The facts ride every pick as own_facts / opp_facts and a
+   why line, whatever the %; they never move p.
+
    A card already under way keeps its picks. When it starts, its ranked picks
    are appended to data/boxpicks_log.csv; results are filled from ESPN after.
 
    Writes site/boxpicks.json:
      {"at", "card", "event", "name", "model",
       "picks": {espn bout id: {"rank", "pick", "vs", "box": [p, 100-p], "p",
-                               "won", "why": [...], "id"}},
+                               "won", "why": [...], "id", "own_facts", "opp_facts",
+                               "opp_flag", "flag": "tier2" (only on a tier-2 pick)}},
       "all":   {espn bout id: {"pick", "vs", "p"}}}
 
    Usage:  python3 build/ufc_reads.py            crawl, score, write
@@ -73,6 +83,10 @@ sys.path.insert(0, os.path.join(D, "build"))
 NOW = dt.datetime.now(dt.timezone.utc)
 TIERS = ((0.75, 82),)                   # men's 75%+ only: 82.2% blind 2022-26, 1.24 a card; the 70% tier is
                                          # dropped (Jose, Oct 12, 2026: "we need something that gets us 75-85+")
+TIER2 = (0.70, 89)                      # 70-74% with the opponent's fight-week flag: blind 2022-26 90.0% (20)
+WIKI_FROM = dt.timedelta(days=7)        # the Wikipedia page is reread every run from 7 days out to the bell
+WIKI_API = "https://en.wikipedia.org/w/api.php"
+WIKI_UA = "TheArenaBoard/1.0 (https://the-arenasports.pages.dev; one page a run, UFC fight-week facts)"
 LIVE_FOR = dt.timedelta(hours=4)        # a card is current until 4 h after its last bout's bell
 GBM = dict(max_depth=3, learning_rate=0.05, max_iter=300, l2_regularization=1.0, random_state=0)
 SKLEARN = "1.9.0"
@@ -886,6 +900,440 @@ def durn(r, s):
     return int(k + b)
 
 
+# ---------------------------------------------------------------- fight-week facts from Wikipedia
+# The research parser (research: scratchpad ufc_ctx/parse_wiki.py), cut down to
+# what the card needs: who stepped in and on how much notice, and who missed
+# weight and by how much. Everything here is known by Friday's weigh-in.
+WLIM = {"Women's Strawweight": 115, "Women's Flyweight": 125, "Women's Bantamweight": 135, "Women's Featherweight": 145,
+        "Light Heavyweight": 205, "Flyweight": 125, "Bantamweight": 135, "Featherweight": 145, "Lightweight": 155,
+        "Welterweight": 170, "Middleweight": 185, "Heavyweight": 265}
+_MON = {m: i + 1 for i, m in enumerate("january february march april may june july august september october november december".split())}
+_NUMW = {"a": 1, "one": 1, "two": 2, "three": 3, "four": 4, "five": 5, "six": 6, "seven": 7, "eight": 8, "nine": 9, "ten": 10,
+         "eleven": 11, "twelve": 12, "fourteen": 14, "fifteen": 15, "twenty": 20, "thirty": 30}
+_REF = re.compile(r"<ref[^>/]*/>|<ref[^>]*>.*?</ref>", re.S)
+_REPL_BY = re.compile(r"replaced by|replacement (?:was|being)|in favou?r of|opponent (?:was|became|changed to)|will now face|"
+                      r"would now face|instead (?:face[sd]?|fought|met|took on)", re.I)
+_REPL_SUBJ = re.compile(r"stepp(?:ed|ing) in|stepp(?:ed|ing) up|as (?:a|his|her|the) (?:late |short[- ]notice )?replacement|"
+                        r"filled in|took (?:the|his|her) place|took over|was tabbed|agreed to (?:fill|step)|\breplaced\b(?! by)|"
+                        r"replac(?:e|ing) (?!by)", re.I)
+_MISS = re.compile(r"missed (?:the )?(?:required )?weight|missed the [\w\s'-]*limit|failed to make weight|came in (?:\w+ )?over|"
+                   r"weighed in (?:at|heavy)|came in at \d|tipped the scales at", re.I)
+_SHORT = re.compile(r"short[- ]notice|late[- ]notice|last[- ]minute|eleventh[- ]hour|days before|fight week|"
+                    r"on (?:\w+ )?(?:days|weeks)'? notice", re.I)
+_NEWC = re.compile(r"newcomer|promotional debut|UFC debut|making (?:his|her) debut", re.I)
+_NOTPERSON = re.compile(r"Championship|UFC|Bellator|Arena|Center|Centre|Fight|Ultimate|Olympic|Grand|Contender|PFL|ONE|Series|"
+                        r"Nevada|Commission|Agency|Kickboxing|Wrestling|Judo|Boxing|COVID|Jiu")
+_DELINK = re.compile(r"\[\[(?:[^\]|]+\|)?([^\]]+)\]\]")
+
+
+def _wtoks(s):
+    s = unicodedata.normalize("NFKD", str(s)).encode("ascii", "ignore").decode().lower()
+    s = re.sub(r"\(.*?\)", " ", s)
+    s = re.sub(r"[^a-z ]+", " ", s.replace("-", " "))
+    return [t for t in s.split() if t not in ("jr", "sr", "ii", "iii", "iv")]
+
+
+def wc_limit(wc, title=False):
+    """the scale's limit for a bout: the class limit, plus a pound off a title bout"""
+    s = str(wc).lower()
+    for k, v in WLIM.items():
+        if k.lower() in s and ("women" in s) == k.startswith("Women"):
+            return v if title else v + 1
+    return None
+
+
+class WikiCard:
+    """the card's men, by every spelling we hold (UFC Stats, the board, the
+       Wikipedia fight card), so a sentence's names land on the right man"""
+
+    def __init__(self, men, gidx):
+        self.f = []                     # (url, tokens, written name)
+        for u, names in men.items():
+            for n in dict.fromkeys(names):
+                if _wtoks(n):
+                    self.f.append((u, _wtoks(n), n))
+        self.gidx = gidx
+        self.last = {}
+        for u, tk, _ in self.f:
+            self.last.setdefault(tk[-1], set()).add(u)
+
+    def match(self, text):
+        tk = _wtoks(text)
+        if not tk:
+            return None
+        for u, ft, _ in self.f:
+            if tk == ft or set(tk) == set(ft):
+                return u
+        for u, ft, _ in self.f:         # 'Kim Ji-yeon' vs 'Ji Yeon Kim', middle names
+            if len(tk) >= 2 and tk[-1] in ft and tk[0] in ft:
+                return u
+        if len(tk) == 1 and len(self.last.get(tk[0], ())) == 1:
+            return next(iter(self.last[tk[0]]))
+        if len(tk) >= 2 and len(self.last.get(tk[-1], ())) == 1:
+            u = next(iter(self.last[tk[-1]]))
+            if any(x[0] == u and x[1][0][:1] == tk[0][:1] for x in self.f):
+                return u
+        return None
+
+    def mentions(self, s):
+        """[(pos, card url or None, any known url or None, text)] in reading order:
+           wiki links, then card men's full names, then their bare surnames"""
+        out = []
+        for m in re.finditer(r"\[\[([^\]|]+)(?:\|([^\]]+))?\]\]", s):
+            txt, tgt = m.group(2) or m.group(1), re.sub(r"\(.*?\)", "", m.group(1))
+            u = self.match(txt) or self.match(tgt)
+            g = u or self.gidx.get(" ".join(_wtoks(txt))) or self.gidx.get(" ".join(_wtoks(tgt)))
+            person = bool(re.match(r"^[A-Z][\w'\-\.]+(?: [A-Z\w'\-\.]+){0,4}$", txt.strip())) and not _NOTPERSON.search(txt)
+            if u or g or person:
+                out.append((m.start(), u, g, txt))
+        plain = re.sub(r"\[\[[^\]]*\]\]", lambda m: " " * len(m.group(0)), s)
+        for u, ft, name in self.f:
+            for m in re.finditer(r"\b%s\b" % re.escape(name), plain):
+                out.append((m.start(), u, u, m.group(0)))
+                plain = plain[:m.start()] + " " * len(m.group(0)) + plain[m.end():]
+        for u, ft, name in self.f:
+            for m in re.finditer(r"\b%s\b" % re.escape(name.split()[-1]), plain):
+                if len(self.last.get(ft[-1], ())) == 1 and m.group(0)[0].isupper():
+                    out.append((m.start(), u, u, m.group(0)))
+        for m in re.finditer(r"\b[A-Z][\w'\-]+(?: [A-Z][\w'\-]+){1,2}", plain):
+            g = self.gidx.get(" ".join(_wtoks(m.group(0))))
+            if g and not any(abs(m.start() - o[0]) < 3 for o in out):
+                out.append((m.start(), self.match(m.group(0)), g, m.group(0)))
+        out.sort()
+        return out
+
+
+def _background(t):
+    m = re.search(r"==\s*Background\s*==", t)
+    if not m:
+        return ""
+    j = len(t)
+    for h in (r"==\s*Results", r"==\s*Fight card", r"==\s*Bonus", r"==\s*Announced"):
+        k = re.compile(h).search(t, m.end())
+        if k and k.start() < j:
+            j = k.start()
+    return t[m.start():j]
+
+
+def _sentences(b):
+    """sentences with each ref turned into a date token, None at a paragraph break"""
+    def rep(m):
+        d = re.search(r"\|\s*date\s*=\s*(\d{4}-\d{2}-\d{2})", m.group(0))
+        return " ⟦%s⟧ " % (d.group(1) if d else "")
+    b = _REF.sub(rep, b)
+    b = re.sub(r"\.((?:\s*⟦[^⟧]*⟧)+)", r"\1.", b)    # a ref after the stop belongs to the sentence before
+    for _ in range(2):
+        b = re.sub(r"\{\{[^{}]*\}\}", "", b)
+    b = re.sub(r"'''?", "", b)
+    out = []
+    for para in re.split(r"\n\s*\n|\n\*|\n=+", b):
+        p = re.sub(r"\b(vs|Jr|Sr|St|Dr|Mt|U\.S|No)\.", lambda m: m.group(0).replace(".", "․"), para.replace("\n", " "))
+        out += [s.replace("․", ".") for s in re.split(r"(?<=\.)\s+(?=[A-Z\[⟦\"'])", p) if s.strip()]
+        out.append(None)
+    return out
+
+
+def _notice_days(s):
+    m = re.search(r"(\w+|\d+)[- ](day|week)s?(?:'s|s')?[- ]notice", s, re.I)
+    if m:
+        n = int(m.group(1)) if m.group(1).isdigit() else _NUMW.get(m.group(1).lower())
+        if n:
+            return n * (7 if m.group(2).lower() == "week" else 1)
+    m = re.search(r"(?:less than|under|just|only) (\w+) (day|week)s?", s, re.I)
+    if m and re.search(r"notice|replace|step", s, re.I):
+        n = _NUMW.get(m.group(1).lower()) or (int(m.group(1)) if m.group(1).isdigit() else None)
+        if n:
+            return n * (7 if m.group(2).lower() == "week" else 1)
+    return None
+
+
+def _text_date(s, ev):
+    """'on November 25' -> a date in the card's year (the year before when that is after the card)"""
+    m = re.search(r"\b(January|February|March|April|May|June|July|August|September|October|November|December) (\d{1,2})\b"
+                  r"(?!,? \d{4}\s*\])", s)
+    if not m:
+        return None
+    try:
+        d = dt.date(ev.year, _MON[m.group(1).lower()], int(m.group(2)))
+    except ValueError:
+        return None
+    return dt.date(ev.year - 1, d.month, d.day) if d > ev else d
+
+
+def wiki_fight_card(t):
+    """the page's {{MMAevent bout}} rows: (weight class, name, name, title bout)"""
+    out = []
+    for chunk in t.split("{{MMAevent bout")[1:]:
+        chunk = _REF.sub("", chunk.split("\n}}")[0].split("}}\n")[0])
+        ps = [_DELINK.sub(r"\1", p).strip() for p in chunk.split("\n|")]
+        if len(ps) >= 5 and ps[3].lower().rstrip(".") in ("vs", "def"):
+            title = any(re.search(r"\((?:c|ic)\)", p) for p in ps[2:5:2])
+            out.append((ps[1], re.sub(r"\((?:c|ic)\)", "", ps[2]).strip(), re.sub(r"\((?:c|ic)\)", "", ps[4]).strip(), title))
+    return out
+
+
+def wiki_facts(t, day, bouts, gidx):
+    """facts per man from one event page.
+       bouts: [(a_url, [a's names], b_url, [b's names], weight class, title bout)]
+       -> {url: {replacement, rebook, notice_days, short_words, newcomer, missed_weight, lbs_over}}"""
+    men = {}
+    bout_of = {}
+    for au, an, bu, bn, wc, title in bouts:
+        men.setdefault(au, list(an))
+        men.setdefault(bu, list(bn))
+        bout_of[au] = bout_of[bu] = [wc, title]
+    # the page's own spellings, tied by the pair: one man's surname and any of the other's names
+    for wwc, w1, w2, wt in wiki_fight_card(t):
+        t1, t2 = set(_wtoks(w1)), set(_wtoks(w2))
+        for au, an, bu, bn, wc, title in bouts:
+            ta = {x for n in an for x in _wtoks(n)}
+            tb = {x for n in bn for x in _wtoks(n)}
+            for (x1, x2, n1, n2) in ((t1, t2, w1, w2), (t2, t1, w2, w1)):
+                if x1 & ta and x2 & tb and (_wtoks(n1)[-1] in ta or _wtoks(n2)[-1] in tb):
+                    men[au].append(n1)
+                    men[bu].append(n2)
+                    if wc_limit(wc) is None:    # after a miss the page writes 'Catchweight (139.75 lb)'
+                        bout_of[au][0] = wwc
+                    bout_of[au][1] = title or wt
+    card = WikiCard(men, gidx)
+    side = {}
+    lastsubj = None
+    for s in _sentences(_background(t)):
+        if s is None:
+            lastsubj = None
+            continue
+        ms = card.mentions(s)
+        clean = re.sub(r"⟦[^⟧]*⟧", "", s)
+        rd = [dt.date.fromisoformat(x) for x in re.findall(r"⟦(\d{4}-\d{2}-\d{2})⟧", s)]
+        when = _text_date(clean, day) or (min(rd) if rd else None)
+        oncard = [m for m in ms if m[1]]
+        # who stepped in
+        repl = None
+        mby = _REPL_BY.search(s)
+        if mby:
+            after = [m for m in ms if m[0] >= mby.end() - 1]
+            if after:
+                repl = after[0]
+                if re.search(r"instead|will now face|would now face|to face", mby.group(0), re.I):
+                    repl = ("rebook",) + repl[1:]
+        msub = _REPL_SUBJ.search(s)
+        if not repl and msub:
+            before = [m for m in ms if m[0] < msub.start()]
+            if before:
+                repl = before[-1]
+        if repl and repl[1]:
+            d = side.setdefault(repl[1], {})
+            kind = "rebook" if repl[0] == "rebook" else "replacement"
+            if kind == "replacement" or d.get("role") != "replacement":
+                d["role"] = kind
+            if when:
+                d["repl_date"] = when
+            nd = _notice_days(clean)
+            if nd:
+                d["notice_text"] = nd
+            if _SHORT.search(clean):
+                d["short_words"] = True
+            if _NEWC.search(clean):
+                d["newcomer"] = True
+        # who missed weight
+        if _MISS.search(clean) or re.search(r"\bover the\b.*\blimit", clean):
+            missers = []
+            mpos = _MISS.search(s)
+            if mpos:
+                before = [m for m in oncard if m[0] < mpos.start()]
+                if re.search(r"missed|failed", mpos.group(0)) and before:
+                    missers = before[-4:] if re.search(r",| and ", s[before[0][0]:mpos.start()]) else before[-1:]
+                elif before:
+                    missers = before[-1:]
+            for m in re.finditer(r"weighed in at|came in at|tipped the scales at", s):
+                before = [x for x in oncard if x[0] < m.start()]
+                if before and before[-1] not in missers:
+                    missers.append(before[-1])
+            if not missers and re.match(r"\s*(He|She)\b", clean) and lastsubj and lastsubj[1]:
+                missers = [lastsubj]
+            for x in missers:
+                u = x[1]
+                wc, title = bout_of.get(u, ("", False))
+                lim = wc_limit(wc, title)
+                seg = _DELINK.sub(r"\1", s[x[0]:])
+                seg = re.sub(r"⟦[^⟧]*⟧", "", seg)[:260]
+                # the sentence's own 'over the bantamweight non-title fight limit' outranks the card:
+                # the first class named after 'over' ('one pound over the lightweight and three
+                # pounds over the flyweight non-title fights limit respectively')
+                ml = re.search(r"\bover the ((?:women's )?(?:light heavyweight|heavyweight|flyweight|bantamweight|featherweight|"
+                               r"lightweight|welterweight|middleweight|strawweight))(\s+(?:non-)?title)?", seg, re.I)
+                if ml:
+                    t2 = (ml.group(2) or "").strip().lower()
+                    lims = [wc_limit(ml.group(1), (t2 == "title") if t2 else title), lim]
+                else:
+                    lims = [lim]
+                w = None
+                mm = re.search(r"(?:weighed in at|weighing in at|coming in at|came in at|tipped the scales at|weighed)\s*"
+                               r"(\d{3}(?:\.\d+)?)", seg)
+                ws = [float(mm.group(1))] if mm else [float(v) for v in re.findall(r"(\d{3}(?:\.\d+)?)\s*(?:pounds|lb|lbs)\b", seg)]
+                # the first limit the weight is over (a 'respectively' sentence names two classes)
+                lim, w = next(((li, v) for li in lims if li for v in ws if li < v < li + 15), (None, None))
+                mo = re.search(r"(\d+(?:\.\d+)?|one|two|three|four|five|six|seven|eight|nine|half a|a half|a quarter|a)"
+                               r"( and a half| and a quarter)? (?:pounds?|lbs?) over", seg)
+                d = side.setdefault(u, {})
+                d["missed"] = True
+                if w and lim and lim < w < lim + 15:
+                    d["lbs"] = round(w - lim, 2)
+                elif mo:
+                    v = {"half a": .5, "a half": .5, "a quarter": .25, "a": 1}.get(mo.group(1))
+                    if v is None:
+                        v = float(mo.group(1)) if mo.group(1)[0].isdigit() else _NUMW.get(mo.group(1))
+                    if v is not None:
+                        d["lbs"] = v + (.5 if mo.group(2) == " and a half" else .25 if mo.group(2) else 0)
+        if oncard:
+            lastsubj = oncard[0]
+        elif ms:
+            lastsubj = ms[0]
+    out = {}
+    for u in men:
+        v = side.get(u, {})
+        nd = v.get("notice_text")
+        if nd is None and v.get("repl_date"):
+            nd = (day - v["repl_date"]).days
+        out[u] = dict(replacement=v.get("role") == "replacement", rebook=v.get("role") == "rebook",
+                      notice_days=nd if v.get("role") else None, short_words=bool(v.get("short_words")),
+                      newcomer=bool(v.get("newcomer")), missed_weight=bool(v.get("missed")), lbs_over=v.get("lbs"))
+    return out
+
+
+def wiki_api(params, tries=4):
+    """one MediaWiki API call, polite: our user agent, maxlag, backing off on 429 / 5xx"""
+    q = dict(params, format="json", formatversion=2, maxlag=5)
+    last = None
+    for i in range(tries):
+        wait = 2 ** i
+        try:
+            r = _rq.get(WIKI_API, params=q, headers={"User-Agent": WIKI_UA, "Accept": "application/json"}, timeout=20)
+            if r.status_code == 200 and r.text.lstrip().startswith("{"):
+                j = r.json()
+                if (j.get("error") or {}).get("code") != "maxlag":
+                    return j
+            last = r.status_code
+            ra = r.headers.get("Retry-After")
+            if ra and ra.isdigit():
+                wait = int(ra)
+        except Exception as e:
+            last = e
+        time.sleep(min(wait, 10))
+    raise RuntimeError("wikipedia: %s" % last)
+
+
+def _wiki_pages(titles):
+    j = wiki_api(dict(action="query", prop="revisions", rvprop="content|ids|timestamp", rvslots="main", redirects=1,
+                      titles="|".join(titles)))
+    out = []
+    for p in (j.get("query") or {}).get("pages", []):
+        if p.get("revisions"):
+            rv = p["revisions"][0]
+            out.append(dict(title=p["title"], revid=rv.get("revid"), edited=rv.get("timestamp"), wikitext=rv["slots"]["main"]["content"]))
+    return out
+
+
+def _card_fit(t, surnames, day):
+    """how well a page fits the card: the share of the card's surnames on it, 0 if the date is not"""
+    if str(day.year) not in t:
+        return 0.0
+    low = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode().lower()
+    return sum(1 for s in surnames if s and s in low) / max(len(surnames), 1)
+
+
+def wiki_card_facts(card, us, got, h, dry=False):
+    """fight-week facts per UFC Stats fighter url for the card, from its Wikipedia
+       page (cached; reread every run from 7 days out until the card starts)"""
+    day = dt.date.fromisoformat(us["date"])
+    fn = os.path.join(HIST, "wiki_%s_%s.json" % (us["date"], re.sub(r"[^A-Za-z0-9]+", "_", us["name"]).strip("_")))
+    cache = None
+    try:
+        cache = json.load(open(fn))
+    except Exception:
+        pass
+    surnames = [_ln(n) for _, r in got.values() for _, n in r["men"]]
+    due = cache is None or (card["start"] - WIKI_FROM <= NOW < card["start"])
+    page = cache
+    if due and _rq is not None:
+        try:
+            tried = [cache["title"]] if cache else []
+            tried += [us["name"], us["name"].split(":")[0]] if re.match(r"UFC \d+:", us["name"]) else [us["name"]]
+            pages = _wiki_pages(list(dict.fromkeys(tried)))
+            best = max(pages, key=lambda p: _card_fit(p["wikitext"], surnames, day), default=None)
+            if not best or _card_fit(best["wikitext"], surnames, day) < 0.5:
+                hits = []
+                for q in (us["name"], "UFC %s %d, %d" % (day.strftime("%B"), day.day, day.year)):
+                    j = wiki_api(dict(action="query", list="search", srsearch=q, srlimit=5, srnamespace=0))
+                    hits += [x["title"] for x in (j.get("query") or {}).get("search", [])]
+                if hits:
+                    pages = _wiki_pages(list(dict.fromkeys(hits))[:10])
+                    best = max(pages, key=lambda p: _card_fit(p["wikitext"], surnames, day), default=None)
+            if best and _card_fit(best["wikitext"], surnames, day) >= 0.5:
+                page = dict(best, card=us["date"], event=us["name"], fetched=NOW.isoformat(timespec="seconds"))
+            else:
+                print("  wikipedia: no page fits %s %s" % (us["date"], us["name"]))
+        except Exception as e:
+            print("  wikipedia failed (%s); %s" % (e, "using the cached page" if cache else "no fight-week facts"))
+    if not page:
+        return {}, None
+    fighters = h["fighters"].drop_duplicates("fighter_url", keep="last")
+    gidx = {}
+    for u, n in zip(fighters.fighter_url, fighters.name):
+        k = " ".join(_wtoks(n))
+        gidx[k] = None if k in gidx and gidx[k] != u else u
+    gidx = {k: v for k, v in gidx.items() if v}
+    bouts = []
+    for f, r in got.values():
+        if len(r["men"]) != 2:
+            continue
+        board = {_ln(f[3]): f[3], _ln(f[5]): f[5]}
+        (au, an), (bu, bn) = r["men"]
+        bouts.append((au, [an] + [board[_ln(an)]] * (_ln(an) in board), bu, [bn] + [board[_ln(bn)]] * (_ln(bn) in board),
+                      r.get("weight_class", ""), "title" in str(r.get("weight_class", "")).lower()))
+    facts = wiki_facts(page["wikitext"], day, bouts, gidx)
+    if not dry and page is not cache:
+        page["facts"] = {u: dict(v, name=next((n for b in bouts for x, n in ((b[0], b[1][0]), (b[2], b[3][0])) if x == u), ""))
+                         for u, v in facts.items() if v["replacement"] or v["rebook"] or v["missed_weight"]}
+        json.dump(page, open(fn, "w"), indent=1, ensure_ascii=False)
+    return facts, page
+
+
+def ufc_events_before(h, u, d):
+    """his UFC event bouts before the day (UFC Stats' event pages; the Contender Series is not one)"""
+    F = h["fights"]
+    return int(((F.event_date < str(d)[:10]) & ((F.red_url == u) | (F.blue_url == u))).sum())
+
+
+def fact_lines(name, v):
+    """a man's fight-week facts, said plainly; [] when there are none"""
+    if not v:
+        return []
+    sur = _sur(name)
+    out = []
+    if v.get("replacement") or v.get("rebook"):
+        nd = v.get("notice_days")
+        s = ("%s took the fight on %d days' notice" % (sur, nd)) if nd is not None and nd >= 0 else \
+            ("%s took the fight on short notice" % sur) if v.get("short_words") else "%s stepped in as a replacement" % sur
+        if v.get("debut"):
+            s += ", his UFC debut"
+        out.append(s)
+    if v.get("missed_weight"):
+        out.append(("%s missed weight by %g lb" % (sur, v["lbs_over"])) if v.get("lbs_over") else "%s missed weight" % sur)
+    return out
+
+
+def fw_flag(v):
+    """the tested fight-week flag: a replacement on 14 days' notice or less (or written as short
+       notice), a short-notice UFC debut, or a missed weight"""
+    if not v:
+        return False
+    stepped = v.get("replacement") or v.get("rebook")
+    nd = v.get("notice_days")
+    short14 = bool(stepped and ((nd is not None and nd <= 14) or v.get("short_words")))
+    return short14 or bool(v.get("short_notice_debut")) or bool(v.get("missed_weight"))
+
+
 # ---------------------------------------------------------------- the board's card
 def board_fights():
     import pagefile
@@ -987,8 +1435,10 @@ def resolve_pro(h, fe, urls, names):
     return added
 
 
-def score_card(h, M, card, got, d):
-    """every matched bout on the card, point in time at the card's date"""
+def score_card(h, M, card, got, d, facts=None):
+    """every matched bout on the card, point in time at the card's date; facts are
+       wiki_card_facts()' per-man fight-week facts, carried onto each side"""
+    facts = facts or {}
     need = set()
     names = {}
     for _, r in got.values():
@@ -1022,8 +1472,15 @@ def score_card(h, M, card, got, d):
         bs = {_ln(f[3]): (f[3], f[4]), _ln(f[5]): (f[5], f[6])}
         pk = bs.get(_ln(r[s]), (r[s], ""))
         vs = bs.get(_ln(r[o]), (r[o], ""))
+        fw = {}
+        for k in (s, o):
+            v = dict(facts.get(r[k + "_url"]) or {})
+            if v:
+                v["debut"] = ufc_events_before(h, r[k + "_url"], d) == 0
+                v["short_notice_debut"] = bool(v.get("replacement") and v["debut"])
+            fw[k] = v
         out.append(dict(bid=bid, pick=pk[0], id=str(pk[1]), vs=vs[0], conf=float(conf), p_a=float(p[i]), a=r.a, b=r.b,
-                        wc=r.wc, why=why(r, s, M, Z[i], FE.iloc[i]), row=r))
+                        wc=r.wc, why=why(r, s, M, Z[i], FE.iloc[i]), row=r, own=fw[s], opp=fw[o]))
     return sorted(out, key=lambda x: -x["conf"])
 
 
@@ -1044,15 +1501,24 @@ def picks_json(card, us, scored, M):
         if women_row(x["row"]):
             continue
         rank += 1
-        picks[x["bid"]] = dict(rank=rank, pick=x["pick"], vs=x["vs"], box=[pct, 100 - pct], p=pct, won=won,
-                               why=x["why"], id=x["id"])
+        # fight-week facts (Oct 12, 2026): said on every pick, whatever the %; a 70-74%
+        # pick whose opponent carries the flag and who carries none himself is tier 2
+        own, opp = fact_lines(x["pick"], x["own"]), fact_lines(x["vs"], x["opp"])
+        opp_flag = fw_flag(x["opp"]) and not fw_flag(x["own"])
+        tier2 = won is None and opp_flag and x["conf"] >= TIER2[0]
+        why_ = (opp + x["why"] + own) if tier2 else (x["why"] + own + opp)
+        picks[x["bid"]] = dict(rank=rank, pick=x["pick"], vs=x["vs"], box=[pct, 100 - pct], p=pct,
+                               won=TIER2[1] if tier2 else won, why=why_, id=x["id"],
+                               own_facts="; ".join(own), opp_facts="; ".join(opp), opp_flag=bool(opp_flag))
+        if tier2:
+            picks[x["bid"]]["flag"] = "tier2"
     return {"at": NOW.date().isoformat(), "card": us["date"], "event": card["event"], "name": us["name"],
             "model": M["last_bout"], "picks": picks, "all": allb}
 
 
 # ---------------------------------------------------------------- the log
 LOGCOLS = ["card_date", "bout_id", "rank", "pick", "vs", "boxes_pick", "boxes_vs", "lead", "hist_win_pct", "result", "method",
-           "model_pct"]
+           "model_pct", "flag", "facts"]       # flag: the opponent's fight-week flag (1/0); facts: both men's, in words
 
 
 def read_log():
@@ -1075,7 +1541,9 @@ def log_card(bp):
     n = 0
     for bid, p in sorted(bp["picks"].items(), key=lambda kv: kv[1]["rank"]):
         rows.append(dict({k: "" for k in LOGCOLS}, card_date=bp["card"], bout_id=bid, rank=p["rank"], pick=p["pick"], vs=p["vs"],
-                         hist_win_pct=p["won"], model_pct=p.get("p", "")))
+                         hist_win_pct=p["won"], model_pct=p.get("p", ""),
+                         flag=int(bool(p.get("opp_flag"))) if "opp_flag" in p else "",
+                         facts=" | ".join(x for x in (p.get("own_facts"), p.get("opp_facts")) if x)))
         n += 1
     # every other men's bout too, unranked, so a card with no pick still grades
     # the model: do the 60s win about 60%, the 70s about 70% (Jose, Oct 12,
@@ -1243,16 +1711,22 @@ def main():
     M = load_model()
     if not dry:
         M = maybe_refit(h, M, us["date"])
-    scored = score_card(h, M, card, got, us["date"])
+    facts, wpage = wiki_card_facts(card, us, got, h, dry=dry)
+    if wpage:
+        n = sum(1 for v in facts.values() if v["replacement"] or v["rebook"] or v["missed_weight"])
+        print("  wikipedia: %s (fetched %s): %d men with fight-week facts" % (wpage["title"], wpage.get("fetched", "")[:16], n))
+    scored = score_card(h, M, card, got, us["date"], facts)
     bp = picks_json(card, us, scored, M)
     unread = [f for f in card["rows"] if str(f[1]) not in got]
     print("ufc_reads: %s %s, model through %s | %d bouts read, %d ranked%s | %.1fs" % (
         us["date"], us["name"], M["last_bout"], len(scored), len(bp["picks"]),
         ("; unread: " + ", ".join("%s v %s" % (f[3], f[5]) for f in unread)) if unread else "", time.time() - t0))
     for x in scored:
-        rk = bp["picks"].get(x["bid"], {}).get("rank")
-        print("  %s %3.0f%%  %-24s over %-24s %s" % (("#%d" % rk) if rk else "  ", 100 * x["conf"], x["pick"], x["vs"],
-                                                   "; ".join(x["why"]) if rk else ""))
+        pk = bp["picks"].get(x["bid"], {})
+        rk = pk.get("rank")
+        print("  %s %3.0f%%  %-24s over %-24s %s%s" % (("#%d" % rk) if rk else "  ", 100 * x["conf"], x["pick"], x["vs"],
+                                                     "[TIER 2, won %s] " % pk["won"] if pk.get("flag") == "tier2" else "",
+                                                     "; ".join(pk.get("why", [])) if rk else ""))
     if dry:
         return 0
     json.dump(bp, open(OUT, "w"), indent=1, ensure_ascii=False)
