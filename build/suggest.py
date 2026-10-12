@@ -467,6 +467,10 @@ def college(page, out, keep5):
     except Exception:
         return
     cfb = json.loads(re.search(r"\bCFB\s*=\s*(\[.*?\]);\n", page, re.S).group(1))
+    try:
+        CP = json.load(open(os.path.join(D, "site", "prices.json"))).get("CFB", {})
+    except Exception:
+        CP = {}
     for r in cfb:
         start = T(r[2])
         if start < NOW - dt.timedelta(hours=4) or start > NOW + dt.timedelta(days=8):
@@ -481,7 +485,8 @@ def college(page, out, keep5):
         m = rd.get("ml")
         if m and m.get("pick") in (away, home):
             side = "away" if m["pick"] == away else "home"
-            bk = {w: implied(r[10 if w == "away" else 12]) for w in ("away", "home")}
+            ml = CP.get(gid) or ["", "", "", ""]      # the college prices live in site/prices.json
+            bk = {w: implied(ml[0 if w == "away" else 2]) for w in ("away", "home")}
             bp = "away" if (bk["away"] or 0) >= (bk["home"] or 0) else "home"
             game["mlread"] = {"pick": m["pick"], "model": round(100 * m["p"]), "side": side,
                               "book": round(100 * bk[bp]) if bk[bp] else None, "bookpick": away if bp == "away" else home,

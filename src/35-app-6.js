@@ -1678,7 +1678,7 @@
            teams playing each other?") */
         var A = side.away.club, Hm = side.home.club, ps = mlr.side;
         var mOf = function (w) { return w === ps ? mlr.model : 100 - mlr.model; };
-        var bOf = function (w) { return side[w].club === mlr.bookpick ? mlr.book : 100 - mlr.book; };
+        var bOf = function (w) { return mlr.book == null ? "\u2013" : side[w].club === mlr.bookpick ? mlr.book : 100 - mlr.book; };
         var cl = mlr.call, mw = cl === "take" ? "TAKE" : cl === "lean" ? "LEAN" : "NO CALL";
         var cell = function (w, v) { return '<td class="' + (w === ps && cl ? "pk" : "") + '">' + v + "</td>"; };
         h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (cl || "none") + '">' + mw + '</b><span>' +
@@ -1697,7 +1697,7 @@
       var hh = pr.h2h || [], hHas = has(hh[0]) || has(hh[1]);
       /* our tested read lights its man even when the book has pulled the price
          (Jose, Oct 7, 2026: "they dont have odds for prescott anymore") */
-      var hLit = hHas;   /* the read lights only while the book prices it (Jose, Oct 7, 2026) */
+      var hLit = hHas || lg === "college-football";   /* the read lights only while the book prices it (Jose, Oct 7, 2026); DraftKings does not price college head to heads, so a college read stands on its own */
       h += '<div class="gph2h">' + '<div class="gpp">' + price(hh[0], famName(side.away.qb) + " H2H", st.h2h === "away") + '<i>H2H</i></div>' +
         '<img class="gpface' + (st.h2h === "away" ? " on" : "") + (hLit && lean.h2h === "away" ? " lean" : "") + '" data-h2h="away" src="' + faceDir + esc(side.away.qid) + '.png" alt="">' +
         '<div class="gpvs2"><svg><use href="#vs"/></svg></div>' +
@@ -1743,7 +1743,7 @@
             return '<div class="gpck' + (ok ? " ok" : "") + '"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
               (ok ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M7 7l10 10M17 7L7 17"/>') + '</svg><span>' + t + '</span></div>';
           }).join("") + '</div>');
-      } else if (st.h2h) h += hHas ? withL5(box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb))) : NONE;
+      } else if (st.h2h) h += hHas || (sg.h2h || {})[st.h2h] ? withL5(box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb))) : NONE;
       /* the touchdowns: one row a passer -- his face, 1+ 2+ 3+ passing, then
          1+ 2+ rushing -- each a price that goes on the slip, a word under
          every priced rung and nothing under one the book has not priced
