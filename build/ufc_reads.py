@@ -1033,7 +1033,9 @@ def picks_json(card, us, scored, M):
         pct = int(round(100 * x["conf"]))
         allb[x["bid"]] = dict(pick=x["pick"], vs=x["vs"], p=pct)
         won = next((w for t, w in TIERS if x["conf"] >= t), None)
-        if won is None:
+        # every bout is scored, but only men's bouts are picks (Jose, Oct 12,
+        # 2026: "it can read everything but don't tell me about women's fights")
+        if won is None or women_row(x["row"]):
             continue
         rank += 1
         picks[x["bid"]] = dict(rank=rank, pick=x["pick"], vs=x["vs"], box=[pct, 100 - pct], p=pct, won=won,
