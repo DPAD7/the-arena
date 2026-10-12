@@ -1032,7 +1032,7 @@ def picks_json(card, us, scored, M):
     rank = 0
     for x in scored:
         pct = int(round(100 * x["conf"]))
-        allb[x["bid"]] = dict(pick=x["pick"], vs=x["vs"], p=pct)
+        allb[x["bid"]] = dict(pick=x["pick"], vs=x["vs"], p=pct, women=bool(women_row(x["row"])))
         won = next((w for t, w in TIERS if x["conf"] >= t), None)
         # every bout is scored, but only men's bouts are picks (Jose, Oct 12,
         # 2026: "it can read everything but don't tell me about women's fights")
@@ -1071,6 +1071,14 @@ def log_card(bp):
     for bid, p in sorted(bp["picks"].items(), key=lambda kv: kv[1]["rank"]):
         rows.append(dict({k: "" for k in LOGCOLS}, card_date=bp["card"], bout_id=bid, rank=p["rank"], pick=p["pick"], vs=p["vs"],
                          hist_win_pct=p["won"], model_pct=p.get("p", "")))
+        n += 1
+    # every other men's bout too, unranked, so a card with no pick still grades
+    # the model: do the 60s win about 60%, the 70s about 70% (Jose, Oct 12,
+    # 2026: "how will I know if it's true. Just miss the entire card")
+    for bid, a in sorted((bp.get("all") or {}).items(), key=lambda kv: -kv[1]["p"]):
+        if bid in bp["picks"] or a.get("women"):
+            continue
+        rows.append(dict({k: "" for k in LOGCOLS}, card_date=bp["card"], bout_id=bid, pick=a["pick"], vs=a["vs"], model_pct=a["p"]))
         n += 1
     write_log(rows)
     return n
