@@ -1688,8 +1688,9 @@
           '<tr><td>Book</td>' + cell("away", bOf("away")) + cell("home", bOf("home")) + '</tr></table>' +
           ((mlr.why || []).length ? '<div class="gpwhy"><div class="gpwhyhd">Why our model likes ' + esc(side[ps].club) + '</div>' +
             mlr.why.map(function (t) { return '<div class="gpck ok"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg><span>' + esc(t) + '</span></div>'; }).join("") + '</div>' : "") +
-          '<div class="gpnote">' + (cl && mlr.won != null ? "Won before: past reads like this won <b>" + mlr.won + "%</b> (" + mlr.n + " games)." :
-            "A call needs our model at 60+.") + "</div></div>";
+          '<div class="gpnote">' + (cl && mlr.wontxt ? "Won before: " + esc(mlr.wontxt) + "." :
+            cl && mlr.won != null ? "Won before: past reads like this won <b>" + mlr.won + "%</b> (" + mlr.n + " games)." :
+            esc(mlr.need || "A call needs our model at 60+.")) + "</div></div>";
       } else if (st.ml) h += mlHas ? box((call.ml || {})[st.ml], (sg.ml || {})[st.ml], side[st.ml].club) : NONE;
       h += '<div class="gpsep"></div>';
       /* the two passers, head to head */
@@ -1759,6 +1760,9 @@
         /* the 1+ is our model's word, as tested: LEAN at 75+ (75-82% blind),
            PASS under 75 (63-72%, priced like 80%+) -- the book's number alone
            made nearly every passer a LEAN (Jose, Oct 7, 2026) */
+        /* college: our model's own rule, 90%+ with a line (about 93% blind);
+           short of it the book's number, as on every other rung */
+        if (kind === "ptd" && n === 1 && rd && rd.take1 != null) return rd.take1 ? (num(slot[0]) <= -1000 ? "heavy" : "take") : tier(p);
         if (kind === "ptd" && n === 1 && rd && rd.p1 != null) {
           if (rd.p1 >= 0.80 && p >= 0.85) return num(slot[0]) <= -1000 ? "heavy" : "take";
           /* model 70-74 with the book at 80%+ threw a TD 80% of the time (25
@@ -1792,7 +1796,8 @@
         var ww = wordOf(wk, wn, wslot, wrd), wp = pct(wslot), wname = famName(side[wside].qb);
         if (ww) {
           var lines = wn === 1 ? (wrd.why1 || []) : wn === 2 ? ((wrd.two || {}).why || []) : (wrd.why3 || []);
-          var foot = wn === 1 ? "Won before: our model 80+ with the book 85%+ threw a TD about 90% of the time (210 games)." :
+          var foot = wn === 1 && wrd.won1 ? "Won before: " + esc(wrd.won1) + "." :
+                     wn === 1 ? "Won before: our model 80+ with the book 85%+ threw a TD about 90% of the time (210 games)." :
                      wn === 2 ? "Won before: " + ((wrd.two || {}).won || "") + "." :
                      "Won before: when the book had 3+ at 30%+, it hit 31% (207 games). Priced about right, not a lock.";
           h += '<div class="gpbox gpml3"><div class="gpchd"><b class="gpc gpc--' + (ww === "long" ? "none" : "take") + '">' + (ww === "long" ? "LONG SHOT" : "TAKE") + '</b><span>' +

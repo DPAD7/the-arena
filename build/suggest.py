@@ -378,6 +378,13 @@ def td_reads():
         return {}
 
 
+def by_game(name):
+    try:
+        return json.load(open(os.path.join(D, "data", name))).get("by_game", {})
+    except Exception:
+        return {}
+
+
 def ptd_reads():
     try:
         return json.load(open(os.path.join(D, "data", "ptd_reads.json"))).get("reads", {})
@@ -401,7 +408,7 @@ def h2h_read(away_qb, home_qb):
 L5 = os.path.join(D, "data", "last5.json")
 
 
-def last5(qid, keep):
+def last5(qid, keep, lg="nfl"):
     """His last five games with a pass thrown, newest first, from ESPN's game
        log: [where, M/D, yards, completions, attempts]. Last season fills in
        early on. Kept six hours in data/last5.json."""
@@ -411,7 +418,7 @@ def last5(qid, keep):
     games = []
     for yr in (NOW.year, NOW.year - 1):
         try:
-            j = rq.get("https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/%s/gamelog?season=%d" % (qid, yr),
+            j = rq.get("https://site.web.api.espn.com/apis/common/v3/sports/football/%s/athletes/%s/gamelog?season=%d" % (lg, qid, yr),
                        impersonate="chrome", timeout=20).json()
         except Exception:
             continue
@@ -439,6 +446,81 @@ def last5(qid, keep):
     out = [r for _, r in sorted({d: r for d, r in games}.items(), reverse=True)][:5]
     keep[qid] = {"at": NOW.isoformat(), "g": out}
     return out
+
+
+def implied(o):
+    try:
+        n = int(str(o).replace("\u2212", "-").replace("+", ""))
+    except (TypeError, ValueError):
+        return None
+    return -n / (-n + 100.0) if n < 0 else 100.0 / (n + 100)
+
+
+def college(page, out, keep5):
+    """The college game pages read the same boxes as the NFL ones, filled from
+       data/cfb_reads.json (build/cfb_reads.py, every sweep): the moneyline at
+       75%+, the passing-yards head to head at 83.2%+, 1+ passing TD at 90%+ with
+       a line, 2+ at 70%+ -- each its tested rule, nothing else gold (Jose,
+       Oct 12, 2026: "all need to be wired ... for college football and NFL")."""
+    try:
+        R = json.load(open(os.path.join(D, "data", "cfb_reads.json"))).get("reads", {})
+    except Exception:
+        return
+    cfb = json.loads(re.search(r"\bCFB\s*=\s*(\[.*?\]);\n", page, re.S).group(1))
+    for r in cfb:
+        start = T(r[2])
+        if start < NOW - dt.timedelta(hours=4) or start > NOW + dt.timedelta(days=8):
+            continue
+        gid, away, home = str(r[1]), r[3], r[4]
+        men = {"away": (r[5], str(r[6] or "")), "home": (r[7], str(r[8] or ""))}
+        rd = R.get(gid) or {}
+        game = {"away": away, "home": home, "qb": {k: {"name": v[0], "id": v[1]} for k, v in men.items()},
+                "ml": {}, "h2h": {}, "ptd": {}, "atd": {}, "lg": "college-football"}
+        lean = {"ml": None, "h2h": None, "ptd": {}, "atd": {}}
+        call = {"ml": {}, "h2h": {}}
+        m = rd.get("ml")
+        if m and m.get("pick") in (away, home):
+            side = "away" if m["pick"] == away else "home"
+            bk = {w: implied(r[10 if w == "away" else 12]) for w in ("away", "home")}
+            bp = "away" if (bk["away"] or 0) >= (bk["home"] or 0) else "home"
+            game["mlread"] = {"pick": m["pick"], "model": round(100 * m["p"]), "side": side,
+                              "book": round(100 * bk[bp]) if bk[bp] else None, "bookpick": away if bp == "away" else home,
+                              "call": m.get("call"), "why": m.get("why") or [], "need": "A call needs our model at 75+.",
+                              "wontxt": "our model at 75%+ won 82-92% of blind games (2022-26)" if m.get("call") == "take" else None}
+            if m.get("call") == "take":
+                lean["ml"] = side
+            call["ml"] = {w: (m.get("call") if w == side else None) for w in men}
+        h = rd.get("h2h")
+        if h and h.get("pick_id"):
+            side = "away" if str(h["pick_id"]) == men["away"][1] else "home" if str(h["pick_id"]) == men["home"][1] else None
+            if side:
+                other = "home" if side == "away" else "away"
+                if h.get("call") == "take":
+                    lean["h2h"] = side
+                    game["h2h"][side] = "Our read: %s out-passes %s, our model at %d%% (83%%+ won about 91%% of blind games, 2022-26)." % (
+                        fam(men[side][0]), fam(men[other][0]), round(100 * h["p"]))
+                else:
+                    game["h2h"][side] = "Our model has %s at %d%% to out-pass %s; a call needs 83%%+." % (
+                        fam(men[side][0]), round(100 * h["p"]), fam(men[other][0]))
+                game["h2h"][other] = game["h2h"][side]
+                call["h2h"] = {w: ("take" if h.get("call") == "take" and w == side else None) for w in men}
+        P = rd.get("ptd") or {}
+        game["tdread"] = {}
+        for w in men:
+            q = P.get(men[w][1])
+            if not q:
+                game["tdread"][w] = None
+                continue
+            game["tdread"][w] = {"p1": q.get("p1"), "take1": bool(q.get("take1")),
+                                 "won1": "our model 90%+ with a line threw a TD about 93% of the time (2022-26 blind)",
+                                 "why1": ["Our model: %d%%" % round(100 * (q.get("p1") or 0))] + ([] if q.get("has_line") else ["No ESPN line yet, so it cannot qualify"]),
+                                 "two": {"take": bool(q.get("take2")), "won": "our model 70%+ threw 2+ about 78% of the time (2022-26 blind)",
+                                         "why": ["Our model: %d%%" % round(100 * (q.get("p2") or 0))]}}
+        game["ptdread"] = {w: (game["tdread"][w] or {}).get("p1") for w in men}
+        game["lean"] = lean
+        game["call"] = call
+        game["last5"] = {w: last5(men[w][1], keep5, "college-football") if men[w][1] else [] for w in men}
+        out[gid] = game
 
 
 def main():
@@ -562,10 +644,11 @@ def main():
             lean["ptd"][w] = (best or 1) if rows[w] else None
             lean["atd"][w] = 1 if runs[w] and game["atd"][w]["1"]["call"] in ("take", "lean") else None
         # the 1+ passing TD read for each passer, by his ESPN id (data/ptd_reads.json)
-        PR = ptd_reads()
-        game["ptdread"] = {w: (PR.get(str(men[w][1])) or {}).get("p") for w in men}
-        TR = td_reads()
-        game["tdread"] = {w: TR.get(str(men[w][1])) for w in men}
+        # each game's own read first (a passer can have two games in the window)
+        PR, TR = ptd_reads(), td_reads()
+        PG, TG = by_game("ptd_reads.json").get(gid) or {}, by_game("td_reads.json").get(gid) or {}
+        game["ptdread"] = {w: (PG.get(str(men[w][1])) or PR.get(str(men[w][1])) or {}).get("p") for w in men}
+        game["tdread"] = {w: TG.get(str(men[w][1])) or TR.get(str(men[w][1])) for w in men}
         game["lean"] = lean
         game["call"] = {}
         for m in ("ml", "h2h"):
@@ -577,6 +660,7 @@ def main():
         # the last-5 bars under the head to head (Jose, Oct 12, 2026)
         game["last5"] = {w: last5(men[w][1], keep5) if men[w][1] else [] for w in men}
         out[gid] = game
+    college(s, out, keep5)
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
     json.dump(keep5, open(L5, "w"), separators=(",", ":"))
     print("suggest: %d games" % len(out))
