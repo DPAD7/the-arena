@@ -1935,6 +1935,106 @@ def fill_results(fights):
     return n
 
 
+# ---------------------------------------------------------------- the Contender Series (build/dwcs_reads.py)
+# UFC Stats does not carry DWCS, so its cards never match above. Every DWCS card
+# still on the board is scored by the DWCS model (pro records from ESPN, no odds)
+# and its men's bouts are merged into picks{} beside the regular card's, keyed by
+# bout id, each marked model "dwcs". Blind 2023-26 no band reached 70%, so "won"
+# stays None on every DWCS pick (see dwcs_reads.py).
+def write_out(bp):
+    json.dump(bp, open(OUT, "w"), indent=1, ensure_ascii=False)
+
+
+def dwcs_part(cur, fights, held, dry):
+    """{"cards": [...], "picks": {...}, "all": {...}} for the DWCS cards still on the board;
+       a card under way keeps the picks it had and is logged"""
+    out = dict(cards=[], picks={}, all={})
+    try:
+        import dwcs_reads as DR
+    except Exception as e:
+        print("  dwcs: module failed to load (%s)" % e)
+        return out
+    if not dry:
+        try:
+            if DR.update_store(fights, NOW):
+                try:
+                    import sklearn  # noqa: F401
+                    DR.fit()
+                except ImportError:
+                    pass
+        except Exception as e:
+            print("  dwcs: store update failed (%s)" % e)
+    try:
+        M = json.load(open(DR.MODEL))
+    except Exception as e:
+        print("  dwcs: no model (%s)" % e)
+        return out
+    hp = held.get("picks") or {}
+    ha = held.get("all") or {}
+    for c in cur:
+        try:
+            if not DR.is_dwcs(c["event"]):
+                continue
+        except Exception:
+            continue
+        rows = [f for f in c["rows"] if f[4] and f[6]]
+        ids = [str(f[1]) for f in rows]
+        day = (c["start"] - dt.timedelta(hours=5)).date().isoformat()     # the card's ET date
+        name = ""
+        try:
+            name = DR.event_name(c["event"])
+        except Exception:
+            pass
+        started = c["start"] <= NOW
+        if started and any(i in hp and hp[i].get("model") == "dwcs" for i in ids):
+            picks = {i: hp[i] for i in ids if i in hp}
+            allb = {i: ha[i] for i in ids if i in ha}
+            print("dwcs: %s %s is under way; its picks stand" % (day, name))
+        else:
+            try:
+                scored = DR.score_card(rows, M)
+            except Exception as e:
+                print("  dwcs: scoring %s failed (%s)" % (c["event"], e))
+                continue
+            picks, allb = DR.picks(scored)
+            print("dwcs: %s %s, model through %s | %d bouts read, %d ranked (no tier tested 75%%+ blind: every read is a lean)" % (
+                day, name, M.get("last_bout"), len(scored), len(picks)))
+            for x in scored:
+                pk = picks.get(x["bid"], {})
+                print("  %s %3.0f%%  %-24s over %-24s %s" % (("#%d" % pk["rank"]) if pk else "  ", 100 * x["conf"], x["pick"],
+                                                           x["vs"], "; ".join(pk.get("why", [])[:3]) if pk else "(women's bout, not ranked)"))
+        for v in allb.values():
+            v["dwcs"] = True
+        for v in picks.values():
+            v["card"] = day
+        out["cards"].append(dict(card=day, event=c["event"], name=name, start=c["start"].isoformat(), model="dwcs"))
+        out["picks"].update(picks)
+        out["all"].update(allb)
+        if started and not dry:
+            n = log_card(dict(card=day, picks=picks, all=allb))
+            if n:
+                print("log: %d DWCS picks for %s" % (n, day))
+    return out
+
+
+def merge_dwcs(base, dw):
+    """the regular card's file with the DWCS cards' picks beside it; the soonest card
+       is the primary (card / event / name), every card listed in "cards" """
+    base = dict(base or {})
+    picks = {k: v for k, v in (base.get("picks") or {}).items() if v.get("model") != "dwcs"}
+    allb = {k: v for k, v in (base.get("all") or {}).items() if not v.get("dwcs")}
+    cl = [c for c in (base.get("cards") or []) if c.get("model") != "dwcs"]
+    if not cl and base.get("card"):
+        cl = [dict(card=base.get("card"), event=base.get("event"), name=base.get("name"), model="ufc")]
+    picks.update(dw["picks"])
+    allb.update(dw["all"])
+    cl = sorted(cl + dw["cards"], key=lambda c: c.get("start") or c.get("card") or "")
+    base.update(picks=picks, all=allb, cards=cl, at=NOW.date().isoformat())
+    if cl:
+        base.update(card=cl[0]["card"], event=cl[0]["event"], name=cl[0].get("name", ""))
+    return base
+
+
 # ---------------------------------------------------------------- main
 def load_model():
     return json.load(open(MODEL))
@@ -2054,6 +2154,7 @@ def main():
     except Exception:
         pass
     cur = [c for c in cards(fights) if c["end"] + LIVE_FOR > NOW]
+    dw = dwcs_part(cur, fights, held, dry)
     try:
         up = event_list("upcoming")
     except Exception as e:
@@ -2073,17 +2174,26 @@ def main():
             card = c
             break
     if not card:
-        print("ufc_reads: no UFC card on the board matches UFC Stats; boxpicks.json left as it is")
+        print("ufc_reads: no UFC card on the board matches UFC Stats; %s" % (
+            "the Contender Series picks are merged into boxpicks.json" if dw["cards"] else "boxpicks.json left as it is"))
         if not dry:
+            if dw["cards"]:
+                write_out(merge_dwcs(held, dw))
             save_hist(h)
         return 0
     started = card["start"] <= NOW
-    if started and held.get("card") == us["date"] and str(held.get("event", card["event"])) == str(card["event"]):
+    held_cards = held.get("cards") or [dict(card=held.get("card"), event=held.get("event", card["event"]))]
+    if started and any(c.get("card") == us["date"] and str(c.get("event")) == str(card["event"]) for c in held_cards):
         print("ufc_reads: %s %s is under way; its picks stand" % (us["date"], us["name"]))
         if not dry:
-            n = log_card(held)
+            own = dict(held, card=us["date"], event=card["event"],
+                       picks={k: v for k, v in (held.get("picks") or {}).items() if v.get("model") != "dwcs"},
+                       all={k: v for k, v in (held.get("all") or {}).items() if not v.get("dwcs")})
+            n = log_card(own)
             if n:
                 print("log: %d picks for %s" % (n, us["date"]))
+            if dw["cards"]:
+                write_out(merge_dwcs(held, dw))
             save_hist(h)
         return 0
     M = load_model()
@@ -2121,7 +2231,8 @@ def main():
                 "; ".join(c["why"])))
     if dry:
         return 0
-    json.dump(bp, open(OUT, "w"), indent=1, ensure_ascii=False)
+    write_out(merge_dwcs(dict(bp, cards=[dict(card=us["date"], event=card["event"], name=us["name"],
+                                              start=card["start"].isoformat(), model="ufc")]), dw))
     if started:
         n = log_card(bp)
         if n:
