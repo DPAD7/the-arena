@@ -601,6 +601,11 @@
       '<div class="pkline">' + (p.p != null
         ? "Model " + p.p + "% vs " + esc(p.vs) + " \u00b7 " + (p.flag === "tier2" ? "70-74% with the other man missing weight or on short notice won " + p.won + "% blind" : p.won ? "75%+ reads won " + p.won + "% blind, 2022-26" : "under our 75% cutoff")
         : p.box[0] + " boxes to " + p.box[1] + " vs " + esc(p.vs) + " \u00b7 won " + p.won + "% at this lead since 2010") + "</div>" +
+      /* the fight's one call, from any market on the fight sheet: the winner
+         or whether it goes the distance, whichever the models are surest of
+         (Jose, Oct 12, 2026: "doesn't matter if it's yes or no") */
+      (p.call ? '<div class="pkline pkcall"><b>Our call: ' + esc(p.call.side) + "</b> \u00b7 " + esc(p.call.market) + " \u00b7 model " + p.call.p + "%" +
+        (p.call.won != null ? " \u00b7 calls like this won " + p.call.won + "% blind" : "") + (p.call.price ? " \u00b7 DK " + esc(p.call.price) : "") + "</div>" : "") +
       '<ul class="pkwhy">' + (p.why || []).map(li).join("") + "</ul>" +
       ((p.against || []).length ? '<ul class="pkwhy pkagainst">' + p.against.map(li).join("") + "</ul>" : "") + "</div>";
     s.hidden = false;

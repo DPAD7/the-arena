@@ -39,6 +39,15 @@
    2015-21 86.7%, 15). The facts ride every pick as own_facts / opp_facts and a
    why line, whatever the %; they never move p.
 
+   The call (Oct 12, 2026): every men's pick also carries "call", the likeliest
+   side on the bout sheet -- the moneyline favorite or a side of Fight to Go the
+   Distance (every other sheet market is a part of one of those) -- from the
+   winner model and a distance model (data/models/ufc_dist.json, --fit-dist).
+   Best call per bout, blind: 2022-23 67.0% (75%+ calls 80.1%, 1.60 a card),
+   2024-26 66.6% (75%+ 84.5%, 1.62 a card). "won" is the blind 2022-26 rate of
+   that side in its 5-point band; "price" is DraftKings' price when posted,
+   information only.
+
    A card already under way keeps its picks. When it starts, its ranked picks
    are appended to data/boxpicks_log.csv; results are filled from ESPN after.
 
@@ -46,13 +55,16 @@
      {"at", "card", "event", "name", "model",
       "picks": {espn bout id: {"rank", "pick", "vs", "box": [p, 100-p], "p",
                                "won", "why": [...], "id", "own_facts", "opp_facts",
-                               "opp_flag", "flag": "tier2" (only on a tier-2 pick)}},
+                               "opp_flag", "flag": "tier2" (only on a tier-2 pick),
+                               "call": {"market", "sel", "side", "p", "won", "won_n", "p_ml",
+                                        "p_dist", "why": [...], "price" (when DK has it)}}},
       "all":   {espn bout id: {"pick", "vs", "p"}}}
 
    Usage:  python3 build/ufc_reads.py            crawl, score, write
            python3 build/ufc_reads.py --dry      score and print, write nothing
            python3 build/ufc_reads.py --no-crawl skip UFC Stats' finished events
            python3 build/ufc_reads.py --fit [--before YYYY-MM-DD] [--out PATH]
+           python3 build/ufc_reads.py --fit-dist [--before YYYY-MM-DD] [--out PATH]   the distance model
            python3 build/ufc_reads.py --replay YYYY-MM-DD   score a past card point-in-time
            pip: pandas numpy pyarrow curl_cffi (scikit-learn only for --fit)
 """
@@ -900,6 +912,302 @@ def durn(r, s):
     return int(k + b)
 
 
+# ---------------------------------------------------------------- the call: one side on every men's bout
+# Every market the bout sheet carries was modeled walk-forward (research: scratchpad
+# ufc_call/; fit on the years before, men's decided bouts, no odds): moneyline, each
+# man by KO/TKO/DQ, submission or decision, the Method of Victory double chances,
+# Exact Method of Victory, Fight to Go the Distance yes/no, Round Betting, Alternate
+# Round Betting and Winning Round. Every one of them is a part of one man winning or
+# of the fight ending early / going the distance, so the likeliest side on the sheet
+# is always the moneyline favorite or a side of Fight to Go the Distance -- the
+# call is whichever of the two the models rate higher. "won" is the blind
+# 2022-26 hit rate of that market's side in that 5-point band (CALL_WON).
+#
+#   best call per bout, blind   all      75%+ calls
+#     2022-23                   67.0%    80.1% (136, 1.60 a card, 17% of bouts)
+#     2024-26                   66.6%    84.5% (193, 1.62 a card, 16% of bouts)
+#
+# The distance model: a depth-2 boosted tree on both men's stats (scored from both
+# corners and averaged) and a ridge logistic on the pair's means and gaps, the two
+# averaged -- chosen on 2019-21 only (scratchpad ufc_call/dist_tune.py). Kept in
+# data/models/ufc_dist.json; refit like the winner model when scikit-learn is here.
+DMODEL = os.path.join(D, "data", "models", "ufc_dist.json")
+EXTRA = os.path.join(HIST, "extra.parquet")      # per-bout side stats the distance model adds, cached by fight
+DGBM = dict(GBM, max_depth=2)
+DLR_C = 0.05
+# blind 2022-26 hit rate, best call per bout, by market side and band: [won %, bouts]
+CALL_WON = {
+    "ml": {80: (88, 81), 75: (80, 164), 70: (74, 201), 65: (67, 289), 60: (62, 255), 0: (60, 242)},
+    "fin": {80: (88, 34), 75: (78, 45), 70: (67, 82), 65: (68, 122), 60: (64, 102), 0: (55, 120)},
+    "dist": {70: (70, 30), 65: (63, 57), 60: (59, 99), 0: (55, 119)},   # 75%+ merged into 70: 5 bouts only
+}
+WLB = (("Light Heavyweight", 205), ("Heavyweight", 265), ("Flyweight", 125), ("Bantamweight", 135),
+       ("Featherweight", 145), ("Lightweight", 155), ("Welterweight", 170), ("Middleweight", 185))
+EXCOLS = ["u_n", "u_dec", "u_mins_mean", "pkow", "psubw", "pdecw", "pkol", "psubl", "pdecl"]
+
+
+def wc_lb(wc):
+    s = str(wc)
+    if "Women" in s:
+        return np.nan
+    return next((v for k, v in WLB if k in s), np.nan)
+
+
+def side_extra(fe, u, d):
+    """his decisions and average UFC fight length, and his pro wins and losses by
+       method, as of the morning of the bout"""
+    o = {}
+    h = fe.Hg.get(u)
+    p = h[(h.date < d) & h.result.isin(["W", "L", "D"])] if h is not None else None
+    if p is None or p.empty:
+        o.update(u_dec=0, u_n=0)
+    else:
+        o["u_n"] = len(p)
+        o["u_dec"] = int(p.method.astype(str).str.contains("DEC|Decision").sum())
+    g = fe.Lg.get(u)
+    q = g[g.date < d] if g is not None else None
+    o["u_mins_mean"] = q.mins.mean() if q is not None and len(q) else np.nan
+    for k in ("pkow", "psubw", "pdecw", "pkol", "psubl", "pdecl"):
+        o[k] = np.nan
+    pr = fe.pro_rows(u)
+    if pr is not None:
+        q = pr[pr.date < d]
+        w = q[q.result == "win"].method.astype(str)
+        l = q[q.result == "loss"].method.astype(str)
+        o["pkow"] = int(w.str.contains("KO|DQ", case=False).sum())
+        o["psubw"] = int(w.str.contains("Sub", case=False).sum())
+        o["pdecw"] = int(w.str.contains("Dec", case=False).sum())
+        o["pkol"] = int(l.str.contains("KO|DQ", case=False).sum())
+        o["psubl"] = int(l.str.contains("Sub", case=False).sum())
+        o["pdecl"] = int(l.str.contains("Dec", case=False).sum())
+    return o
+
+
+def extras(fe, X, cache=None):
+    """the extra side stats for each row of X: from the cache by fight url, else computed"""
+    rows = []
+    for r in X.itertuples(index=False):
+        fu = getattr(r, "fight_url", None)
+        if cache is not None and isinstance(fu, str) and fu in cache.index:
+            rows.append(cache.loc[fu].to_dict())
+            continue
+        row = {}
+        for s, u in (("a", r.a_url), ("b", r.b_url)):
+            for k, v in side_extra(fe, u, r.date).items():
+                row[s + "_" + k] = v
+        rows.append(row)
+    return pd.DataFrame(rows, index=X.index).reindex(columns=["%s_%s" % (s, c) for s in "ab" for c in EXCOLS])
+
+
+def side_tab(X, s):
+    g = lambda c: X[s + "_" + c].astype(float)
+    n = g("n").where(g("n") > 0)
+    pn = g("pn").where(g("pn") > 0)
+    un = g("u_n").where(g("u_n") > 0)
+    o = {}
+    for c in ("age", "reach", "height", "elo", "slpm", "sapm", "acc", "tdpm", "tddef", "ctrl_share", "kdpm", "kdabs",
+              "subpm", "r1", "late", "ufc_mins", "n", "layoff", "pn", "pfin", "u_mins_mean", "streak", "l3"):
+        o[c] = g(c)
+    o["ko_rate"] = g("ko_wins") / n
+    o["sub_rate"] = g("sub_wins") / n
+    o["kod_rate"] = g("been_kod") / n
+    o["subbed_rate"] = g("been_subbed") / n
+    o["udec_share"] = g("u_dec") / un
+    o["pko_rate"] = g("pkow") / pn
+    o["psub_rate"] = g("psubw") / pn
+    o["pdec_rate"] = g("pdecw") / pn
+    o["pkol_rate"] = g("pkol") / pn
+    o["psubl_rate"] = g("psubl") / pn
+    o["pdecl_rate"] = g("pdecl") / pn
+    return pd.DataFrame(o, index=X.index)
+
+
+def ordered_tab(X, a="a", b="b"):
+    """the bout from a's corner: both men's stats, each man's weapon into the other's
+       weakness, the scheduled rounds, the weight and a title"""
+    SA, SB = side_tab(X, a), side_tab(X, b)
+    F = pd.concat([SA.add_prefix("A_"), SB.add_prefix("B_")], axis=1)
+    F["A_ko_vs_chin"] = SA.ko_rate.fillna(SA.pko_rate) * SB.kod_rate.fillna(SB.pkol_rate)
+    F["B_ko_vs_chin"] = SB.ko_rate.fillna(SB.pko_rate) * SA.kod_rate.fillna(SA.pkol_rate)
+    F["A_sub_vs_def"] = SA.sub_rate.fillna(SA.psub_rate) * SB.subbed_rate.fillna(SB.psubl_rate)
+    F["B_sub_vs_def"] = SB.sub_rate.fillna(SB.psub_rate) * SA.subbed_rate.fillna(SA.psubl_rate)
+    F["A_kd_vs_kdabs"] = SA.kdpm * SB.kdabs
+    F["B_kd_vs_kdabs"] = SB.kdpm * SA.kdabs
+    F["A_td_vs_def"] = SA.tdpm * (1 - SB.tddef)
+    F["B_td_vs_def"] = SB.tdpm * (1 - SA.tddef)
+    F["A_pace"] = SA.slpm + SB.sapm
+    F["B_pace"] = SB.slpm + SA.sapm
+    F["elo_gap"] = SA.elo - SB.elo
+    F["sched"] = pd.to_numeric(X.scheduled_rounds, errors="coerce").astype(float)
+    F["wlb"] = X.wc.map(wc_lb).astype(float)
+    F["title"] = (X.title_bout.astype(str) == "true").astype(int)
+    return F
+
+
+def sym_tab(X, FA):
+    SA, SB = side_tab(X, "a"), side_tab(X, "b")
+    S = pd.concat([((SA + SB) / 2).add_prefix("m_"), (SA - SB).abs().add_prefix("d_")], axis=1)
+    S["kochin"] = FA.A_ko_vs_chin + FA.B_ko_vs_chin
+    S["subdef"] = FA.A_sub_vs_def + FA.B_sub_vs_def
+    S["kdkd"] = FA.A_kd_vs_kdabs + FA.B_kd_vs_kdabs
+    S["sched"], S["wlb"], S["title"] = FA.sched, FA.wlb, FA.title
+    S["elo_gap"] = FA.elo_gap.abs()
+    return S
+
+
+def mclass(m):
+    m = str(m)
+    return "DEC" if "DEC" in m else "SUB" if m == "SUB" else "KO" if m in ("KO/TKO", "DQ") else None
+
+
+def dist_tables(h, X, fe=None, cache=True):
+    """X (bouts rows plus scheduled_rounds / title_bout) -> FA, FB, S"""
+    fe = fe or Feats(h)
+    C = None
+    if cache and os.path.exists(EXTRA):
+        C = pd.read_parquet(EXTRA).drop_duplicates("fight_url", keep="last").set_index("fight_url")
+    E = extras(fe, X, C)
+    if cache and "fight_url" in X:
+        have = set(C.index) if C is not None else set()
+        new = X.fight_url.notna() & ~X.fight_url.isin(have)
+        if new.any():
+            add = E[new.values].assign(fight_url=X.fight_url[new].values)
+            C2 = pd.concat([C.reset_index() if C is not None else None, add], ignore_index=True)
+            C2.to_parquet(EXTRA, index=False, compression="zstd")
+    X = pd.concat([X.drop(columns=[c for c in E.columns if c in X], errors="ignore"), E], axis=1)
+    FA, FB = ordered_tab(X, "a", "b"), ordered_tab(X, "b", "a")
+    return FA, FB[FA.columns], sym_tab(X, FA)
+
+
+def fit_dist(h, before, out):
+    """the distance model, fit on men's decided bouts before the card; trees and the
+       logistic exported to JSON and checked against scikit-learn"""
+    import sklearn
+    from sklearn.ensemble import HistGradientBoostingClassifier
+    from sklearn.linear_model import LogisticRegression
+    F = h["fights"][["fight_url", "scheduled_rounds", "title_bout"]].drop_duplicates("fight_url")
+    X = h["bouts"].reset_index(drop=True).merge(F, on="fight_url", how="left")
+    FA, FB, S = dist_tables(h, X)
+    mc = X.method.map(mclass)
+    tr = train_mask(X, before) & mc.notna().values
+    y = (mc == "DEC").astype(int).values
+    m = HistGradientBoostingClassifier(**DGBM).fit(pd.concat([FA[tr], FB[tr]]).values, np.concatenate([y[tr], y[tr]]))
+    trees = []
+    for it in m._predictors:
+        n = it[0].nodes
+        trees.append(dict(f=n["feature_idx"].tolist(), t=n["num_threshold"].tolist(), l=n["left"].tolist(),
+                          r=n["right"].tolist(), leaf=n["is_leaf"].astype(int).tolist(), v=n["value"].tolist(),
+                          ml=n["missing_go_to_left"].astype(int).tolist()))
+    St = S[tr].values
+    med = np.nanmedian(St, 0)
+    fz = np.where(np.isnan(St), med, St)
+    mu, sd = fz.mean(0), fz.std(0) + 1e-9
+    lr = LogisticRegression(C=DLR_C, max_iter=2000).fit((fz - mu) / sd, y[tr])
+    M = dict(model="HistGradientBoostingClassifier + LogisticRegression", sklearn=sklearn.__version__, gbm=DGBM, C=DLR_C,
+             before=str(pd.Timestamp(before).date()), last_bout=str(X.date[tr].max().date()), n_train=int(tr.sum()),
+             cols_o=list(FA.columns), cols_s=list(S.columns), baseline=float(np.ravel(m._baseline_prediction)[0]),
+             trees=trees, med=med.tolist(), mu=mu.tolist(), sd=sd.tolist(), coef=lr.coef_[0].tolist(),
+             icpt=float(lr.intercept_[0]), won=CALL_WON,
+             note="P(goes the distance) = mean of the trees (scored from both corners, averaged) and the logistic")
+    k = np.r_[np.flatnonzero(tr)[-1500:], np.arange(len(X))[-300:]]
+    ps = ((m.predict_proba(FA.values[k])[:, 1] + m.predict_proba(FB.values[k])[:, 1]) / 2
+          + lr.predict_proba((np.where(np.isnan(S.values[k]), med, S.values[k]) - mu) / sd)[:, 1]) / 2
+    pj = dist_p(M, FA.iloc[k], FB.iloc[k], S.iloc[k])[0]
+    err = float(np.max(np.abs(ps - pj)))
+    M["parity_max_abs"] = err
+    assert err < 1e-9, err
+    os.makedirs(os.path.dirname(out), exist_ok=True)
+    json.dump(M, open(out, "w"), separators=(",", ":"))
+    print("distance model fit on %d bouts before %s (%d trees), JSON vs sklearn max |dp| %.2e -> %s"
+          % (tr.sum(), M["before"], len(trees), err, os.path.relpath(out, D)))
+    return M
+
+
+def dist_p(M, FA, FB, S):
+    """P(goes the distance) and the logistic's per-feature pushes (+ toward the cards)"""
+    A = FA.reindex(columns=M["cols_o"]).values.astype(float)
+    B = FB.reindex(columns=M["cols_o"]).values.astype(float)
+    p1 = (raw_p(M, A) + raw_p(M, B)) / 2
+    Q = S.reindex(columns=M["cols_s"]).values.astype(float)
+    z = (np.where(np.isnan(Q), np.array(M["med"]), Q) - np.array(M["mu"])) / np.array(M["sd"])
+    push = z * np.array(M["coef"])
+    p2 = 1 / (1 + np.exp(-(push.sum(1) + M["icpt"])))
+    return (p1 + p2) / 2, push
+
+
+def dist_why(r, push, cols, toward_dec):
+    """the logistic's biggest pushes toward the call, said with both men's numbers;
+       only stats whose plain reading points the same way (a high finish rate toward
+       a finish, long fights toward the cards)"""
+    a, b = _sur(r["a"]), _sur(r["b"])
+    g = lambda s, c: r[s + "_" + c]
+
+    def pct(x):
+        return "%.0f%%" % (100 * x) if x == x else "n/a"
+
+    def rate(s, k):
+        pn = g(s, "pn")
+        return g(s, k) / pn if pn == pn and pn > 0 else np.nan
+
+    def both(lab, fa, fb):
+        return "%s: %s %s, %s %s" % (lab, a, fa, b, fb)
+    # feature -> (plain direction: +1 toward the cards, -1 toward a finish, text)
+    T = {
+        "m_pdec_rate": (1, lambda: both("Pro fights won on the cards", pct(rate("a", "pdecw")), pct(rate("b", "pdecw")))),
+        "m_pdecl_rate": (1, lambda: both("Pro losses on the cards", "%d" % g("a", "pdecl"), "%d" % g("b", "pdecl"))),
+        "m_u_mins_mean": (1, lambda: both("Average UFC fight", "%.1f min" % g("a", "u_mins_mean"), "%.1f min" % g("b", "u_mins_mean"))),
+        "m_udec_share": (1, lambda: both("UFC fights to the cards", "%d of %d" % (g("a", "u_dec"), g("a", "u_n")),
+                                          "%d of %d" % (g("b", "u_dec"), g("b", "u_n")))),
+        "m_ufc_mins": (1, lambda: both("UFC minutes", "%.0f" % g("a", "ufc_mins"), "%.0f" % g("b", "ufc_mins"))),
+        "m_pfin": (-1, lambda: both("Pro wins by finish", pct(g("a", "pfin")), pct(g("b", "pfin")))),
+        "kochin": (-1, lambda: "KO wins vs KO losses: %s %d KO wins, %s KO'd %s; %s %d KO wins, %s KO'd %s" % (
+            a, g("a", "pkow"), b, times(g("b", "pkol")), b, g("b", "pkow"), a, times(g("a", "pkol")))),
+        "m_sapm": (-1, lambda: both("Strikes absorbed a minute", "%.1f" % g("a", "sapm"), "%.1f" % g("b", "sapm"))),
+        "m_psubl_rate": (-1, lambda: both("Submitted as a pro", times(g("a", "psubl")), times(g("b", "psubl")))),
+        "m_pkol_rate": (-1, lambda: both("KO'd as a pro", times(g("a", "pkol")), times(g("b", "pkol")))),
+        "m_subpm": (-1, lambda: both("Submission tries per 15 min", "%.1f" % g("a", "subpm"), "%.1f" % g("b", "subpm"))),
+        "elo_gap": (-1, lambda: "UFC rating gap %.0f points (%s %.0f, %s %.0f)" % (abs(g("a", "elo") - g("b", "elo")), a, g("a", "elo"), b, g("b", "elo"))),
+        "sched": (-1, lambda: "Five-round fight"),
+    }
+    want = 1 if toward_dec else -1
+    out = []
+    for j in np.argsort(-push * want):
+        c = cols[j]
+        if push[j] * want <= 0:
+            break
+        if c in T and T[c][0] == want:
+            try:
+                out.append(T[c][1]())
+            except Exception:
+                continue
+        if len(out) == 3:
+            break
+    return out
+
+
+def call_won(kind, p):
+    tab = CALL_WON[kind]
+    k = max(t for t in tab if 100 * p >= t)
+    return tab[k]
+
+
+def make_call(x, pdist, push, cols):
+    """the likeliest side on the sheet: the moneyline favorite or a side of the distance"""
+    pml = x["conf"]
+    cand = [(pml, "ml"), (1 - pdist, "fin"), (pdist, "dist")]
+    p, kind = max(cand, key=lambda c: (c[0], c[1] == "ml"))
+    won, n = call_won(kind, p)
+    if kind == "ml":
+        c = dict(market="Moneyline", sel=x["pick"], side="%s wins" % _sur(x["pick"]), why=list(x["why"]))
+    else:
+        dec = kind == "dist"
+        c = dict(market="Fight to Go the Distance", sel="Yes" if dec else "No",
+                 side="Fight goes the distance" if dec else "Fight does not go the distance",
+                 why=dist_why(x["row"], push, cols, dec))
+    c.update(p=int(round(100 * p)), won=won, won_n=n, p_ml=int(round(100 * pml)), p_dist=int(round(100 * pdist)))
+    return c
+
+
 # ---------------------------------------------------------------- fight-week facts from Wikipedia
 # The research parser (research: scratchpad ufc_ctx/parse_wiki.py), cut down to
 # what the card needs: who stepped in and on how much notice, and who missed
@@ -1435,10 +1743,13 @@ def resolve_pro(h, fe, urls, names):
     return added
 
 
-def score_card(h, M, card, got, d, facts=None):
+def score_card(h, M, card, got, d, facts=None, DM=None, rounds=None):
     """every matched bout on the card, point in time at the card's date; facts are
-       wiki_card_facts()' per-man fight-week facts, carried onto each side"""
+       wiki_card_facts()' per-man fight-week facts, carried onto each side; with the
+       distance model DM, each bout's P(goes the distance) too (rounds: bout id ->
+       scheduled rounds)"""
     facts = facts or {}
+    rounds = rounds or {}
     need = set()
     names = {}
     for _, r in got.values():
@@ -1462,6 +1773,15 @@ def score_card(h, M, card, got, d, facts=None):
     X = pd.DataFrame(rows)
     Z, FE = zmat(M, X)
     p = sym_p(M, Z)
+    pdist, push = [None] * len(X), [None] * len(X)
+    if DM is not None and len(X):
+        first = next(iter(got), None)
+        X["scheduled_rounds"] = [rounds.get(bid) or (5 if bid == first or "title" in str(r["weight_class"]).lower() else 3)
+                                 for bid, (f, r) in got.items()]
+        X["title_bout"] = ["true" if "title" in str(r["weight_class"]).lower() else "false" for f, r in got.values()]
+        FA, FB, S = dist_tables(h, X, fe, cache=False)
+        pdist, push = dist_p(DM, FA, FB, S)
+        X = pd.concat([X, extras(fe, X)], axis=1)
     out = []
     for i, (bid, f) in enumerate(keys):
         r = X.iloc[i]
@@ -1480,11 +1800,28 @@ def score_card(h, M, card, got, d, facts=None):
                 v["short_notice_debut"] = bool(v.get("replacement") and v["debut"])
             fw[k] = v
         out.append(dict(bid=bid, pick=pk[0], id=str(pk[1]), vs=vs[0], conf=float(conf), p_a=float(p[i]), a=r.a, b=r.b,
-                        wc=r.wc, why=why(r, s, M, Z[i], FE.iloc[i]), row=r, own=fw[s], opp=fw[o]))
+                        wc=r.wc, why=why(r, s, M, Z[i], FE.iloc[i]), row=r, own=fw[s], opp=fw[o],
+                        pdist=None if pdist[i] is None else float(pdist[i]), push=push[i], f=f))
     return sorted(out, key=lambda x: -x["conf"])
 
 
-def picks_json(card, us, scored, M):
+def call_price(book, x, c):
+    """DraftKings' price for the call's side from site/prices.json, if posted"""
+    bid, f = x["bid"], x.get("f")
+    try:
+        if c["market"] == "Moneyline":
+            row = (book.get("FIGHTS") or {}).get(bid)
+            if row and f:
+                return row[0] if _ln(f[3]) == _ln(x["pick"]) else row[2] if _ln(f[5]) == _ln(x["pick"]) else None
+        else:
+            v = ((book.get("FPROPS") or {}).get(bid) or {}).get("dist" if c["sel"] == "Yes" else "nodist") or [None]
+            return v[0][0] if v[0] else None
+    except Exception:
+        return None
+    return None
+
+
+def picks_json(card, us, scored, M, DM=None, book=None):
     picks, allb = {}, {}
     rank = 0
     for x in scored:
@@ -1512,8 +1849,19 @@ def picks_json(card, us, scored, M):
                                own_facts="; ".join(own), opp_facts="; ".join(opp), opp_flag=bool(opp_flag))
         if tier2:
             picks[x["bid"]]["flag"] = "tier2"
-    return {"at": NOW.date().isoformat(), "card": us["date"], "event": card["event"], "name": us["name"],
-            "model": M["last_bout"], "picks": picks, "all": allb}
+        # the call (Oct 12, 2026): the likeliest side on the bout sheet, the moneyline
+        # favorite or a side of Fight to Go the Distance, with its blind hit rate
+        if x.get("pdist") is not None:
+            c = make_call(dict(x, why=why_), x["pdist"], x["push"], DM["cols_s"])
+            pr = call_price(book or {}, x, c)
+            if pr:
+                c["price"] = pr         # information only: never in the model
+            picks[x["bid"]]["call"] = c
+    out = {"at": NOW.date().isoformat(), "card": us["date"], "event": card["event"], "name": us["name"],
+           "model": M["last_bout"], "picks": picks, "all": allb}
+    if DM is not None:
+        out["dist_model"] = DM["last_bout"]
+    return out
 
 
 # ---------------------------------------------------------------- the log
@@ -1605,6 +1953,30 @@ def maybe_refit(h, M, before):
     return fit(h, before, MODEL)
 
 
+def load_dist():
+    try:
+        return json.load(open(DMODEL))
+    except Exception:
+        return None
+
+
+def maybe_refit_dist(h, DM, before):
+    """refit the distance model when scikit-learn is here and there are decided bouts newer than it"""
+    try:
+        import sklearn  # noqa: F401
+    except Exception:
+        return DM
+    X = h["bouts"]
+    newest = X.date[train_mask(X, before) & X.method.map(mclass).notna().values].max()
+    if DM is not None and pd.Timestamp(DM["last_bout"]) >= newest:
+        return DM
+    try:
+        return fit_dist(h, before, DMODEL)
+    except Exception as e:
+        print("  distance model refit failed (%s); %s" % (e, "keeping the committed one" if DM else "no calls"))
+        return DM
+
+
 def append_bouts(h, added):
     if not added:
         return
@@ -1650,6 +2022,12 @@ def main():
         before = a[a.index("--before") + 1] if "--before" in a else (NOW.date() + dt.timedelta(days=1)).isoformat()
         out = a[a.index("--out") + 1] if "--out" in a else MODEL
         fit(h, before, out)
+        return 0
+    if "--fit-dist" in a:
+        h = load_hist()
+        before = a[a.index("--before") + 1] if "--before" in a else (NOW.date() + dt.timedelta(days=1)).isoformat()
+        out = a[a.index("--out") + 1] if "--out" in a else DMODEL
+        fit_dist(h, before, out)
         return 0
     if "--replay" in a:
         replay(a[a.index("--replay") + 1])
@@ -1711,12 +2089,21 @@ def main():
     M = load_model()
     if not dry:
         M = maybe_refit(h, M, us["date"])
+    DM = load_dist()
+    if not dry:
+        DM = maybe_refit_dist(h, DM, us["date"])
+    book = {}
+    try:
+        book = json.load(open(os.path.join(D, "site", "prices.json")))
+    except Exception:
+        pass
+    rounds = {bid: ((book.get("FPROPS") or {}).get(bid) or {}).get("rounds") for bid in got}
     facts, wpage = wiki_card_facts(card, us, got, h, dry=dry)
     if wpage:
         n = sum(1 for v in facts.values() if v["replacement"] or v["rebook"] or v["missed_weight"])
         print("  wikipedia: %s (fetched %s): %d men with fight-week facts" % (wpage["title"], wpage.get("fetched", "")[:16], n))
-    scored = score_card(h, M, card, got, us["date"], facts)
-    bp = picks_json(card, us, scored, M)
+    scored = score_card(h, M, card, got, us["date"], facts, DM, rounds)
+    bp = picks_json(card, us, scored, M, DM, book)
     unread = [f for f in card["rows"] if str(f[1]) not in got]
     print("ufc_reads: %s %s, model through %s | %d bouts read, %d ranked%s | %.1fs" % (
         us["date"], us["name"], M["last_bout"], len(scored), len(bp["picks"]),
@@ -1727,6 +2114,11 @@ def main():
         print("  %s %3.0f%%  %-24s over %-24s %s%s" % (("#%d" % rk) if rk else "  ", 100 * x["conf"], x["pick"], x["vs"],
                                                      "[TIER 2, won %s] " % pk["won"] if pk.get("flag") == "tier2" else "",
                                                      "; ".join(pk.get("why", [])) if rk else ""))
+        c = pk.get("call")
+        if c:
+            print("        CALL %s: %s  %d%% (won %d%% blind, %d bouts)%s | %s" % (
+                c["market"], c["side"], c["p"], c["won"], c["won_n"], (" DK " + c["price"]) if c.get("price") else "",
+                "; ".join(c["why"])))
     if dry:
         return 0
     json.dump(bp, open(OUT, "w"), indent=1, ensure_ascii=False)
