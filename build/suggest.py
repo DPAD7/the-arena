@@ -267,17 +267,14 @@ def h2h_case(qb, lines, other, olines, oalw, oppw, opp):
         return "No game on record this year for %s: he has not thrown a pass in these games, so this would be his first." % fam(qb)
     y = sum(x[0] for x in lines) / len(lines)
     a = sum(x[1] for x in lines) / len(lines)
-    s = "%s throws for %.0f a game on %.0f throws" % (fam(qb), y, a)
-    if olines:
-        oy = sum(x[0] for x in olines) / len(olines)
-        oa = sum(x[1] for x in olines) / len(olines)
-        s += ", %s %.0f on %.0f" % (fam(other), oy, oa)
-    s += ". His games: %s." % ", ".join(str(x[0]) for x in lines)
+    # his yards, throws and games are the last-5 bars under this text now
+    # (Jose, Oct 12, 2026: the first sentence repeats the bars)
+    s = ""
     if oalw:
-        s += " %s's defense gives up %.0f passing yards a game." % (opp, oalw["yds"])
+        s += "%s's defense gives up %.0f passing yards a game." % (opp, oalw["yds"])
     if oppw:
         s += " %s's defense on the wire: %s." % (opp, oppw)
-    return s
+    return s.strip() or "%s throws for %.0f a game on %.0f throws." % (fam(qb), y, a)
 
 
 def expect(rows, oalw):
@@ -401,8 +398,55 @@ def h2h_read(away_qb, home_qb):
     return None
 
 
+L5 = os.path.join(D, "data", "last5.json")
+
+
+def last5(qid, keep):
+    """His last five games with a pass thrown, newest first, from ESPN's game
+       log: [where, M/D, yards, completions, attempts]. Last season fills in
+       early on. Kept six hours in data/last5.json."""
+    k = keep.get(qid)
+    if k and (NOW - dt.datetime.fromisoformat(k["at"])) < dt.timedelta(hours=6):
+        return k["g"]
+    games = []
+    for yr in (NOW.year, NOW.year - 1):
+        try:
+            j = rq.get("https://site.web.api.espn.com/apis/common/v3/sports/football/nfl/athletes/%s/gamelog?season=%d" % (qid, yr),
+                       impersonate="chrome", timeout=20).json()
+        except Exception:
+            continue
+        nm, ev = j.get("names") or [], j.get("events") or {}
+        if not all(x in nm for x in ("completions", "passingAttempts", "passingYards")):
+            continue
+        ic, ia, iy = nm.index("completions"), nm.index("passingAttempts"), nm.index("passingYards")
+        for st in j.get("seasonTypes") or []:
+            if "Preseason" in (st.get("displayName") or ""):
+                continue
+            for c in st.get("categories") or []:
+                for e in c.get("events") or []:
+                    g, x = ev.get(e.get("eventId")) or {}, e.get("stats") or []
+                    try:
+                        at = int(x[ia])
+                    except (ValueError, IndexError):
+                        continue
+                    if not at or not g.get("gameDate"):
+                        continue
+                    t = dt.datetime.fromisoformat(g["gameDate"].replace("Z", "+00:00")) - dt.timedelta(hours=5)
+                    games.append((g["gameDate"], ["%s %s" % (g.get("atVs") or "vs", (g.get("opponent") or {}).get("abbreviation") or ""),
+                                                 "%d/%d" % (t.month, t.day), int(float(x[iy])), int(x[ic]), at]))
+        if len({d for d, _ in games}) >= 5:
+            break
+    out = [r for _, r in sorted({d: r for d, r in games}.items(), reverse=True)][:5]
+    keep[qid] = {"at": NOW.isoformat(), "g": out}
+    return out
+
+
 def main():
     s = pagefile.read()
+    try:
+        keep5 = json.load(open(L5))
+    except Exception:
+        keep5 = {}
     sched = json.loads(re.search(r"  var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
     try:
         alerts = json.load(open(os.path.join(D, "site", "alerts.json")))
@@ -530,8 +574,11 @@ def main():
         if game.get("mlread"):
             mr2 = game["mlread"]
             game["call"]["ml"] = {w: (mr2["call"] if w == mr2["side"] else None) for w in men}
+        # the last-5 bars under the head to head (Jose, Oct 12, 2026)
+        game["last5"] = {w: last5(men[w][1], keep5) if men[w][1] else [] for w in men}
         out[gid] = game
     json.dump(out, open(OUT, "w"), separators=(",", ":"), ensure_ascii=False)
+    json.dump(keep5, open(L5, "w"), separators=(",", ":"))
     print("suggest: %d games" % len(out))
     return 0
 

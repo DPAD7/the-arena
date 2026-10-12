@@ -4168,6 +4168,27 @@
   .gpc--cold { background: #5ac8fa; color: #000; }
   .gpc--heavy { background: #3a3a3c; color: #fff; }
   .gpbox--none { color: #9a9aa0; }
+  /* the last-5 bars inside the head-to-head box (Oct 12, 2026) */
+  .l5 { margin-top: 12px; padding-top: 10px; border-top: 1px solid #2c2c2e; }
+  .l5hd { display: flex; justify-content: space-between; align-items: baseline; font: 800 11px Barlow, "Helvetica Neue", Arial, sans-serif; letter-spacing: .12em; color: #8e8e93; }
+  .l5hd span:nth-child(2) { color: #fff; letter-spacing: .02em; font-size: 13px; }
+  .l5rows { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+  .l5r { display: grid; grid-template-columns: 52px 1fr 1fr 52px; align-items: center; }
+  .l5o { font: 800 11.5px/1.15 Barlow, "Helvetica Neue", Arial, sans-serif; color: #fff; }
+  .l5o small { display: block; font: 600 10px Barlow, "Helvetica Neue", Arial, sans-serif; color: #8e8e93; }
+  .l5o.rt { text-align: right; }
+  .l5s { height: 36px; display: flex; }
+  .l5s.l { justify-content: flex-end; border-right: 2px solid #3a3a3f; }
+  .l5b { height: 100%; display: flex; align-items: center; box-sizing: border-box; font: 800 14px/1 "Barlow Condensed", Barlow, sans-serif; }
+  .l5b span { display: flex; flex-direction: column; }
+  .l5b i { font: 800 10.5px Barlow, "Helvetica Neue", Arial, sans-serif; font-style: normal; margin-top: 2px; opacity: .75; }
+  .l5s.l .l5b { background: linear-gradient(270deg, #e5e5ea, #8e8e93); color: #000; border-radius: 7px 2px 2px 7px; padding-left: 6px; }
+  .l5s.r .l5b { background: linear-gradient(90deg, #8e8e93, #e5e5ea); color: #000; border-radius: 2px 7px 7px 2px; justify-content: flex-end; padding-right: 6px; }
+  .l5s.l.on .l5b { background: linear-gradient(270deg, #0b5f2b, #17c257); color: #fff; }
+  .l5s.r.on .l5b { background: linear-gradient(90deg, #0b5f2b, #17c257); color: #fff; }
+  .l5s.r .l5b span { align-items: flex-end; }
+  .l5ft { display: flex; justify-content: space-between; margin-top: 10px; font: 700 11px Barlow, "Helvetica Neue", Arial, sans-serif; color: #8e8e93; }
+  .l5ft b { color: #fff; }
   .gpsep { height: 1px; background: rgba(255,255,255,.14); margin: 18px 0; }
   .gph2h { display: flex; align-items: center; justify-content: center; gap: 10px; }
   .gph2h .gpp { flex: 1; max-width: 92px; }

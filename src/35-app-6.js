@@ -1709,15 +1709,40 @@
       var CHK = ["Offense more efficient + receivers set 45+ yds higher", "Passing more efficient + receivers set 34+ yds higher",
                  "Line gives up less pressure + receivers set 34+ yds higher", "His efficiency vs this defense + his yardage line 2+ higher"];
       var rdx = sg.h2hread;
+      /* the two passers' last five games, mirrored from the middle like the
+         card: yards and completions/attempts in the bar, inside the same box
+         as the text (Jose, Oct 12, 2026) */
+      var l5 = function () {
+        var L = sg.last5 || {}, a = L.away || [], b = L.home || [];
+        if (!a.length && !b.length) return "";
+        var M = 1;
+        a.concat(b).forEach(function (r) { if (r[2] > M) M = r[2]; });
+        M = Math.max(M * 1.08, 300);
+        var avg = function (g) {
+          if (!g.length) return "";
+          var n = g.length, s = function (i) { return Math.round(g.reduce(function (t, r) { return t + r[i]; }, 0) / n); };
+          return "Avg <b>" + s(2) + "</b> \u00b7 <b>" + s(3) + "/" + s(4) + "</b>";
+        };
+        var lab = function (r, rt) { return r ? '<div class="l5o' + (rt ? " rt" : "") + '">' + esc(r[0]) + "<small>" + esc(r[1]) + "</small></div>" : '<div class="l5o"></div>'; };
+        var bar = function (r, w) {
+          return '<div class="l5s ' + w + ((w === "l" ? "away" : "home") === st.h2h ? " on" : "") + '">' + (r ? '<div class="l5b" style="width:' + (r[2] / M * 100).toFixed(1) + '%"><span>' + r[2] + "<i>" + r[3] + "/" + r[4] + "</i></span></div>" : "") + "</div>";
+        };
+        var h5 = '<div class="l5"><div class="l5hd"><span>' + esc(famName(side.away.qb)).toUpperCase() + "</span><span>Last 5 \u00b7 yds \u00b7 comp/att</span><span>" +
+          esc(famName(side.home.qb)).toUpperCase() + '</span></div><div class="l5rows">';
+        for (var i = 0; i < Math.max(a.length, b.length); i++)
+          h5 += '<div class="l5r">' + lab(a[i]) + bar(a[i], "l") + bar(b[i], "r") + lab(b[i], 1) + "</div>";
+        return h5 + '</div><div class="l5ft"><span>' + avg(a) + "</span><span>" + avg(b) + "</span></div></div>";
+      };
+      var withL5 = function (html) { var x = l5(); return x && html.slice(-6) === "</div>" ? html.slice(0, -6) + x + "</div>" : html; };
       if (st.h2h && hHas && rdx && lean.h2h === st.h2h) {
         var cw = (call.h2h || {})[st.h2h] === "take" ? "TAKE" : "LEAN", nOk = (rdx.checks || []).filter(Boolean).length;
-        h += '<div class="gpbox gpchecks"><div class="gpchd"><b class="gpc gpc--' + cw.toLowerCase() + '">' + cw + '</b><span>' + nOk + ' of 4 checks</span></div>' +
+        h += withL5('<div class="gpbox gpchecks"><div class="gpchd"><b class="gpc gpc--' + cw.toLowerCase() + '">' + cw + '</b><span>' + nOk + ' of 4 checks</span></div>' +
           CHK.map(function (t, i) {
             var ok = (rdx.checks || [])[i];
             return '<div class="gpck' + (ok ? " ok" : "") + '"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">' +
               (ok ? '<path d="M5 12.5l4.5 4.5L19 7.5"/>' : '<path d="M7 7l10 10M17 7L7 17"/>') + '</svg><span>' + t + '</span></div>';
-          }).join("") + '</div>';
-      } else if (st.h2h) h += hHas ? box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb)) : NONE;
+          }).join("") + '</div>');
+      } else if (st.h2h) h += hHas ? withL5(box((call.h2h || {})[st.h2h], (sg.h2h || {})[st.h2h], famName(side[st.h2h].qb))) : NONE;
       /* the touchdowns: one row a passer -- his face, 1+ 2+ 3+ passing, then
          1+ 2+ rushing -- each a price that goes on the slip, a word under
          every priced rung and nothing under one the book has not priced
