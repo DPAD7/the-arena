@@ -439,7 +439,7 @@ def score_card(rows, M, now=None):
         a_pick = p >= 0.5
         pk, vs = (f[3], f[5]) if a_pick else (f[5], f[3])
         S, O = (A, B) if a_pick else (B, A)
-        out.append(dict(bid=str(f[1]), pick=pk, vs=vs, id=str(f[4] if a_pick else f[6]), conf=max(p, 1 - p),
+        out.append(dict(bid=str(f[1]), pick=pk, vs=vs, id=str(f[4] if a_pick else f[6]), conf=max(p, 1 - p), first=bool(a_pick),
                         women=women(f[7]), wc=f[7], why=why(S, O, pk, vs, push if a_pick else -push, M["fc"]),
                         rec=(S["pw"], S["pl"], O["pw"], O["pl"])))
     return sorted(out, key=lambda x: -x["conf"])
@@ -449,6 +449,10 @@ def picks(scored):
     """site/boxpicks.json's per-bout shape: men's bouts only, ranked; "won" only for a
        tier tested 75%+ blind (none yet), so every DWCS read is a lean"""
     out, allb, rank = {}, {}, 0
+    try:
+        FP = json.load(open(os.path.join(D, "site", "prices.json"))).get("FIGHTS", {})
+    except Exception:
+        FP = {}
     for x in scored:
         pct = int(round(100 * x["conf"]))
         allb[x["bid"]] = dict(pick=x["pick"], vs=x["vs"], p=pct, women=x["women"])
@@ -461,6 +465,12 @@ def picks(scored):
                                  75 if pct >= 75 else 70 if pct >= 70 else 50, BLIND["t75"][0] if pct >= 75 else
                                  BLIND["t70"][0] if pct >= 70 else BLIND["all"][0], BLIND["years"])],
                              id=x["id"], own_facts="", opp_facts="", opp_flag=False, model="dwcs")
+        # the same "Our call" line the UFC tickets carry (Jose, Oct 12, 2026); a
+        # Contender Series call is the winner, at its own band's blind rate
+        band = BLIND["t75"] if pct >= 75 else BLIND["t70"] if pct >= 70 else BLIND["all"]
+        pr = (FP.get(x["bid"]) or ["", "", "", ""])[0 if x.get("first") else 2] or None
+        out[x["bid"]]["call"] = dict(market="Moneyline", side=x["pick"] + " wins", p=pct, won=round(band[0]), price=pr,
+                                     why=x["why"][:3])
     return out, allb
 
 
