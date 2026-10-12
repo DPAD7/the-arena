@@ -1465,7 +1465,7 @@
       });
     }
     setTimeout(greensDraw, 600);
-    setInterval(greensDraw, 60000);
+    (window.GAMEBEAT = window.GAMEBEAT || []).push(greensDraw);   /* with each live reading, not every minute */
     function fillStart(tab) {
       var u = fillFor(tab);
       u.done = false;

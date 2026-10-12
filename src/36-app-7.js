@@ -108,7 +108,7 @@
       if (sport === "form") { if (formWeek === "season") renderMoney(); else renderForm(); }
     });
   }
-  setInterval(formLive, 30000);
+  (window.GAMEBEAT = window.GAMEBEAT || []).push(formLive);   /* with each live reading */
   /* the games' beat: as often as nextLook() says, and when it says stop, a
      look at the board every five minutes with no reading behind it, so a tab
      change or a new day picks the beat back up */
@@ -118,7 +118,8 @@
       var want = nextLook();
       clearTimeout(at);
       at = setTimeout(function () {
-        if (nextLook()) { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); }
+        if (nextLook()) { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400);
+          setTimeout(function () { (window.GAMEBEAT || []).forEach(function (f) { try { f(); } catch (e) {} }); }, 1600); }
         beat();
       }, want || 5 * 60000);
     };
@@ -145,7 +146,11 @@
       var look = nextLook();
       var want = anyLive() ? 5000 : (look || 5 * 60000);
       clearTimeout(at);
-      at = setTimeout(function () { if (anyLive() || nextLook()) refreshFights(); beat(); }, want);
+      at = setTimeout(function () {
+        if (anyLive() || nextLook()) refreshFights();
+        if (anyLive()) setTimeout(function () { (window.FIGHTBEAT || []).forEach(function (f) { try { f(); } catch (e) {} }); }, 1600);
+        beat();
+      }, want);
     };
     beat();
     document.addEventListener("visibilitychange", function () {
@@ -313,7 +318,7 @@
      changes no faster than the ten-minute tick that writes it, so asking any
      oftener only finds the same stamp (Jose, Sep 29, 2026: "why do we need to
      check so often") */
-  setInterval(watchBuild, 600000);
+  (window.GAMEBEAT = window.GAMEBEAT || []).push(watchBuild);   /* on open/return (below) and with live readings */
   document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") watchBuild(); });
   /* back to where he was reading, after a version change took the page */
   (function () {
@@ -368,14 +373,15 @@
      board was re-fetching every event on it every sixty seconds, nearly all of
      them finished and unable to change (Jose, Sep 22, 2026: "this one min
      shit is dumb"). */
-  setInterval(pullLedger, 60000);
+  /* the ledger changes only with a sweep, and a sweep's deploy reloads the page */
   /* the marks were only read when the page loaded, so a bet marked from
      another device never arrived until he reloaded. They are asked for on the
      same beat as the prices, and the gold lands without a rebuild
      (Jose, Sep 19, 2026: "I don't see it, so I have to refresh?") */
-  setInterval(function () { pullState(); }, 60000);
+  /* marks from another device: read on coming back to the app (Oct 12, 2026: no timer) */
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState !== "visible") return;
+    pullState();
     pullPrices();
     pullLedger();
     refreshVisible();
@@ -1309,10 +1315,12 @@
     if (c.dataset.bet) { if (on) OPENSLIP[c.dataset.bet] = 1; else delete OPENSLIP[c.dataset.bet]; }
     if (on) trkPull();
   };
-  setInterval(function () {
+  var walletBeat = function () {
     var sh = document.getElementById("cashsheet");
     if (sh && !sh.hidden && document.visibilityState === "visible") trkPull();
-  }, 15000);
+  };
+  (window.GAMEBEAT = window.GAMEBEAT || []).push(walletBeat);
+  (window.FIGHTBEAT = window.FIGHTBEAT || []).push(walletBeat);
   /* ---- the slip, tracked: fights (Jose, Sep 29, 2026) ----
      Every fight leg is one row -- picture, name over the market, the
      market's own marks, the price -- and the legs that ask about a window of
@@ -1892,7 +1900,9 @@
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
   }
   window.bankDraw = bankDraw;
-  setInterval(function () { if (document.visibilityState === "visible") bankDraw(); }, 15000);
+  var bankBeat = function () { if (document.visibilityState === "visible") bankDraw(); };
+  (window.GAMEBEAT = window.GAMEBEAT || []).push(bankBeat);   /* redrawn as live readings land, not every 15 seconds */
+  (window.FIGHTBEAT = window.FIGHTBEAT || []).push(bankBeat);
   /* the dollar button: dragged, it follows the finger and settles on the
      nearer side; tapped, it opens the balance beside it. Where it rests is
      this device's own, kept in the browser. */

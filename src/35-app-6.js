@@ -471,11 +471,12 @@
   /* the rewind, beside FINAL, on a bout that has a file; and what it opens */
   /* while a card is being fought, its rewinds land a bout at a time: the
      list is read again every two minutes and finished bouts get their button */
-  setInterval(function () {
-    if (!document.querySelector('.gcard[data-bout]')) return;
+  /* read again on the fight beat only, while a card is being fought (Jose,
+     Oct 12, 2026: "this should only be when fights are on") */
+  (window.FIGHTBEAT = window.FIGHTBEAT || []).push(function () {
     ANIMS = null;
     document.querySelectorAll('.gcard[data-bout]').forEach(function (c) { armRewind(c); });
-  }, 120000);
+  });
   function armRewind(card) {
     if (!card || !card.dataset.bout) return;
     var gt = card.querySelector(".gtime");
@@ -1589,8 +1590,7 @@
       });
     });
   }
-  window.rankTickets = rankTickets;
-  setInterval(rankTickets, 5000);
+  window.rankTickets = rankTickets;   /* run when a card is painted; no timer */
   function gamePage(card) {
     var id = card.dataset.espn, lg = card.dataset.lg || "nfl";
     var rows = lg === "college-football" ? (typeof CFB !== "undefined" ? CFB : []) : SCHED;
