@@ -593,10 +593,14 @@
     }
     var esc = function (t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
     var li = function (x) { return "<li>" + esc(x) + "</li>"; };
-    s.innerHTML = '<div class="chsbox" role="dialog" aria-label="Box pick"><button type="button" class="chsx" aria-label="Close">' +
+    s.innerHTML = '<div class="chsbox" role="dialog" aria-label="Fight read"><button type="button" class="chsx" aria-label="Close">' +
       '<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>' +
       '<div class="pkrank">Pick ' + p.rank + '</div><h3 class="pkname">' + esc(p.pick) + '</h3>' +
-      '<div class="pkline">' + p.box[0] + " boxes to " + p.box[1] + " vs " + esc(p.vs) + " · won " + p.won + "% at this lead since 2010</div>" +
+      /* the stats model replaced the box count (Oct 12, 2026: the boxes were
+         only the favorite); an old file still reads as boxes */
+      '<div class="pkline">' + (p.p != null
+        ? "Model " + p.p + "% vs " + esc(p.vs) + " \u00b7 " + (p.p >= 75 ? "75%+" : "70-74%") + " reads won " + p.won + "% blind, 2024-26"
+        : p.box[0] + " boxes to " + p.box[1] + " vs " + esc(p.vs) + " \u00b7 won " + p.won + "% at this lead since 2010") + "</div>" +
       '<ul class="pkwhy">' + (p.why || []).map(li).join("") + "</ul>" +
       ((p.against || []).length ? '<ul class="pkwhy pkagainst">' + p.against.map(li).join("") + "</ul>" : "") + "</div>";
     s.hidden = false;
