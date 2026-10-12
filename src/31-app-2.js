@@ -533,7 +533,9 @@
     return card.dataset.lg === "nfl" && !!card.dataset.kick && Date.now() < Date.parse(card.dataset.kick);
   }
   setInterval(function () {
-    document.querySelectorAll(".gtix").forEach(function (t) {
+    /* the game tickets only: a fight's pick ticket wears .gtix too and was
+       swept off a minute after it appeared (Jose, Oct 12, 2026) */
+    document.querySelectorAll(".gtix:not(.gpick)").forEach(function (t) {
       var c = t.closest(".gcard");
       if (!c || !ticketDue(c)) t.remove();
     });
