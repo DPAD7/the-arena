@@ -422,28 +422,6 @@
    "kick": "2026-10-18T20:05Z"
   },
   {
-   "gid": "401873000",
-   "away": "NO",
-   "home": "NYG",
-   "pick": "NYG",
-   "model": 70,
-   "book": 51,
-   "bookpick": "NO",
-   "agree": false,
-   "won": 56,
-   "n": 45,
-   "call": "lean",
-   "rank": 6,
-   "why": [
-    "Points allowed per game: NYG 21.2, NO 30.2",
-    "Last 3 games, win %: NYG 83%, NO 0%",
-    "Win % this season: NYG 70%, NO 20%",
-    "Turnovers per game: NYG 1.4, NO 2.0"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
-  },
-  {
    "gid": "401873002",
    "away": "PIT",
    "home": "TB",
@@ -455,7 +433,7 @@
    "won": 52,
    "n": 25,
    "call": "lean",
-   "rank": 7,
+   "rank": 6,
    "why": [
     "TB is starting a backup QB",
     "Points per game: PIT 22.2, TB 20.0",
@@ -477,7 +455,7 @@
    "won": 47,
    "n": 15,
    "call": "lean",
-   "rank": 8,
+   "rank": 7,
    "why": [
     "Points allowed per game: JAX 14.0, HOU 22.4",
     "Last 3 games, win %: JAX 100%, HOU 33%",
@@ -486,6 +464,28 @@
    ],
    "week": 6,
    "kick": "2026-10-18T13:30Z"
+  },
+  {
+   "gid": "401873000",
+   "away": "NO",
+   "home": "NYG",
+   "pick": "NYG",
+   "model": 70,
+   "book": 50,
+   "bookpick": "NYG",
+   "agree": true,
+   "won": 47,
+   "n": 15,
+   "call": "lean",
+   "rank": 8,
+   "why": [
+    "Points allowed per game: NYG 21.2, NO 30.2",
+    "Last 3 games, win %: NYG 83%, NO 0%",
+    "Win % this season: NYG 70%, NO 20%",
+    "Turnovers per game: NYG 1.4, NO 2.0"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
   },
   {
    "gid": "401873005",
