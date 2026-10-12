@@ -71,7 +71,8 @@ LOG = os.path.join(D, "data", "boxpicks_log.csv")
 sys.path.insert(0, os.path.join(D, "build"))
 
 NOW = dt.datetime.now(dt.timezone.utc)
-TIERS = ((0.75, 84), (0.70, 74))       # model chance -> 2024-26 blind hit rate
+TIERS = ((0.75, 82),)                   # men's 75%+ only: 82.2% blind 2022-26, 1.24 a card; the 70% tier is
+                                         # dropped (Jose, Oct 12, 2026: "we need something that gets us 75-85+")
 LIVE_FOR = dt.timedelta(hours=4)        # a card is current until 4 h after its last bout's bell
 GBM = dict(max_depth=3, learning_rate=0.05, max_iter=300, l2_regularization=1.0, random_state=0)
 SKLEARN = "1.9.0"
