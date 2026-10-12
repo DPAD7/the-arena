@@ -532,14 +532,6 @@
   function ticketDue(card) {
     return card.dataset.lg === "nfl" && !!card.dataset.kick && Date.now() < Date.parse(card.dataset.kick);
   }
-  setInterval(function () {
-    /* the game tickets only: a fight's pick ticket wears .gtix too and was
-       swept off a minute after it appeared (Jose, Oct 12, 2026) */
-    document.querySelectorAll(".gtix:not(.gpick)").forEach(function (t) {
-      var c = t.closest(".gcard");
-      if (!c || !ticketDue(c)) t.remove();
-    });
-  }, 60000);
   function seatTicket(card) {
     if (!card || card.dataset.bout || !ticketDue(card)) return;
     var top = card.querySelector(".gtop");
@@ -555,6 +547,9 @@
     });
     var t = top.querySelector(".gtrend");
     if (t) top.insertBefore(b, t); else top.appendChild(b);
+    /* gone at its own kickoff, not by a check every minute (Jose, Oct 12,
+       2026: "we know when the game starts") */
+    setTimeout(function () { b.remove(); }, Math.max(0, Date.parse(card.dataset.kick) - Date.now()));
   }
   window.seatTicket = seatTicket;
   /* the box pick's ticket on a fight card: the card's ranked pick (1 is the
