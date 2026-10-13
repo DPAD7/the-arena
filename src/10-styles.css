@@ -618,8 +618,11 @@
      the same nav, and nothing stretched, because only one side is ever set
      (Jose, Sep 23, 2026: "2 x my logo in the floating tab without changing
      the size of the floating nav height and dont distort the logo") */
+  /* the star keeps the room the other marks have inside the sliding mark,
+     so the mark goes round the whole star and not through its points
+     (Jose, Oct 13, 2026: "why is it not around the full icon") */
   #sportbar .sptab[data-sp="form"] > img {
-    width: auto; height: 49px; padding: 0; border-width: 0;
+    width: auto; height: 42px; padding: 4px;
   }
   /* ---- the mark fills when it is asked for what the day is missing ----
      Double tapped, it goes and gets a price for every event on the open day
