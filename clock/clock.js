@@ -713,14 +713,9 @@ export class Clock {
         if ((L.atd || {})[w]) one(grade(F, "atd", i, L.atd[w], b.qb[i]));
       }
     }
-    /* the money, not the parlay record: what he won or lost on his tracked
-       bets, then his picks and the board's (Jose, Oct 13, 2026: "don't track
-       my parlays ... how much I won") */
-    const hist = (await this.ctx.storage.get("hist")) || {};
-    const wk = Object.values(hist).filter(h => now - h.at < 7 * 86400000);
-    const net = wk.filter(h => h.res === "won").reduce((t, h) => t + h.pay, 0) - wk.reduce((t, h) => t + h.wager, 0);
+    /* his picks and the board's picks only: no parlays, no money (Jose,
+       Oct 13, 2026: "don't track my parlays" ... "not how much I won") */
     const parts = [];
-    if (wk.length) parts.push((net >= 0 ? "Won +$" : "Down −$") + Math.abs(net).toFixed(2));
     if (mine[0] + mine[1]) parts.push("Your picks " + mine[0] + "–" + mine[1]);
     if (board[0] + board[1]) parts.push("Board picks " + board[0] + "–" + board[1]);
     if (!parts.length) return;
