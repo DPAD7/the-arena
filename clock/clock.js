@@ -444,9 +444,17 @@ export class Clock {
         if (!wire) { try { wire = await (await fetch(SITE + "/wire.json")).json(); } catch (e) { wire = {}; } }
         const qbs = [...new Set((bet.legs || []).map(l => idx[l.sel]).filter(v => v && v.qb).map(v => v.qb))];
         const hurt = qbs.map(q => wire[String(q)] && wire[String(q)].status ? (idx && Object.values(idx).find(v => v.qb === q) || {}).qbName + " is " + wire[String(q)].status.toLowerCase() : "").filter(Boolean);
-        const r0 = Object.values(rows).find(r => Date.parse(r[2]) === first);
+        /* the event named is one of the slip's own, never another on the board
+           at the same minute (Oct 13, 2026: two fight slips were told "DEL @
+           MTSU kicks off in 30 minutes" because the college game also started
+           at 7), and a bout is said as a fight, not a kickoff */
+        const mine = (bet.legs || []).map(l => idx[l.sel]).filter(Boolean).map(v => rows[v.gid]);
+        const r0 = mine.find(r => Date.parse(r[2]) === first);
+        const what = !r0 ? "First game in 30 minutes."
+          : r0[0] === "bout" ? r0[4] + " vs " + r0[5] + " is on the card starting in 30 minutes."
+          : r0[4] + " @ " + r0[5] + " kicks off in 30 minutes.";
         out.push({ key: "pre@" + bet.id, type: "pregame", title: "Your " + (bet.odds || "") + " slip starts soon",
-                   body: (r0 ? r0[4] + " @ " + r0[5] + " kicks off in 30 minutes." : "First game in 30 minutes.") + (hurt.length ? " " + hurt.join("; ") + "." : ""),
+                   body: what + (hurt.length ? " " + hurt.join("; ") + "." : ""),
                    url: "/#slip=" + bet.id });
       }
     }
