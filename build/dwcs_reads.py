@@ -352,10 +352,8 @@ def why(A, B, pick, vs, push, fc):
     T_ = {
         "d_age": lambda: ("%.0f years younger (%.0f vs %.0f)" % (B["age"] - A["age"], A["age"], B["age"]) if B["age"] - A["age"] >= 1
                           else "Age %.0f vs %.0f" % (A["age"], B["age"])),
-        "d_height": lambda: ('%.0f" taller' % (A["height"] - B["height"]) if A["height"] > B["height"]
-                             else 'Height %.0f" vs %.0f"' % (A["height"], B["height"])),
-        "d_reach": lambda: ('%.0f" more reach (%.0f vs %.0f)' % (A["reach"] - B["reach"], A["reach"], B["reach"]) if A["reach"] > B["reach"]
-                            else 'Reach %.0f" vs %.0f"' % (A["reach"], B["reach"])),
+        "d_height": lambda: "%.0f inches taller (%s vs %s)" % (A["height"] - B["height"], _ft(A["height"]), _ft(B["height"])),
+        "d_reach": lambda: '%.0f more inches of reach (%.0f" vs %.0f")' % (A["reach"] - B["reach"], A["reach"], B["reach"]),
         "d_wpct": lambda: "Pro record %s vs %s" % (rec(A), rec(B)),
         "d_pl": lambda: "%d pro losses vs %d" % (A["pl"], B["pl"]),
         "d_pw": lambda: "%d pro wins vs %d" % (A["pw"], B["pw"]),
@@ -373,13 +371,13 @@ def why(A, B, pick, vs, push, fc):
         "d_subbed": lambda: "Submitted %s, %s %s" % (_times(A["subbed"]), op, _times(B["subbed"])),
         "d_finished": lambda: "Finished %s as a pro, %s %s" % (_times(A["finished"]), op, _times(B["finished"])),
         "d_dec_l": lambda: "Decision losses %d vs %d" % (A["dec_l"], B["dec_l"]),
-        "fin_vs_dur": lambda: "Finishes %s of his wins; %s has been finished %s" % (pct(A["fin"]), op, _times(B["finished"])),
+        "fin_vs_dur": lambda: "Finishes %s of his wins; %s %s" % (pct(A["fin"]), op, "has never been finished" if not B["finished"] else "has been finished " + _times(B["finished"])),
         "ko_vs_chin": lambda: "KO power vs %s's chin: KO'd %s" % (op, _times(B["kod"])),
         "sub_vs_def": lambda: "Submission threat vs %s, submitted %s" % (op, _times(B["subbed"])),
         "d_layoff": lambda: "Fought %.0f months ago, %s %.0f" % (A["layoff"] / 30.4, op, B["layoff"] / 30.4),
         "d_yrs": lambda: "%.0f years as a pro, %s %.0f" % (A["yrs"], op, B["yrs"]),
-        "d_big_w": lambda: "%d wins in named promotions, %s %d" % (A["big_w"], op, B["big_w"]),
-        "d_big_n": lambda: "%d fights in named promotions, %s %d" % (A["big_n"], op, B["big_n"]),
+        "d_big_w": lambda: "%d wins in known promotions like LFA or CFFC (not local shows), %s %d" % (A["big_w"], op, B["big_w"]),
+        "d_big_n": lambda: "%d fights in known promotions like LFA or CFFC (not local shows), %s %d" % (A["big_n"], op, B["big_n"]),
         "d_dwcs_prev": lambda: "Back on the Contender Series (%d before)" % A["dwcs_prev"],
         "d_opp_pct": lambda: "His opponents won %s of their fights, %s's %s" % (pct(A["opp_pct"]), op, pct(B["opp_pct"])),
         "d_qual_w": lambda: "%d wins over men with winning records (5+ fights), %s %d" % (A["qual_w"], op, B["qual_w"]),
@@ -388,12 +386,29 @@ def why(A, B, pick, vs, push, fc):
         "d_last_loss": lambda: "%s lost his last fight" % op,
         "d_last_finished": lambda: "%s was finished in his last fight" % op,
     }
+    # a reason is only said when the pick is actually ahead on it: "0 wins vs 2"
+    # read as a reason for the man with 0 (Jose, Oct 12, 2026)
+    MORE = {"d_height": "height", "d_reach": "reach", "d_wpct": "wpct", "d_pw": "pw", "d_streak": "streak", "d_l3": "l3",
+            "d_fin": "fin", "d_ko_rate": "ko_rate", "d_sub_rate": "sub_rate", "d_dec_rate": "dec_rate", "d_r1_rate": "r1_rate",
+            "d_big_w": "big_w", "d_big_n": "big_n", "d_opp_pct": "opp_pct", "d_qual_w": "qual_w", "d_win_opp_pct": "win_opp_pct",
+            "d_fpy": "fpy", "d_yrs": "yrs"}
+    LESS = {"d_age": "age", "d_pl": "pl", "d_kod": "kod", "d_subbed": "subbed", "d_finished": "finished", "d_dec_l": "dec_l"}
+
+    def ahead(c):
+        try:
+            if c in MORE:
+                return A[MORE[c]] > B[MORE[c]]
+            if c in LESS:
+                return A[LESS[c]] < B[LESS[c]]
+        except Exception:
+            return False
+        return True
     out = []
     for j in np.argsort(-push):
         if push[j] <= 0.02:
             break
         c = fc[j]
-        if c in T_:
+        if c in T_ and ahead(c):
             try:
                 s = T_[c]()
             except Exception:
@@ -403,6 +418,10 @@ def why(A, B, pick, vs, push, fc):
         if len(out) == 4:
             break
     return out
+
+
+def _ft(x):
+    return "%d'%d\"" % (int(x // 12), int(round(x % 12)))
 
 
 def _times(n):
