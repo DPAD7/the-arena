@@ -254,6 +254,10 @@ def hidden_games():
 SITE_STATE = "https://the-arenasports.pages.dev/state"
 
 
+MISS_LIMIT = 5             # price passes a side can come up empty before he hears
+MISS_HOURS = 48            # only games this close are counted
+
+
 def count_misses():
     """College only. Every price pass, a college game inside MISS_HOURS where
        DraftKings prices one passer and not the other is counted for the empty
