@@ -32,7 +32,7 @@ export async function onRequestGet({ request }) {
   }
   /* ESPN's edge is Akamai and refuses a bare machine call -- "Access Denied"
      -- so the request is made the way a browser makes it (Jose, Sep 17, 2026) */
-  const r = await fetch(target.toString(), {
+  const ask = (u) => fetch(u, {
     headers: {
       accept: "application/json, text/plain, */*",
       "accept-language": "en-US,en;q=0.9",
@@ -43,6 +43,17 @@ export async function onRequestGet({ request }) {
     },
     cf: { cacheTtl: 5, cacheEverything: true }
   });
+  let r = await ask(target.toString());
+  /* site.web.api began refusing Cloudflare outright (403) while
+     site.api.espn.com still answers the same paths: no fight result and no
+     live score reached the board on Oct 13, 2026 (Jose: "what the fuck is up
+     with the results"). A refused call goes again to the other host. */
+  if (r.status === 403 && target.hostname === "site.web.api.espn.com") {
+    const alt = new URL(target.toString());
+    alt.hostname = "site.api.espn.com";
+    const r2 = await ask(alt.toString());
+    if (r2.ok) r = r2;
+  }
   const body = await r.text();
   return new Response(body, {
     status: r.status,
