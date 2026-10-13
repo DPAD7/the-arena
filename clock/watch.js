@@ -148,9 +148,14 @@ const LOOSE = [
   [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]]]
 ];
 export function looseState(l, g) {
-  if (!g || g.state !== "post") return "open";
+  /* a count leg lands the moment the count reaches it, live, not at the
+     final (Oct 12, 2026: Bass's 1+ FG went in at 13:23 of the 1st and no
+     alert came); HT/FT and an under still wait for the final */
+  if (!g || g.state === "pre") return "open";
+  const post = g.state === "post";
   const mk = String(l.market || ""), pick = String(l.pick || "").split(" \u00b7 ")[0].trim();
   if (/half ?time ?\/ ?full ?time/i.test(mk)) {
+    if (!post) return "open";
     const two = pick.split("/").map(t => t.trim().split(" ")[0].toUpperCase()), ab = Object.keys(g.ls || {});
     if (ab.length !== 2) return "open";
     const lead = n => { const a = (g.ls[ab[0]] || []).slice(0, n).reduce((x, y) => x + y, 0), b = (g.ls[ab[1]] || []).slice(0, n).reduce((x, y) => x + y, 0);
@@ -169,9 +174,9 @@ export function looseState(l, g) {
   let have = 0;
   for (const src of stat[1]) { let v = ((g.box[names[0]][src[0]] || {})[src[1]]); if (src[2] !== undefined && v) v = String(v).split("/")[src[2]]; have += parseFloat(v) || 0; }
   let m;
-  if ((m = /^(\d+)\+$/.exec(pick))) return have >= +m[1] ? "won" : "lost";
-  if ((m = /^over\s+([\d.]+)$/i.exec(pick))) return have > +m[1] ? "won" : "lost";
-  if ((m = /^under\s+([\d.]+)$/i.exec(pick))) return have < +m[1] ? "won" : "lost";
+  if ((m = /^(\d+)\+$/.exec(pick))) return have >= +m[1] ? "won" : post ? "lost" : "open";
+  if ((m = /^over\s+([\d.]+)$/i.exec(pick))) return have > +m[1] ? "won" : post ? "lost" : "open";
+  if ((m = /^under\s+([\d.]+)$/i.exec(pick))) return have >= +m[1] ? "lost" : post ? "won" : "open";
   return "open";
 }
 
@@ -232,8 +237,9 @@ export function news(slips, idx, games, prev, rows) {
       const v = idx[lg.sel], g = v && games[v.gid], r = v && rows[v.gid];
       const other = v && r && !v.fight ? (v.side ? r[7] : r[9]) : null;
       const dk = String(lg.status || "").toLowerCase();
-      const st = dk === "won" || dk === "lost" ? dk : legState(v, g, other, r);
-      return { lg, v, g, st };
+      const gl = !v && lg.g ? games[String(lg.g)] : null;
+      const st = dk === "won" || dk === "lost" ? dk : v ? legState(v, g, other, r) : gl ? looseState(lg, gl) : "open";
+      return { lg, v, g: g || gl, st };
     });
     if (legs.some(x => x.st === "lost")) continue;
     const open = legs.filter(x => x.st === "open");
