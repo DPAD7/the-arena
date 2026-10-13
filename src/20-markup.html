@@ -515,14 +515,24 @@
     var seen = {};
     try { seen = JSON.parse(localStorage.getItem("arena.livealerts") || "{}"); } catch (e) {}
     DKB.bets.forEach(function (bet) {
+      if (bet.status === "won" || bet.status === "lost") return;
       var legs = bet.legs || [], won = 0, lost = 0, left = null;
       legs.forEach(function (lg) {
         var b = null;
         document.querySelectorAll("button.price[data-oid]").forEach(function (x) { if (x.dataset.oid === lg.sel) b = b || x; });
-        if (b && b.classList.contains("won")) won++;
-        else if (b && b.classList.contains("lost")) lost++;
+        /* a leg with no price on the board (a kicker's field goal, a count)
+           is settled by its own word or the wallet's tracker, never taken as
+           still open: Bass 1+ FG hit in the first quarter of a game long over
+           and the slip kept saying one leg left (Jose, Oct 13, 2026) */
+        var st = String(lg.status || "").toLowerCase();
+        if (st !== "won" && st !== "lost") st = (window.TRKST || {})[lg.sel] || "";
+        if (st === "won" || (b && b.classList.contains("won"))) won++;
+        else if (st === "lost" || (b && b.classList.contains("lost"))) lost++;
         else left = { lg: lg, b: b };
       });
+      /* an open leg with nothing on the board to read is not known to be
+         open, so nothing is said about it */
+      if (left && !left.b) return;
       if (lost || legs.length < 2 || won !== legs.length - 1 || !left || seen["one:" + bet.id]) return;
       seen["one:" + bet.id] = 1;
       var card = left.b && left.b.closest(".gcard"), where = "";
