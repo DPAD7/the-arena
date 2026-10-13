@@ -20,8 +20,12 @@ from curl_cffi import requests as rq
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 import pagefile
-POSFILE = D + "/cache/positions.json"
-POS = json.load(open(POSFILE)) if os.path.exists(POSFILE) else {}
+# kept in data/, which the sweep commits: in cache/ (gitignored) every run on
+# a fresh runner asked ESPN for every passer's position again (Oct 12, 2026)
+POSFILE = D + "/data/positions.json"
+_OLD = D + "/cache/positions.json"
+POS = json.load(open(POSFILE)) if os.path.exists(POSFILE) else (
+    json.load(open(_OLD)) if os.path.exists(_OLD) else {})
 
 
 def position(pid):
@@ -168,7 +172,11 @@ def main():
     for g in sched:
         f = D + "/site/final/%s.json" % g[1]
         if not os.path.exists(f):
-            j = live(g[1])
+            # ESPN is asked only about a game that has kicked off: a game still
+            # to come answers "pre" anyway, and the whole season was being read
+            # on every run (Oct 12, 2026)
+            kicked = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00")) <= now
+            j = live(g[1]) if kicked else None
             if j is None:
                 # only the week in front of us: the whole season of empty
                 # matchups is eighteen tabs of nothing (Jose, Sep 17, 2026)

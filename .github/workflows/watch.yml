@@ -6,7 +6,8 @@ name: watch
 
 on:
   workflow_run:
-    workflows: [sweep, settle, ask, dkbets, fightlog, promote]
+    # (dkbets is gone: nothing starts it since the DK read was retired -- Oct 12, 2026)
+    workflows: [sweep, settle, ask, fightlog, promote]
     types: [completed]
 
 permissions:

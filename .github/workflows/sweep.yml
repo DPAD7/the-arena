@@ -1,8 +1,11 @@
 # The board's own sweep, run by GitHub instead of a Mac.
 #
-# Same script the LaunchAgent ran every ten minutes: refresh.py decides for
-# itself whether this moment is due -- three sweeps a day, the hub at 10 ET,
-# 120/60/30 minutes before each kickoff and first bell, and after the whistle.
+# The site's clock starts it and names the moments it is for in the "moments"
+# input (clock/clock.js keys: sweep@<date> <h>, pre@<id>@<120|60|30>,
+# report@<date> <mins>, live@<id>@<ms>); refresh.py serves those as given.
+# With none named it decides for itself, as the LaunchAgent's copy did: three
+# sweeps a day, 120/60/30 minutes before each kickoff and first bell, the
+# injury-report window, a card or game running (Oct 12, 2026).
 #
 # The six-gigabyte record stays on the Mac. The only tables the sweep reads
 # from it are club_name and person_name, so data/register.db carries those and
@@ -27,6 +30,10 @@ on:
         description: "due (refresh.py --if-due) or dayend (refresh.py --day-end)"
         required: false
         default: "due"
+      moments:
+        description: "the clock's moment keys this wake serves, comma separated (empty: refresh.py decides)"
+        required: false
+        default: ""
 
 # two runs must never overlap: they would write the same files at once
 concurrency:
@@ -49,17 +56,45 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+          # the wheels are kept between runs; the install line below is the
+          # list, so this file is the cache key (Oct 12, 2026)
+          cache: pip
+          cache-dependency-path: .github/workflows/sweep.yml
+
+      # what is due, asked first with nothing installed: refresh.py --check
+      # needs only Python and exits 0 when something is due, 78 when nothing
+      # is, so a wake with nothing to do installs nothing (Oct 12, 2026)
+      - name: What is due
+        id: due
+        env:
+          MOMENTS: ${{ inputs.moments }}
+          MODE: ${{ inputs.mode }}
+        run: |
+          if [ "$MODE" = "dayend" ]; then
+            echo "due=1" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          if python build/refresh.py --if-due --check --moments "$MOMENTS"; then
+            echo "due=1" >> "$GITHUB_OUTPUT"
+          else
+            rc=$?
+            if [ "$rc" -ne 78 ]; then exit "$rc"; fi
+            echo "due=0" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-node@v4
+        if: steps.due.outputs.due == '1'
         with:
           node-version: "22"   # wrangler wants 22 or better
 
       - name: What the scripts need
+        if: steps.due.outputs.due == '1'
         # playwright drives the runner's own Chrome for build/look.py, so no
         # browser is downloaded
         run: pip install --quiet curl_cffi cryptography playwright pillow pandas numpy pyarrow scikit-learn==1.9.0
 
       - name: The register, and somewhere to write
+        if: steps.due.outputs.due == '1'
         # logs/ is not in the repo -- a runner starts without it, and the first
         # run with something to say died on the missing folder
         run: |
@@ -67,6 +102,7 @@ jobs:
           mkdir -p logs cache prices
 
       - name: Sweep
+        if: steps.due.outputs.due == '1'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
@@ -78,24 +114,29 @@ jobs:
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
           DK_COOKIES: ${{ secrets.DK_COOKIES }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MOMENTS: ${{ inputs.moments }}
+          MODE: ${{ inputs.mode }}
         run: |
-          if [ "${{ inputs.mode }}" = "dayend" ]; then
+          if [ "$MODE" = "dayend" ]; then
             python build/refresh.py --day-end
           else
-            python build/refresh.py --if-due
+            python build/refresh.py --if-due --moments "$MOMENTS"
           fi
 
       - name: The site, checked
-        # every run, due or not: the site carries main's page (if not, it is
-        # built and deployed again), the functions answer, a face is a
-        # picture. What is wrong lands in site/guard.json (Sep 28, 2026)
-        if: always()
+        # every run that was due, whether the sweep passed or not: the site
+        # carries main's page (if not, it is built and deployed again), the
+        # functions answer, a face is a picture. What is wrong lands in
+        # site/guard.json (Sep 28, 2026), rewritten only when the list
+        # changes (Oct 12, 2026)
+        if: always() && steps.due.outputs.due == '1'
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: python build/guard.py --live
 
       - name: Keep what it wrote
+        if: steps.due.outputs.due == '1'
         run: |
           rm -f data/qbspy.db
           git config user.name "the arena"

@@ -36,6 +36,26 @@ OUT = os.path.join(D, "site", "img", "posters")
 LIST = os.path.join(D, "site", "posters.json")
 UA = {"User-Agent": "the-arena/1.0 (185117539+DPAD7@users.noreply.github.com)"}
 API = "https://en.wikipedia.org/w/api.php"
+# each card with no poster found, and when it was last looked for: it is not
+# asked about again for a day if it is within two weeks, a week otherwise --
+# the past cards and the Contender weeks were asked about on every pass for
+# art that never comes (Oct 12, 2026)
+MISSES = os.path.join(D, "data", "poster_misses.json")
+
+
+def rest(c, misses):
+    """True when this card was looked for too lately to look again."""
+    last = misses.get(str(c[1]))
+    if not last:
+        return False
+    now = datetime.datetime.now(datetime.timezone.utc)
+    try:
+        when = datetime.datetime.fromisoformat(c[2].replace("Z", "+00:00"))
+        seen = datetime.datetime.fromisoformat(last)
+    except (ValueError, TypeError, IndexError):
+        return False
+    near = now - datetime.timedelta(days=1) <= when <= now + datetime.timedelta(days=14)
+    return now - seen < datetime.timedelta(days=1 if near else 7)
 
 
 def title_of(name):
@@ -140,6 +160,11 @@ def main():
     except (OSError, ValueError):
         have = {}
     os.makedirs(OUT, exist_ok=True)
+    try:
+        misses = json.load(open(MISSES))
+    except (OSError, ValueError):
+        misses = {}
+    stamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="minutes")
     got, missing = [], []
     zp = zuffa_posters() if any(str(c[1]).startswith("zb-") for c in cards) else {}
     for c in cards:
@@ -165,11 +190,14 @@ def main():
         # a stand-in from UFC.com is held until Wikipedia has the real one
         if eid in have and os.path.exists(os.path.join(D, "site", have[eid])) and "-ufc" not in have[eid]:
             continue
+        if rest(c, misses):
+            continue
         url = poster_url(title_of(name))
         if not url:
             alt = search_title(name)
             url = poster_url(alt) if alt else None
         if not url:
+            misses[eid] = stamp
             if eid in have:
                 continue
             when = datetime.datetime.fromisoformat(c[2].replace("Z", "+00:00"))
@@ -182,6 +210,7 @@ def main():
             else:
                 missing.append(name)
             continue
+        misses.pop(eid, None)
         if DRY:
             got.append(name)
             continue
@@ -205,6 +234,7 @@ def main():
         got.append(name)
     if not DRY:
         json.dump(have, open(LIST, "w"), separators=(",", ":"), sort_keys=True)
+        json.dump(misses, open(MISSES, "w"), indent=0, sort_keys=True)
     print("posters: %d held, %d new, %d without one yet" % (len(have), len(got), len(missing)))
     for n in missing[:12]:
         print("   no poster yet:", n)

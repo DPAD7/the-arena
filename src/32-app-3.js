@@ -401,7 +401,7 @@
     };
     var have = read(PROPS[g.id]);
     if (PICKPX[g.id]) return PICKPX[g.id].then(read);
-    PICKPX[g.id] = fetch("prices/" + g.id + ".json", { cache: "no-store" })
+    PICKPX[g.id] = fetch("prices/" + g.id + ".json", { cache: "no-cache" })
       .then(function (r) {
         var t = (r.headers.get("content-type") || "").toLowerCase();
         return r.ok && t.indexOf("json") >= 0 ? r.json() : null;
@@ -583,7 +583,7 @@
   /* the two starting receivers of each club, in their Kalshi jerseys */
   var WRS = null;
   function loadWrs() {
-    if (!WRS) WRS = fetch("wr.json", { cache: "no-store" }).then(function (r) { return r.json(); }).catch(function () { return {}; });
+    if (!WRS) WRS = fetch("wr.json", { cache: "no-cache" }).then(function (r) { return r.json(); }).catch(function () { return {}; });
     return WRS;
   }
   /* his club's five up front, from site/lineups.json (build/lineups.py): a
@@ -592,7 +592,7 @@
      No movement just stationary") */
   var HOTLU = null;
   function loadLu() {
-    if (!HOTLU) HOTLU = fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+    if (!HOTLU) HOTLU = fetch("lineups.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; })
       .catch(function () { return {}; });
     return HOTLU;
   }
@@ -1097,7 +1097,7 @@
       qbWire(page);
     };
     if (QBCLIPS) draw();
-    else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+    else fetch("qbclips.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
       .then(function (j) { QBCLIPS = j || {}; draw(); }).catch(function () { page.innerHTML = ""; });
     /* a star set in the search, or on another device, repaints the row */
     window.clipsDraw = function () { if (page.isConnected && QBCLIPS) draw(); };
@@ -1170,7 +1170,7 @@
       }).join("") + "</div>";
     };
     if (QBCLIPS) draw();
-    else fetch("qbclips.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+    else fetch("qbclips.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
       .then(function (j) { QBCLIPS = j || {}; draw(); }).catch(function () { QBCLIPS = QBCLIPS || {}; draw(); });
     page.addEventListener("click", function (e) {
       var t = e.target.closest(".gtile");
@@ -1303,7 +1303,7 @@
       fit(); window.addEventListener("resize", fit);
     };
     if (QBWIRE) { draw(); return; }
-    fetch("qbwire.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+    fetch("qbwire.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { QBWIRE = j; if (page.isConnected) draw(); }).catch(function () {});
   }
   /* the how-to lives behind a small ? beside the heading now, not under every
@@ -1428,15 +1428,11 @@
       var n2 = at(qi, ci + 2);
       if (n2) urlOf(n2.clip).catch(function () {});
     };
-    var watch = function (want, c) {
-      clearTimeout(box._kick); clearTimeout(box._skip);
-      box._kick = setTimeout(function () {
-        if (box.dataset.want === want && alive && cur.currentTime < 0.1 && !box._held) cur.play().catch(function () {});
-      }, 2500);
-      box._skip = setTimeout(function () {
-        if (box.dataset.want === want && alive && cur.currentTime < 0.1 && !box._held) { report(c, "stuck"); ci++; play(); }
-      }, 9000);
-    };
+    /* a clip that will not start is told by the player itself: "canplay"
+       kicks it (below), and "stalled" -- no data coming -- before its first
+       frame passes it by. They were a 2.5 and a 9 second timer on every
+       clip (Oct 12, 2026). */
+    var watch = function (want, c) { cur._want = want; cur._clip = c; };
     var play = function () {
       if (!alive) return;
       if (ci < 0) { if (qi > 0) { qi--; ci = POOL[order[qi]].clips.length - 1; } else ci = 0; }
@@ -1481,6 +1477,11 @@
       };
       v.onended = function () { if (v === cur) { ci++; play(); } };
       v.oncanplay = function () { if (v === cur && !box._held && v.paused) v.play().catch(function () {}); };
+      v.onstalled = function () {
+        if (v !== cur || !alive || box._held || box.dataset.want !== v._want || v.currentTime >= 0.1 || v.readyState >= 2) return;
+        v._want = "";
+        report(v._clip || {}, "stuck"); ci++; play();
+      };
       v.onplaying = function () {
         if (v !== cur || v._told === box.dataset.want) return;
         v._told = box.dataset.want;

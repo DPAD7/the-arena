@@ -111,6 +111,7 @@
         b.classList.toggle("lost", !won);
       });
     });
+    if (window.oneLeftSoon) window.oneLeftSoon();
   }
   /* How a bout actually ended, from the one ESPN feed that says so.
      The scoreboard only writes "Unofficial Winner Decision", so every
@@ -454,13 +455,12 @@
     if (ANIMS) return then(ANIMS);
     ANIMWAIT.push(then);
     if (ANIMWAIT.length > 1) return;
-    /* the card's own recorder, and the second one started mid-card, which
-       keeps its rewinds in anim/live/ (Oct 3, 2026) */
-    var get = function (u) { return fetch(u, { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; }); };
-    Promise.all([get("anim/index.json"), get("anim/live/index.json")])
-      .then(function (two) {
-        ANIMS = two[0] || {};
-        Object.keys(two[1] || {}).forEach(function (k) { if (!ANIMS[k]) { ANIMS[k] = two[1][k]; ANIMS[k].dir = "live/"; } });
+    /* the card's own recorder only: the second one started mid-card on
+       Oct 3, 2026 kept its rewinds in anim/live/, a one-off whose list was
+       still asked for on every open (Oct 12, 2026) */
+    fetch("anim/index.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; })
+      .then(function (j) {
+        ANIMS = j || {};
         window.ANIMS = ANIMS;
       })
       .catch(function () { ANIMS = {}; })
@@ -733,6 +733,7 @@
     card._tl = {gone: gone, at: Date.now(), rd: rd, rounds: rounds,
                 each: each, whole: whole, live: state === "in" && rd >= 1};
     card._tl.left = left;
+    if (card._tl.live) clockOn();
     var fill = wrap.querySelector(".tlfill");
     if (fill) fill.style.width = pct + "%";
     /* the running clock rides over the head of the fill, kept off both ends
@@ -770,24 +771,39 @@
   /* one clock for every bout on the board, a beat a second */
   /* a running football clock ticks down each second between readings, never
      further than the next reading can be (ten seconds) */
-  setInterval(function () {
+  /* the two clocks run only while a card has a running clock or a live
+     bout, and stop by themselves when none has: they ticked every second
+     all day, every day (Oct 12, 2026). clockOn() is called where a reading
+     says a clock is running. */
+  function clockOn() { if (!window._clockT) window._clockT = setInterval(clockBeat, 1000); }
+  function clockBeat() {
+    if (!(footBeat() + boutBeat())) { clearInterval(window._clockT); window._clockT = 0; }
+  }
+  window.clockOn = clockOn;
+  function footBeat() {
+    var n = 0;
     document.querySelectorAll(".gcard[data-espn]").forEach(function (card) {
       var k = card._clk;
       if (!k || !k.run) return;
+      n++;
       var left = Math.max(0, k.sec - Math.min(12, (Date.now() - k.at) / 1000));
       var t = Math.floor(left / 60) + ":" + ("0" + Math.floor(left % 60)).slice(-2);
       card.querySelectorAll(".gclk--two b:first-child").forEach(function (b) { if (b.textContent !== t) b.textContent = t; });
     });
-  }, 1000);
+    return n;
+  }
   function mmss(n) {
     n = Math.max(0, Math.round(n));
     var m = Math.floor(n / 60), s = n % 60;
     return m + ":" + (s < 10 ? "0" : "") + s;
   }
-  setInterval(function () {
-    document.querySelectorAll(".gcard[data-bout].live").forEach(function (card) {
+  function boutBeat() {
+    var n = 0;
+    document.querySelectorAll(".gcard[data-bout]").forEach(function (card) {
       var t = card._tl;
       if (!t || !t.live) return;
+      n++;
+      if (!card.classList.contains("live")) return;
       var on = t.gone + (Date.now() - t.at) / 1000;
       /* never past the end of the round we were told we are in */
       on = Math.min(on, t.rd * t.each);
@@ -809,7 +825,8 @@
         if (gt.textContent !== g) gt.textContent = g;
       }
     });
-  }, 1000);
+    return n;
+  }
   function startedNow(card) {
     var k = Date.parse(card.dataset.kick || "");
     if (!k || k <= Date.now() + 60000) return;
@@ -890,6 +907,7 @@
         settleFight(card, winner, how);
         /* how it ended, in the clock's place: UD · R5 5:00, TKO · R2 3:41 */
         /* theScore's method where the names matched; ESPN's coarser word otherwise */
+        var known = !!(c.how && c.how.type);
         if (!(c.how && c.how.type) && how) {
           var COARSE = { "Decision": "DEC", "Kotko": "TKO", "KO/TKO": "TKO", "Submission": "SUB", "Draw": "DRAW", "No Contest": "NC" };
           c.how = { type: COARSE[how] || how.toUpperCase(), round: (c.status || {}).period || "", time: (c.status || {}).displayClock || "" };
@@ -919,7 +937,12 @@
           }
         }
         card.dataset.settledBout = "1";
-        exactMethod(card);
+        /* ESPN's core feed is asked only where the method is not already
+           exact: theScore's own word (UD, SUB, TKO...) needs no second read,
+           one call a finished bout (Oct 12, 2026). A bare decision still
+           asks, for UD, SD or MD. */
+        if (known && lab && !/^DEC/i.test(lab)) card.dataset.exactMethod = "1";
+        else exactMethod(card);
         /* A bout that is over is over. Only football was ever marked done, so
            only football sank to the foot of the day, and a finished fight sat
            at the top of the board with its result on it (Jose, Sep 19, 2026:
@@ -953,8 +976,10 @@
        off -- the same rule the football sweep already follows. */
     var cards = [].slice.call(document.querySelectorAll(
       ".board:not([hidden]) .gcard[data-bout], .hidebox .gcard[data-bout]"));
-    if (!cards.length) return;
-    var now = Date.now(), live = [], byEvent = {};
+    /* the readings are handed back, so the fight beat waits on them and not
+       on a guessed 1.6 seconds (Oct 12, 2026) */
+    if (!cards.length) return Promise.resolve();
+    var now = Date.now(), live = [], byEvent = {}, jobs = [];
     cards.forEach(function (card) {
       if (card.dataset.settledBout) return;
       var t = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
@@ -974,7 +999,7 @@
        O'Neill, nine hours after they fought (Jose, Sep 20, 2026: "what's
        missing with these"). They are asked about here instead. */
     Object.keys(byEvent).forEach(function (eid) {
-      fetch("final/mma-" + eid + ".json").then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
+      jobs.push(fetch("final/mma-" + eid + ".json").then(function (r) { if (!r.ok) throw new Error(); return r.json(); })
         .then(function (d) {
           applyBoard(byEvent[eid], d);
           /* the file is written as each bout ends now, not once at the end of
@@ -993,9 +1018,9 @@
             if (over[c.dataset.bout]) c.dataset.settledBout = "1";
             else waiting.push(c);
           });
-          if (waiting.length && !/^zb-/.test(eid)) askNight(waiting);
+          if (waiting.length && !/^zb-/.test(eid)) return askNight(waiting);
         })
-        .catch(function () { if (!/^zb-/.test(eid)) askNight(byEvent[eid]); });
+        .catch(function () { if (!/^zb-/.test(eid)) return askNight(byEvent[eid]); }));
     });
     /* the rest of a night that is already under way rides along: it is the
        same one read, and the book's order is not the cage's -- Onley v
@@ -1011,11 +1036,12 @@
       var t = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
       if (nights[card.dataset.event] && t && t < now + 8 * 3600000) live.push(card);
     });
-    askNight(live);
+    jobs.push(askNight(live));
+    return Promise.all(jobs);
   }
   /* the scoreboard for the night each bout was on, one read per night */
   function askNight(cards) {
-    if (!cards || !cards.length) return;
+    if (!cards || !cards.length) return Promise.resolve();
     /* The scoreboard answers for today, and only today. A bout that finished
        last night is neither today's nor eight hours old yet -- the window
        between the last bell and the results file being written -- so nothing
@@ -1031,12 +1057,12 @@
                 : "";
       (byNight[k] = byNight[k] || []).push(card);
     });
-    Object.keys(byNight).forEach(function (k) {
-      fetch(espnUrl(MMA + (k ? "?dates=" + k : "")))
+    return Promise.all(Object.keys(byNight).map(function (k) {
+      return fetch(espnUrl(MMA + (k ? "?dates=" + k : "")))
         .then(function (r) { return r.json(); })
         .then(function (d) { applyBoard(byNight[k], d); })
         .catch(function () {});
-    });
+    }));
   }
 
   /* ---- what the card paid ----
@@ -1565,12 +1591,17 @@
      price on the page is the same button the card has, so a tap puts the
      leg on the slip; what he picked is kept per game, so leaving and coming
      back finds it as he left it. */
-  var SUGGEST = null;
+  var SUGGEST = null, SUGGEST_ASK = null;
+  /* one read in flight, whoever asks: every card painted before the file
+     landed started its own, fifty-five reads of suggest.json on open
+     (Oct 12, 2026) */
   function suggestLoad(cb) {
     if (SUGGEST) { cb(SUGGEST); return; }
-    fetch("suggest.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
-      .then(function (j) { SUGGEST = j || {}; cb(SUGGEST); })
-      .catch(function () { SUGGEST = {}; cb(SUGGEST); });
+    if (!SUGGEST_ASK) SUGGEST_ASK = fetch("suggest.json", { cache: "no-cache" })
+      .then(function (r) { return r.ok ? r.json() : {}; })
+      .then(function (j) { SUGGEST = j || {}; return SUGGEST; })
+      .catch(function () { SUGGEST = {}; return SUGGEST; });
+    SUGGEST_ASK.then(cb);
   }
   /* the moneyline rank inside the NFL ticket's window, white on every game;
      two digits set smaller (Jose, Oct 7, 2026: "A, same ticket, smaller two

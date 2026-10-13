@@ -1,24 +1,37 @@
-"""Ask DraftKings what the board's prices are now, and rewrite only what moved.
+"""The board's sweep: decide what this moment is for, run those jobs, deploy once.
 
-   DraftKings sends no timestamp, no version and no ETag, and answers
-   cache-control: no-store — so there is no way to ask whether a price has
-   changed short of fetching it and comparing. That is what this does. It
-   fetches, compares against what is on the page, and writes nothing at all
-   unless a digit is different.
+   The site's clock (clock/clock.js) starts sweep.yml at the moments that
+   matter and names them in the workflow's "moments" input; they reach this
+   script as --moments "<key>,<key>" and are served as given, whatever this
+   run's own clock says -- a run queued behind another used to find nothing
+   due and drop the work (Oct 12, 2026). The keys are the clock's own:
 
-   Only events that have not kicked off are asked about. A game in progress
-   is not priced any more and its buttons are already locked by the clock on
-   the page, so pulling it would be spending a request on nothing.
+     sweep@<YYYY-MM-DD> <h>        a daily sweep: every job (FULL)
+     pre@<id>@<120|60|30>          before a kickoff or first bell: the reads
+                                   that must be fresh (PREGAME)
+     report@<YYYY-MM-DD> <mins>    the NFL injury-report window: watch_news.py
+     live@<id>@<ms>                a card or a game being played
+     final@<id>, dayend@<date>     a game over, the day's last final
 
-   Run with --dry to see what moved without writing or deploying.
+   With no moments given, --if-due decides for itself the way it always did:
+   the sweep hours, 120/60/30 minutes before each start, the report window,
+   and a card or game running. Anything else and it exits having asked
+   nobody anything.
 
-   Run with --if-due to have it decide for itself whether this is one of the
-   moments worth looking: two hours, one hour and half an hour before each
-   kickoff still to come. Overlapping games share a wake, so a Sunday with
-   fourteen one-o'clock games costs the same as one game. Anything else and
-   it exits without asking DraftKings a single question.
+       python3 build/refresh.py --if-due [--moments "k1,k2"]
+       python3 build/refresh.py --day-end          one full pass
+       python3 build/refresh.py --if-due --check   exit 0 when something is
+                                                   due, 78 when not; writes
+                                                   nothing (sweep.yml asks this
+                                                   before installing anything)
+       ... --plan    say which jobs would run, run none of them
+       ... --dry     run the jobs with --dry, write and deploy nothing
+
+   The jobs only write (ARENA_NO_DEPLOY=1); this deploys once at the end of
+   the run, and only when site/ or src/ changed (Oct 12, 2026).
 """
 import datetime
+import hashlib
 import json
 import urllib.request
 import os
@@ -41,6 +54,14 @@ BUDGET = 900          # fifteen minutes, inside the job's twenty
 def _out_of_time(_sig, _frame):
     sys.stderr.write("refresh.py passed its %ds budget; stopping so the next "
                      "wake is not blocked\n" % BUDGET)
+    # what the run wrote so far still goes out: the jobs no longer deploy on
+    # their own, so stopping here without it would leave the site a pass
+    # behind (Oct 12, 2026)
+    try:
+        signal.alarm(0)
+        deploy_if_changed(timeout=150)
+    except Exception:
+        pass
     os._exit(2)
 
 
@@ -49,74 +70,119 @@ signal.alarm(BUDGET)
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pagefile
-from read_dk import ask
 
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-DRY = "--dry" in sys.argv
+PLAN = "--plan" in sys.argv
+CHECK = "--check" in sys.argv
+DRY = "--dry" in sys.argv or PLAN or CHECK
 # ODDS_NOW pretends it is another moment, so the wake windows can be tested
 # without waiting for one to come round.
 NOW = (datetime.datetime.fromisoformat(os.environ["ODDS_NOW"])
        if os.environ.get("ODDS_NOW")
        else datetime.datetime.now(datetime.timezone.utc))
+# every job this runs only writes; the deploy is this script's, once
+CHILD = dict(os.environ, ARENA_NO_DEPLOY="1")
 
 
 def log(line):
+    if CHECK:
+        return
     stamp = NOW.astimezone().strftime("%m/%d %H:%M")
     print(line)
     if not DRY:
+        os.makedirs(D + "/logs", exist_ok=True)
         with open(D + "/logs/refresh.log", "a") as f:
             f.write("%s  %s\n" % (stamp, line))
 
 
-def whose(page, at):
-    """Name the price in the log the way the card names it: the game, then the
-       man or the club the button sits against."""
-    head = page.rfind('<div class="gcard"', 0, at)
-    clubs = re.findall(r'<span class="gteam[^"]*">(?:<span class="gml">.*?</span>)?'
-                       r'([A-Za-z&;. ]+?)(?:<span class="gml">.*?</span>)?</span>',
-                       page[head:at + 400], re.S)
-    game = "/".join(c.strip() for c in clubs[:2] if c.strip()) or "?"
-    near = page[max(head, at - 320):at]
-    man = re.findall(r'class="(?:wrname|ptdline)">([^<]{1,20})</span>', near)
-    lab = re.findall(r'class="gmk">([^<]{1,14})</span>', near)
-    tail = (man[-1] if man else (lab[-1] if lab else "ML")).strip()
-    return ("%s %s" % (game, tail))[:22]
+# ------------------------------------------------------- running a job -----
+# each job runs once a pass: starters ran three times, news, wire and depth
+# twice, played_qb twice (Oct 12, 2026). again=True is for the one job that
+# has to read what a later one wrote (qb_clips after the clip builders).
+RAN = []
 
 
-def implied(american):
-    """What the book is charging, as a chance out of a hundred."""
-    n = int(american)
-    return 100.0 / (n + 100.0) if n > 0 else -n / (-n + 100.0)
+def run(job, args=(), tail=None, again=False, cwd=None, dry=True, timeout=None):
+    if job in RAN and not again:
+        return []
+    RAN.append(job)
+    name = job[:-3] + ("" if not args else " " + " ".join(args))
+    if PLAN:
+        log("   would run %s" % name)
+        return []
+    if not os.path.exists(D + "/build/" + job):
+        log("   %s: not here, skipped" % job[:-3])
+        return []
+    try:
+        r = subprocess.run([sys.executable, D + "/build/" + job] + list(args) + (["--dry"] if DRY and dry else []),
+                           capture_output=True, text=True, cwd=cwd or D, env=CHILD, timeout=timeout)
+    except Exception as e:
+        log("   %s: did not run (%s)" % (name, type(e).__name__))
+        return []
+    out = (r.stdout + r.stderr).strip().splitlines()
+    for line in (out if tail is None else out[-tail:]):
+        log("   %s: %s" % (name, line))
+    return out
 
 
-def as_html(american):
-    n = int(american)
-    return ("+%d" % n) if n > 0 else ("&minus;%d" % -n)
+# ------------------------------------------------------------ the deploy ---
+def fingerprint():
+    """What site/ and src/ hold now, as git sees it: every changed or new
+       file, by its content. index.html and build.txt are left out -- they are
+       built from the rest at deploy time."""
+    try:
+        st = subprocess.run(["git", "status", "--porcelain", "-uall", "--", "site", "src"],
+                            capture_output=True, text=True, cwd=D, timeout=60).stdout
+    except Exception:
+        return None
+    h = hashlib.sha1()
+    for line in sorted(st.splitlines()):
+        path = line[3:].split(" -> ")[-1].strip('"')
+        if path in ("site/index.html", "site/build.txt"):
+            continue
+        h.update(line.encode())
+        try:
+            with open(os.path.join(D, path), "rb") as f:
+                h.update(hashlib.sha1(f.read()).digest())
+        except OSError:
+            pass
+    return h.hexdigest()
 
 
-def plain(american):
-    """DraftKings writes its minus sign U+2212; make it a number."""
-    return int(str(american).replace("−", "-").replace("+", "").strip())
+START = None
 
 
-# ------------------------------------------------------- what to ask for ----
-src = json.load(open(D + "/data/sources.json"))
+OWED = D + "/data/deploy_owed.json"
+
+
+def deploy_if_changed(timeout=300):
+    """One deploy for the whole run, and none when nothing changed. A deploy
+       that fails is written down (data/deploy_owed.json, committed with the
+       run) and the next run deploys whether or not it changed anything, so
+       what this run wrote still reaches the site."""
+    if DRY:
+        return True
+    owed = os.path.exists(OWED)
+    if START is not None and fingerprint() == START and not owed:
+        log("deploy: nothing on the site changed, not deployed")
+        return True
+    pagefile.deployable(pagefile.read())
+    for attempt in (1, 2):
+        out = subprocess.run(["npx", "wrangler", "pages", "deploy", ".",
+                              "--project-name=the-arenasports", "--branch=main"],
+                             cwd=D + "/site", capture_output=True, text=True, timeout=timeout)
+        if out.returncode == 0:
+            log("deployed")
+            if owed:
+                os.remove(OWED)
+            return True
+        log("DEPLOY FAILED (try %d): %s" % (attempt, (out.stderr or "")[-200:]))
+    json.dump({"at": NOW.isoformat()}, open(OWED, "w"))
+    return False
+
 
 BEFORE = (120, 60, 30)     # minutes before a kickoff that a price is worth reading
-# and after the whistle -- for the football, nothing. watch.py is awake while
-# a game is being played and settles it the second ESPN says final, so a fixed
-# look three and a half hours after kickoff is both late and, for a college
-# game that ran long, wrong (Jose, Sep 22, 2026: "no 3 1/2 and 5 1/2 either").
-# The fights keep theirs: a card is a night, not a game, and watch.py does not
-# read them.
-AFTER = ()
-# and nothing after a card either. watch.py is awake from the first bell,
-# asks ESPN every ten seconds, and writes each bout down the moment it reads
-# final -- so looking again seven and nine hours later is looking at what is
-# already settled (Jose, Sep 22, 2026: "we don't need to settle hours after,
-# if ESPN says it's final then it's final")
-AFTER_MMA = ()
-SLOT = 11                  # the agent wakes every ten, so a window a shade wider
+SLOT = 11                  # the clock's wake lands inside a window a shade over ten
 # DraftKings posts a game's passing props days after its moneyline, with no
 # notice. These are the hours (Eastern) the drawn weeks are swept for anything
 # newly posted, on top of the kickoff wakes above. Jose asked for this on
@@ -126,22 +192,6 @@ SLOT = 11                  # the agent wakes every ten, so a window a shade wide
 # in front of every game, so they were the rest of the list read again for
 # nothing (Jose, Sep 23, 2026: "five sweeps is overkill").
 SWEEP_ET = (9, 15, 21)
-# the three of those that ask DraftKings for prices. A week is a hundred and
-# twenty-eight prices -- a moneyline each club, 1+ and 2+ passing touchdowns
-# and an anytime touchdown each passer, across sixteen games -- and fill_week.py
-# now skips any game whose eight are already held. So the asking empties itself
-# out over the week, and three times a day is enough to catch each market the
-# morning, afternoon or evening it goes up (Jose, Sep 22, 2026: "no that
-# overkill ... three times a day until its full, then stop"). The kickoff wakes
-# still run it regardless: a late starter swap makes a price we hold the wrong
-# man's, and that cannot wait for the next sweep.
-PRICE_ET = (9, 15, 21)
-# the hub's own reading, once a day before the football starts. Its thirteen
-# pages are slow and none of them price anything, so they are kept off the
-# kickoff wakes and never compete with a board that is about to lock. Left at
-# hand-run they went two weeks stale: the sheets, splits, teasers and team
-# spreads were still reading Sep 4 on Sep 18 (Jose, Sep 18, 2026)
-HUB_ET = (10,)
 # the rankings, once a day, on the nine o'clock sweep: the AP poll for the
 # college cards, then the UFC's own table and the flattened copy a bout card
 # reads its number from. A vote moves once a week, so asking more often only
@@ -149,12 +199,10 @@ HUB_ET = (10,)
 # (Jose, Sep 23, 2026: "put the rankings on the schedule, once a day").
 RANKS_ET = (9, 15)   # the AP poll is out Sunday afternoon; 9 AM alone left it a day behind (Sep 27, 2026)
 RANK_JOBS = ("cfb_rank.py", "ufc_rankings.py", "fighter_ranks.py")
-HUB = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-HUB_JOBS = ("hub_props", "hub_sheets", "hub_sheet_games", "hub_team_sheets",
-            "hub_splits", "hub_team_splits", "hub_streaks", "hub_consistency",
-            "hub_matchups", "hub_systems", "hub_tds", "hub_teasers",
-            "hub_league_stats")
 HORIZON_DAYS = 8           # the same reach fill_week.py and fill_fights.py price
+# (the hub readers at 10 ET are gone: they wrote only to data/qbspy.db, which
+# the run throws away, and nothing read them -- Oct 12, 2026. So is the daily
+# DraftKings login touch: the DK read was retired.)
 
 
 def board_events():
@@ -180,24 +228,6 @@ def board_events():
     return out
 
 
-def hub_due(seen):
-    """The daily hub read, if this is the hour for it."""
-    from zoneinfo import ZoneInfo
-    et = NOW.astimezone(ZoneInfo("America/New_York"))
-    out = []
-    for h in HUB_ET:
-        wake = et.replace(hour=h, minute=0, second=0, microsecond=0)
-        key = "hub@" + wake.strftime("%Y-%m-%d %H")
-        late = (et - wake).total_seconds() / 60.0
-        if key not in seen and 0 <= late < SLOT:
-            out.append((key, "hub read %d:00 ET" % h, 0))
-    return out
-
-
-MISS_LIMIT = 5             # price passes a side can come up empty before he hears
-MISS_HOURS = 48            # only games this close are counted
-
-
 def tell(key, title, body):
     """A notification on his phone, through the clock (the watcher's route)."""
     try:
@@ -205,34 +235,6 @@ def tell(key, title, body):
         triage.alert(key, title, body)
     except Exception as e:
         log("   alert not sent (%s)" % type(e).__name__)
-
-
-def open_pass():
-    """Straight after a price pass: starters.py ran ahead of the book in it, so
-       a passer DraftKings has just posted is put on his card now and read for
-       his prices, not at the next sweep. Each swap is told to his phone
-       (Jose, Sep 30, 2026: Tulsa kept last week's man with no prices while
-       DraftKings priced Baylor Hayes)."""
-    def run(job):
-        r = subprocess.run([sys.executable, D + "/build/" + job], capture_output=True, text=True, cwd=D)
-        out = (r.stdout + r.stderr).strip().splitlines()
-        for line in out[-4:]:
-            log("   %s: %s" % (job[:-3], line))
-        return out
-    said = run("starters.py")
-    swaps = [l for l in said if "(DraftKings)" in l]
-    if swaps:
-        run("suggest.py")
-        pagefile.deployable(pagefile.read())
-        run("fill_week.py")
-        for l in swaps:
-            m = re.match(r"\s*(\S+)\s+(.+?)\s+->\s+(.+?)\s+\(DraftKings\)", l)
-            from cares import cares
-            if m and not cares(m.group(1)):
-                log("   swap not told (not starred, nothing on it): %s %s" % (m.group(1), m.group(3)))
-            elif m:
-                tell("swap@%s@%s" % (m.group(1), m.group(3)), "%s: %s starts" % (m.group(1), m.group(3)),
-                     "DraftKings prices %s, not %s -- the card has him now." % (m.group(3), m.group(2)))
 
 
 BLOWOUT = -1000            # a favorite this heavy: DraftKings often skips the game's props
@@ -345,6 +347,9 @@ def read_ranks():
        just wrote, so it is held back when that read failed or came back with
        no divisions: flattening an empty table would wipe every number off
        the bout cards."""
+    if PLAN:
+        log("   would run %s" % ", ".join(j[:-3] for j in RANK_JOBS))
+        return
     ufc_ok = False
     for job in RANK_JOBS:
         if job == "fighter_ranks.py" and not ufc_ok:
@@ -365,25 +370,6 @@ def read_ranks():
                 ufc_ok = False
 
 
-def read_hub():
-    """Set the thirteen hub readers going and let go of them. They are minutes
-       of fetching apiece and this run has nine for everything, so waiting on
-       them would kill the wake that is actually pricing games."""
-    log_path = HUB + "/hub_sweep.log"
-    # quoted: the folder is "the arena", so unquoted the shell reads
-    # /Users/joe/Desktop/the and every one of the thirteen readers dies on the
-    # space before it opens anything. They have never once run (Sep 20, 2026)
-    import shlex
-    script = "; ".join("%s %s" % (shlex.quote(sys.executable),
-                                  shlex.quote("%s/build/%s.py" % (HUB, j)))
-                       for j in HUB_JOBS)
-    with open(log_path, "a") as f:
-        f.write("\n===== %s\n" % NOW.isoformat())
-        subprocess.Popen(["/bin/sh", "-c", script], cwd=HUB, stdout=f, stderr=f,
-                         start_new_session=True)
-    log("hub: %d readers set going, logging to %s" % (len(HUB_JOBS), log_path))
-
-
 # The NFL's practice report is due by 4 p.m. ET, or as soon as practice is
 # over, on three set days before each game, and the last of them carries the
 # game status (Out, Doubtful, Questionable) -- NFL Personnel (Injury) Report
@@ -392,10 +378,10 @@ REPORT_DAYS = {6: (2, 3, 4), 0: (3, 4, 5), 3: (0, 1, 2), 4: (1, 2, 3), 5: (1, 2,
 REPORT_FROM, REPORT_TO = (15, 30), (19, 0)     # ET: around the 4 p.m. deadline and late practices
 
 
-def report_window(seen):
+def report_window(seen, mark=True):
     """Is this a half hour the NFL's injury report can have moved in? A report
        day for some game on the board, between 3:30 and 7 p.m. ET, once each
-       half hour. Marks the half hour served when it is."""
+       half hour. Marks the half hour served when it is (and mark is True)."""
     from zoneinfo import ZoneInfo
     et = NOW.astimezone(ZoneInfo("America/New_York"))
     if not ((et.hour, et.minute) >= REPORT_FROM and (et.hour, et.minute) < REPORT_TO):
@@ -421,8 +407,9 @@ def report_window(seen):
     key = "report@%s %02d:%02d" % (today.isoformat(), et.hour, 30 if et.minute >= 30 else 0)
     if key in seen:
         return False
-    seen[key] = NOW.isoformat()
-    json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+    if mark:
+        seen[key] = NOW.isoformat()
+        json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
     return True
 
 
@@ -440,9 +427,35 @@ def sweeps_due(seen):
     return hit
 
 
-def price_drawn():
+# ------------------------------------------------------------ the passes ---
+# The three daily sweeps (and the day's close-out) run every job.
+FULL = ("settle.py", "played_qb.py", "kicks.py", "news.py", "wire.py", "depth.py", "starters.py",
+        "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py",
+        "dk_promos.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "boxing.py", "posters.py",
+        "alerts.py", "lineups.py", "qbwire.py", "anim_rebuild.py", "guard.py", "qb_search.py",
+        "qb_clips.py", "ask_fold.py", "networks.py", "birthdays.py", "faces.py", "mirror.py",
+        "records_mma.py", "ufc_records.py", "bfo_odds.py", "h2h_week.py", "nfl_reads.py",
+        "cfb_reads.py", "ufc_reads.py", "suggest.py", "log_reads.py", "covered.py")
+# (out of the list, Oct 12, 2026: score_watch.py -- SCORE_WATCH is off on the
+# page, so what it wrote was never drawn; ptd10.py -- it wrote only a picks
+# note into the gitignored notes/, against the standing no-picks order)
+# A 120/60/30-minute wake runs only what has to be fresh at the start: who
+# is hurt and who starts, the prices, the lineups and the alerts, and the
+# reads built on them -- not the other thirty jobs (Oct 12, 2026). Same
+# order as FULL.
+PREGAME = ("news.py", "wire.py", "depth.py", "starters.py", "dk_people.py", "fill_week.py",
+           "fill_fights.py", "alerts.py", "lineups.py", "guard.py", "h2h_week.py", "nfl_reads.py",
+           "cfb_reads.py", "ufc_reads.py", "suggest.py", "log_reads.py")
+# after the whistle, the clips; the rest of what settle_late used to run is
+# in FULL already, and runs once
+CLIPS = ("settle.py", "played_qb.py", "starters.py", "ledger.py", "alt_ptd.py",
+         "nfl_clips.py", "build_nflindex.py", "club_clips.py", "x_clips.py", "qb_clips.py")
+CARD_DONE = ("mma_year.py", "bfo_odds.py", "ufc_records.py")
+
+
+def price_drawn(jobs):
     """The drawn weeks: results first, then every game and bout still to come.
-       fill_week.py and fill_fights.py deploy what they change themselves."""
+       The jobs write; the run deploys once at its end."""
     # keep_prices.py runs after fill_week.py: it copies what was just read
     # alt_ptd.py rides straight behind ledger.py: ledger.py writes ledger.json
     # from scratch each run, so the passing-touchdown ladder has to be put back
@@ -500,25 +513,12 @@ def price_drawn():
     # for thirty-three games and the Dolphins' record on every college card
     # while every line of the log read fine (Jose, Sep 22, 2026: "wire it so
     # it runs and updates and we never have to ask again").
-    # ptd10.py rides at the back and touches nothing the board reads: it takes
-    # the ledger and the prices the jobs above have just written and leaves one
-    # note behind, notes/ptd10-week-N.md -- who to take for one passing
-    # touchdown and why (Jose, Sep 20, 2026: "do not change how we do the site,
-    # just make a separate note")
     # ask_fold.py rides behind the two pricers: whatever a double tap read
     # between sweeps is kept on the site, and this lays it into the price
     # files -- only where a slot is empty, never over a price the sweep just
     # read (Jose, Sep 23, 2026: double tap fetches the missing prices).
-    from zoneinfo import ZoneInfo
-    hour = NOW.astimezone(ZoneInfo("America/New_York")).hour
-    for job in ("settle.py", "played_qb.py", "kicks.py", "news.py", "wire.py", "depth.py", "starters.py", "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py", "dk_promos.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "boxing.py", "posters.py", "alerts.py", "lineups.py", "qbwire.py", "anim_rebuild.py", "guard.py", "qb_search.py", "qb_clips.py", "ask_fold.py", "score_watch.py", "networks.py", "birthdays.py", "faces.py", "mirror.py", "records_mma.py", "ufc_records.py", "bfo_odds.py", "h2h_week.py", "nfl_reads.py", "cfb_reads.py", "ufc_reads.py", "suggest.py", "log_reads.py", "ptd10.py", "covered.py"):
-        if job == "fill_week.py" and hour in SWEEP_ET and hour not in PRICE_ET:
-            log("   fill_week: not a pricing hour (%d:00 ET), nothing asked" % hour)
-            continue
-        r = subprocess.run([sys.executable, D + "/build/" + job] + (["--dry"] if DRY else []),
-                           capture_output=True, text=True)
-        for line in (r.stdout + r.stderr).strip().splitlines():
-            log("   %s: %s" % (job[:-3], line))
+    for job in jobs:
+        run(job)
 
 
 def card_running():
@@ -591,58 +591,6 @@ def game_running():
     return None
 
 
-def after_due(events, seen):
-    """The wakes that stand behind a game rather than in front of it."""
-    hit = []
-    for e in events:
-        if not e["start"]:
-            continue
-        kick = datetime.datetime.fromisoformat(e["start"].replace("Z", "+00:00"))
-        fight = e["id"].startswith("FIGHTS:")
-        for mins in (AFTER_MMA if fight else AFTER):
-            key = "%s@+%d" % (e["id"], mins)
-            if key in seen:
-                continue
-            late = (NOW - (kick + datetime.timedelta(minutes=mins))).total_seconds() / 60.0
-            if 0 <= late < SLOT:
-                hit.append((key, e["name"], mins, fight))
-    return hit
-
-
-def settle_late(fight):
-    """After the whistle: the result and the ladder, then the touchdown clips
-       from the club sites, nfl.com and the clubs' posts. The clip builders are
-       the slow ones, so they run here and nowhere else.
-
-       A card answers to mma_year.py instead, which writes the fought event to
-       site/final/mma-{id}.json and takes ESPN's stored closing price for every
-       bout the board still shows unpriced."""
-    jobs = ("mma_year.py", "bfo_odds.py", "ufc_records.py") if fight else (
-        "settle.py", "played_qb.py", "starters.py", "ledger.py", "alt_ptd.py",
-        "nfl_clips.py", "build_nflindex.py", "club_clips.py", "x_clips.py",
-        # then the passers' and the games' clips on Stacked, so a finished
-        # game's touchdowns are there the moment its clips are (Sep 29, 2026)
-        "qb_clips.py")
-    for job in jobs:
-        if not os.path.exists(D + "/build/" + job):
-            log("   %s: not here, skipped" % job[:-3])
-            continue
-        r = subprocess.run([sys.executable, D + "/build/" + job] + (["--dry"] if DRY else []),
-                           capture_output=True, text=True, cwd=D)
-        for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
-            log("   %s: %s" % (job[:-3], line))
-    if DRY:
-        return
-    # played_qb and starters write the page, so the deploy carries it built
-    pagefile.deployable(pagefile.read())
-    out = subprocess.run(
-        ["npx", "wrangler", "pages", "deploy", ".",
-         "--project-name=the-arenasports", "--branch=main"],
-        cwd=D + "/site", capture_output=True, text=True, timeout=300)
-    log("after the whistle: deployed" if out.returncode == 0
-        else "after the whistle: DEPLOY FAILED " + (out.stderr or "")[-200:])
-
-
 def unsettled():
     """Games and bouts ESPN calls final that we have written no result for.
 
@@ -707,306 +655,300 @@ def due_now(events):
     return hit, seen
 
 
-if "--day-end" in sys.argv:
-    # the day's last game is final (build/day_end.py): one full pass, the
-    # same one a sweep runs, then the page's prices and the deploy below
-    log("day end: every game of the day is final -- a full pass")
-    price_drawn()
-elif "--if-due" in sys.argv:
-    # DraftKings is read only when he double taps the bag (dkbets.yml), never
-    # on a sweep (Jose, Sep 26, 2026: "only when I double tap")
-    hit, seen = due_now(src["events"])
-    ahead = [e for e in board_events()
-             if datetime.datetime.fromisoformat(e["start"].replace("Z", "+00:00")) > NOW]
-    drawn, _ = due_now(ahead)
-    if drawn:
-        drawn = drawn[:1]    # one run serves every game in the slot
-    else:
-        drawn = sweeps_due(seen)
-    hub = hub_due(seen)
-    ranks = ranks_due(seen)
-    late = after_due(board_events(), seen)
+def open_pass(before):
+    """Straight after a price pass: starters.py ran ahead of the book in it, so
+       a passer DraftKings has just posted is put on his card now and read for
+       his prices, not at the next sweep. Each swap is told to his phone
+       (Jose, Sep 30, 2026: Tulsa kept last week's man with no prices while
+       DraftKings priced Baylor Hayes). starters.py runs a second time only
+       when this pass's book read (data/dk_qbs.json) changed -- the one case
+       this is for (Oct 12, 2026)."""
+    if _dkq() == before:
+        log("   open pass: the book named no new passer this pass")
+        return
+    said = run("starters.py", tail=4, again=True)
+    swaps = [l for l in said if "(DraftKings)" in l]
+    if swaps:
+        run("suggest.py", tail=4, again=True)
+        run("fill_week.py", tail=4, again=True)
+        for l in swaps:
+            m = re.match(r"\s*(\S+)\s+(.+?)\s+->\s+(.+?)\s+\(DraftKings\)", l)
+            from cares import cares
+            if m and not cares(m.group(1)):
+                log("   swap not told (not starred, nothing on it): %s %s" % (m.group(1), m.group(3)))
+            elif m:
+                tell("swap@%s@%s" % (m.group(1), m.group(3)), "%s: %s starts" % (m.group(1), m.group(3)),
+                     "DraftKings prices %s, not %s -- the card has him now." % (m.group(3), m.group(2)))
+
+
+def settle_late(fight):
+    """After the whistle: the result and the ladder, then the touchdown clips
+       from the club sites, nfl.com and the clubs' posts. The clip builders are
+       the slow ones, so they run here and nowhere else. A job the pass has
+       already run is not run again; qb_clips is, so the clips just built are
+       on Stacked (Sep 29, 2026).
+
+       A card answers to mma_year.py instead, which writes the fought event to
+       site/final/mma-{id}.json and takes ESPN's stored closing price for every
+       bout the board still shows unpriced."""
+    for job in (CARD_DONE if fight else CLIPS):
+        run(job, tail=6, again=(job == "qb_clips.py" and "x_clips.py" in RAN))
+
+
+def served():
+    f = D + "/data/served.json"
+    try:
+        return json.load(open(f))
+    except (OSError, ValueError):
+        return {}
+
+
+def keep_served(seen):
+    if not DRY:
+        json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
+
+
+def given_moments():
+    """The clock's keys, from --moments "a,b" (or the MOMENTS variable)."""
+    raw = ""
+    if "--moments" in sys.argv:
+        i = sys.argv.index("--moments")
+        raw = sys.argv[i + 1] if i + 1 < len(sys.argv) else ""
+    raw = raw or os.environ.get("MOMENTS", "")
+    return [k.strip() for k in raw.split(",") if k.strip()]
+
+
+def read_moments(keys):
+    """What the clock's keys ask for: {"sweep": [...], "pre": [(id, mins)],
+       "report": bool, "live": [id], "final": [id], "dayend": bool, "ranks": [...]}"""
+    want = {"sweep": [], "pre": [], "report": False, "live": [], "final": [], "dayend": False,
+            "ranks": [], "other": []}
+    for k in keys:
+        kind, _, rest = k.partition("@")
+        if kind == "sweep":
+            want["sweep"].append(k)
+            try:
+                if int(rest.split()[-1]) in RANKS_ET:
+                    want["ranks"].append(k)
+            except (ValueError, IndexError):
+                pass
+        elif kind == "pre":
+            gid, _, mins = rest.rpartition("@")
+            try:
+                want["pre"].append((gid, int(mins)))
+            except ValueError:
+                want["other"].append(k)
+        elif kind == "report":
+            want["report"] = True
+        elif kind == "live":
+            want["live"].append(rest.rpartition("@")[0] or rest)
+        elif kind == "final":
+            want["final"].append(rest)
+        elif kind == "dayend":
+            want["dayend"] = True
+        else:
+            want["other"].append(k)        # hub@, keep@: retired, nothing to do
+    return want
+
+
+def dispatch_fightlog(running, seen):
+    """A fight card starting: set the recorder going on GitHub for the whole
+       card. It ran on his Mac and never moved when the sweep did, so the 9/26
+       card has no rewinds (Jose, Sep 27, 2026: "where are the rewinds")."""
+    if DRY or ("fightlog@" + str(running)) in seen:
+        return
+    tok = os.environ.get("GITHUB_TOKEN") or ""
+    repo = os.environ.get("GITHUB_REPOSITORY") or "DPAD7/the-arena"
+    if not tok:
+        log("fight recorder: no GITHUB_TOKEN here, not started")
+        return
+    try:
+        req = urllib.request.Request(
+            "https://api.github.com/repos/%s/actions/workflows/fightlog.yml/dispatches" % repo,
+            data=json.dumps({"ref": "main", "inputs": {"event": str(running)}}).encode(),
+            headers={"authorization": "Bearer " + tok, "accept": "application/vnd.github+json",
+                     "content-type": "application/json", "user-agent": "the-arena-sweep"}, method="POST")
+        code = urllib.request.urlopen(req, timeout=30).status
+    except Exception as e:
+        code = str(e)[:80]
+    log("fight recorder for card %s: %s" % (running, "started" if code == 204 else "NOT started (%s)" % code))
+    if code == 204:
+        seen["fightlog@" + str(running)] = NOW.isoformat()
+        keep_served(seen)
+
+
+def main():
+    global START
+    keys = given_moments()
+    seen = served()
+    want = read_moments(keys)
+    if "--day-end" in sys.argv:
+        want["dayend"] = True
+    # with no moments named, this run's own clock decides, as it always did
+    if not keys and "--if-due" in sys.argv:
+        ahead = [e for e in board_events()
+                 if datetime.datetime.fromisoformat(e["start"].replace("Z", "+00:00")) > NOW]
+        drawn, _ = due_now(ahead)
+        if drawn:
+            key, _name, mins = drawn[0]      # one run serves every game in the slot
+            want["pre"].append((key.split(":", 1)[1].rsplit("@", 1)[0], mins))
+            want["_served"] = [key]
+        else:
+            for key, _name, _m in sweeps_due(seen):
+                want["sweep"].append(key)
+        for key, _name, _m in ranks_due(seen):
+            want["ranks"].append(key)
     running = card_running()
     playing = game_running()
-    if late:
-        # one run settles every game in the slot and one every card, but a
-        # football wake and a fight wake are different work, so a slot holding
-        # both does both rather than marking both served and doing one
-        # (Jose, Sep 18, 2026)
-        games = [x for x in late if not x[3]][:1]
-        cards = [x for x in late if x[3]][:1]
-        late = games + cards
-    # anything over that we have not written down settles now, whatever the
-    # clock says -- and a wake the clock was still holding is spent here
-    owed = unsettled()
-    if owed and not [x for x in late if not x[3]]:
-        for lg, gid, nm in owed[:6]:
-            log("unsettled: %s %s is final and has no result" % (lg, nm))
-        late = late + [("unsettled@%s" % owed[0][1], owed[0][2], 0,
-                        owed[0][0] == "mma")]
-    if not hit and not drawn and not late and not hub and not ranks and not running and not playing and not boxing_running():
+    boxing = boxing_running()
+    full = bool(want["sweep"] or want["dayend"])
+    pregame = bool(want["pre"])
+    cards, boxcards = _ids("FIGHTCARDS"), _ids("BOXCARDS")
+    live_cards = [x for x in want["live"] if x in cards]
+    live_box = [x for x in want["live"] if x in boxcards]
+    live_games = [x for x in want["live"] if x not in cards and x not in boxcards]
+    busy = bool(full or pregame or want["ranks"] or want["final"] or want["live"] or running or playing or boxing)
+    # the report window, from the clock's key, or (no keys) this run's clock
+    fallback = not keys and "--if-due" in sys.argv
+
+    if CHECK:
+        # sweep.yml asks before it installs anything: 0 is due, 78 is not
+        due = busy or want["report"] or (fallback and report_window(seen, mark=False))
+        print("due" if due else "nothing due")
+        sys.stdout.flush()
+        os._exit(0 if due else 78)
+
+    if not busy:
         # between sweeps, only in the NFL's own report windows: a new injury
         # report or insider post does anything (Jose, Sep 29, 2026: "there's
-        # specific rules to this")
-        if not DRY and report_window(seen):
-            r = subprocess.run([sys.executable, D + "/build/watch_news.py"], capture_output=True, text=True, cwd=D)
-            for line in (r.stdout + r.stderr).strip().splitlines()[-8:]:
-                log("   " + line)
+        # specific rules to this"). watch_news.py deploys what it changes.
+        if want["report"] or (fallback and report_window(seen, mark=not DRY)):
+            watch_news()
+        if want["other"]:
+            log("moments with nothing to do: " + ", ".join(want["other"]))
         os._exit(0)          # no interpreter shutdown to get stuck in
-    log("due: " + "; ".join("%s, %d min out" % (n or "?", m) for _, n, m in hit + drawn) +
-        "".join("%s, %d min after" % (n or "?", m) for _, n, m, _f in late) +
-        "".join(n for _, n, _ in hub + ranks))
+
+    # a report window beside a live pass: watch_news.py first, deploying what
+    # it changes itself; beside a sweep or a pregame wake it is not run, those
+    # read the same and more (Oct 12, 2026)
+    if want["report"] and not (full or pregame):
+        watch_news()
+    START = fingerprint()
+    log("due: " + "; ".join(
+        (["sweep " + ", ".join(want["sweep"])] if want["sweep"] else []) +
+        (["day end"] if want["dayend"] else []) +
+        ["%s, %d min out" % (g, m) for g, m in want["pre"]] +
+        (["live " + ", ".join(str(x) for x in want["live"])] if want["live"] else []) +
+        (["final " + ", ".join(want["final"])] if want["final"] else []) +
+        (["card running %s" % running] if running else []) +
+        (["game running %s" % playing] if playing else []) +
+        (["boxing running %s" % boxing] if boxing else []) +
+        (["rankings"] if want["ranks"] else [])) +
+        ("  [given: %s]" % ",".join(keys) if keys else ""))
     # a rehearsal must not spend a real wake
     if not DRY:
-        for key, _, _ in hit + drawn + hub + ranks:
+        for key in want["sweep"] + want["ranks"] + want.get("_served", []) + keys:
             seen[key] = NOW.isoformat()
-        for key, _, _, _f in late:
-            seen[key] = NOW.isoformat()
-        json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
-    # a fight card starting: set the recorder going on GitHub for the whole
-    # card. It ran on his Mac and never moved when the sweep did, so the 9/26
-    # card has no rewinds (Jose, Sep 27, 2026: "where are the rewinds")
-    if running and not DRY and ("fightlog@" + str(running)) not in seen:
-        tok = os.environ.get("GITHUB_TOKEN") or ""
-        repo = os.environ.get("GITHUB_REPOSITORY") or "DPAD7/the-arena"
-        if tok:
-            try:
-                req = urllib.request.Request(
-                    "https://api.github.com/repos/%s/actions/workflows/fightlog.yml/dispatches" % repo,
-                    data=json.dumps({"ref": "main", "inputs": {"event": str(running)}}).encode(),
-                    headers={"authorization": "Bearer " + tok, "accept": "application/vnd.github+json",
-                             "content-type": "application/json", "user-agent": "the-arena-sweep"}, method="POST")
-                code = urllib.request.urlopen(req, timeout=30).status
-            except Exception as e:
-                code = str(e)[:80]
-            log("fight recorder for card %s: %s" % (running, "started" if code == 204 else "NOT started (%s)" % code))
-            if code == 204:
-                seen["fightlog@" + str(running)] = NOW.isoformat()
-                json.dump(seen, open(D + "/data/served.json", "w"), indent=1)
-        else:
-            log("fight recorder: no GITHUB_TOKEN here, not started")
-    if playing and not DRY:
-        r = subprocess.run([sys.executable, D + "/build/played_qb.py"], capture_output=True, text=True, cwd=D)
-        out = (r.stdout + r.stderr).strip().splitlines()
-        for line in out[-4:]:
-            log("   played_qb (live): " + line)
-        if any("rows corrected: 0" in x for x in out) is False and r.returncode == 0:
-            pagefile.deployable(pagefile.read())
-            dep = subprocess.run(["npx", "wrangler", "pages", "deploy", ".",
-                                  "--project-name=the-arenasports", "--branch=main"],
-                                 cwd=D + "/site", capture_output=True, text=True, timeout=300)
-            log("   live passer fixed: deployed" if dep.returncode == 0 else "   live passer fixed: DEPLOY FAILED")
+            # and the same hour as this script's own clock writes it, so a
+            # fallback run later in the window does not run it again
+            mm = re.match(r"(sweep|ranks)@(\d{4}-\d\d-\d\d) (\d+)$", key)
+            if mm:
+                seen["%s@%s %02d" % (mm.group(1), mm.group(2), int(mm.group(3)))] = NOW.isoformat()
+                if mm.group(1) == "sweep" and int(mm.group(3)) in RANKS_ET:
+                    seen["ranks@%s %02d" % (mm.group(2), int(mm.group(3)))] = NOW.isoformat()
+        keep_served(seen)
+    if running:
+        dispatch_fightlog(running, seen)
+    # anything over that we have not written down settles now -- on the three
+    # sweeps only (settle.yml saves each game the moment it goes final), and
+    # after the early exit above, so a pass with nothing due asks ESPN nothing
+    # (Oct 12, 2026)
+    owed = []
+    if want["sweep"] and not PLAN:
+        owed = unsettled()
+        for lg, gid, nm in owed[:6]:
+            log("unsettled: %s %s is final and has no result" % (lg, nm))
+
+    if full or pregame:
+        if pregame and not full:
+            # The league posts its inactives ninety minutes before kickoff, so
+            # the sixty-minute wake is the first one that can read that list
+            # instead of guessing at it, and the thirty is the confirm. news,
+            # wire, depth and starters run once, at the head of the pregame
+            # list, and starters reads every game in the horizon, this one
+            # included (Jose, Sep 22, 2026: "60-minute wake for injury per
+            # game ... the biggest thing is that I don't want to have to do it")
+            for gid, mins in want["pre"]:
+                if mins in (60, 30):
+                    log("inactives wake (%d min out): %s" % (mins, gid))
+        before = _dkq()
+        price_drawn(FULL if full else PREGAME)
+        if not DRY:
+            open_pass(before)
+            count_misses()
+    if want["report"] and (full or pregame):
+        log("report window: this pass reads the same, watch_news not run")
+    # a game being played: its box score says who is throwing, so a card that
+    # named the wrong man is right within ten minutes of the snap
+    # (Jose, Sep 25, 2026: "we need 100% accurate qbs")
+    if (playing or live_games) and (not DRY or PLAN):
+        run("played_qb.py", tail=4)
     # a Zuffa card on tonight: its results from the promoter's own page every
-    # pass while it runs (Jose, Sep 26, 2026)
-    if not DRY and boxing_running():
-        r = subprocess.run([sys.executable, D + "/build/boxing.py"], capture_output=True, text=True, cwd=D)
-        for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
-            log("   boxing (live): " + line)
-        pagefile.deployable(pagefile.read())
-        dep = subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
-                             cwd=D + "/site", capture_output=True, text=True, timeout=300)
-        log("   boxing results: deployed" if dep.returncode == 0 else "   boxing results: DEPLOY FAILED")
-    if running and not drawn:
+    # pass while it runs (Jose, Sep 26, 2026); deployed below only if it
+    # changed something (Oct 12, 2026)
+    if (boxing or live_box) and (not DRY or PLAN):
+        run("boxing.py", tail=2)
+    if (running or live_cards) and not (full or pregame):
         # the card is on: read the book again for the prices and for when the
         # bouts that are left now start (Jose, Sep 18, 2026)
-        log("card under way (%s): reading the bouts again" % running)
-        if not DRY:
-            r = subprocess.run([sys.executable, D + "/build/fill_fights.py"], capture_output=True, text=True)
-            for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
-                log("   fill_fights: " + line)
+        log("card under way (%s): reading the bouts again" % (running or ",".join(live_cards)))
+        if not DRY or PLAN:
+            run("fill_fights.py", tail=6)
             # and the book's clock for the bouts already on tonight: the pass
             # above skips a card whose block time has gone, so tonight's clock
             # was never read again, and this run's stale copy won the merge
             # over a fresh one -- LaGrange v Ariano back at 7:15 when the book
             # had moved it to 9:20 (Jose, Oct 6, 2026: "Fix it!")
-            r = subprocess.run([sys.executable, D + "/build/fill_fights.py", "--times"],
-                               capture_output=True, text=True, cwd=D + "/build")
-            for line in (r.stdout + r.stderr).strip().splitlines()[-3:]:
-                log("   fill_fights --times: " + line)
-    if drawn:
-        # The league posts its inactives ninety minutes before kickoff, so the
-        # sixty-minute wake is the first one that can read that list instead of
-        # guessing at it, and the thirty is the confirm. Both ask ESPN again
-        # and settle this one game's passer before the prices are read for him
-        # (Jose, Sep 22, 2026: "60-minute wake for injury per game ... the
-        # biggest thing is that I don't want to have to do it").
-        for _key, _name, _mins in drawn:
-            if _mins not in (60, 30) or not _key.startswith("SCHED:"):
-                continue
-            gid = _key.split(":", 1)[1].split("@")[0]
-            log("inactives wake (%d min out): %s" % (_mins, _name))
-            for job in ("news.py", "wire.py", "depth.py"):
-                r = subprocess.run([sys.executable, D + "/build/" + job],
-                                   capture_output=True, text=True, cwd=D)
-                for line in (r.stdout + r.stderr).strip().splitlines()[-3:]:
-                    log("   %s: %s" % (job[:-3], line))
-            r = subprocess.run([sys.executable, D + "/build/starters.py",
-                                "--game", gid], capture_output=True, text=True, cwd=D)
-            for line in (r.stdout + r.stderr).strip().splitlines()[-6:]:
-                log("   starters: " + line)
-        price_drawn()
-        if not DRY:
-            open_pass()
-            count_misses()
-    for _k, _n, _m, _fight in late:
-        settle_late(_fight)
-    if hub and not DRY:
-        read_hub()
-        # once a day, DraftKings is asked for a token and the login it hands
-        # back is kept, so his login never lapses between double taps; his
-        # bets are not read (Jose, Sep 26, 2026: "only when I double tap")
-        try:
-            r = subprocess.run([sys.executable, D + "/build/dk_bets.py", "--keep"],
-                               capture_output=True, text=True, cwd=D, timeout=90)
-            for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
-                log("   dk login: " + line)
-        except Exception as e:
-            log("   dk login: did not run (%s)" % type(e).__name__)
-    if ranks and not DRY:
+            run("fill_fights.py", ("--times",), tail=3, again=True, cwd=D + "/build")
+    if owed or want["final"]:
+        if [x for x in owed if x[0] != "mma"] or want["final"]:
+            settle_late(False)
+        if [x for x in owed if x[0] == "mma"]:
+            settle_late(True)
+    if want["ranks"] and (not DRY or PLAN):
         read_ranks()
-    if not hit:
-        sys.exit(0)
-live = [e for e in src["events"]
-        if e["start"] and datetime.datetime.fromisoformat(
-            e["start"].replace("Z", "+00:00")) > NOW]
-gone = len(src["events"]) - len(live)
-
-board_oids = set()
-for e in src["events"]:
-    board_oids |= set(e["oids"])
-for l in src["league"]:
-    board_oids |= set(l.get("oids") or [])
-
-if not live:
-    log("no hand-built prices left to ask about; the drawn cards are priced by fill_week.py")
-    if not DRY:
-        for job in ("fill_week.py", "fill_fights.py", "settle.py"):
-            subprocess.run([sys.executable, D + "/build/" + job])
+    # a failed deploy still exits 0, so the run's commit lands; the next run
+    # deploys what it wrote (deploy_owed.json)
+    deploy_if_changed()
     sys.exit(0)
 
-# every price whose game has not kicked: the ones under an event's own
-# category, and the league-wide ones belonging to a game still to come
-live_ids = {e["id"] for e in live}
-live_oids = set()
-for e in live:
-    live_oids |= set(e["oids"])
-for l in src["league"]:
-    for oid, eid in (l.get("event_of") or {}).items():
-        if eid in live_ids:
-            live_oids.add(oid)
 
-log("asking about %d events still to kick (%d already started)" % (len(live), gone))
+def _ids(var):
+    """The card ids a live@ key can name: FIGHTCARDS or BOXCARDS."""
+    m = re.search(r"  var %s = (\[.*?\]);\n" % var, pagefile.read(), re.S)
+    try:
+        return {str(c[1]) for c in json.loads(m.group(1))} if m else set()
+    except ValueError:
+        return set()
 
-# ------------------------------------------------------------ the asking ----
-now_price = {}
-asked = failed = 0
 
-for e in live:
-    for cat in e["cats"]:
-        got = ask(None, None,
-                  "/sportscontent/dkusmd/v1/events/%s/categories/%d" % (e["id"], cat))
-        asked += 1
-        if not got:
-            failed += 1
-            continue
-        for s in got.get("selections") or []:
-            od = (s.get("displayOdds") or {}).get("american")
-            if s.get("id") in board_oids and od:
-                now_price[s["id"]] = plain(od)
+def watch_news():
+    if PLAN:
+        log("report window: would run watch_news")
+        return
+    if DRY:
+        return
+    r = subprocess.run([sys.executable, D + "/build/watch_news.py"], capture_output=True, text=True, cwd=D)
+    for line in (r.stdout + r.stderr).strip().splitlines()[-8:]:
+        log("   " + line)
 
-for l in src["league"]:
-    if not (set(l.get("oids") or []) & live_oids):
-        log("   skipped: %s — every game it prices has kicked" % l["what"])
-        continue
-    got = ask(None, None, l["path"])
-    asked += 1
-    if not got:
-        failed += 1
-        continue
-    # an emptied league-wide list is a 200 with nothing in it, not an error.
-    # DraftKings relocates markets into each event's own category and leaves
-    # the old path answering politely, so every id read from it goes stale
-    # while the board keeps showing the price it last saw.
-    if not (got.get("selections") or []):
-        log("   EMPTY: %s answered with 0 selections — the market has most "
-            "likely moved to the events' own categories; its ids are stale"
-            % l["what"])
-        failed += 1
-        continue
-    for s in got.get("selections") or []:
-        od = (s.get("displayOdds") or {}).get("american")
-        if s.get("id") in board_oids and od:
-            now_price[s["id"]] = plain(od)
 
-log("%d requests (%d came back empty), %d prices read back"
-    % (asked, failed, len(now_price)))
+def _dkq():
+    try:
+        return open(D + "/data/dk_qbs.json").read()
+    except OSError:
+        return ""
 
-# --------------------------------------------------------- what moved -------
-page = pagefile.read()
-BTN = r'(<button class="price"[^>]*data-oid="%s"[^>]*>)(.*?)(</button>)'
 
-moved, held, absent = [], 0, []
-for oid in sorted(live_oids):
-    fresh = now_price.get(oid)
-    m = re.search(BTN % re.escape(oid), page, re.S)
-    if not m:
-        continue
-    if fresh is None:
-        absent.append(oid)
-        continue
-    was = m.group(2)
-    shown = re.match(r"\s*(&minus;|−|-|\+)?\s*(\d+)", was)
-    if shown and plain((("-" if shown.group(1) in ("&minus;", "−", "-") else "+")
-                        + shown.group(2))) == fresh:
-        held += 1
-        continue
-    moved.append((oid, was.split("<")[0].strip(), fresh))
-
-log("moved: %d | held: %d | market no longer offered: %d"
-    % (len(moved), held, len(absent)))
-for oid, was, now in moved[:40]:
-    m = re.search(BTN % re.escape(oid), page, re.S)
-    log("   %-22s %8s -> %-8s  %s"
-        % (whose(page, m.start()), was.replace("&minus;", "-"),
-           as_html(now).replace("&minus;", "-"), oid[:24]))
-
-if not moved:
-    log("nothing moved — the board is already right, nothing written")
-    sys.exit(0)
-
-# ------------------------------------------------------------ the writing ---
-# the prices were read from DraftKings minutes ago and the page may have been
-# edited since, so the swaps are made against the file as it is now rather than
-# against the copy this run started from (Jose, Sep 17, 2026)
-page = pagefile.read()
-for oid, _, fresh in moved:
-    def swap(m, f=fresh):
-        return m.group(1) + '%s <span class="pct">%d%%</span>' % (
-            as_html(f), round(implied(f) * 100)) + m.group(3)
-    page, n = re.subn(BTN % re.escape(oid), swap, page, count=1, flags=re.S)
-    if n != 1:
-        log("   %s is no longer on the page, left alone" % oid[:24])
-
-# If the page carries a read-time line, keep it current. It does not any more
-# — Jose took it off — so this updates one where it exists and never adds one.
-when = NOW.astimezone(datetime.timezone(datetime.timedelta(hours=-4)))
-stamp = "DK read " + when.strftime("%a %-m/%-d %-I:%M %p") + " ET"
-page = re.sub(r'(<div class="stamp" id="stamp">)[^<]*(</div>)',
-              lambda m: m.group(1) + stamp + m.group(2), page, count=1)
-
-if DRY:
-    log("dry run — nothing written")
-    sys.exit(0)
-
-if not pagefile.write(page):
-    log("the page changed while this run was reading — nothing written")
-    sys.exit(0)
-pagefile.deployable(page)
-
-out = subprocess.run(
-    ["npx", "wrangler", "pages", "deploy", ".",
-     "--project-name=the-arenasports", "--branch=main"],
-    cwd=D + "/site", capture_output=True, text=True, timeout=300)
-ok = out.returncode == 0
-log("deployed" if ok else "DEPLOY FAILED: " + (out.stderr or "")[-300:])
-sys.exit(0 if ok else 1)
+if __name__ == "__main__":
+    main()

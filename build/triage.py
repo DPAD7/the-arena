@@ -6,9 +6,6 @@
    workflows finishes in failure. It reads the failed job's log, names the
    cause, and does what the cause calls for:
 
-     login      DraftKings' login has expired (dk_bets says LOGIN EXPIRED, or
-                a 401 minting the token). Only Jose can mend that: an alert
-                on his phone says so, once a day.
      transient  the network or a site was down (timeouts, resets, 5xx). A
                 sweep is run again once; the rest run again on their own
                 next wake. An alert, no issue.
@@ -193,9 +190,9 @@ def main():
     where = "%s%s" % (RUN_NAME or "a run", (" (" + script + ")") if script else "")
     print("kind:", kind, "| where:", where)
     first = said.strip().split("\n")[-1][:140]
-    if kind == "login":
-        alert("login", "DraftKings logged you out", said)
-    elif kind == "transient":
+    # (the "login" kind is gone: name_it() never returns it since the
+    # DraftKings read was retired -- Oct 12, 2026)
+    if kind == "transient":
         again = RUN_NAME == "sweep" and rerun_sweep()
         alert("transient@" + RUN_NAME, "%s could not reach its source" % where,
               first + (" -- run again now." if again else " -- it runs again on the next wake."))

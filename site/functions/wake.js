@@ -6,7 +6,12 @@ import { store } from "./_store.js";
    already holds. GitHub no longer wakes itself every ten minutes to ask
    whether anything is due (Jose, Sep 29, 2026).
 
-     POST /wake   x-wake: <the clock's secret>   {"mode": "due" | "dayend" | "keep"}
+     POST /wake   x-wake: <the clock's secret>   {"mode": "due" | "dayend", "moments": "k1,k2"}
+
+   "moments" are the clock's keys for what this wake serves (sweep@<date> <h>,
+   pre@<id>@<min>, report@<date> <min>, live@<id>@<ms>), passed on as the
+   sweep's "moments" input so a run that starts late still does the work
+   (Oct 12, 2026).
 
    The secret is kept in ARENA as clock:wake and in the clock as WAKE_SECRET;
    anything else is refused.
@@ -18,6 +23,19 @@ function ok(body, status) {
     status: status || 200,
     headers: { "content-type": "application/json", "cache-control": "no-store" }
   });
+}
+
+/* the clock's keys, comma-joined: an array or a string, only the characters
+   a key is made of, whole keys only, under GitHub's input size */
+export function momentsOf(m) {
+  const list = (Array.isArray(m) ? m : String(m || "").split(","))
+    .map(k => String(k).trim()).filter(k => k && /^[\w@.:+\- ]+$/.test(k));
+  let out = "";
+  for (const k of [...new Set(list)]) {
+    if (out.length + k.length + 1 > 60000) break;
+    out += (out ? "," : "") + k;
+  }
+  return out;
 }
 
 export async function onRequest({ request, env }) {
@@ -35,17 +53,22 @@ export async function onRequest({ request, env }) {
   if (!want || said !== want) return ok({ error: "no" }, 403);
   let body = {};
   try { body = await request.json(); } catch (e) { body = {}; }
-  /* "keep" is the daily touch of the DraftKings login (dk_bets.py --keep),
-     its own workflow; anything else is the sweep (Jose, Sep 30, 2026: "do
-     this on the back end so we can wire other things") */
-  const mode = body.mode === "dayend" ? "dayend" : body.mode === "keep" ? "keep" : "due";
-  const flow = mode === "keep" ? "dkbets.yml" : "sweep.yml";
-  const inputs = mode === "keep" ? { keep: "1" } : { mode: mode };
-  const r = await fetch("https://api.github.com/repos/DPAD7/the-arena/actions/workflows/" + flow + "/dispatches", {
+  /* every wake is the sweep; the DraftKings login touch ("keep") is gone --
+     the login is read on his double tap (Oct 12, 2026) */
+  const mode = body.mode === "dayend" ? "dayend" : "due";
+  const moments = momentsOf(body.moments);
+  const inputs = { mode: mode };
+  if (moments) inputs.moments = moments;
+  const send = (inp) => fetch("https://api.github.com/repos/DPAD7/the-arena/actions/workflows/sweep.yml/dispatches", {
     method: "POST",
     headers: { "authorization": "Bearer " + env.GH_TOKEN, "accept": "application/vnd.github+json",
                "content-type": "application/json", "user-agent": "the-arena-clock" },
-    body: JSON.stringify({ ref: "main", inputs: inputs })
+    body: JSON.stringify({ ref: "main", inputs: inp })
   });
-  return ok({ started: r.status === 204, mode: mode }, r.status === 204 ? 200 : 502);
+  let r = await send(inputs);
+  /* a sweep.yml on main without the "moments" input answers 422 to it: the
+     sweep still starts, on its own reading of what is due (Oct 12, 2026) */
+  let plain = false;
+  if (r.status === 422 && inputs.moments) { r = await send({ mode: mode }); plain = true; }
+  return ok({ started: r.status === 204, mode: mode, moments: plain ? "" : moments }, r.status === 204 ? 200 : 502);
 }

@@ -24,9 +24,10 @@
    is the starter. It can only tell us who was there. So the one thing this
    corrects is a man who was not.
 
-   Only games we hold a settled file for are touched, which is the same as
-   saying only games that are over. Nothing upcoming is changed: that is
-   starters.py's job and it works off the depth chart.
+   Games we hold a settled file for are read from it, and a game under way
+   (kicked off, under five hours old, no settled file yet) from ESPN's live
+   box score, so a live pass corrects the card mid-game. Nothing upcoming is
+   changed: that is starters.py's job and it works off the depth chart.
 
        python3 build/played_qb.py          fix every played game
        python3 build/played_qb.py --dry    say what it would change

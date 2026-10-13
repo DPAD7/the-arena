@@ -1,11 +1,17 @@
 # A game went final: save it now.
 #
-# Started by site/functions/final.js the moment a device sees ESPN call a game
-# final (Jose, Sep 29, 2026: "as soon as it says final ... it settles that
-# final and it's final"). It runs the after-game jobs refresh.py runs -- the
-# saved result, the passer who played, the Form tab's counts, the touchdown
-# clips -- and the QB search, then deploys and keeps what it wrote. It writes
-# the same files the sweep does, so it queues behind a running sweep.
+# Started by site/functions/settled.js (POST /settled) the moment a device or
+# the clock sees ESPN call a game final (Jose, Sep 29, 2026: "as soon as it
+# says final ... it settles that final and it's final"). It runs the
+# after-game jobs refresh.py runs -- the saved result, the passer who played,
+# the Form tab's counts, the touchdown clips -- and the QB search, then
+# deploys and keeps what it wrote. It writes the same files the sweep does,
+# so it queues behind a running sweep.
+#
+# A game told here that already has site/final/<id>.json was settled by a
+# sweep or an earlier run, and costs nothing: when every game in $GAMES has
+# its file, nothing is installed or run. The day's close-out is not run from
+# here any more -- the clock's own dayend wake runs it (Oct 12, 2026).
 name: settle
 run-name: settle ${{ inputs.games }}
 
@@ -31,23 +37,43 @@ jobs:
         with:
           ref: main      # a run queued behind another starts from main as it is now (Oct 3, 2026)
 
+      # the games told that have no saved result yet; none, and the run ends
+      - name: Which are new
+        id: new
+        env:
+          GAMES: ${{ inputs.games }}
+        run: |
+          new=""
+          for g in $(echo "$GAMES" | tr ',' ' '); do
+            g=$(echo "$g" | tr -cd '0-9A-Za-z-')
+            [ -n "$g" ] || continue
+            if [ -f "site/final/$g.json" ]; then echo "already settled: $g"; else new="$new $g"; fi
+          done
+          echo "new:$new"
+          echo "games=$(echo $new | tr ' ' ',')" >> "$GITHUB_OUTPUT"
+
       - uses: actions/setup-python@v5
+        if: steps.new.outputs.games != ''
         with:
           python-version: "3.12"
 
       - uses: actions/setup-node@v4
+        if: steps.new.outputs.games != ''
         with:
           node-version: "22"
 
       - name: What the scripts need
+        if: steps.new.outputs.games != ''
         run: pip install --quiet curl_cffi cryptography playwright
 
       - name: The register, and somewhere to write
+        if: steps.new.outputs.games != ''
         run: |
           cp data/register.db data/qbspy.db
           mkdir -p logs cache prices
 
       - name: Save the finished games and count them in
+        if: steps.new.outputs.games != ''
         env:
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -57,9 +83,9 @@ jobs:
           NFL_CLIENT_KEY: ${{ secrets.NFL_CLIENT_KEY }}
           NFL_CLIENT_SECRET: ${{ secrets.NFL_CLIENT_SECRET }}
           NFL_DEVICE_ID: ${{ secrets.NFL_DEVICE_ID }}
-          GAMES: ${{ inputs.games }}
+          GAMES: ${{ steps.new.outputs.games }}
         run: |
-          echo "told final: $GAMES"
+          echo "told final, no result yet: $GAMES"
           for job in settle played_qb starters ledger alt_ptd nfl_clips build_nflindex club_clips x_clips qb_search qb_clips; do
             if [ -f "build/$job.py" ]; then
               echo "== $job"; python "build/$job.py" 2>&1 | tail -4 || true
@@ -67,10 +93,9 @@ jobs:
           done
           python -c "import sys; sys.path.insert(0, 'build'); import pagefile; pagefile.deployable(pagefile.read())"
           (cd site && npx --yes wrangler pages deploy . --project-name=the-arenasports --branch=main)
-          # the day's last game: one full pass to close the day out
-          python build/day_end.py
 
       - name: Keep what it wrote
+        if: steps.new.outputs.games != ''
         run: |
           rm -f data/qbspy.db
           git config user.name "the arena"

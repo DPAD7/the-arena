@@ -244,10 +244,10 @@
      the one it opened with (Jose, Sep 29, 2026: "does it update automatically
      if someone's on the injury report") */
   function alertsPull() {
-    fetch("alerts.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+    fetch("alerts.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { if (j) { ALERTS = j; alertsIn(); } else if (!ALERTS) ALERTS = {}; })
       .catch(function () { if (!ALERTS) ALERTS = {}; });
-    fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : null; })
+    fetch("lineups.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) { if (j) ALERTLU = j; }).catch(function () {});
   }
   alertsPull();
@@ -533,7 +533,14 @@
     });
     try { localStorage.setItem("arena.livealerts", JSON.stringify(seen)); } catch (e) {}
   }
-  setInterval(oneLeft, 20000);
+  /* asked when a leg is settled on a card (placedState, a bout's method, a
+     moneyline's final), not every twenty seconds forever; a burst of
+     settles is one look (Oct 12, 2026) */
+  var oneLeftT = 0;
+  window.oneLeftSoon = function () {
+    if (oneLeftT) return;
+    oneLeftT = setTimeout(function () { oneLeftT = 0; oneLeft(); }, 0);
+  };
   function showAlert(head, says) {
     var el = document.getElementById("legalert");
     if (!el) { el = document.createElement("div"); el.id = "legalert"; document.body.appendChild(el); }
@@ -2085,7 +2092,8 @@
      simply absent from it (Jose, Sep 21, 2026) */
   var RANK = {};
   fetch("ranks.json").then(function (r) { return r.json(); })
-    .then(function (j) { RANK = j || {}; if (typeof paintAll === "function") paintAll(); seatRanks(); })
+    /* the numbers alone, not a repaint of the board (Oct 12, 2026) */
+    .then(function (j) { RANK = j || {}; seatRanks(); })
     .catch(function () { RANK = {}; });
   /* the AP number on every school line already drawn: the file lands after
      the first cards are laid out, and those cards never got theirs
@@ -2100,10 +2108,10 @@
   }
   new MutationObserver(function () { clearTimeout(seatRanks._t); seatRanks._t = setTimeout(function () { seatRanks(); }, 200); })
     .observe(document.documentElement, { childList: true, subtree: true });
+  /* cfb_cover.json is not read while CFB_CLIPS is off: it only fed a full
+     repaint nobody used. Read it again here the day the clips come back
+     (Oct 12, 2026) */
   var CFBCOVER = null;
-  fetch("cfb_cover.json").then(function (r) { return r.json(); })
-    .then(function (j) { CFBCOVER = {}; Object.keys(j || {}).forEach(function (k) { CFBCOVER[String(j[k].id)] = 1; }); if (typeof paintAll === "function") paintAll(); })
-    .catch(function () { CFBCOVER = {}; });
   function sideAbbr(card, side) {
     /* drawn cards say it in data-lab/data-rab; hand-built cards only in the head */
     var ab = side === "l" ? card.dataset.lab : card.dataset.rab;
@@ -2314,9 +2322,8 @@
     });
     return hlsLib;
   }
-  if (window.MediaSource) {
-    (window.requestIdleCallback || function (f) { setTimeout(f, 1500); })(function () { loadHls(); });
-  }
+  /* no load at idle: every open paid for it whether a clip was played or
+     not; playHls() asks for it, and the file is cached a month (Oct 12, 2026) */
   function playHls(vid, url) {
     /* Chrome says "maybe" to native HLS and then cannot play it (error 4),
        so the answer to canPlayType decides nothing. Where MediaSource exists

@@ -1,16 +1,20 @@
-# The home-screen app was serving yesterday's JavaScript. The page is small and
-# is rewritten whenever a price moves, so it is never worth caching.
+# The home-screen app was serving yesterday's JavaScript. The page and its
+# data are rewritten whenever a price moves, so a copy is never used without
+# asking: no-cache keeps it but checks it against the server every time, and
+# an unchanged file comes back as a 304 with no body (it was no-store, which
+# fetched every byte again on every open; Oct 12, 2026).
 /*
-  Cache-Control: no-store, no-cache, must-revalidate, max-age=0
-  Pragma: no-cache
+  Cache-Control: no-cache
 
 # Pictures and icons change by file name or not at all: a month in the phone
 # (Jose, Sep 16, 2026: "they load every time")
 /faces/*
-  ! Pragma
   ! Cache-Control
   Cache-Control: public, max-age=2592000, immutable
 /ico/*
-  ! Pragma
   ! Cache-Control
   Cache-Control: public, max-age=604800
+# hls.js, asked for only when a clip plays: a month (Oct 12, 2026)
+/lib/*
+  ! Cache-Control
+  Cache-Control: public, max-age=2592000

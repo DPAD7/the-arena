@@ -161,6 +161,11 @@ def main():
             print("dry run -- nothing written")
         return
     pricefile.write(book)
+    # under refresh.py (ARENA_NO_DEPLOY=1) this only writes, and the run
+    # deploys once at its end (Oct 12, 2026); run by hand it still deploys
+    if os.environ.get("ARENA_NO_DEPLOY"):
+        print("written; the run deploys at its end")
+        return
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
                    cwd=D + "/site", capture_output=True, text=True)
     print("deployed")

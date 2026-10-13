@@ -9,7 +9,6 @@
    drawn and every picture on screen has arrived (Jose, Sep 23, 2026: "it
    should open once the images and page is loaded completely, not before") */
 (function () {
-  var t0 = Date.now();
   /* a reload the board did itself, for new code, opens straight on the
      board: the stack is for opening the app, not for an update (Jose, Sep 29,
      2026: "shouldn't it just refresh without the animation again?") */
@@ -23,24 +22,47 @@
     var im = document.querySelector("#boot .bstack"), gap = screen.height - innerHeight;
     if (im && gap > 0 && gap < 120) im.style.transform = "translateY(" + (-gap / 2) + "px)";
   } catch (e) {}
-  var go = function () {
-    var b = document.getElementById("boot"), d = document.getElementById("board");
-    if (!b) return;
-    var ready = d && d.children.length && document.readyState === "complete";
-    if (ready) {
-      var vh = innerHeight, imgs = d.querySelectorAll("img");
-      for (var k = 0; k < imgs.length; k++) {
-        var r = imgs[k].getBoundingClientRect();
-        if (r.bottom > 0 && r.top < vh && r.width && !imgs[k].complete) { ready = false; break; }
-      }
-    }
-    /* the stack is always built whole before the board opens, never rushed:
-       three plates, the $, and a beat on the finished stack (Jose, Sep 29, 2026) */
-    if (Date.now() - t0 < 3200) ready = false;
-    if (!ready && Date.now() - t0 < 10000) { setTimeout(go, 80); return; }
+  /* it opens on the events themselves, not a look every 80 ms: the $ ending
+     its animation (and a beat on the finished stack), the page's load, and
+     each picture on screen arriving. Ten seconds and it opens regardless
+     (Oct 12, 2026; the animation is unchanged) */
+  var b = document.getElementById("boot"), done = false, built = false, loaded = document.readyState === "complete";
+  var out = function () {
+    if (done || !b) return;
+    done = true;
     b.classList.add("boot--out"); setTimeout(function () { b.remove(); }, 400);
   };
-  setTimeout(go, 80);
+  var check = function () {
+    if (done || !built || !loaded) return;
+    var d = document.getElementById("board");
+    if (!d || !d.children.length) {
+      if (d && !check.mo) { check.mo = new MutationObserver(check); check.mo.observe(d, { childList: true }); }
+      return;
+    }
+    if (check.mo) { check.mo.disconnect(); check.mo = null; }
+    var vh = innerHeight, imgs = d.querySelectorAll("img"), wait = 0;
+    for (var k = 0; k < imgs.length; k++) {
+      var r = imgs[k].getBoundingClientRect();
+      if (r.bottom > 0 && r.top < vh && r.width && !imgs[k].complete) {
+        wait++;
+        if (!imgs[k]._bootw) {
+          imgs[k]._bootw = 1;
+          imgs[k].addEventListener("load", check, { once: true });
+          imgs[k].addEventListener("error", check, { once: true });
+        }
+      }
+    }
+    if (!wait) out();
+  };
+  /* the stack is always built whole before the board opens, never rushed:
+     three plates, the $, and a beat on the finished stack (Jose, Sep 29, 2026) */
+  var dollar = b && b.querySelector(".bd");
+  if (dollar) dollar.addEventListener("animationend", function () {
+    setTimeout(function () { built = true; check(); }, 400);
+  }, { once: true });
+  else built = true;
+  if (!loaded) addEventListener("load", function () { loaded = true; check(); }, { once: true });
+  setTimeout(out, 10000);
 })();
 </script>
 <title>Stax</title>

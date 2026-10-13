@@ -3,11 +3,11 @@
          on the injury report since it was read shows on the next open */
       if (!LU || LUAT !== (window.FILESTAMP || LUAT)) {
         var stamp = window.FILESTAMP;
-        fetch("lineups.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+        fetch("lineups.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; })
           .then(function (j) { LU = j || {}; LUAT = stamp; if (box.classList.contains("open")) draw(); }).catch(function () { LU = LU || {}; });
       }
       if (DATA) return Promise.resolve(DATA);
-      return fetch("qbsearch.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+      return fetch("qbsearch.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
         .then(function (j) { DATA = j || { qbs: {} }; return DATA; }).catch(function () { DATA = { qbs: {} }; return DATA; });
     }
     function esc(t) { return String(t == null ? "" : t).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
@@ -23,10 +23,11 @@
       document.querySelectorAll('.gcard[data-settled="1"][data-espn]').forEach(function (c) { ENDED[c.dataset.espn] = 1; });
       (typeof SCHED === "object" ? SCHED : []).forEach(function (g) {
         var t = Date.parse(g[2]), id = String(g[1]);
-        if (t <= now && t > now - 6 * 3600000 && !ENDED[id]) ask.push(id);
+        /* only a game old enough to be over: a younger one has no file yet (Oct 12, 2026) */
+        if (t <= now - 2.5 * 3600000 && t > now - 6 * 3600000 && !ENDED[id]) ask.push(id);
       });
       return Promise.all(ask.map(function (id) {
-        return fetch("final/" + id + ".json", { cache: "no-store" }).then(function (r) {
+        return fetch("final/" + id + ".json", { cache: "no-cache" }).then(function (r) {
           if (r.ok && /json/.test(r.headers.get("content-type") || "")) ENDED[id] = 1;
         }).catch(function () {});
       }));
@@ -185,7 +186,7 @@
       if (crow) crow.hidden = !CFBMODE;
       if (row) row.hidden = CFBMODE;
       inp.placeholder = CFBMODE ? "Search a QB or a school" : "Search a QB, or a few for a parlay";
-      if (CFBMODE) fetch("ranks.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+      if (CFBMODE) fetch("ranks.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
         .then(function (j) { RANKS = j || {}; cfbRow(); }).catch(function () { RANKS = RANKS || {}; });
       if (CFBMODE && !SCHOOLS) fetch("cfb_schools.json").then(function (r) { return r.json(); })
         .then(function (j) { SCHOOLS = j || {}; cfbRow(); }).catch(function () { SCHOOLS = {}; });
@@ -831,29 +832,8 @@
     });
     document.addEventListener("visibilitychange", function () { if (!document.hidden) setTimeout(keepBars, 120); });
     window.addEventListener("scroll", function () { if (!window._kbT) window._kbT = setTimeout(function () { window._kbT = 0; keepBars(); }, 250); }, { passive: true });
-    /* when the bar is seen floating, what the phone says about its own
-       screen is written to the state once, so the cause is read off the real
-       numbers instead of guessed (Jose, Oct 6, 2026: "it happens when I
-       scroll, anytime I scroll") */
-    var DIAGAT = 0;
-    function navProbe() {
-      var bar = document.getElementById("sportbar");
-      if (!bar || typing() || Date.now() - DIAGAT < 60000) return;
-      var r = bar.getBoundingClientRect(), vv = window.visualViewport || {};
-      if (r.bottom > (screen.height || 9999) - 160) return;
-      DIAGAT = Date.now();
-      var row = { ih: innerHeight, ch: document.documentElement.clientHeight, sh: screen.height,
-                  vh: Math.round(vv.height || 0), vt: Math.round(vv.offsetTop || 0), vs: vv.scale || 0,
-                  sy: Math.round(scrollY), top: Math.round(r.top), bot: Math.round(r.bottom), gap0: GAP0,
-                  drop: getComputedStyle(document.documentElement).getPropertyValue("--vvdrop"),
-                  sa: navigator.standalone ? 1 : 0, ua: navigator.userAgent.slice(-60) };
-      var set = {}; set[String(DIAGAT)] = row;
-      try {
-        fetch("state?k=" + encodeURIComponent(typeof ARENAKEY !== "undefined" ? ARENAKEY : "arena-001bff8ddf784985"), { method: "POST", headers: { "content-type": "application/json" },
-          body: JSON.stringify({ patch: { navdiag: { set: set } } }) });
-      } catch (e) {}
-    }
-    window.addEventListener("scroll", function () { clearTimeout(window._npT); window._npT = setTimeout(navProbe, 400); }, { passive: true });
+    /* (the floating-bar probe that wrote navdiag to /state is gone: the
+       state threw it away unread, Oct 12, 2026) */
     if (window.visualViewport) {
       window.visualViewport.addEventListener("resize", keepBars);
       window.visualViewport.addEventListener("scroll", keepBars);

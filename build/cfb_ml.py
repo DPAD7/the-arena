@@ -80,11 +80,10 @@ def main():
     s = s[:m.start(1)] + json.dumps(C, separators=(",", ":")) + s[m.end(1):]
     if not pagefile.write(s):
         print("page changed under us, not written")
-    doc = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
-           '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
-           '<meta name="theme-color" content="#000000">\n'
-           '<meta name="robots" content="noindex">\n<meta name="referrer" content="no-referrer">\n</head>\n<body>\n')
-    open(D + "/site/index.html", "w").write(doc + s + "\n</body>\n</html>\n")
+        return
+    # built the one way every page is built: a hand-written site/index.html
+    # shipped a literal __BUILD__ and a zoomable viewport (Oct 12, 2026)
+    pagefile.deployable(pagefile.read())
     print("written")
 
 

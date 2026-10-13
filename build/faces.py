@@ -19,6 +19,10 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 import pagefile
 URL = "https://a.espncdn.com/combiner/i?img=/i/headshots/%s/players/full/%s.png&w=336&h=336&scale=crop"
+# each face ESPN would not give, and when: it is not asked for again for a
+# day -- the same college passers with no headshot were asked for on every
+# pass (Oct 12, 2026)
+MISSES = D + "/data/face_misses.json"
 
 
 def main():
@@ -62,10 +66,23 @@ def main():
         except Exception:
             return False
 
-    todo = []
+    import datetime as dt
+    now = dt.datetime.now(dt.timezone.utc)
+    try:
+        misses = json.load(open(MISSES))
+    except (OSError, ValueError):
+        misses = {}
+    todo, rested = [], 0
     for lg, pid in want:
         png = D + "/site/faces/%s/%s.png" % (lg, pid)
         if not os.path.exists(png) or small(png):
+            last = misses.get("%s/%s" % (lg, pid))
+            try:
+                if last and now - dt.datetime.fromisoformat(last) < dt.timedelta(days=1):
+                    rested += 1
+                    continue
+            except ValueError:
+                pass
             todo.append((lg, pid))
 
     def fetch(item):
@@ -105,9 +122,17 @@ def main():
         return False
 
     with ThreadPoolExecutor(8) as ex:
-        got = sum(1 for ok in ex.map(fetch, todo) if ok)
-    print("faces: %d passers on the schedule, %d fetched now, %d missing at ESPN"
-          % (len(want), got, len(todo) - got))
+        oks = list(ex.map(fetch, todo))
+    got = sum(1 for ok in oks if ok)
+    for (lg, pid), ok in zip(todo, oks):
+        if ok:
+            misses.pop("%s/%s" % (lg, pid), None)
+        else:
+            misses["%s/%s" % (lg, pid)] = now.isoformat(timespec="minutes")
+    json.dump(misses, open(MISSES, "w"), indent=0, sort_keys=True)
+    print("faces: %d passers on the schedule, %d fetched now, %d missing at ESPN%s"
+          % (len(want), got, len(todo) - got,
+             (", %d misses resting a day" % rested) if rested else ""))
 
 
 if __name__ == "__main__":

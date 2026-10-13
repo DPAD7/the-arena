@@ -62,7 +62,10 @@
     if (!card || !pr) return;
     if (card.classList.contains("done") || card.dataset.settled === "1") return;
     var put = function (host, slot, short) {
-      if (!host) return;
+      /* a rung the card drew as an empty place (the rushing row's 2+) stays
+         empty: a repaint used to wipe what this wrote there, and the card
+         now keeps it, so it is not written (Oct 12, 2026) */
+      if (!host || !host.firstChild) return;
       var had = host.querySelector("button.price");
       if (!slot || !slot[0]) return;                 /* no price: leave the slot */
       var keep = host.querySelector(".ntick, .ptdline");
@@ -255,7 +258,7 @@
     if (!id || CARDDONE[id]) return Promise.resolve("none");
     var over = card.dataset.settled === "1" || card.dataset.settledBout === "1" ||
                card.classList.contains("done");
-    return fetch("prices/" + id + ".json", {cache: "no-store"})
+    return fetch("prices/" + id + ".json", {cache: "no-cache"})
       /* a file that is not there comes back as the page itself, 200 and
          HTML, not as a 404 -- read as JSON that throws, and the mark in the
          nav called an event with no file a failure (Jose, Sep 23, 2026:
@@ -264,8 +267,12 @@
         var kind = (r.headers.get("content-type") || "").toLowerCase();
         return (r.ok && kind.indexOf("json") >= 0) ? r.json() : null;
       })
-      .then(function (j) {
-        if (!j) return "none";
+      .then(function (j) { return j ? takeCard(card, id, j) : "none"; })
+      .catch(function () { return "bad"; });
+  }
+  /* what a card's prices do to it, from its own file (the double tap) or
+     from prices.json, which holds the same numbers (seatCard, below) */
+  function takeCard(card, id, j) {
         if (j.props) {
           var into = card.dataset.bout ? FPROPS : PROPS;
           into[id] = j.props;
@@ -293,9 +300,27 @@
            the new build when it lands. */
         CARDDONE[id] = 1;
         return (j.ml || j.props) ? "got" : "none";
-      })
-      .catch(function () { return "bad"; });
   }
+  /* A card drawn takes its prices from prices.json, already read, instead
+     of asking for prices/<id>.json: every card on the board fetched its own
+     file on open, the same numbers prices.json holds (all 1,386 files
+     matched it). The page bakes only a slim copy of the props, so this step
+     is still what puts the full set on a drawn card (Oct 12, 2026). */
+  var PRICEJ = null;
+  function seatCard(card) {
+    if (!card || !PRICEJ) return;
+    var id = card.dataset.espn || card.dataset.bout;
+    if (!id || CARDDONE[id]) return;
+    var bout = !!card.dataset.bout;
+    var ml = (PRICEJ[bout ? "FIGHTS" : card.dataset.lg === "college-football" ? "CFB" : "SCHED"] || {})[id];
+    var props = (PRICEJ[bout ? "FPROPS" : "PROPS"] || {})[id];
+    if (!ml && !props) return;
+    var j = {};
+    if (ml) j.ml = ml;
+    if (props) j.props = props;
+    takeCard(card, id, j);
+  }
+  window.seatCard = seatCard;
   /* every card on the board that still has something to learn */
   function pullCards() {
     var seen = {};
@@ -311,8 +336,9 @@
   function pullPrices() {
     var COL = { SCHED: [9, 10, 11, 12], CFB: [10, 11, 12, 13], FIGHTS: [8, 9, 10, 11] };
     var KEY = { SCHED: 1, CFB: 1, FIGHTS: 1 };
-    return fetch("prices.json", {cache: "no-store"}).then(function (r) { return r.json(); }).then(function (j) {
+    return fetch("prices.json", {cache: "no-cache"}).then(function (r) { return r.json(); }).then(function (j) {
       if (!j) return;
+      PRICEJ = j;
       var moved = 0, inPlace = [], rebuild = 0, nowPlease = 0;
       /* A game that is over keeps the price it closed at. prices.json is one
          file for the whole board and it is still asked for, but what it says
@@ -498,6 +524,8 @@
         if (one[3]) b.dataset.oid = one[3];
         if (typeof markSaved === "function") markSaved(card);
       });
+      /* and every card already drawn takes its own, once (seatCard) */
+      document.querySelectorAll(".gcard[data-espn], .gcard[data-bout]").forEach(seatCard);
       /* A chip that the board has never drawn needs it built again, and a
          rebuild moves rows under him: before today prices were read once at
          load, so this never happened. It waits until he has left the page
@@ -557,7 +585,7 @@
     if (!gid) return;
     if (SCOREBOX === null) {
       SCOREBOX = {};
-      fetch("scoreboxes.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+      fetch("scoreboxes.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
         .then(function (j) { SCOREBOX = j || {}; }).catch(function () {});
       return;
     }
@@ -747,8 +775,13 @@
         .then(function (r) { return r.json(); });
     };
     /* the settled file is asked for once, and again only after a game reads
-       final -- settle.py writes it hours later */
-    box.p = (box.tried && !(hit && hit.done))
+       final -- settle.py writes it hours later. Not at all for a game that
+       kicked off under two and a half hours ago: no game is over by then, and
+       each ask was a miss (Oct 12, 2026) */
+    var row = (league === "college-football" ? (typeof CFB === "object" ? CFB : []) : SCHED)
+      .filter(function (g) { return String(g[1]) === id; })[0];
+    var young = row && row[2] && Date.now() < Date.parse(row[2]) + 2.5 * 3600000;
+    box.p = ((box.tried || young) && !(hit && hit.done))
       ? wire()
       : fetch("final/" + id + ".json").then(function (r) {
           if (!r.ok) throw new Error("no file");
@@ -782,7 +815,9 @@
     if (card.dataset.settled) return;           /* drawn from its file already; nothing changes */
     var kick = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
     if (kick && kick > Date.now() + 20 * 60000) return;   /* not kicked off: nothing to read yet */
-    gameFeed(id, lg)
+    /* the reading is handed back, so whatever follows a refresh waits on it
+       rather than on a guessed second and a half (Oct 12, 2026) */
+    return gameFeed(id, lg)
       .then(function (d) {
         if (((FEED || {})[String(id)] || {}).final) { card.dataset.settled = "1"; card._full = true; }
         return d;
@@ -883,6 +918,7 @@
           var sec = +cs[1] * 60 + +cs[2], was = card._clk;
           card._clk = { sec: sec, at: Date.now(), run: !!(was && was.sec !== sec && was.per === (comp.status || {}).period),
                         per: (comp.status || {}).period };
+          if (card._clk.run && window.clockOn) window.clockOn();
         } else card._clk = null;
 
         var series = d.winprobability;

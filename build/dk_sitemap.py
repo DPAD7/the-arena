@@ -40,6 +40,7 @@ import pagefile
 OUT = os.path.join(D, "data", "dk_people.json")
 DRY = "--dry" in sys.argv
 MAP = "https://sportsbook.draftkings.com/sitemaps/SportsbookPlayerUriProvider_0.xml"
+MISSES = os.path.join(D, "data", "dk_sitemap_misses.json")
 
 
 def pages():
@@ -95,11 +96,31 @@ def main():
     before = len(have)
     known = {v.get("espn") for v in have.values()}
 
+    # the sitemap is read only when a drawn passer is still unpinned, and a
+    # name it could not pin is not tried again for a day: it was fetched on
+    # every pass with nothing new to find (Oct 12, 2026)
+    import datetime as dt
+    now = dt.datetime.now(dt.timezone.utc)
+    try:
+        misses = json.load(open(MISSES))
+    except (OSError, ValueError):
+        misses = {}
+
+    def resting(name):
+        try:
+            return now - dt.datetime.fromisoformat(misses.get(name) or "") < dt.timedelta(days=1)
+        except ValueError:
+            return False
+    need = {n: e for n, e in drawn().items() if e not in known and not resting(n)}
+    if not need:
+        print("dk_sitemap: every drawn passer is pinned (or tried today); the sitemap not read")
+        return 0
+
     by = pages()
     print("NFL player pages DraftKings publishes: %d" % len(by))
 
     pinned, several, absent = [], [], []
-    for name, espn in sorted(drawn().items()):
+    for name, espn in sorted(need.items()):
         if espn in known:
             continue
         found = by.get(slug(name)) or by.get(slug(re.sub(r"\s+(jr\.?|sr\.?|ii|iii|iv|v)$", "", name, flags=re.I))) or []
@@ -122,6 +143,11 @@ def main():
     if DRY:
         print("(dry run, nothing written)")
         return 0
+    for name in several + absent:
+        misses[name] = now.isoformat(timespec="minutes")
+    for _dk, _espn, name in pinned:
+        misses.pop(name, None)
+    json.dump(misses, open(MISSES, "w"), indent=0, sort_keys=True)
     json.dump(have, open(OUT, "w"), indent=1, sort_keys=True)
     print("written to %s (%d -> %d)" % (OUT, before, len(have)))
     return 0

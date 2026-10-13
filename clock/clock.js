@@ -6,31 +6,32 @@
    the next moment that matters and nothing between:
 
      the three sweeps           9, 15, 21 ET           (refresh.py SWEEP_ET)
-     the hubs                   10 ET                  (HUB_ET)
-     the DraftKings login touch  11 ET                  (KEEP_ET)
      before each start          120, 60, 30 minutes    (BEFORE: prices, inactives)
      the injury report          3:30-7 p.m. ET, each half hour, on each
                                 game's three practice-report days (REPORT_DAYS)
-     a card or a game running   every ten minutes while it runs (the live passes)
+     a card or a game running   every ten minutes while it runs (the live passes;
+                                an NFL game's only when ESPN shows a passer the
+                                card does not name, and none once it is final)
      a game's final             from two and a half hours after kickoff, every
                                 two minutes until ESPN says final -- then the
                                 site saves it (/settled) with no phone open
      the day's last final       one close-out pass (refresh.py --day-end)
 
-   Each wake starts GitHub through the site's /wake (which holds the token)
+   Each wake starts GitHub through the site's /wake (which holds the token),
+   naming the moments it serves (the "moments" input, Oct 12, 2026: a run
+   queued behind another used to find nothing due and the work was lost),
    and sets the next alarm. The moments come from site/schedule.json, which
    every build writes. A daily cron re-arms it in case an alarm is ever lost.
 */
 import { sendPush } from "./push.js";
-import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState, looseState } from "./watch.js";
+import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState, looseState, qbOff, liveGames } from "./watch.js";
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, leghit: true, pregame: true, change: true, fight: true, recap: true };
 const SWEEP_ET = [9, 15, 21];
-const HUB_ET = [10];
-// the daily touch of the DraftKings login, so it never expires on him
-// (Jose, Sep 30, 2026: the wallet went red after two weeks without a read)
-const KEEP_ET = [];   // no touches: the reader runs on his double tap, as it always did (Jose, Sep 30, 2026)
+// the 10 ET hub wake and the DraftKings login touch are gone: the hub readers
+// left refresh.py and the login is read on his double tap (Oct 12, 2026)
+const PICKS_EVERY = 5 * 60000;       // /state and suggest.json, not every 5-15s tick (Oct 12, 2026)
 const BEFORE = [120, 60, 30];
 // the NFL's practice reports, by kickoff weekday (0 = Sunday): the report days
 const REPORT_DAYS = { 0: [3, 4, 5], 1: [4, 5, 6], 4: [1, 2, 3], 5: [2, 3, 4], 6: [2, 3, 4], 3: [0, 1, 2] };
@@ -239,21 +240,26 @@ export class Clock {
     try { sched = await (await fetch(SITE + "/schedule.json", { cf: { cacheTtl: 0 } })).json(); } catch (e) { sched = []; }
     const done = (await this.ctx.storage.get("done")) || {};
     for (const k of Object.keys(done)) if (now - done[k] > 3 * 86400000) delete done[k];
-    const moments = this.moments(sched, now);
+    const moments = this.moments(sched, now, done);
     // every moment that has come and not been served: one run serves them all
     const came = moments.filter(m => m.at <= now + 30000 && m.at > now - 20 * MIN && !done[m.key]);
-    const keep = came.filter(m => m.key.startsWith("keep@")), due = came.filter(m => !m.key.startsWith("keep@"));
-    if (due.length) {
-      // claimed before the wake, so nothing else can start the same sweep
-      for (const m of due) done[m.key] = now;
-      await this.ctx.storage.put("done", done);
-      const ok = await this.wake("due");
-      if (!ok) { for (const m of due) delete done[m.key]; await this.ctx.storage.put("done", done); }
+    /* a football game's live pass is for one thing, a passer on the field the
+       card does not name (played_qb.py); with none, the slot is spent here and
+       nothing starts (Oct 12, 2026) */
+    const due = [];
+    for (const m of came) {
+      if (m.gid && !(await this.qbSwapped(m.row))) { done[m.key] = now; continue; }
+      due.push(m);
     }
-    // the login's daily touch is its own run (dkbets.yml --keep), not a sweep
-    if (keep.length) {
-      const ok = await this.wake("keep");
-      if (ok) for (const m of keep) done[m.key] = now;
+    let failed = false;
+    if (due.length) {
+      /* the moments go with the wake, so a run queued behind another still
+         knows what it is for; and each is marked served only once GitHub took
+         the dispatch (Oct 12, 2026). tick() runs one at a time, so nothing
+         else can start the same sweep in between. */
+      const ok = await this.wake("due", due.map(m => m.key));
+      if (ok) for (const m of due) done[m.key] = now;
+      else failed = true;
     }
     // finals, with no phone needed
     const watch = await this.finals(sched, now, done);
@@ -262,12 +268,18 @@ export class Clock {
     // his slips: what their games are doing, and what is worth a push
     let live = false;
     try { live = await this.slips(sched, now); } catch (e) { live = false; }
-    // his gold marks and the board's leans, kept for the week's recap
-    try { await this.picks(sched, now); } catch (e) {}
+    // his gold marks and the board's leans, kept for the week's recap -- every
+    // few minutes, not on every 5-15 second tick (Oct 12, 2026)
+    if (!this.picksAt || now - this.picksAt >= PICKS_EVERY) {
+      this.picksAt = now;
+      try { await this.picks(sched, now); } catch (e) {}
+    }
     await this.ctx.storage.put("done", done);
     // the next alarm: the next moment, or the next final check
     let next = now + 6 * 60 * MIN;
     for (const m of moments) if (m.at > now + 30000 && !done[m.key] && m.at < next) next = m.at;
+    // a wake GitHub refused is tried again in a minute, inside its window
+    if (failed) next = Math.min(next, now + MIN);
     if (watch.checking) next = Math.min(next, now + 2 * MIN);
     // a game with his money on it is being played: look every minute
     if (live) next = Math.min(next, now + MIN);
@@ -281,13 +293,22 @@ export class Clock {
     await this.ctx.storage.setAlarm(Math.max(now + (pushing === "fight" ? 5000 : pushing ? 15000 : live === "fight" ? 15000 : 30000), next));
   }
 
-  moments(sched, now) {
+  /* an NFL game's passer, off ESPN's box score now: true when a side's card
+     passer has not thrown while another man has (qbOff in watch.js) */
+  async qbSwapped(row) {
+    if (!row) return false;
+    try {
+      const d = await (await espnGet("https://site.web.api.espn.com/apis/site/v2/sports/football/" + row[3] + "/summary?event=" + row[1])).json();
+      return qbOff(row, d).length > 0;
+    } catch (e) { return false; }
+  }
+
+  moments(sched, now, done) {
+    done = done || {};
     const out = [], today = etParts(now).date;
     for (const date of [today, dayShift(today, 1)]) {
       const [y, m, d] = date.split("-").map(Number);
       for (const h of SWEEP_ET) out.push({ key: "sweep@" + date + " " + h, at: etMs(y, m, d, h, 0) });
-      for (const h of HUB_ET) out.push({ key: "hub@" + date + " " + h, at: etMs(y, m, d, h, 0) });
-      for (const h of KEEP_ET) out.push({ key: "keep@" + date + " " + h, at: etMs(y, m, d, h, 0) });
       // the injury report: this date is a report day for some NFL game
       const wd = new Date(date + "T12:00:00Z").getUTCDay();
       const report = sched.some(r => {
@@ -307,10 +328,12 @@ export class Clock {
       for (const b of BEFORE) out.push({ key: "pre@" + r[1] + "@" + b, at: start - b * MIN });
       // while it runs, a pass every ten minutes on the ten-minute grid
       const span = r[0] === "card" ? CARD_MS : (r[3] === "nfl" ? GAME_MS : 0);
-      if (span && now >= start && now < start + span) {
+      // a game already final has no live passes left (Oct 12, 2026)
+      if (span && now >= start && now < start + span && !done["final@" + r[1]]) {
         const slot = Math.floor(now / (10 * MIN)) * 10 * MIN;
         for (const t of [slot, slot + 10 * MIN])
-          if (t >= start && t < start + span) out.push({ key: "live@" + r[1] + "@" + t, at: t });
+          if (t >= start && t < start + span)
+            out.push(r[0] === "game" ? { key: "live@" + r[1] + "@" + t, at: t, gid: r[1], row: r } : { key: "live@" + r[1] + "@" + t, at: t });
       }
     }
     return out;
@@ -371,12 +394,7 @@ export class Clock {
   /* his open slips, read while their games are on */
   async slips(sched, now) {
     if (!this.env.ARENA) return false;
-    let held = null;
-    try {
-      const own = await this.ctx.storage.get("kv:dkbets");
-      held = JSON.parse((own && own.v) || (await this.env.ARENA.get("dkbets")) || "null");
-    } catch (e) { held = null; }
-    // and the slips he added to the wallet himself (Oct 3, 2026)
+    // the slips he added to the wallet himself (Oct 3, 2026)
     let sent = [];
     try {
       const s0 = await this.ctx.storage.get("kv:dkbets:sent");
@@ -423,9 +441,13 @@ export class Clock {
     // the games on his legs being played now
     const want = new Set();
     for (const bet of slips) for (const l of bet.legs || []) {
+      /* a won slip has said all it will; a lost one is still read for its
+         games' final score (Oct 6), but never keeps the clock up (Oct 12, 2026) */
+      if (String(bet.status || "").toLowerCase() === "won") continue;
       /* a leg off no board price reads the game it was tracked on */
       const v = idx[l.sel] || (l.g && rows[String(l.g)] && String(l.status || "").toLowerCase() === "open" ? { gid: String(l.g) } : null);
       if (!v) continue;
+      if (rows[v.gid][3] === "boxing") continue;   // no live feed to read (Oct 12, 2026)
       const st = Date.parse(rows[v.gid][2]);
       /* a slip is only settled when its last leg is, so every leg on it is
          read until then: a fight from the 4 PM prelims had dropped out of
@@ -543,8 +565,12 @@ export class Clock {
     const keep = {};
     for (const [gid, g] of Object.entries(games)) keep[gid] = { qb: g.qb, state: g.state };
     await this.ctx.storage.put("prev", Object.assign(prev, keep));
-    if (Object.entries(games).some(([gid, g]) => rows[gid] && rows[gid][0] === "bout" && g.state === "in")) return "fight";
-    return Object.values(games).some(g => g.state === "in") || [...want].some(gid => !games[gid] || games[gid].state === "pre");
+    /* live only on the games of a slip still open, and never a boxing bout:
+       a skipped boxing read counted as live and a settled slip kept the clock
+       at a minute for sixteen hours (Oct 12, 2026) */
+    const on = liveGames(slips, idx, rows, now);
+    if ([...on].some(gid => rows[gid][0] === "bout" && games[gid] && games[gid].state === "in")) return "fight";
+    return [...on].some(gid => !games[gid] || games[gid].state === "in" || games[gid].state === "pre");
   }
 
   /* The week's account (Jose, Oct 6, 2026): "if I mark something gold and it
@@ -591,6 +617,11 @@ export class Clock {
 
     const et = etParts(now);
     if (et.wd !== 2 || et.h < 10) return;
+    /* told once: the "already sent" check was inside tell(), so the whole
+       recap -- every final, every card -- was rebuilt each tick all Tuesday
+       after 10 (Oct 12, 2026) */
+    const told = (await this.ctx.storage.get("sent")) || {};
+    if (told["recap@" + et.date]) return;
     let sent = [];
     try { const s0 = await this.ctx.storage.get("kv:dkbets:sent"); sent = JSON.parse((s0 && s0.v) || "[]"); } catch (e) { sent = []; }
     if (sent.some(b => String(b.status || "open").toLowerCase() === "open" && now - Date.parse(b.placed || 0) < 8 * 86400000)) return;
@@ -708,14 +739,21 @@ export class Clock {
     return n;
   }
 
-  async wake(mode) {
+  /* the sweep, through the site's /wake; moments are the keys this wake
+     serves (sweep@, pre@<id>@<min>, report@, live@<id>@<ms>), handed to
+     refresh.py as the workflow's "moments" input (Oct 12, 2026) */
+  async wake(mode, moments) {
     try {
       const r = await fetch(SITE + "/wake", { method: "POST",
         headers: { "content-type": "application/json", "x-wake": this.env.WAKE_SECRET || "" },
-        body: JSON.stringify({ mode }) });
+        body: wakeBody(mode, moments) });
       return r.ok;
     } catch (e) { return false; }
   }
+}
+
+export function wakeBody(mode, moments) {
+  return JSON.stringify(moments && moments.length ? { mode, moments: moments.join(",") } : { mode });
 }
 
 export default {

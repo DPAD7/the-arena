@@ -61,8 +61,11 @@ def main():
     # a swapped passer gets his prices and his game page's cases in the same
     # pass, not at the next sweep (Jose, Sep 30, 2026: "if a starter is out,
     # then we swap it on the fly")
+    # the jobs only write; this deploys once below (fill_week.py deployed on
+    # its own as well -- Oct 12, 2026)
+    env = dict(os.environ, ARENA_NO_DEPLOY="1")
     for job in ("news.py", "wire.py", "starters.py", "fill_week.py", "alerts.py", "lineups.py", "suggest.py", "qbwire.py"):
-        r = subprocess.run([sys.executable, os.path.join(D, "build", job)], capture_output=True, text=True, cwd=D)
+        r = subprocess.run([sys.executable, os.path.join(D, "build", job)], capture_output=True, text=True, cwd=D, env=env)
         for line in (r.stdout + r.stderr).strip().splitlines()[-2:]:
             print("   %s: %s" % (job[:-3], line))
     pagefile.deployable(pagefile.read())

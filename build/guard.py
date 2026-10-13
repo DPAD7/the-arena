@@ -23,7 +23,7 @@
                 page and the fonts point at is there
      the page   rendered and measured, build/look.py: nothing
                 thrown, no sideways scroll, fonts loaded, no broken
-                pictures, HOT at 55px, All and search at 32
+                pictures
 
    After a deploy, --live asks the site itself: the build on it is the one
    just made (if not, deploy again), the functions answer JSON, and a
@@ -201,8 +201,10 @@ def alerts():
 
 
 def jerseys():
+    # the files are named in lower case (ari.png) and the runner's disk is
+    # case-sensitive, so ARI.png read as missing for all 32 clubs (Oct 12, 2026)
     return [(None, "%s has no Kalshi jersey" % c) for c in load("depth.json")
-            if not os.path.exists(os.path.join(SITE, "ico", "jersey", c + ".png"))]
+            if not os.path.exists(os.path.join(SITE, "ico", "jersey", c.lower() + ".png"))]
 
 
 def fights():
@@ -351,10 +353,15 @@ def live():
 def main():
     wrong = live() if "--live" in sys.argv else local()
     was = load("guard.json")
-    was[("live" if "--live" in sys.argv else "board")] = {"at": NOW.strftime("%Y-%m-%dT%H:%MZ"), "wrong": wrong}
-    was.pop("wrong", None)
-    was.pop("at", None)
-    json.dump(was, open(OUT, "w"), indent=1)
+    side = "live" if "--live" in sys.argv else "board"
+    # written only when the list of faults changes: a fresh "at" on every run
+    # made a commit of its own nearly every sweep (Oct 12, 2026). "at" is now
+    # when this list was first seen.
+    if (was.get(side) or {}).get("wrong") != wrong or "wrong" in was or "at" in was:
+        was[side] = {"at": NOW.strftime("%Y-%m-%dT%H:%MZ"), "wrong": wrong}
+        was.pop("wrong", None)
+        was.pop("at", None)
+        json.dump(was, open(OUT, "w"), indent=1)
     for w in wrong:
         print("GUARD: " + w)
     print("guard%s: %s" % (" (live)" if "--live" in sys.argv else "",

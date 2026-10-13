@@ -46,6 +46,10 @@ from curl_cffi import requests as rq
 D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(D, "data", "bfo_odds.json")
 EVENTS = os.path.join(D, "data", "bfo_events.json")
+# a card the archive could not wholly tie, and when it was last tried: it is
+# tried again a day later while the card is under a week old, a week later
+# after that -- the same untied cards were read on every pass (Oct 12, 2026)
+MISSES = os.path.join(D, "data", "bfo_misses.json")
 CACHE = os.path.join(D, "cache", "bfo")
 NOTE = os.path.join(D, "notes", "bfo-review.md")
 BASE = "https://www.bestfightodds.com"
@@ -399,6 +403,7 @@ def main():
     cards = json.loads(re.search(r"  var FIGHTCARDS = (\[\[.*?\]\]);", s, re.S).group(1))
     evmap = json.load(open(EVENTS)) if os.path.exists(EVENTS) else {}
     have = json.load(open(OUT)) if os.path.exists(OUT) and not FRESH else {}
+    misses = json.load(open(MISSES)) if os.path.exists(MISSES) and not FRESH else {}
     report = {"events": [], "bouts": 0, "matched": 0, "lines": 0, "props": 0, "untied": [], "noevent": [], "learned": []}
     by_event = {}
     for f in fights:
@@ -417,6 +422,13 @@ def main():
             report["bouts"] += len(bouts)
             report["matched"] += len(bouts)
             continue
+        last = misses.get(eid)
+        if last:
+            wait = dt.timedelta(days=1 if NOW - T(start) < dt.timedelta(days=7) else 7)
+            if NOW - T(last) < wait:
+                report["events"].append("%s: tried %s, not again yet" % (name, last))
+                continue
+        misses[eid] = NOW.strftime("%Y-%m-%dT%H:%MZ")      # cleared below once every bout ties
         date = T(start).date()
         # the main event is the bout the card is named after; failing that
         # the last to start
@@ -506,6 +518,8 @@ def main():
             report["matched"] += 1
             have[str(f[1])] = {"event": pth, "mu": mu["mu"], "names": mu["names"], "flip": flip,
                                "date": str(date), "ml": mu["ml"], "props": mu["props"]}
+        if got == len(bouts):
+            misses.pop(eid, None)
         report["events"].append("%s: %s, %d of %d bouts (%s)" % (name, ", ".join(paths), got, len(bouts), how))
     # ---- what the board is missing ----
     book = pricefile.read()
@@ -557,6 +571,7 @@ def main():
     os.makedirs(os.path.dirname(NOTE), exist_ok=True)
     open(NOTE, "w").write("\n".join(lines) + "\n")
     json.dump(evmap, open(EVENTS, "w"), indent=1, sort_keys=True)
+    json.dump(misses, open(MISSES, "w"), indent=1, sort_keys=True)
     json.dump(LEARNED, open(NAMES_F, "w"), indent=1, sort_keys=True, ensure_ascii=False)
     json.dump(have, open(OUT, "w"), separators=(",", ":"), sort_keys=True)
     pricefile.write(book)

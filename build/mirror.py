@@ -40,6 +40,9 @@ ESPN_CLUB = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/%s/500/%s.png&w=9
 ESPN_MAN = ("https://a.espncdn.com/combiner/i?img=/i/headshots/mma/players/full/"
             "%s.png&w=336&h=336&scale=crop")
 SCORE_MAN = "https://assets-sports-gcp.thescore.com/mma/fighter/%s/w192xh192_headshot.png"
+# each picture that would not come down, and when: it is not asked for again
+# for a day -- the same misses were asked for on every pass (Oct 12, 2026)
+MISSES = D + "/data/mirror_misses.json"
 
 
 def arrays():
@@ -116,18 +119,41 @@ def main():
             if sid and not (eid and os.path.exists(
                     D + "/site/faces/mma/%s.png" % eid)):
                 want.append((SCORE_MAN % sid, "faces/mma/s%s.png" % sid))
-    got = miss = had = 0
+    import datetime as dt
+    now = dt.datetime.now(dt.timezone.utc)
+    try:
+        misses = json.load(open(MISSES))
+    except (OSError, ValueError):
+        misses = {}
+    got = miss = had = rested = 0
     gone = []
     for url, path in want:
+        last = misses.get(path)
+        if last and not ALL and not os.path.exists(D + "/site/" + path):
+            try:
+                fresh = now - dt.datetime.fromisoformat(last) < dt.timedelta(days=1)
+            except ValueError:
+                fresh = False
+            if fresh:
+                rested += 1
+                miss += 1
+                gone.append(path)      # still none to be had, as far as we know
+                continue
         r = keep(url, path)
         if r is None:
             had += 1
+            misses.pop(path, None)
         elif r:
             got += 1
+            misses.pop(path, None)
         else:
             miss += 1
             gone.append(path)
+            misses[path] = now.isoformat(timespec="minutes")
             print("  no picture: %s" % path)
+    json.dump(misses, open(MISSES, "w"), indent=0, sort_keys=True)
+    if rested:
+        print("  %d misses not asked again until a day has passed" % rested)
     # A man neither ESPN nor theScore has a picture of was still asked for by
     # every reader's browser, on every card, and answered 404 -- an outside
     # request that could never succeed. The names are written down so the page

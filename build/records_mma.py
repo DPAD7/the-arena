@@ -24,6 +24,25 @@ OUT = os.path.join(D, "site", "fighters.json")
 DRY = "--dry" in sys.argv
 API = "http://sports.core.api.espn.com/v2/sports/mma/athletes/%s/records"
 UA = {"User-Agent": "Mozilla/5.0"}
+# when each man was last asked, so a record is read once a day rather than on
+# every pass, and a flag nobody keeps is looked for once a day (Oct 12, 2026)
+ASKED = os.path.join(D, "data", "records_mma_asked.json")
+DAY = 20 * 3600          # a shade under a day, so the same sweep each day asks
+
+
+def _asked():
+    try:
+        d = json.load(open(ASKED))
+        return {"rec": d.get("rec") or {}, "flag": d.get("flag") or {}}
+    except (OSError, ValueError):
+        return {"rec": {}, "flag": {}}
+
+
+def _stamp(t):
+    return time.strftime("%Y-%m-%dT%H:%MZ", time.gmtime(t))
+
+
+ASK = _asked()
 
 
 def ask(url):
@@ -82,7 +101,11 @@ def main():
         # result could never reach the file (Jose: "SHAHBAZYAN 16-6, what is
         # this?"). Ten days back is well past the point ESPN has settled it.
         if when > back:
-            wanted[athlete_id] = True
+            # once a day, unless he has fought since he was last asked
+            last = ASK["rec"].get(athlete_id) or ""
+            if athlete_id not in have or not last or last < when <= now or \
+                    last < _stamp(time.time() - DAY):
+                wanted[athlete_id] = True
         elif athlete_id not in have:
             wanted[athlete_id] = False
 
@@ -90,6 +113,7 @@ def main():
     for athlete_id in sorted(wanted):
         asked += 1
         rec = record_of(athlete_id)
+        ASK["rec"][athlete_id] = now
         if rec:
             if have.get(athlete_id) != rec:
                 got += 1
@@ -153,6 +177,10 @@ def flags():
     for athlete_id in sorted(set(i for i, _ in on_the_board())):
         if have.get(athlete_id):
             continue        # a blank is asked again, never kept as the answer
+        # ... once a day, not on every pass (Oct 12, 2026)
+        if (ASK["flag"].get(athlete_id) or "") > _stamp(time.time() - DAY):
+            continue
+        ASK["flag"][athlete_id] = _stamp(time.time())
         try:
             a = ask("http://sports.core.api.espn.com/v2/sports/mma/athletes/%s" % athlete_id)
         except Exception as e:
@@ -193,6 +221,7 @@ def flags():
         have[athlete_id] = code
         new += 1
     json.dump(have, open(FLAGS, "w"), separators=(",", ":"), sort_keys=True)
+    json.dump(ASK, open(ASKED, "w"), separators=(",", ":"), sort_keys=True)
     print("flags: %d new, %d held" % (new, len(have)))
 
 

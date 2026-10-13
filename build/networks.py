@@ -35,7 +35,20 @@ def get(u):
         return []
 
 
+STAMP = os.path.join(D, "data", "networks_day.json")
+
+
 def main():
+    # once a day: the listings are set days ahead, and both feeds were read on
+    # every pass (Oct 12, 2026). --force reads them now.
+    today = dt.datetime.now(dt.timezone.utc).date().isoformat()
+    try:
+        last = json.load(open(STAMP)).get("day")
+    except (OSError, ValueError):
+        last = None
+    if last == today and "--force" not in sys.argv:
+        print("networks: already read today (%s)" % today)
+        return
     s = pagefile.read()
     db = sqlite3.connect(DB)
     club = {w: a for w, a in db.execute("select written, abbr from club_name")}
@@ -76,6 +89,8 @@ def main():
     for v in out.values():
         seen[v] = seen.get(v, 0) + 1
     print("networks: %d games | %s" % (len(out), ", ".join("%s %d" % kv for kv in sorted(seen.items(), key=lambda x: -x[1])[:10])))
+    if out:
+        json.dump({"day": today}, open(STAMP, "w"))
 
 
 if __name__ == "__main__":

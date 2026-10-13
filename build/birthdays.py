@@ -10,7 +10,7 @@
    only -- the men who would catch the passing touchdown -- and are not drawn.
 
    Dates of birth come from ESPN's athlete record, once each, and are kept in
-   cache/dob.json so the sweep never asks twice. Written to site/birthdays.json:
+   data/dob.json so the sweep never asks twice. Written to site/birthdays.json:
 
      {"qb":   {event id: {athlete id: {"name", "age", "on"}}},
       "cast": {club: [{"id", "name", "pos", "rank", "dob", "age", "on", "game"}]}}
@@ -30,7 +30,12 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 import pagefile
 DRY = "--dry" in sys.argv
-CACHE = D + "/cache/dob.json"
+# in data/, which the sweep commits: in cache/ (gitignored) a fresh runner
+# asked ESPN for every man's date of birth on every pass (Oct 12, 2026)
+CACHE = D + "/data/dob.json"
+_OLD = D + "/cache/dob.json"
+# the clubs' charts, read once a day rather than 32 asks on every pass
+CASTFILE = D + "/data/birthdays_cast.json"
 SEASON = "2026"
 CAST = {"wr": 2, "te": 1, "rb": 1}
 
@@ -94,7 +99,8 @@ def birthday_game(dob, games, weeks):
 def main():
     s = pagefile.read()
     sched = json.loads(re.search(r"var SCHED = (\[\[.*?\]\]);", s, re.S).group(1))
-    dob = json.load(open(CACHE)) if os.path.exists(CACHE) else {}
+    dob = json.load(open(CACHE)) if os.path.exists(CACHE) else (
+        json.load(open(_OLD)) if os.path.exists(_OLD) else {})
     # each week's window: its first game day through the Tuesday after its last
     weeks = {}
     for g in sched:
@@ -103,10 +109,18 @@ def main():
         weeks[g[0]] = (min(a, d), max(z, d))
     weeks = {w: (a, z + dt.timedelta(days=1)) for w, (a, z) in weeks.items()}
 
-    # the cast, club by club, off ESPN's depth chart
+    # the cast, club by club, off ESPN's depth chart -- once a day
     ids = teams()
     cast = {}
     clubs = sorted({g[3] for g in sched} | {g[4] for g in sched})
+    today = dt.datetime.now(dt.timezone.utc).date().isoformat()
+    try:
+        held = json.load(open(CASTFILE))
+    except (OSError, ValueError):
+        held = {}
+    if held.get("day") == today and set(held.get("cast") or {}) >= set(c for c in clubs if ids.get(c)):
+        cast = held["cast"]
+        clubs = []
     for club in clubs:
         tid = ids.get(club)
         if not tid:
@@ -125,6 +139,8 @@ def main():
                     if m:
                         rows.append({"id": m.group(1), "pos": pos.upper(), "rank": rank})
         cast[club] = rows
+    if clubs and not DRY:
+        json.dump({"day": today, "cast": cast}, open(CASTFILE, "w"), separators=(",", ":"))
 
     # every man we need a date for: the passers and the cast
     want = {}
@@ -144,8 +160,7 @@ def main():
     with ThreadPoolExecutor(8) as ex:
         for pid, d, full in ex.map(fetch, missing):
             dob[pid] = {"dob": d, "name": full}
-    if not DRY:
-        os.makedirs(D + "/cache", exist_ok=True)
+    if not DRY and (missing or not os.path.exists(CACHE)):
         json.dump(dob, open(CACHE, "w"), separators=(",", ":"))
 
     # the passers: his games are the ones he is carded on

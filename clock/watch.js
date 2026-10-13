@@ -132,6 +132,31 @@ export async function readGame(gid, lg, board) {
   return g;
 }
 
+/* the sides of a game being played whose card passer is not among that
+   club's passers in ESPN's box score, while someone else is throwing: the
+   only case played_qb.py corrects, so the only case worth a live pass
+   (Oct 12, 2026: most live passes printed "rows corrected: 0"). A side with
+   no passer yet, or a card with no passer on it, says nothing. */
+export function qbOff(row, d) {
+  const comp = ((((d || {}).header || {}).competitions) || [])[0] || {};
+  if (((((comp.status || {}).type) || {}).state) !== "in") return [];
+  const side = {};
+  for (const c of comp.competitors || []) side[String(((c.team || {}).abbreviation) || "").toUpperCase()] = c.homeAway === "home" ? 1 : 0;
+  const threw = [[], []];
+  for (const t of ((d.boxscore || {}).players) || []) {
+    const s = side[String(((t.team || {}).abbreviation) || "").toUpperCase()];
+    if (s === undefined) continue;
+    for (const st of t.statistics || []) if (st.name === "passing")
+      for (const a of st.athletes || []) threw[s].push(String((a.athlete || {}).id || ""));
+  }
+  const out = [];
+  for (const s of [0, 1]) {
+    const card = String(row[s ? 9 : 7] || "");
+    if (card && threw[s].length && !threw[s].includes(card)) out.push(s);
+  }
+  return out;
+}
+
 /* a leg off no board price, settled once its game is over: half time / full
    time off the quarters, a count prop off the man's own box-score line --
    the same stats the wallet draws (Jose, Oct 9, 2026: "if the game is over
@@ -361,6 +386,28 @@ export function news(slips, idx, games, prev, rows) {
           .map(x => lab(x.l, x.w) + " " + (legState(x.w, g, x.w.side ? r[7] : r[9], r) === "won" ? "hit" : "missed")).join(" · ");
         out.push({ tag: "slip:" + bet.id, key: k, type: "final", title: "Final: " + away + " " + g.sc[0] + "–" + g.sc[1] + " " + home, body: said + ".", url: "/#game=" + v.gid });
       }
+    }
+  }
+  return out;
+}
+
+/* the games that keep the clock looking every minute: those on a leg of a
+   slip still open (a won or lost slip has nothing left to say -- Oct 12,
+   2026), and never a boxing bout, which has no live feed here and only ever
+   read as "not yet seen", holding the clock at a minute for sixteen hours */
+export function liveGames(slips, idx, rows, now) {
+  const out = new Set();
+  for (const bet of slips) {
+    const bs = String(bet.status || "").toLowerCase();
+    if (bs === "won" || bs === "lost") continue;
+    for (const l of bet.legs || []) {
+      const ls = String(l.status || "").toLowerCase();
+      if (ls === "won" || ls === "lost") continue;
+      const v = idx[l.sel] || (l.g && rows[String(l.g)] && ls === "open" ? { gid: String(l.g) } : null);
+      const r = v && rows[v.gid];
+      if (!r || r[3] === "boxing") continue;
+      const st = Date.parse(r[2]);
+      if (now >= st - 5 * MIN && now < st + 16 * 60 * MIN) out.add(v.gid);
     }
   }
   return out;

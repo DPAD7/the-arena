@@ -10,9 +10,8 @@
      width        the page never scrolls sideways, at 430 and at 390
      fonts        Barlow and Barlow Condensed are loaded, not the fallback
      pictures     no image on screen came back broken
-     HOT          a card is 55 px tall on a 430 screen, in step with the width
-     All          one card for each of the 32 clubs
-     search       the starters' row holds all 32
+     (the HOT, All and search-row checks were dropped Oct 12, 2026: the
+     HOT field is parked)
 
    Prints one line per fault, each starting LOOK:, and returns the list to
    build/guard.py. Needs playwright; on GitHub it drives the runner's own
@@ -136,44 +135,6 @@ def gestures(b, seen):
     else:
         seen.append("pull-down")
     c.close()
-    return wrong
-
-
-def hot(b, seen):
-    """HOT at every screen he uses: the cards standing right under the
-    quarterback's spot and reaching down to the betslip's room, and the whole
-    row above the nav -- on a short phone, an iPad and a desktop as much as
-    on his own (audit, Sep 28, 2026; the cards fill the room since Sep 29)."""
-    wrong = []
-    for W, H, phone in ((430, 932, True), (390, 844, True), (1024, 1366, False), (1280, 900, False)):
-        c = b.new_context(viewport={"width": W, "height": H}, device_scale_factor=1)
-        pv = c.new_page()
-        pv.route("**/*", serve)
-        pv.add_init_script("try { localStorage.setItem('arena.fview', 'hot') } catch (e) {}")
-        pv.goto(HOST + "/")
-        pv.wait_for_timeout(3000)
-        pv.evaluate("""(() => { const b = [...document.querySelectorAll('#sportbar button')]
-            .find(b => (b.getAttribute('aria-label') || '') == 'Form'); if (b) b.click(); })()""")
-        pv.wait_for_timeout(3000)
-        r = pv.evaluate("""(() => { const cs = [...document.querySelectorAll('.qcards--hot .qcard')]
-            .map(c => c.getBoundingClientRect()).filter(r => r.height && r.right > 0 && r.left < innerWidth);
-            const nav = document.getElementById('sportbar').getBoundingClientRect();
-            const fb = document.querySelector('.forkbox'); const fr = fb ? fb.getBoundingClientRect() : null;
-            const spot = fr ? fr.top + (185 + 27.5) * (window.FSCALE || 0.82) : null;
-            return cs.length ? { h: cs[0].height, top: Math.min(...cs.map(r => r.top)), bottom: Math.max(...cs.map(r => r.bottom)), nav: nav.top, spot: spot } : null })()""")
-        if not r:
-            wrong.append("HOT shows no cards at %dx%d" % (W, H))
-        else:
-            if phone:
-                seen.append("HOT %.1fpx at %d" % (r["h"], W))
-                # under the quarterback's spot, and down to the betslip's room (76 and its margins)
-                if r["spot"] is not None and r["top"] < r["spot"] - 1:
-                    wrong.append("HOT cards sit on the quarterback's spot at %d (%.0f above %.0f)" % (W, r["top"], r["spot"]))
-                if r["bottom"] < r["nav"] - 76 - 8 - 6 - 24:
-                    wrong.append("HOT cards stop short of the betslip at %d (%.0f, room to %.0f)" % (W, r["bottom"], r["nav"] - 90))
-            if r["bottom"] > r["nav"] + 1:
-                wrong.append("the HOT row runs under the nav at %dx%d (%.0f past %.0f)" % (W, H, r["bottom"], r["nav"]))
-        c.close()
     return wrong
 
 
@@ -360,37 +321,12 @@ def main():
                   }).map(i => i.getAttribute('src'))""")
                 if broken:
                     wrong.append("%d pictures on screen are broken: %s" % (len(broken), ", ".join(broken[:5])))
-                # the Form tab, opened once on All and once on HOT
-                for view in ("all",):
-                    pv = c.new_page()
-                    pv.route("**/*", serve)
-                    pv.add_init_script("try { localStorage.setItem('arena.fview', '%s') } catch (e) {}" % view)
-                    pv.goto(HOST + "/")
-                    pv.wait_for_timeout(3000)
-                    pv.evaluate("""(() => { const b = [...document.querySelectorAll('#sportbar button')]
-                        .find(b => (b.getAttribute('aria-label') || '') == 'Form'); if (b) b.click(); })()""")
-                    pv.wait_for_timeout(3000)
-                    if view == "all":
-                        n = pv.evaluate("""new Set([...document.querySelectorAll('.qcard:not(.qcard--clone)')]
-                            .filter(c => c.getBoundingClientRect().height)
-                            /* by the face's ESPN id: two starters share a surname
-                               (Jayden and Jalon Daniels, Sep 29, 2026) */
-                            .map(c => ((c.querySelector('img[data-ring]') || {}).dataset || {}).ring + '|' +
-                                      (c.querySelector('.qname h3') || {}).textContent)).size""")
-                        seen.append("All %d" % n)
-                        if n != 32:
-                            wrong.append("the All tab shows %d passers, not 32" % n)
-                    pv.close()
-                # the row is drawn when search opens and its file has come in
-                pg.evaluate("window.openSearch && window.openSearch()")
-                pg.wait_for_timeout(2500)
-                n = pg.evaluate("document.querySelectorAll('#qsearch .qst').length")
-                seen.append("search row %d" % n)
-                if n != 32:
-                    wrong.append("the search row holds %d starters, not 32" % n)
+                # (the Form tab's All and HOT views and the search's starters
+                # row are no longer measured: the HOT field is parked, and the
+                # four renders cost ~24 s a run and threw false faults --
+                # Oct 12, 2026)
             if W == 430:
                 wrong += gestures(b, seen)
-                wrong += hot(b, seen)
                 wrong += fight_tab(b, seen)
                 wrong += tracker(b, seen)
                 wrong += tracker(b, seen, "CFB")

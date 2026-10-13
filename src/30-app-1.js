@@ -540,7 +540,7 @@
      was answered 404 both times -- fourteen of them on one card. A man on
      this list is not asked for (Jose, Sep 22, 2026). */
   var NOPIC = {};
-  fetch("nopic.json", { cache: "no-store" })
+  fetch("nopic.json", { cache: "no-cache" })
     .then(function (r) { return r.ok ? r.json() : null; })
     .then(function (j) {
       if (!j || !j.length) return;
@@ -1051,8 +1051,28 @@
      (notes/mocks/mock_mma.py; the design note, Sep 21, 2026). */
   var FRANK = {};
   fetch("fighter_ranks.json").then(function (r) { return r.json(); })
-    .then(function (j) { FRANK = j || {}; if (typeof paintAll === "function") paintAll(); })
+    .then(function (j) { FRANK = j || {}; seatFranks(); })
     .catch(function () { FRANK = {}; });
+  /* the ranks landing put back only the numbers and the division, not the
+     whole board: a full repaint did not even reach a corner already drawn,
+     since layoutBout() builds each card once (Oct 12, 2026) */
+  function seatFranks() {
+    document.querySelectorAll('.gcard[data-bout][data-v3="1"]').forEach(function (card) {
+      var sides = card.querySelectorAll(".ghead--fight > .gteam");
+      [["l", sides[0]], ["r", sides[1]]].forEach(function (p) {
+        var rk = p[1] && p[1].querySelector(".gdiv");
+        if (!rk) return;
+        var who = p[0] === "l" ? card.dataset.lf : card.dataset.rf;
+        var t = isTBA(who) ? "" : boutRank(who);
+        if (rk.textContent !== t) rk.textContent = t;
+      });
+      var wt = card.querySelector(".gweight"), d = boutDiv(card);
+      if (wt && wt.textContent !== d) {
+        wt.textContent = d;
+        if (d.length > 12) wt.dataset.long = "1"; else delete wt.dataset.long;
+      }
+    });
+  }
   var DIVNAME = { FLW: "FLYWEIGHT", BW: "BANTAMWEIGHT", FW: "FEATHERWEIGHT",
                   LW: "LIGHTWEIGHT", WW: "WELTERWEIGHT", MW: "MIDDLEWEIGHT",
                   LHW: "LIGHT HEAVYWEIGHT", HW: "HEAVYWEIGHT",

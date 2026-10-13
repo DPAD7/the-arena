@@ -222,6 +222,10 @@ def main():
                 row[8:12] = prev[8:12]          # DraftKings' moneyline and ids stay
                 # the names as the board already writes them, so the pricers' name match holds
                 row[3], row[5] = prev[3], prev[5]
+            elif T(row[2]) < NOW and prev and len(prev) >= 12 and prev[8]:
+                # a fought bout whose closing line is already held keeps it:
+                # 466 of 485 past bouts were priced again every run (Oct 12, 2026)
+                row[8], row[10] = prev[8], prev[10]
             elif T(row[2]) < NOW:
                 past.append((row, eid))
             fights.append(row)

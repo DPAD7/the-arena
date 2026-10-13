@@ -420,11 +420,8 @@ def main():
     if c:
         s = s[:c.start()] + "  var CFB = %s;\n" % json.dumps(cfb, separators=(",", ":")) + s[c.end():]
 
-    # who the mark comes off, for the page to read: a man the book is pricing
-    # wears no plaster anywhere (Jose, Sep 22, 2026). Written whole each run,
-    # so a man the book stops pricing gets his plaster back by himself.
-    json.dump(clear, open(os.path.join(D, "site", "cleared.json"), "w"),
-              separators=(",", ":"), sort_keys=True)
+    # (site/cleared.json is no longer written: nothing on the page read it --
+    # Oct 12, 2026)
 
     if swaps and not pagefile.write(s):
         print("page changed under us, nothing written")

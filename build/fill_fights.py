@@ -363,7 +363,9 @@ def times_only():
     print("their clock: %d bouts, %d moved" % (len(kicks), len(moved)))
     for a, b, was, now in moved[:10]:
         print("   %-20s v %-20s %s -> %s" % (a, b, was, now))
-    if moved:
+    if moved and os.environ.get("ARENA_NO_DEPLOY"):
+        print("written; the run deploys at its end")      # (Oct 12, 2026)
+    elif moved:
         subprocess.run(["npx", "wrangler", "pages", "deploy", ".",
                         "--project-name=the-arenasports", "--branch=main"],
                        cwd=D + "/site", capture_output=True, text=True, timeout=300)
@@ -494,6 +496,11 @@ def main():
         print("card changes written to the page: %d" % len(SWAPPED) if pagefile.write(s2) else "page moved under us")
     print("written: %d bouts in FPROPS, %d starts in KICKS, prices.json only -- the page is untouched"
           % (len(book["FPROPS"]), len(book.get("KICKS") or {})))
+    # under refresh.py (ARENA_NO_DEPLOY=1) this only writes, and the run
+    # deploys once at its end (Oct 12, 2026); run by hand it still deploys
+    if os.environ.get("ARENA_NO_DEPLOY"):
+        print("written; the run deploys at its end")
+        return
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
                    cwd=D + "/site", capture_output=True, text=True)
     print("deployed")

@@ -496,7 +496,7 @@
      again on the ledger's own beat, and a read that fails leaves it empty
      rather than leaving yesterday's marks on the page */
   function pullWire() {
-    fetch("wire.json", { cache: "no-store" })
+    fetch("wire.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || JSON.stringify(j) === JSON.stringify(WIRE)) return;
@@ -507,7 +507,7 @@
         if (typeof seatHurt === "function") document.querySelectorAll(".gcard").forEach(seatHurt);
       })
       .catch(function () {});
-    fetch("cold.json", { cache: "no-store" })
+    fetch("cold.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         var c = (j && j.cold) || {};
@@ -518,7 +518,7 @@
       .catch(function () {});
     /* the birthdays ride along too: the file is keyed by game and the border
        is seated the same way the mark is */
-    fetch("birthdays.json", { cache: "no-store" })
+    fetch("birthdays.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || JSON.stringify(j) === JSON.stringify(BIRTHDAYS)) return;
@@ -528,7 +528,7 @@
       .catch(function () {});
     /* the chart rides with the wire, since neither answers alone: the wire
        says he is hurt, the chart says whether he still plays */
-    fetch("depth.json", { cache: "no-store" })
+    fetch("depth.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (!j || JSON.stringify(j) === JSON.stringify(DEPTH)) return;
@@ -559,7 +559,7 @@
   }
   function pullLedger() {
     if (document.hidden) return;
-    fetch("ledger.json", { cache: "no-store" })
+    fetch("ledger.json", { cache: "no-cache" })
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (t) {
         if (!t || t === LEDGERAT) return;
@@ -718,7 +718,7 @@
     requestAnimationFrame(function () { seat(false); });
     if (!POSTERS) {
       POSTERS = {};
-      fetch("posters.json", { cache: "no-store" }).then(function (r) { return r.json(); })
+      fetch("posters.json", { cache: "no-cache" }).then(function (r) { return r.json(); })
         .then(function (j) { POSTERS = j || {}; var keep = PCAR.scrollLeft; draw(); PCAR.scrollLeft = keep; })
         .catch(function () {});
     }
@@ -1724,7 +1724,7 @@
       });
     }
 
-    var tapWait = null, tapPass = false;
+    var tapWait = 0, tapPass = false;
     /* ---- long press the mark: ALL / HOT / NOT / OUT rise above the nav ----
        Held, the four come up in their own glass bar just over the floating
        nav; the finger slides up onto one and lets go to open it, or lets go
@@ -1799,15 +1799,9 @@
          else, open the form first and it reads the choice on the way in */
       var here = document.querySelector('.fview:not(.fpop) button[data-fview="' + v + '"]');
       if (here && sport === "form") { here.click(); return; }
+      /* the form reads the choice on the way in; the hunt for a SEASON tab
+         that is no longer drawn is gone (Oct 12, 2026) */
       longFired = false; tapPass = true; formTab.click();
-      setTimeout(function () {
-        var season = [].slice.call(document.querySelectorAll(".wktab")).find(function (x) { return /SEASON/i.test(x.textContent); });
-        if (season && !season.classList.contains("on") && season.getAttribute("aria-selected") !== "true") season.click();
-        setTimeout(function () {
-          var b1 = document.querySelector('.fview:not(.fpop) button[data-fview="' + v + '"]');
-          if (b1 && b1.getAttribute("aria-selected") !== "true") b1.click();
-        }, 120);
-      }, 120);
     });
     window._openForm = function () { longFired = false; tapPass = true; formTab.click(); };
     formTab.addEventListener("click", function (e) {
@@ -1818,27 +1812,22 @@
       /* the second tap reads the wallet now: the odds' double tap moved to
          the day tab and the NFL shield, and the wallet gave up its own
          (Jose, Oct 1, 2026: "the logo of the stack now does the wallet") */
-      if (tapWait) {
-        clearTimeout(tapWait); tapWait = null;
+      /* the first tap opens the form at once, and a second inside 420 ms
+         opens the wallet over it: the first used to wait the 420 ms out to
+         see whether a second came (Oct 12, 2026). 260 read two mouse clicks
+         as two singles (Jose, Sep 23, 2026) */
+      if (Date.now() - tapWait < 420) {
+        tapWait = 0;
         if (typeof window._walletOpen === "function") window._walletOpen();
         return;
       }
-      tapWait = setTimeout(function () {
-        tapWait = null;
-        /* a tap opens HOT, the season's field, not the last view it was on
-           (Jose, Sep 25, 2026: "on click it loads the hot page") */
-        try { localStorage.setItem("arena.fview", "hot"); } catch (e1) {}
-        tapPass = true;
-        formTab.click();                          /* a single tap, a moment late */
-        setTimeout(function () {
-          var season = [].slice.call(document.querySelectorAll(".wktab")).find(function (x) { return /SEASON/i.test(x.textContent); });
-          if (season && !season.classList.contains("on") && season.getAttribute("aria-selected") !== "true") season.click();
-          setTimeout(function () {
-            var b1 = document.querySelector('.fview:not(.fpop) button[data-fview="hot"]');
-            if (b1 && b1.getAttribute("aria-selected") !== "true") b1.click();
-          }, 120);
-        }, 120);
-      }, 420);                                    /* 260 read two mouse clicks as two singles (Jose, Sep 23, 2026) */
+      tapWait = Date.now();
+      /* a tap opens HOT, the season's field, not the last view it was on
+         (Jose, Sep 25, 2026: "on click it loads the hot page"); the form
+         reads it on the way in */
+      try { localStorage.setItem("arena.fview", "hot"); } catch (e1) {}
+      tapPass = true;
+      formTab.click();
     }, true);
   }
 

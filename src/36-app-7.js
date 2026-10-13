@@ -25,10 +25,15 @@
     try { LIVESOCK = new WebSocket(location.origin.replace(/^http/, "ws") + "/live"); } catch (e) { LIVESOCK = null; return; }
     LIVESOCK.onmessage = function (e) {
       var j = {}; try { j = JSON.parse(e.data); } catch (err) {}
+      var reads = [];
       (j.changed || []).forEach(function (id) {
-        document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { refresh(c); });
+        document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { reads.push(refresh(c)); });
       });
-      if ((j.changed || []).length) { setTimeout(sinkDone, 1200); setTimeout(placedState, 1400); if (typeof bankDraw === "function") bankDraw(); }
+      /* on the readings themselves, not 1.2 and 1.4 seconds on (Oct 12, 2026) */
+      if ((j.changed || []).length) {
+        Promise.all(reads).then(function () { sinkDone(); placedState(); });
+        if (typeof bankDraw === "function") bankDraw();
+      }
       /* a bout moved: the fight cards read again at once */
       if ((j.bouts || []).length && typeof refreshFights === "function") { refreshFights(); if (typeof bankDraw === "function") bankDraw(); }
     };
@@ -40,13 +45,14 @@
     else liveLine();
   });
   function refreshVisible() {
-    var now = Date.now(), soon = now + 8 * 86400000;
+    var now = Date.now(), soon = now + 8 * 86400000, reads = [];
     document.querySelectorAll(".board:not([hidden]) .gcard[data-espn], .hidebox .gcard[data-espn]")
       .forEach(function (card) {
         var k = card.dataset.kick ? Date.parse(card.dataset.kick) : 0;
         if (k && k > soon) return;
-        refresh(card);
+        reads.push(refresh(card));
       });
+    return Promise.all(reads);
   }
   refreshVisible();
   refreshFights();
@@ -66,14 +72,18 @@
     if (typeof seatWant === "function") seatWant(c);
     if (typeof seatTrend === "function") seatTrend(c);
     if (typeof seatTicket === "function") seatTicket(c);
-    if (typeof rankTickets === "function") rankTickets();
     if (typeof seatPick === "function") seatPick(c);
     if (typeof seatTrack === "function") seatTrack(c);
     if (typeof orderTop === "function") orderTop(c);
-    if (typeof pullCard === "function") pullCard(c);
+    /* its prices from prices.json, already read, not a fetch of
+       prices/<id>.json per card (Oct 12, 2026); pullCard stays for the
+       double tap */
+    if (typeof seatCard === "function") seatCard(c);
   }
+  /* the tickets' ranks are set once a pass, not once a card (Oct 12, 2026) */
   function paintAll(root) {
     (root || document).querySelectorAll(".gcard").forEach(paintCard);
+    if (typeof rankTickets === "function") rankTickets();
   }
   paintAll();
   /* asked for on the way in, whichever board is open, because every card's
@@ -92,6 +102,7 @@
         else if (n.querySelector && n.querySelector(".gcard")) { paintAll(n); touched = true; }
       });
     });
+    if (touched && typeof rankTickets === "function") rankTickets();
     return touched;
   }).observe(document.body, { childList: true, subtree: true });
   /* the form and money pages keep step with the cards: every thirty seconds,
@@ -118,8 +129,10 @@
       var want = nextLook();
       clearTimeout(at);
       at = setTimeout(function () {
-        if (nextLook()) { refreshVisible(); setTimeout(sinkDone, 1200); setTimeout(placedState, 1400);
-          setTimeout(function () { (window.GAMEBEAT || []).forEach(function (f) { try { f(); } catch (e) {} }); }, 1600); }
+        if (nextLook()) refreshVisible().then(function () {
+          sinkDone(); placedState();
+          (window.GAMEBEAT || []).forEach(function (f) { try { f(); } catch (e) {} });
+        });
         beat();
       }, want || 5 * 60000);
     };
@@ -147,14 +160,17 @@
       var want = anyLive() ? 5000 : (look || 5 * 60000);
       clearTimeout(at);
       at = setTimeout(function () {
-        if (anyLive() || nextLook()) refreshFights();
-        if (anyLive()) setTimeout(function () { (window.FIGHTBEAT || []).forEach(function (f) { try { f(); } catch (e) {} }); }, 1600);
+        if (anyLive() || nextLook()) refreshFights().then(function () {
+          if (anyLive()) (window.FIGHTBEAT || []).forEach(function (f) { try { f(); } catch (e) {} });
+        });
         beat();
       }, want);
     };
     beat();
+    /* coming back: the beat is set again; the read itself is the one
+       return handler's, further down (Oct 12, 2026) */
     document.addEventListener("visibilitychange", function () {
-      if (!document.hidden) { refreshFights(); beat(); }
+      if (!document.hidden) beat();
     });
   })();
   /* the scores looked after themselves but the prices did not: they were read
@@ -183,6 +199,7 @@
         b.classList.toggle("lost", over && !got);
       });
     });
+    if (window.oneLeftSoon) window.oneLeftSoon();
   }
   /* it ran every five seconds all day for something that only changes when a
      count does. It is called where the counts are written instead
@@ -217,11 +234,8 @@
        closed each of them under him (Jose, Sep 29, 2026) */
     var cash = document.getElementById("cashsheet"), qs = document.getElementById("qsearch");
     return !!document.querySelector("dialog[open]") || !!(cash && !cash.hidden) ||
-           !!(qs && qs.classList.contains("open")) || document.documentElement.classList.contains("cashlock") ||
-           /* a wallet refresh under way, or its green, grey or red still up:
-              a reload took it just as the fill reached the top (Jose, Sep 29,
-              2026: "I can never see if it checks out") */
-           !!document.querySelector("#cashfab .wal.filling, #cashfab .wal.pop, #cashfab .wal.sink");
+           !!(qs && qs.classList.contains("open")) || document.documentElement.classList.contains("cashlock");
+           /* (the wallet's own refresh fill went with the DraftKings read, Oct 12, 2026) */
   }
   var AWAY = 0;        /* when the page went into the background, 0 while seen */
   /* Where he was reading, written on the way out. A phone throws away a tab
@@ -252,14 +266,20 @@
     location.replace(location.pathname + "?v=" + encodeURIComponent(v) + location.hash);
   }
   if (/[?&]v=/.test(location.search)) history.replaceState(null, "", location.pathname + location.hash);
+  /* the data stamp the prices on the page were last read at: a stamp that
+     has moved past it is what makes coming back read prices.json again
+     (Oct 12, 2026) */
+  var PRICED = BUILTD;
+  /* hands back the data stamp it read ("" when it read none) */
   function watchBuild() {
-    fetch("build.txt", {cache: "no-store"})
+    return fetch("build.txt", {cache: "no-cache"})
       .then(function (r) { return r.ok ? r.text() : null; })
       .then(function (v) {
-        if (!v) return;
+        if (!v) return "";
         /* two stamps: the code's, then the data's */
         var two = v.trim().split(/\s+/);
         v = two[0];
+        var seen = two[1] || "";
         /* the injury report and lineups, read again only when the sweep has
            written new ones */
         if (two[2] && two[2] !== watchBuild.files) {
@@ -269,7 +289,7 @@
         /* the same code with new prices: taken only while the page is put
            away, so it is there when he comes back and never under his thumb */
         if (v === BUILT && two[1] && /^\d{14}$/.test(BUILTD) && two[1] !== BUILTD) {
-          if (!document.hidden || busy()) return;
+          if (!document.hidden || busy()) return seen;
           keepPlace();
           try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} freshPage(two.join("-"));
           return;
@@ -280,13 +300,13 @@
            single time. It never fired on any deployed build. A stamp is
            fourteen digits and the placeholder is not, so the shape decides
            it and nothing here can be rewritten out from under it. */
-        if (!/^\d{14}$/.test(BUILT) || v === BUILT) return;
+        if (!/^\d{14}$/.test(BUILT) || v === BUILT) return seen;
         /* A new version is never taken while he is reading. It waits for the
            page to be put away, or for five quiet minutes, because a reload in
            the middle of a scroll throws him back up the board -- ten deploys
            in an hour meant ten jumps (Jose, Sep 19, 2026: "the page is
            jumping, soooo annoying") */
-        if (busy()) return;
+        if (busy()) return seen;
         /* A page he is looking at never refreshes itself. No scores site or
            book does that, and it is not needed here: prices, marks, scores,
            clocks and finished games are all written onto the board where it
@@ -311,15 +331,15 @@
           sessionStorage.setItem("arena.sp", String(sport || ""));
         } catch (e) {}
         try { sessionStorage.setItem("arena.quiet", "1"); } catch (e) {} freshPage(two.join("-"));
+        return "";
       })
-      .catch(function () {});
+      .catch(function () { return ""; });
   }
   /* every ten minutes while it is open, and on coming back to it: the board
      changes no faster than the ten-minute tick that writes it, so asking any
      oftener only finds the same stamp (Jose, Sep 29, 2026: "why do we need to
      check so often") */
   (window.GAMEBEAT = window.GAMEBEAT || []).push(watchBuild);   /* on open/return (below) and with live readings */
-  document.addEventListener("visibilitychange", function () { if (document.visibilityState === "visible") watchBuild(); });
   /* back to where he was reading, after a version change took the page */
   (function () {
     var at = 0, sp = "";
@@ -354,20 +374,15 @@
       if (document.body.scrollHeight < at) return;   /* not drawn that far yet */
       window.scrollTo(0, at);
     };
-    [300, 900, 1800, 3000, 4500, 6000].forEach(function (ms) { setTimeout(put, ms); });
+    /* whenever the board's height changes -- a render, a row of pictures
+       landing -- rather than at six guessed moments; for six seconds, or
+       until he scrolls (Oct 12, 2026) */
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(function () { if (mine) ro.disconnect(); else put(); });
+      ro.observe(document.body);
+      setTimeout(function () { ro.disconnect(); }, 6000);
+    } else [300, 900, 1800, 3000, 4500, 6000].forEach(function (ms) { setTimeout(put, ms); });
   })();
-  document.addEventListener("visibilitychange", function () {
-    /* coming back to the tab is the moment to take a new version: he is not
-       mid-scroll, and the page he left is the page he expects to see move */
-    if (document.visibilityState !== "visible") return;
-    /* he is back and looking at it, so this is the last moment to reload it:
-       take the fresh numbers, leave the version alone */
-    AWAY = 0;
-    LASTTOUCH = 0;
-    pullState();
-    pullPrices();
-    setTimeout(function () { LASTTOUCH = Date.now(); }, 1500);
-  });
   /* No timer. A card's prices are read once, when it is drawn, and that is
      the end of it -- the sweep is what moves them, and it is scheduled. The
      board was re-fetching every event on it every sixty seconds, nearly all of
@@ -379,13 +394,36 @@
      same beat as the prices, and the gold lands without a rebuild
      (Jose, Sep 19, 2026: "I don't see it, so I have to refresh?") */
   /* marks from another device: read on coming back to the app (Oct 12, 2026: no timer) */
+  /* One handler for coming back, where there were three, each reading the
+     state, the prices and the fights again on its own. The marks are always
+     read (another device may have moved them); build.txt is read first, and
+     the prices and the ledger only when its data stamp has moved, the scores
+     and the fights only while something on the board is being played
+     (Oct 12, 2026). Until those land the board may be rebuilt under him at
+     once (LASTTOUCH 0), the way the old handler's second and a half did. */
+  function boardLive() {
+    var now = Date.now(), on = false;
+    document.querySelectorAll(".board:not([hidden]) .gcard, .hidebox .gcard").forEach(function (c) {
+      if (on || c.classList.contains("done") || c.dataset.settled === "1" || c.dataset.settledBout === "1") return;
+      var k = c.dataset.kick ? Date.parse(c.dataset.kick) : 0;
+      if (c.classList.contains("live") || c.querySelector(".glivebar") || (k && k <= now)) on = true;
+    });
+    return on;
+  }
   document.addEventListener("visibilitychange", function () {
     if (document.visibilityState !== "visible") return;
+    AWAY = 0;
+    LASTTOUCH = 0;
     pullState();
-    pullPrices();
-    pullLedger();
-    refreshVisible();
-    refreshFights();
+    var live = boardLive();
+    watchBuild().then(function (st) {
+      var moved = !!st && st !== PRICED, reads = [];
+      if (moved) PRICED = st;
+      if (moved || live) reads.push(pullPrices());
+      if (moved) pullLedger();
+      if (live) { reads.push(refreshVisible()); reads.push(refreshFights()); }
+      return Promise.all(reads);
+    }).catch(function () {}).then(function () { if (!LASTTOUCH) LASTTOUCH = Date.now(); });
   });
   document.getElementById("weekbar").addEventListener("click", function () { setTimeout(refreshVisible, 50); });
   /* ---- the balance behind the dollar button ----
@@ -407,24 +445,29 @@
   BANK.legs = BANK.legs || {}; BANK.paid = BANK.paid || {};
   function bankKeep() { try { localStorage.setItem(BANKKEY, JSON.stringify(BANK)); } catch (e) {} }
   function money(n) { return "$" + (Math.round(n * 100) / 100).toLocaleString("en-US", {minimumFractionDigits: 2, maximumFractionDigits: 2}); }
-  /* ---- DraftKings' own numbers, from the Arena DK Bets extension ----
-     The book fills at whatever it shows when the slip goes in, and the board
-     only knew the price it had when a price was marked: Army -198 here, -192
-     on the slip, $2.79 short (Jose, Sep 26, 2026: "math is off"). A sync from
-     My Bets (tools/dk-bets) is the truth: its balance is the balance, its
-     fills are the legs' prices, and a day it has settled is not paid twice. */
+  /* ---- the slips he tracked, and the balance he set ----
+     The DraftKings read is retired (the extension and the double tap that
+     read My Bets): /bets is read for two things only, the slips the board
+     handed to DraftKings ("sent") and the balance he confirmed by hand
+     ("wallet"). The book's old 'bets' and 'balance' are not merged any more
+     (Oct 12, 2026). */
   /* the last read of the bets, kept on the phone, so the wallet opens on the
      settled slip and the right balance at once and not a moment later
      (Oct 3, 2026: "it's loading as this then loads settled") */
   var DKB = null, DKB_T = 0;
-  try { var k0 = JSON.parse(localStorage.getItem("arena.bets") || "null"); if (k0) DKB = k0; } catch (e) {}
-  function dkDay(placed) {
-    var m = /([A-Z][a-z]{2})[a-z]* (\d{1,2}), (\d{4})/.exec(placed || "");
-    if (!m) return "";
-    var mo = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"].indexOf(m[1]);
-    if (mo < 0) return "";
-    return dayKeyOf(new Date(Date.UTC(+m[3], mo, +m[2], 16)).toISOString());
+  /* the slips the board itself handed to DraftKings: kept by the site the
+     moment "Add to betslip" is tapped, so the wallet tracks them with no
+     DraftKings login at all (Jose, Oct 3, 2026: "the bets I build outside
+     wouldn't be the bets we track") */
+  function withSent(j) {
+    var sent = (j && j.sent) || [], out = { sent: sent, wallet: (j && j.wallet) || null, bets: sent.slice(), at: 0 };
+    sent.forEach(function (b) { var t = Date.parse(b.placed) || 0; if (t > out.at) out.at = t; });
+    if (out.wallet && out.wallet.at > out.at) out.at = out.wallet.at;
+    return out;
   }
+  /* a copy kept from before the read was retired still carries the book's
+     slips and balance: only its own sent and wallet are taken */
+  try { var k0 = JSON.parse(localStorage.getItem("arena.bets") || "null"); if (k0) DKB = withSent(k0); } catch (e) {}
   /* every leg of an open slip is gold on its card, every time the panel
      draws -- not only when a sync lands, which a reload lost -- and saved so
      the other devices see it (Jose, Sep 26, 2026: "why isn't it
@@ -450,17 +493,12 @@
   }
   var bankFix = false;
   function dkApply() {
-    /* the book's balance is the balance, every time it is read -- a unit taken
-       off before the read landed stayed off, and the wallet said $150.22 with
-       $250.22 on DraftKings (Jose, Sep 28, 2026) */
+    /* the balance: the one he set, or else nothing -- and every slip tracked
+       from the board since then moves it, its stake out and, once every leg
+       has won, its payout in (Oct 3, 2026: $0.00 after an $810 win) */
     var wal = DKB && DKB.wallet;
-    /* the balance: the one he set, or else the book's last read, or else
-       nothing -- and every slip tracked from the board since then moves it,
-       its stake out and, once every leg has won, its payout in (Oct 3, 2026:
-       $0.00 after an $810 win) */
     if (DKB) {
-      var base = wal && typeof wal.bal === "number" ? [wal.bal, wal.at || 0]
-               : typeof DKB.balance === "number" ? [DKB.balance, DKB.bookAt || 0] : [0, 0];
+      var base = wal && typeof wal.bal === "number" ? [wal.bal, wal.at || 0] : [0, 0];
       var b0 = base[0];
       (DKB.sent || []).forEach(function (bet) {
         if ((Date.parse(bet.placed) || 0) < base[1]) return;
@@ -475,9 +513,7 @@
     if (!DKB || !DKB.at || (BANK.dkAt || 0) >= DKB.at) { var f0 = bankFix; bankFix = false; return f0; }
     BANK.out = BANK.out || {}; BANK.paid = BANK.paid || {};
     (DKB.bets || []).forEach(function (bet) {
-      /* the sweep sends the book's own ISO time and selection ids; the
-         extension sent the screen's words */
-      var d = /^\d{4}-\d\d-\d\dT/.test(bet.placed || "") ? dayKeyOf(bet.placed) : dkDay(bet.placed);
+      var d = /^\d{4}-\d\d-\d\dT/.test(bet.placed || "") ? dayKeyOf(bet.placed) : "";
       (bet.legs || []).forEach(function (lg) {
         var v = lg.sel && BANK.legs[lg.sel];
         if (v && lg.odds) v.o = String(lg.odds).replace("-", "\u2212");
@@ -496,59 +532,8 @@
         });
       });
     });
-    if (typeof DKB.balance === "number" && !(DKB.wallet && DKB.wallet.at >= (DKB.bookAt || 0))) BANK.bal = DKB.balance;
     BANK.dkAt = DKB.at;
     return true;
-  }
-  /* the double tap: ask the site to read the book now, then watch /bets
-     until a sync newer than the ask lands -- the helmet's own way
-     (Jose, Sep 26, 2026) */
-  function dkFresh(done) {
-    fetch("bets?k=" + encodeURIComponent(ARENAKEY), { method: "POST", cache: "no-store",
-      headers: { "content-type": "application/json" }, body: JSON.stringify({ pull: true }) })
-      .then(function (r) { return r.json(); })
-      .then(function (j) {
-        if (!j || !j.asked) { done(false, false); return; }
-        var t0 = Date.now(), tries = 0;
-        (function look() {
-          fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
-            .then(function (r) { return r.json(); })
-            .then(function (b) {
-              /* a fresh sync wins: an expiry flagged by an older read never
-                 turns a good one red (Jose, Sep 29, 2026) */
-              if (b && b.at && b.at >= j.asked) { DKB = withSent(b); DKB_T = Date.now(); bankDraw(); done(true, true); return; }
-              if (b && b.expired && b.expired >= j.asked && b.expired > (b.at || 0)) { done(false, false); return; }   /* login gone: red */
-              if (++tries > 75 || Date.now() - t0 > 150000) { done(true, false); return; }
-              if (done.step) done.step(Math.min(92, 20 + tries * 2));
-              /* every two seconds: the green comes up as soon as the book's
-                 answer lands, not up to five seconds after (Jose, Sep 28, 2026) */
-              setTimeout(look, 2000);
-            }).catch(function () { done(false, false); });
-        })();
-      }).catch(function () { done(false, false); });
-  }
-  window._dkFresh = dkFresh;
-  /* the slips the board itself handed to DraftKings: kept by the site the
-     moment "Add to betslip" is tapped, so the wallet tracks them with no
-     DraftKings login at all (Jose, Oct 3, 2026: "the bets I build outside
-     wouldn't be the bets we track"). A slip DraftKings' own read also
-     carries, the same legs, is shown once, as DraftKings has it. */
-  function withSent(j) {
-    var bets = (j.bets || []).slice(), seen = {};
-    bets.forEach(function (b) {
-      seen[(b.legs || []).map(function (l) { return l.sel; }).sort().join("|")] = 1;
-    });
-    (j.sent || []).forEach(function (b) {
-      var k = (b.legs || []).map(function (l) { return l.sel; }).sort().join("|");
-      if (!seen[k]) bets.push(b);
-    });
-    var out = {};
-    for (var key in j) out[key] = j[key];
-    out.bets = bets;
-    out.bookAt = j.at || 0;
-    (j.sent || []).forEach(function (b) { var t = Date.parse(b.placed) || 0; if (t > (out.at || 0)) out.at = t; });
-    if (j.wallet && j.wallet.at > (out.at || 0)) out.at = j.wallet.at;
-    return out;
   }
   /* "Add to wallet": the slip's legs, the price DraftKings filled it at and
      the stake, confirmed by him, kept by the site; from then on the wallet
@@ -563,7 +548,7 @@
   function promoLoad() {
     if (Date.now() - PROMOT < 300000) return Promise.resolve();
     PROMOT = Date.now();
-    return fetch("promos.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : []; })
+    return fetch("promos.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : []; })
       .then(function (j) { PROMOS = j || []; }).catch(function () { PROMOS = []; });
   }
   function sportOf(gid) {
@@ -856,20 +841,18 @@
       t.classList.add("bad"); setTimeout(function () { t.classList.remove("bad"); }, 600);
     }).then(function () { t.disabled = false; chkSet("idle"); });
   }
-  function dkPull(done) {
+  function dkPull() {
     DKB_T = Date.now();
     return fetch("bets?k=" + encodeURIComponent(ARENAKEY), { cache: "no-store" })
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
-        if (j && (j.at || (j.sent && j.sent.length))) {
+        if (j && ((j.sent && j.sent.length) || j.wallet)) {
           DKB = withSent(j);
           try { localStorage.setItem("arena.bets", JSON.stringify(DKB)); } catch (e) {}
           bankDraw();
         }
-        /* read, and was the last sync from the book recent: six hours */
-        if (done) done(!!j, !!(j && j.at && Date.now() - j.at < 6 * 3600000));
       })
-      .catch(function () { if (done) done(false); });
+      .catch(function () {});
   }
   window._dkPull = dkPull;
   var CASHHIDE = false;
@@ -985,7 +968,7 @@
      through site/dkevents.json, else the two clubs its event is written
      with; never a written name alone. */
   var DKEVENTS = {};
-  fetch("dkevents.json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; })
+  fetch("dkevents.json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; })
     .then(function (j) { DKEVENTS = j || {}; }).catch(function () {});
   function trkGameOf(lg) {
     if (lg.g) return String(lg.g);
@@ -1362,7 +1345,7 @@
     FNIGHT[k] = { at: Date.now() };
     /* the night's file first: it carries theScore's method (Knockout, Split
        Decision), where the scoreboard only ever says "Unofficial Winner" */
-    var saved = fetch("final/mma-" + f[0] + ".json", { cache: "no-store" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+    var saved = fetch("final/mma-" + f[0] + ".json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
     var live = fetch(espnUrl(MMA + "?dates=" + k)).then(function (r) { return r.json(); }).catch(function () { return {}; });
     Promise.all([live, saved]).then(function (two) {
       var d = { events: [].concat(two[0].events || [], two[1].events || []) };
@@ -1615,32 +1598,46 @@
   })();
   /* a tapped alert lands on what it was about: the slip, open, in the
      wallet, or the game's card (Jose, Sep 29, 2026) */
+  /* it lands the moment what it is about is drawn -- the slip when the
+     wallet draws, the card when the board adds it -- rather than a second
+     and a half on and then every 300 ms (Oct 12, 2026). Six seconds, as
+     before, and then it gives up. */
+  var LAND = null, LANDING = false;
+  function landSlip() {
+    if (!LAND || LANDING) return;
+    if (Date.now() > LAND.until) { LAND = null; return; }
+    LANDING = true;
+    try {
+      var sel = '#cashlegs .slipcard[data-bet="' + LAND.id + '"]';
+      var card = document.querySelector(sel);
+      if (!card && typeof cashDay === "function") {
+        [-1, 0, 1].some(function (d) { var b = document.querySelector('#cashdays [data-d="' + d + '"]'); if (b) cashDay(b); return !!document.querySelector(sel); });
+        card = document.querySelector(sel);
+      }
+      if (card) { LAND = null; var v = card.querySelector(".slview"); if (v && !card.classList.contains("slipcard--open")) slipOpen(v); card.scrollIntoView({ block: "start" }); }
+    } finally { LANDING = false; }
+  }
   function landOn(url) {
     var h = String(url || "").split("#")[1] || "", m;
     if ((m = /^slip=(.+)$/.exec(h))) {
       var sheet = document.getElementById("cashsheet");
       if (sheet) { sheet.hidden = false; document.documentElement.classList.add("cashlock"); }
-      var tries = 0;
-      (function find() {
-        if (typeof bankDraw === "function") bankDraw();
-        var card = document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]');
-        if (!card && typeof cashDay === "function") {
-          [-1, 0, 1].some(function (d) { var b = document.querySelector('#cashdays [data-d="' + d + '"]'); if (b) cashDay(b); return !!document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]'); });
-          card = document.querySelector('#cashlegs .slipcard[data-bet="' + m[1] + '"]');
-        }
-        if (card) { var v = card.querySelector(".slview"); if (v && !card.classList.contains("slipcard--open")) slipOpen(v); card.scrollIntoView({ block: "start" }); return; }
-        if (++tries < 20) setTimeout(find, 300);
-      })();
+      LAND = { id: m[1], until: Date.now() + 6000 };
+      if (typeof bankDraw === "function") bankDraw();     /* which lands it, if it can */
     } else if ((m = /^(game|bout)=(.+)$/.exec(h))) {
-      var tries2 = 0, attr = m[1] === "bout" ? "data-bout" : "data-espn", id2 = m[2];
-      (function find2() {
+      var attr = m[1] === "bout" ? "data-bout" : "data-espn", id2 = m[2];
+      var find2 = function () {
         var c = document.querySelector('.gcard[' + attr + '="' + id2 + '"]');
-        if (c) { c.scrollIntoView({ block: "center", behavior: "smooth" }); return; }
-        if (++tries2 < 20) setTimeout(find2, 300);
-      })();
+        if (c) c.scrollIntoView({ block: "center", behavior: "smooth" });
+        return !!c;
+      };
+      if (find2()) return;
+      var mo = new MutationObserver(function () { if (find2()) mo.disconnect(); });
+      mo.observe(document.body, { childList: true, subtree: true });
+      setTimeout(function () { mo.disconnect(); }, 6000);
     }
   }
-  if (/^#(slip|game|bout)=/.test(location.hash)) setTimeout(function () { landOn(location.href); history.replaceState(null, "", location.pathname); }, 1500);
+  if (/^#(slip|game|bout)=/.test(location.hash)) { landOn(location.href); history.replaceState(null, "", location.pathname); }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -1688,6 +1685,7 @@
     Object.keys(BANK.legs).forEach(function (id) { if (!placed[id]) { delete BANK.legs[id]; moved = true; } });
     if (dkApply()) moved = true;
     dkGold();
+    if (window.oneLeftSoon) window.oneLeftSoon();
     /* today's games only, by each game's own start on the Eastern clock:
        yesterday's gold is still on the board until the day's marks clear,
        and it is not part of today's run (Jose, Sep 25, 2026) */
@@ -1898,6 +1896,7 @@
         cm(UNIT * legs.reduce(function (d, b) { return d * (toDec(b.o) || 1); }, 1)) + '</b></div></div>';
     }
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
+    if (LAND) landSlip();
   }
   window.bankDraw = bankDraw;
   var bankBeat = function () { if (document.visibilityState === "visible") bankDraw(); };
@@ -2010,83 +2009,10 @@
       moved = true; fab.classList.add("drag"); sheet.hidden = true;
       place(ox + dx, oy + dy);
     });
-    /* a double tap reads the bets the DK extension sent, the fill climbing
-       the bag and going green when it is in, red if it fails, the way the
-       helmet's does (Jose, Sep 26, 2026) */
-    var wal = fab.querySelector(".wal"), fillEl = fab.querySelector(".wal-lv");
-    var tapT = null, fadeT = null, popT = null;
-    window._walletPull = function () { pullNow(); };
     /* the wallet opens off the Stacked mark's double tap; its floating button
        is gone (Jose, Oct 3, 2026: "move the fab to the stacked logo") */
     window._walletOpen = function () { if (sheet.hidden) openSheet(); else sheet.hidden = true; };
     if (fab) fab.style.display = "none";
-    function pullNow() {
-      clearTimeout(fadeT); clearTimeout(popT);
-      wal.className = "wal filling";
-      fillEl.style.transition = "none"; fillEl.style.height = "0";
-      void fillEl.offsetHeight; fillEl.style.transition = "";
-      /* the fill never stops: it is paced to how long the last syncs took,
-         so it is near the top about when the answer lands, and it keeps
-         creeping -- slower and slower, never still -- if the answer is late.
-         The answer finishes it, and the card pops as it touches the top
-         (Jose, Sep 28, 2026: "move continuously ... slower or faster,
-         depending on when we get the result") */
-      var EXP = 45000;
-      try { EXP = Math.max(8000, Math.min(150000, parseFloat(localStorage.getItem("arena.dkSyncMs")) || 45000)); } catch (e0) {}
-      fillEl.style.transition = "none";
-      var t0 = performance.now(), climbing = true;
-      var climbT = null;
-      (function step() {
-        if (!climbing) return;
-        var k = (performance.now() - t0) / EXP;
-        /* a steady climb to 75% by the time the last runs took, then a crawl
-           that never reaches the top: only the answer fills the rest, so it
-           touches the top and turns green together (Jose, Sep 28, 2026: "at
-           59 seconds and then 60 it should go, fill and then green") */
-        var h = k < 1 ? 75 * k : 75 + 13 * (1 - Math.exp(-1.2 * (k - 1)));
-        /* the wallet's inside runs from 13% to 70% of its box (wallet-inner.png):
-           the fill is laid on that, so 88% looked full at the old scale */
-        fillEl.style.height = (12.9 + 0.57 * h).toFixed(2) + "%";
-        climbT = requestAnimationFrame(step);
-      })();
-      var fin = function (ok, fresh) {
-        climbing = false; cancelAnimationFrame(climbT);
-        /* how long this one took, to pace the next */
-        if (ok) { try {
-          var took = performance.now() - t0, was = parseFloat(localStorage.getItem("arena.dkSyncMs")) || took;
-          localStorage.setItem("arena.dkSyncMs", String(Math.round(was * 0.6 + took * 0.4)));
-        } catch (e1) {} }
-        var cls = !ok ? "bad" : fresh ? "ok" : "none", fired = false;
-        /* the card pops the moment the fill reaches the top -- on the fill's
-           own end, not on a timer that ran late or not at all (Jose, Sep 28,
-           2026: "when it's at the top the card pops up"): the wallet is at
-           rest again and the card rises, in the same frame. green: a fresh
-           sync; grey: read, nothing new from the book in six hours; red: the
-           read failed */
-        var top = function () {
-          if (fired) return;
-          fired = true;
-          fillEl.removeEventListener("transitionend", onEnd);
-          clearTimeout(popT);
-          fillEl.style.transition = "";
-          wal.className = "wal pop " + cls;
-          fadeT = setTimeout(function () {
-            wal.className = "wal sink " + cls;
-            fadeT = setTimeout(function () { wal.className = "wal"; }, 400);
-          }, 2400);
-        };
-        var onEnd = function (e) { if (!e || e.propertyName === "height") top(); };
-        fillEl.addEventListener("transitionend", onEnd);
-        fillEl.style.height = getComputedStyle(fillEl).height;   /* from wherever it has got to */
-        void fillEl.offsetHeight;
-        fillEl.style.transition = "height .35s ease-out";
-        fillEl.style.height = "100%";
-        popT = setTimeout(top, 420);   /* if the browser drops the end event */
-      };
-      /* the climb is its own; the checks along the way no longer move it */
-      fin.step = function () {};
-      (window._dkFresh || function (d) { d(false); })(fin);
-    }
     function up() {
       if (!down) return;
       down = false; fab.classList.remove("drag");
