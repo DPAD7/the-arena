@@ -93,6 +93,12 @@ def main():
             q = out.setdefault(pid, {"name": name, "club": club, "clips": []})
             q["club"] = club
             q["clips"].append(clip)
+    # only the man each club starts now: a backup who got in for a game, or a
+    # starter who is out, is not on the clips page (Jose, Oct 13, 2026: "why
+    # the fuck is cooper rush here" -- Rush, Lock, Keenum and Mariota were)
+    starters = {str(v.get("starter")) for v in load("depth.json").values() if isinstance(v, dict) and v.get("starter")}
+    if len(starters) >= 24:
+        out = {pid: q for pid, q in out.items() if pid in starters}
     json.dump(out, open(os.path.join(SITE, "qbclips.json"), "w"), separators=(",", ":"))
     print("qb_clips: %d passers, %d clips (%d TD passes, %d rushing TDs)" % (
         len(out), sum(len(q["clips"]) for q in out.values()),
