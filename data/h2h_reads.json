@@ -1,5 +1,5 @@
 {
- "at": "2026-10-13 01:06 UTC",
+ "at": "2026-10-13 13:07 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -84,6 +84,100 @@
    "game": "HOU@JAC",
    "eid": 21914,
    "kick": "2026-10-18 13:30:00Z"
+  },
+  {
+   "qbs": [
+    "Justin Herbert",
+    "Patrick Mahomes II"
+   ],
+   "pick": "Patrick Mahomes II",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "LAC K.Mitchell (15%)",
+    "LAC O.Gadsden II (14%)",
+    "LAC T.Harris (19%)",
+    "KC K.Walker III (15%)",
+    "KC T.Kelce (18%)",
+    "KC T.Thornton (15%)",
+    "KC X.Worthy (17%)"
+   ],
+   "score": [
+    -1,
+    1
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "LAC@KC",
+   "eid": 22063,
+   "kick": "2026-10-18 20:25:00Z"
+  },
+  {
+   "qbs": [
+    "Jordan Love",
+    "Dak Prescott"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "DAL R.Flournoy (14%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "DAL@GB",
+   "eid": 22065,
+   "kick": "2026-10-19 00:20:00Z"
+  },
+  {
+   "qbs": [
+    "Brock Purdy",
+    "Jayden Daniels"
+   ],
+   "pick": "Brock Purdy",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "SF D.Samuel Sr. (11%)",
+    "WAS A.Williams (17%)",
+    "WAS C.Okonkwo (11%)",
+    "WAS T.McLaurin (16%)",
+    "WAS T.Burks (11%)"
+   ],
+   "score": [
+    7,
+    -1
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 181.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "WAS@SF",
+   "eid": 22066,
+   "kick": "2026-10-20 00:15:00Z"
   }
  ]
 }
