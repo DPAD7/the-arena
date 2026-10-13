@@ -151,6 +151,18 @@ export class Clock {
       const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Alerts are on", body: "This is what they look like.", url: "/" }], 0);
       return Response.json({ sent: n });
     }
+    /* send this Tuesday's recap again, built fresh (Jose, Oct 13, 2026: "send it again") */
+    if (url.pathname.endsWith("/recap") && request.method === "POST") {
+      const now = Date.now(), et = etParts(now);
+      const told = (await this.ctx.storage.get("sent")) || {};
+      delete told["recap@" + et.date]; await this.ctx.storage.put("sent", told);
+      let sched = [];
+      try { sched = await (await fetch(SITE + "/schedule.json")).json(); } catch (e) { sched = []; }
+      let err = null;
+      try { await this.picks(sched, now); } catch (e) { err = String(e); }
+      const after = (await this.ctx.storage.get("sent")) || {};
+      return Response.json({ sent: !!after["recap@" + et.date], err });
+    }
     if (url.pathname.endsWith("/debug")) {
       let sched = [];
       try { sched = await (await fetch(SITE + "/schedule.json")).json(); } catch (e) { sched = []; }

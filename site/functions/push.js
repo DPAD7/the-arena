@@ -29,6 +29,7 @@ export async function onRequest({ request, env }) {
   if (b.sub || b.drop) return json(await (await post("sub", { sub: b.sub, drop: b.drop })).json());
   if (b.prefs) return json(await (await post("prefs", b.prefs)).json());
   if (b.test) return json(await (await post("test", {})).json());
+  if (b.recap) return json(await (await post("recap", {})).json());   // send this week's recap again (Oct 13, 2026)
   if (b.opened) return json(await (await post("opened", { type: b.opened })).json());
   if (b.cliplog) return json(await (await post("cliplog", b.cliplog)).json());
   /* a fault, from the watcher on GitHub, signed with the run's secret */
