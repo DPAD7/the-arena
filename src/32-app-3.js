@@ -1091,9 +1091,9 @@
           '<span class="cstar" data-star="' + id + '">' + STARSVG(!!st[id]) + '</span></span>' +
           '<span class="cname">' + esc(famName(q.name)) + '</span></button>';
       };
-      page.innerHTML = (n ? '<h3 class="cliphead">Top QBs' + howBtn() + '</h3><div class="cliprow">' + all.slice(0, n).map(tile).join("") + "</div>" : "") +
-        (all.length > n ? '<h3 class="cliphead">' + "Around the League" + (n ? "" : howBtn()) + '</h3><div class="cliprow">' +
-          all.slice(n).map(function (id, j) { return tile(id, n + j); }).join("") + "</div>" : "");
+      /* one row of all 32 starters, the ranked men first with their numbers
+         (Jose, Oct 13, 2026: "gimme 1 list not 2") */
+      page.innerHTML = '<h3 class="cliphead">QBs' + howBtn() + '</h3><div class="cliprow">' + all.map(tile).join("") + "</div>";
       qbWire(page);
     };
     if (QBCLIPS) draw();
