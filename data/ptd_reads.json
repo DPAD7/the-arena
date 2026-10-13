@@ -1,15 +1,7 @@
 {
- "at": "2026-10-12",
+ "at": "2026-10-13",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "3918298": {
-   "p": 0.83,
-   "name": "Josh Allen"
-  },
-  "12483": {
-   "p": 0.921,
-   "name": "Matthew Stafford"
-  },
   "3912547": {
    "p": 0.804,
    "name": "Sam Darnold"
@@ -86,6 +78,10 @@
    "p": 0.792,
    "name": "Jacoby Brissett"
   },
+  "12483": {
+   "p": 0.905,
+   "name": "Matthew Stafford"
+  },
   "4038941": {
    "p": 0.733,
    "name": "Justin Herbert"
@@ -93,6 +89,10 @@
   "3139477": {
    "p": 0.838,
    "name": "Patrick Mahomes"
+  },
+  "3918298": {
+   "p": 0.833,
+   "name": "Josh Allen"
   },
   "14880": {
    "p": 0.81,
