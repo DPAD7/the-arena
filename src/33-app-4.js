@@ -1288,7 +1288,7 @@
     var r = t.getBoundingClientRect(), b = sbar.getBoundingClientRect();
     var w = size ? size.w : (spmark.offsetWidth || 57);
     spmark.style.transform =
-      "translateX(" + (r.left - b.left + (r.width - w) / 2) + "px)";
+      "translateX(" + (r.left - b.left - sbar.clientLeft + (r.width - w) / 2) + "px)";
   }
   function markNow() {
     seatMark(sbar.querySelector('.sptab[aria-selected="true"]') ||
