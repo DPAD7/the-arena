@@ -37427,7 +37427,7 @@
   "right": "Cody Chovancek",
   "rounds": 3,
   "start": "2026-10-17T21:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Cody Chovancek": [
@@ -37457,7 +37457,7 @@
   "right": "Melissa Croden",
   "rounds": 3,
   "start": "2026-10-17T21:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Melissa Croden": [
@@ -37487,7 +37487,7 @@
   "right": "Nick Galanti",
   "rounds": 3,
   "start": "2026-10-17T23:30Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Julien Leblanc": [
@@ -37517,7 +37517,7 @@
   "right": "Steven Koslow",
   "rounds": 3,
   "start": "2026-10-17T22:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Chad Anheliger": [
@@ -37547,7 +37547,7 @@
   "right": "Jhonata Diniz",
   "rounds": 3,
   "start": "2026-10-17T23:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Tanner Boser": [
@@ -37577,7 +37577,7 @@
   "right": "Mandel Nallo",
   "rounds": 3,
   "start": "2026-10-18T00:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Mandel Nallo": [
@@ -37607,8 +37607,48 @@
   "right": "Timmy Cuamba",
   "rounds": 3,
   "start": "2026-10-18T00:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Louis Jourdain": [
+     "-275",
+     "0QA378840244#2320127512_13L9034Q11Q21"
+    ],
+    "Timothy Cuamba": [
+     "+190",
+     "0QA378840244#2320127544_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Louis Jourdain": [
+     "-175",
+     "0QA378840245#2320127514_13L9034Q11Q21"
+    ],
+    "Timothy Cuamba": [
+     "+125",
+     "0QA378840245#2320127541_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Louis Jourdain": [
+     "-275",
+     "0QA378840257#2320127521_13L9034Q10Q21"
+    ],
+    "Timothy Cuamba": [
+     "+200",
+     "0QA378840257#2320127534_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Louis Jourdain": [
+     "-200",
+     "0QA378840256#2320127520_13L9034Q10Q21"
+    ],
+    "Timothy Cuamba": [
+     "+150",
+     "0QA378840256#2320127535_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Louis Jourdain": [
      "-198",
@@ -37617,6 +37657,36 @@
     "Timothy Cuamba": [
      "+164",
      "0ML86681990_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Louis Jourdain": [
+     "-285",
+     "0QA378840255#2320127519_13L9034Q10Q21"
+    ],
+    "Timothy Cuamba": [
+     "+210",
+     "0QA378840255#2320127536_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Louis Jourdain": [
+     "-120",
+     "0HC86733502N350_1"
+    ],
+    "Timothy Cuamba": [
+     "-110",
+     "0HC86733502P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Louis Jourdain": [
+     "-500",
+     "0HC86733503P750_1"
+    ],
+    "Timothy Cuamba": [
+     "+330",
+     "0HC86733503N750_3"
     ]
    },
    "Total Rounds": {
@@ -37628,6 +37698,442 @@
      "+110",
      "0OU86703489U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-275",
+     "0OU86733501O150_1"
+    ],
+    "Under": [
+     "+195",
+     "0OU86733501U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1500",
+     "0QA378840247#2320127515_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA378840247#2320127540_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA378840231#2320127498_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+5000",
+     "0QA378840258#2320127522_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+120",
+     "0QA378840238#2320127506_13L9034Q11Q22"
+    ],
+    "No": [
+     "-160",
+     "0QA378840238#2320127550_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA378840239#2320127507_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA378840239#2320127549_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-110",
+     "0QA378840224#2320127492_13L9034Q10Q20"
+    ],
+    "No": [
+     "-120",
+     "0QA378840224#2320127561_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+360",
+     "0QA378840246#2320127513_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+900",
+     "0QA378840246#2320127543_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+550",
+     "0QA378840246#2320127573_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1300",
+     "0QA378840246#2320127580_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+850",
+     "0QA378840246#2320127596_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2000",
+     "0QA378840246#2320127603_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-110",
+     "0QA378840246#2320127647_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Louis Jourdain to Win in Rounds 1-2": [
+     "+210",
+     "0QA378840227#2320127496_13L9034Q11Q21"
+    ],
+    "Louis Jourdain to Win in Round 3 or on Decision": [
+     "+140",
+     "0QA378840227#2320127566_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840227#2320127632_13L9034Q19Q29"
+    ],
+    "Timothy Cuamba to Win in Rounds 1-2": [
+     "+550",
+     "0QA378840227#2320127591_15L9034Q15Q25"
+    ],
+    "Timothy Cuamba to Win in Round 3 or on Decision": [
+     "+260",
+     "0QA378840227#2320127613_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Louis Jourdain to Win by KO/TKO/DQ in Round 1": [
+     "+450",
+     "0QA378840229#2320127495_13L9034Q11Q21"
+    ],
+    "Louis Jourdain to Win by KO/TKO/DQ in Round 2": [
+     "+700",
+     "0QA378840229#2320127559_13L9034Q12Q22"
+    ],
+    "Louis Jourdain to Win by KO/TKO/DQ in Round 3": [
+     "+1100",
+     "0QA378840229#2320127565_13L9034Q13Q23"
+    ],
+    "Louis Jourdain to Win by Submission in Round 1": [
+     "+1300",
+     "0QA378840229#2320127609_13L9034Q16Q26"
+    ],
+    "Louis Jourdain to Win by Submission in Round 2": [
+     "+1800",
+     "0QA378840229#2320127612_13L9034Q17Q27"
+    ],
+    "Louis Jourdain to Win by Submission in Round 3": [
+     "+3000",
+     "0QA378840229#2320127628_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-110",
+     "0QA378840229#2320127677_13L9034Q121Q221"
+    ],
+    "Timothy Cuamba to Win by KO/TKO/DQ in Round 1": [
+     "+1200",
+     "0QA378840229#2320127646_15L9034Q111Q211"
+    ],
+    "Timothy Cuamba to Win by KO/TKO/DQ in Round 2": [
+     "+1800",
+     "0QA378840229#2320127652_15L9034Q112Q212"
+    ],
+    "Timothy Cuamba to Win by KO/TKO/DQ in Round 3": [
+     "+2500",
+     "0QA378840229#2320127655_15L9034Q113Q213"
+    ],
+    "Timothy Cuamba to Win by Submission in Round 1": [
+     "+2200",
+     "0QA378840229#2320127666_15L9034Q116Q216"
+    ],
+    "Timothy Cuamba to Win by Submission in Round 2": [
+     "+3000",
+     "0QA378840229#2320127667_15L9034Q117Q217"
+    ],
+    "Timothy Cuamba to Win by Submission in Round 3": [
+     "+4500",
+     "0QA378840229#2320127672_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Louis Jourdain To Win And Under 0.5": [
+     "+900",
+     "0QA378840234#2320127502_13L9034Q11Q21"
+    ],
+    "Louis Jourdain To Win And Under 1.5": [
+     "+265",
+     "0QA378840234#2320127571_13L9034Q11Q23"
+    ],
+    "Timothy Cuamba To Win And Under 0.5": [
+     "+2000",
+     "0QA378840234#2320127553_14L9034Q12Q22"
+    ],
+    "Timothy Cuamba To Win And Under 1.5": [
+     "+700",
+     "0QA378840234#2320127582_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Louis Jourdain To Win And Over 1.5": [
+     "-105",
+     "0QA378840235#2320127572_13L9034Q11Q23"
+    ],
+    "Louis Jourdain To Win And Over 2.5": [
+     "+150",
+     "0QA378840235#2320127595_13L9034Q11Q25"
+    ],
+    "Timothy Cuamba To Win And Over 1.5": [
+     "+205",
+     "0QA378840235#2320127581_14L9034Q12Q24"
+    ],
+    "Timothy Cuamba To Win And Over 2.5": [
+     "+270",
+     "0QA378840235#2320127604_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-450",
+     "0QA378840236#2320127504_13L9034Q11Q22"
+    ],
+    "No": [
+     "+300",
+     "0QA378840236#2320127552_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-180",
+     "0QA378840237#2320127505_13L9034Q11Q22"
+    ],
+    "No": [
+     "+135",
+     "0QA378840237#2320127551_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Louis Jourdain Round 1": [
+     "+360",
+     "0QA378840225#2320127493_13L9034Q11Q20"
+    ],
+    "Louis Jourdain Round 2": [
+     "+550",
+     "0QA378840225#2320127563_13L9034Q11Q22"
+    ],
+    "Louis Jourdain Round 3": [
+     "+950",
+     "0QA378840225#2320127589_13L9034Q11Q24"
+    ],
+    "Louis Jourdain By Decision": [
+     "+200",
+     "0QA378840225#2320127645_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840225#2320127654_15L9034Q10Q212"
+    ],
+    "Timothy Cuamba Round 1": [
+     "+900",
+     "0QA378840225#2320127562_14L9034Q12Q21"
+    ],
+    "Timothy Cuamba Round 2": [
+     "+1300",
+     "0QA378840225#2320127588_14L9034Q12Q23"
+    ],
+    "Timothy Cuamba Round 3": [
+     "+1800",
+     "0QA378840225#2320127610_14L9034Q12Q25"
+    ],
+    "Timothy Cuamba By Decision": [
+     "+330",
+     "0QA378840225#2320127653_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+300",
+     "0QA378840230#2320127497_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+370",
+     "0QA378840230#2320127557_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+600",
+     "0QA378840230#2320127567_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840230#2320127607_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-110",
+     "0QA378840230#2320127614_13L9034Q11Q25"
+    ]
+   },
+   "Timothy Cuamba to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+425",
+     "0QA378840248#2320127516_13L9034Q11Q22"
+    ],
+    "No": [
+     "-700",
+     "0QA378840248#2320127539_13L9034Q13Q24"
+    ]
+   },
+   "Louis Jourdain to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+155",
+     "0QA378840249#2320127518_13L9034Q11Q22"
+    ],
+    "No": [
+     "-205",
+     "0QA378840249#2320127537_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Louis Jourdain to Win by KO/TKO/DQ or Decision": [
+     "-165",
+     "0QA378840228#2320127500_13L9034Q11Q21"
+    ],
+    "Louis Jourdain to Win by KO/TKO/DQ or Submission": [
+     "+155",
+     "0QA378840228#2320127555_13L9034Q12Q22"
+    ],
+    "Louis Jourdain to Win by Submission or Decision": [
+     "+120",
+     "0QA378840228#2320127568_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840228#2320127616_13L9034Q17Q27"
+    ],
+    "Timothy Cuamba to Win by KO/TKO/DQ or Decision": [
+     "+180",
+     "0QA378840228#2320127583_15L9034Q14Q24"
+    ],
+    "Timothy Cuamba to Win by KO/TKO/DQ or Submission": [
+     "+425",
+     "0QA378840228#2320127593_15L9034Q15Q25"
+    ],
+    "Timothy Cuamba to Win by Submission or Decision": [
+     "+230",
+     "0QA378840228#2320127606_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Louis Jourdain to Win By KO/TKO/DQ or Timothy Cuamba to Win by Submission": [
+     "+160",
+     "0QA378840254#2320127517_13L9034Q10Q21"
+    ],
+    "Louis Jourdain to Win By KO/TKO/DQ or Timothy Cuamba to Win by Decision": [
+     "-120",
+     "0QA378840254#2320127538_13L9034Q10Q22"
+    ],
+    "Louis Jourdain to Win By Submission or Timothy Cuamba to Win by KO/TKO/DQ": [
+     "+270",
+     "0QA378840254#2320127574_13L9034Q10Q23"
+    ],
+    "Louis Jourdain to Win By Submission or Timothy Cuamba to Win by Decision": [
+     "+180",
+     "0QA378840254#2320127579_13L9034Q10Q24"
+    ],
+    "Louis Jourdain to Win By Decision or Timothy Cuamba to Win by KO/TKO/DQ": [
+     "+110",
+     "0QA378840254#2320127597_13L9034Q10Q25"
+    ],
+    "Louis Jourdain to Win By Decision or Timothy Cuamba to Win by Submission": [
+     "+145",
+     "0QA378840254#2320127602_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840254#2320127619_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+140",
+     "0QA378840226#2320127494_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+425",
+     "0QA378840226#2320127560_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-110",
+     "0QA378840226#2320127564_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA378840226#2320127587_15L9034Q14Q24"
+    ]
+   },
+   "Louis Jourdain to Win by Unanimous Decision": {
+    "Yes": [
+     "+250",
+     "0QA378840240#2320127508_13L9034Q11Q22"
+    ]
+   },
+   "Timothy Cuamba to Win by Unanimous Decision": {
+    "Yes": [
+     "+425",
+     "0QA378840241#2320127509_13L9034Q11Q22"
+    ]
+   },
+   "Louis Jourdain to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA378840242#2320127510_13L9034Q11Q22"
+    ]
+   },
+   "Timothy Cuamba to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1600",
+     "0QA378840243#2320127511_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Louis Jourdain": [
+     "+225",
+     "0QA378840264#2320127523_13L9034Q11Q22"
+    ],
+    "Timothy Cuamba": [
+     "+600",
+     "0QA378840264#2320127532_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Louis Jourdain": [
+     "+700",
+     "0QA378840265#2320127524_13L9034Q11Q22"
+    ],
+    "Timothy Cuamba": [
+     "+1200",
+     "0QA378840265#2320127531_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Louis Jourdain": [
+     "+200",
+     "0QA378840266#2320127525_13L9034Q11Q22"
+    ],
+    "Timothy Cuamba": [
+     "+330",
+     "0QA378840266#2320127530_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -37637,7 +38143,7 @@
   "right": "Marc-Andre Barriault",
   "rounds": 3,
   "start": "2026-10-18T01:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Marc-Andre Barriault": [
@@ -38173,7 +38679,7 @@
   "right": "Cristian P\u00e9rez",
   "rounds": 3,
   "start": "2026-10-18T01:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Kyle Nelson": [
@@ -38705,7 +39211,7 @@
   "right": "Jasmine Jasudavicius",
   "rounds": 3,
   "start": "2026-10-18T02:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Erin Blanchfield": [
@@ -39237,7 +39743,7 @@
   "right": "Joaquin Buckley",
   "rounds": 5,
   "start": "2026-10-18T02:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Joaquin Buckley": [
@@ -39901,7 +40407,7 @@
   "right": "Mackenzie Stiller",
   "rounds": 3,
   "start": "2026-10-17T22:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Katlyn Cerminara": [
@@ -39931,7 +40437,7 @@
   "right": "Joel Faglier",
   "rounds": 3,
   "start": "2026-10-17T23:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Moneyline": {
     "Javad Mahjoub": [
@@ -39961,7 +40467,7 @@
   "right": "Greg Foster",
   "rounds": 3,
   "start": "2026-10-13T23:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Jason Asher": [
@@ -40005,11 +40511,11 @@
    },
    "Moneyline": {
     "Jason Asher": [
-     "-205",
+     "-192",
      "0ML86701188_1"
     ],
     "Greg Foster": [
-     "+170",
+     "+160",
      "0ML86701188_3"
     ]
    },
@@ -40497,7 +41003,7 @@
   "right": "Douglas da Lapa",
   "rounds": 3,
   "start": "2026-10-13T23:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Douglas da Lapa": [
@@ -40541,11 +41047,11 @@
    },
    "Moneyline": {
     "Douglas da Lapa": [
-     "-170",
+     "-155",
      "0ML86701176_1"
     ],
     "Davi Cabral": [
-     "+142",
+     "+130",
      "0ML86701176_3"
     ]
    },
@@ -41029,7 +41535,7 @@
   "right": "Luis Francischinelli",
   "rounds": 3,
   "start": "2026-10-14T00:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Will Rentz": [
@@ -41123,11 +41629,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "+240",
+     "+250",
      "0OU86703580O150_1"
     ],
     "Under": [
-     "-330",
+     "-345",
      "0OU86703580U150_3"
     ]
    },
@@ -41561,7 +42067,7 @@
   "right": "Smilla Sundell",
   "rounds": 3,
   "start": "2026-10-14T00:45Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Smilla Sundell": [
@@ -41605,11 +42111,11 @@
    },
    "Moneyline": {
     "Smilla Sundell": [
-     "-550",
+     "-575",
      "0ML86701178_1"
     ],
     "Aline Pereira": [
-     "+410",
+     "+425",
      "0ML86701178_3"
     ]
    },
@@ -42097,7 +42603,7 @@
   "right": "Erick Visconde",
   "rounds": 3,
   "start": "2026-10-14T01:15Z",
-  "read": "2026-10-13T22:02Z",
+  "read": "2026-10-13T22:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Ilias Bulaid": [
@@ -42141,11 +42647,11 @@
    },
    "Moneyline": {
     "Ilias Bulaid": [
-     "-135",
+     "-130",
      "0ML86701177_1"
     ],
     "Erick Visconde": [
-     "+114",
+     "+110",
      "0ML86701177_3"
     ]
    },
