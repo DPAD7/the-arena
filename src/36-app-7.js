@@ -1770,7 +1770,11 @@
            on its own, without waiting on the next read of the book (Jose,
            Sep 26, 2026: "it should drop automatically") */
         .filter(function (bet) {
-          return !(bet.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; });
+          /* the result the clock writes onto the leg counts too: two fight
+             slips sat in the bag red after Asher lost, because only the
+             tracker's own word was read (Jose, Oct 13, 2026) */
+          return String(bet.status || "").toLowerCase() !== "lost" && !(bet.legs || []).some(function (lg) {
+            return String(lg.status || "").toLowerCase() === "lost" || (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel] || TRKST[lg.sel] === "lost"; });
         })
         /* the day picked under the balance: a slip is on the day its first
            game starts, Eastern; anything after tomorrow waits under Tomorrow */
@@ -1866,10 +1870,10 @@
       }).join("");
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
-      if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel]; }); })) setTimeout(bankDraw, 0);
+      if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel] || TRKST[lg.sel] === "lost"; }); })) setTimeout(bankDraw, 0);
       /* the icon's badge while the app is open: slips still being played (the clock sets it while the app is closed) */
       try {
-        var liveN = (DKB.bets || []).filter(function (b0) { return !(b0.legs || []).some(function (lg) { return (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; }); })
+        var liveN = (DKB.bets || []).filter(function (b0) { return !(b0.legs || []).some(function (lg) { return String(lg.status || "").toLowerCase() === "lost" || (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel]; }); })
           .reduce(function (t, b0) { return t + ((b0.legs || []).some(function (lg) { var st = String(lg.status || "").toLowerCase(); return st !== "won" && st !== "lost" && TRKST[lg.sel] !== "won"; }) ? 1 : 0); }, 0);   /* one a slip, not one a leg (Jose, Oct 12, 2026) */
         if (navigator.setAppBadge) { if (liveN) navigator.setAppBadge(liveN); else navigator.clearAppBadge(); }
       } catch (e) {}
