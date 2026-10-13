@@ -712,7 +712,7 @@
     t.classList.toggle("rdy", phase === "ready");
     t.style.setProperty("--p", (pc || 0) + "%");
     t.disabled = phase === "checking";
-    t.textContent = text || (phase === "checking" ? "Checking DraftKings" : "Track bet");
+    t.textContent = text || (phase === "checking" ? "Checking prices" : "Track bet");
   }
   /* a leg's price in what DraftKings sent back: each price sits just before
      its own id, wherever it is in the answer */
