@@ -1,11 +1,12 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.btile{position:relative;width:240px;height:240px;display:grid;place-items:center}.btile canvas{position:absolute;left:-75px;top:-75px;width:390px;height:390px}.bglow{position:absolute;inset:-75px;background:radial-gradient(circle at 50% 52%,rgba(229,51,63,.28),transparent 62%);opacity:0;animation:btin .5s ease .2s forwards}.bstar{position:relative;width:166px;height:166px;top:-3.5px;left:-2.5px;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .6s forwards}.bstar img{position:absolute;left:0;top:0;width:186.7px;height:186.7px}@keyframes btin{from{opacity:0}to{opacity:1}}@keyframes bstin{from{opacity:0;transform:scale(.4) rotate(-200deg)}to{opacity:1;transform:none}}</style>
-<div id="boot" aria-hidden="true"><div class="btile"><div class="bglow"></div><canvas id="bgl"></canvas><div class="bstar bd"><img src="ico/stax-star.png" alt=""></div></div></div>
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.btile{position:relative;width:240px;height:240px;display:grid;place-items:center}.btile canvas{position:absolute;left:-75px;top:-75px;width:390px;height:390px}.bglow{position:absolute;inset:-75px;background:radial-gradient(circle at 50% 52%,rgba(229,51,63,.28),transparent 62%);opacity:0;animation:btin .5s ease .2s forwards}.bstar{position:relative;width:166px;height:166px;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .6s forwards}.bstar img{position:absolute;left:-34px;top:-34px;width:234px;height:234px}@keyframes btin{from{opacity:0}to{opacity:1}}@keyframes bstin{from{opacity:0;transform:scale(.4) rotate(-200deg)}to{opacity:1;transform:none}}</style>
+<div id="boot" aria-hidden="true"><div class="btile"><div class="bglow"></div><canvas id="bgl"></canvas><div class="bstar bd"><img src="ico/stax-spark.png" alt=""></div></div></div>
 <script>
-/* the meshed star S on black with its glitter from the very first paint
-   (Jose, Oct 13, 2026; it was the stack of plates and the $), until the board is
+/* the sparkle S on black with its glitter from the very first paint
+   (Jose, Oct 13, 2026; before it the meshed star, and the stack of plates
+   and the $ before that), until the board is
    drawn and every picture on screen has arrived (Jose, Sep 23, 2026: "it
    should open once the images and page is loaded completely, not before") */
 (function () {
