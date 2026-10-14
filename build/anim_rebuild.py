@@ -263,7 +263,10 @@ def main(only=None):
             continue
         if only and bout != only:
             continue
-        if not only and (bout in index or not (NOW - dt.timedelta(days=21) < t < NOW - dt.timedelta(hours=6))):
+        # any bout whose bell has gone and ESPN calls over -- not six hours on:
+        # the recorder lost ESPN a minute into the Oct 13 card and five bouts
+        # sat with no rewind all night (Jose: "add back the rewinds")
+        if not only and (bout in index or not (NOW - dt.timedelta(days=21) < t < NOW)):
             continue
         todo.append((f, t))
     if not todo:

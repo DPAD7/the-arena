@@ -52,6 +52,8 @@ jobs:
           LOG=$!
           cut() {
             python build/anim.py || return 0
+            # a bout the recorder lost is rebuilt from ESPN's count the moment it ends
+            python build/anim_rebuild.py || true
             git add data/fight_log.jsonl data/fight_plays.jsonl site/anim
             if git diff --cached --quiet; then return 0; fi
             git commit -q -m "rewinds for card ${{ inputs.event }}"
