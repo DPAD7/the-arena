@@ -120,7 +120,11 @@
      the card when the champion has been moved to the left. */
   function seatBout(card, pr) {
     if (!card || !pr) return;
-    if (card.classList.contains("done") || card.dataset.settledBout === "1") return;
+    /* a finished bout keeps the prices it closed at, but an end left empty
+       is filled once from the file: Rentz v Francischinelli finished and its
+       KO, SUB and DEC went to dashes (Jose, Oct 13, 2026: "why the fuck do
+       you keep removing them") */
+    var shut = card.classList.contains("done") || card.dataset.settledBout === "1";
     var A = card.dataset.flip === "1" ? 1 : 0, B = A ? 0 : 1;
     [["ko", "KO"], ["sub", "SUB"], ["dec", "DEC"]].forEach(function (k) {
       var got = pr[k[0]];
@@ -137,6 +141,7 @@
         var slot = got[pair[1]];
         if (!slot || !slot[0]) return;
         var had = ends[pair[0]].querySelector("button.price");
+        if (shut && had) return;
         ends[pair[0]].innerHTML = "";
         ends[pair[0]].appendChild(fchip(slot));
         keepMarks(had, ends[pair[0]]);
@@ -552,9 +557,10 @@
          the closing prices takes them: the in-place writer only fires on a
          price that moved, and these never moved (Asher v Foster, Oct 13) */
       FIGHTS.forEach(function (row) {
-        if (!row[8] && !row[10]) return;
+        if (!row[8] && !row[10] && !FPROPS[String(row[1])]) return;
         var c = document.querySelector('.gcard[data-bout="' + row[1] + '"]');
         if (c && !c.querySelector(":scope > .ghead .gml button.price")) seatMoneyline(c, row.slice(8, 12));
+        if (c && FPROPS[String(row[1])]) seatBout(c, FPROPS[String(row[1])]);
       });
       if (nowPlease && busy()) {
         rebuild++;                 /* a sheet is open: it goes with the rest */
