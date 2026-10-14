@@ -514,11 +514,15 @@
       inPlace.forEach(function (one) {
         var card = document.querySelector('.gcard[data-espn="' + one[0] + '"], .gcard[data-bout="' + one[0] + '"]');
         if (!card) return;
-        if (frozen(one[0])) return;
         var slots = card.querySelectorAll(":scope > .ghead .gml");
         var slot = slots[one[1]];
         var b = slot ? slot.querySelector("button.price") : null;
         if (!b) return;
+        /* a finished card keeps what it closed at -- but a button that never
+           got its closing price is written once: Asher v Foster settled before
+           the first read and its moneyline sat on dashes (Jose, Oct 13, 2026:
+           "where the fuck are the odds") */
+        if (frozen(one[0]) && b.dataset.odds) return;
         b.textContent = String(one[2]).replace("-", "\u2212");
         b.dataset.odds = one[2];
         if (one[3]) b.dataset.oid = one[3];
@@ -1451,6 +1455,9 @@
   }
 
   function settleFight(card, winner, how) {
+    /* the pick's ticket is a pregame thing: gone the moment the bout is
+       decided (Jose, Oct 13, 2026: "why is the tick still there") */
+    card.querySelectorAll(".gpick").forEach(function (x) { x.remove(); });
     var lf = surname(card.dataset.lf), rf = surname(card.dataset.rf);
     var w = surname(winner);
     var leftWon = w && w === lf, rightWon = w && w === rf;

@@ -4144,6 +4144,9 @@
     dialog.sheet--settling { transition: none; }
   }
   /* ---- the game page, off the ticket (Jose, Sep 30, 2026) ---- */
+  /* a fight pick's ticket is pregame only: never on a bout that has started
+     or been decided, whichever path marked it (Jose, Oct 13, 2026) */
+  .gcard.live .gpick, .gcard.done .gpick, .gcard[data-settled-bout="1"] .gpick { display: none !important; }
   .gtix { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 26px; padding: 0; border: 0;
     background: none; cursor: pointer; flex: none; }
   .gtix img { width: 15px; height: auto; display: block; }
