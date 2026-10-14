@@ -1,5 +1,5 @@
 {
- "at": "2026-10-14 03:36 UTC",
+ "at": "2026-10-14 13:07 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -87,6 +87,63 @@
   },
   {
    "qbs": [
+    "Daniel Jones",
+    "Cam Ward"
+   ],
+   "pick": "Cam Ward",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "IND L.Treadwell (14%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "TEN@IND",
+   "eid": 22001,
+   "kick": "2026-10-18 17:00:00Z"
+  },
+  {
+   "qbs": [
+    "Tyler Shough",
+    "Jameis Winston"
+   ],
+   "pick": "Jameis Winston",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "NYG D.Mooney (12%)"
+   ],
+   "score": [
+    -1,
+    1
+   ],
+   "why": [
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "NO@NYG",
+   "eid": 22005,
+   "kick": "2026-10-18 17:00:00Z"
+  },
+  {
+   "qbs": [
     "Drake Maye",
     "Geno Smith"
    ],
@@ -107,7 +164,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 55.0 yards higher in total on their lines",
+    "His receivers are set 53.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -127,15 +184,8 @@
    ],
    "pick": "Matthew Stafford",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "ARI M.Wilson (28%)",
-    "ARI T.McBride (25%)",
-    "LA D.Adams (19%)",
-    "LA K.Williams (18%)",
-    "LA P.Nacua (24%)",
-    "LA T.Higbee (15%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     -1,
     1
@@ -194,23 +244,19 @@
     "Kirk Cousins"
    ],
    "pick": "Kirk Cousins",
-   "lead": 4,
+   "lead": 2,
    "complete": false,
    "missing": [
-    "BUF D.Kincaid (11%)",
     "BUF K.Coleman (14%)",
     "BUF K.Shakir (18%)",
-    "BUF T.Johnson (13%)",
-    "LV B.Bowers (29%)",
     "LV C.White (10%)"
    ],
    "score": [
-    -1,
-    3
+    0,
+    2
    ],
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
-    "His receivers are set 79.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -231,10 +277,8 @@
    ],
    "pick": null,
    "lead": 0,
-   "complete": false,
-   "missing": [
-    "DAL R.Flournoy (14%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     0,
     0
