@@ -37427,8 +37427,48 @@
   "right": "Cody Chovancek",
   "rounds": 3,
   "start": "2026-10-17T21:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Cody Chovancek": [
+     "-160",
+     "0QA379062928#2320969005_13L9034Q11Q21"
+    ],
+    "Su Young You": [
+     "+115",
+     "0QA379062928#2320969052_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Cody Chovancek": [
+     "-140",
+     "0QA379062929#2320969007_13L9034Q11Q21"
+    ],
+    "Su Young You": [
+     "+100",
+     "0QA379062929#2320969050_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Cody Chovancek": [
+     "-160",
+     "0QA379062953#2320969030_13L9034Q10Q21"
+    ],
+    "Su Young You": [
+     "+120",
+     "0QA379062953#2320969042_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Cody Chovancek": [
+     "+135",
+     "0QA379062952#2320969029_13L9034Q10Q21"
+    ],
+    "Su Young You": [
+     "-180",
+     "0QA379062952#2320969043_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Cody Chovancek": [
      "-135",
@@ -37437,6 +37477,36 @@
     "Su Young You": [
      "+114",
      "0ML86681992_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Cody Chovancek": [
+     "-330",
+     "0QA379062951#2320969023_13L9034Q10Q21"
+    ],
+    "Su Young You": [
+     "+235",
+     "0QA379062951#2320969049_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Cody Chovancek": [
+     "+120",
+     "0HC86744457N350_1"
+    ],
+    "Su Young You": [
+     "-160",
+     "0HC86744457P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Cody Chovancek": [
+     "-350",
+     "0HC86744458P750_1"
+    ],
+    "Su Young You": [
+     "+250",
+     "0HC86744458N750_3"
     ]
    },
    "Total Rounds": {
@@ -37448,6 +37518,438 @@
      "+124",
      "0OU86703493U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-320",
+     "0OU86744456O150_1"
+    ],
+    "Under": [
+     "+220",
+     "0OU86744456U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1600",
+     "0QA379062932#2320969025_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA379062917#2320968993_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+5500",
+     "0QA379062954#2320969032_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+110",
+     "0QA379062922#2320968999_13L9034Q11Q22"
+    ],
+    "No": [
+     "-145",
+     "0QA379062922#2320969058_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+600",
+     "0QA379062923#2320969000_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA379062923#2320969057_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-135",
+     "0QA379062910#2320968987_13L9034Q10Q20"
+    ],
+    "No": [
+     "+105",
+     "0QA379062910#2320969067_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+500",
+     "0QA379062930#2320969006_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+650",
+     "0QA379062930#2320969038_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+800",
+     "0QA379062930#2320969077_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1000",
+     "0QA379062930#2320969082_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1200",
+     "0QA379062930#2320969098_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1500",
+     "0QA379062930#2320969101_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-135",
+     "0QA379062930#2320969137_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Cody Chovancek to Win in Rounds 1-2": [
+     "+300",
+     "0QA379062913#2320968991_13L9034Q11Q21"
+    ],
+    "Cody Chovancek to Win in Round 3 or on Decision": [
+     "+150",
+     "0QA379062913#2320969072_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062913#2320969126_13L9034Q19Q29"
+    ],
+    "Su Young You to Win in Rounds 1-2": [
+     "+425",
+     "0QA379062913#2320969093_15L9034Q15Q25"
+    ],
+    "Su Young You to Win in Round 3 or on Decision": [
+     "+195",
+     "0QA379062913#2320969111_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Cody Chovancek to Win by KO/TKO/DQ in Round 1": [
+     "+650",
+     "0QA379062915#2320968990_13L9034Q11Q21"
+    ],
+    "Cody Chovancek to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA379062915#2320969065_13L9034Q12Q22"
+    ],
+    "Cody Chovancek to Win by KO/TKO/DQ in Round 3": [
+     "+1500",
+     "0QA379062915#2320969071_13L9034Q13Q23"
+    ],
+    "Cody Chovancek to Win by Submission in Round 1": [
+     "+1500",
+     "0QA379062915#2320969107_13L9034Q16Q26"
+    ],
+    "Cody Chovancek to Win by Submission in Round 2": [
+     "+2200",
+     "0QA379062915#2320969110_13L9034Q17Q27"
+    ],
+    "Cody Chovancek to Win by Submission in Round 3": [
+     "+3000",
+     "0QA379062915#2320969122_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-135",
+     "0QA379062915#2320969149_13L9034Q121Q221"
+    ],
+    "Su Young You to Win by KO/TKO/DQ in Round 1": [
+     "+1900",
+     "0QA379062915#2320969136_15L9034Q111Q211"
+    ],
+    "Su Young You to Win by KO/TKO/DQ in Round 2": [
+     "+2500",
+     "0QA379062915#2320969138_15L9034Q112Q212"
+    ],
+    "Su Young You to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA379062915#2320969141_15L9034Q113Q213"
+    ],
+    "Su Young You to Win by Submission in Round 1": [
+     "+1000",
+     "0QA379062915#2320969144_15L9034Q116Q216"
+    ],
+    "Su Young You to Win by Submission in Round 2": [
+     "+1400",
+     "0QA379062915#2320969145_15L9034Q117Q217"
+    ],
+    "Su Young You to Win by Submission in Round 3": [
+     "+2200",
+     "0QA379062915#2320969146_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Cody Chovancek To Win And Under 0.5": [
+     "+1100",
+     "0QA379062918#2320968994_13L9034Q11Q21"
+    ],
+    "Cody Chovancek To Win And Under 1.5": [
+     "+380",
+     "0QA379062918#2320969075_13L9034Q11Q23"
+    ],
+    "Su Young You To Win And Under 0.5": [
+     "+1600",
+     "0QA379062918#2320969061_14L9034Q12Q22"
+    ],
+    "Su Young You To Win And Under 1.5": [
+     "+550",
+     "0QA379062918#2320969084_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Cody Chovancek To Win And Over 1.5": [
+     "+110",
+     "0QA379062919#2320969076_13L9034Q11Q23"
+    ],
+    "Cody Chovancek To Win And Over 2.5": [
+     "+160",
+     "0QA379062919#2320969096_13L9034Q11Q25"
+    ],
+    "Su Young You To Win And Over 1.5": [
+     "+150",
+     "0QA379062919#2320969083_14L9034Q12Q24"
+    ],
+    "Su Young You To Win And Over 2.5": [
+     "+200",
+     "0QA379062919#2320969102_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-525",
+     "0QA379062920#2320968997_13L9034Q11Q22"
+    ],
+    "No": [
+     "+340",
+     "0QA379062920#2320969060_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-215",
+     "0QA379062921#2320968998_13L9034Q11Q22"
+    ],
+    "No": [
+     "+160",
+     "0QA379062921#2320969059_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Cody Chovancek Round 1": [
+     "+500",
+     "0QA379062911#2320968988_13L9034Q11Q20"
+    ],
+    "Cody Chovancek Round 2": [
+     "+800",
+     "0QA379062911#2320969069_13L9034Q11Q22"
+    ],
+    "Cody Chovancek Round 3": [
+     "+1100",
+     "0QA379062911#2320969091_13L9034Q11Q24"
+    ],
+    "Cody Chovancek By Decision": [
+     "+205",
+     "0QA379062911#2320969135_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062911#2320969140_15L9034Q10Q212"
+    ],
+    "Su Young You Round 1": [
+     "+700",
+     "0QA379062911#2320969068_14L9034Q12Q21"
+    ],
+    "Su Young You Round 2": [
+     "+1000",
+     "0QA379062911#2320969090_14L9034Q12Q23"
+    ],
+    "Su Young You Round 3": [
+     "+1600",
+     "0QA379062911#2320969108_14L9034Q12Q25"
+    ],
+    "Su Young You By Decision": [
+     "+250",
+     "0QA379062911#2320969139_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+340",
+     "0QA379062916#2320968992_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+425",
+     "0QA379062916#2320969063_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+650",
+     "0QA379062916#2320969073_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062916#2320969105_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-135",
+     "0QA379062916#2320969112_13L9034Q11Q25"
+    ]
+   },
+   "Su Young You to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+350",
+     "0QA379062933#2320969026_13L9034Q11Q22"
+    ],
+    "No": [
+     "-550",
+     "0QA379062933#2320969046_13L9034Q13Q24"
+    ]
+   },
+   "Cody Chovancek to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+240",
+     "0QA379062934#2320969027_13L9034Q11Q22"
+    ],
+    "No": [
+     "-340",
+     "0QA379062934#2320969045_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Cody Chovancek to Win by KO/TKO/DQ or Decision": [
+     "-120",
+     "0QA379062914#2320968995_13L9034Q11Q21"
+    ],
+    "Cody Chovancek to Win by KO/TKO/DQ or Submission": [
+     "+240",
+     "0QA379062914#2320969062_13L9034Q12Q22"
+    ],
+    "Cody Chovancek to Win by Submission or Decision": [
+     "+130",
+     "0QA379062914#2320969074_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062914#2320969114_13L9034Q17Q27"
+    ],
+    "Su Young You to Win by KO/TKO/DQ or Decision": [
+     "+170",
+     "0QA379062914#2320969085_15L9034Q14Q24"
+    ],
+    "Su Young You to Win by KO/TKO/DQ or Submission": [
+     "+350",
+     "0QA379062914#2320969095_15L9034Q15Q25"
+    ],
+    "Su Young You to Win by Submission or Decision": [
+     "+125",
+     "0QA379062914#2320969104_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Cody Chovancek to Win By KO/TKO/DQ or Su Young You to Win by Submission": [
+     "+150",
+     "0QA379062935#2320969028_13L9034Q10Q21"
+    ],
+    "Cody Chovancek to Win By KO/TKO/DQ or Su Young You to Win by Decision": [
+     "-110",
+     "0QA379062935#2320969044_13L9034Q10Q22"
+    ],
+    "Cody Chovancek to Win By Submission or Su Young You to Win by KO/TKO/DQ": [
+     "+390",
+     "0QA379062935#2320969078_13L9034Q10Q23"
+    ],
+    "Cody Chovancek to Win By Submission or Su Young You to Win by Decision": [
+     "+150",
+     "0QA379062935#2320969081_13L9034Q10Q24"
+    ],
+    "Cody Chovancek to Win By Decision or Su Young You to Win by KO/TKO/DQ": [
+     "+135",
+     "0QA379062935#2320969099_13L9034Q10Q25"
+    ],
+    "Cody Chovancek to Win By Decision or Su Young You to Win by Submission": [
+     "+100",
+     "0QA379062935#2320969100_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062935#2320969117_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+235",
+     "0QA379062912#2320968989_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+295",
+     "0QA379062912#2320969066_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-135",
+     "0QA379062912#2320969070_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062912#2320969089_15L9034Q14Q24"
+    ]
+   },
+   "Cody Chovancek to Win by Unanimous Decision": {
+    "Yes": [
+     "+240",
+     "0QA379062924#2320969001_13L9034Q11Q22"
+    ]
+   },
+   "Su Young You to Win by Unanimous Decision": {
+    "Yes": [
+     "+300",
+     "0QA379062925#2320969002_13L9034Q11Q22"
+    ]
+   },
+   "Cody Chovancek to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA379062926#2320969003_13L9034Q11Q22"
+    ]
+   },
+   "Su Young You to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA379062927#2320969004_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Cody Chovancek": [
+     "+330",
+     "0QA379062961#2320969033_13L9034Q11Q22"
+    ],
+    "Su Young You": [
+     "+1000",
+     "0QA379062961#2320969039_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Cody Chovancek": [
+     "+800",
+     "0QA379062962#2320969034_13L9034Q11Q22"
+    ],
+    "Su Young You": [
+     "+500",
+     "0QA379062962#2320969037_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Cody Chovancek": [
+     "+205",
+     "0QA379062963#2320969035_13L9034Q11Q22"
+    ],
+    "Su Young You": [
+     "+250",
+     "0QA379062963#2320969036_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -37457,8 +37959,48 @@
   "right": "Melissa Croden",
   "rounds": 3,
   "start": "2026-10-17T21:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Melissa Croden": [
+     "-310",
+     "0QA379062738#2320968405_13L9034Q11Q21"
+    ],
+    "Chelsea Chandler": [
+     "+210",
+     "0QA379062738#2320968546_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Melissa Croden": [
+     "-370",
+     "0QA379062740#2320968410_13L9034Q11Q21"
+    ],
+    "Chelsea Chandler": [
+     "+245",
+     "0QA379062740#2320968540_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Melissa Croden": [
+     "-275",
+     "0QA379062769#2320968480_13L9034Q10Q21"
+    ],
+    "Chelsea Chandler": [
+     "+200",
+     "0QA379062769#2320968516_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Melissa Croden": [
+     "-225",
+     "0QA379062768#2320968477_13L9034Q10Q21"
+    ],
+    "Chelsea Chandler": [
+     "+170",
+     "0QA379062768#2320968519_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Melissa Croden": [
      "-290",
@@ -37467,6 +38009,36 @@
     "Chelsea Chandler": [
      "+235",
      "0ML86681987_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Melissa Croden": [
+     "-330",
+     "0QA379062767#2320968459_13L9034Q10Q21"
+    ],
+    "Chelsea Chandler": [
+     "+235",
+     "0QA379062767#2320968537_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Melissa Croden": [
+     "-110",
+     "0HC86744436N550_1"
+    ],
+    "Chelsea Chandler": [
+     "-120",
+     "0HC86744436P550_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Melissa Croden": [
+     "-700",
+     "0HC86744438P750_1"
+    ],
+    "Chelsea Chandler": [
+     "+425",
+     "0HC86744438N750_3"
     ]
    },
    "Total Rounds": {
@@ -37478,6 +38050,402 @@
      "+135",
      "0OU86703485U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-350",
+     "0OU86744434O150_1"
+    ],
+    "Under": [
+     "+240",
+     "0OU86744434U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1800",
+     "0QA379062745#2320968465_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA379062714#2320968381_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+5500",
+     "0QA379062770#2320968486_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+100",
+     "0QA379062725#2320968393_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA379062725#2320968564_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+600",
+     "0QA379062727#2320968395_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA379062727#2320968561_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-135",
+     "0QA379062697#2320968369_13L9034Q10Q20"
+    ],
+    "No": [
+     "+105",
+     "0QA379062697#2320968591_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+500",
+     "0QA379062742#2320968407_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+900",
+     "0QA379062742#2320968504_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+650",
+     "0QA379062742#2320968621_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1200",
+     "0QA379062742#2320968636_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+900",
+     "0QA379062742#2320968670_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1600",
+     "0QA379062742#2320968676_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-135",
+     "0QA379062742#2320968748_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Melissa Croden to Win in Rounds 1-2": [
+     "+250",
+     "0QA379062706#2320968377_13L9034Q11Q21"
+    ],
+    "Melissa Croden to Win in Round 3 or on Decision": [
+     "-125",
+     "0QA379062706#2320968606_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062706#2320968726_13L9034Q19Q29"
+    ],
+    "Chelsea Chandler to Win in Rounds 1-2": [
+     "+650",
+     "0QA379062706#2320968660_15L9034Q15Q25"
+    ],
+    "Chelsea Chandler to Win in Round 3 or on Decision": [
+     "+390",
+     "0QA379062706#2320968696_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Melissa Croden to Win by KO/TKO/DQ in Round 1": [
+     "+600",
+     "0QA379062710#2320968375_13L9034Q11Q21"
+    ],
+    "Melissa Croden to Win by KO/TKO/DQ in Round 2": [
+     "+800",
+     "0QA379062710#2320968585_13L9034Q12Q22"
+    ],
+    "Melissa Croden to Win by KO/TKO/DQ in Round 3": [
+     "+1000",
+     "0QA379062710#2320968603_13L9034Q13Q23"
+    ],
+    "Melissa Croden to Win by Submission in Round 1": [
+     "+1200",
+     "0QA379062710#2320968688_13L9034Q16Q26"
+    ],
+    "Melissa Croden to Win by Submission in Round 2": [
+     "+1600",
+     "0QA379062710#2320968694_13L9034Q17Q27"
+    ],
+    "Melissa Croden to Win by Submission in Round 3": [
+     "+2000",
+     "0QA379062710#2320968718_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-135",
+     "0QA379062710#2320968772_13L9034Q121Q221"
+    ],
+    "Chelsea Chandler to Win by KO/TKO/DQ in Round 1": [
+     "+1700",
+     "0QA379062710#2320968746_15L9034Q111Q211"
+    ],
+    "Chelsea Chandler to Win by KO/TKO/DQ in Round 2": [
+     "+2200",
+     "0QA379062710#2320968750_15L9034Q112Q212"
+    ],
+    "Chelsea Chandler to Win by KO/TKO/DQ in Round 3": [
+     "+3000",
+     "0QA379062710#2320968756_15L9034Q113Q213"
+    ],
+    "Chelsea Chandler to Win by Submission in Round 1": [
+     "+2200",
+     "0QA379062710#2320968762_15L9034Q116Q216"
+    ],
+    "Chelsea Chandler to Win by Submission in Round 2": [
+     "+3000",
+     "0QA379062710#2320968764_15L9034Q117Q217"
+    ],
+    "Chelsea Chandler to Win by Submission in Round 3": [
+     "+4500",
+     "0QA379062710#2320968766_15L9034Q118Q218"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-600",
+     "0QA379062720#2320968389_13L9034Q11Q22"
+    ],
+    "No": [
+     "+380",
+     "0QA379062720#2320968570_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-230",
+     "0QA379062723#2320968391_13L9034Q11Q22"
+    ],
+    "No": [
+     "+170",
+     "0QA379062723#2320968567_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Melissa Croden Round 1": [
+     "+450",
+     "0QA379062700#2320968371_13L9034Q11Q20"
+    ],
+    "Melissa Croden Round 2": [
+     "+600",
+     "0QA379062700#2320968597_13L9034Q11Q22"
+    ],
+    "Melissa Croden Round 3": [
+     "+800",
+     "0QA379062700#2320968656_13L9034Q11Q24"
+    ],
+    "Melissa Croden By Decision": [
+     "+120",
+     "0QA379062700#2320968744_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062700#2320968754_15L9034Q10Q212"
+    ],
+    "Chelsea Chandler Round 1": [
+     "+1100",
+     "0QA379062700#2320968594_14L9034Q12Q21"
+    ],
+    "Chelsea Chandler Round 2": [
+     "+1400",
+     "0QA379062700#2320968654_14L9034Q12Q23"
+    ],
+    "Chelsea Chandler Round 3": [
+     "+2200",
+     "0QA379062700#2320968690_14L9034Q12Q25"
+    ],
+    "Chelsea Chandler By Decision": [
+     "+500",
+     "0QA379062700#2320968752_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+380",
+     "0QA379062712#2320968379_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+400",
+     "0QA379062712#2320968579_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA379062712#2320968609_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062712#2320968684_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-135",
+     "0QA379062712#2320968698_13L9034Q11Q25"
+    ]
+   },
+   "Chelsea Chandler to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+550",
+     "0QA379062748#2320968468_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1000",
+     "0QA379062748#2320968528_13L9034Q13Q24"
+    ]
+   },
+   "Melissa Croden to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+175",
+     "0QA379062750#2320968471_13L9034Q11Q22"
+    ],
+    "No": [
+     "-235",
+     "0QA379062750#2320968525_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Melissa Croden to Win by KO/TKO/DQ or Decision": [
+     "-235",
+     "0QA379062708#2320968385_13L9034Q11Q21"
+    ],
+    "Melissa Croden to Win by KO/TKO/DQ or Submission": [
+     "+175",
+     "0QA379062708#2320968576_13L9034Q12Q22"
+    ],
+    "Melissa Croden to Win by Submission or Decision": [
+     "-140",
+     "0QA379062708#2320968612_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062708#2320968702_13L9034Q17Q27"
+    ],
+    "Chelsea Chandler to Win by KO/TKO/DQ or Decision": [
+     "+280",
+     "0QA379062708#2320968643_15L9034Q14Q24"
+    ],
+    "Chelsea Chandler to Win by KO/TKO/DQ or Submission": [
+     "+550",
+     "0QA379062708#2320968664_15L9034Q15Q25"
+    ],
+    "Chelsea Chandler to Win by Submission or Decision": [
+     "+320",
+     "0QA379062708#2320968682_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Melissa Croden to Win By KO/TKO/DQ or Chelsea Chandler to Win by Submission": [
+     "+190",
+     "0QA379062751#2320968474_13L9034Q10Q21"
+    ],
+    "Melissa Croden to Win By KO/TKO/DQ or Chelsea Chandler to Win by Decision": [
+     "+130",
+     "0QA379062751#2320968522_13L9034Q10Q22"
+    ],
+    "Melissa Croden to Win By Submission or Chelsea Chandler to Win by KO/TKO/DQ": [
+     "+290",
+     "0QA379062751#2320968624_13L9034Q10Q23"
+    ],
+    "Melissa Croden to Win By Submission or Chelsea Chandler to Win by Decision": [
+     "+220",
+     "0QA379062751#2320968633_13L9034Q10Q24"
+    ],
+    "Melissa Croden to Win By Decision or Chelsea Chandler to Win by KO/TKO/DQ": [
+     "-130",
+     "0QA379062751#2320968672_13L9034Q10Q25"
+    ],
+    "Melissa Croden to Win By Decision or Chelsea Chandler to Win by Submission": [
+     "-115",
+     "0QA379062751#2320968674_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062751#2320968708_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+190",
+     "0QA379062703#2320968373_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+390",
+     "0QA379062703#2320968588_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-135",
+     "0QA379062703#2320968600_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062703#2320968652_15L9034Q14Q24"
+    ]
+   },
+   "Melissa Croden to Win by Unanimous Decision": {
+    "Yes": [
+     "+140",
+     "0QA379062729#2320968397_13L9034Q11Q22"
+    ]
+   },
+   "Chelsea Chandler to Win by Unanimous Decision": {
+    "Yes": [
+     "+550",
+     "0QA379062732#2320968399_13L9034Q11Q22"
+    ]
+   },
+   "Melissa Croden to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA379062734#2320968401_13L9034Q11Q22"
+    ]
+   },
+   "Chelsea Chandler to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA379062736#2320968403_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Melissa Croden": [
+     "+275",
+     "0QA379062777#2320968489_13L9034Q11Q22"
+    ],
+    "Chelsea Chandler": [
+     "+800",
+     "0QA379062777#2320968507_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Melissa Croden": [
+     "+600",
+     "0QA379062778#2320968492_13L9034Q11Q22"
+    ],
+    "Chelsea Chandler": [
+     "+1200",
+     "0QA379062778#2320968501_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Melissa Croden": [
+     "+120",
+     "0QA379062779#2320968495_13L9034Q11Q22"
+    ],
+    "Chelsea Chandler": [
+     "+500",
+     "0QA379062779#2320968498_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -37487,7 +38455,7 @@
   "right": "Nick Galanti",
   "rounds": 3,
   "start": "2026-10-17T23:30Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Julien Leblanc": [
@@ -37531,11 +38499,11 @@
    },
    "Moneyline": {
     "Julien Leblanc": [
-     "+455",
+     "+490",
      "0ML86681996_1"
     ],
     "Nick Galanti": [
-     "-625",
+     "-675",
      "0ML86681996_3"
     ]
    },
@@ -37571,11 +38539,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "+165",
+     "+170",
      "0OU86703495O150_1"
     ],
     "Under": [
-     "-215",
+     "-220",
      "0OU86703495U150_3"
     ]
    },
@@ -38019,8 +38987,48 @@
   "right": "Steven Koslow",
   "rounds": 3,
   "start": "2026-10-17T22:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Chad Anheliger": [
+     "+190",
+     "0QA379063036#2320969331_13L9034Q11Q21"
+    ],
+    "Steven Koslow": [
+     "-275",
+     "0QA379063036#2320969378_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Chad Anheliger": [
+     "-180",
+     "0QA379063037#2320969333_13L9034Q11Q21"
+    ],
+    "Steven Koslow": [
+     "+130",
+     "0QA379063037#2320969376_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Chad Anheliger": [
+     "+205",
+     "0QA379063061#2320969356_13L9034Q10Q21"
+    ],
+    "Steven Koslow": [
+     "-280",
+     "0QA379063061#2320969368_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Chad Anheliger": [
+     "+450",
+     "0QA379063060#2320969355_13L9034Q10Q21"
+    ],
+    "Steven Koslow": [
+     "-750",
+     "0QA379063060#2320969369_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Chad Anheliger": [
      "+124",
@@ -38029,6 +39037,36 @@
     "Steven Koslow": [
      "-148",
      "0ML86682076_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Chad Anheliger": [
+     "-180",
+     "0QA379063059#2320969349_13L9034Q10Q21"
+    ],
+    "Steven Koslow": [
+     "+135",
+     "0QA379063059#2320969375_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Chad Anheliger": [
+     "-115",
+     "0HC86744463P350_1"
+    ],
+    "Steven Koslow": [
+     "-115",
+     "0HC86744463N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Chad Anheliger": [
+     "-135",
+     "0HC86744465P750_1"
+    ],
+    "Steven Koslow": [
+     "+105",
+     "0HC86744465N750_3"
     ]
    },
    "Total Rounds": {
@@ -38040,6 +39078,442 @@
      "+145",
      "0OU86703491U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+105",
+     "0OU86744462O250_1"
+    ],
+    "Under": [
+     "-140",
+     "0OU86744462U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1100",
+     "0QA379063040#2320969351_13L9034Q11Q22"
+    ],
+    "No": [
+     "-5000",
+     "0QA379063040#2320969373_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA379063025#2320969319_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4500",
+     "0QA379063062#2320969358_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+185",
+     "0QA379063030#2320969325_13L9034Q11Q22"
+    ],
+    "No": [
+     "-250",
+     "0QA379063030#2320969384_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA379063031#2320969326_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA379063031#2320969383_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+140",
+     "0QA379063018#2320969313_13L9034Q10Q20"
+    ],
+    "No": [
+     "-185",
+     "0QA379063018#2320969393_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+600",
+     "0QA379063038#2320969332_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+295",
+     "0QA379063038#2320969364_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+1000",
+     "0QA379063038#2320969403_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+500",
+     "0QA379063038#2320969408_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1500",
+     "0QA379063038#2320969424_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+800",
+     "0QA379063038#2320969427_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+140",
+     "0QA379063038#2320969463_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Chad Anheliger to Win in Rounds 1-2": [
+     "+450",
+     "0QA379063021#2320969317_13L9034Q11Q21"
+    ],
+    "Chad Anheliger to Win in Round 3 or on Decision": [
+     "+215",
+     "0QA379063021#2320969398_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063021#2320969452_13L9034Q19Q29"
+    ],
+    "Steven Koslow to Win in Rounds 1-2": [
+     "+155",
+     "0QA379063021#2320969419_15L9034Q15Q25"
+    ],
+    "Steven Koslow to Win in Round 3 or on Decision": [
+     "+350",
+     "0QA379063021#2320969437_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Chad Anheliger to Win by KO/TKO/DQ in Round 1": [
+     "+950",
+     "0QA379063023#2320969316_13L9034Q11Q21"
+    ],
+    "Chad Anheliger to Win by KO/TKO/DQ in Round 2": [
+     "+1400",
+     "0QA379063023#2320969391_13L9034Q12Q22"
+    ],
+    "Chad Anheliger to Win by KO/TKO/DQ in Round 3": [
+     "+2000",
+     "0QA379063023#2320969397_13L9034Q13Q23"
+    ],
+    "Chad Anheliger to Win by Submission in Round 1": [
+     "+2000",
+     "0QA379063023#2320969433_13L9034Q16Q26"
+    ],
+    "Chad Anheliger to Win by Submission in Round 2": [
+     "+2800",
+     "0QA379063023#2320969436_13L9034Q17Q27"
+    ],
+    "Chad Anheliger to Win by Submission in Round 3": [
+     "+4000",
+     "0QA379063023#2320969448_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+140",
+     "0QA379063023#2320969475_13L9034Q121Q221"
+    ],
+    "Steven Koslow to Win by KO/TKO/DQ in Round 1": [
+     "+1400",
+     "0QA379063023#2320969462_15L9034Q111Q211"
+    ],
+    "Steven Koslow to Win by KO/TKO/DQ in Round 2": [
+     "+2200",
+     "0QA379063023#2320969464_15L9034Q112Q212"
+    ],
+    "Steven Koslow to Win by KO/TKO/DQ in Round 3": [
+     "+3500",
+     "0QA379063023#2320969467_15L9034Q113Q213"
+    ],
+    "Steven Koslow to Win by Submission in Round 1": [
+     "+300",
+     "0QA379063023#2320969470_15L9034Q116Q216"
+    ],
+    "Steven Koslow to Win by Submission in Round 2": [
+     "+550",
+     "0QA379063023#2320969471_15L9034Q117Q217"
+    ],
+    "Steven Koslow to Win by Submission in Round 3": [
+     "+850",
+     "0QA379063023#2320969472_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Chad Anheliger To Win And Under 0.5": [
+     "+1700",
+     "0QA379063026#2320969320_13L9034Q11Q21"
+    ],
+    "Chad Anheliger To Win And Under 1.5": [
+     "+550",
+     "0QA379063026#2320969401_13L9034Q11Q23"
+    ],
+    "Steven Koslow To Win And Under 0.5": [
+     "+650",
+     "0QA379063026#2320969387_14L9034Q12Q22"
+    ],
+    "Steven Koslow To Win And Under 1.5": [
+     "+200",
+     "0QA379063026#2320969410_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Chad Anheliger To Win And Over 1.5": [
+     "+165",
+     "0QA379063027#2320969402_13L9034Q11Q23"
+    ],
+    "Chad Anheliger To Win And Over 2.5": [
+     "+225",
+     "0QA379063027#2320969422_13L9034Q11Q25"
+    ],
+    "Steven Koslow To Win And Over 1.5": [
+     "+165",
+     "0QA379063027#2320969409_14L9034Q12Q24"
+    ],
+    "Steven Koslow To Win And Over 2.5": [
+     "+310",
+     "0QA379063027#2320969428_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-310",
+     "0QA379063028#2320969323_13L9034Q11Q22"
+    ],
+    "No": [
+     "+220",
+     "0QA379063028#2320969386_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-125",
+     "0QA379063029#2320969324_13L9034Q11Q22"
+    ],
+    "No": [
+     "-105",
+     "0QA379063029#2320969385_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Chad Anheliger Round 1": [
+     "+700",
+     "0QA379063019#2320969314_13L9034Q11Q20"
+    ],
+    "Chad Anheliger Round 2": [
+     "+1000",
+     "0QA379063019#2320969395_13L9034Q11Q22"
+    ],
+    "Chad Anheliger Round 3": [
+     "+1600",
+     "0QA379063019#2320969417_13L9034Q11Q24"
+    ],
+    "Chad Anheliger By Decision": [
+     "+275",
+     "0QA379063019#2320969461_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063019#2320969466_15L9034Q10Q212"
+    ],
+    "Steven Koslow Round 1": [
+     "+265",
+     "0QA379063019#2320969394_14L9034Q12Q21"
+    ],
+    "Steven Koslow Round 2": [
+     "+500",
+     "0QA379063019#2320969416_14L9034Q12Q23"
+    ],
+    "Steven Koslow Round 3": [
+     "+800",
+     "0QA379063019#2320969434_14L9034Q12Q25"
+    ],
+    "Steven Koslow By Decision": [
+     "+450",
+     "0QA379063019#2320969465_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+220",
+     "0QA379063024#2320969318_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+320",
+     "0QA379063024#2320969389_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA379063024#2320969399_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063024#2320969431_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+140",
+     "0QA379063024#2320969438_13L9034Q11Q25"
+    ]
+   },
+   "Steven Koslow to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+120",
+     "0QA379063041#2320969352_13L9034Q11Q22"
+    ],
+    "No": [
+     "-160",
+     "0QA379063041#2320969372_13L9034Q13Q24"
+    ]
+   },
+   "Chad Anheliger to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+350",
+     "0QA379063042#2320969353_13L9034Q11Q22"
+    ],
+    "No": [
+     "-550",
+     "0QA379063042#2320969371_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Chad Anheliger to Win by KO/TKO/DQ or Decision": [
+     "+135",
+     "0QA379063022#2320969321_13L9034Q11Q21"
+    ],
+    "Chad Anheliger to Win by KO/TKO/DQ or Submission": [
+     "+350",
+     "0QA379063022#2320969388_13L9034Q12Q22"
+    ],
+    "Chad Anheliger to Win by Submission or Decision": [
+     "+190",
+     "0QA379063022#2320969400_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063022#2320969440_13L9034Q17Q27"
+    ],
+    "Steven Koslow to Win by KO/TKO/DQ or Decision": [
+     "+255",
+     "0QA379063022#2320969411_15L9034Q14Q24"
+    ],
+    "Steven Koslow to Win by KO/TKO/DQ or Submission": [
+     "+120",
+     "0QA379063022#2320969421_15L9034Q15Q25"
+    ],
+    "Steven Koslow to Win by Submission or Decision": [
+     "-130",
+     "0QA379063022#2320969430_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Chad Anheliger to Win By KO/TKO/DQ or Steven Koslow to Win by Submission": [
+     "-135",
+     "0QA379063043#2320969354_13L9034Q10Q21"
+    ],
+    "Chad Anheliger to Win By KO/TKO/DQ or Steven Koslow to Win by Decision": [
+     "+185",
+     "0QA379063043#2320969370_13L9034Q10Q22"
+    ],
+    "Chad Anheliger to Win By Submission or Steven Koslow to Win by KO/TKO/DQ": [
+     "+400",
+     "0QA379063043#2320969404_13L9034Q10Q23"
+    ],
+    "Chad Anheliger to Win By Submission or Steven Koslow to Win by Decision": [
+     "+280",
+     "0QA379063043#2320969407_13L9034Q10Q24"
+    ],
+    "Chad Anheliger to Win By Decision or Steven Koslow to Win by KO/TKO/DQ": [
+     "+165",
+     "0QA379063043#2320969425_13L9034Q10Q25"
+    ],
+    "Chad Anheliger to Win By Decision or Steven Koslow to Win by Submission": [
+     "-200",
+     "0QA379063043#2320969426_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063043#2320969443_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+290",
+     "0QA379063020#2320969315_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+115",
+     "0QA379063020#2320969392_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+140",
+     "0QA379063020#2320969396_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379063020#2320969415_15L9034Q14Q24"
+    ]
+   },
+   "Chad Anheliger to Win by Unanimous Decision": {
+    "Yes": [
+     "+330",
+     "0QA379063032#2320969327_13L9034Q11Q22"
+    ]
+   },
+   "Steven Koslow to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA379063033#2320969328_13L9034Q11Q22"
+    ]
+   },
+   "Chad Anheliger to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1200",
+     "0QA379063034#2320969329_13L9034Q11Q22"
+    ]
+   },
+   "Steven Koslow to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA379063035#2320969330_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Chad Anheliger": [
+     "+500",
+     "0QA379063069#2320969359_13L9034Q11Q22"
+    ],
+    "Steven Koslow": [
+     "+800",
+     "0QA379063069#2320969365_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Chad Anheliger": [
+     "+1100",
+     "0QA379063070#2320969360_13L9034Q11Q22"
+    ],
+    "Steven Koslow": [
+     "+150",
+     "0QA379063070#2320969363_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Chad Anheliger": [
+     "+275",
+     "0QA379063071#2320969361_13L9034Q11Q22"
+    ],
+    "Steven Koslow": [
+     "+450",
+     "0QA379063071#2320969362_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -38049,7 +39523,7 @@
   "right": "Jhonata Diniz",
   "rounds": 3,
   "start": "2026-10-17T23:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Tanner Boser": [
@@ -38585,7 +40059,7 @@
   "right": "Mandel Nallo",
   "rounds": 3,
   "start": "2026-10-18T00:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Mandel Nallo": [
@@ -39147,7 +40621,7 @@
   "right": "Timmy Cuamba",
   "rounds": 3,
   "start": "2026-10-18T00:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Louis Jourdain": [
@@ -39191,11 +40665,11 @@
    },
    "Moneyline": {
     "Louis Jourdain": [
-     "-198",
+     "-185",
      "0ML86681990_1"
     ],
     "Timothy Cuamba": [
-     "+164",
+     "+154",
      "0ML86681990_3"
     ]
    },
@@ -39713,7 +41187,7 @@
   "right": "Marc-Andre Barriault",
   "rounds": 3,
   "start": "2026-10-18T01:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Marc-Andre Barriault": [
@@ -39757,11 +41231,11 @@
    },
    "Moneyline": {
     "Marc-Andre Barriault": [
-     "+170",
+     "+164",
      "0ML86681995_1"
     ],
     "Kyle Daukaus": [
-     "-205",
+     "-198",
      "0ML86681995_3"
     ]
    },
@@ -40279,7 +41753,7 @@
   "right": "Cristian P\u00e9rez",
   "rounds": 3,
   "start": "2026-10-18T01:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Kyle Nelson": [
@@ -40841,7 +42315,7 @@
   "right": "Jasmine Jasudavicius",
   "rounds": 3,
   "start": "2026-10-18T02:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Erin Blanchfield": [
@@ -41403,7 +42877,7 @@
   "right": "Joaquin Buckley",
   "rounds": 5,
   "start": "2026-10-18T02:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Joaquin Buckley": [
@@ -42117,8 +43591,48 @@
   "right": "Mackenzie Stiller",
   "rounds": 3,
   "start": "2026-10-17T22:45Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Katlyn Cerminara": [
+     "+100",
+     "0QA379062982#2320969168_13L9034Q11Q21"
+    ],
+    "Mackenzie Stiller": [
+     "-140",
+     "0QA379062982#2320969215_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Katlyn Cerminara": [
+     "-800",
+     "0QA379062983#2320969170_13L9034Q11Q21"
+    ],
+    "Mackenzie Stiller": [
+     "+425",
+     "0QA379062983#2320969213_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Katlyn Cerminara": [
+     "+105",
+     "0QA379063007#2320969193_13L9034Q10Q21"
+    ],
+    "Mackenzie Stiller": [
+     "-140",
+     "0QA379063007#2320969205_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Katlyn Cerminara": [
+     "+265",
+     "0QA379063006#2320969192_13L9034Q10Q21"
+    ],
+    "Mackenzie Stiller": [
+     "-380",
+     "0QA379063006#2320969206_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Katlyn Cerminara": [
      "-290",
@@ -42127,6 +43641,36 @@
     "Mackenzie Stiller": [
      "+235",
      "0ML86681993_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Katlyn Cerminara": [
+     "-310",
+     "0QA379063005#2320969186_13L9034Q10Q21"
+    ],
+    "Mackenzie Stiller": [
+     "+225",
+     "0QA379063005#2320969212_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Katlyn Cerminara": [
+     "-120",
+     "0HC86744466N350_1"
+    ],
+    "Mackenzie Stiller": [
+     "-110",
+     "0HC86744466P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Katlyn Cerminara": [
+     "-600",
+     "0HC86744468P750_1"
+    ],
+    "Mackenzie Stiller": [
+     "+380",
+     "0HC86744468N750_3"
     ]
    },
    "Total Rounds": {
@@ -42138,6 +43682,438 @@
      "+250",
      "0OU86703490U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-750",
+     "0OU86744464O150_1"
+    ],
+    "Under": [
+     "+400",
+     "0OU86744464U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2800",
+     "0QA379062986#2320969188_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA379062971#2320969156_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+9000",
+     "0QA379063008#2320969195_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-225",
+     "0QA379062976#2320969162_13L9034Q11Q22"
+    ],
+    "No": [
+     "+170",
+     "0QA379062976#2320969221_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA379062977#2320969163_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA379062977#2320969220_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-300",
+     "0QA379062964#2320969150_13L9034Q10Q20"
+    ],
+    "No": [
+     "+220",
+     "0QA379062964#2320969230_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+1100",
+     "0QA379062984#2320969169_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+950",
+     "0QA379062984#2320969201_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+1500",
+     "0QA379062984#2320969240_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1200",
+     "0QA379062984#2320969245_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+2200",
+     "0QA379062984#2320969261_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1800",
+     "0QA379062984#2320969264_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-300",
+     "0QA379062984#2320969300_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Katlyn Cerminara to Win in Rounds 1-2": [
+     "+650",
+     "0QA379062967#2320969154_13L9034Q11Q21"
+    ],
+    "Katlyn Cerminara to Win in Round 3 or on Decision": [
+     "-240",
+     "0QA379062967#2320969235_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062967#2320969289_13L9034Q19Q29"
+    ],
+    "Mackenzie Stiller to Win in Rounds 1-2": [
+     "+550",
+     "0QA379062967#2320969256_15L9034Q15Q25"
+    ],
+    "Mackenzie Stiller to Win in Round 3 or on Decision": [
+     "+425",
+     "0QA379062967#2320969274_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Katlyn Cerminara to Win by KO/TKO/DQ in Round 1": [
+     "+1400",
+     "0QA379062969#2320969153_13L9034Q11Q21"
+    ],
+    "Katlyn Cerminara to Win by KO/TKO/DQ in Round 2": [
+     "+1800",
+     "0QA379062969#2320969228_13L9034Q12Q22"
+    ],
+    "Katlyn Cerminara to Win by KO/TKO/DQ in Round 3": [
+     "+2800",
+     "0QA379062969#2320969234_13L9034Q13Q23"
+    ],
+    "Katlyn Cerminara to Win by Submission in Round 1": [
+     "+3000",
+     "0QA379062969#2320969270_13L9034Q16Q26"
+    ],
+    "Katlyn Cerminara to Win by Submission in Round 2": [
+     "+4000",
+     "0QA379062969#2320969273_13L9034Q17Q27"
+    ],
+    "Katlyn Cerminara to Win by Submission in Round 3": [
+     "+6500",
+     "0QA379062969#2320969285_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-300",
+     "0QA379062969#2320969312_13L9034Q121Q221"
+    ],
+    "Mackenzie Stiller to Win by KO/TKO/DQ in Round 1": [
+     "+3500",
+     "0QA379062969#2320969299_15L9034Q111Q211"
+    ],
+    "Mackenzie Stiller to Win by KO/TKO/DQ in Round 2": [
+     "+4500",
+     "0QA379062969#2320969301_15L9034Q112Q212"
+    ],
+    "Mackenzie Stiller to Win by KO/TKO/DQ in Round 3": [
+     "+7000",
+     "0QA379062969#2320969304_15L9034Q113Q213"
+    ],
+    "Mackenzie Stiller to Win by Submission in Round 1": [
+     "+1100",
+     "0QA379062969#2320969307_15L9034Q116Q216"
+    ],
+    "Mackenzie Stiller to Win by Submission in Round 2": [
+     "+1400",
+     "0QA379062969#2320969308_15L9034Q117Q217"
+    ],
+    "Mackenzie Stiller to Win by Submission in Round 3": [
+     "+2000",
+     "0QA379062969#2320969309_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Katlyn Cerminara To Win And Under 0.5": [
+     "+2500",
+     "0QA379062972#2320969157_13L9034Q11Q21"
+    ],
+    "Katlyn Cerminara To Win And Under 1.5": [
+     "+850",
+     "0QA379062972#2320969238_13L9034Q11Q23"
+    ],
+    "Mackenzie Stiller To Win And Under 0.5": [
+     "+2000",
+     "0QA379062972#2320969224_14L9034Q12Q22"
+    ],
+    "Mackenzie Stiller To Win And Under 1.5": [
+     "+700",
+     "0QA379062972#2320969247_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Katlyn Cerminara To Win And Over 1.5": [
+     "-280",
+     "0QA379062973#2320969239_13L9034Q11Q23"
+    ],
+    "Katlyn Cerminara To Win And Over 2.5": [
+     "-270",
+     "0QA379062973#2320969259_13L9034Q11Q25"
+    ],
+    "Mackenzie Stiller To Win And Over 1.5": [
+     "+330",
+     "0QA379062973#2320969246_14L9034Q12Q24"
+    ],
+    "Mackenzie Stiller To Win And Over 2.5": [
+     "+450",
+     "0QA379062973#2320969265_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-1200",
+     "0QA379062974#2320969160_13L9034Q11Q22"
+    ],
+    "No": [
+     "+600",
+     "0QA379062974#2320969223_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-475",
+     "0QA379062975#2320969161_13L9034Q11Q22"
+    ],
+    "No": [
+     "+320",
+     "0QA379062975#2320969222_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Katlyn Cerminara Round 1": [
+     "+1100",
+     "0QA379062965#2320969151_13L9034Q11Q20"
+    ],
+    "Katlyn Cerminara Round 2": [
+     "+1400",
+     "0QA379062965#2320969232_13L9034Q11Q22"
+    ],
+    "Katlyn Cerminara Round 3": [
+     "+2200",
+     "0QA379062965#2320969254_13L9034Q11Q24"
+    ],
+    "Katlyn Cerminara By Decision": [
+     "-200",
+     "0QA379062965#2320969298_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062965#2320969303_15L9034Q10Q212"
+    ],
+    "Mackenzie Stiller Round 1": [
+     "+950",
+     "0QA379062965#2320969231_14L9034Q12Q21"
+    ],
+    "Mackenzie Stiller Round 2": [
+     "+1200",
+     "0QA379062965#2320969253_14L9034Q12Q23"
+    ],
+    "Mackenzie Stiller Round 3": [
+     "+1800",
+     "0QA379062965#2320969271_14L9034Q12Q25"
+    ],
+    "Mackenzie Stiller By Decision": [
+     "+600",
+     "0QA379062965#2320969302_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+600",
+     "0QA379062970#2320969155_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+650",
+     "0QA379062970#2320969226_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+1000",
+     "0QA379062970#2320969236_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062970#2320969268_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-300",
+     "0QA379062970#2320969275_13L9034Q11Q25"
+    ]
+   },
+   "Mackenzie Stiller to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+450",
+     "0QA379062987#2320969189_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA379062987#2320969209_13L9034Q13Q24"
+    ]
+   },
+   "Katlyn Cerminara to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+550",
+     "0QA379062988#2320969190_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1000",
+     "0QA379062988#2320969208_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Katlyn Cerminara to Win by KO/TKO/DQ or Decision": [
+     "-275",
+     "0QA379062968#2320969158_13L9034Q11Q21"
+    ],
+    "Katlyn Cerminara to Win by KO/TKO/DQ or Submission": [
+     "+550",
+     "0QA379062968#2320969225_13L9034Q12Q22"
+    ],
+    "Katlyn Cerminara to Win by Submission or Decision": [
+     "-260",
+     "0QA379062968#2320969237_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062968#2320969277_13L9034Q17Q27"
+    ],
+    "Mackenzie Stiller to Win by KO/TKO/DQ or Decision": [
+     "+425",
+     "0QA379062968#2320969248_15L9034Q14Q24"
+    ],
+    "Mackenzie Stiller to Win by KO/TKO/DQ or Submission": [
+     "+450",
+     "0QA379062968#2320969258_15L9034Q15Q25"
+    ],
+    "Mackenzie Stiller to Win by Submission or Decision": [
+     "+245",
+     "0QA379062968#2320969267_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Katlyn Cerminara to Win By KO/TKO/DQ or Mackenzie Stiller to Win by Submission": [
+     "+255",
+     "0QA379062989#2320969191_13L9034Q10Q21"
+    ],
+    "Katlyn Cerminara to Win By KO/TKO/DQ or Mackenzie Stiller to Win by Decision": [
+     "+275",
+     "0QA379062989#2320969207_13L9034Q10Q22"
+    ],
+    "Katlyn Cerminara to Win By Submission or Mackenzie Stiller to Win by KO/TKO/DQ": [
+     "+850",
+     "0QA379062989#2320969241_13L9034Q10Q23"
+    ],
+    "Katlyn Cerminara to Win By Submission or Mackenzie Stiller to Win by Decision": [
+     "+400",
+     "0QA379062989#2320969244_13L9034Q10Q24"
+    ],
+    "Katlyn Cerminara to Win By Decision or Mackenzie Stiller to Win by KO/TKO/DQ": [
+     "-250",
+     "0QA379062989#2320969262_13L9034Q10Q25"
+    ],
+    "Katlyn Cerminara to Win By Decision or Mackenzie Stiller to Win by Submission": [
+     "-475",
+     "0QA379062989#2320969263_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062989#2320969280_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+500",
+     "0QA379062966#2320969152_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+400",
+     "0QA379062966#2320969229_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-300",
+     "0QA379062966#2320969233_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062966#2320969252_15L9034Q14Q24"
+    ]
+   },
+   "Katlyn Cerminara to Win by Unanimous Decision": {
+    "Yes": [
+     "-165",
+     "0QA379062978#2320969164_13L9034Q11Q22"
+    ]
+   },
+   "Mackenzie Stiller to Win by Unanimous Decision": {
+    "Yes": [
+     "+750",
+     "0QA379062979#2320969165_13L9034Q11Q22"
+    ]
+   },
+   "Katlyn Cerminara to Win by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA379062980#2320969166_13L9034Q11Q22"
+    ]
+   },
+   "Mackenzie Stiller to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA379062981#2320969167_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Katlyn Cerminara": [
+     "+700",
+     "0QA379063015#2320969196_13L9034Q11Q22"
+    ],
+    "Mackenzie Stiller": [
+     "+2000",
+     "0QA379063015#2320969202_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Katlyn Cerminara": [
+     "+1800",
+     "0QA379063016#2320969197_13L9034Q11Q22"
+    ],
+    "Mackenzie Stiller": [
+     "+550",
+     "0QA379063016#2320969200_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Katlyn Cerminara": [
+     "-200",
+     "0QA379063017#2320969198_13L9034Q11Q22"
+    ],
+    "Mackenzie Stiller": [
+     "+600",
+     "0QA379063017#2320969199_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -42147,8 +44123,48 @@
   "right": "Joel Faglier",
   "rounds": 3,
   "start": "2026-10-17T23:15Z",
-  "read": "2026-10-14T19:02Z",
+  "read": "2026-10-14T21:32Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Javad Mahjoub": [
+     "-120",
+     "0QA379062798#2320968463_13L9034Q11Q21"
+    ],
+    "Joel Faglier": [
+     "-115",
+     "0QA379062798#2320968604_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Javad Mahjoub": [
+     "-130",
+     "0QA379062799#2320968469_13L9034Q11Q21"
+    ],
+    "Joel Faglier": [
+     "-105",
+     "0QA379062799#2320968598_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Javad Mahjoub": [
+     "-115",
+     "0QA379062823#2320968538_13L9034Q10Q21"
+    ],
+    "Joel Faglier": [
+     "-115",
+     "0QA379062823#2320968574_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Javad Mahjoub": [
+     "+110",
+     "0QA379062822#2320968535_13L9034Q10Q21"
+    ],
+    "Joel Faglier": [
+     "-145",
+     "0QA379062822#2320968577_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Javad Mahjoub": [
      "-108",
@@ -42159,14 +44175,480 @@
      "0ML86681988_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Javad Mahjoub": [
+     "-145",
+     "0QA379062821#2320968517_13L9034Q10Q21"
+    ],
+    "Joel Faglier": [
+     "+110",
+     "0QA379062821#2320968595_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Javad Mahjoub": [
+     "+110",
+     "0HC86744427N350_1"
+    ],
+    "Joel Faglier": [
+     "-145",
+     "0HC86744427P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Javad Mahjoub": [
+     "-170",
+     "0HC86744428P750_1"
+    ],
+    "Joel Faglier": [
+     "+130",
+     "0HC86744428N750_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "+100",
+     "-110",
      "0OU86703492O150_1"
     ],
     "Under": [
-     "-130",
+     "-120",
      "0OU86703492U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+190",
+     "0OU86744426O250_1"
+    ],
+    "Under": [
+     "-265",
+     "0OU86744426U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+750",
+     "0QA379062802#2320968523_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1800",
+     "0QA379062802#2320968589_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA379062787#2320968427_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3500",
+     "0QA379062824#2320968544_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+330",
+     "0QA379062792#2320968445_13L9034Q11Q22"
+    ],
+    "No": [
+     "-500",
+     "0QA379062792#2320968622_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1200",
+     "0QA379062793#2320968448_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA379062793#2320968619_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+250",
+     "0QA379062780#2320968409_13L9034Q10Q20"
+    ],
+    "No": [
+     "-350",
+     "0QA379062780#2320968645_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+225",
+     "0QA379062800#2320968466_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+255",
+     "0QA379062800#2320968562_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+650",
+     "0QA379062800#2320968665_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+700",
+     "0QA379062800#2320968675_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1200",
+     "0QA379062800#2320968707_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1300",
+     "0QA379062800#2320968713_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+250",
+     "0QA379062800#2320968779_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Javad Mahjoub to Win in Rounds 1-2": [
+     "+170",
+     "0QA379062783#2320968421_13L9034Q11Q21"
+    ],
+    "Javad Mahjoub to Win in Round 3 or on Decision": [
+     "+360",
+     "0QA379062783#2320968655_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062783#2320968763_13L9034Q19Q29"
+    ],
+    "Joel Faglier to Win in Rounds 1-2": [
+     "+170",
+     "0QA379062783#2320968697_15L9034Q15Q25"
+    ],
+    "Joel Faglier to Win in Round 3 or on Decision": [
+     "+380",
+     "0QA379062783#2320968733_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Javad Mahjoub to Win by KO/TKO/DQ in Round 1": [
+     "+400",
+     "0QA379062785#2320968418_13L9034Q11Q21"
+    ],
+    "Javad Mahjoub to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA379062785#2320968642_13L9034Q12Q22"
+    ],
+    "Javad Mahjoub to Win by KO/TKO/DQ in Round 3": [
+     "+1900",
+     "0QA379062785#2320968653_13L9034Q13Q23"
+    ],
+    "Javad Mahjoub to Win by Submission in Round 1": [
+     "+600",
+     "0QA379062785#2320968725_13L9034Q16Q26"
+    ],
+    "Javad Mahjoub to Win by Submission in Round 2": [
+     "+1500",
+     "0QA379062785#2320968731_13L9034Q17Q27"
+    ],
+    "Javad Mahjoub to Win by Submission in Round 3": [
+     "+2500",
+     "0QA379062785#2320968755_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+250",
+     "0QA379062785#2320968791_13L9034Q121Q221"
+    ],
+    "Joel Faglier to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA379062785#2320968778_15L9034Q111Q211"
+    ],
+    "Joel Faglier to Win by KO/TKO/DQ in Round 2": [
+     "+1300",
+     "0QA379062785#2320968780_15L9034Q112Q212"
+    ],
+    "Joel Faglier to Win by KO/TKO/DQ in Round 3": [
+     "+2500",
+     "0QA379062785#2320968783_15L9034Q113Q213"
+    ],
+    "Joel Faglier to Win by Submission in Round 1": [
+     "+425",
+     "0QA379062785#2320968786_15L9034Q116Q216"
+    ],
+    "Joel Faglier to Win by Submission in Round 2": [
+     "+1100",
+     "0QA379062785#2320968787_15L9034Q117Q217"
+    ],
+    "Joel Faglier to Win by Submission in Round 3": [
+     "+2000",
+     "0QA379062785#2320968788_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Javad Mahjoub To Win And Under 0.5": [
+     "+600",
+     "0QA379062788#2320968430_13L9034Q11Q21"
+    ],
+    "Javad Mahjoub To Win And Under 1.5": [
+     "+195",
+     "0QA379062788#2320968661_13L9034Q11Q23"
+    ],
+    "Joel Faglier To Win And Under 0.5": [
+     "+600",
+     "0QA379062788#2320968631_14L9034Q12Q22"
+    ],
+    "Joel Faglier To Win And Under 1.5": [
+     "+195",
+     "0QA379062788#2320968679_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Javad Mahjoub To Win And Over 1.5": [
+     "+240",
+     "0QA379062789#2320968663_13L9034Q11Q23"
+    ],
+    "Javad Mahjoub To Win And Over 2.5": [
+     "+400",
+     "0QA379062789#2320968703_13L9034Q11Q25"
+    ],
+    "Joel Faglier To Win And Over 1.5": [
+     "+255",
+     "0QA379062789#2320968677_14L9034Q12Q24"
+    ],
+    "Joel Faglier To Win And Over 2.5": [
+     "+425",
+     "0QA379062789#2320968715_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-150",
+     "0QA379062790#2320968439_13L9034Q11Q22"
+    ],
+    "No": [
+     "+115",
+     "0QA379062790#2320968628_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+150",
+     "0QA379062791#2320968442_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA379062791#2320968625_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Javad Mahjoub Round 1": [
+     "+240",
+     "0QA379062781#2320968412_13L9034Q11Q20"
+    ],
+    "Javad Mahjoub Round 2": [
+     "+650",
+     "0QA379062781#2320968649_13L9034Q11Q22"
+    ],
+    "Javad Mahjoub Round 3": [
+     "+1200",
+     "0QA379062781#2320968693_13L9034Q11Q24"
+    ],
+    "Javad Mahjoub By Decision": [
+     "+550",
+     "0QA379062781#2320968777_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062781#2320968782_15L9034Q10Q212"
+    ],
+    "Joel Faglier Round 1": [
+     "+240",
+     "0QA379062781#2320968647_14L9034Q12Q21"
+    ],
+    "Joel Faglier Round 2": [
+     "+650",
+     "0QA379062781#2320968691_14L9034Q12Q23"
+    ],
+    "Joel Faglier Round 3": [
+     "+1200",
+     "0QA379062781#2320968727_14L9034Q12Q25"
+    ],
+    "Joel Faglier By Decision": [
+     "+600",
+     "0QA379062781#2320968781_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+115",
+     "0QA379062786#2320968424_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+320",
+     "0QA379062786#2320968637_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+600",
+     "0QA379062786#2320968657_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062786#2320968721_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+250",
+     "0QA379062786#2320968735_13L9034Q11Q25"
+    ]
+   },
+   "Joel Faglier to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+140",
+     "0QA379062803#2320968526_13L9034Q11Q22"
+    ],
+    "No": [
+     "-185",
+     "0QA379062803#2320968586_13L9034Q13Q24"
+    ]
+   },
+   "Javad Mahjoub to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+140",
+     "0QA379062804#2320968529_13L9034Q11Q22"
+    ],
+    "No": [
+     "-185",
+     "0QA379062804#2320968583_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Javad Mahjoub to Win by KO/TKO/DQ or Decision": [
+     "+145",
+     "0QA379062784#2320968433_13L9034Q11Q21"
+    ],
+    "Javad Mahjoub to Win by KO/TKO/DQ or Submission": [
+     "+140",
+     "0QA379062784#2320968634_13L9034Q12Q22"
+    ],
+    "Javad Mahjoub to Win by Submission or Decision": [
+     "+195",
+     "0QA379062784#2320968659_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062784#2320968739_13L9034Q17Q27"
+    ],
+    "Joel Faglier to Win by KO/TKO/DQ or Decision": [
+     "+190",
+     "0QA379062784#2320968681_15L9034Q14Q24"
+    ],
+    "Joel Faglier to Win by KO/TKO/DQ or Submission": [
+     "+140",
+     "0QA379062784#2320968701_15L9034Q15Q25"
+    ],
+    "Joel Faglier to Win by Submission or Decision": [
+     "+165",
+     "0QA379062784#2320968719_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Javad Mahjoub to Win By KO/TKO/DQ or Joel Faglier to Win by Submission": [
+     "-110",
+     "0QA379062805#2320968532_13L9034Q10Q21"
+    ],
+    "Javad Mahjoub to Win By KO/TKO/DQ or Joel Faglier to Win by Decision": [
+     "+140",
+     "0QA379062805#2320968580_13L9034Q10Q22"
+    ],
+    "Javad Mahjoub to Win By Submission or Joel Faglier to Win by KO/TKO/DQ": [
+     "+145",
+     "0QA379062805#2320968667_13L9034Q10Q23"
+    ],
+    "Javad Mahjoub to Win By Submission or Joel Faglier to Win by Decision": [
+     "+190",
+     "0QA379062805#2320968673_13L9034Q10Q24"
+    ],
+    "Javad Mahjoub to Win By Decision or Joel Faglier to Win by KO/TKO/DQ": [
+     "+175",
+     "0QA379062805#2320968709_13L9034Q10Q25"
+    ],
+    "Javad Mahjoub to Win By Decision or Joel Faglier to Win by Submission": [
+     "+145",
+     "0QA379062805#2320968711_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062805#2320968745_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+120",
+     "0QA379062782#2320968415_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+140",
+     "0QA379062782#2320968644_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+250",
+     "0QA379062782#2320968651_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA379062782#2320968689_15L9034Q14Q24"
+    ]
+   },
+   "Javad Mahjoub to Win by Unanimous Decision": {
+    "Yes": [
+     "+650",
+     "0QA379062794#2320968451_13L9034Q11Q22"
+    ]
+   },
+   "Joel Faglier to Win by Unanimous Decision": {
+    "Yes": [
+     "+700",
+     "0QA379062795#2320968454_13L9034Q11Q22"
+    ]
+   },
+   "Javad Mahjoub to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA379062796#2320968457_13L9034Q11Q22"
+    ]
+   },
+   "Joel Faglier to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2200",
+     "0QA379062797#2320968460_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Javad Mahjoub": [
+     "+275",
+     "0QA379062831#2320968547_13L9034Q11Q22"
+    ],
+    "Joel Faglier": [
+     "+380",
+     "0QA379062831#2320968565_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Javad Mahjoub": [
+     "+400",
+     "0QA379062832#2320968550_13L9034Q11Q22"
+    ],
+    "Joel Faglier": [
+     "+300",
+     "0QA379062832#2320968559_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Javad Mahjoub": [
+     "+550",
+     "0QA379062833#2320968553_13L9034Q11Q22"
+    ],
+    "Joel Faglier": [
+     "+600",
+     "0QA379062833#2320968556_13L9034Q13Q24"
     ]
    }
   }
