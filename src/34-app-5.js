@@ -148,9 +148,13 @@
      are closed and the ghost slot is the truth. */
   function seatMoneyline(card, ml) {
     if (!card || !ml) return;
-    if (card.classList.contains("done") || card.dataset.settled === "1") return;
     var slots = card.querySelectorAll(":scope > .ghead .gml");
     if (slots.length !== 2) return;
+    /* a settled card keeps what it closed at -- but one drawn before any
+       price reached it has nothing to keep, and its closing line is written
+       once (Jose, Oct 13, 2026: Asher v Foster final on two empty slots) */
+    if ((card.classList.contains("done") || card.dataset.settled === "1") &&
+        card.querySelector(":scope > .ghead .gml button.price")) return;
     /* a bout the page flips (the champion moved to the left) has its two
        slots the other way round from the data, so the prices follow the
        men, not the slots -- every flipped bout wore the other man's
@@ -545,13 +549,12 @@
          -- is written straight onto its button and needs none of this
          (Jose, Sep 19, 2026: "it never did it before") */
       /* a bout card drawn with empty moneyline slots while its row now holds
-         the closing prices is drawn again: the in-place writer only fires on
-         a price that moved, and these never moved (Asher v Foster, Oct 13) */
+         the closing prices takes them: the in-place writer only fires on a
+         price that moved, and these never moved (Asher v Foster, Oct 13) */
       FIGHTS.forEach(function (row) {
         if (!row[8] && !row[10]) return;
         var c = document.querySelector('.gcard[data-bout="' + row[1] + '"]');
-        var once = window._mlRedrawn || (window._mlRedrawn = {});
-        if (c && !c.querySelector(".gml button.price") && !once[row[1]]) { once[row[1]] = 1; delete MADE[String(row[1])]; rebuild++; }
+        if (c && !c.querySelector(":scope > .ghead .gml button.price")) seatMoneyline(c, row.slice(8, 12));
       });
       if (nowPlease && busy()) {
         rebuild++;                 /* a sheet is open: it goes with the rest */
