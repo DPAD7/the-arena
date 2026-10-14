@@ -376,20 +376,28 @@
                                   "Starters down on defense: harder to hold the other side."]);
       }
     }
-    /* 7. already on an open DraftKings slip */
+    /* 7. already on an open DraftKings slip -- open meaning still alive: a
+       slip with a leg lost, or one already settled, is not a second bet's
+       risk (Jose, Oct 13, 2026: warned on Francischinelli off two dead slips) */
     if (typeof DKB === "object" && DKB && DKB.bets && DKB.bets.some(function (b0) {
-          return (b0.legs || []).some(function (lg) { return lg.sel === btn.dataset.oid; }); })) {
+          return slipAlive(b0) && (b0.legs || []).some(function (lg) { return lg.sel === btn.dataset.oid; }); })) {
       says.push(["dup", "Already on an open DraftKings slip.", "A second bet on it doubles the same risk."]);
     }
     if (!says.length) return;
     showAlert("Consider \u00b7 " + (gameName(card) || ""), says);
+  }
+  function slipAlive(b0) {
+    var st = String(b0.status || "").toLowerCase();
+    if (st === "won" || st === "lost") return false;
+    var tk = window.TRKST || {};
+    return !(b0.legs || []).some(function (lg) { return String(lg.status || "").toLowerCase() === "lost" || tk[lg.sel] === "lost"; });
   }
   /* legs he has on this game: gold on the board, or on an open DraftKings slip */
   function legsOn(card) {
     var out = [];
     card.querySelectorAll("button.price[data-oid]").forEach(function (b) {
       var id = b.dataset.oid, dk = typeof DKB === "object" && DKB && DKB.bets &&
-        DKB.bets.some(function (b0) { return (b0.legs || []).some(function (lg) { return lg.sel === id; }); });
+        DKB.bets.some(function (b0) { return slipAlive(b0) && (b0.legs || []).some(function (lg) { return lg.sel === id; }); });
       if (placed[id] || dk) out.push(b);
     });
     return out;

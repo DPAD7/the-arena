@@ -544,6 +544,15 @@
          alone, and a moneyline -- which is what actually moves during a game
          -- is written straight onto its button and needs none of this
          (Jose, Sep 19, 2026: "it never did it before") */
+      /* a bout card drawn with empty moneyline slots while its row now holds
+         the closing prices is drawn again: the in-place writer only fires on
+         a price that moved, and these never moved (Asher v Foster, Oct 13) */
+      FIGHTS.forEach(function (row) {
+        if (!row[8] && !row[10]) return;
+        var c = document.querySelector('.gcard[data-bout="' + row[1] + '"]');
+        var once = window._mlRedrawn || (window._mlRedrawn = {});
+        if (c && !c.querySelector(".gml button.price") && !once[row[1]]) { once[row[1]] = 1; delete MADE[String(row[1])]; rebuild++; }
+      });
       if (nowPlease && busy()) {
         rebuild++;                 /* a sheet is open: it goes with the rest */
         nowPlease = 0;
