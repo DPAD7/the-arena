@@ -141,7 +141,7 @@
    "home": "CLE",
    "pick": "BAL",
    "model": 64,
-   "book": 68,
+   "book": 69,
    "bookpick": "BAL",
    "agree": true,
    "won": 67,
@@ -207,7 +207,7 @@
    "home": "JAX",
    "pick": "JAX",
    "model": 73,
-   "book": 57,
+   "book": 56,
    "bookpick": "JAX",
    "agree": true,
    "won": 47,
@@ -251,7 +251,7 @@
    "home": "ATL",
    "pick": "CHI",
    "model": 56,
-   "book": 59,
+   "book": 54,
    "bookpick": "CHI",
    "agree": true,
    "won": 58,
@@ -268,6 +268,28 @@
    "kick": "2026-10-18T17:00Z"
   },
   {
+   "gid": "401872998",
+   "away": "CAR",
+   "home": "PHI",
+   "pick": "CAR",
+   "model": 55,
+   "book": 50,
+   "bookpick": "PHI",
+   "agree": false,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 12,
+   "why": [
+    "Points per game: CAR 30.2, PHI 18.4",
+    "Last 3 games, win %: CAR 67%, PHI 0%",
+    "Passing offense (EPA): CAR +0.22, PHI -0.07",
+    "Offense success rate: CAR 43%, PHI 36%"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
+  },
+  {
    "gid": "401873007",
    "away": "DAL",
    "home": "GB",
@@ -279,7 +301,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 12,
+   "rank": 13,
    "why": [
     "Points allowed per game: GB 22.4, DAL 27.2",
     "Last 3 games, win %: GB 67%, DAL 33%",
@@ -301,7 +323,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 13,
+   "rank": 14,
    "why": [
     "SEA is starting a backup QB",
     "Last 3 games, win %: DEN 67%, SEA 33%",
@@ -310,28 +332,6 @@
    ],
    "week": 6,
    "kick": "2026-10-16T00:15Z"
-  },
-  {
-   "gid": "401872998",
-   "away": "CAR",
-   "home": "PHI",
-   "pick": "CAR",
-   "model": 55,
-   "book": 51,
-   "bookpick": "PHI",
-   "agree": false,
-   "won": 40,
-   "n": 149,
-   "call": null,
-   "rank": 14,
-   "why": [
-    "Points per game: CAR 30.2, PHI 18.4",
-    "Last 3 games, win %: CAR 67%, PHI 0%",
-    "Passing offense (EPA): CAR +0.22, PHI -0.07",
-    "Offense success rate: CAR 43%, PHI 36%"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
   }
  ]
 }
