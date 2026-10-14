@@ -57,13 +57,25 @@ UA = {"User-Agent": "Mozilla/5.0"}
 KEEP = None      # None means keep every number the feed carries
 
 
+ASKFAIL = {}
+
+
 def ask(url, tries=3):
+    why = ""
     for _ in range(tries):
         try:
             r = urllib.request.urlopen(urllib.request.Request(url, headers=UA), timeout=20)
             return json.load(r)
-        except Exception:
+        except Exception as e:
+            why = "%s %s" % (type(e).__name__, getattr(e, "code", "") or str(e)[:60])
             time.sleep(1)
+    # a read that fails says so, once a minute at most: on Oct 13, 2026 the
+    # recorder went silent after a minute of the first bout and ran two and a
+    # half hours on nothing, with no word in its log as to why
+    now = time.time()
+    if now - ASKFAIL.get(why, 0) > 60:
+        ASKFAIL[why] = now
+        print("ESPN read failed (%s): %s" % (why, url[:120]), flush=True)
     return {}
 
 
