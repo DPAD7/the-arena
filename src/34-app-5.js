@@ -517,7 +517,9 @@
         var slots = card.querySelectorAll(":scope > .ghead .gml");
         var slot = slots[one[1]];
         var b = slot ? slot.querySelector("button.price") : null;
-        if (!b) return;
+        /* a card drawn before its prices came has no button to write on: it
+           is drawn again with them (Asher v Foster sat on two empty slots) */
+        if (!b) { delete MADE[one[0]]; rebuild++; return; }
         /* a finished card keeps what it closed at -- but a button that never
            got its closing price is written once: Asher v Foster settled before
            the first read and its moneyline sat on dashes (Jose, Oct 13, 2026:
@@ -530,6 +532,12 @@
       });
       /* and every card already drawn takes its own, once (seatCard) */
       document.querySelectorAll(".gcard[data-espn], .gcard[data-bout]").forEach(seatCard);
+      /* a bout decided before its prices came found nothing to pay: its
+         best-paying chip is worked out again now they are here (Jose, Oct 13,
+         2026: "where the fuck is the most highest paying one") */
+      if (typeof showHitsLater === "function")
+        document.querySelectorAll(".gcard[data-bout].done").forEach(function (c) {
+          var h = c.querySelector(".hits"); if (h && h.hidden) showHitsLater(c); });
       /* A chip that the board has never drawn needs it built again, and a
          rebuild moves rows under him: before today prices were read once at
          load, so this never happened. It waits until he has left the page
