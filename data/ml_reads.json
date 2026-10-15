@@ -53,7 +53,7 @@
    "home": "NE",
    "pick": "NE",
    "model": 67,
-   "book": 74,
+   "book": 73,
    "bookpick": "NE",
    "agree": true,
    "won": 75,
@@ -119,7 +119,7 @@
    "home": "CLE",
    "pick": "BAL",
    "model": 64,
-   "book": 69,
+   "book": 66,
    "bookpick": "BAL",
    "agree": true,
    "won": 67,
@@ -136,6 +136,28 @@
    "kick": "2026-10-18T17:00Z"
   },
   {
+   "gid": "401872998",
+   "away": "CAR",
+   "home": "PHI",
+   "pick": "CAR",
+   "model": 70,
+   "book": 62,
+   "bookpick": "CAR",
+   "agree": true,
+   "won": 87,
+   "n": 31,
+   "call": "lean",
+   "rank": 7,
+   "why": [
+    "Points per game: CAR 30.2, PHI 18.4",
+    "PHI is starting a backup QB",
+    "Last 3 games, win %: CAR 67%, PHI 0%",
+    "QB play (EPA per dropback): CAR +0.08, PHI +0.02"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
+  },
+  {
    "gid": "401873000",
    "away": "NO",
    "home": "NYG",
@@ -147,7 +169,7 @@
    "won": 56,
    "n": 45,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points allowed per game: NYG 21.2, NO 30.2",
     "Last 3 games, win %: NYG 83%, NO 0%",
@@ -169,7 +191,7 @@
    "won": 52,
    "n": 25,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "TB is starting a backup QB",
     "Points per game: PIT 22.2, TB 20.0",
@@ -191,7 +213,7 @@
    "won": 47,
    "n": 15,
    "call": "lean",
-   "rank": 9,
+   "rank": 10,
    "why": [
     "Points allowed per game: JAX 14.0, HOU 22.4",
     "Last 3 games, win %: JAX 100%, HOU 33%",
@@ -213,7 +235,7 @@
    "won": 61,
    "n": 119,
    "call": null,
-   "rank": 10,
+   "rank": 11,
    "why": [
     "Points per game: BUF 32.8, LV 26.4",
     "Last 3 games, win %: BUF 67%, LV 33%",
@@ -235,7 +257,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 11,
+   "rank": 12,
    "why": [
     "Points allowed per game: CHI 19.2, ATL 24.4",
     "Last 3 games, point margin: CHI +2.3, ATL +11.7",
@@ -246,34 +268,12 @@
    "kick": "2026-10-18T17:00Z"
   },
   {
-   "gid": "401872998",
-   "away": "CAR",
-   "home": "PHI",
-   "pick": "CAR",
-   "model": 55,
-   "book": 51,
-   "bookpick": "CAR",
-   "agree": true,
-   "won": 58,
-   "n": 153,
-   "call": null,
-   "rank": 12,
-   "why": [
-    "Points per game: CAR 30.2, PHI 18.4",
-    "Last 3 games, win %: CAR 67%, PHI 0%",
-    "Passing offense (EPA): CAR +0.22, PHI -0.07",
-    "Offense success rate: CAR 43%, PHI 36%"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
-  },
-  {
    "gid": "401873007",
    "away": "DAL",
    "home": "GB",
    "pick": "GB",
    "model": 51,
-   "book": 53,
+   "book": 52,
    "bookpick": "GB",
    "agree": true,
    "won": 58,

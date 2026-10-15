@@ -1,5 +1,5 @@
 {
- "at": "2026-10-15 13:06 UTC",
+ "at": "2026-10-15 19:08 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -28,33 +28,6 @@
    "game": "SEA@DEN",
    "eid": 22000,
    "kick": "2026-10-16 00:15:00Z"
-  },
-  {
-   "qbs": [
-    "Trevor Lawrence",
-    "C.J. Stroud"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": false,
-   "missing": [
-    "HOU J.Noel (12%)",
-    "HOU X.Hutchinson (19%)"
-   ],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "HOU@JAC",
-   "eid": 21914,
-   "kick": "2026-10-18 13:30:00Z"
   },
   {
    "qbs": [
@@ -87,59 +60,28 @@
   },
   {
    "qbs": [
-    "Jalen Hurts",
-    "Bryce Young"
-   ],
-   "pick": "Bryce Young",
-   "lead": 14,
-   "complete": false,
-   "missing": [
-    "PHI D.Goedert (10%)",
-    "PHI D.Cooper (11%)",
-    "PHI D.Wicks (21%)",
-    "PHI M.Lemon (20%)"
-   ],
-   "score": [
-    -3,
-    11
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 164.0 yards higher in total on their lines",
-    "4 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    1,
-    1
-   ],
-   "game": "CAR@PHI",
-   "eid": 22002,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
     "Aaron Rodgers",
     "Jalon Daniels"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Aaron Rodgers",
+   "lead": 4,
    "complete": false,
    "missing": [
-    "PIT J.Warren (17%)",
     "PIT R.Wilson (13%)"
    ],
    "score": [
-    0,
-    0
+    3,
+    -1
    ],
-   "why": [],
+   "why": [
+    "His receivers are set 53.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
    "checks": [
     0,
     0,
-    0,
+    1,
     0
    ],
    "game": "PIT@TB",
@@ -211,7 +153,6 @@
     "NE E.Chism III (12%)",
     "NE H.Henry (11%)",
     "NE R.Doubs (16%)",
-    "NYJ B.Allen (11%)",
     "NYJ K.Sadiq (18%)"
    ],
    "score": [
@@ -220,7 +161,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 54.0 yards higher in total on their lines",
+    "His receivers are set 67.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -280,7 +221,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 124.5 yards higher in total on their lines",
+    "His receivers are set 123.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -312,7 +253,7 @@
    ],
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
-    "His receivers are set 49.0 yards higher in total on their lines",
+    "His receivers are set 50.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -371,7 +312,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 165.0 yards higher in total on their lines",
+    "His receivers are set 167.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
