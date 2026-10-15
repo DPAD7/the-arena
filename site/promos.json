@@ -16,11 +16,11 @@
   ]
  },
  {
-  "id": "1PVO2W",
-  "head": "NBA Futures 30% Profit Boost",
+  "id": "V928V8",
+  "head": "NBA Cup 30% Profit Boost",
   "pct": 30,
-  "start": "2026-10-14T11:00:00.0000000Z",
-  "end": "2026-10-15T03:59:00.0000000Z",
+  "start": "2026-10-15T11:00:00.0000000Z",
+  "end": "2026-10-16T03:59:00.0000000Z",
   "sport": "",
   "game": "",
   "gid": "",
@@ -29,6 +29,40 @@
   "maxWager": 25.0,
   "types": [
    "any"
+  ]
+ },
+ {
+  "id": "0K38Y9",
+  "head": "Ohio State @ Indiana 50% Profit Boost",
+  "pct": 50,
+  "start": "2026-10-15T13:00:00.0000000Z",
+  "end": "2026-10-17T19:30:00.0000000Z",
+  "sport": "college-football",
+  "game": "Ohio State @ Indiana",
+  "gid": "401858488",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "single",
+   "sgp"
+  ]
+ },
+ {
+  "id": "N5RX66",
+  "head": "Notre Dame @ BYU 50% Profit Boost",
+  "pct": 50,
+  "start": "2026-10-15T13:00:00.0000000Z",
+  "end": "2026-10-18T03:00:00.0000000Z",
+  "sport": "college-football",
+  "game": "Notre Dame @ BYU",
+  "gid": "401856809",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "single",
+   "sgp"
   ]
  }
 ]
