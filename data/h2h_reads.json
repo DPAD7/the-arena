@@ -1,5 +1,5 @@
 {
- "at": "2026-10-15 01:05 UTC",
+ "at": "2026-10-15 03:40 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -83,6 +83,40 @@
    ],
    "game": "TEN@IND",
    "eid": 22001,
+   "kick": "2026-10-18 17:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jalen Hurts",
+    "Bryce Young"
+   ],
+   "pick": "Bryce Young",
+   "lead": 14,
+   "complete": false,
+   "missing": [
+    "PHI D.Goedert (10%)",
+    "PHI D.Cooper (11%)",
+    "PHI D.Wicks (21%)",
+    "PHI M.Lemon (20%)"
+   ],
+   "score": [
+    -3,
+    11
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 165.0 yards higher in total on their lines",
+    "4 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "game": "CAR@PHI",
+   "eid": 22002,
    "kick": "2026-10-18 17:00:00Z"
   },
   {
@@ -186,7 +220,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 56.0 yards higher in total on their lines",
+    "His receivers are set 54.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -279,7 +313,7 @@
    ],
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
-    "His receivers are set 46.0 yards higher in total on their lines",
+    "His receivers are set 48.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
