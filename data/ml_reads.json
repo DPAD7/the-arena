@@ -114,28 +114,6 @@
    "kick": "2026-10-18T20:05Z"
   },
   {
-   "gid": "401872997",
-   "away": "BAL",
-   "home": "CLE",
-   "pick": "BAL",
-   "model": 64,
-   "book": 66,
-   "bookpick": "BAL",
-   "agree": true,
-   "won": 67,
-   "n": 78,
-   "call": "take",
-   "rank": 6,
-   "why": [
-    "Points per game: BAL 29.2, CLE 18.6",
-    "QB play (EPA per dropback): BAL +0.11, CLE -0.08",
-    "Last 3 games, win %: BAL 100%, CLE 67%",
-    "Offense success rate: BAL 50%, CLE 40%"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
-  },
-  {
    "gid": "401872998",
    "away": "CAR",
    "home": "PHI",
@@ -147,12 +125,34 @@
    "won": 87,
    "n": 31,
    "call": "lean",
-   "rank": 7,
+   "rank": 6,
    "why": [
     "Points per game: CAR 30.2, PHI 18.4",
     "PHI is starting a backup QB",
     "Last 3 games, win %: CAR 67%, PHI 0%",
     "QB play (EPA per dropback): CAR +0.08, PHI +0.02"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
+  },
+  {
+   "gid": "401872997",
+   "away": "BAL",
+   "home": "CLE",
+   "pick": "BAL",
+   "model": 64,
+   "book": 64,
+   "bookpick": "BAL",
+   "agree": true,
+   "won": 67,
+   "n": 78,
+   "call": "lean",
+   "rank": 7,
+   "why": [
+    "Points per game: BAL 29.2, CLE 18.6",
+    "QB play (EPA per dropback): BAL +0.11, CLE -0.08",
+    "Last 3 games, win %: BAL 100%, CLE 67%",
+    "Offense success rate: BAL 50%, CLE 40%"
    ],
    "week": 6,
    "kick": "2026-10-18T17:00Z"
@@ -229,7 +229,7 @@
    "home": "LV",
    "pick": "BUF",
    "model": 54,
-   "book": 69,
+   "book": 66,
    "bookpick": "BUF",
    "agree": true,
    "won": 61,
