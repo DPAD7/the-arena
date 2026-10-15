@@ -1,5 +1,5 @@
 {
- "at": "2026-10-15 22:20 UTC",
+ "at": "2026-10-15 22:33 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -28,33 +28,6 @@
    "game": "SEA@DEN",
    "eid": 22000,
    "kick": "2026-10-16 00:15:00Z"
-  },
-  {
-   "qbs": [
-    "Trevor Lawrence",
-    "C.J. Stroud"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": false,
-   "missing": [
-    "HOU J.Noel (12%)",
-    "HOU X.Hutchinson (19%)"
-   ],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "HOU@JAC",
-   "eid": 21914,
-   "kick": "2026-10-18 13:30:00Z"
   },
   {
    "qbs": [
@@ -87,6 +60,40 @@
   },
   {
    "qbs": [
+    "Tanner McKee",
+    "Bryce Young"
+   ],
+   "pick": "Bryce Young",
+   "lead": 14,
+   "complete": false,
+   "missing": [
+    "PHI D.Goedert (10%)",
+    "PHI D.Cooper (11%)",
+    "PHI D.Wicks (21%)",
+    "PHI M.Lemon (20%)"
+   ],
+   "score": [
+    -3,
+    11
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 167.0 yards higher in total on their lines",
+    "4 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    1
+   ],
+   "game": "CAR@PHI",
+   "eid": 22002,
+   "kick": "2026-10-18 17:00:00Z"
+  },
+  {
+   "qbs": [
     "Aaron Rodgers",
     "Jalon Daniels"
    ],
@@ -101,7 +108,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 54.0 yards higher in total on their lines",
+    "His receivers are set 56.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -259,6 +266,39 @@
    ],
    "game": "LAC@KC",
    "eid": 22063,
+   "kick": "2026-10-18 20:25:00Z"
+  },
+  {
+   "qbs": [
+    "Josh Allen",
+    "Kirk Cousins"
+   ],
+   "pick": "Kirk Cousins",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "BUF K.Coleman (14%)",
+    "BUF K.Shakir (18%)",
+    "LV C.White (10%)"
+   ],
+   "score": [
+    -1,
+    3
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+30 a game)",
+    "His receivers are set 54.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "BUF@LV",
+   "eid": 22064,
    "kick": "2026-10-18 20:25:00Z"
   },
   {
