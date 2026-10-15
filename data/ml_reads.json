@@ -1,30 +1,8 @@
 {
- "at": "2026-10-14",
+ "at": "2026-10-15",
  "week": 6,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
-  {
-   "gid": "401872994",
-   "away": "BUF",
-   "home": "LAR",
-   "pick": "BUF",
-   "model": 52,
-   "book": 62,
-   "bookpick": "LAR",
-   "agree": false,
-   "won": 40,
-   "n": 149,
-   "call": null,
-   "rank": 1,
-   "why": [
-    "Points per game: BUF 31.8, LAR 21.2",
-    "Pass defense, EPA allowed: BUF +0.21, LAR -0.09",
-    "Defense, EPA allowed per play: BUF +0.12, LAR -0.11",
-    "Win % this season: BUF 75%, LAR 50%"
-   ],
-   "week": 5,
-   "kick": "2026-10-13T00:15Z"
-  },
   {
    "gid": "401873006",
    "away": "LAC",
@@ -251,7 +229,7 @@
    "home": "ATL",
    "pick": "CHI",
    "model": 56,
-   "book": 52,
+   "book": 51,
    "bookpick": "CHI",
    "agree": true,
    "won": 58,
@@ -317,7 +295,7 @@
    "home": "DEN",
    "pick": "DEN",
    "model": 58,
-   "book": 58,
+   "book": 56,
    "bookpick": "SEA",
    "agree": false,
    "won": 40,
@@ -332,6 +310,28 @@
    ],
    "week": 6,
    "kick": "2026-10-16T00:15Z"
+  },
+  {
+   "gid": "401873010",
+   "away": "NE",
+   "home": "CHI",
+   "pick": "CHI",
+   "model": 53,
+   "book": 53,
+   "bookpick": "CHI",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 1,
+   "why": [
+    "Points per game: CHI 23.8, NE 22.0",
+    "Turnovers per game: CHI 2.0, NE 2.2",
+    "Offense success rate: CHI 46%, NE 45%",
+    "Takeaways per game: CHI 1.0, NE 1.2"
+   ],
+   "week": 7,
+   "kick": "2026-10-23T00:15Z"
   }
  ]
 }

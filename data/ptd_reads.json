@@ -1,5 +1,5 @@
 {
- "at": "2026-10-14",
+ "at": "2026-10-15",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "3912547": {
@@ -116,16 +116,6 @@
   }
  },
  "by_game": {
-  "401872994": {
-   "3918298": {
-    "p": 0.83,
-    "name": "Josh Allen"
-   },
-   "12483": {
-    "p": 0.921,
-    "name": "Matthew Stafford"
-   }
-  },
   "401872995": {
    "3912547": {
     "p": 0.804,
@@ -264,6 +254,16 @@
    "4361741": {
     "p": 0.86,
     "name": "Brock Purdy"
+   }
+  },
+  "401873010": {
+   "4431452": {
+    "p": 0.829,
+    "name": "Drake Maye"
+   },
+   "4431611": {
+    "p": 0.843,
+    "name": "Caleb Williams"
    }
   }
  }
