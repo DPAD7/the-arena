@@ -1,5 +1,5 @@
 {
- "at": "2026-10-16 13:08 UTC",
+ "at": "2026-10-16 19:06 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -103,7 +103,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 167.0 yards higher in total on their lines",
+    "His receivers are set 164.0 yards higher in total on their lines",
     "4 of 4 combined boxes checked"
    ],
    "checks": [
@@ -132,7 +132,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 66.5 yards higher in total on their lines",
+    "His receivers are set 57.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -144,6 +144,34 @@
    ],
    "game": "PIT@TB",
    "eid": 22003,
+   "kick": "2026-10-18 17:00:00Z"
+  },
+  {
+   "qbs": [
+    "Deshaun Watson",
+    "Tyler Huntley"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "CLE J.Jeudy (10%)",
+    "CLE Q.Judkins (14%)",
+    "BAL R.Bateman (14%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "BAL@CLE",
+   "eid": 22004,
    "kick": "2026-10-18 17:00:00Z"
   },
   {
@@ -204,25 +232,26 @@
     "Geno Smith"
    ],
    "pick": "Geno Smith",
-   "lead": 2,
+   "lead": 6,
    "complete": false,
    "missing": [
     "NE D.Douglas (13%)",
     "NE E.Chism III (12%)",
-    "NE R.Doubs (16%)",
-    "NYJ K.Sadiq (18%)"
+    "NE R.Doubs (16%)"
    ],
    "score": [
-    -1,
-    1
+    -2,
+    4
    ],
    "why": [
-    "Faces a defense that gives up more yards after the catch"
+    "Faces a defense that gives up more yards after the catch",
+    "His receivers are set 76.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
    ],
    "checks": [
     0,
     0,
-    0,
+    1,
     0
    ],
    "game": "NYJ@NE",
@@ -275,7 +304,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 146.0 yards higher in total on their lines",
+    "His receivers are set 122.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -307,7 +336,7 @@
    ],
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
-    "His receivers are set 54.0 yards higher in total on their lines",
+    "His receivers are set 52.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -366,7 +395,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 162.0 yards higher in total on their lines",
+    "His receivers are set 165.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [

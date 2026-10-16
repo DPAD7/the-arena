@@ -1,15 +1,7 @@
 {
- "at": "2026-10-15",
+ "at": "2026-10-16",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "3912547": {
-   "p": 0.804,
-   "name": "Sam Darnold"
-  },
-  "4426338": {
-   "p": 0.799,
-   "name": "Bo Nix"
-  },
   "4432577": {
    "p": 0.745,
    "name": "C.J. Stroud"
@@ -26,9 +18,9 @@
    "p": 0.766,
    "name": "Michael Penix Jr."
   },
-  "3916387": {
-   "p": 0.766,
-   "name": "Lamar Jackson"
+  "4035671": {
+   "p": 0.642,
+   "name": "Tyler Huntley"
   },
   "3122840": {
    "p": 0.707,
@@ -113,6 +105,14 @@
   "4361741": {
    "p": 0.86,
    "name": "Brock Purdy"
+  },
+  "3912547": {
+   "p": 0.804,
+   "name": "Sam Darnold"
+  },
+  "4426338": {
+   "p": 0.799,
+   "name": "Bo Nix"
   }
  },
  "by_game": {
@@ -147,9 +147,9 @@
    }
   },
   "401872997": {
-   "3916387": {
-    "p": 0.766,
-    "name": "Lamar Jackson"
+   "4035671": {
+    "p": 0.642,
+    "name": "Tyler Huntley"
    },
    "3122840": {
     "p": 0.707,
