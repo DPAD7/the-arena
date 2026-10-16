@@ -1,12 +1,12 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.btile{position:relative;width:240px;height:240px;display:grid;place-items:center}.btile canvas{position:absolute;left:-75px;top:-75px;width:390px;height:390px}.bglow{position:absolute;inset:-75px;background:radial-gradient(circle at 50% 52%,rgba(229,51,63,.28),transparent 62%);opacity:0;animation:btin .5s ease .2s forwards}.bstar{position:relative;width:166px;height:166px;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .6s forwards}.bstar img{position:absolute;left:-34px;top:-34px;width:234px;height:234px}@keyframes btin{from{opacity:0}to{opacity:1}}@keyframes bstin{from{opacity:0;transform:scale(.4) rotate(-200deg)}to{opacity:1;transform:none}}</style>
-<div id="boot" aria-hidden="true"><div class="btile"><div class="bglow"></div><canvas id="bgl"></canvas><div class="bstar bd"><img src="ico/stax-spark.png" alt=""></div></div></div>
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.btile{position:relative;width:200px;height:200px}.bstar{position:absolute;inset:0;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .3s forwards}.bstar img{width:200px;height:200px;display:block}@keyframes bstin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}</style>
+<div id="boot" aria-hidden="true"><div class="btile"><div class="bstar bd"><img src="ico/stax-x.png" alt=""></div></div></div>
 <script>
-/* the sparkle S on black with its glitter from the very first paint
-   (Jose, Oct 13, 2026; before it the meshed star, and the stack of plates
-   and the $ before that), until the board is
+/* the silver X tile on plain black, no glow and no glitter, from the very
+   first paint (Jose, Oct 16, 2026; before it the sparkle S, the meshed star
+   and the stack of plates and the $), until the board is
    drawn and every picture on screen has arrived (Jose, Sep 23, 2026: "it
    should open once the images and page is loaded completely, not before") */
 (function () {
@@ -56,32 +56,7 @@
     if (!wait) out();
   };
   /* the mark always lands whole before the board opens, never rushed: the
-     glow, the star spun in, and a beat on it (Jose, Oct 13, 2026) */
-  /* red and white glitter drifting in from both sides behind the star and
-     twinkling, like the Monday Night Countdown desk (Jose, Oct 13, 2026) */
-  (function () {
-    var c = document.getElementById("bgl"); if (!c || !c.getContext) return;
-    var x = c.getContext("2d"), dpr = devicePixelRatio || 1, W = 390, H = 390, P = [], t0 = performance.now();
-    c.width = W * dpr; c.height = H * dpr; x.scale(dpr, dpr);
-    var spawn = function (side) { return {x: side ? W + 4 : -4, y: Math.random() * H, vx: (side ? -1 : 1) * (0.08 + Math.random() * 0.3), vy: (Math.random() - .5) * .12, r: .5 + Math.random() * 1.4, ph: Math.random() * 6.28, sp: .8 + Math.random() * 1.8, c: Math.random() < .68 ? "229,51,63" : "255,255,255", life: 0, max: 700 + Math.random() * 800}; };
-    for (var i = 0; i < 380; i++) { var q = spawn(i % 2); q.x = Math.random() * W; q.life = Math.random() * q.max; P.push(q); }
-    var f = function (now) {
-      if (!c.isConnected) return;
-      var t = (now - t0) / 1000; x.clearRect(0, 0, W, H);
-      if (P.length < 380) for (var k = 0; k < 2; k++) P.push(spawn(Math.random() < .5));
-      for (var i = P.length - 1; i >= 0; i--) {
-        var p = P[i]; p.x += p.vx; p.y += p.vy; p.vx *= .998; p.life++;
-        if (p.life > p.max || p.x < -10 || p.x > W + 10) { P.splice(i, 1); continue; }
-        var fade = Math.min(1, p.life / 80, (p.max - p.life) / 100), tw = .45 + .55 * Math.abs(Math.sin(p.ph + t * p.sp));
-        var dx = (p.x - W / 2) / (W / 2), dy = (p.y - H / 2) / (H / 2), rr = Math.sqrt(dx * dx + dy * dy);
-        var a = fade * tw * Math.min(1, .35 + Math.abs(dx)) * Math.max(0, Math.min(1, (1 - rr) * 3));
-        x.fillStyle = "rgba(" + p.c + "," + a.toFixed(3) + ")"; x.beginPath(); x.arc(p.x, p.y, p.r, 0, 6.283); x.fill();
-        if (p.r > 1.4 && tw > .9) { x.fillStyle = "rgba(255,255,255," + (a * .6).toFixed(3) + ")"; x.fillRect(p.x - p.r * 2.2, p.y - .3, p.r * 4.4, .6); x.fillRect(p.x - .3, p.y - p.r * 2.2, .6, p.r * 4.4); }
-      }
-      requestAnimationFrame(f);
-    };
-    requestAnimationFrame(f);
-  })();
+     tile scaled in, and a beat on it (Jose, Oct 16, 2026) */
   var dollar = b && b.querySelector(".bd");
   if (dollar) dollar.addEventListener("animationend", function () {
     setTimeout(function () { built = true; check(); }, 700);
