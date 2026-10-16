@@ -1,5 +1,5 @@
 {
- "at": "2026-10-16 19:06 UTC",
+ "at": "2026-10-16 21:40 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -34,17 +34,19 @@
     "Trevor Lawrence",
     "C.J. Stroud"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Trevor Lawrence",
+   "lead": 2,
    "complete": false,
    "missing": [
     "HOU J.Noel (12%)"
    ],
    "score": [
     1,
-    1
+    -1
    ],
-   "why": [],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+53 a game)"
+   ],
    "checks": [
     0,
     0,
@@ -88,29 +90,26 @@
     "Bryce Young"
    ],
    "pick": "Bryce Young",
-   "lead": 14,
+   "lead": 12,
    "complete": false,
    "missing": [
-    "PHI D.Goedert (10%)",
-    "PHI D.Cooper (11%)",
-    "PHI D.Wicks (21%)",
-    "PHI M.Lemon (20%)"
+    "PHI D.Cooper (11%)"
    ],
    "score": [
     -3,
-    11
+    9
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 164.0 yards higher in total on their lines",
-    "4 of 4 combined boxes checked"
+    "His receivers are set 75.0 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
    ],
    "checks": [
     1,
     1,
     1,
-    1
+    0
    ],
    "game": "CAR@PHI",
    "eid": 22002,
@@ -156,8 +155,7 @@
    "complete": false,
    "missing": [
     "CLE J.Jeudy (10%)",
-    "CLE Q.Judkins (14%)",
-    "BAL R.Bateman (14%)"
+    "CLE Q.Judkins (14%)"
    ],
    "score": [
     0,
@@ -245,7 +243,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 76.0 yards higher in total on their lines",
+    "His receivers are set 74.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -304,7 +302,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 122.5 yards higher in total on their lines",
+    "His receivers are set 49.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -336,7 +334,7 @@
    ],
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
-    "His receivers are set 52.0 yards higher in total on their lines",
+    "His receivers are set 50.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -395,7 +393,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 165.0 yards higher in total on their lines",
+    "His receivers are set 167.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
