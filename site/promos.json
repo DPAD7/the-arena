@@ -1,21 +1,5 @@
 [
  {
-  "id": "W52QK3",
-  "head": "College Football 30% Profit Boost",
-  "pct": 30,
-  "start": "2026-10-16T03:00:00.0000000Z",
-  "end": "2026-10-17T03:30:00.0000000Z",
-  "sport": "college-football",
-  "game": "",
-  "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
   "id": "0K38Y9",
   "head": "Ohio State @ Indiana 50% Profit Boost",
   "pct": 50,
@@ -47,6 +31,38 @@
   "types": [
    "single",
    "sgp"
+  ]
+ },
+ {
+  "id": "W52QZJ",
+  "head": "NHL 25% Profit Boost",
+  "pct": 25,
+  "start": "2026-10-16T21:00:00.0000000Z",
+  "end": "2026-10-17T03:59:00.0000000Z",
+  "sport": "",
+  "game": "",
+  "gid": "",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "any"
+  ]
+ },
+ {
+  "id": "QRP493",
+  "head": "NFL Week 6 Sunday 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-16T21:00:00.0000000Z",
+  "end": "2026-10-19T03:59:00.0000000Z",
+  "sport": "nfl",
+  "game": "",
+  "gid": "",
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "any"
   ]
  }
 ]
