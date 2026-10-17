@@ -107,7 +107,7 @@ def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
-    kicks, kicked_at = {}, 0
+    kicks, kicked_at, said_at = {}, 0, {}
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -118,8 +118,11 @@ def main():
                     continue
                 on = True
                 seen.add(gid)
-                if sent.get(gid) != st:
+                # a game that sits still (a timeout, a review) is said again
+                # every half minute, so nobody takes its quiet for a lost line
+                if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 30:
                     moved[gid] = st
+                    said_at[gid] = time.time()
         # a finished game leaves DraftKings' list instead of saying final: gone
         # for two reads out of the 4th or overtime, it is over, with the score
         # it left on (Jose, Oct 17, 2026: "why do I still see time on the clock")
