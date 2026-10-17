@@ -988,6 +988,9 @@
     [/receptions/i, [["receiving", "REC"]], "REC"],
     [/rushing yards|rush yds/i, [["rushing", "YDS"]], "RUSH YDS"],
     [/rushing attempts|carries/i, [["rushing", "CAR"]], "CAR"],
+    /* a TD leg on a game the board drew no ladder for (Sayin 2+, Oct 17, 2026) */
+    [/passing touchdowns|pass tds/i, [["passing", "TD"]], "PTD"],
+    [/rushing touchdowns|rush tds/i, [["rushing", "TD"]], "RTD"],
     [/passing yards|pass yds/i, [["passing", "YDS"]], "PASS YDS"],
     [/completions/i, [["passing", "C/ATT", 0]], "COMP"],
     [/pass(ing)? attempts/i, [["passing", "C/ATT", 1]], "ATT"],
