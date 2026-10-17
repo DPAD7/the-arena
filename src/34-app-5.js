@@ -847,11 +847,17 @@
   window.DKLIVE = window.DKLIVE || {};
   function dkPatch(id, d) {
     var dk = window.DKLIVE[String(id)];
-    if (!d || !dk || Date.now() - dk.at > 45000) return d;
+    if (!d || !dk || Date.now() - dk.at > (dk.final ? 30 * 60000 : 45000)) return d;
     var comp = (((d.header || {}).competitions) || [])[0];
     if (!comp) return d;
     var st = comp.status = comp.status || {}, ty = st.type = st.type || {};
     if (ty.state === "post" || ty.completed) return d;
+    /* over by DraftKings' word: final now, not when ESPN catches up */
+    if (dk.final) {
+      ty.state = "post"; ty.completed = true; ty.shortDetail = ty.detail = "Final"; st.displayClock = "0:00";
+      (comp.competitors || []).forEach(function (c) { c.score = String(dk.sc[c.homeAway === "home" ? 1 : 0]); });
+      return d;
+    }
     ty.state = "in";
     var m = /^(\d+:\d\d) - (\w+)/.exec(dk.clock || "");
     if (m) {

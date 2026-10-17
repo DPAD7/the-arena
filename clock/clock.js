@@ -522,9 +522,9 @@ export class Clock {
         /* DraftKings' word on the score, the clock and the ball, where it is
            fresh: ESPN's trails it (Oct 17, 2026). The passers' counts stay ESPN's */
         const dk = r[0] === "bout" ? null : dklive[gid];
-        if (dk && Date.now() - dk.at < 45000 && games[gid] && games[gid].state !== "post") {
+        if (dk && Date.now() - dk.at < (dk.final ? 30 * 60000 : 45000) && games[gid] && games[gid].state !== "post") {
           const g = games[gid];
-          g.state = "in"; g.sc = dk.sc; g.clock = dk.clock || g.clock; g.down = dk.down || g.down;
+          g.state = dk.final ? "post" : "in"; g.sc = dk.sc; g.clock = dk.clock || g.clock; g.down = dk.down || g.down;
           g.rz = !!dk.rz;
           const pid = Object.keys(g.teamId || {}).find(id => g.teamId[id] === dk.poss);
           g.poss = pid || null;

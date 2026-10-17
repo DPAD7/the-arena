@@ -20,6 +20,7 @@
 import datetime as dt
 import json
 import os
+import re
 import sys
 import time
 
@@ -104,9 +105,9 @@ def due_soon(board):
 def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
-    sent, t0, quiet_since = {}, time.time(), None
+    sent, t0, quiet_since, gone = {}, time.time(), None, {}
     while time.time() - t0 < LIMIT:
-        moved, on = {}, False
+        moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
             d = ask(None, None, "/sportscontent/dkusmd/v1/leagues/%d" % lid) or {}
             for e in d.get("events") or []:
@@ -114,8 +115,19 @@ def main():
                 if not gid:
                     continue
                 on = True
+                seen.add(gid)
                 if sent.get(gid) != st:
                     moved[gid] = st
+        # a finished game leaves DraftKings' list instead of saying final: gone
+        # for two reads out of the 4th or overtime, it is over, with the score
+        # it left on (Jose, Oct 17, 2026: "why do I still see time on the clock")
+        for gid, st in list(sent.items()):
+            if gid in seen or st.get("final"):
+                gone.pop(gid, None)
+                continue
+            gone[gid] = gone.get(gid, 0) + 1
+            if gone[gid] >= 2 and re.search(r"4th|OT", st.get("clock") or ""):
+                moved[gid] = dict(st, final=True, clock="Final", rz=False, down="", running=False)
         if ONCE:
             print(json.dumps(moved, indent=1))
             return
