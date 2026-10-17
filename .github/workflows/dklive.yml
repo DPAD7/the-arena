@@ -1,0 +1,41 @@
+# DraftKings' live game state, every few seconds while football is on, handed
+# to the clock for the alerts and the open board (build/dk_live.py). ESPN ran
+# two and a half minutes behind it (Jose, Oct 17, 2026). The clock starts this
+# when a game is on and it has not heard from it; it stops on its own.
+name: dklive
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: dklive
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 350
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            build
+            data
+            src
+            site/prices.json
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: What the script needs
+        run: pip install --quiet curl_cffi
+
+      - name: Read DraftKings live
+        env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+        run: python -u build/dk_live.py

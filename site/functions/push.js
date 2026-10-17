@@ -32,6 +32,11 @@ export async function onRequest({ request, env }) {
   if (b.recap) return json(await (await post("recap", {})).json());   // send this week's recap again (Oct 13, 2026)
   if (b.opened) return json(await (await post("opened", { type: b.opened })).json());
   if (b.cliplog) return json(await (await post("cliplog", b.cliplog)).json());
+  /* DraftKings' live game state, from dk_live.py on GitHub, signed (Oct 17, 2026) */
+  if (b.dklive) {
+    if (!env.ASK_SECRET || request.headers.get("x-ask-secret") !== env.ASK_SECRET) return json({ error: "no" }, 403);
+    return json(await (await post("dklive", b.dklive)).json());
+  }
   /* a fault, from the watcher on GitHub, signed with the run's secret */
   if (b.fault) {
     if (!env.ASK_SECRET || request.headers.get("x-ask-secret") !== env.ASK_SECRET) return json({ error: "no" }, 403);

@@ -147,6 +147,24 @@ export class Clock {
                                    body: String(b.body || "").slice(0, 200), url: b.url || "/" }], 0);
       return Response.json({ sent: n });
     }
+    /* DraftKings' live state for the games that moved, every few seconds
+       while football is on (build/dk_live.py): kept for the alerts, sent to
+       any open page, and the next look brought forward to now. ESPN ran two
+       and a half minutes behind it (Jose, Oct 17, 2026) */
+    if (url.pathname.endsWith("/dklive") && request.method === "POST") {
+      const b = await request.json();
+      const held = (await this.ctx.storage.get("dklive")) || {};
+      const at = Number(b.at) || Date.now();
+      for (const [gid, st] of Object.entries(b.games || {})) held[gid] = Object.assign({}, st, { at });
+      for (const gid of Object.keys(held)) if (Date.now() - held[gid].at > 6 * 3600000) delete held[gid];
+      await this.ctx.storage.put("dklive", held);
+      await this.ctx.storage.put("dkbeat", Date.now());
+      const games = Object.keys(b.games || {});
+      if (games.length) for (const ws of this.ctx.getWebSockets()) { try { ws.send(JSON.stringify({ dk: b.games })); } catch (e) {} }
+      const nextAt = await this.ctx.storage.getAlarm();
+      if (!nextAt || nextAt > Date.now() + 1000) await this.ctx.storage.setAlarm(Date.now() + 500);
+      return Response.json({ ok: true, games: games.length });
+    }
     if (url.pathname.endsWith("/test") && request.method === "POST") {
       const n = await this.tell([{ key: "test@" + Date.now(), type: "test", title: "Alerts are on", body: "This is what they look like.", url: "/" }], 0);
       return Response.json({ sent: n });
@@ -299,6 +317,16 @@ export class Clock {
     // (Jose, Oct 17, 2026: "we're a full 30 seconds behind")
     let pushing = false;
     try { pushing = await this.livePush(sched, now); } catch (e) { pushing = false; }
+    /* football on or about to be, and DraftKings' reader not heard from:
+       start it, at most once in five minutes */
+    const footy = sched.some(r => r[0] === "game" && Date.parse(r[2]) <= now + 10 * MIN && now - Date.parse(r[2]) < 4.5 * 60 * MIN);
+    if (footy) {
+      const beat = (await this.ctx.storage.get("dkbeat")) || 0, woke = (await this.ctx.storage.get("dkwoke")) || 0;
+      if (now - beat > 90000 && now - woke > 5 * MIN) {
+        await this.ctx.storage.put("dkwoke", now);
+        await this.wake("dklive");
+      }
+    }
     if (live || pushing) next = Math.min(next, now + 5000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
     await this.ctx.storage.setAlarm(Math.max(now + (live || pushing ? 5000 : 30000), next));
@@ -475,6 +503,7 @@ export class Clock {
       if (now >= st - 5 * MIN && now < st + 16 * 60 * MIN) want.add(v.gid);
     }
     const prev = (await this.ctx.storage.get("prev")) || {};
+    const dklive = (await this.ctx.storage.get("dklive")) || {};
     const games = {};
     if (want.size) {
       const boards = {};
@@ -488,6 +517,16 @@ export class Clock {
           try { boards[k] = await (await espnGet(u)).json(); } catch (e) { boards[k] = {}; }
         }
         games[gid] = r[0] === "bout" ? readBout(gid, boards[k]) : await readGame(gid, r[3], boards[k]);
+        /* DraftKings' word on the score, the clock and the ball, where it is
+           fresh: ESPN's trails it (Oct 17, 2026). The passers' counts stay ESPN's */
+        const dk = r[0] === "bout" ? null : dklive[gid];
+        if (dk && Date.now() - dk.at < 45000 && games[gid] && games[gid].state !== "post") {
+          const g = games[gid];
+          g.state = "in"; g.sc = dk.sc; g.clock = dk.clock || g.clock; g.down = dk.down || g.down;
+          g.rz = !!dk.rz;
+          const pid = Object.keys(g.teamId || {}).find(id => g.teamId[id] === dk.poss);
+          g.poss = pid || null;
+        }
       }
     }
     // a fight on his slip is up next: the bout before it on ESPN's card (which

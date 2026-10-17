@@ -55,6 +55,16 @@ export async function onRequest({ request, env }) {
   try { body = await request.json(); } catch (e) { body = {}; }
   /* every wake is the sweep; the DraftKings login touch ("keep") is gone --
      the login is read on his double tap (Oct 12, 2026) */
+  /* football on: DraftKings' live reader, its own workflow (Oct 17, 2026) */
+  if (body.mode === "dklive") {
+    const r = await fetch("https://api.github.com/repos/DPAD7/the-arena/actions/workflows/dklive.yml/dispatches", {
+      method: "POST",
+      headers: { "authorization": "Bearer " + env.GH_TOKEN, "accept": "application/vnd.github+json",
+                 "content-type": "application/json", "user-agent": "the-arena-clock" },
+      body: JSON.stringify({ ref: "main" })
+    });
+    return ok({ started: r.status === 204, mode: "dklive" }, r.status === 204 ? 200 : 502);
+  }
   const mode = body.mode === "dayend" ? "dayend" : "due";
   const moments = momentsOf(body.moments);
   const inputs = { mode: mode };
