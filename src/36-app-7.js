@@ -26,6 +26,12 @@
     LIVESOCK.onmessage = function (e) {
       var j = {}; try { j = JSON.parse(e.data); } catch (err) {}
       var reads = [];
+      /* DraftKings' live state, ahead of ESPN's: kept, and its cards drawn
+         again now (Oct 17, 2026) */
+      if (j.dk) Object.keys(j.dk).forEach(function (id) {
+        window.DKLIVE[id] = Object.assign({}, j.dk[id], { at: Date.now() });
+        if ((j.changed || []).indexOf(id) < 0) (j.changed = j.changed || []).push(id);
+      });
       (j.changed || []).forEach(function (id) {
         document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { reads.push(refresh(c)); });
       });

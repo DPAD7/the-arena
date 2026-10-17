@@ -839,6 +839,34 @@
                                        body: JSON.stringify({ games: ids }) }).catch(function () {});
     }, 3000);
   }
+  /* DraftKings' word on the score, the clock and the down, where the clock
+     has sent it in the last 45 seconds: ESPN's game page ran two and a half
+     minutes behind DraftKings' tracker (Jose, Oct 17, 2026: "if we can use
+     that instead of ESPN, that would be better"). ESPN keeps the plays, the
+     passers and the final word */
+  window.DKLIVE = window.DKLIVE || {};
+  function dkPatch(id, d) {
+    var dk = window.DKLIVE[String(id)];
+    if (!d || !dk || Date.now() - dk.at > 45000) return d;
+    var comp = (((d.header || {}).competitions) || [])[0];
+    if (!comp) return d;
+    var st = comp.status = comp.status || {}, ty = st.type = st.type || {};
+    if (ty.state === "post" || ty.completed) return d;
+    ty.state = "in";
+    var m = /^(\d+:\d\d) - (\w+)/.exec(dk.clock || "");
+    if (m) {
+      st.displayClock = m[1];
+      st.period = { "1st": 1, "2nd": 2, "3rd": 3, "4th": 4, "OT": 5 }[m[2]] || st.period;
+    }
+    ty.shortDetail = ty.detail = dk.clock || ty.shortDetail;
+    (comp.competitors || []).forEach(function (c) { c.score = String(dk.sc[c.homeAway === "home" ? 1 : 0]); });
+    if (dk.down) {
+      d.situation = d.situation || {};
+      d.situation.downDistanceText = dk.down;
+      d.situation.isRedZone = !!dk.rz;
+    }
+    return d;
+  }
   function refresh(card) {
     var id = card.dataset.espn, lg = card.dataset.lg;
     if (!id) return;
@@ -850,7 +878,7 @@
     return gameFeed(id, lg)
       .then(function (d) {
         if (((FEED || {})[String(id)] || {}).final) { card.dataset.settled = "1"; card._full = true; }
-        return d;
+        return dkPatch(id, d);
       })
       .then(function (d) {
         var comp = (((d.header || {}).competitions) || [{}])[0] || {};
