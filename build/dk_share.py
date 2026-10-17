@@ -172,6 +172,26 @@ def main():
             "post": re.search(r"/post/([0-9a-f-]{36})", link).group(1)}
     print(json.dumps(sent, ensure_ascii=False, indent=1))
     if "--dry" not in sys.argv:
+        # the same bet the board's own Place Bet / Track Bet already recorded:
+        # DraftKings' copy is the bet, the board's guess at it goes (Jose, Oct
+        # 17, 2026: Utah, Wake, Buckley sat twice -- $100 from the link, $25
+        # from the board's button)
+        def legs_of(x):
+            return sorted(slip_track.fold(str(l.get("label") or "").split(" \u00b7 ")[0].replace("\u2016", " ")).split()[0]
+                          for l in x.get("legs") or [])
+        mine = legs_of(sent)
+        held = rq.get(slip_track.BETS, impersonate="chrome", timeout=30).json().get("sent") or []
+        placed = dt.datetime.fromisoformat(sent["placed"].replace("Z", "+00:00"))
+        for x in held:
+            if x.get("id") == sent["id"] or x.get("post") or not re.match(r"board-\d+$", str(x.get("id"))):
+                continue
+            try:
+                t = dt.datetime.fromisoformat(str(x.get("placed")).replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            if abs((t - placed).total_seconds()) < 3 * 3600 and legs_of(x) == mine:
+                rq.post(slip_track.BETS, json={"unsent": x["id"]}, impersonate="chrome", timeout=30)
+                print("dropped the board's own copy", x["id"])
         r = rq.post(slip_track.BETS, json={"unsent": sent["id"], "sent": sent}, impersonate="chrome", timeout=30)
         print("posted", sent["id"], r.status_code, r.text[:80])
 
