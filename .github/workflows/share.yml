@@ -1,0 +1,41 @@
+# A DraftKings share link pasted on the wallet: site/functions/slip.js reads
+# the bet off the post and starts this, which ties each leg to its board game
+# and puts it in the wallet (build/dk_share.py; Jose, Oct 17, 2026).
+name: share
+run-name: share ${{ inputs.link }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      link:
+        description: "the DraftKings share link"
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  share:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            build
+            data
+            src
+            site/prices.json
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: What the script needs
+        run: pip install --quiet curl_cffi
+
+      - name: Tie the legs and track the bet
+        env:
+          LINK: ${{ inputs.link }}
+        run: python build/dk_share.py "$LINK"

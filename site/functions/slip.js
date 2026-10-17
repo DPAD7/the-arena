@@ -122,10 +122,46 @@ async function dispatch(env, key) {
   if (r.status !== 204 && r.status !== 200) throw new Error("GitHub said " + r.status);
 }
 
+/* a DraftKings share link pasted on the wallet: the post carries the whole
+   bet as the book holds it, read here with no login, and handed to
+   share.yml (build/dk_share.py) to tie each leg to the board (Jose, Oct 17,
+   2026: "a place to put the shared link and then it does it on its own") */
+async function fromLink(env, link) {
+  const m = /draftkings\.com\/social\/post\/([0-9a-f-]{36})/.exec(link || "");
+  if (!m) return ok({ say: "That isn't a DraftKings bet link." }, 400);
+  const r = await fetch("https://api.draftkings.com/comments/feed/post/details.json", {
+    method: "POST", headers: { "content-type": "application/json", origin: "https://sportsbook.draftkings.com",
+                               referer: "https://sportsbook.draftkings.com/" },
+    body: JSON.stringify({ postKey: m[1] })
+  });
+  let bet = null;
+  try {
+    const d = await r.json();
+    for (const e of (d.post || {}).postEntries || []) {
+      let props = (e.metadataProperties || {}).properties || [];
+      if (!Array.isArray(props)) props = [props];
+      for (const p of props) if (p.name === "betJSON") bet = JSON.parse(atob(p.value));
+    }
+  } catch (e) {}
+  if (!bet || !bet.betId) return ok({ say: "DraftKings didn't hand that bet over. Try the link again." }, 502);
+  const id = "board-dk" + bet.betId;
+  if ((await sentIds(env)).has(id)) return ok({ say: "Already in your wallet.", bets: 0 });
+  const legs = (bet.combinationOutcomes || []).reduce((n, o) => n + ((o.nestedSGPSelections || []).length || 1), 0);
+  const r2 = await fetch("https://api.github.com/repos/" + REPO + "/actions/workflows/share.yml/dispatches", {
+    method: "POST",
+    headers: { "authorization": "Bearer " + env.GH_TOKEN, "accept": "application/vnd.github+json",
+               "x-github-api-version": "2022-11-28", "user-agent": "the-arena-slip", "content-type": "application/json" },
+    body: JSON.stringify({ ref: "main", inputs: { link: "https://sportsbook.draftkings.com/social/post/" + m[1] } })
+  });
+  if (r2.status !== 204 && r2.status !== 200) return ok({ say: "Read it, but could not start the tracker." }, 502);
+  return ok({ say: legs + " legs · " + money(bet.stake) + " pays " + money(bet.potentialPayout) + " · in your wallet in a minute", bets: 1, id });
+}
+
 export async function onRequestPost({ request, env }) {
-  if (!env.ANTHROPIC_API_KEY) return ok({ say: "The slip reader has no key yet." }, 500);
   let body = null;
   try { body = await request.json(); } catch (e) { return ok({ say: "That screenshot did not come through." }, 400); }
+  if (body && body.link) return fromLink(env, body.link);
+  if (!env.ANTHROPIC_API_KEY) return ok({ say: "The slip reader has no key yet." }, 500);
   const b64 = String((body && body.image) || "").replace(/^data:[^,]*,/, "").replace(/\s+/g, "");
   if (b64.length < 1000) return ok({ say: "That screenshot did not come through." }, 400);
 
