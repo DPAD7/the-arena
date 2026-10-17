@@ -1150,7 +1150,16 @@
             pyds: statLine(box, p[1], "passing", "YDS"),
             td: tdCount(box, p[1])
           };
+          /* a read that comes back without the players (ESPN between plays)
+             keeps what the card last showed -- a stat never blanks once it is
+             up (Jose, Oct 17, 2026: "the stats, they're missing") */
+          var was = (card._stats || {})[p[0]] || {};
+          ["ptd", "pyds", "td"].forEach(function (k) {
+            var v = stats[p[0]][k];
+            if ((v === null || v === undefined || isNaN(v)) && was[k] != null && !isNaN(was[k])) stats[p[0]][k] = was[k];
+          });
         });
+        card._stats = stats;
 
         card.querySelectorAll(".trk").forEach(function (t) {
           var head = t.querySelector(".trkhead").textContent;
