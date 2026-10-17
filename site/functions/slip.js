@@ -143,10 +143,10 @@ async function fromLink(env, link) {
       for (const p of props) if (p.name === "betJSON") bet = JSON.parse(atob(p.value));
     }
   } catch (e) {}
-  if (!bet || !bet.betId) return ok({ say: "DraftKings didn't hand that bet over. Try the link again." }, 502);
-  const id = "board-dk" + bet.betId;
-  if ((await sentIds(env)).has(id)) return ok({ say: "Already in your wallet.", bets: 0 });
-  const legs = (bet.combinationOutcomes || []).reduce((n, o) => n + ((o.nestedSGPSelections || []).length || 1), 0);
+  /* DraftKings may turn the site away; the run on GitHub reads it either way */
+  const id = bet && bet.betId ? "board-dk" + bet.betId : "";
+  if (id && (await sentIds(env)).has(id)) return ok({ say: "Already in your wallet.", bets: 0 });
+  const legs = bet ? (bet.combinationOutcomes || []).reduce((n, o) => n + ((o.nestedSGPSelections || []).length || 1), 0) : 0;
   const r2 = await fetch("https://api.github.com/repos/" + REPO + "/actions/workflows/share.yml/dispatches", {
     method: "POST",
     headers: { "authorization": "Bearer " + env.GH_TOKEN, "accept": "application/vnd.github+json",
@@ -154,7 +154,8 @@ async function fromLink(env, link) {
     body: JSON.stringify({ ref: "main", inputs: { link: "https://sportsbook.draftkings.com/social/post/" + m[1] } })
   });
   if (r2.status !== 204 && r2.status !== 200) return ok({ say: "Read it, but could not start the tracker." }, 502);
-  return ok({ say: legs + " legs · " + money(bet.stake) + " pays " + money(bet.potentialPayout) + " · in your wallet in a minute", bets: 1, id });
+  return ok({ say: bet ? legs + " legs · " + money(bet.stake) + " pays " + money(bet.potentialPayout) + " · in your wallet in a minute"
+                       : "Got it · in your wallet in a minute", bets: 1, id });
 }
 
 export async function onRequestPost({ request, env }) {
