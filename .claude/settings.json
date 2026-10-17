@@ -1,0 +1,14 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ \"$CLAUDE_CODE_REMOTE\" = \"true\" ]; then cat \"$CLAUDE_PROJECT_DIR/docs/cloud-rules.md\"; fi"
+          }
+        ]
+      }
+    ]
+  }
+}

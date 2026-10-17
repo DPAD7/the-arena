@@ -43,7 +43,19 @@ jobs:
           git config user.name "the arena"
           git config user.email "185117539+DPAD7@users.noreply.github.com"
           git checkout main
-          git merge --no-edit "$GITHUB_SHA"
+          # the build stamp, the built page and the sweep's data are made
+          # again on every run: a clash there takes main's copy. A clash in
+          # the page's own source stops the run (Sep 19 died on build.txt)
+          if ! git merge --no-edit "$GITHUB_SHA"; then
+            for f in $(git diff --name-only --diff-filter=U); do
+              case "$f" in
+                site/build.txt|site/index.html|site/*.json|site/final/*|site/anim/*|data/*)
+                  git checkout --ours -- "$f"; git add "$f" ;;
+                *) echo "::error::merge clash in $f"; exit 1 ;;
+              esac
+            done
+            git commit --no-edit
+          fi
           git push origin main
 
       - name: Build the page
