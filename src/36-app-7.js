@@ -1822,9 +1822,11 @@
         })
         /* the day picked under the balance: a slip is on the day its first
            game starts, Eastern; anything after tomorrow waits under Tomorrow */
-        .filter(function (bet) { return slipDay(bet, kickOf) === CASHDAY; });
+        /* every open slip, whatever day it plays: the Today / Tomorrow button
+           is gone (Jose, Oct 17, 2026) -- won and lost ones have left already */
+        .sort(function (a, b) { return slipDay(a, kickOf) - slipDay(b, kickOf); });
       var LMAP = legMap();
-      if (!open.length) putHTML(box, '<div class="cashnone">No slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + "</div>");
+      if (!open.length) putHTML(box, '<div class="cashnone">No open slips</div>');
       else putHTML(box, open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
@@ -1930,7 +1932,7 @@
         '<b>' + open.length + '</b>' +
         '<b>' + cm(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
         '<b class="cashpay">' + cm(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
-        '<span>Slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + '</span><span>Wagered</span><span>Total payout</span></div></div>' : ""));
+        '<span>Open slips</span><span>Wagered</span><span>Total payout</span></div></div>' : ""));
     } else if (!legs.length) {
       putHTML(box, "");
       var dayEl0 = document.getElementById("cashday"); if (dayEl0) putHTML(dayEl0, "");
