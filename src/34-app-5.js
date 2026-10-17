@@ -1033,6 +1033,17 @@
                      sd: pl.sd, dn: pl.dn, yl: pl.yl, n: pl.n, g: pl.g,
                      s: pl.s, o: pl.o };
           });
+          /* the newest point says the down and the spot DraftKings has now,
+             not ESPN's last logged play (Oct 17, 2026: the marker read 3rd &
+             18 while the ball was 1st & 10 at the IU 6) */
+          var dkn = window.DKLIVE[String(id)], tail = card._wp[card._wp.length - 1];
+          var dplay = (((d.drives || {}).current || {}).plays || []).slice(-1)[0];
+          if (tail && dkn && !dkn.final && Date.now() - dkn.at < 45000 && dkn.down && dplay && dplay.end) {
+            var dm = /^(\d)\w* & (\w+)/.exec(dkn.down) || [];
+            tail.sd = tail.d = dkn.down; tail.dn = +dm[1] || tail.dn; tail.n = +dm[2] || tail.n;
+            tail.g = dkn.toGoal; tail.yl = dplay.end.yardLine; tail.s = dplay.end.possessionText;
+            tail.o = (dplay.end.team || {}).id || tail.o;
+          }
           wireRead(card);
           markScores(card, d, series, lhome);
         }
