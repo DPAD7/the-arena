@@ -2025,7 +2025,29 @@
   function putHTML(el, html) {
     if (el._html === html) return;
     el._html = html;
-    el.innerHTML = html;
+    /* what changed is changed in place -- a score, a clock, a class -- and
+       every node that is the same stays, so no picture is fetched again
+       (the crawler caught every slip rebuilt on each score, Oct 17, 2026) */
+    var next = document.createElement(el.tagName);
+    next.innerHTML = html;
+    morph(el, next);
+  }
+  function morph(a, b) {
+    var ak = a.childNodes, bk = b.childNodes, i;
+    for (i = 0; i < bk.length; i++) {
+      var x = ak[i], y = bk[i];
+      if (!x) { a.appendChild(y.cloneNode(true)); continue; }
+      if (x.nodeType !== y.nodeType || x.nodeName !== y.nodeName ||
+          (x.nodeType === 1 && (x.getAttribute("data-bet") || "") !== (y.getAttribute("data-bet") || ""))) {
+        a.replaceChild(y.cloneNode(true), x); continue;
+      }
+      if (x.nodeType === 3 || x.nodeType === 8) { if (x.nodeValue !== y.nodeValue) x.nodeValue = y.nodeValue; continue; }
+      var an = x.attributes, bn = y.attributes, j;
+      for (j = an.length - 1; j >= 0; j--) if (!y.hasAttribute(an[j].name)) x.removeAttribute(an[j].name);
+      for (j = 0; j < bn.length; j++) if (x.getAttribute(bn[j].name) !== bn[j].value) x.setAttribute(bn[j].name, bn[j].value);
+      morph(x, y);
+    }
+    while (ak.length > bk.length) a.removeChild(a.lastChild);
   }
   window.bankDraw = bankDraw;
   var bankBeat = function () { if (document.visibilityState === "visible") bankDraw(); };

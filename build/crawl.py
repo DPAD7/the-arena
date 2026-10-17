@@ -50,6 +50,20 @@ PAGE_CHECKS = r"""() => {
       if (r.width > 8 && im.complete && im.naturalWidth === 0 && getComputedStyle(im).visibility !== 'hidden') say('image', id + ' picture did not load: ' + (im.getAttribute('src') || '').slice(0, 80));
     });
   });
+  // a live card with no fresh DraftKings reading: the feed itself is down
+  document.querySelectorAll('.board:not([hidden]) .gcard[data-espn]').forEach(c => {
+    const id = c.dataset.espn, dk = DK[id];
+    if ((c.classList.contains('live') || c.querySelector('.glivebar')) && c.dataset.lg !== 'mma' &&
+        !c.classList.contains('done') && (!dk || Date.now() - dk.at > 90000)) say('feed', id + ' is live with no DraftKings reading for 90s');
+  });
+  // a fighter's record once, in its slot, never inside his name
+  document.querySelectorAll('.board:not([hidden]) .gcard--bout').forEach(c => {
+    c.querySelectorAll('.fname').forEach(n => { if (/\b\d{1,2}-\d{1,2}(-\d)?\b/.test(n.textContent)) say('record', (c.dataset.bout || '') + ' has a record inside a name: ' + n.textContent.trim()); });
+  });
+  // names and classes fit on one line
+  document.querySelectorAll('.board:not([hidden]) .gcard .fname, .board:not([hidden]) .gcard .qname').forEach(n => {
+    if (n.offsetParent && n.scrollWidth > n.clientWidth + 2) say('overflow', 'name runs out of its box: ' + n.textContent.trim().slice(0, 40));
+  });
   // the wallet: every open slip once, every leg drawn properly
   const seen = {};
   document.querySelectorAll('#cashlegs .slipcard[data-bet]').forEach(c => {
@@ -116,6 +130,80 @@ def qb_rules():
     return wrong
 
 
+def fight_rules():
+    """A finished bout keeps both men's closing moneyline (fixed nine times)."""
+    import re, glob
+    sys.path.insert(0, os.path.join(D, "build"))
+    import pagefile
+    wrong = []
+    s = pagefile.read()
+    book = (json.load(open(os.path.join(D, "site", "prices.json"))).get("FIGHTS") or {})
+    rows = []
+    for var in ("FIGHTS",):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, s, re.S)
+        rows += json.loads(m.group(1)) if m else []
+    done = set()
+    for f in glob.glob(os.path.join(D, "site", "final", "mma-*.json")):
+        try:
+            for e in json.load(open(f)).get("events") or []:
+                for c in e.get("competitions") or []:
+                    if ((c.get("status") or {}).get("type") or {}).get("state") == "post":
+                        done.add(str(c.get("id")))
+        except Exception:
+            continue
+    import datetime as dt
+    now = dt.datetime.now(dt.timezone.utc)
+    for g in rows:
+        bid = str(g[1])
+        try:
+            t = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        if bid not in done or now - t > dt.timedelta(days=10):
+            continue
+        v = book.get(bid) or []
+        row_has = (g[9] if len(g) > 9 else "") and (g[11] if len(g) > 11 else "")
+        if not ((len(v) >= 3 and v[0] and v[2]) or row_has):
+            wrong.append(("odds", "%s vs %s is over with no closing moneyline" % (g[3], g[5])))
+    return wrong
+
+
+def leg_rules():
+    """Every leg on a tracked slip has a result within 16 hours of its start (fixed seven times)."""
+    import re
+    import datetime as dt
+    sys.path.insert(0, os.path.join(D, "build"))
+    import pagefile
+    wrong = []
+    s = pagefile.read()
+    start = {}
+    for var in ("SCHED", "CFB", "FIGHTS"):
+        m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, s, re.S)
+        for g in json.loads(m.group(1)) if m else []:
+            start[str(g[1])] = g[2]
+    try:
+        sent = rq.get(BETS, impersonate="chrome", timeout=30).json().get("sent") or []
+    except Exception:
+        return wrong
+    now = dt.datetime.now(dt.timezone.utc)
+    for b in sent:
+        if str(b.get("status") or "").lower() in ("won", "lost"):
+            continue
+        if any(str(l.get("status") or "").lower() == "lost" for l in b.get("legs") or []):
+            continue
+        for l in b.get("legs") or []:
+            if str(l.get("status") or "").lower() in ("won", "lost", "void"):
+                continue
+            st = start.get(str(l.get("g") or "")) or (l.get("frow") or [None, None, None])[2] or l.get("start")
+            try:
+                t = dt.datetime.fromisoformat(str(st).replace("Z", "+00:00"))
+            except ValueError:
+                continue
+            if now - t > dt.timedelta(hours=16):
+                wrong.append(("settle", "%s on %s has no result 16h after it started" % (l.get("label"), b.get("id"))))
+    return wrong
+
+
 def page_rules():
     from playwright.sync_api import sync_playwright
     with sync_playwright() as p:
@@ -135,13 +223,22 @@ def page_rules():
                     "document.querySelectorAll('#cashlegs .slipcard .slview').forEach(v => { var c = v.closest('.slipcard'); if (c && !c.classList.contains('slipcard--open')) slipOpen(v); })")
         pg.wait_for_timeout(4000)
         wrong = [tuple(x) for x in pg.evaluate(PAGE_CHECKS)]
+        # nothing is rebuilt under him: a minute of watching, no card or slip
+        # replaced (fixed seven times)
+        pg.evaluate("""() => { window._rebuilt = 0; const mo = new MutationObserver(ms => ms.forEach(m => m.removedNodes.forEach(n => {
+          if (n.nodeType === 1 && (n.matches('.gcard, .slipcard') || n.querySelector && n.querySelector('.slipcard'))) window._rebuilt++; })));
+          document.querySelectorAll('.board, #cashlegs').forEach(b => mo.observe(b, { childList: true, subtree: true })); }""")
+        pg.wait_for_timeout(60000)
+        n = pg.evaluate("window._rebuilt")
+        if n:
+            wrong.append(("rebuild", "%d card(s) or slip(s) were rebuilt in a minute with nothing changing" % n))
         wrong += [("script", "the page threw: " + e[:160]) for e in errs[:3]]
         b.close()
     return wrong
 
 
 def main():
-    wrong = slip_rules() + qb_rules()
+    wrong = slip_rules() + qb_rules() + fight_rules() + leg_rules()
     try:
         wrong += page_rules()
     except Exception as ex:
