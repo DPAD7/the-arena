@@ -48,7 +48,9 @@ import sys
 # behind this one, so the old nine minutes, set for launchd's ten, only cut
 # full passes off mid-way: the 9 AM sweep of Oct 1, 2026 stopped in
 # fill_fights at 540 seconds with the commit and deploy still to come.
-BUDGET = 900          # fifteen minutes, inside the job's twenty
+BUDGET = 1500         # twenty-five minutes, inside the job's thirty: the full
+                      # 9 PM pass of Oct 16, 2026 ran past fifteen in cfb_reads
+                      # with a whole Saturday slate to read
 
 
 def _out_of_time(_sig, _frame):
@@ -62,7 +64,11 @@ def _out_of_time(_sig, _frame):
         deploy_if_changed(timeout=150)
     except Exception:
         pass
-    os._exit(2)
+    # a pass cut short is finished by the next wake, so it is not a failure:
+    # exit 2 sent Jose a "Run failed" email for a run that had deployed and
+    # whose next wake ran clean (Oct 16, 2026: "stop stop stop")
+    print("::notice::refresh.py stopped at its %ds budget; the next wake finishes the pass" % BUDGET)
+    os._exit(0)
 
 
 signal.signal(signal.SIGALRM, _out_of_time)

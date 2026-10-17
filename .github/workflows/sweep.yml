@@ -47,7 +47,7 @@ jobs:
     permissions:
       contents: write
       actions: write      # to set the fight recorder going when a card starts
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
