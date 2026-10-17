@@ -32,6 +32,21 @@
         window.DKLIVE[id] = Object.assign({}, j.dk[id], { at: Date.now() });
         if ((j.changed || []).indexOf(id) < 0) (j.changed = j.changed || []).push(id);
       });
+      /* DraftKings' start for a game or bout, minute by minute: the card's
+         clock takes it, and one shut on ESPN's slot opens until the real one */
+      if (j.kicks) Object.keys(j.kicks).forEach(function (id) {
+        var t = j.kicks[id];
+        [typeof SCHED === "object" ? SCHED : [], typeof CFB === "object" ? CFB : [], typeof FIGHTS === "object" ? FIGHTS : []]
+          .forEach(function (set) { set.forEach(function (row) { if (String(row[1]) === id && !row._began) row[2] = t; }); });
+        document.querySelectorAll('.gcard[data-espn="' + id + '"], .gcard[data-bout="' + id + '"]').forEach(function (c) {
+          c.dataset.kick = t;
+          if (c.classList.contains("locked") && Date.now() < Date.parse(t) && !c.classList.contains("live") &&
+              !c.classList.contains("done") && !c.classList.contains("gdone") && c.dataset.settledBout !== "1") {
+            c.classList.remove("locked");
+            c.querySelectorAll('button.price[data-shut="1"]').forEach(function (b) { delete b.dataset.shut; b.removeAttribute("aria-disabled"); });
+          }
+        });
+      });
       (j.changed || []).forEach(function (id) {
         document.querySelectorAll('.gcard[data-espn="' + id + '"]').forEach(function (c) { reads.push(refresh(c)); });
       });

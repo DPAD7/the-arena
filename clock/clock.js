@@ -159,8 +159,10 @@ export class Clock {
       for (const gid of Object.keys(held)) if (Date.now() - held[gid].at > 6 * 3600000) delete held[gid];
       await this.ctx.storage.put("dklive", held);
       await this.ctx.storage.put("dkbeat", Date.now());
-      const games = Object.keys(b.games || {});
-      if (games.length) for (const ws of this.ctx.getWebSockets()) { try { ws.send(JSON.stringify({ dk: b.games })); } catch (e) {} }
+      const games = Object.keys(b.games || {}), kicks = b.kicks || {};
+      if (Object.keys(kicks).length) await this.ctx.storage.put("dkkicks", Object.assign((await this.ctx.storage.get("dkkicks")) || {}, kicks));
+      if (games.length || Object.keys(kicks).length)
+        for (const ws of this.ctx.getWebSockets()) { try { ws.send(JSON.stringify({ dk: b.games || {}, kicks })); } catch (e) {} }
       const nextAt = await this.ctx.storage.getAlarm();
       if (!nextAt || nextAt > Date.now() + 1000) await this.ctx.storage.setAlarm(Date.now() + 500);
       return Response.json({ ok: true, games: games.length });

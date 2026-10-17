@@ -9,7 +9,7 @@ on:
 
 concurrency:
   group: dklive
-  cancel-in-progress: false
+  cancel-in-progress: true    # a fresh start replaces the running one at once
 
 permissions:
   contents: read

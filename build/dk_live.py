@@ -30,6 +30,7 @@ D = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(D, "build"))
 from read_dk import ask
 from slip_track import Board
+import dk_kicks
 
 SITE = "https://the-arenasports.pages.dev/push"
 LEAGUES = {"nfl": 88808, "ncaaf": 87637}
@@ -106,6 +107,7 @@ def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
+    kicks, kicked_at = {}, 0
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -128,12 +130,24 @@ def main():
             gone[gid] = gone.get(gid, 0) + 1
             if gone[gid] >= 2 and re.search(r"4th|OT", st.get("clock") or ""):
                 moved[gid] = dict(st, final=True, clock="Final", rz=False, down="", running=False)
+        # every minute, DraftKings' start for every game and bout: a game that
+        # kicks off late keeps its prices until it is really on (dk_kicks.py)
+        new_kicks = {}
+        if time.time() - kicked_at > 60:
+            kicked_at = time.time()
+            try:
+                now_k = dk_kicks.football(board)
+                now_k.update(dk_kicks.bouts(board))
+                new_kicks = {k: v for k, v in now_k.items() if kicks.get(k) != v}
+                kicks.update(new_kicks)
+            except Exception as ex:
+                print("kicks failed:", ex)
         if ONCE:
             print(json.dumps(moved, indent=1))
             return
-        if moved:
+        if moved or new_kicks:
             try:
-                rq.post(SITE, json={"dklive": {"at": int(time.time() * 1000), "games": moved}},
+                rq.post(SITE, json={"dklive": {"at": int(time.time() * 1000), "games": moved, "kicks": new_kicks}},
                         headers={"x-ask-secret": secret}, impersonate="chrome", timeout=10)
                 sent.update(moved)
             except Exception as ex:

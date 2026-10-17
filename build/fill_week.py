@@ -219,6 +219,7 @@ def event_for(g, league, keyed, events, club, cfb, loose=True):
 
 
 NEWPINS = {}
+KICKS = {}
 # DraftKings writes a few clubs its own way
 DKCLUB = {"JAC": "JAX", "WAS": "WSH", "LA": "LAR"}
 
@@ -419,6 +420,13 @@ def main():
             elif how == "unsettled":
                 unsettled.append("%s/%s (%s)" % (away, home, league))
                 continue
+            # the book's own kickoff: ESPN lists the TV slot, DraftKings the
+            # real one -- Alabama at Tennessee 3:30 on ESPN, 3:45 on the book,
+            # and the card shut its prices at 3:30 (Jose, Oct 17, 2026: "use
+            # the correct times ... match their cadence")
+            st = (e.get("start") or "")[:16]
+            if st and st + "Z" != g[2] and abs((T(st + "Z") - kick).total_seconds()) < 4 * 3600:
+                KICKS[str(eid)] = st + "Z"
             # a full game is left alone until the day it is played: from
             # twenty-four hours out it is read on every pass, so the price on the card
             # is the one DraftKings has now and the book's passers confirm the
@@ -526,6 +534,7 @@ def main():
     # merged over what is there: past weeks keep their prices, this run's games take theirs
     book = pricefile.read()
     book["PROPS"].update(props)
+    book.setdefault("KICKS", {}).update(KICKS)
     for var in ("SCHED", "CFB"):
         m = re.search(r"var %s = (\[\[.*?\]\]);" % var, s, re.S)
         arr = json.loads(m.group(1))

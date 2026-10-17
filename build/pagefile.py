@@ -148,12 +148,19 @@ def schedule(page):
        (Jose, Sep 29, 2026). [[kind, id, start ISO, league]]"""
     import json as _j
     out = []
+    # DraftKings' own start for a game or bout, over ESPN's listed slot, so
+    # the pregame alerts and the live looks land on the real kickoff
+    # (build/dk_kicks.py; Jose, Oct 17, 2026)
+    try:
+        kicks = _j.load(open(os.path.join(D, "site", "prices.json"))).get("KICKS") or {}
+    except Exception:
+        kicks = {}
     for var, kind, lg in (("SCHED", "game", "nfl"), ("CFB", "game", "college-football"),
                           ("FIGHTCARDS", "card", "mma"), ("BOXCARDS", "card", "boxing")):
         m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
         for g in _j.loads(m.group(1)) if m else []:
             if len(g) > 2 and g[2]:
-                row = [kind, str(g[1]), g[2], lg]
+                row = [kind, str(g[1]), kicks.get(str(g[1])) or g[2], lg]
                 # a game: its clubs and the passer each card names, by ESPN id,
                 # so the clock can tie a leg to his game and his box line
                 if kind == "game" and len(g) > 8:
@@ -165,7 +172,7 @@ def schedule(page):
         m = re.search(r"  var %s = (\[\[.*?\]\]);" % var, page, re.S)
         for f in _j.loads(m.group(1)) if m else []:
             if len(f) > 6 and f[2]:
-                out.append(["bout", str(f[1]), f[2], lg, f[3], f[5], str(f[4] or ""), str(f[6] or ""), str(f[0])])
+                out.append(["bout", str(f[1]), kicks.get(str(f[1])) or f[2], lg, f[3], f[5], str(f[4] or ""), str(f[6] or ""), str(f[0])])
     _j.dump(out, open(os.path.join(D, "site", "schedule.json"), "w"), separators=(",", ":"))
 
 

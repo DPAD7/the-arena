@@ -457,6 +457,27 @@
           }
         }
       });
+      /* a football game's kickoff, off the book too: ESPN lists the TV slot,
+         DraftKings the real kickoff -- Alabama at Tennessee read 3:30 and shut
+         its prices with the book at 3:45 (Jose, Oct 17, 2026: "use the correct
+         times"). A card shut on the slot opens again until the real one */
+      [typeof SCHED === "object" ? SCHED : [], typeof CFB === "object" ? CFB : []].forEach(function (set) {
+        set.forEach(function (row) {
+          var t = kicks[String(row[1])];
+          if (!t || row[2] === t || frozen(String(row[1]))) return;
+          row[2] = t; moved++; nowPlease++;
+          var gc = document.querySelector('.gcard[data-espn="' + row[1] + '"]');
+          if (!gc) return;
+          gc.dataset.kick = t;
+          if (gc.classList.contains("locked") && Date.now() < Date.parse(t) && !gc.classList.contains("live") &&
+              !gc.classList.contains("done") && !gc.classList.contains("gdone")) {
+            gc.classList.remove("locked");
+            gc.querySelectorAll('button.price[data-shut="1"]').forEach(function (b) {
+              delete b.dataset.shut; b.removeAttribute("aria-disabled");
+            });
+          }
+        });
+      });
       /* the chips a card already draws are written onto the buttons that are
          already there: the touchdown rungs, both sides, and the head to head.
          Deferring a rebuild had left the fight prices and the corrected start
