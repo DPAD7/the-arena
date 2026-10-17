@@ -83,9 +83,16 @@ def boxer(name):
             from PIL import Image
             im = Image.open(io.BytesIO(raw)).convert("RGB")
             w, h = im.size
-            side = min(w, h)
-            im = im.crop(((w - side) // 2, 0, (w + side) // 2, side)).resize((400, 400))   # square, from the top: the face
-            im.save(path, quality=88)
+            # the whole picture, never cut: fitted into a square, the sides
+            # filled with its own background (Jose, Oct 17, 2026: "why is this
+            # image so zoomed in, you should show his full face")
+            edge = [im.getpixel((0, y)) for y in range(0, h, max(1, h // 20))] + \
+                   [im.getpixel((w - 1, y)) for y in range(0, h, max(1, h // 20))]
+            bg = tuple(sum(c[i] for c in edge) // len(edge) for i in range(3))
+            side = max(w, h)
+            sq = Image.new("RGB", (side, side), bg)
+            sq.paste(im, ((side - w) // 2, (side - h) // 2))
+            sq.resize((400, 400)).save(path, quality=88)
         except Exception:
             open(path, "wb").write(raw)
         out["face"] = "box:" + slug(name)
