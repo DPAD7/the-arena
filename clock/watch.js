@@ -165,6 +165,8 @@ export function qbOff(row, d) {
    the same stats the wallet draws (Jose, Oct 9, 2026: "if the game is over
    ... the markets within" settle) */
 const LOOSE = [
+  // a TD leg on a game the board drew no ladder for (Sayin 2+, Oct 17, 2026)
+  [/passing touchdowns|pass tds/i, [["passing", "TD"]]], [/rushing touchdowns|rush tds/i, [["rushing", "TD"]]],
   [/rush(ing)? \+ rec(eiving)? yards/i, [["rushing", "YDS"], ["receiving", "YDS"]]],
   [/receiving yards|rec yds/i, [["receiving", "YDS"]]], [/longest reception/i, [["receiving", "LONG"]]],
   [/receptions/i, [["receiving", "REC"]]], [/rushing yards|rush yds/i, [["rushing", "YDS"]]],
