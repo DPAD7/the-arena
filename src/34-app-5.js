@@ -871,6 +871,21 @@
       d.situation.downDistanceText = dk.down;
       d.situation.isRedZone = !!dk.rz;
     }
+    /* the ball where DraftKings has it, as a play on the drive the field is
+       drawn from. ESPN counts the yard line from the home goal: the home side
+       is 100 less its yards to go, the away side is its yards to go (OSU at
+       the IU 31 reads 31; IU at the OSU 19 reads 81) */
+    var off = (comp.competitors || []).filter(function (c) { return (c.team || {}).abbreviation === dk.poss; })[0];
+    if (off && typeof dk.toGoal === "number") {
+      var home = off.homeAway === "home", yl = home ? 100 - dk.toGoal : dk.toGoal;
+      var other = (comp.competitors || []).filter(function (c) { return c !== off; })[0] || {};
+      var spot = dk.toGoal === 50 ? "50" : dk.toGoal < 50 ? ((other.team || {}).abbreviation || "") + " " + dk.toGoal
+                                                         : dk.poss + " " + (100 - dk.toGoal);
+      d.drives = d.drives || {};
+      var cur = d.drives.current = d.drives.current || { plays: [] };
+      cur.plays = (cur.plays || []).concat([{ end: { yardLine: yl, yardsToEndzone: dk.toGoal, possessionText: spot,
+        downDistanceText: dk.down || "", team: { id: (off.team || {}).id } } }]);
+    }
     return d;
   }
   function refresh(card) {
