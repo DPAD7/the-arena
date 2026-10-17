@@ -217,6 +217,17 @@ def clips():
             for pid, q in load("qbclips.json").items() if pid not in st]
 
 
+def wire():
+    """one fact once on a passer's QB Wire card (Oct 17, 2026: Montgomery out,
+       twice on Stroud's)"""
+    wrong = []
+    for p in load("qbwire.json").get("players") or []:
+        keys = [f.get("key") for f in p.get("facts") or []]
+        for k in sorted({k for k in keys if keys.count(k) > 1}):
+            wrong.append(("qbwire", "%s's QB Wire card shows %s twice" % (p.get("n"), k)))
+    return wrong
+
+
 def fights():
     return [(None, "%s vs %s has no weight class" % (g[3], g[5]))
             for g, _ in soon("FIGHTS", after=dt.timedelta(days=7)) if not (g[7] or "").strip()]
@@ -259,9 +270,9 @@ def the_page():
         return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
 
 
-CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, clips, fights, settled, files)
+CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, clips, wire, fights, settled, files)
 # the order a mend is run in, when more than one is due
-MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups", "qb_clips")
+MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups", "qb_clips", "qbwire")
 
 
 def local():

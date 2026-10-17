@@ -386,6 +386,12 @@ def main():
                           "rb": {"id": x["id"], "n": x["name"], "st": x["status"], "inj": x.get("why") or "", "sh": round(x["sh"] * 100)}})
     json.dump(teams, open(TEAMS, "w"), indent=0, sort_keys=True)
 
+    # one fact once: a back listed out twice in the same report drew his card
+    # twice on Stroud's (Jose, Oct 17, 2026: "why is there a dupe?")
+    once = {}
+    for c in cards:
+        once.setdefault(c["key"], c)
+    cards = list(once.values())
     for c in cards:
         seen.setdefault(c["key"], c["at"])
     cards.sort(key=lambda c: c["at"], reverse=True)
