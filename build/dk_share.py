@@ -60,13 +60,21 @@ def fight_row(ev, b, sport):
         if sel.get("marketId") in mk:
             px[slip_track.fold(sel.get("label"))] = (((sel.get("displayOdds") or {}).get("american") or "").replace("\u2212", "-"), sel.get("id") or "")
     pa, pb = px.get(slip_track.fold(a), ("", "")), px.get(slip_track.fold(c), ("", ""))
-    brec = {}
-    bp = os.path.join(slip_track.D, "data", "boxrec.json")
-    if os.path.exists(bp):
-        brec = json.load(open(bp))
     sl = lambda n: re.sub(r"[^a-z0-9]+", "-", n.lower()).strip("-")
-    face = lambda n: ("box:" + sl(n)) if os.path.exists(os.path.join(slip_track.D, "site", "faces", "box", sl(n) + ".jpg")) else ""
-    div = (brec.get(sl(a)) or brec.get(sl(c)) or {}).get("division") or ""
+    have = lambda n: os.path.exists(os.path.join(slip_track.D, "site", "faces", "box", sl(n) + ".jpg"))
+    kept = json.load(open(os.path.join(slip_track.D, "data", "ring.json"))) if os.path.exists(os.path.join(slip_track.D, "data", "ring.json")) else {}
+    # a boxer the board doesn't hold yet: The Ring, for these two men only --
+    # his cut-out and his division (Jose, Oct 17, 2026: "if I do boxing then
+    # look at the ring magazine for this image")
+    if sport == "Boxing" and not (have(a) and have(c) and sl(a) in kept):
+        try:
+            import ring
+            ring.pair(a, c)
+            kept = json.load(open(os.path.join(slip_track.D, "data", "ring.json")))
+        except Exception as ex:
+            print("The Ring:", ex)
+    face = lambda n: ("box:" + sl(n)) if have(n) else ""
+    div = (kept.get(sl(a)) or kept.get(sl(c)) or {}).get("division") or ""
     div = {"Heavy": "Heavyweight", "Cruiser": "Cruiserweight"}.get(div, div + ("weight" if div and not div.endswith("weight") else ""))
     start = (e.get("startDate") or "")[:16] + "Z"
     bid = "dk-" + ev

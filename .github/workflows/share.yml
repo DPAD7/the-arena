@@ -12,30 +12,47 @@ on:
         required: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   share:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
         with:
-          sparse-checkout: |
-            build
-            data
-            src
-            site/prices.json
-          sparse-checkout-cone-mode: false
+          ref: main
 
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
       - name: What the script needs
-        run: pip install --quiet curl_cffi
+        run: pip install --quiet curl_cffi pillow
 
       - name: Tie the legs and track the bet
         env:
           LINK: ${{ inputs.link }}
         run: python build/dk_share.py "$LINK"
+
+      # a boxer The Ring was asked for: his picture goes on the site now and
+      # into the repo, so the phone draws him and the next bet doesn't ask
+      - name: Keep and show a new face
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: |
+          git add site/faces/box data/ring.json data/ring_index.json 2>/dev/null || true
+          if git diff --cached --quiet; then echo "no new face"; exit 0; fi
+          git config user.name "the arena"
+          git config user.email "185117539+DPAD7@users.noreply.github.com"
+          git commit -m "faces from The Ring $(date -u '+%Y-%m-%d %H:%M UTC')"
+          for i in 1 2 3 4 5; do git pull --rebase --autostash -X theirs && git push && break; sleep $((i * 5)); done
+          mkdir -p logs cache prices
+          (cd build && python -c "import pagefile; pagefile.deployable(pagefile.read())")
+          (cd site && npx --yes wrangler@latest pages deploy . --project-name=the-arenasports --branch=main --commit-dirty=true)
+
