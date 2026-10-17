@@ -194,7 +194,9 @@ export class Clock {
     if (url.pathname.endsWith("/status")) {
       const done = (await this.ctx.storage.get("done")) || {};
       const at = await this.ctx.storage.getAlarm();
+      const dkb = await this.ctx.storage.get("dkbeat"), dkl = (await this.ctx.storage.get("dklive")) || {};
       return Response.json({ next: at ? new Date(at).toISOString() : null,
+                             dk: { beat: dkb ? new Date(dkb).toISOString() : null, games: Object.keys(dkl).length },
                              recent: Object.entries(done).sort((a, b) => b[1] - a[1]).slice(0, 25) });
     }
     await this.tick();
