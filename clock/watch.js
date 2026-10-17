@@ -89,12 +89,15 @@ export async function readGame(gid, lg, board) {
     for (const x of c.competitors || []) g.sc[x.homeAway === "home" ? 1 : 0] = +x.score || 0;
     const s = c.situation || {};
     g.poss = s.possession ? String(s.possession) : null;
-    g.rz = !!s.isRedZone;
     g.down = s.downDistanceText || "";
     const pr = (s.lastPlay || {}).probability;
     if (pr && pr.homeWinPercentage != null) g.wpHome = pr.homeWinPercentage;
     g.teamId = {};
     for (const x of c.competitors || []) g.teamId[String((x.team || {}).id)] = (x.team || {}).abbreviation;
+    /* ESPN's flag is up inside either 20: only the other side's 20 is the red
+       zone (OSU sacked to its own 16 was sent as "in the red zone", Oct 17, 2026) */
+    const side = String(s.possessionText || "").split(" ")[0];
+    g.rz = !!s.isRedZone && !!side && side !== g.teamId[g.poss];
   }
   if (g.state !== "pre") {
     try {
