@@ -1,5 +1,5 @@
 {
- "at": "2026-10-16",
+ "at": "2026-10-17",
  "week": 6,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
@@ -114,28 +114,6 @@
    "kick": "2026-10-18T20:05Z"
   },
   {
-   "gid": "401872998",
-   "away": "CAR",
-   "home": "PHI",
-   "pick": "CAR",
-   "model": 70,
-   "book": 60,
-   "bookpick": "CAR",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "lean",
-   "rank": 6,
-   "why": [
-    "Points per game: CAR 30.2, PHI 18.4",
-    "PHI is starting a backup QB",
-    "Last 3 games, win %: CAR 67%, PHI 0%",
-    "QB play (EPA per dropback): CAR +0.08, PHI +0.02"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
-  },
-  {
    "gid": "401873000",
    "away": "NO",
    "home": "NYG",
@@ -147,7 +125,7 @@
    "won": 56,
    "n": 45,
    "call": "lean",
-   "rank": 7,
+   "rank": 6,
    "why": [
     "Points allowed per game: NYG 21.2, NO 30.2",
     "Last 3 games, win %: NYG 83%, NO 0%",
@@ -169,7 +147,7 @@
    "won": 52,
    "n": 25,
    "call": "lean",
-   "rank": 8,
+   "rank": 7,
    "why": [
     "TB is starting a backup QB",
     "Points per game: PIT 22.2, TB 20.0",
@@ -191,7 +169,7 @@
    "won": 47,
    "n": 15,
    "call": "lean",
-   "rank": 9,
+   "rank": 8,
    "why": [
     "Points allowed per game: JAX 14.0, HOU 22.4",
     "Last 3 games, win %: JAX 100%, HOU 33%",
@@ -200,6 +178,28 @@
    ],
    "week": 6,
    "kick": "2026-10-18T13:30Z"
+  },
+  {
+   "gid": "401872998",
+   "away": "CAR",
+   "home": "PHI",
+   "pick": "CAR",
+   "model": 55,
+   "book": 60,
+   "bookpick": "CAR",
+   "agree": true,
+   "won": 61,
+   "n": 119,
+   "call": null,
+   "rank": 9,
+   "why": [
+    "Points per game: CAR 30.2, PHI 18.4",
+    "Last 3 games, win %: CAR 67%, PHI 0%",
+    "Passing offense (EPA): CAR +0.22, PHI -0.07",
+    "Offense success rate: CAR 43%, PHI 36%"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
   },
   {
    "gid": "401873005",
@@ -224,28 +224,6 @@
    "kick": "2026-10-18T20:25Z"
   },
   {
-   "gid": "401872997",
-   "away": "BAL",
-   "home": "CLE",
-   "pick": "BAL",
-   "model": 51,
-   "book": 60,
-   "bookpick": "BAL",
-   "agree": true,
-   "won": 61,
-   "n": 119,
-   "call": null,
-   "rank": 11,
-   "why": [
-    "Points per game: BAL 29.2, CLE 18.6",
-    "Last 3 games, win %: BAL 100%, CLE 67%",
-    "Offense success rate: BAL 50%, CLE 40%",
-    "Win % this season: BAL 80%, CLE 60%"
-   ],
-   "week": 6,
-   "kick": "2026-10-18T17:00Z"
-  },
-  {
    "gid": "401872999",
    "away": "CHI",
    "home": "ATL",
@@ -257,12 +235,34 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 12,
+   "rank": 11,
    "why": [
     "Points allowed per game: CHI 19.2, ATL 24.4",
     "Last 3 games, point margin: CHI +2.3, ATL +11.7",
     "Win % this season: CHI 60%, ATL 40%",
     "Passing offense (EPA): CHI +0.13, ATL -0.04"
+   ],
+   "week": 6,
+   "kick": "2026-10-18T17:00Z"
+  },
+  {
+   "gid": "401872997",
+   "away": "BAL",
+   "home": "CLE",
+   "pick": "BAL",
+   "model": 51,
+   "book": 59,
+   "bookpick": "BAL",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 12,
+   "why": [
+    "Points per game: BAL 29.2, CLE 18.6",
+    "Last 3 games, win %: BAL 100%, CLE 67%",
+    "Offense success rate: BAL 50%, CLE 40%",
+    "Win % this season: BAL 80%, CLE 60%"
    ],
    "week": 6,
    "kick": "2026-10-18T17:00Z"
