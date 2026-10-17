@@ -277,8 +277,8 @@ export function news(slips, idx, games, prev, rows) {
     if (!open.length && legs.length) {
       /* its own alert, never folded into the slip's running one, so the win
          is never just a quiet replacement of "one leg left" (Oct 3, 2026) */
-      out.push({ tag: "won:" + bet.id, key: "won@" + bet.id, type: "slip", title: "You won \u00b7 +$" + Math.max(0, (+bet.topay || 0) - (+bet.wager || 0)).toFixed(2),
-                 body: "Your " + odds + " slip hit for $" + (+bet.topay || 0).toFixed(2) + ". Keep stacking.", url: "/#slip=" + bet.id });
+      out.push({ tag: "won:" + bet.id, key: "won@" + bet.id, type: "slip", /* one row: you won, how much, keep stacking (Jose, Oct 17, 2026) */
+                 title: "You won $" + (+bet.topay || 0).toFixed(2) + " \u00b7 Keep stacking.", body: "", url: "/#slip=" + bet.id });
       continue;
     }
     /* a leg that lands, with the count: "Carr 2+ PTD ✓ · 1 of 6 hit, 5 left"
