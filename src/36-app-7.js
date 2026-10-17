@@ -521,12 +521,25 @@
     if (DKB) {
       var base = wal && typeof wal.bal === "number" ? [wal.bal, wal.at || 0] : [0, 0];
       var b0 = base[0];
+      var startOf = {};
+      [typeof SCHED === "object" ? SCHED : [], typeof CFB === "object" ? CFB : [], typeof FIGHTS === "object" ? FIGHTS : []]
+        .forEach(function (set) { set.forEach(function (r) { startOf[String(r[1])] = Date.parse(r[2]) || 0; }); });
       (DKB.sent || []).forEach(function (bet) {
-        if ((Date.parse(bet.placed) || 0) < base[1]) return;
-        b0 -= bet.wager || 0;
-        var legs = bet.legs || [];
-        if (bet.status === "won" || (legs.length && legs.every(function (lg) {
-          return String(lg.status || "").toLowerCase() === "won" || (BANK.legs[lg.sel] || {}).st === "won" || (window.TRKST || {})[lg.sel] === "won"; }))) b0 += bet.topay || 0;
+        var legs = bet.legs || [], before = (Date.parse(bet.placed) || 0) < base[1];
+        /* a stake placed before the balance was set is already in it; its
+           payout is not, unless its last game could have been settled by then
+           -- the Sayin SGP, placed at 10:24 and won at 3:40, never reached a
+           balance set at 12:21 (Jose, Oct 17, 2026) */
+        if (!before) b0 -= bet.wager || 0;
+        var won = bet.status === "won" || (legs.length && legs.every(function (lg) {
+          return String(lg.status || "").toLowerCase() === "won" || (BANK.legs[lg.sel] || {}).st === "won" || (window.TRKST || {})[lg.sel] === "won"; }));
+        if (!won) return;
+        /* decided after the balance was set: the clock stamps the moment; a
+           slip won before the stamp existed counts unless its last game
+           started more than a day before the balance */
+        var lastKick = Math.max.apply(null, legs.map(function (lg) { return startOf[String(lg.g || "")] || 0; }).concat([0]));
+        var after = bet.settledAt ? bet.settledAt > base[1] : lastKick > base[1] - 86400000;
+        if (!before || after) b0 += bet.topay || 0;
       });
       b0 = Math.round(b0 * 100) / 100;
       if (BANK.bal !== b0) { BANK.bal = b0; bankFix = true; }

@@ -585,7 +585,12 @@ export class Clock {
         }
         const ls = (bet.legs || []).map(l => String(l.status || "").toLowerCase());
         const bs = ls.includes("lost") ? "lost" : ls.length && ls.every(x => x === "won") ? "won" : "open";
-        if (bet.status !== bs) { bet.status = bs; moved = true; }
+        if (bet.status !== bs) {
+          bet.status = bs; moved = true;
+          // when it was decided, so the balance adds a payout that lands
+          // after the balance was set, whenever the bet was placed (Oct 17, 2026)
+          if (bs === "won" || bs === "lost") bet.settledAt = Date.now();
+        }
       }
       if (moved) {
         const s1 = await this.ctx.storage.get("kv:dkbets:sent");
