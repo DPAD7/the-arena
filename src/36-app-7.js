@@ -2021,26 +2021,86 @@
        (Jose, Oct 17, 2026) */
     var linkEl = document.getElementById("cashlink");
     if (linkEl) {
+      /* the slip builds where it will live: five steps -- the link, the bet
+         read, its legs, its payout, tracked -- the first two lit as they
+         really happen, the rest on the real card the moment it lands (Jose,
+         Oct 17, 2026: "I can see it being built ... in a smooth way") */
+      var buildEl = document.getElementById("cashbuild");
+      var STEPS = ["Link", "Bet", "Legs", "Payout", "Tracked"];
+      var stepTo = function (n) {
+        if (!buildEl) return;
+        buildEl.querySelectorAll(".bst").forEach(function (e, i) { e.classList.toggle("on", i < n); });
+      };
+      var buildStart = function () {
+        if (!buildEl) return;
+        buildEl.innerHTML = '<div class="bsteps">' + STEPS.map(function (t) { return '<div class="bst"><i><u></u></i><span>' + t + "</span></div>"; }).join("") +
+          '</div><div class="bskel"><div class="bsk bsk--chip"></div><div class="bskrow"><i></i><i></i><i></i><i></i></div><div class="bsk bsk--line"></div></div>';
+        buildEl.hidden = false;
+        setTimeout(function () { stepTo(1); }, 60);
+      };
+      var buildEnd = function () { if (buildEl) { buildEl.hidden = true; buildEl.innerHTML = ""; } };
+      var fmt$ = function (v) { return "$" + (+v || 0).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); };
+      var buildLand = function (bet) {
+        var sk = buildEl && buildEl.querySelector(".bskel");
+        if (sk) sk.remove();
+        if (typeof bankDraw === "function") bankDraw();
+        var card = document.querySelector('#cashlegs .slipcard[data-bet="' + (window.CSS && CSS.escape ? CSS.escape(bet.id) : bet.id) + '"]');
+        stepTo(3);
+        if (!card) { stepTo(5); setTimeout(buildEnd, 1800); return; }
+        card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        card.classList.add("slbuild");
+        var avs = card.querySelectorAll(".slav");
+        avs.forEach(function (a, i) { a.style.animationDelay = (i * 0.3) + "s"; });
+        var t1 = avs.length * 300 + 300;
+        setTimeout(function () {
+          stepTo(4);
+          card.classList.add("slbuild--pay");
+          var pay = card.querySelector(".slgrid .cashpay"), to = +bet.topay || 0, t0 = performance.now();
+          var count = function (t) {
+            var f = Math.min(1, (t - t0) / 900);
+            if (pay) pay.textContent = fmt$(to * (1 - Math.pow(1 - f, 3)));
+            if (f < 1) requestAnimationFrame(count);
+          };
+          if (pay && !CASHHIDE) requestAnimationFrame(count);
+        }, t1);
+        setTimeout(function () {
+          stepTo(5);
+          card.classList.add("slbuild--done");
+          trackSay((bet.legs || []).length + " legs \u00b7 " + fmt$(bet.wager || 0) + " pays " + fmt$(bet.topay || 0));
+        }, t1 + 1200);
+        setTimeout(function () {
+          card.classList.remove("slbuild", "slbuild--pay", "slbuild--done");
+          avs.forEach(function (a) { a.style.animationDelay = ""; });
+          buildEnd();
+        }, t1 + 3600);
+      };
       var linkGo = function () {
         var v = (linkEl.value || "").trim();
         if (!/draftkings\.com\/social\/post\//.test(v) || linkEl.classList.contains("busy")) return;
         linkEl.classList.add("busy"); linkEl.blur();
+        var had = {};
+        ((DKB && DKB.sent) || []).forEach(function (b) { had[b.id] = 1; });
+        buildStart();
+        var done = function () { linkEl.value = ""; linkEl.classList.remove("busy"); };
         fetch("slip?k=" + encodeURIComponent(ARENAKEY), { method: "POST", headers: { "content-type": "application/json" },
               body: JSON.stringify({ link: v }) })
           .then(function (r) { return r.json(); })
           .then(function (j) {
-            trackSay((j && j.say) || "Got it");
-            var n0 = ((DKB && DKB.sent) || []).length, tries = 0;
+            if (!j || !j.bets) { buildEnd(); done(); trackSay((j && j.say) || "That link didn't work"); return; }
+            stepTo(2);
+            var tries = 0;
             var look = function () {
               tries++;
               Promise.resolve(dkPull()).then(function () {
-                if (((DKB && DKB.sent) || []).length !== n0 || tries > 12) { linkEl.value = ""; linkEl.classList.remove("busy"); }
-                else setTimeout(look, 10000);
+                var fresh = ((DKB && DKB.sent) || []).filter(function (b) { return !had[b.id]; })[0];
+                if (fresh) { done(); buildLand(fresh); }
+                else if (tries > 30) { done(); buildEnd(); }
+                else setTimeout(look, 4000);
               });
             };
-            if (j && j.bets) setTimeout(look, 30000); else { linkEl.value = ""; linkEl.classList.remove("busy"); }
+            setTimeout(look, 15000);
           })
-          .catch(function () { linkEl.classList.remove("busy"); });
+          .catch(function () { done(); buildEnd(); });
       };
       linkEl.addEventListener("input", function () { setTimeout(linkGo, 50); });
       linkEl.addEventListener("paste", function () { setTimeout(linkGo, 50); });

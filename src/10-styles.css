@@ -4391,6 +4391,33 @@
     background: #0e1013; color: var(--ink); font: 500 16px -apple-system, "Helvetica Neue", Arial, sans-serif; padding: 0 12px; outline: none; }
   .cashsheet .cashlink:focus { border-color: #17c257; }
   .cashsheet .cashlink.busy { border-color: #17c257; color: #8e8e93; }
+  /* a pasted slip, built in five steps (Oct 17, 2026) */
+  .cashsheet .cashbuild { margin: 12px 2px 4px; }
+  .cashbuild .bsteps { display: flex; gap: 6px; }
+  .cashbuild .bst { flex: 1; display: grid; gap: 5px; }
+  .cashbuild .bst i { height: 4px; border-radius: 2px; background: #2c2e33; overflow: hidden; display: block; }
+  .cashbuild .bst i u { display: block; height: 100%; width: 0; background: #17c257; transition: width .45s ease; }
+  .cashbuild .bst.on i u { width: 100%; }
+  .cashbuild .bst span { font: 700 10.5px Barlow, Arial, sans-serif; letter-spacing: .1em; color: #5d6066; text-transform: uppercase; transition: color .3s; }
+  .cashbuild .bst.on span { color: #d6d7da; }
+  .cashbuild .bskel { margin-top: 12px; border: 1px solid #34363b; border-radius: 20px; padding: 16px; background: #232428; display: grid; gap: 14px;
+    animation: bskin .45s cubic-bezier(.2,.9,.3,1.1); }
+  .cashbuild .bsk { height: 26px; border-radius: 9px; }
+  .cashbuild .bsk--chip { width: 110px; }
+  .cashbuild .bsk--line { width: 70%; height: 16px; }
+  .cashbuild .bskrow { display: flex; gap: 8px; }
+  .cashbuild .bskrow i { width: 48px; height: 48px; border-radius: 13px; display: block; }
+  .cashbuild .bsk, .cashbuild .bskrow i { background: linear-gradient(90deg, #2a2c31 0%, #34363c 50%, #2a2c31 100%); background-size: 200% 100%; animation: bskshine 1.2s linear infinite; }
+  @keyframes bskshine { from { background-position: 200% 0; } to { background-position: 0 0; } }
+  @keyframes bskin { from { opacity: 0; transform: translateY(14px) scale(.98); } }
+  .cashsheet .slipcard.slbuild .slav { opacity: 0; transform: scale(.4); animation: slpop .4s cubic-bezier(.2,1.4,.4,1) forwards; }
+  .cashsheet .slipcard.slbuild .slnames { clip-path: inset(0 100% 0 0); animation: slwrite .6s ease forwards; animation-delay: inherit; }
+  .cashsheet .slipcard.slbuild .slgrid { opacity: 0; transition: opacity .4s; }
+  .cashsheet .slipcard.slbuild.slbuild--pay .slnames { animation-play-state: running; }
+  .cashsheet .slipcard.slbuild.slbuild--pay .slgrid { opacity: 1; }
+  .cashsheet .slipcard.slbuild--done { border-color: #17c257; box-shadow: 0 0 0 1px #17c25733, 0 0 30px #17c25722; transition: border-color .5s, box-shadow .5s; }
+  @keyframes slpop { to { opacity: 1; transform: none; } }
+  @keyframes slwrite { to { clip-path: inset(0 0 0 0); } }
   .cashsheet .cashbl { font: 700 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8e8e93; }
   .cashsheet .cashhead .cashamt { margin: 0; font: 800 32px/1 "Barlow Condensed", "Arial Narrow", sans-serif; text-align: left; }
   .cashsheet .cashright { display: flex; align-items: center; gap: 8px; flex: none; }
