@@ -1,0 +1,47 @@
+# The double tap on the back of his phone: a placed DraftKings bet, read off
+# the screenshot by site/functions/slip.js, is tied to its games here and put
+# in the wallet (build/slip_track.py; Jose, Oct 17, 2026). It writes no file,
+# so it waits behind nothing.
+name: slip
+run-name: slip ${{ inputs.key }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      key:
+        description: "the reading's key: the bet ids, joined by -"
+        required: true
+
+concurrency:
+  group: slip-${{ inputs.key }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  slip:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            build
+            data
+            src
+            site/prices.json
+          sparse-checkout-cone-mode: false
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: What the script needs
+        run: pip install --quiet curl_cffi
+
+      - name: Tie the legs and track the bet
+        env:
+          ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          KEY: ${{ inputs.key }}
+        run: python build/slip_track.py --key "$KEY"
