@@ -21,6 +21,7 @@ import datetime as dt
 import json
 import os
 import re
+import subprocess
 import sys
 import time
 
@@ -107,7 +108,7 @@ def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
-    kicks, kicked_at, said_at = {}, 0, {}
+    kicks, kicked_at, said_at, crawled_at = {}, 0, {}, 0
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -145,6 +146,14 @@ def main():
                 kicks.update(new_kicks)
             except Exception as ex:
                 print("kicks failed:", ex)
+        # every ten minutes while games are on: the board read as his phone
+        # reads it, against every rule (crawl.py) -- a fault reaches his phone
+        if time.time() - crawled_at > 600 and on:
+            crawled_at = time.time()
+            try:
+                subprocess.run([sys.executable, os.path.join(D, "build", "crawl.py"), "--alert"], timeout=240)
+            except Exception as ex:
+                print("crawl failed:", ex)
         if ONCE:
             print(json.dumps(moved, indent=1))
             return

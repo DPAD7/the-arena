@@ -26,6 +26,7 @@ jobs:
             data
             src
             site/prices.json
+            site/wire.json
           sparse-checkout-cone-mode: false
 
       - uses: actions/setup-python@v5
@@ -33,7 +34,9 @@ jobs:
           python-version: "3.12"
 
       - name: What the script needs
-        run: pip install --quiet curl_cffi
+        run: |
+          pip install --quiet curl_cffi playwright
+          python -m playwright install --with-deps chromium >/dev/null
 
       - name: Read DraftKings live
         env:
