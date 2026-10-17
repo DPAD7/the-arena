@@ -1811,6 +1811,12 @@
           /* the result the clock writes onto the leg counts too: two fight
              slips sat in the bag red after Asher lost, because only the
              tracker's own word was read (Jose, Oct 13, 2026) */
+          /* a slip that has won is done with too: kept in the record and in
+             the balance, gone from the wallet (Jose, Oct 17, 2026: "once it's
+             won ... we don't need it there anymore") */
+          var legs0 = bet.legs || [];
+          if (String(bet.status || "").toLowerCase() === "won" || (legs0.length && legs0.every(function (lg) {
+            return String(lg.status || "").toLowerCase() === "won" || (BANK.legs[lg.sel] || {}).st === "won" || TRKST[lg.sel] === "won"; }))) return false;
           return String(bet.status || "").toLowerCase() !== "lost" && !(bet.legs || []).some(function (lg) {
             return String(lg.status || "").toLowerCase() === "lost" || (BANK.legs[lg.sel] || {}).st === "lost" || TRKLOST[lg.sel] || TRKST[lg.sel] === "lost"; });
         })
