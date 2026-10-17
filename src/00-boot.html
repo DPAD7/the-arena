@@ -1,7 +1,11 @@
 <meta name="theme-color" content="#000000">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}.btile{position:relative;width:160px;height:160px}.bstar{position:absolute;inset:0;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .3s forwards}.bstar img{width:160px;height:160px;display:block}@keyframes bstin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}</style>
+<style>html,body{background:#000;margin:0}#boot{position:fixed;inset:0;z-index:9999;background:#000;display:flex;align-items:center;justify-content:center;transition:opacity .35s}#boot.boot--out{opacity:0;pointer-events:none}html.booting,html.booting body{overflow:hidden;overscroll-behavior:none;touch-action:none}#turn{display:none}@media (orientation:landscape) and (max-height:500px) and (pointer:coarse){#turn{display:flex;position:fixed;inset:0;z-index:10000;background:#000;align-items:center;justify-content:center}#turn img{width:96px;height:96px}html,body{overflow:hidden}}.btile{position:relative;width:160px;height:160px}.bstar{position:absolute;inset:0;opacity:0;animation:bstin .7s cubic-bezier(.34,1.56,.64,1) .3s forwards}.bstar img{width:160px;height:160px;display:block}@keyframes bstin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}</style>
+<!-- a phone turned sideways sees the mark, not the board on its side: an
+     iPhone home-screen app cannot lock its own rotation, so this is the lock
+     (Jose, Oct 17, 2026: "it shouldn't rotate like an app wouldn't") -->
+<div id="turn" aria-hidden="true"><img src="ico/stax-play.png" alt=""></div>
 <div id="boot" aria-hidden="true"><div class="btile"><div class="bstar bd"><img src="ico/stax-play.png" alt=""></div></div></div>
 <script>
 /* the white play tile on plain black, no glow and no glitter, from the very
@@ -28,9 +32,15 @@
      each picture on screen arriving. Ten seconds and it opens regardless
      (Oct 12, 2026; the animation is unchanged) */
   var b = document.getElementById("boot"), done = false, built = false, loaded = document.readyState === "complete";
+  /* nothing under the mark moves while it shows: the board scrolled behind
+     the opening (Jose, Oct 17, 2026) */
+  document.documentElement.classList.add("booting");
+  if (b) b.addEventListener("touchmove", function (e) { e.preventDefault(); }, { passive: false });
   var out = function () {
     if (done || !b) return;
     done = true;
+    document.documentElement.classList.remove("booting");
+    scrollTo(0, 0);
     b.classList.add("boot--out"); setTimeout(function () { b.remove(); }, 400);
   };
   var check = function () {

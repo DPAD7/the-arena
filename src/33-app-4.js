@@ -1070,8 +1070,25 @@
      down out of a clip opened the search) */
   var OWNDRAG = window.OWNDRAG = ".fturf, .fslots, .pickghost, dialog, .slipbar, .htrack, .gcorner, .drvg, .cashfab, .cashsheet, #qsearch, input, textarea, .cliprow, .gamerow, #clipstory, #clipshow";
   (function () {
-    var x0 = 0, y0 = 0, t0 = 0, ok = false, drag = false, dx = 0, sides = {};
+    var x0 = 0, y0 = 0, t0 = 0, ok = false, drag = false, dx = 0, sides = {}, primed = "", raf = 0;
     function width() { return TRACK.getBoundingClientRect().width; }
+    /* the days either side are drawn while nothing moves, not on the first
+       frame of the swipe: drawing two boards under the thumb froze it, and
+       the swipe stuck (Jose, Oct 17, 2026: "sometimes it gets stuck") */
+    function keyNow() { return sport + "|" + JSON.stringify(stateNow()); }
+    function prime() {
+      if (drag) return;
+      sides = { "-1": neighborState(-1), "1": neighborState(1) };
+      [-1, 1].forEach(function (d) {
+        var pane = PANES[String(d)];
+        clearPane(pane);
+        if (sides[String(d)]) renderInto(pane, sides[String(d)]);
+      });
+      primed = keyNow();
+    }
+    var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 200); };
+    window._swipePrime = function () { primed = ""; idle(function () { if (!drag && !primed) prime(); }); };
+    setTimeout(window._swipePrime, 3000);
     document.addEventListener("touchstart", function (e) {
       var t = e.touches[0], caro = e.target.closest(".caro, .form.qcards");
       /* .htrack is the eye's own room: a finger that starts there is hiding a
@@ -1092,27 +1109,26 @@
       if (!ok) return;
       var t = e.touches[0], mx = t.clientX - x0, my = t.clientY - y0;
       if (!drag) {
-        if (Math.abs(mx) < 12 || Math.abs(mx) < Math.abs(my) * 1.3) {
-          if (Math.abs(my) > 12) ok = false;        /* a scroll, not a swipe */
-          return;
-        }
+        /* the first 10 points of travel decide it: more across than down is
+           a swipe, so a thumb drifting on the diagonal still swipes */
+        if (Math.abs(mx) < 10 && Math.abs(my) < 10) return;
+        if (Math.abs(mx) <= Math.abs(my)) { ok = false; return; }   /* a scroll, not a swipe */
         drag = true;
-        sides = { "-1": neighborState(-1), "1": neighborState(1) };
-        [-1, 1].forEach(function (d) {
-          var pane = PANES[String(d)];
-          clearPane(pane);
-          if (sides[String(d)]) renderInto(pane, sides[String(d)]);
-        });
+        if (primed !== keyNow()) prime();
         TRACK.classList.remove("gliding");
       }
       if (e.cancelable) e.preventDefault();
       dx = mx;
-      var short = (dx < 0 && !sides["1"]) || (dx > 0 && !sides["-1"]);   /* nothing that way: a tug */
-      TRACK.style.transform = "translateX(" + (short ? dx / 3 : dx) + "px)";
+      if (!raf) raf = requestAnimationFrame(function () {
+        raf = 0;
+        var short = (dx < 0 && !sides["1"]) || (dx > 0 && !sides["-1"]);   /* nothing that way: a tug */
+        TRACK.style.transform = "translateX(" + (short ? dx / 3 : dx) + "px)";
+      });
     }, { passive: false });
-    document.addEventListener("touchend", function () {
+    function end() {
       if (!drag) return;
       drag = false;
+      if (raf) { cancelAnimationFrame(raf); raf = 0; }
       var dir = dx < 0 ? 1 : -1, st = sides[String(dir)];
       var go = !!st && (Math.abs(dx) > width() / 4 || (Math.abs(dx) > 40 && Date.now() - t0 < 300));
       var settled = false;
@@ -1123,13 +1139,17 @@
         TRACK.classList.remove("gliding");
         if (go) commit(st);
         TRACK.style.transform = "translateX(0)";
-        clearPane(PANES["-1"]); clearPane(PANES["1"]);
+        if (go) { clearPane(PANES["-1"]); clearPane(PANES["1"]); window._swipePrime(); }
       };
       TRACK.classList.add("gliding");
       TRACK.addEventListener("transitionend", done);
       TRACK.style.transform = go ? "translateX(" + (-dir * width()) + "px)" : "translateX(0)";
       setTimeout(done, 400);
-    }, { passive: true });
+    }
+    document.addEventListener("touchend", end, { passive: true });
+    /* a touch the phone takes away (a call, a banner) ends the swipe too,
+       never leaving the board stuck halfway */
+    document.addEventListener("touchcancel", end, { passive: true });
   })();
 
   /* ---- months, for the fights: the year's events, a month at a time ---- */
