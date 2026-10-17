@@ -4549,3 +4549,8 @@
   .ql-t td i { display: block; font: 600 11px Barlow, sans-serif; color: #8e8e93; font-style: normal; }
   .ql-t b.hit { color: #17c257; } .ql-none { color: #8e8e93; padding: 12px 0; text-align: center; }
   .qscfb .qsnone { color: #8e8e93; padding: 10px 4px; font: 600 14px Barlow, sans-serif; }
+
+/* a fight the board doesn't carry, on its slip (Wardley, Oct 17, 2026) */
+.trkloose--fight .trkm { flex: 1; min-width: 0; }
+.trkloose--fight .trkvs { font: 600 13px Barlow, Arial, sans-serif; color: #8e8e93; letter-spacing: .04em; margin-top: 2px; }
+.trkloose--fight .trkodds { flex: none; font: 800 20px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; margin-left: 10px; }
