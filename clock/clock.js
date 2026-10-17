@@ -293,16 +293,15 @@ export class Clock {
     // a wake GitHub refused is tried again in a minute, inside its window
     if (failed) next = Math.min(next, now + MIN);
     if (watch.checking) next = Math.min(next, now + 2 * MIN);
-    // a game with his money on it is being played: look every minute
-    if (live) next = Math.min(next, now + MIN);
-    // a page open while football is on: every fifteen seconds
+    // a game or bout with his money on it, or a page open while one is on:
+    // every five seconds. ESPN's own copy is ten seconds old at most, and a
+    // look a minute apart sent "in the red zone" after Texas had scored
+    // (Jose, Oct 17, 2026: "we're a full 30 seconds behind")
     let pushing = false;
     try { pushing = await this.livePush(sched, now); } catch (e) { pushing = false; }
-    if (pushing) next = Math.min(next, now + (pushing === "fight" ? 5000 : 15000));
-    // a bout with his money on it is on: alerts every fifteen seconds
-    if (live === "fight") next = Math.min(next, now + 15000);
+    if (live || pushing) next = Math.min(next, now + 5000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
-    await this.ctx.storage.setAlarm(Math.max(now + (pushing === "fight" ? 5000 : pushing ? 15000 : live === "fight" ? 15000 : 30000), next));
+    await this.ctx.storage.setAlarm(Math.max(now + (live || pushing ? 5000 : 30000), next));
   }
 
   /* an NFL game's passer, off ESPN's box score now: true when a side's card
