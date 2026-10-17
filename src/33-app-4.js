@@ -1075,16 +1075,19 @@
     /* the days either side are drawn while nothing moves, not on the first
        frame of the swipe: drawing two boards under the thumb froze it, and
        the swipe stuck (Jose, Oct 17, 2026: "sometimes it gets stuck") */
-    function keyNow() { return sport + "|" + JSON.stringify(stateNow()); }
-    function prime() {
-      if (drag) return;
-      sides = { "-1": neighborState(-1), "1": neighborState(1) };
+    /* what the panes hold is named by the two days they hold, worked out
+       fresh at every swipe: a key of the board's own state let a swipe back
+       from Sunday land on Friday */
+    function sidesNow() { return { "-1": neighborState(-1), "1": neighborState(1) }; }
+    function keyOf(sd) { return sport + "|" + JSON.stringify(sd); }
+    function prime(sd) {
+      sides = sd || sidesNow();
       [-1, 1].forEach(function (d) {
         var pane = PANES[String(d)];
         clearPane(pane);
         if (sides[String(d)]) renderInto(pane, sides[String(d)]);
       });
-      primed = keyNow();
+      primed = keyOf(sides);
     }
     var idle = window.requestIdleCallback || function (f) { return setTimeout(f, 200); };
     window._swipePrime = function () { primed = ""; idle(function () { if (!drag && !primed) prime(); }); };
@@ -1114,7 +1117,8 @@
         if (Math.abs(mx) < 10 && Math.abs(my) < 10) return;
         if (Math.abs(mx) <= Math.abs(my)) { ok = false; return; }   /* a scroll, not a swipe */
         drag = true;
-        if (primed !== keyNow()) prime();
+        var sd = sidesNow();
+        if (primed !== keyOf(sd)) prime(sd); else sides = sd;
         TRACK.classList.remove("gliding");
       }
       if (e.cancelable) e.preventDefault();
