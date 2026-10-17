@@ -72,6 +72,12 @@ jobs:
           cp data/register.db data/qbspy.db
           mkdir -p logs cache prices
 
+      # the slips on that game, settled by DraftKings' own word the moment the
+      # game is final -- the same pass, no timer (Oct 17, 2026)
+      - name: Slips settled off DraftKings
+        if: steps.new.outputs.games != ''
+        run: python build/dk_settle.py || true
+
       - name: Save the finished games and count them in
         if: steps.new.outputs.games != ''
         env:

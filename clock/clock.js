@@ -329,6 +329,28 @@ export class Clock {
     // (Jose, Oct 17, 2026: "we're a full 30 seconds behind")
     let pushing = false;
     try { pushing = await this.livePush(sched, now); } catch (e) { pushing = false; }
+    /* a slip added from a share link is settled by DraftKings' own word:
+       from three hours after the last event on it starts -- the board's
+       start for a game it carries, DraftKings' for one it doesn't (a boxing
+       night, another sport) -- asked every half hour until DraftKings has
+       it, for twelve hours. Known times, no timer (Jose, Oct 17, 2026) */
+    try {
+      const s0 = await this.ctx.storage.get("kv:dkbets:sent");
+      const slips = s0 ? JSON.parse(s0.v || "[]") : [];
+      const startOf = {};
+      for (const r of sched) startOf[String(r[1])] = Date.parse(r[2]) || 0;
+      let due = false;
+      for (const bet of slips) {
+        if (!bet.post || /^(won|lost)$/i.test(String(bet.status || ""))) continue;
+        const last = Math.max(0, ...(bet.legs || []).map(l => startOf[String(l.g || "")] || Date.parse(l.start || "") || 0));
+        if (last && now >= last + 3 * 3600000 && now < last + 15 * 3600000) due = true;
+      }
+      const tried = (await this.ctx.storage.get("dksettled")) || 0;
+      if (due && now - tried > 30 * MIN) {
+        await this.ctx.storage.put("dksettled", now);
+        await this.wake("dksettle");
+      }
+    } catch (e) {}
     /* football on or about to be, and DraftKings' reader not heard from:
        start it, at most once in five minutes */
     const footy = sched.some(r => r[0] === "game" && Date.parse(r[2]) <= now + 10 * MIN && now - Date.parse(r[2]) < 4.5 * 60 * MIN);

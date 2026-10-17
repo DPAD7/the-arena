@@ -1,0 +1,28 @@
+# A tracked slip settled by DraftKings' own word: the clock starts this from
+# three hours after the last event on a slip begins, every half hour until
+# DraftKings has the result (build/dk_settle.py; Jose, Oct 17, 2026).
+name: dksettle
+
+on:
+  workflow_dispatch:
+
+concurrency:
+  group: dksettle
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  settle:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          sparse-checkout: build
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install --quiet curl_cffi
+      - run: python build/dk_settle.py

@@ -441,7 +441,7 @@ def sweeps_due(seen):
 # The three daily sweeps (and the day's close-out) run every job.
 FULL = ("settle.py", "played_qb.py", "kicks.py", "news.py", "wire.py", "depth.py", "starters.py",
         "dk_sitemap.py", "dk_people.py", "ledger.py", "alt_ptd.py", "mma_year.py", "fill_week.py",
-        "dk_promos.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "dk_kicks.py", "boxing.py", "posters.py",
+        "dk_promos.py", "cfb_ml.py", "keep_prices.py", "fill_fights.py", "dk_kicks.py", "dk_settle.py", "boxing.py", "posters.py",
         "alerts.py", "lineups.py", "qbwire.py", "anim_rebuild.py", "guard.py", "qb_search.py",
         "qb_clips.py", "ask_fold.py", "networks.py", "birthdays.py", "faces.py", "mirror.py",
         "records_mma.py", "ufc_records.py", "bfo_odds.py", "h2h_week.py", "nfl_reads.py",
@@ -454,7 +454,7 @@ FULL = ("settle.py", "played_qb.py", "kicks.py", "news.py", "wire.py", "depth.py
 # reads built on them -- not the other thirty jobs (Oct 12, 2026). Same
 # order as FULL.
 PREGAME = ("news.py", "wire.py", "depth.py", "starters.py", "dk_people.py", "fill_week.py",
-           "fill_fights.py", "dk_kicks.py", "alerts.py", "lineups.py", "guard.py", "h2h_week.py", "nfl_reads.py",
+           "fill_fights.py", "dk_kicks.py", "dk_settle.py", "alerts.py", "lineups.py", "guard.py", "h2h_week.py", "nfl_reads.py",
            "cfb_reads.py", "ufc_reads.py", "suggest.py", "log_reads.py")
 # after the whistle, the clips; the rest of what settle_late used to run is
 # in FULL already, and runs once

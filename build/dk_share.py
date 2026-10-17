@@ -52,7 +52,8 @@ def leg_of(o, nested):
     return {"who": who, "team": team, "market": market, "line": line,
             "odds": o.get("playedOddsAmerican") or o.get("enterpriseDisplayOdds") or "",
             "game": "%s @ %s" % (o.get("awayTeamName"), o.get("homeTeamName")),
-            "status": o.get("status") or "open", "_sel": o.get("providerSelectionId"), "_sgp": nested}
+            "status": o.get("status") or "open", "_sel": o.get("providerSelectionId"), "_sgp": nested,
+            "_ev": str(o.get("eventId") or "")}
 
 
 def main():
@@ -69,6 +70,7 @@ def main():
                "wager": b.get("stake"), "topay": b.get("potentialPayout"), "boost": "",
                "placed": dt.datetime.fromisoformat(b["placedDate"].replace("Z", "+00:00")).astimezone(slip_track.ET).replace(tzinfo=None).isoformat(),
                "legs": legs}
+    starts = {str(e.get("eventId")): e.get("startDate") for e in b.get("events") or []}
     board = slip_track.Board()
     reading["_placed"] = dt.datetime.fromisoformat(reading["placed"]).replace(tzinfo=slip_track.ET)
     reading["id"] = "board-dk" + reading["bet_id"]
@@ -85,12 +87,20 @@ def main():
         else:
             t["sel"] = lg["_sel"] or t.get("sel")
         t["sgp"] = "1" if lg["_sgp"] else ""
+        # when DraftKings starts the event: a leg the board has no game for
+        # (another sport, another promotion) is settled off DraftKings after it
+        st = starts.get(lg["_ev"])
+        if st and not t.get("g"):
+            t["start"] = st
         tied.append(t)
     sent = {"id": reading["id"], "type": reading["type"] if len(tied) > 1 else "Single",
             "odds": slip_track.minus(reading["odds"]), "was": slip_track.minus(reading["odds"]),
             "wager": slip_track.money(reading["wager"]), "topay": slip_track.money(reading["topay"]),
             "boost": "", "boosted": False, "placed": b["placedDate"][:19] + "Z", "status": "open",
-            "from": "board", "legs": tied}
+            "from": "board", "legs": tied,
+            # the post it came from: DraftKings' own copy of the bet, read
+            # again by dk_settle.py for the result (Oct 17, 2026)
+            "post": re.search(r"/post/([0-9a-f-]{36})", link).group(1)}
     print(json.dumps(sent, ensure_ascii=False, indent=1))
     if "--dry" not in sys.argv:
         r = rq.post(slip_track.BETS, json={"unsent": sent["id"], "sent": sent}, impersonate="chrome", timeout=30)
