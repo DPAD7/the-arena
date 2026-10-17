@@ -913,6 +913,12 @@
       put(f[9], { g: String(f[1]), k: "fml", s: 0, fight: 1 });
       put(f[11], { g: String(f[1]), k: "fml", s: 1, fight: 1 });
     });
+    var lf0 = legFights();
+    Object.keys(lf0).forEach(function (bid) {
+      var f = lf0[bid];
+      put(f[9], { g: bid, k: "fml", s: 0, fight: 1 });
+      put(f[11], { g: bid, k: "fml", s: 1, fight: 1 });
+    });
     if (typeof FPROPS === "object") Object.keys(FPROPS).forEach(function (bid) {
       var fp = FPROPS[bid] || {};
       Object.keys(fp).forEach(function (key) {
@@ -1357,9 +1363,25 @@
      market's own marks, the price -- and the legs that ask about a window of
      the fight carry a bar for just that window. The spec is in the notes as
      wallet-slip-tracker. */
+  /* a fight the board doesn't carry rides on its own leg, in the board's
+     bout shape (dk_share.py: "frow"), and is drawn exactly as a UFC bout is
+     -- Wardley v Dubois on his slip, with no card on the Combat tab (Jose,
+     Oct 17, 2026: "boxing is the same thing as MMA") */
+  function legFights() {
+    var out = {};
+    ((DKB && DKB.sent) || []).forEach(function (bet) {
+      (bet.legs || []).forEach(function (lg) {
+        if (!lg.frow || !lg.frow[1]) return;
+        out[String(lg.frow[1])] = lg.frow;
+        if (typeof FPROPS === "object" && !FPROPS[lg.frow[1]]) FPROPS[lg.frow[1]] = { rounds: /^Boxing/.test(lg.frow[7] || "") ? 12 : 3 };
+      });
+    });
+    return out;
+  }
   function trkFightRow(bid) {
     var hit = null;
     (typeof FIGHTS === "object" ? FIGHTS : []).some(function (f) { if (String(f[1]) === String(bid)) { hit = { g: f, fight: 1 }; return true; } return false; });
+    if (!hit) { var lf = legFights()[String(bid)]; if (lf) hit = { g: lf, fight: 1 }; }
     return hit;
   }
   /* each market: its words, its marks, and the stretch of the fight it asks

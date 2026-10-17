@@ -42,6 +42,38 @@ def bet_of(link):
     raise SystemExit("no bet on that post")
 
 
+LEAGUE = {"Boxing": 72061, "MMA": 9034}
+
+
+def fight_row(ev, b, sport):
+    """[card, bout, start, man, face, man, face, class, price, id, price, id, "", ""]"""
+    e = next((x for x in b.get("events") or [] if str(x.get("eventId")) == ev), None)
+    if not e or " vs " not in (e.get("name") or ""):
+        return None
+    a, c = [x.strip() for x in e["name"].split(" vs ", 1)]
+    sys.path.insert(0, os.path.join(slip_track.D, "build"))
+    from read_dk import ask
+    d = ask(None, None, "/sportscontent/dkusmd/v1/leagues/%d" % LEAGUE.get(sport, 72061)) or {}
+    mk = {m["id"]: m for m in d.get("markets") or [] if str(m.get("eventId")) == ev and "Moneyline" in (m.get("name") or "")}
+    px = {}
+    for sel in d.get("selections") or []:
+        if sel.get("marketId") in mk:
+            px[slip_track.fold(sel.get("label"))] = (((sel.get("displayOdds") or {}).get("american") or "").replace("\u2212", "-"), sel.get("id") or "")
+    pa, pb = px.get(slip_track.fold(a), ("", "")), px.get(slip_track.fold(c), ("", ""))
+    brec = {}
+    bp = os.path.join(slip_track.D, "data", "boxrec.json")
+    if os.path.exists(bp):
+        brec = json.load(open(bp))
+    sl = lambda n: re.sub(r"[^a-z0-9]+", "-", n.lower()).strip("-")
+    face = lambda n: ("box:" + sl(n)) if os.path.exists(os.path.join(slip_track.D, "site", "faces", "box", sl(n) + ".jpg")) else ""
+    div = (brec.get(sl(a)) or brec.get(sl(c)) or {}).get("division") or ""
+    div = {"Heavy": "Heavyweight", "Cruiser": "Cruiserweight"}.get(div, div + ("weight" if div and not div.endswith("weight") else ""))
+    start = (e.get("startDate") or "")[:16] + "Z"
+    bid = "dk-" + ev
+    return [bid, bid, start, a, face(a), c, face(c), (("Boxing " if sport == "Boxing" else "") + div).strip(),
+            pa[0], pa[1], pb[0], pb[1], "", ""]
+
+
 def leg_of(o, nested):
     offer, out = o.get("offerLabel") or "", o.get("outcomeLabel") or ""
     m = re.match(r"(.+?) \((\w+)\) (.+)$", offer)
@@ -98,6 +130,13 @@ def main():
         # his face from the board's boxing faces, the matchup and the time --
         # never the raw words (Jose, Oct 17, 2026: Wardley came in as "Fab")
         if not t.get("g") and sports.get(lg["_ev"]) in ("Boxing", "MMA"):
+            # the fight itself rides on the leg, in the board's own bout shape,
+            # so the slip draws it the way it draws a UFC bout -- both men,
+            # their prices, the class, the bar -- with no card on the Combat
+            # tab (Jose, Oct 17, 2026: "just add it to the bet slip where I had it")
+            fr = fight_row(lg["_ev"], b, sports.get(lg["_ev"]))
+            if fr:
+                t["frow"] = fr
             me, opp = lg["who"], next((x for x in lg["game"].split(" @ ") if x != lg["who"]), "")
             kind = "ML" if lg["market"].lower() == "moneyline" else (lg["line"] or lg["market"]).upper()
             t["label"] = me.split()[-1].upper() + " \u2016 " + kind
