@@ -1382,6 +1382,19 @@
     var out = {};
     ((DKB && DKB.sent) || []).forEach(function (bet) {
       (bet.legs || []).forEach(function (lg) {
+        /* a fight leg with no fight on it still draws as a fight: built from
+           the leg -- the matchup, his face, his price, the time (Jose, Oct 17,
+           2026: "it should look just like MMA ... live or not") */
+        if (!lg.frow && / \u2016 /.test(String(lg.label || "")) && / vs /.test(String(lg.evn || "")) && !lg.g) {
+          var two = String(lg.evn).split(" vs "), me = String(lg.label).split(" \u2016 ")[0].toUpperCase();
+          var mine = two[0].split(" ").pop().toUpperCase() === me ? 0 : 1, other = two[1 - mine];
+          var sl = function (n) { return String(n || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); };
+          var row = ["leg-" + lg.sel, "leg-" + lg.sel, lg.start || "", "", "", "", "", "", "", "", "", "", "", ""];
+          row[3 + 2 * mine] = two[mine]; row[4 + 2 * mine] = lg.img ? "box:" + sl(two[mine]) : "";
+          row[5 - 2 * mine] = other; row[6 - 2 * mine] = "box:" + sl(other);
+          row[8 + 2 * mine] = String(lg.odds || "").replace("\u2212", "-"); row[9 + 2 * mine] = lg.sel;
+          lg.frow = row;
+        }
         if (!lg.frow || !lg.frow[1]) return;
         out[String(lg.frow[1])] = lg.frow;
         if (typeof FPROPS === "object" && !FPROPS[lg.frow[1]]) FPROPS[lg.frow[1]] = { rounds: /^Boxing/.test(lg.frow[7] || "") ? 12 : 3 };
