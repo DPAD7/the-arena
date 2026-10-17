@@ -2006,6 +2006,35 @@
       if (list && list.contains(e.target) && list.scrollHeight > list.clientHeight) return;
       e.preventDefault();
     }, { passive: false });
+    /* a shared bet link pasted in the wallet's box: the site reads the bet
+       off it, GitHub ties the legs, and the wallet looks again until it lands
+       (Jose, Oct 17, 2026) */
+    var linkEl = document.getElementById("cashlink");
+    if (linkEl) {
+      var linkGo = function () {
+        var v = (linkEl.value || "").trim();
+        if (!/draftkings\.com\/social\/post\//.test(v) || linkEl.classList.contains("busy")) return;
+        linkEl.classList.add("busy"); linkEl.blur();
+        fetch("slip?k=" + encodeURIComponent(ARENAKEY), { method: "POST", headers: { "content-type": "application/json" },
+              body: JSON.stringify({ link: v }) })
+          .then(function (r) { return r.json(); })
+          .then(function (j) {
+            trackSay((j && j.say) || "Got it");
+            var n0 = ((DKB && DKB.sent) || []).length, tries = 0;
+            var look = function () {
+              tries++;
+              Promise.resolve(dkPull()).then(function () {
+                if (((DKB && DKB.sent) || []).length !== n0 || tries > 12) { linkEl.value = ""; linkEl.classList.remove("busy"); }
+                else setTimeout(look, 10000);
+              });
+            };
+            if (j && j.bets) setTimeout(look, 30000); else { linkEl.value = ""; linkEl.classList.remove("busy"); }
+          })
+          .catch(function () { linkEl.classList.remove("busy"); });
+      };
+      linkEl.addEventListener("input", function () { setTimeout(linkGo, 50); });
+      linkEl.addEventListener("paste", function () { setTimeout(linkGo, 50); });
+    }
     var amtEl = document.getElementById("cashamt"), holdT = null;
     if (amtEl) {
       amtEl.addEventListener("pointerdown", function () {

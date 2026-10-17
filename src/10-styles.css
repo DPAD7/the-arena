@@ -4384,7 +4384,13 @@
      when it was tracked, the faces and the arrow, the names, then the numbers */
   .cashsheet .cashhead { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px;
     margin: 0 0 12px; padding-bottom: 12px; border-bottom: 1px solid rgba(255,255,255,.13); text-align: left; }
-  .cashsheet .cashbal { display: grid; gap: 4px; min-width: 0; }
+  .cashsheet .cashbal { display: grid; gap: 4px; min-width: 0; flex: 1; }
+  /* where the balance was: an empty box a shared bet link is pasted into
+     (Jose, Oct 17, 2026: "the space should be like an empty place so I can paste") */
+  .cashsheet .cashlink { width: 100%; height: 44px; box-sizing: border-box; border-radius: 12px; border: 1px solid var(--edge);
+    background: #0e1013; color: var(--ink); font: 500 16px -apple-system, "Helvetica Neue", Arial, sans-serif; padding: 0 12px; outline: none; }
+  .cashsheet .cashlink:focus { border-color: #17c257; }
+  .cashsheet .cashlink.busy { border-color: #17c257; color: #8e8e93; }
   .cashsheet .cashbl { font: 700 12px/1 "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .1em; text-transform: uppercase; color: #8e8e93; }
   .cashsheet .cashhead .cashamt { margin: 0; font: 800 32px/1 "Barlow Condensed", "Arial Narrow", sans-serif; text-align: left; }
   .cashsheet .cashright { display: flex; align-items: center; gap: 8px; flex: none; }
