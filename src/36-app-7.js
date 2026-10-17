@@ -1494,7 +1494,13 @@
     var chip = !r || r.state === "pre" ? '<span class="trkst trkst--pre">PRE</span>' : r.state === "post" ? '<span class="trkst trkst--fin">FINAL</span>'
       : '<span class="trkst">LIVE R' + r.period + " " + esc(r.clock || "") + "</span>";
     var out = '<div class="trkg"><div class="trkh">' + esc(day) + " · " + esc(tm) + " · " + esc(f[7] || "") + " " + chip + "</div>";
-    var pic = function (who) { var h = gamePic(bid, who); return h ? h.src : ""; };
+    /* a boxer the board has no card for: his picture off BoxRec, kept in
+       faces/box (Wardley, Oct 17, 2026) */
+    var pic = function (who) {
+      var h = gamePic(bid, who); if (h) return h.src;
+      var id = String(who === L ? f[4] : who === Rn ? f[6] : "");
+      return /^box:/.test(id) ? "faces/box/" + id.slice(4) + ".jpg" : "";
+    };
     var sur = function (n) { return esc(lastName(n) || n); };
     var faceL = trkFace(pic(L)), faceR = trkFace(pic(Rn));
     G.legs.forEach(function (x) {
