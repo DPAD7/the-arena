@@ -390,6 +390,18 @@ def main():
             continue
         seen += 1
         for side, (i, club) in enumerate(((5, g[3]), (7, g[4]))):
+            # a named starter first, as in the NFL: reported by the club or
+            # the insiders and held in data/qb_named.json -- the college cards
+            # never read it, and Raiola stayed on Oregon's after Brock Thomas
+            # was named (Jose, Oct 17, 2026: "why do I have to do this research")
+            held = NAMED.get("%s|%s" % (espn_id, club))
+            if held and (wire.get(str(held["id"])) or {}).get("status", "").lower() not in STOP:
+                if str(g[i + 1]) != str(held["id"]):
+                    swaps.append("%-4s %-20s -> %-20s (named)" % (club, g[i], held["name"]))
+                    g[i], g[i + 1] = held["name"], str(held["id"])
+                    f, pr = pricefile(espn_id)
+                    unprice(espn_id, side)
+                continue
             # DraftKings first: the one passer it prices for this side is the
             # starter, the way the chart names him in the NFL (Jose, Sep 25,
             # 2026: "dk should confirm"). ESPN keeps no college depth chart --
