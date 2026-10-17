@@ -76,6 +76,14 @@ export class Clock {
     if (request.headers.get("Upgrade") === "websocket") {
       const pair = new WebSocketPair();
       this.ctx.acceptWebSocket(pair[1]);
+      /* a page that has just opened gets DraftKings' whole board at once, not
+         only the next game that moves (Oct 17, 2026) */
+      try {
+        const held = (await this.ctx.storage.get("dklive")) || {}, now = Date.now(), dk = {};
+        for (const [gid, st] of Object.entries(held)) if (now - st.at < (st.final ? 30 * 60000 : 45000)) dk[gid] = st;
+        const kicks = (await this.ctx.storage.get("dkkicks")) || {};
+        if (Object.keys(dk).length || Object.keys(kicks).length) pair[1].send(JSON.stringify({ dk, kicks }));
+      } catch (e) {}
       const at = await this.ctx.storage.getAlarm();
       if (!at || at > Date.now() + 15000) await this.ctx.storage.setAlarm(Date.now() + 5000);
       return new Response(null, { status: 101, webSocket: pair[0] });
