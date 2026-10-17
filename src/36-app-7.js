@@ -1042,7 +1042,8 @@
     st = st === "won" ? "won" : st === "lost" ? "lost" : "";
     var over = r && r.state === "post", pre = !r || r.state === "pre";
     var mid = man && man.id ? man.id : x.lg.pid ? String(x.lg.pid) : "";
-    var face = mid ? trkFace("face/nfl/" + mid + ".png", espnHead(mid)) : "";
+    var fl = sportOf(x.lg.g) || "nfl";
+    var face = mid ? trkFace("face/" + fl + "/" + mid + ".png", "https://a.espncdn.com/i/headshots/" + fl + "/players/full/" + mid + ".png") : "";
     var name = esc(famName(P.who || ""));
     /* a yes or no that asks when: the first quarter, read off the plays */
     var q1 = /1st quarter|first quarter/i.test(P.mk || "");
@@ -1812,6 +1813,8 @@
               } else
               lab = (famName(P0.who || "") + " " + (P0.yes !== undefined ? (P0.yes ? "YES" : "NO") : P0.over === false ? "U" + (P0.line || "") : (P0.n || "") + "+")).trim() + " \u00b7 ";
             }
+            /* a leg that names its man keeps his face, found game or not */
+            if (!pic0 && lg.pid) pic0 = String(lg.pid);
           }
           /* a fight leg wears its fighter, or both men for a leg on the fight,
              off the bout it was placed on, and the market's own mark */
