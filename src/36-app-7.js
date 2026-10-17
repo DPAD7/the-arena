@@ -1298,6 +1298,15 @@
     }).join("");
     /* a leg off no game the board carries keeps its plain line */
     if (loose.length) html += '<div class="trkg">' + loose.map(function (lg) {
+      /* a fight the board doesn't carry: his face, the market, the matchup
+         and the time, as a fight row reads -- never the bare words */
+      if (lg.img || lg.evn) {
+        var who0 = String(lg.label || "").split(" \u2016 "), when0 = String(lg.pick || "").split(" \u00b7 ")[1] || "";
+        return '<div class="trkr trkloose--fight">' + (lg.img ? '<span class="trkc">' + trkFace(lg.img) + "</span>" : "") +
+          '<div class="trkm"><div class="trkl"><b>' + esc(who0[1] || "") + "</b>" + esc(who0[0] || "") +
+          ' <i>\u00b7 ' + esc(lg.evn || "") + (when0 ? " \u00b7 " + esc(when0) : "") + "</i></div></div>" +
+          '<span class="trkn">' + esc(String(lg.odds || "").replace("-", "\u2212")) + "</span></div>";
+      }
       return '<div class="trkloose">' + esc(lg.label || lg.pick || "") + '<b>' + esc(String(lg.odds || "").replace("-", "−")) + "</b></div>";
     }).join("") + "</div>";
     return html;
@@ -1877,7 +1886,10 @@
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
                       say (Oct 3, 2026: all six won and the card sat open) */
-                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : (TRKST[lg.sel] || ""), pic: pic0, fw: fw, fmk: fmk };
+                   g: gid, st: v.st === "won" || v.st === "lost" ? v.st : (TRKST[lg.sel] || ""), pic: pic0, fw: fw, fmk: fmk,
+                   /* a fighter the board carries no card for: his face from the
+                      board's own boxing faces (Wardley, Oct 17, 2026) */
+                   img: lg.img || "" };
         });
         var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
         /* the icons only; the words fold under a "View picks" the way

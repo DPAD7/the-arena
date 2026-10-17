@@ -1256,7 +1256,8 @@
       var who = b.fw || (m ? m[1] : sh.split(" ")[0]);
       /* a college passer's face is in the college folder (Sayin, Oct 17, 2026) */
       var fl = /^(ncaaf|college-football)$/.test(sportOf(b.g)) ? "college-football" : "nfl";
-      var pic = b.pic ? '<img class="slpic slpic--face" alt="" loading="lazy" src="face/' + fl + '/' + b.pic + '.png" data-next="https://a.espncdn.com/i/headshots/' + fl + '/players/full/' + b.pic + '.png" onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}else{this.remove();}">'
+      if (!b.pic && b.img) var pimg = '<img class="slpic slpic--face" alt="" loading="lazy" src="' + b.img + '" onerror="this.remove()">';
+      var pic = pimg ? pimg : b.pic ? '<img class="slpic slpic--face" alt="" loading="lazy" src="face/' + fl + '/' + b.pic + '.png" data-next="https://a.espncdn.com/i/headshots/' + fl + '/players/full/' + b.pic + '.png" onerror="if(this.dataset.next){this.src=this.dataset.next;this.dataset.next=\'\';}else{this.remove();}">'
         : slipPic(who, sportOf(b.g) || (m && m[4] ? "mma" : ""), b.g);
       var mk = b.fmk || markFor(m ? m[2] : "");
       /* the badge is the box: the ML inside it has no box of its own (Jose, Oct 17, 2026) */

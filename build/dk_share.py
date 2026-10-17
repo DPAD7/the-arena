@@ -71,6 +71,7 @@ def main():
                "placed": dt.datetime.fromisoformat(b["placedDate"].replace("Z", "+00:00")).astimezone(slip_track.ET).replace(tzinfo=None).isoformat(),
                "legs": legs}
     starts = {str(e.get("eventId")): e.get("startDate") for e in b.get("events") or []}
+    sports = {str(e.get("eventId")): (e.get("sportName") or "") for e in b.get("events") or []}
     board = slip_track.Board()
     reading["_placed"] = dt.datetime.fromisoformat(reading["placed"]).replace(tzinfo=slip_track.ET)
     reading["id"] = "board-dk" + reading["bet_id"]
@@ -92,6 +93,20 @@ def main():
         st = starts.get(lg["_ev"])
         if st and not t.get("g"):
             t["start"] = st
+        # a fight the board doesn't carry (a boxing night off the Combat tab):
+        # drawn the way every fight leg is -- the man's surname and the market,
+        # his face from the board's boxing faces, the matchup and the time --
+        # never the raw words (Jose, Oct 17, 2026: Wardley came in as "Fab")
+        if not t.get("g") and sports.get(lg["_ev"]) in ("Boxing", "MMA"):
+            me, opp = lg["who"], next((x for x in lg["game"].split(" @ ") if x != lg["who"]), "")
+            kind = "ML" if lg["market"].lower() == "moneyline" else (lg["line"] or lg["market"]).upper()
+            t["label"] = me.split()[-1].upper() + " \u2016 " + kind
+            t["pick"] = t["label"] + (" \u00b7 " + slip_track.when(st[:16] + "Z") if st else "")
+            t["evn"] = me + " vs " + opp
+            t["market"] = ""
+            face = slip_track.fold(me).replace(" ", "-")
+            if os.path.exists(os.path.join(slip_track.D, "site", "faces", "box", face + ".jpg")):
+                t["img"] = "faces/box/" + face + ".jpg"
         tied.append(t)
     sent = {"id": reading["id"], "type": reading["type"] if len(tied) > 1 else "Single",
             "odds": slip_track.minus(reading["odds"]), "was": slip_track.minus(reading["odds"]),

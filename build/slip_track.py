@@ -181,9 +181,8 @@ def tie(board, bet, leg):
         if s < 0:
             continue
         name = (f[3] if s == 0 else f[5]).split()[-1].upper()
-        if re.search(r"moneyline|to win", mk, re.I) and (f[9] if s == 0 else f[11]):
-            kind = "ML"
-            out.update(sel=f[9] if s == 0 else f[11], label=name + " ‖ " + kind)
+        if re.search(r"moneyline|to win", mk, re.I):
+            out.update(sel=(f[9] if s == 0 else f[11]) or "dk-ml-%s-%d" % (f[1], s), label=name + " ‖ ML")
         else:
             out.update(sel="dk-" + hashlib.md5((bet["id"] + who + mk + str(leg.get("line"))).encode()).hexdigest()[:12],
                        label=name + " ‖ " + (leg.get("line") or mk).upper(), market=mk + " " + who)
