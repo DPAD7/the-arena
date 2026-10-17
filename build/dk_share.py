@@ -144,6 +144,13 @@ def main():
             # tab (Jose, Oct 17, 2026: "just add it to the bet slip where I had it")
             fr = fight_row(lg["_ev"], b, sports.get(lg["_ev"]))
             if fr:
+                # his side carries the bet's own id and the price it filled at:
+                # the book's ids for a bout move once it goes live
+                side = 3 if slip_track.fold(fr[3]) == slip_track.fold(lg["who"]) else 5 if slip_track.fold(fr[5]) == slip_track.fold(lg["who"]) else 0
+                if side:
+                    fr[side + 6] = lg["_sel"] or fr[side + 6]
+                    if not fr[side + 5]:
+                        fr[side + 5] = lg["odds"].replace("\u2212", "-")
                 t["frow"] = fr
             me, opp = lg["who"], next((x for x in lg["game"].split(" @ ") if x != lg["who"]), "")
             kind = "ML" if lg["market"].lower() == "moneyline" else (lg["line"] or lg["market"]).upper()

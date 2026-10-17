@@ -913,6 +913,17 @@
       put(f[9], { g: String(f[1]), k: "fml", s: 0, fight: 1 });
       put(f[11], { g: String(f[1]), k: "fml", s: 1, fight: 1 });
     });
+    /* the leg itself names its fight: by its own id first -- the book's ids
+       for the bout move once it goes live, the bet's never does (Wardley,
+       Oct 17, 2026: the slip lost his fight the moment the bell rang) */
+    ((DKB && DKB.sent) || []).forEach(function (bet) {
+      (bet.legs || []).forEach(function (lg) {
+        var f = lg.frow; if (!f || !lg.sel) return;
+        var who = String(lg.label || "").split(" \u2016 ")[0].toUpperCase();
+        var s = String(f[3] || "").split(" ").pop().toUpperCase() === who ? 0 : String(f[5] || "").split(" ").pop().toUpperCase() === who ? 1 : -1;
+        if (s >= 0) put(lg.sel, { g: String(f[1]), k: "fml", s: s, fight: 1 });
+      });
+    });
     var lf0 = legFights();
     Object.keys(lf0).forEach(function (bid) {
       var f = lf0[bid];
