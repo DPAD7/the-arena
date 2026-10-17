@@ -1818,8 +1818,8 @@
            game starts, Eastern; anything after tomorrow waits under Tomorrow */
         .filter(function (bet) { return slipDay(bet, kickOf) === CASHDAY; });
       var LMAP = legMap();
-      if (!open.length) box.innerHTML = '<div class="cashnone">No slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + "</div>";
-      else box.innerHTML = open.map(function (bet) {
+      if (!open.length) putHTML(box, '<div class="cashnone">No slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + "</div>");
+      else putHTML(box, open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
           /* a result the clock wrote onto the slip settles the leg on every
@@ -1907,7 +1907,7 @@
           '</div>' +
           (rows ? '<ul class="slpicks">' + rows + '</ul>' : "") + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
           '</div>';
-      }).join("");
+      }).join(""));
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
       if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel] || TRKST[lg.sel] === "lost"; }); })) setTimeout(bankDraw, 0);
@@ -1920,15 +1920,16 @@
       /* the day's totals stand still under the slips, which scroll between
          the balance and them (Jose, Sep 26, 2026) */
       var dayEl = document.getElementById("cashday");
-      if (dayEl) dayEl.innerHTML = (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
+      if (dayEl) putHTML(dayEl, (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
         '<b>' + open.length + '</b>' +
         '<b>' + cm(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
         '<b class="cashpay">' + cm(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
-        '<span>Slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + '</span><span>Wagered</span><span>Total payout</span></div></div>' : "");
+        '<span>Slips ' + ["yesterday", "today", "tomorrow"][CASHDAY + 1] + '</span><span>Wagered</span><span>Total payout</span></div></div>' : ""));
     } else if (!legs.length) {
-      box.innerHTML = "";
-      var dayEl0 = document.getElementById("cashday"); if (dayEl0) dayEl0.innerHTML = "";
+      putHTML(box, "");
+      var dayEl0 = document.getElementById("cashday"); if (dayEl0) putHTML(dayEl0, "");
     } else {
+      box._html = null;
       box.innerHTML = '<div class="slipcard' + (state ? " slipcard--" + state : "") + '">' +
         slipAvatars(legs) + '<div class="slnames">' + esc(slipNames(legs)) + '</div>' +
         '<div class="slfoot"><b>' + legs.length + (legs.length > 1 ? " legs" : " leg") +
@@ -1941,6 +1942,15 @@
     }
     if (moved) { bankKeep(); if (typeof pushState === "function") pushState(); }
     if (LAND) landSlip();
+  }
+  /* the wallet is written again only when what it shows has changed: the
+     live line lands every few seconds now, and rewriting the same slips each
+     time reloaded every logo and face -- the wallet flickered (Jose, Oct 17,
+     2026) */
+  function putHTML(el, html) {
+    if (el._html === html) return;
+    el._html = html;
+    el.innerHTML = html;
   }
   window.bankDraw = bankDraw;
   var bankBeat = function () { if (document.visibilityState === "visible") bankDraw(); };
