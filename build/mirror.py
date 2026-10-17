@@ -31,7 +31,10 @@ import pagefile
 ALL = "--all" in sys.argv
 H = {"accept": "image/png,image/*;q=0.8"}
 
-ESPN_CLUB = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/%s/500/%s.png&w=96&h=96"
+# the dark-ground mark: the board is black, and Ohio State's black lettering
+# vanished on it (Jose, Oct 17, 2026); ESPN serves the plain one where a
+# school has no dark one
+ESPN_CLUB = "https://a.espncdn.com/combiner/i?img=/i/teamlogos/%s/500-dark/%s.png&w=96&h=96"
 # 336, not 220: the bout card draws a fighter across his whole half of the
 # head -- about 300 real pixels on a phone -- and a 220px picture blurs at
 # that size. The passers were moved to 336 for the same reason; the fighters

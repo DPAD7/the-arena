@@ -519,7 +519,7 @@
     return "logos/" + lg + "/" + key + ".png";
   }
   function clubAway(lg, key) {
-    return ESPN_CLUB + lg + "/500/" + key + ".png&w=96&h=96";
+    return ESPN_CLUB + lg + "/500-dark/" + key + ".png&w=96&h=96";
   }
   /* through the face function, like a passer's: a fighter we have not
      mirrored yet is a 404, never the web page cached for a month */
