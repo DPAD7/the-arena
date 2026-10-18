@@ -9,7 +9,7 @@
    "home": "KC",
    "pick": "KC",
    "model": 87,
-   "book": 77,
+   "book": 78,
    "bookpick": "KC",
    "agree": true,
    "won": 83,
@@ -119,7 +119,7 @@
    "home": "TB",
    "pick": "PIT",
    "model": 65,
-   "book": 54,
+   "book": 55,
    "bookpick": "PIT",
    "agree": true,
    "won": 52,
@@ -229,7 +229,7 @@
    "home": "CLE",
    "pick": "BAL",
    "model": 51,
-   "book": 61,
+   "book": 60,
    "bookpick": "BAL",
    "agree": true,
    "won": 61,
@@ -290,6 +290,28 @@
    "kick": "2026-10-19T00:20Z"
   },
   {
+   "gid": "401873014",
+   "away": "IND",
+   "home": "MIN",
+   "pick": "MIN",
+   "model": 75,
+   "book": 70,
+   "bookpick": "MIN",
+   "agree": true,
+   "won": 84,
+   "n": 25,
+   "call": "take",
+   "rank": 1,
+   "why": [
+    "Points allowed per game: MIN 12.8, IND 27.6",
+    "Win % this season: MIN 100%, IND 40%",
+    "Last 3 games, win %: MIN 100%, IND 67%",
+    "Turnovers per game: MIN 0.8, IND 1.6"
+   ],
+   "week": 7,
+   "kick": "2026-10-25T17:00Z"
+  },
+  {
    "gid": "401873015",
    "away": "MIA",
    "home": "NYJ",
@@ -301,7 +323,7 @@
    "won": 64,
    "n": 64,
    "call": "take",
-   "rank": 1,
+   "rank": 2,
    "why": [
     "Points allowed per game: NYJ 19.2, MIA 26.4",
     "Points per game: NYJ 18.6, MIA 14.0",
@@ -323,7 +345,7 @@
    "won": 64,
    "n": 11,
    "call": "take",
-   "rank": 2,
+   "rank": 3,
    "why": [
     "Points allowed per game: DEN 20.8, ARI 32.4",
     "Last 3 games, win %: DEN 67%, ARI 0%",
@@ -332,28 +354,6 @@
    ],
    "week": 7,
    "kick": "2026-10-25T20:05Z"
-  },
-  {
-   "gid": "401873014",
-   "away": "IND",
-   "home": "MIN",
-   "pick": "MIN",
-   "model": 75,
-   "book": 69,
-   "bookpick": "MIN",
-   "agree": true,
-   "won": 62,
-   "n": 26,
-   "call": "take",
-   "rank": 3,
-   "why": [
-    "Points allowed per game: MIN 12.8, IND 27.6",
-    "Win % this season: MIN 100%, IND 40%",
-    "Last 3 games, win %: MIN 100%, IND 67%",
-    "Turnovers per game: MIN 0.8, IND 1.6"
-   ],
-   "week": 7,
-   "kick": "2026-10-25T17:00Z"
   },
   {
    "gid": "401873017",

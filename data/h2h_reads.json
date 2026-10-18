@@ -1,5 +1,5 @@
 {
- "at": "2026-10-18 15:04 UTC",
+ "at": "2026-10-18 16:05 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -32,22 +32,19 @@
     "Daniel Jones",
     "Cam Ward"
    ],
-   "pick": "Cam Ward",
-   "lead": 4,
+   "pick": null,
+   "lead": 0,
    "complete": true,
    "missing": [],
    "score": [
-    -2,
-    2
+    1,
+    1
    ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "New coach for his side"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
-    0,
+    1,
     0
    ],
    "game": "TEN@IND",
@@ -72,7 +69,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 94.0 yards higher in total on their lines",
+    "His receivers are set 88.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -101,7 +98,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 60.0 yards higher in total on their lines",
+    "His receivers are set 61.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -141,32 +138,6 @@
   },
   {
    "qbs": [
-    "Tyler Shough",
-    "Jameis Winston"
-   ],
-   "pick": "Jameis Winston",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NO@NYG",
-   "eid": 22005,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
     "Caleb Williams",
     "Michael Penix Jr."
    ],
@@ -198,10 +169,8 @@
    ],
    "pick": "Geno Smith",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "NE E.Chism III (12%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     -1,
     1
@@ -265,7 +234,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 56.5 yards higher in total on their lines",
+    "His receivers are set 53.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
