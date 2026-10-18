@@ -138,7 +138,7 @@ def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
-    kicks, kicked_at, said_at, crawled_at, crawl_p = {}, 0, {}, time.time(), None
+    kicks, kicked_at, said_at = {}, 0, {}
     posted_at, pend, boxes = 0, {}, {}
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
@@ -186,8 +186,6 @@ def main():
                 kicks.update(new_kicks)
             except Exception as ex:
                 print("kicks failed:", ex)
-        # every ten minutes while games are on: the board read as his phone
-        # reads it, against every rule (crawl.py) -- a fault reaches his phone
         if ONCE:
             print(json.dumps(moved, indent=1))
             return
