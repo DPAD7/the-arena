@@ -1280,7 +1280,11 @@
          for one (Jose, Sep 22, 2026). */
       /* a man we hold no picture of takes the silhouette here too, rather
          than the bare corner (Jose, Sep 22, 2026) */
-      if (pic && (!/^\d+$/.test(String(fid || "")) || NOPIC[String(fid)])) {
+      /* a boxer's box:<name> is his own kept cut-out, drawn by mug(); it was
+         blanked here as a non-number (Garcia v Benn, Oct 18, 2026) */
+      if (pic && /^box:/.test(String(fid || ""))) {
+        /* left as mug() drew it */
+      } else if (pic && (!/^\d+$/.test(String(fid || "")) || NOPIC[String(fid)])) {
         if ((pic.getAttribute("src") || "").indexOf("unknown") < 0) {
           pic.removeAttribute("onerror");
           pic.dataset.next = "";
