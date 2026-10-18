@@ -1,38 +1,5 @@
 [
  {
-  "id": "1PK6Z7",
-  "head": "College Football 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-17T04:01:00.0000000Z",
-  "end": "2026-10-18T06:30:00.0000000Z",
-  "sport": "college-football",
-  "game": "",
-  "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
-  "id": "N5RX66",
-  "head": "Notre Dame @ BYU 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-15T13:00:00.0000000Z",
-  "end": "2026-10-18T03:00:00.0000000Z",
-  "sport": "college-football",
-  "game": "Notre Dame @ BYU",
-  "gid": "401856809",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "single",
-   "sgp"
-  ]
- },
- {
   "id": "QRP493",
   "head": "NFL Week 6 Sunday 30% Profit Boost",
   "pct": 30,
@@ -63,22 +30,6 @@
   "types": [
    "sgp",
    "sgpx",
-   "parlay"
-  ]
- },
- {
-  "id": "YW609E",
-  "head": "NBA Player Averages 30% Parlay Boost",
-  "pct": 30,
-  "start": "2026-10-17T11:00:00.0000000Z",
-  "end": "2026-10-18T03:59:00.0000000Z",
-  "sport": "",
-  "game": "",
-  "gid": "",
-  "minOdds": "+100",
-  "minLegs": 2,
-  "maxWager": 25.0,
-  "types": [
    "parlay"
   ]
  }

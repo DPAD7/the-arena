@@ -1,103 +1,27 @@
 {
- "at": "2026-10-17",
- "card": "2026-10-17",
- "event": "600060773",
- "name": "UFC Fight Night: Buckley vs. Malott",
- "model": "2026-10-10",
+ "at": "2026-10-18",
+ "card": "2026-10-24",
+ "event": "600061267",
+ "name": "UFC 333: Volkanovski vs. Evloev",
+ "model": "2026-10-17",
  "picks": {
-  "401919643": {
+  "401911639": {
    "rank": 1,
-   "pick": "Cody Chovancek",
-   "vs": "SuYoung You",
+   "pick": "Abdul-Rakhman Yakhyaev",
+   "vs": "Nikita Krylov",
    "box": [
-    71,
-    29
+    69,
+    31
    ],
-   "p": 71,
+   "p": 69,
    "won": null,
    "why": [
-    "3 years younger (28 vs 31)",
-    "Pro streak W9 vs L1",
-    "2\" taller",
-    "Pro record 9-0 vs 15-4"
+    "9 years younger (26 vs 35)",
+    "Pro record 9-0 vs 31-12",
+    "0 pro losses vs 12",
+    "Finishes 89% of wins; Krylov finished 10 times"
    ],
-   "id": "5282412",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "Cody Chovancek",
-    "side": "Chovancek wins",
-    "why": [
-     "3 years younger (28 vs 31)",
-     "Pro streak W9 vs L1",
-     "2\" taller",
-     "Pro record 9-0 vs 15-4"
-    ],
-    "p": 71,
-    "won": 74,
-    "won_n": 201,
-    "p_ml": 71,
-    "p_dist": 64,
-    "price": "-125"
-   }
-  },
-  "401908372": {
-   "rank": 2,
-   "pick": "Kyle Daukaus",
-   "vs": "Marc-Andre Barriault",
-   "box": [
-    66,
-    34
-   ],
-   "p": 66,
-   "won": null,
-   "why": [
-    "Higher UFC rating (1519 vs 1459)",
-    "Absorbs 3.2 strikes a minute, Barriault 5.9",
-    "Pro record 16-5 vs 16-11",
-    "3 years younger (34 vs 37)"
-   ],
-   "id": "4329444",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "Kyle Daukaus",
-    "side": "Daukaus wins",
-    "why": [
-     "Higher UFC rating (1519 vs 1459)",
-     "Absorbs 3.2 strikes a minute, Barriault 5.9",
-     "Pro record 16-5 vs 16-11",
-     "3 years younger (34 vs 37)"
-    ],
-    "p": 66,
-    "won": 67,
-    "won_n": 289,
-    "p_ml": 66,
-    "p_dist": 38,
-    "price": "-205"
-   }
-  },
-  "401914039": {
-   "rank": 3,
-   "pick": "Steven Koslow",
-   "vs": "Chad Anheliger",
-   "box": [
-    64,
-    36
-   ],
-   "p": 64,
-   "won": null,
-   "why": [
-    "10 years younger (30 vs 40)",
-    "Pro record 7-1 vs 13-8",
-    "Finishes 100% of wins; Anheliger finished 4 times",
-    "5.3 takedowns per 15 min, Anheliger 0.8"
-   ],
-   "id": "5119740",
+   "id": "5291025",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
@@ -106,56 +30,93 @@
     "sel": "No",
     "side": "Fight does not go the distance",
     "why": [
-     "Pro wins by finish: Anheliger 77%, Koslow 100%",
-     "KO wins vs KO losses: Anheliger 7 KO wins, Koslow KO'd once; Koslow 0 KO wins, Anheliger KO'd never",
-     "Submitted as a pro: Anheliger 4 times, Koslow never"
+     "Submission tries per 15 min: Krylov 1.1, Yakhyaev 8.5",
+     "Pro wins by finish: Krylov 55%, Yakhyaev 89%",
+     "Submitted as a pro: Krylov 6 times, Yakhyaev never"
     ],
-    "p": 70,
-    "won": 67,
-    "won_n": 82,
-    "p_ml": 64,
-    "p_dist": 30,
-    "price": "-170"
+    "p": 79,
+    "won": 78,
+    "won_n": 45,
+    "p_ml": 69,
+    "p_dist": 21
    }
   },
-  "401929676": {
-   "rank": 4,
-   "pick": "Joel Faglier",
-   "vs": "Javad Mahjoub",
+  "401911637": {
+   "rank": 2,
+   "pick": "Azamat Murzakanov",
+   "vs": "Dominick Reyes",
    "box": [
-    61,
-    39
+    60,
+    40
    ],
-   "p": 61,
+   "p": 60,
    "won": null,
    "why": [
-    "10 years younger (26 vs 35)",
-    "Faglier took the fight on 17 days' notice, his UFC debut"
+    "Pro record 16-1 vs 16-5",
+    "Late-round margin +3 strikes, Reyes +2",
+    "Stops 89% of takedowns, Reyes 83%",
+    "Finishes 81% of wins; Reyes finished 4 times"
    ],
-   "id": "5454260",
-   "own_facts": "Faglier took the fight on 17 days' notice, his UFC debut",
+   "id": "4227265",
+   "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
-    "market": "Moneyline",
-    "sel": "Joel Faglier",
-    "side": "Faglier wins",
+    "market": "Fight to Go the Distance",
+    "sel": "No",
+    "side": "Fight does not go the distance",
     "why": [
-     "10 years younger (26 vs 35)",
-     "Faglier took the fight on 17 days' notice, his UFC debut"
+     "KO wins vs KO losses: Murzakanov 12 KO wins, Reyes KO'd 4 times; Reyes 10 KO wins, Murzakanov KO'd once",
+     "Pro wins by finish: Murzakanov 81%, Reyes 75%",
+     "KO'd as a pro: Murzakanov once, Reyes 4 times"
     ],
-    "p": 61,
-    "won": 62,
-    "won_n": 255,
-    "p_ml": 61,
-    "p_dist": 42,
-    "price": "-130"
+    "p": 67,
+    "won": 68,
+    "won_n": 122,
+    "p_ml": 60,
+    "p_dist": 33
    }
   },
-  "401911807": {
-   "rank": 5,
-   "pick": "Nick Galanti",
-   "vs": "Julien LeBlanc",
+  "401911638": {
+   "rank": 3,
+   "pick": "Cam Rowston",
+   "vs": "Abus Magomedov",
+   "box": [
+    60,
+    40
+   ],
+   "p": 60,
+   "won": null,
+   "why": [
+    "4 years younger (32 vs 36)",
+    "Strike margin +3.5 a minute vs -0.3",
+    "Knocked down 0.00 times per 15 min, Magomedov 0.58",
+    "Absorbs 2.0 strikes a minute, Magomedov 3.3"
+   ],
+   "id": "4694832",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "No",
+    "side": "Fight does not go the distance",
+    "why": [
+     "Pro wins by finish: Magomedov 62%, Rowston 79%",
+     "KO wins vs KO losses: Magomedov 11 KO wins, Rowston KO'd once; Rowston 4 KO wins, Magomedov KO'd 2 times",
+     "KO'd as a pro: Magomedov 2 times, Rowston once"
+    ],
+    "p": 66,
+    "won": 68,
+    "won_n": 122,
+    "p_ml": 60,
+    "p_dist": 34
+   }
+  },
+  "401911635": {
+   "rank": 4,
+   "pick": "Alexander Volkov",
+   "vs": "Rizvan Kuniev",
    "box": [
     59,
     41
@@ -163,39 +124,37 @@
    "p": 59,
    "won": null,
    "why": [
-    "Higher UFC rating (1525 vs 1471)",
-    "6 years younger (28 vs 35)",
-    "Pro record 8-1 vs 10-3",
-    "Finishes 75% of wins; Leblanc finished once",
-    "Galanti took the fight on 16 days' notice, his UFC debut"
+    "3\" taller",
+    "Higher UFC rating (1715 vs 1584)",
+    "Late-round margin +7 strikes, Kuniev -4",
+    "Round 1 margin +11 strikes, Kuniev +6"
    ],
-   "id": "5296770",
-   "own_facts": "Galanti took the fight on 16 days' notice, his UFC debut",
+   "id": "2993650",
+   "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Nick Galanti",
-    "side": "Galanti wins",
+    "sel": "Alexander Volkov",
+    "side": "Volkov wins",
     "why": [
-     "Higher UFC rating (1525 vs 1471)",
-     "6 years younger (28 vs 35)",
-     "Pro record 8-1 vs 10-3",
-     "Finishes 75% of wins; Leblanc finished once",
-     "Galanti took the fight on 16 days' notice, his UFC debut"
+     "3\" taller",
+     "Higher UFC rating (1715 vs 1584)",
+     "Late-round margin +7 strikes, Kuniev -4",
+     "Round 1 margin +11 strikes, Kuniev +6"
     ],
     "p": 59,
     "won": 60,
     "won_n": 242,
     "p_ml": 59,
-    "p_dist": 49,
-    "price": "-750"
+    "p_dist": 58,
+    "price": "-115"
    }
   },
-  "401905374": {
-   "rank": 6,
-   "pick": "Mandel Nallo",
-   "vs": "Nate Landwehr",
+  "401911634": {
+   "rank": 5,
+   "pick": "Lone'er Kavanagh",
+   "vs": "Ramazan Temirov",
    "box": [
     59,
     41
@@ -203,74 +162,70 @@
    "p": 59,
    "won": null,
    "why": [
-    "Younger (37.2 vs 38.4)",
-    "Pro record 14-4 vs 18-8",
-    "Finishes 100% of pro wins, Landwehr 50%",
-    "4 pro losses vs 8"
+    "2\" taller",
+    "2 years younger (27 vs 30)",
+    "1 pro losses vs 2",
+    "Late-round margin -2 strikes, Temirov -22"
    ],
-   "id": "4063786",
+   "id": "5147737",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
     "why": [
-     "KO wins vs KO losses: Nallo 8 KO wins, Landwehr KO'd 4 times; Landwehr 7 KO wins, Nallo KO'd 3 times",
-     "Strikes absorbed a minute: Nallo 9.1, Landwehr 6.0",
-     "Pro wins by finish: Nallo 100%, Landwehr 50%"
+     "Pro fights won on the cards: Kavanagh 45%, Temirov 33%",
+     "Average UFC fight: Kavanagh 15.7 min, Temirov 7.4 min"
     ],
-    "p": 66,
-    "won": 68,
-    "won_n": 122,
+    "p": 62,
+    "won": 59,
+    "won_n": 99,
     "p_ml": 59,
-    "p_dist": 34,
-    "price": "-1000"
+    "p_dist": 62
    }
   },
-  "401909783": {
-   "rank": 7,
-   "pick": "Louis Jourdain",
-   "vs": "Timmy Cuamba",
+  "401911640": {
+   "rank": 6,
+   "pick": "Grant Dawson",
+   "vs": "Nurullo Aliev",
    "box": [
-    58,
-    42
+    59,
+    41
    ],
-   "p": 58,
+   "p": 59,
    "won": null,
    "why": [
-    "Finishes 67% of pro wins, Cuamba 50%",
-    "Pro record 9-3 vs 10-4",
-    "Finishes 67% of wins; Cuamba finished 2 times",
-    "Higher UFC rating (1525 vs 1501)"
+    "Finishes 71% of pro wins, Aliev 18%",
+    "Round 1 margin +5 strikes, Aliev +2",
+    "Late-round margin +6 strikes, Aliev +1",
+    "Higher UFC rating (1682 vs 1600)"
    ],
-   "id": "4877916",
+   "id": "3931156",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
-    "market": "Moneyline",
-    "sel": "Louis Jourdain",
-    "side": "Jourdain wins",
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
     "why": [
-     "Finishes 67% of pro wins, Cuamba 50%",
-     "Pro record 9-3 vs 10-4",
-     "Finishes 67% of wins; Cuamba finished 2 times",
-     "Higher UFC rating (1525 vs 1501)"
+     "Pro fights won on the cards: Dawson 18%, Aliev 82%",
+     "Average UFC fight: Dawson 11.3 min, Aliev 15.0 min",
+     "UFC minutes: Dawson 170, Aliev 60"
     ],
-    "p": 58,
-    "won": 60,
-    "won_n": 242,
-    "p_ml": 58,
-    "p_dist": 57,
-    "price": "-175"
+    "p": 60,
+    "won": 55,
+    "won_n": 119,
+    "p_ml": 59,
+    "p_dist": 60
    }
   },
-  "401897388": {
-   "rank": 8,
-   "pick": "Mike Malott",
-   "vs": "Joaquin Buckley",
+  "401928047": {
+   "rank": 7,
+   "pick": "Colby Thicknesse",
+   "vs": "Asaf Chopurov",
    "box": [
     56,
     44
@@ -278,73 +233,104 @@
    "p": 56,
    "won": null,
    "why": [
-    "Pro record 14-2 vs 21-8",
-    "2 pro losses vs 8",
-    "Round 1 margin +9 strikes, Buckley -1",
-    "Higher UFC rating (1654 vs 1642)"
+    "UFC minutes 45 vs 0",
+    "Chopurov makes a UFC debut"
    ],
-   "id": "3165120",
+   "id": "5264462",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
-    "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
+    "market": "Moneyline",
+    "sel": "Colby Thicknesse",
+    "side": "Thicknesse wins",
     "why": [
-     "Five-round fight",
-     "Pro wins by finish: Buckley 57%, Malott 79%",
-     "KO'd as a pro: Buckley 4 times, Malott 2 times"
-    ],
-    "p": 63,
-    "won": 64,
-    "won_n": 102,
-    "p_ml": 56,
-    "p_dist": 37,
-    "price": "-185"
-   }
-  },
-  "401923630": {
-   "rank": 9,
-   "pick": "Cristian Pérez",
-   "vs": "Kyle Nelson",
-   "box": [
-    55,
-    45
-   ],
-   "p": 55,
-   "won": null,
-   "why": [
-    "8 years younger (27 vs 35)",
-    "Pro record 15-2 vs 17-7",
-    "Finishes 80% of wins; Nelson finished 4 times",
-    "2 pro losses vs 7"
-   ],
-   "id": "5180489",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
-    "why": [
-     "KO wins vs KO losses: Nelson 6 KO wins, Perez KO'd once; Perez 6 KO wins, Nelson KO'd 3 times",
-     "Pro wins by finish: Nelson 59%, Perez 80%",
-     "KO'd as a pro: Nelson 3 times, Perez once"
+     "UFC minutes 45 vs 0",
+     "Chopurov makes a UFC debut"
     ],
     "p": 56,
-    "won": 55,
-    "won_n": 120,
-    "p_ml": 55,
-    "p_dist": 44,
-    "price": "-550"
+    "won": 60,
+    "won_n": 242,
+    "p_ml": 56,
+    "p_dist": 50
    }
   },
-  "401908371": {
+  "401911633": {
+   "rank": 8,
+   "pick": "Petr Yan",
+   "vs": "Merab Dvalishvili",
+   "box": [
+    53,
+    47
+   ],
+   "p": 53,
+   "won": null,
+   "why": [
+    "1\" taller",
+    "2 years younger (34 vs 36)",
+    "Stops 86% of takedowns, Dvalishvili 76%",
+    "Finishes 40% of wins; Dvalishvili finished once"
+   ],
+   "id": "4293517",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro fights won on the cards: Yan 48%, Dvalishvili 62%",
+     "Average UFC fight: Yan 17.6 min, Dvalishvili 17.6 min",
+     "UFC minutes: Yan 282, Dvalishvili 299"
+    ],
+    "p": 75,
+    "won": 70,
+    "won_n": 30,
+    "p_ml": 53,
+    "p_dist": 75
+   }
+  },
+  "401911632": {
+   "rank": 9,
+   "pick": "Alexander Volkanovski",
+   "vs": "Movsar Evloev",
+   "box": [
+    52,
+    48
+   ],
+   "p": 52,
+   "won": null,
+   "why": [
+    "Late-round margin +15 strikes, Evloev +6",
+    "Strike margin +2.7 a minute vs +1.1",
+    "Round 1 margin +9 strikes, Evloev +3",
+    "Stops 69% of takedowns, Evloev 61%"
+   ],
+   "id": "3949584",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro fights won on the cards: Volkanovski 34%, Evloev 65%",
+     "Average UFC fight: Volkanovski 16.8 min, Evloev 16.0 min",
+     "UFC minutes: Volkanovski 303, Evloev 160"
+    ],
+    "p": 64,
+    "won": 59,
+    "won_n": 99,
+    "p_ml": 52,
+    "p_dist": 64
+   }
+  },
+  "401930357": {
    "rank": 10,
-   "pick": "Jhonata Diniz",
-   "vs": "Tanner Boser",
+   "pick": "Jacob Malkoun",
+   "vs": "Abubakar Vagaev",
    "box": [
     51,
     49
@@ -352,13 +338,50 @@
    "p": 51,
    "won": null,
    "why": [
-    "Higher UFC rating (1535 vs 1483)",
-    "Pro record 9-2 vs 22-11",
-    "2 pro losses vs 11",
-    "Finishes 78% of wins; Boser finished 3 times"
+    "Higher UFC rating (1570 vs 1519)",
+    "Strike margin +1.9 a minute vs -0.4",
+    "2 years younger (31 vs 34)",
+    "Finishes 30% of wins; Vagaev finished 3 times"
    ],
-   "id": "5145497",
+   "id": "4687434",
    "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro fights won on the cards: Vagaev 69%, Malkoun 54%",
+     "Average UFC fight: Vagaev 15.0 min, Malkoun 11.1 min",
+     "UFC fights to the cards: Vagaev 1 of 1, Malkoun 6 of 9"
+    ],
+    "p": 71,
+    "won": 70,
+    "won_n": 30,
+    "p_ml": 51,
+    "p_dist": 71
+   }
+  },
+  "401929495": {
+   "rank": 11,
+   "pick": "Losene Keita",
+   "vs": "Aaron Pico",
+   "box": [
+    51,
+    49
+   ],
+   "p": 51,
+   "won": null,
+   "why": [
+    "Higher UFC rating (1516 vs 1508)",
+    "Pro record 17-2 vs 14-5",
+    "KO power (1.68 knockdowns per 15 min) vs Pico, KO'd once in the UFC",
+    "Knocked down 0.00 times per 15 min, Pico 0.82",
+    "Keita took the fight on 36 days' notice"
+   ],
+   "id": "5192314",
+   "own_facts": "Keita took the fight on 36 days' notice",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
@@ -366,106 +389,93 @@
     "sel": "No",
     "side": "Fight does not go the distance",
     "why": [
-     "KO wins vs KO losses: Boser 12 KO wins, Diniz KO'd 2 times; Diniz 7 KO wins, Boser KO'd 3 times",
-     "Pro wins by finish: Boser 64%, Diniz 78%",
-     "KO'd as a pro: Boser 3 times, Diniz 2 times"
+     "KO wins vs KO losses: Pico 9 KO wins, Keita KO'd once; Keita 10 KO wins, Pico KO'd 4 times",
+     "Pro wins by finish: Pico 79%, Keita 59%",
+     "KO'd as a pro: Pico 4 times, Keita once"
     ],
-    "p": 53,
-    "won": 55,
-    "won_n": 120,
+    "p": 63,
+    "won": 64,
+    "won_n": 102,
     "p_ml": 51,
-    "p_dist": 47,
-    "price": "-165"
+    "p_dist": 37
    }
   }
  },
  "all": {
-  "401897729": {
-   "pick": "Erin Blanchfield",
-   "vs": "Jasmine Jasudavicius",
-   "p": 79,
-   "women": true
-  },
-  "401908373": {
-   "pick": "Melissa Croden",
-   "vs": "Chelsea Chandler",
-   "p": 75,
-   "women": true
-  },
-  "401919643": {
-   "pick": "Cody Chovancek",
-   "vs": "SuYoung You",
-   "p": 71,
+  "401911639": {
+   "pick": "Abdul-Rakhman Yakhyaev",
+   "vs": "Nikita Krylov",
+   "p": 69,
    "women": false
   },
-  "401908372": {
-   "pick": "Kyle Daukaus",
-   "vs": "Marc-Andre Barriault",
-   "p": 66,
+  "401911637": {
+   "pick": "Azamat Murzakanov",
+   "vs": "Dominick Reyes",
+   "p": 60,
    "women": false
   },
-  "401929675": {
-   "pick": "Katlyn Cerminara",
-   "vs": "Mackenzie Stiller",
-   "p": 65,
-   "women": true
-  },
-  "401914039": {
-   "pick": "Steven Koslow",
-   "vs": "Chad Anheliger",
-   "p": 64,
+  "401911638": {
+   "pick": "Cam Rowston",
+   "vs": "Abus Magomedov",
+   "p": 60,
    "women": false
   },
-  "401929676": {
-   "pick": "Joel Faglier",
-   "vs": "Javad Mahjoub",
-   "p": 61,
-   "women": false
-  },
-  "401911807": {
-   "pick": "Nick Galanti",
-   "vs": "Julien LeBlanc",
+  "401911635": {
+   "pick": "Alexander Volkov",
+   "vs": "Rizvan Kuniev",
    "p": 59,
    "women": false
   },
-  "401905374": {
-   "pick": "Mandel Nallo",
-   "vs": "Nate Landwehr",
+  "401911634": {
+   "pick": "Lone'er Kavanagh",
+   "vs": "Ramazan Temirov",
    "p": 59,
    "women": false
   },
-  "401909783": {
-   "pick": "Louis Jourdain",
-   "vs": "Timmy Cuamba",
-   "p": 58,
+  "401911640": {
+   "pick": "Grant Dawson",
+   "vs": "Nurullo Aliev",
+   "p": 59,
    "women": false
   },
-  "401897388": {
-   "pick": "Mike Malott",
-   "vs": "Joaquin Buckley",
+  "401928047": {
+   "pick": "Colby Thicknesse",
+   "vs": "Asaf Chopurov",
    "p": 56,
    "women": false
   },
-  "401923630": {
-   "pick": "Cristian Pérez",
-   "vs": "Kyle Nelson",
-   "p": 55,
+  "401911633": {
+   "pick": "Petr Yan",
+   "vs": "Merab Dvalishvili",
+   "p": 53,
    "women": false
   },
-  "401908371": {
-   "pick": "Jhonata Diniz",
-   "vs": "Tanner Boser",
+  "401911632": {
+   "pick": "Alexander Volkanovski",
+   "vs": "Movsar Evloev",
+   "p": 52,
+   "women": false
+  },
+  "401930357": {
+   "pick": "Jacob Malkoun",
+   "vs": "Abubakar Vagaev",
+   "p": 51,
+   "women": false
+  },
+  "401929495": {
+   "pick": "Losene Keita",
+   "vs": "Aaron Pico",
    "p": 51,
    "women": false
   }
  },
- "dist_model": "2026-10-10",
+ "dist_model": "2026-10-17",
  "cards": [
   {
-   "card": "2026-10-17",
-   "event": "600060773",
-   "name": "UFC Fight Night: Buckley vs. Malott",
-   "start": "2026-10-17T21:00:00+00:00",
+   "card": "2026-10-24",
+   "event": "600061267",
+   "name": "UFC 333: Volkanovski vs. Evloev",
+   "start": "2026-10-24T14:00:00+00:00",
    "model": "ufc"
   }
  ]
