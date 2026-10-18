@@ -1,5 +1,5 @@
 {
- "at": "2026-10-17",
+ "at": "2026-10-18",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "4432577": {
@@ -127,21 +127,15 @@
    "name": "Jared Goff"
   },
   "3912547": {
-   "p": 0.804,
+   "p": 0.809,
    "name": "Sam Darnold"
+  },
+  "3924327": {
+   "p": 0.794,
+   "name": "Drew Lock"
   }
  },
  "by_game": {
-  "401872995": {
-   "3912547": {
-    "p": 0.804,
-    "name": "Sam Darnold"
-   },
-   "4426338": {
-    "p": 0.799,
-    "name": "Bo Nix"
-   }
-  },
   "401872996": {
    "4432577": {
     "p": 0.745,
@@ -390,6 +384,20 @@
    "14880": {
     "p": 0.82,
     "name": "Kirk Cousins"
+   }
+  },
+  "401873022": {
+   "3139477": {
+    "p": 0.791,
+    "name": "Patrick Mahomes"
+   },
+   "3912547": {
+    "p": 0.809,
+    "name": "Sam Darnold"
+   },
+   "3924327": {
+    "p": 0.794,
+    "name": "Drew Lock"
    }
   }
  }

@@ -1,5 +1,5 @@
 {
- "at": "2026-10-17",
+ "at": "2026-10-18",
  "week": 6,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
@@ -290,28 +290,6 @@
    "kick": "2026-10-19T00:20Z"
   },
   {
-   "gid": "401872995",
-   "away": "SEA",
-   "home": "DEN",
-   "pick": "DEN",
-   "model": 58,
-   "book": 58,
-   "bookpick": "SEA",
-   "agree": false,
-   "won": 40,
-   "n": 149,
-   "call": null,
-   "rank": 14,
-   "why": [
-    "SEA is starting a backup QB",
-    "Last 3 games, win %: DEN 67%, SEA 33%",
-    "Turnovers per game: DEN 1.0, SEA 1.8",
-    "Defense, EPA allowed per play: DEN -0.04, SEA -0.12"
-   ],
-   "week": 6,
-   "kick": "2026-10-16T00:15Z"
-  },
-  {
    "gid": "401873017",
    "away": "SF",
    "home": "ATL",
@@ -444,6 +422,28 @@
    "kick": "2026-10-25T17:00Z"
   },
   {
+   "gid": "401873022",
+   "away": "KC",
+   "home": "SEA",
+   "pick": "KC",
+   "model": 66,
+   "book": 60,
+   "bookpick": "SEA",
+   "agree": false,
+   "won": 33,
+   "n": 12,
+   "call": "lean",
+   "rank": 7,
+   "why": [
+    "SEA is starting a backup QB",
+    "Points per game: KC 29.5, SEA 24.7",
+    "Last 3 games, win %: KC 100%, SEA 33%",
+    "QB play (EPA per dropback): KC +0.16, SEA -0.00"
+   ],
+   "week": 7,
+   "kick": "2026-10-26T00:20Z"
+  },
+  {
    "gid": "401873016",
    "away": "NYG",
    "home": "HOU",
@@ -455,7 +455,7 @@
    "won": 75,
    "n": 12,
    "call": null,
-   "rank": 7,
+   "rank": 8,
    "why": [
     "QB play (EPA per dropback): HOU +0.14, NYG -0.03",
     "Turnovers per game: HOU 0.4, NYG 1.4",
@@ -477,7 +477,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 8,
+   "rank": 9,
    "why": [
     "Points allowed per game: PIT 21.8, NO 30.2",
     "Last 3 games, win %: PIT 67%, NO 0%",
@@ -499,7 +499,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 9,
+   "rank": 10,
    "why": [
     "Points per game: CLE 18.6, TEN 11.6",
     "Last 3 games, win %: CLE 67%, TEN 0%",
@@ -521,7 +521,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 10,
+   "rank": 11,
    "why": [
     "Points per game: CHI 23.8, NE 22.0",
     "Turnovers per game: CHI 2.0, NE 2.2",
@@ -543,7 +543,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 11,
+   "rank": 12,
    "why": [
     "BAL is starting a backup QB",
     "QB play (EPA per dropback): CIN +0.15, BAL -0.04",
@@ -565,7 +565,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 12,
+   "rank": 13,
    "why": [
     "Points per game: LV 26.4, LAR 23.8",
     "Last 3 games, point margin: LV -7.7, LAR -1.0",
