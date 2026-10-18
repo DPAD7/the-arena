@@ -80,7 +80,7 @@ export class Clock {
          only the next game that moves (Oct 17, 2026) */
       try {
         const held = (await this.ctx.storage.get("dklive")) || {}, now = Date.now(), dk = {};
-        for (const [gid, st] of Object.entries(held)) if (now - st.at < (st.final ? 30 * 60000 : 45000)) dk[gid] = st;
+        for (const [gid, st] of Object.entries(held)) if (now - st.at < (st.final ? 30 * 60000 : 90000)) dk[gid] = st;
         const kicks = (await this.ctx.storage.get("dkkicks")) || {};
         if (Object.keys(dk).length || Object.keys(kicks).length) pair[1].send(JSON.stringify({ dk, kicks }));
       } catch (e) {}
@@ -172,7 +172,7 @@ export class Clock {
       if (games.length || Object.keys(kicks).length)
         for (const ws of this.ctx.getWebSockets()) { try { ws.send(JSON.stringify({ dk: b.games || {}, kicks })); } catch (e) {} }
       const nextAt = await this.ctx.storage.getAlarm();
-      if (!nextAt || nextAt > Date.now() + 1000) await this.ctx.storage.setAlarm(Date.now() + 500);
+      if (!nextAt || nextAt > Date.now() + 5000) await this.ctx.storage.setAlarm(Date.now() + 1000);
       return Response.json({ ok: true, games: games.length });
     }
     if (url.pathname.endsWith("/test") && request.method === "POST") {
@@ -361,9 +361,12 @@ export class Clock {
         await this.wake("dklive");
       }
     }
-    if (live || pushing) next = Math.min(next, now + 5000);
+    // fifteen seconds, not five: DraftKings' feed brings the moments in on its
+    // own (it sets the alarm forward as each lands), and every alarm is a
+    // request against the free 100,000 a day (Oct 18, 2026)
+    if (live || pushing) next = Math.min(next, now + 15000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
-    await this.ctx.storage.setAlarm(Math.max(now + (live || pushing ? 5000 : 30000), next));
+    await this.ctx.storage.setAlarm(Math.max(now + (live || pushing ? 15000 : 30000), next));
   }
 
   /* an NFL game's passer, off ESPN's box score now: true when a side's card
@@ -554,7 +557,7 @@ export class Clock {
         /* DraftKings' word on the score, the clock and the ball, where it is
            fresh: ESPN's trails it (Oct 17, 2026). The passers' counts stay ESPN's */
         const dk = r[0] === "bout" ? null : dklive[gid];
-        if (dk && Date.now() - dk.at < (dk.final ? 30 * 60000 : 45000) && games[gid] && games[gid].state !== "post") {
+        if (dk && Date.now() - dk.at < (dk.final ? 30 * 60000 : 90000) && games[gid] && games[gid].state !== "post") {
           const g = games[gid];
           g.state = dk.final ? "post" : "in"; g.sc = dk.sc; g.clock = dk.clock || g.clock; g.down = dk.down || g.down;
           g.rz = !!dk.rz;

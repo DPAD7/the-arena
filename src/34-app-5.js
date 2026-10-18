@@ -822,7 +822,11 @@
     var hit = FEED[id];
     /* five seconds, the relay's own hold: a live clock read twenty seconds
        stale ran half a minute behind the broadcast (Jose, Sep 26, 2026) */
-    if (hit && (hit.final || Date.now() - hit.at < 5000)) return hit.p;
+    /* with DraftKings carrying the score and the clock, ESPN is only asked
+       for the stats, every thirty seconds: each DraftKings beat re-asking it
+       ran the board past Cloudflare's 100,000 a day (Oct 18, 2026) */
+    var dkf = (window.DKLIVE || {})[id], hold = dkf && Date.now() - dkf.at < 60000 ? 30000 : 5000;
+    if (hit && (hit.final || Date.now() - hit.at < hold)) return hit.p;
     var league = lg === "college-football" ? "college-football" : "nfl";
     var box = { at: Date.now(), final: false, tried: hit ? hit.tried : false };
     var wire = function () {
@@ -873,7 +877,7 @@
   window.DKLIVE = window.DKLIVE || {};
   function dkPatch(id, d) {
     var dk = window.DKLIVE[String(id)];
-    if (!d || !dk || Date.now() - dk.at > (dk.final ? 30 * 60000 : 45000)) return d;
+    if (!d || !dk || Date.now() - dk.at > (dk.final ? 30 * 60000 : 90000)) return d;
     var comp = (((d.header || {}).competitions) || [])[0];
     if (!comp) return d;
     var st = comp.status = comp.status || {}, ty = st.type = st.type || {};
@@ -1064,7 +1068,7 @@
              18 while the ball was 1st & 10 at the IU 6) */
           var dkn = window.DKLIVE[String(id)], tail = card._wp[card._wp.length - 1];
           var dplay = (((d.drives || {}).current || {}).plays || []).slice(-1)[0];
-          if (tail && dkn && !dkn.final && Date.now() - dkn.at < 45000 && dkn.down && dplay && dplay.end) {
+          if (tail && dkn && !dkn.final && Date.now() - dkn.at < 90000 && dkn.down && dplay && dplay.end) {
             var dm = /^(\d)\w* & (\w+)/.exec(dkn.down) || [];
             tail.sd = tail.d = dkn.down; tail.dn = +dm[1] || tail.dn; tail.n = +dm[2] || tail.n;
             tail.g = dkn.toGoal; tail.yl = dplay.end.yardLine; tail.s = dplay.end.possessionText;

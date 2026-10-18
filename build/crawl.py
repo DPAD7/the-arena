@@ -60,7 +60,7 @@ PAGE_CHECKS = r"""() => {
   document.querySelectorAll('.board:not([hidden]) .gcard[data-espn]').forEach(c => {
     const id = c.dataset.espn, dk = DK[id];
     if ((c.classList.contains('live') || c.querySelector('.glivebar')) && c.dataset.lg !== 'mma' &&
-        !c.classList.contains('done') && (!dk || Date.now() - dk.at > 90000)) say('feed', id + ' is live with no DraftKings reading for 90s');
+        !c.classList.contains('done') && (!dk || Date.now() - dk.at > 150000)) say('feed', id + ' is live with no DraftKings reading for 150s');
   });
   // a fighter's record once, in its slot, never inside his name
   document.querySelectorAll('.board:not([hidden]) .gcard--bout').forEach(c => {

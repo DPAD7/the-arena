@@ -109,6 +109,7 @@ def main():
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
     kicks, kicked_at, said_at, crawled_at, crawl_p = {}, 0, {}, time.time(), None
+    posted_at, pend = 0, {}
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -121,7 +122,7 @@ def main():
                 seen.add(gid)
                 # a game that sits still (a timeout, a review) is said again
                 # every half minute, so nobody takes its quiet for a lost line
-                if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 30:
+                if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 60:
                     moved[gid] = st
                     said_at[gid] = time.time()
         # a finished game leaves DraftKings' list instead of saying final: gone
@@ -160,7 +161,16 @@ def main():
         if ONCE:
             print(json.dumps(moved, indent=1))
             return
+        # one post every ten seconds at most, carrying everything that moved:
+        # each post is a request against the free 100,000 a day (Oct 18, 2026)
+        if moved and not new_kicks and time.time() - posted_at < 10:
+            pend.update(moved)
+            moved = {}
+        elif pend:
+            pend.update(moved)
+            moved, pend = dict(pend), {}
         if moved or new_kicks:
+            posted_at = time.time()
             try:
                 rq.post(SITE, json={"dklive": {"at": int(time.time() * 1000), "games": moved, "kicks": new_kicks}},
                         headers={"x-ask-secret": secret}, impersonate="chrome", timeout=10)
