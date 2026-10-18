@@ -241,6 +241,22 @@ def page_rules():
         pg = c.new_page()
         errs = []
         pg.on("pageerror", lambda e: errs.append(str(e)))
+        # what the page itself reads can change under it: his marks on the
+        # store, the prices, a game's final file. A redraw in a minute where
+        # one of those changed is the design, not a rebuild for nothing.
+        seen, moved, watching = {}, [], [False]
+        def _read(r):
+            u = r.url.split("?")[0]
+            if r.request.method != "GET" or not (u.rsplit("/", 1)[-1] in ("state", "prices.json", "build.txt") or "/final/" in u):
+                return
+            try:
+                body = r.body()
+            except Exception:
+                return
+            if watching[0] and (u not in seen or seen[u] != body):
+                moved.append(u)
+            seen[u] = body
+        pg.on("response", _read)
         pg.goto(SITE + "?crawl=%d" % int(time.time()), wait_until="load")
         pg.wait_for_timeout(20000)
         pg.evaluate("window._dkPull && window._dkPull()")
@@ -255,8 +271,12 @@ def page_rules():
         pg.evaluate("""() => { window._rebuilt = 0; const mo = new MutationObserver(ms => ms.forEach(m => m.removedNodes.forEach(n => {
           if (n.nodeType === 1 && (n.matches('.gcard, .slipcard') || n.querySelector && n.querySelector('.slipcard'))) window._rebuilt++; })));
           document.querySelectorAll('.board, #cashlegs').forEach(b => mo.observe(b, { childList: true, subtree: true })); }""")
+        watching[0] = True
         pg.wait_for_timeout(60000)
+        watching[0] = False
         n = pg.evaluate("window._rebuilt")
+        if n and moved:
+            n = 0
         # a sweep that deployed while the page was open changed what it is made
         # of: drawing again to take it is the design, not a rebuild for nothing
         if n and data_stamp() != before:
