@@ -1156,6 +1156,28 @@
             });
           });
         });
+        /* before a passer has a stat he is not in the box score, and the
+           shirt went up with no number (Jose, Oct 18, 2026: "where are the
+           numbers on the jerseys?"): the game's lineup has it, his surname
+           on this card the tie */
+        if (!card._qbjer[0] || !card._qbjer[1]) {
+          if (!window._luQB) window._luQB = fetch("lineups.json", { cache: "no-cache" })
+            .then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
+          window._luQB.then(function (lu) {
+            var game = lu[card.dataset.espn] || {};
+            var names = card.querySelectorAll(".h2hside .h2hnmtx");
+            [0, 1].forEach(function (i) {
+              if (card._qbjer[i] || !names[i]) return;
+              var sur = names[i].textContent.trim().toLowerCase().replace(/\s+jr\.?$/, "").split(/\s+/).pop();
+              Object.keys(game).forEach(function (club) {
+                ((game[club] || {}).off || []).forEach(function (m) {
+                  var his = String(m.nm || "").toLowerCase().replace(/\s+jr\.?$/, "").split(/\s+/).pop();
+                  if (m.k === "qb" && m.n && sur && his === sur) card._qbjer[i] = String(m.n);
+                });
+              });
+            });
+          });
+        }
         [["l", lq], ["r", rq]].forEach(function (p) {
           if (!p[1]) return;
           stats[p[0]] = {
