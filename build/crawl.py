@@ -251,6 +251,7 @@ def page_rules():
         wrong = [tuple(x) for x in pg.evaluate(PAGE_CHECKS)]
         # nothing is rebuilt under him: a minute of watching, no card or slip
         # replaced (fixed seven times)
+        over0 = pg.evaluate("Object.keys(JSON.parse(localStorage.getItem('arena.over') || '{}')).length")
         pg.evaluate("""() => { window._rebuilt = 0; const mo = new MutationObserver(ms => ms.forEach(m => m.removedNodes.forEach(n => {
           if (n.nodeType === 1 && (n.matches('.gcard, .slipcard') || n.querySelector && n.querySelector('.slipcard'))) window._rebuilt++; })));
           document.querySelectorAll('.board, #cashlegs').forEach(b => mo.observe(b, { childList: true, subtree: true })); }""")
@@ -259,6 +260,11 @@ def page_rules():
         # a sweep that deployed while the page was open changed what it is made
         # of: drawing again to take it is the design, not a rebuild for nothing
         if n and data_stamp() != before:
+            n = 0
+        # a game that finished in the minute is a change too: a hidden card
+        # that ends redraws the board so it falls back into order (markOver,
+        # Jose, Sep 20, 2026)
+        if n and pg.evaluate("Object.keys(JSON.parse(localStorage.getItem('arena.over') || '{}')).length") != over0:
             n = 0
         if n:
             wrong.append(("rebuild", "%d card(s) or slip(s) were rebuilt in a minute with nothing changing" % n))
