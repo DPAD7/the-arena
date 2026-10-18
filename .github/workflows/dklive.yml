@@ -13,6 +13,8 @@ concurrency:
 
 permissions:
   contents: read
+  issues: write
+  actions: write
 
 jobs:
   live:
@@ -41,4 +43,5 @@ jobs:
       - name: Read DraftKings live
         env:
           ASK_SECRET: ${{ secrets.ASK_SECRET }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: python -u build/dk_live.py

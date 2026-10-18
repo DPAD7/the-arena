@@ -264,7 +264,48 @@ def main():
                     headers={"x-ask-secret": os.environ.get("ASK_SECRET", "")}, impersonate="chrome", timeout=30)
         except Exception as ex:
             print("alert failed:", ex)
+    if ALERT and wrong and os.environ.get("GITHUB_TOKEN"):
+        mend(wrong)
     return 1 if wrong else 0
+
+
+def mend(wrong):
+    """Each kind of fault, once, as a "fault" issue -- mend.yml sets Claude on
+    it to find the cause in the code, fix it, prove it and ship it (Jose, Oct
+    17, 2026: "if it's missing it just fix the code")."""
+    import urllib.request
+    tok, repo = os.environ["GITHUB_TOKEN"], "DPAD7/the-arena"
+
+    def gh(path, data=None):
+        req = urllib.request.Request("https://api.github.com/repos/%s%s" % (repo, path),
+                                     data=json.dumps(data).encode() if data is not None else None,
+                                     method="POST" if data is not None else "GET")
+        req.add_header("Authorization", "Bearer " + tok)
+        req.add_header("Accept", "application/vnd.github+json")
+        with urllib.request.urlopen(req, timeout=30) as r:
+            return json.loads(r.read() or b"{}")
+    try:
+        open_ = {i["title"]: i["number"] for i in gh("/issues?state=open&labels=fault&per_page=50")}
+    except Exception as ex:
+        print("issues unread:", ex)
+        return
+    kinds = {}
+    for k, m in wrong:
+        kinds.setdefault(k, []).append(m)
+    for k, ms in kinds.items():
+        title = "crawl: %s" % k
+        body = ("build/crawl.py found this on the live board (%s):\n\n" % time.strftime("%Y-%m-%d %H:%M UTC", time.gmtime()) +
+                "\n".join("- " + m for m in ms[:20]) +
+                "\n\nFind the cause in the code, fix it, prove it with `python3 build/crawl.py`, and ship.")
+        try:
+            if title in open_:
+                gh("/issues/%s/comments" % open_[title], {"body": body})
+                continue
+            it = gh("/issues", {"title": title, "body": body, "labels": ["fault"]})
+            gh("/actions/workflows/mend.yml/dispatches", {"ref": "main", "inputs": {"issue": str(it["number"])}})
+            print("filed #%s and set the mender on it" % it["number"])
+        except Exception as ex:
+            print("filing failed:", ex)
 
 
 if __name__ == "__main__":
