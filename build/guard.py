@@ -262,6 +262,65 @@ def files():
     return wrong
 
 
+def usage():
+    """What the board costs to run: Cloudflare's free plan stops every function
+       at 100,000 requests a UTC day, and past it the board loses its marks,
+       wallet and live line. Flagged at a fifth of that, the day it happens
+       (Oct 18, 2026: 66,629 on the 17th and 122,155 on the 18th went
+       unnoticed until the board went dark; Jose: "this is the whole reason I
+       was doing an audit")."""
+    from curl_cffi import requests as rq
+    tok = os.environ.get("CLOUDFLARE_API_TOKEN")
+    acct = os.environ.get("CLOUDFLARE_ACCOUNT_ID")
+    if not tok:
+        for f in (os.path.expanduser("~/.wrangler/config/default.toml"),
+                  os.path.expanduser("~/Library/Preferences/.wrangler/config/default.toml")):
+            m = re.search(r'oauth_token = "([^"]+)"', open(f).read()) if os.path.exists(f) else None
+            if m:
+                tok = m.group(1)
+                break
+    if not tok:
+        return [(None, "Cloudflare usage: no token to read it with")]
+
+    def ask(url, body=None):
+        h = {"Authorization": "Bearer " + tok}
+        r = rq.post(url, json=body, headers=h, timeout=30) if body else rq.get(url, headers=h, timeout=30)
+        return r.json()
+    try:
+        if not acct:
+            acct = ask("https://api.cloudflare.com/client/v4/accounts")["result"][0]["id"]
+        day = NOW.strftime("%Y-%m-%d")
+        q = ('{viewer{accounts(filter:{accountTag:"%s"}){p:pagesFunctionsInvocationsAdaptiveGroups(limit:1,'
+             'filter:{date:"%s"}){sum{requests}} d:durableObjectsInvocationsAdaptiveGroups(limit:1,'
+             'filter:{date:"%s"}){sum{requests}}}}}') % (acct, day, day)
+        a = ask("https://api.cloudflare.com/client/v4/graphql", {"query": q})["data"]["viewer"]["accounts"][0]
+        n = sum(r["sum"]["requests"] for k in ("p", "d") for r in a[k])
+    except Exception as e:
+        return [(None, "Cloudflare usage could not be read (%s)" % type(e).__name__)]
+    print("   cloudflare: %d requests today (UTC)" % n)
+    return [(None, "Cloudflare: %d requests today, past 20,000 of the free 100,000 -- something is asking per screen" % n)] if n > 20000 else []
+
+
+def reads():
+    """No read the browser can make itself goes through a function: the
+       sources the page reads answer browsers directly, and faces are files."""
+    wrong = []
+    src = pagefile.read()
+    if not re.search(r"function espnUrl\(u\) \{ return u; \}", src):
+        wrong.append((None, "the page reads ESPN through /espn again -- every read is a request against the limit"))
+    routes = load_site("_routes.json")
+    if any(r.startswith("/face") for r in (routes.get("include") or [])):
+        wrong.append((None, "faces go through a function again -- they are plain files"))
+    return wrong
+
+
+def load_site(name):
+    try:
+        return json.load(open(os.path.join(SITE, name)))
+    except (OSError, ValueError):
+        return {}
+
+
 def the_page():
     try:
         import look
@@ -270,7 +329,7 @@ def the_page():
         return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
 
 
-CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, clips, wire, fights, settled, files)
+CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, clips, wire, fights, settled, files, usage, reads)
 # the order a mend is run in, when more than one is due
 MENDS = ("depth", "wire", "starters", "fill_week", "faces", "mirror", "settle", "lineups", "qb_clips", "qbwire")
 
