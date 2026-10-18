@@ -188,15 +188,6 @@ def main():
                 print("kicks failed:", ex)
         # every ten minutes while games are on: the board read as his phone
         # reads it, against every rule (crawl.py) -- a fault reaches his phone
-        # beside the loop, never in it: a crawl run inside it held the feed for
-        # minutes and then found the feed missing (the mender's own finding,
-        # issue #9, Oct 17, 2026); the first one waits ten minutes
-        if time.time() - crawled_at > 600 and on and (crawl_p is None or crawl_p.poll() is not None):
-            crawled_at = time.time()
-            try:
-                crawl_p = subprocess.Popen([sys.executable, os.path.join(D, "build", "crawl.py"), "--alert"])
-            except Exception as ex:
-                print("crawl failed:", ex)
         if ONCE:
             print(json.dumps(moved, indent=1))
             return
