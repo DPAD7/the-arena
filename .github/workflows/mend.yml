@@ -75,13 +75,16 @@ jobs:
           show_full_output: true
           claude_args: "--max-turns 60 --allowedTools Bash,Read,Edit,Write,Grep,Glob"
           prompt: |
-            You are mending the board (read CLAUDE.md first; every rule there holds). A run failed and
-            build/triage.py filed it as issue #${{ github.event.issue.number || inputs.issue }} in this repo.
+            You are mending the board (read docs/cloud-rules.md first -- the board's CLAUDE.md and standing
+            rules; every rule there holds). A run or the crawler filed a fault as issue #${{ github.event.issue.number || inputs.issue }} in this repo.
             Read the issue with `gh issue view` (the traceback, the script, the commit). Find the cause in the
             code, never guess: read the script and the data it read. Fix the cause, not the symptom. Prove it:
             run the script dry where it has a dry mode, rebuild the page
             (`cd build && python3 -c "import pagefile; pagefile.deployable(pagefile.read())"`), and run
-            `python3 build/guard.py`. If the fix holds, ship with `build/ship.sh "<one line on what it was>"`
-            and close the issue with that same line as a comment. If it needs Jose (a login, a secret, a
-            decision), say exactly what in a comment and leave the issue open. Always end by commenting on the
+            `python3 build/guard.py`. If the fix holds, ship it yourself -- ship.sh needs zsh, which this runner lacks,
+            so do its steps: `git pull --rebase`, rebuild the page as above, `git add -A && git commit -m "<one
+            line>"`, `git push` (pull --rebase and retry if refused), then
+            `cd site && npx --yes wrangler@latest pages deploy . --project-name=the-arenasports --branch=main --commit-dirty=true`.
+            Close the issue with that same line as a comment. Only a login, a secret or a real decision needs
+            Jose: then say exactly what in a comment and leave the issue open -- never ask him to ship. Always end by commenting on the
             issue with `gh issue comment`, even when there was nothing to mend. Never print a cookie or a secret.

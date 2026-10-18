@@ -108,7 +108,7 @@ def main():
     board = Board()
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
-    kicks, kicked_at, said_at, crawled_at = {}, 0, {}, 0
+    kicks, kicked_at, said_at, crawled_at, crawl_p = {}, 0, {}, time.time(), None
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -148,10 +148,13 @@ def main():
                 print("kicks failed:", ex)
         # every ten minutes while games are on: the board read as his phone
         # reads it, against every rule (crawl.py) -- a fault reaches his phone
-        if time.time() - crawled_at > 600 and on:
+        # beside the loop, never in it: a crawl run inside it held the feed for
+        # minutes and then found the feed missing (the mender's own finding,
+        # issue #9, Oct 17, 2026); the first one waits ten minutes
+        if time.time() - crawled_at > 600 and on and (crawl_p is None or crawl_p.poll() is not None):
             crawled_at = time.time()
             try:
-                subprocess.run([sys.executable, os.path.join(D, "build", "crawl.py"), "--alert"], timeout=240)
+                crawl_p = subprocess.Popen([sys.executable, os.path.join(D, "build", "crawl.py"), "--alert"])
             except Exception as ex:
                 print("crawl failed:", ex)
         if ONCE:
