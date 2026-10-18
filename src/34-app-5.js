@@ -630,7 +630,12 @@
      header. A settled game comes from site/final/*.json and never noticed; a
      game still being played fell through to ESPN and silently got nothing, on
      every sport. (Jose spotted it on Syracuse at Pittsburgh, Sep 17, 2026) */
-  function espnUrl(u) { return "/espn?u=" + encodeURIComponent(u); }
+  /* ...they all answer a browser now (Access-Control-Allow-Origin: *, ESPN's
+     three hosts and theScore, checked Oct 18, 2026), so the page asks them
+     itself. Through /espn every read was a request against the free plan's
+     100,000 a day, and Saturday's college slate spent them all and took the
+     board down (Jose, Oct 18, 2026: "what are we requesting 100,000 times") */
+  function espnUrl(u) { return u; }
   /* theScore's box for a game, as ESPN writes one, for the two passers on
      the card only: each is found on his own side of the ball, by surname,
      or as the one man on that side who has thrown -- the two passers in the
