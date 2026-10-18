@@ -40,7 +40,13 @@ PAGE_CHECKS = r"""() => {
       const sc = [...c.querySelectorAll('.gscore, .trkbox, .gsc')].map(e => e.textContent.trim());
       const clk = (c.dataset.clk || '');
       const want = (dk.clock || '').split(' - ')[0];
-      if (want && clk && clk.indexOf(want) < 0 && !/half|final/i.test(clk)) say('clock', id + ' card reads "' + clk + '", DraftKings ' + dk.clock);
+      // the card counts down on its own between readings and DraftKings' clock
+      // moves every second, so the two are read a second or two apart: the same
+      // quarter within 10 seconds is the same clock
+      const secs = t => { const m = /^(\d+):(\d\d)\s*-\s*(\w+)/.exec(t || ''); return m ? [m[3], +m[1] * 60 + +m[2]] : null; };
+      const a = secs(clk), b = secs(dk.clock);
+      const same = a && b ? (a[0] === b[0] && Math.abs(a[1] - b[1]) <= 10) : clk.indexOf(want) >= 0;
+      if (want && clk && !same && !/half|final/i.test(clk)) say('clock', id + ' card reads "' + clk + '", DraftKings ' + dk.clock);
     }
     if (live) {
       c.querySelectorAll('.ptdside, .trkbox').forEach(e => { if (e.offsetParent && !e.textContent.trim()) say('stat', id + ' has a blank stat on a live card'); });
