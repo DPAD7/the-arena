@@ -853,6 +853,9 @@
     var CLUBS = { FLA: "Florida", DAL: "Cowboys", VT: "Virginia Tech", PSU: "Penn State", MICH: "Michigan", NO: "Saints", LAC: "Chargers",
                   CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers",
                   KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers" };
+    /* passers, by ESPN id: his touchdown rungs and head to heads, not his
+       club's moneyline (Jose, Oct 18, 2026: "Winston is on the black list") */
+    var QBS = { "2969939": "Jameis Winston" };
     var MEN = ["alden coria", "trevor peek", "dan hooker", "rafa garcia", "marwan rahiki", "joseph morales", "jose miguel delgado", "iwo baraniewski"];
     function sideOf(card, el) {
       var c = card.getBoundingClientRect(), r = el.getBoundingClientRect();
@@ -878,9 +881,11 @@
       [].forEach.call(document.querySelectorAll(".gcard"), function (card) {
         if (!card.offsetParent) return;
         var l = isMine(card, "l"), r = isMine(card, "r");
-        if (!l && !r) return;
+        var ql = !!QBS[card.dataset.lqbid], qr = !!QBS[card.dataset.rqbid];
+        if (!l && !r && !ql && !qr) return;
         [].forEach.call(card.querySelectorAll("button.price"), function (b) {
-          b.classList.toggle("dnbp", sideOf(card, b) === "l" ? l : r);
+          var s = sideOf(card, b), ml = /^0ML/.test(b.dataset.oid || "");
+          b.classList.toggle("dnbp", (s === "l" ? l : r) || (!ml && (s === "l" ? ql : qr)));
         });
       });
     }
