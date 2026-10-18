@@ -216,14 +216,24 @@ def dk_props(eid, a, b, nr):
 
 
 def face(link, name):
-    """A man's picture from his Wikipedia article, where it has a free one."""
-    if not link:
-        return ""
+    """A man's picture: the one already kept, else The Ring's cut-out, else
+       his Wikipedia article's. A kept picture was skipped when his row had no
+       Wikipedia link, and the card drew the silhouette (Billam-Smith, Garcia,
+       Benn; Oct 18, 2026)."""
     f = slug(name)
     path = os.path.join(FACES, f + ".jpg")
     if os.path.exists(path):
         return "box:" + f
     if DRY:
+        return ""
+    try:
+        import ring
+        p = ring.find(name, scan=False)
+        if p and ring.face(p, name):
+            return "box:" + f
+    except Exception as e:
+        print("   ring %s: %s" % (name, e))
+    if not link:
         return ""
     try:
         j = rq.get(API, params={"action": "query", "prop": "pageimages", "piprop": "thumbnail",

@@ -307,7 +307,7 @@
       if (!nm) return;
       /* a boxer has no ESPN id: his flag is kept under his name, from The
          Ring (ring.py --flags; Jose, Oct 18, 2026) */
-      var who = String((i ? card.dataset.rf : card.dataset.lf) || "").toLowerCase()
+      var who = String((i ? card.dataset.rf : card.dataset.lf) || "").normalize("NFKD").replace(/[\u0300-\u036f]/g, "").toLowerCase()
         .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
       var code = (id && FIGHTFLAG[id]) || (who && FIGHTFLAG["box:" + who]), el = nm.querySelector(".fflag");
       if (!code) { if (el) el.remove(); return; }

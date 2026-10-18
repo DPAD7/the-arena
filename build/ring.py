@@ -35,7 +35,10 @@ SITE = "https://www.ringmagazine.com"
 
 
 def slug(name):
-    return re.sub(r"[^a-z0-9]+", "-", name.lower()).strip("-")
+    """boxing.py's: accents folded, so José Ramírez is jose-ramirez in both"""
+    import unicodedata
+    t = unicodedata.normalize("NFKD", name).encode("ascii", "ignore").decode()
+    return re.sub(r"[^a-z0-9]+", "-", t.lower()).strip("-")
 
 
 def fold(name):
