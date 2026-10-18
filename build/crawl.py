@@ -64,6 +64,14 @@ PAGE_CHECKS = r"""() => {
   document.querySelectorAll('.board:not([hidden]) .gcard .fname, .board:not([hidden]) .gcard .qname').forEach(n => {
     if (n.offsetParent && n.scrollWidth > n.clientWidth + 2) say('overflow', 'name runs out of its box: ' + n.textContent.trim().slice(0, 40));
   });
+  // a card still to play with prices in the file shows them
+  const PJ = window.PRICEJ_SNAP || null;
+  document.querySelectorAll('.board:not([hidden]) .gcard[data-espn], .board:not([hidden]) .gcard[data-bout]').forEach(c => {
+    if (c.classList.contains('done') || c.classList.contains('locked') || c.classList.contains('live')) return;
+    const btns = [...c.querySelectorAll('button.price')];
+    if (btns.length && !btns.some(b => /\d/.test(b.textContent)) && c.dataset.kick && Date.parse(c.dataset.kick) > Date.now())
+      say('odds', (c.dataset.espn || c.dataset.bout) + ' shows no prices before it starts');
+  });
   // the wallet: every open slip once, every leg drawn properly
   const seen = {};
   document.querySelectorAll('#cashlegs .slipcard[data-bet]').forEach(c => {

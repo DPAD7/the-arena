@@ -319,7 +319,12 @@
   function seatCard(card) {
     if (!card || !PRICEJ) return;
     var id = card.dataset.espn || card.dataset.bout;
-    if (!id || CARDDONE[id]) return;
+    /* "done" is the game's, the card is a node: a card drawn again after its
+       prices were laid (a passer swapped, a day redrawn) came up all dashes
+       and was never seated again (Jose, Oct 17, 2026: Utah-Colorado and
+       Wake-Cal "missing odds when we already had them") */
+    if (!id) return;
+    if (CARDDONE[id] && [].some.call(card.querySelectorAll("button.price"), function (b) { return /\d/.test(b.textContent); })) return;
     var bout = !!card.dataset.bout;
     var ml = (PRICEJ[bout ? "FIGHTS" : card.dataset.lg === "college-football" ? "CFB" : "SCHED"] || {})[id];
     var props = (PRICEJ[bout ? "FPROPS" : "PROPS"] || {})[id];
