@@ -180,6 +180,7 @@
     function open() {
       if (box.classList.contains("open")) return;
       var tab = tabNow();
+      if (tab === "all") tab = "nfl";        /* the All tab searches the NFL's passers */
       if (tab !== "nfl" && tab !== "college-football") return;
       CFBMODE = tab === "college-football";
       box.classList.toggle("qs--cfb", CFBMODE);
