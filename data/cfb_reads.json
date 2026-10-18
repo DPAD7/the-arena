@@ -1,5 +1,5 @@
 {
- "at": "2026-10-18T16:05:20Z",
+ "at": "2026-10-18T16:35:14Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -3858,7 +3858,7 @@
     "pick": "Drew Mestemaker",
     "pick_id": "5219834",
     "team": "OKST",
-    "p": 0.766774,
+    "p": 0.76353,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3876,18 +3876,18 @@
     "5219834": {
      "name": "Drew Mestemaker",
      "team": "OKST",
-     "p1": 0.899572,
+     "p1": 0.897933,
      "take1": false,
-     "p2": 0.683034,
+     "p2": 0.67938,
      "take2": false,
      "has_line": true
     },
     "5079771": {
      "name": "Isaac Wilson",
      "team": "COLO",
-     "p1": 0.731021,
+     "p1": 0.734548,
      "take1": false,
-     "p2": 0.411216,
+     "p2": 0.415295,
      "take2": false,
      "has_line": true
     }
@@ -4670,7 +4670,7 @@
     "pick": "John Mateer",
     "pick_id": "4915980",
     "team": "OU",
-    "p": 0.600063,
+    "p": 0.608693,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -4688,18 +4688,18 @@
     "4915980": {
      "name": "John Mateer",
      "team": "OU",
-     "p1": 0.739601,
+     "p1": 0.746479,
      "take1": false,
-     "p2": 0.404769,
+     "p2": 0.412901,
      "take2": false,
      "has_line": true
     },
     "5294646": {
      "name": "Parker Puckett",
      "team": "MSST",
-     "p1": 0.693552,
+     "p1": 0.685843,
      "take1": false,
-     "p2": 0.338136,
+     "p2": 0.330647,
      "take2": false,
      "has_line": true
     }
@@ -5233,7 +5233,7 @@
    "kick": "2026-10-24T20:00Z",
    "ml": {
     "pick": "OHIO",
-    "p": 0.851894,
+    "p": 0.844099,
     "call": "take",
     "why": [
      "Margin rating: OHIO -0.5, EMU -9.6",
@@ -6120,9 +6120,9 @@
     "pick": "Owen McCown",
     "pick_id": "4775136",
     "team": "UTSA",
-    "p": 0.670221,
+    "p": 0.701315,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "4775136",
@@ -6138,20 +6138,20 @@
     "4775136": {
      "name": "Owen McCown",
      "team": "UTSA",
-     "p1": 0.824483,
+     "p1": 0.821118,
      "take1": false,
-     "p2": 0.510484,
+     "p2": 0.500682,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5291713": {
      "name": "Trace Johnson",
      "team": "TULN",
-     "p1": 0.664784,
+     "p1": 0.615836,
      "take1": false,
-     "p2": 0.318425,
+     "p2": 0.275479,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
