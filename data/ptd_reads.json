@@ -2,14 +2,6 @@
  "at": "2026-10-18",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4432577": {
-   "p": 0.745,
-   "name": "C.J. Stroud"
-  },
-  "4360310": {
-   "p": 0.818,
-   "name": "Trevor Lawrence"
-  },
   "4431611": {
    "p": 0.82,
    "name": "Caleb Williams"
@@ -118,6 +110,10 @@
    "p": 0.835,
    "name": "Joe Burrow"
   },
+  "4432577": {
+   "p": 0.806,
+   "name": "C.J. Stroud"
+  },
   "4426338": {
    "p": 0.744,
    "name": "Bo Nix"
@@ -129,6 +125,10 @@
   "3912547": {
    "p": 0.809,
    "name": "Sam Darnold"
+  },
+  "4360310": {
+   "p": 0.818,
+   "name": "Trevor Lawrence"
   }
  },
  "by_game": {
