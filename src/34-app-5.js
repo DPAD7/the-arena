@@ -559,7 +559,11 @@
            got its closing price is written once: Asher v Foster settled before
            the first read and its moneyline sat on dashes (Jose, Oct 13, 2026:
            "where the fuck are the odds") */
-        if (frozen(one[0]) && b.dataset.odds) return;
+        /* ...and that once is the file's pregame close, never the line baked
+           into the page: the button kept the page's +220 for Carolina while
+           the file closed them at -162 after Hurts was ruled out (Jose, Oct
+           18, 2026: "it's a pregame read not live or final ml"). A row is
+           only listed here on its first take, so this writes once. */
         b.textContent = String(one[2]).replace("-", "\u2212");
         b.dataset.odds = one[2];
         if (one[3]) b.dataset.oid = one[3];
