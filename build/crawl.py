@@ -256,7 +256,19 @@ def main():
     for k, m in wrong:
         print("  %-6s %s" % (k, m))
     print("crawl: %d fault(s)" % len(wrong))
-    if ALERT and wrong:
+    # a missing live feed counts only when the last look saw it too: a reader
+    # restarting is a minute, not a fault (Oct 17, 2026)
+    held = "/tmp/crawl_feed.json"
+    feed = [w for w in wrong if w[0] == "feed"]
+    try:
+        before = set(tuple(x) for x in json.load(open(held)))
+    except Exception:
+        before = set()
+    json.dump(feed, open(held, "w"))
+    wrong = [w for w in wrong if w[0] != "feed" or tuple(w) in before]
+    # faults go to the mender, never to his phone (Jose, Oct 17, 2026: "why are
+    # you sending me notifications about this")
+    if False and ALERT and wrong:
         try:
             rq.post(SITE + "push", json={"fault": {"key": "crawl-" + "-".join(sorted({k for k, _ in wrong})),
                                                    "title": "The board caught %d fault%s" % (len(wrong), "" if len(wrong) == 1 else "s"),
