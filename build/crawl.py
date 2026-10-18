@@ -212,8 +212,20 @@ def leg_rules():
     return wrong
 
 
+def data_stamp():
+    """what the board is made of right now: the build stamp and the prices file"""
+    out = []
+    for f in ("build.txt", "prices.json"):
+        try:
+            out.append(rq.get(SITE + f + "?crawl=%d" % int(time.time()), timeout=20).text)
+        except Exception:
+            out.append(None)
+    return out
+
+
 def page_rules():
     from playwright.sync_api import sync_playwright
+    before = data_stamp()
     with sync_playwright() as p:
         try:
             b = p.chromium.launch()
@@ -238,6 +250,10 @@ def page_rules():
           document.querySelectorAll('.board, #cashlegs').forEach(b => mo.observe(b, { childList: true, subtree: true })); }""")
         pg.wait_for_timeout(60000)
         n = pg.evaluate("window._rebuilt")
+        # a sweep that deployed while the page was open changed what it is made
+        # of: drawing again to take it is the design, not a rebuild for nothing
+        if n and data_stamp() != before:
+            n = 0
         if n:
             wrong.append(("rebuild", "%d card(s) or slip(s) were rebuilt in a minute with nothing changing" % n))
         wrong += [("script", "the page threw: " + e[:160]) for e in errs[:3]]
