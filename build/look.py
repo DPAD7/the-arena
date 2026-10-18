@@ -133,6 +133,11 @@ def gestures(b, seen):
             wrong.append("the wallet floats over an open sheet")
         pg.evaluate("document.querySelectorAll('dialog.sheet[open]').forEach(d => d.close())")
     pg.evaluate("scrollTo(0, 0)")
+    # the search is the NFL tab's own (Jose, Oct 17, 2026: "I thought this was
+    # only for nfl"): pull there, not on the All tab the board opens on
+    pg.evaluate("(() => { const t = document.querySelector('.sptab[data-sp=\"nfl\"]'); if (t) t.click(); })()")
+    pg.wait_for_timeout(1500)
+    pg.evaluate("scrollTo(0, 0)")
     # a spot at the top that is the page, not a piece with its own drag (a
     # live graph took the pull during games and read as a fault, Oct 17, 2026)
     top = pg.evaluate("""(() => { const m = document.querySelector('main, #board, .board') || document.body;
