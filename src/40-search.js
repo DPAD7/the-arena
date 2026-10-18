@@ -208,7 +208,9 @@
     addEventListener("touchstart", function (e) {
       y0 = null;
       if (box.classList.contains("open") || window.scrollY > 2 || document.documentElement.classList.contains("hotlock")) return;
-      if (tabNow() !== "nfl" && tabNow() !== "college-football") return;
+      /* the All tab too: it is where the board opens, and the pull did
+         nothing there (the gesture check, Oct 17, 2026) */
+      if (tabNow() !== "nfl" && tabNow() !== "college-football" && tabNow() !== "all") return;
       if (document.querySelector("dialog[open]")) return;
       /* a drag that starts on a card's hide corner is the hide, never the
          search (Jose, Sep 28, 2026: "conflicting with the drag down to hide") */

@@ -80,6 +80,12 @@ def gestures(b, seen):
     pg.route("**/*", serve)
     pg.goto(HOST + "/")
     pg.wait_for_timeout(4000)
+    # the opening holds every touch until it goes (Oct 17, 2026): wait for it,
+    # as a finger would
+    try:
+        pg.wait_for_function("!document.getElementById('boot')", timeout=15000)
+    except Exception:
+        pass
     cdp = c.new_cdp_session(pg)
     opened = "document.querySelector('#qsearch').classList.contains('open')"
     close = "document.querySelector('#qsearch').classList.remove('open')"
@@ -127,8 +133,14 @@ def gestures(b, seen):
             wrong.append("the wallet floats over an open sheet")
         pg.evaluate("document.querySelectorAll('dialog.sheet[open]').forEach(d => d.close())")
     pg.evaluate("scrollTo(0, 0)")
+    # a spot at the top that is the page, not a piece with its own drag (a
+    # live graph took the pull during games and read as a fault, Oct 17, 2026)
     top = pg.evaluate("""(() => { const m = document.querySelector('main, #board, .board') || document.body;
-        const r = m.getBoundingClientRect(); return [innerWidth / 2, Math.max(r.top, 0) + 200] })()""")
+        const r = m.getBoundingClientRect(), own = (window.OWNDRAG || '.gcorner') + ', .gcorner--pulling';
+        for (let y = Math.max(r.top, 0) + 120; y < innerHeight - 200; y += 24)
+          for (const x of [innerWidth / 2, 40, innerWidth - 40]) { const e = document.elementFromPoint(x, y);
+            if (e && !(e.closest && e.closest(own))) return [x, y]; }
+        return [innerWidth / 2, Math.max(r.top, 0) + 200] })()""")
     drag(pg, cdp, top[0], top[1], 160)
     if not pg.evaluate(opened):
         wrong.append("a pull down at the top of the page does not open the search")
@@ -219,6 +231,11 @@ def tracker(b, seen, board="SCHED"):
         if el: el.screenshot(path=os.path.join(os.environ["LOOKSHOT"], "tracker_%s.png" % board))
     c.close()
     wrong = ["the wallet tracker threw: " + e for e in errs[:2]]
+    # a slip whose every leg has won leaves the wallet (Oct 17, 2026): this
+    # test's slip is built from a finished game's winning side, so gone is right
+    if not got and not errs:
+        seen.append("tracker %s (won slip left the wallet)" % pick[0])
+        return wrong
     if not got or not got["games"] or got["rows"] < 2 or not got["h"]:
         wrong.append("the wallet tracker did not draw game %s (%s)" % (pick[0], got))
     elif not got["fin"]:
@@ -278,6 +295,10 @@ def fight_tracker(b, seen):
         won: !!t.querySelector('.trkn--won') } })()""")
     c.close()
     wrong = ["the fight tracker threw: " + e for e in errs[:2]]
+    # a won leg's slip leaves the wallet now (Oct 17, 2026): gone is right
+    if not got and not errs:
+        seen.append("fight tracker %s (won slip left the wallet)" % pick[0])
+        return wrong
     if not got or not got["rows"]:
         wrong.append("the fight tracker did not draw bout %s (%s)" % (pick[0], got))
     elif not got["fin"] or not got["won"]:
