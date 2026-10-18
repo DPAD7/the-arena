@@ -53,6 +53,10 @@ MISSES = os.path.join(D, "data", "bfo_misses.json")
 CACHE = os.path.join(D, "cache", "bfo")
 NOTE = os.path.join(D, "notes", "bfo-review.md")
 BASE = "https://www.bestfightodds.com"
+# boxing's archive is the same site under another name, with the same pages
+# (Jose, Oct 18, 2026: "We have https://www.proboxingodds.com")
+BOXBASE = "https://www.proboxingodds.com"
+SITE = [BASE]
 DRY = "--dry" in sys.argv
 FRESH = "--fresh" in sys.argv
 NOW = dt.datetime.now(dt.timezone.utc)
@@ -92,11 +96,11 @@ def get(path, days=None):
        changes, so its page is fetched once; a fighter's page and a search
        are kept a day."""
     os.makedirs(CACHE, exist_ok=True)
-    f = os.path.join(CACHE, re.sub(r"[^A-Za-z0-9._-]+", "_", path.strip("/"))[:150] + ".html")
+    f = os.path.join(CACHE, ("pbo_" if SITE[0] == BOXBASE else "") + re.sub(r"[^A-Za-z0-9._-]+", "_", path.strip("/"))[:150] + ".html")
     if os.path.exists(f) and not FRESH:
         if days is None or time.time() - os.path.getmtime(f) < days * 86400:
             return open(f).read()
-    r = rq.get(BASE + path, impersonate="chrome", timeout=40)
+    r = rq.get(SITE[0] + path, impersonate="chrome", timeout=40)
     time.sleep(0.6)
     if r.status_code != 200:
         return ""
@@ -410,17 +414,23 @@ def main():
     s = pagefile.read()
     fights = json.loads(re.search(r"  var FIGHTS = (\[\[.*?\]\]);", s, re.S).group(1))
     cards = json.loads(re.search(r"  var FIGHTCARDS = (\[\[.*?\]\]);", s, re.S).group(1))
+    # boxing's cards too: their prices go to the file, and boxing.py carries
+    # them into its own rows the way it carries DraftKings'
+    bx = re.search(r"  var BOXCARDS = (\[\[.*?\]\]);\n  var BOXFIGHTS = (\[\[.*?\]\]);", s, re.S)
+    boxfights = json.loads(bx.group(2)) if bx else []
+    cards += json.loads(bx.group(1)) if bx else []
     evmap = json.load(open(EVENTS)) if os.path.exists(EVENTS) else {}
     have = json.load(open(OUT)) if os.path.exists(OUT) and not FRESH else {}
     misses = json.load(open(MISSES)) if os.path.exists(MISSES) and not FRESH else {}
     report = {"events": [], "bouts": 0, "matched": 0, "lines": 0, "props": 0, "untied": [], "noevent": [], "learned": []}
     by_event = {}
-    for f in fights:
+    for f in fights + boxfights:
         by_event.setdefault(str(f[0]), []).append(f)
     for wk, eid, start, name in cards:
         eid = str(eid)
-        if eid.startswith("zb-") or T(start) > NOW - dt.timedelta(hours=6):
-            continue                                    # boxing is not in the archive; a card still to come is DraftKings'
+        if T(start) > NOW - dt.timedelta(hours=6):
+            continue                                    # a card still to come is DraftKings'
+        SITE[0] = BOXBASE if eid.startswith("zb-") else BASE
         bouts = [f for f in by_event.get(eid, []) if f[3] and f[5] and "TBA" not in (f[3] + f[5])]
         if not bouts:
             continue
@@ -533,7 +543,7 @@ def main():
     # ---- what the board is missing ----
     book = pricefile.read()
     changed_rows = 0
-    for f in fights:
+    for f in fights + boxfights:
         rec = have.get(str(f[1]))
         if not rec or T(f[2]) > NOW - dt.timedelta(hours=6):
             continue
@@ -545,14 +555,16 @@ def main():
             if ln:
                 f[8], f[10] = ln[0], ln[1]
                 book["FIGHTS"][str(f[1])] = [f[8], "", f[10], ""]
-                changed_rows += 1
+                changed_rows += f in fights
                 report["lines"] += 1
         # the sheet, every key the book left empty
         e = sheet_from(mu, flip)
         fp = book["FPROPS"].setdefault(str(f[1]), {})
-        fp.setdefault("rounds", e["rounds"])
+        box = str(f[0]).startswith("zb-")
+        if not box:
+            fp.setdefault("rounds", e["rounds"])     # a boxing bout's rounds are its own, not 3 or 5
         for key, slots in e.items():
-            if key == "rounds":
+            if key == "rounds" or (box and re.match(r"^(any)?(ko|sub)?rd|^sub|^anysub|^kosub|^subdec|^first60", key)):
                 continue
             cur = fp.get(key) or [None] * len(slots)
             cur = list(cur) + [None] * (len(slots) - len(cur))

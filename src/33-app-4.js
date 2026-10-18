@@ -305,7 +305,11 @@
     [card.dataset.lfid, card.dataset.rfid].forEach(function (id, i) {
       var nm = sides[i] && sides[i].querySelector(".fname");
       if (!nm) return;
-      var code = FIGHTFLAG[id], el = nm.querySelector(".fflag");
+      /* a boxer has no ESPN id: his flag is kept under his name, from The
+         Ring (ring.py --flags; Jose, Oct 18, 2026) */
+      var who = String((i ? card.dataset.rf : card.dataset.lf) || "").toLowerCase()
+        .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "");
+      var code = (id && FIGHTFLAG[id]) || (who && FIGHTFLAG["box:" + who]), el = nm.querySelector(".fflag");
       if (!code) { if (el) el.remove(); return; }
       if (!el) { el = document.createElement("img"); el.className = "fflag"; el.alt = ""; nm.insertBefore(el, nm.firstChild); }
       var src = "ico/flags/" + code + ".png";

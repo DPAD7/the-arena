@@ -57,13 +57,27 @@ def profile(fid):
         return None
 
 
-def find(name, near=None):
+def learn(p, index):
+    """Every man a profile names in its fights, by id: an undercard man is
+       reached through the man he fought, not a scan of the whole list."""
+    for f in (p or {}).get("fights") or []:
+        for side in ("fighterA", "fighterB"):
+            x = f.get(side) or {}
+            if x.get("id") and x.get("name"):
+                index.setdefault(x["id"], x["name"])
+
+
+def find(name, near=None, scan=True):
     """The Ring's profile for a man, or None."""
     want = fold(name)
     index = json.load(open(INDEX)) if os.path.exists(INDEX) else {}
-    for fid, n in index.items():
+    for fid, n in list(index.items()):
         if fold(n) == want:
-            return profile(fid)
+            got = profile(fid)
+            if got:
+                learn(got, index)
+                json.dump(index, open(INDEX, "w"), indent=0, sort_keys=True)
+            return got
     # the opponent of a man already found: through the fight they share
     if near:
         for f in near.get("fights") or []:
@@ -75,6 +89,8 @@ def find(name, near=None):
                         index[got["id"]] = got.get("name", "")
                         json.dump(index, open(INDEX, "w"), indent=0, sort_keys=True)
                         return got
+    if not scan:
+        return None
     sm = get("/api/sitemap/sitemap-fighters")
     ids = re.findall(r"/fighters/([A-Za-z0-9]+)</loc>", sm.text) if sm else []
     found = None
@@ -85,6 +101,7 @@ def find(name, near=None):
         if not p:
             continue
         index[fid] = p.get("name", "")
+        learn(p, index)
         if fold(p.get("name")) == want:
             found = p
             break
@@ -142,7 +159,73 @@ def pair(a, b):
     return oa, ob
 
 
-if __name__ == "__main__":
+FLAGS = os.path.join(D, "site", "flags.json")
+FLAGDIR = os.path.join(D, "site", "ico", "flags")
+COUNTRIES = os.path.join(D, "data", "countries.json")
+
+
+def flag_code(nat):
+    """The Ring's country as the board's flag file: the name ESPN's codes are
+       kept under, else its two-letter code with the flag fetched once."""
+    names = json.load(open(COUNTRIES))
+    country = (nat or {}).get("country") or ""
+    if names.get(country):
+        return names[country]
+    iso = ((nat or {}).get("countryCode") or "").lower()
+    if not iso:
+        return ""
+    path = os.path.join(FLAGDIR, iso + ".png")
+    if not os.path.exists(path):
+        from PIL import Image
+        r = rq.get("https://flagcdn.com/w160/%s.png" % iso, impersonate="chrome", timeout=30)
+        if r.status_code != 200:
+            return ""
+        im = Image.open(io.BytesIO(r.content)).convert("RGBA")
+        im.thumbnail((72, 72), Image.LANCZOS)
+        im.save(path, optimize=True)
+    names[country] = iso
+    json.dump(names, open(COUNTRIES, "w"), indent=1, sort_keys=True, ensure_ascii=False)
+    return iso
+
+
+def flags():
+    """A boxer's flag, from The Ring's nationality, the way an MMA man's comes
+       from ESPN (Jose, Oct 18, 2026). A boxer has no ESPN id, so his flag is
+       kept under box:<his name> in site/flags.json, the key his face uses."""
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    import pagefile
+    m = re.search(r"  var BOXFIGHTS = (\[\[.*?\]\]);", pagefile.read(), re.S)
+    bouts = json.loads(m.group(1)) if m else []
+    have = json.load(open(FLAGS)) if os.path.exists(FLAGS) else {}
+    new, miss = 0, []
+    for f in bouts:
+        a, b = f[3], f[5]
+        if not a or not b or "TBA" in (a + b):
+            continue
+        ka, kb = "box:" + slug(a), "box:" + slug(b)
+        if have.get(ka) and have.get(kb):
+            continue
+        # only the two men of the bout: each by name, or through the other
+        pa = find(a, scan=False)
+        pb = find(b, near=pa, scan=False)
+        if pb and not pa:
+            pa = find(a, near=pb, scan=False)
+        for k, p, n in ((ka, pa, a), (kb, pb, b)):
+            if have.get(k):
+                continue
+            code = flag_code((p or {}).get("nationality"))
+            if code:
+                have[k] = code
+                new += 1
+            else:
+                miss.append(n)
+    json.dump(have, open(FLAGS, "w"), separators=(",", ":"), sort_keys=True)
+    print("boxing flags: %d new, %d not on The Ring: %s" % (new, len(miss), ", ".join(miss)))
+
+
+if __name__ == "__main__" and sys.argv[1:] == ["--flags"]:
+    flags()
+elif __name__ == "__main__":
     names = sys.argv[1:]
     for i in range(0, len(names) - 1, 2):
         print(pair(names[i], names[i + 1]))
