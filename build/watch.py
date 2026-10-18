@@ -172,6 +172,7 @@ def run(job, args=()):
 
 
 def deploy():
+    pagefile.deployable(pagefile.read())    # built, not committed (Oct 18, 2026)
     out = subprocess.run(
         ["npx", "wrangler", "pages", "deploy", ".",
          "--project-name=the-arenasports", "--branch=main"],

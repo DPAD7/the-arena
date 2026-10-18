@@ -166,6 +166,9 @@ def main():
     if os.environ.get("ARENA_NO_DEPLOY"):
         print("written; the run deploys at its end")
         return
+    # index.html and build.txt are built, not committed: a fresh checkout has
+    # neither, and a deploy without them 404s the board (Oct 18, 2026)
+    pagefile.deployable(pagefile.read())
     subprocess.run(["npx", "wrangler", "pages", "deploy", ".", "--project-name=the-arenasports", "--branch=main"],
                    cwd=D + "/site", capture_output=True, text=True)
     print("deployed")
