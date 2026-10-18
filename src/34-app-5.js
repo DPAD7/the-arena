@@ -825,7 +825,9 @@
     /* with DraftKings carrying the score and the clock, ESPN is only asked
        for the stats, every thirty seconds: each DraftKings beat re-asking it
        ran the board past Cloudflare's 100,000 a day (Oct 18, 2026) */
-    var dkf = (window.DKLIVE || {})[id], hold = dkf && Date.now() - dkf.at < 60000 ? 30000 : 5000;
+    /* while DraftKings' reader is on a game, ESPN is not asked at all from
+       here: the reader sends the box score with each play (Oct 18, 2026) */
+    var dkf = (window.DKLIVE || {})[id], hold = dkf && Date.now() - dkf.at < 90000 && hit ? 9e9 : 5000;
     if (hit && (hit.final || Date.now() - hit.at < hold)) return hit.p;
     var league = lg === "college-football" ? "college-football" : "nfl";
     var box = { at: Date.now(), final: false, tried: hit ? hit.tried : false };
@@ -896,6 +898,8 @@
     }
     ty.shortDetail = ty.detail = dk.clock || ty.shortDetail;
     (comp.competitors || []).forEach(function (c) { c.score = String(dk.sc[c.homeAway === "home" ? 1 : 0]); });
+    if (dk.box) { d.boxscore = d.boxscore || {}; d.boxscore.players = dk.box; }
+    if (dk.wp && dk.wp.length > ((d.winprobability || []).length)) d.winprobability = dk.wp;
     if (dk.down) {
       d.situation = d.situation || {};
       d.situation.downDistanceText = dk.down;

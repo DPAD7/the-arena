@@ -364,9 +364,15 @@ export class Clock {
     // fifteen seconds, not five: DraftKings' feed brings the moments in on its
     // own (it sets the alarm forward as each lands), and every alarm is a
     // request against the free 100,000 a day (Oct 18, 2026)
-    if (live || pushing) next = Math.min(next, now + 15000);
+    // no timer of its own while football is on: each DraftKings post sets the
+    // next look (Jose, Oct 18, 2026: "we have 3 clocks"). A fight card still
+    // looks every 15s -- DraftKings' fight feed is not wired yet -- and if the
+    // reader goes quiet the clock looks once a minute until it is back
+    const beat = (await this.ctx.storage.get("dkbeat")) || 0;
+    if (pushing === "fight" || live === "fight") next = Math.min(next, now + 15000);
+    else if ((live || pushing) && now - beat > 90000) next = Math.min(next, now + 60000);
     if (watch.nextEnd && watch.nextEnd > now) next = Math.min(next, watch.nextEnd);
-    await this.ctx.storage.setAlarm(Math.max(now + (live || pushing ? 15000 : 30000), next));
+    await this.ctx.storage.setAlarm(Math.max(now + 15000, next));
   }
 
   /* an NFL game's passer, off ESPN's box score now: true when a side's card

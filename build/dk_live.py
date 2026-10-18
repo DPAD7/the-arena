@@ -95,6 +95,36 @@ def state_of(board, e):
     return str(g[1]), out
 
 
+def box_of(gid, lg):
+    """ESPN's box score for one game, trimmed to what a card reads: each
+    passer's, runner's and catcher's line. Asked only when DraftKings shows a
+    play happened -- the page never asks ESPN itself while DraftKings is on
+    (Jose, Oct 18, 2026: "we have 3 clocks")."""
+    url = "https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s" % (
+        "college-football" if lg == "ncaaf" else "nfl", gid)
+    try:
+        d = rq.get(url, impersonate="chrome", timeout=10).json()
+    except Exception:
+        return None
+    out = []
+    for t in (d.get("boxscore") or {}).get("players") or []:
+        cats = []
+        for c in t.get("statistics") or []:
+            if c.get("name") not in ("passing", "rushing", "receiving"):
+                continue
+            cats.append({"name": c["name"], "labels": c.get("labels") or [],
+                         "athletes": [{"athlete": {"id": str((a.get("athlete") or {}).get("id")),
+                                                   "displayName": (a.get("athlete") or {}).get("displayName"),
+                                                   "jersey": (a.get("athlete") or {}).get("jersey")},
+                                       "stats": a.get("stats") or []} for a in c.get("athletes") or []]})
+        out.append({"team": {"id": str((t.get("team") or {}).get("id")), "abbreviation": (t.get("team") or {}).get("abbreviation")},
+                    "statistics": cats})
+    # and the win-chance line, play by play, for the card's graph
+    wp = [{"homeWinPercentage": round(w.get("homeWinPercentage") or 0, 3), "playId": w.get("playId")}
+          for w in d.get("winprobability") or []]
+    return {"players": out, "wp": wp} if out else None
+
+
 def due_soon(board):
     now = dt.datetime.now(dt.timezone.utc)
     for g, lg in board.rows:
@@ -109,7 +139,7 @@ def main():
     secret = os.environ.get("ASK_SECRET", "")
     sent, t0, quiet_since, gone = {}, time.time(), None, {}
     kicks, kicked_at, said_at, crawled_at, crawl_p = {}, 0, {}, time.time(), None
-    posted_at, pend = 0, {}
+    posted_at, pend, boxes = 0, {}, {}
     while time.time() - t0 < LIMIT:
         moved, on, seen = {}, False, set()
         for lg, lid in LEAGUES.items():
@@ -122,6 +152,15 @@ def main():
                 seen.add(gid)
                 # a game that sits still (a timeout, a review) is said again
                 # every half minute, so nobody takes its quiet for a lost line
+                # a play happened (score, down, ball or possession moved): the
+                # box score comes along, read once here for every screen
+                was = sent.get(gid) or {}
+                if any(was.get(k) != st.get(k) for k in ("sc", "down", "toGoal", "poss")) or not boxes.get(gid):
+                    bx = box_of(gid, lg)
+                    if bx:
+                        boxes[gid] = bx
+                if boxes.get(gid):
+                    st = dict(st, box=boxes[gid]["players"], wp=boxes[gid]["wp"])
                 if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 60:
                     moved[gid] = st
                     said_at[gid] = time.time()

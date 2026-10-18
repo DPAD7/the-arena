@@ -11,7 +11,9 @@
        lands on any second and the card should stop saying LIVE on the same
        breath ESPN says final -- the same beat watch.py keeps on the machine
        (Jose, Sep 22, 2026: "it shouldn't be taking 30 seconds") */
-    if (live) return LIVESOCK ? 120000 : 10000;
+    /* the live line brings every change; the page looks for itself only
+       when the line is down (Oct 18, 2026: one clock, DraftKings') */
+    if (live) return LIVESOCK ? 0 : 30000;
     if (soonest === Infinity) return 0;
     return Math.max(60000, Math.min(soonest - 20 * 60000 - now, 5 * 60000));
   }
