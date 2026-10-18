@@ -57,7 +57,7 @@ jobs:
       - uses: actions/setup-node@v4
         if: steps.gate.outputs.has == 'true'
         with:
-          node-version: "20"
+          node-version: "22"
       - name: Mend
         if: steps.gate.outputs.has == 'true'
         uses: anthropics/claude-code-action@v1
