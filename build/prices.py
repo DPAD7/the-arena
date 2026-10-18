@@ -87,17 +87,37 @@ def event_ids():
     return _EVENTS
 
 
-def tidy(d):
-    """Take every event-keyed collision back out. Returns how many went."""
+def on_page():
+    """Every id a row on the page carries, or None if the fight arrays did
+       not read. A bout called off (Gall v Dumas, McGhee v Sopaj, Sep 2026)
+       kept its prices here for good, since nothing prunes this file."""
+    try:
+        page = pagefile.read()
+        ufc, box = rows(page, "FIGHTS"), rows(page, "BOXFIGHTS")
+    except Exception:
+        return None
+    if not ufc or not box:
+        return None
+    # KICKS holds the games' clocks too
+    games = (rows(page, "SCHED") or []) + (rows(page, "CFB") or [])
+    return set(str(r[1]) for r in ufc + box + games if len(r) > 1)
+
+
+def tidy(d, called_off=False):
+    """Take every event-keyed collision back out, and with called_off every
+       id the page no longer carries. Returns how many went.
+
+       called_off is for --tidy only: a sweep writes a new bout's prices
+       before it writes the bout's row (boxing.py), so pruning on every
+       write would drop them."""
     gone = 0
     bad = event_ids()
-    if not bad:
-        return 0
+    live = on_page() if called_off else None
     for shelf in ("FIGHTS", "FPROPS", "KICKS"):
         held = d.get(shelf)
         if not isinstance(held, dict):
             continue
-        for k in [k for k in held if str(k) in bad]:
+        for k in [k for k in held if str(k) in bad or (live and str(k) not in live)]:
             del held[k]
             gone += 1
     return gone
@@ -194,9 +214,9 @@ def main():
         return
     if "--tidy" in sys.argv:
         d = read()
-        gone = tidy(d)
+        gone = tidy(d, called_off=True)
         write(d)
-        print("prices.json: %d event-keyed collisions removed" % gone)
+        print("prices.json: %d event-keyed or called-off entries removed" % gone)
         return
     d = read()
     print("prices.json: %s"

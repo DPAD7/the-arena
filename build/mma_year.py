@@ -58,6 +58,23 @@ def fmt(eid, cid):
     return _FMT[key]
 
 
+def sane(f, cid):
+    """A UFC bout is three rounds or five. ESPN has written four on a
+       three-round bout (Black v Amaya, Lui v Sulangrangbo), and the rail drew
+       R1-R4; any other count takes the book's, failing that three
+       (audit, Oct 18, 2026)."""
+    reg = (f or {}).get("regulation") or {}
+    if not f or reg.get("periods") in (3, 5):
+        return f
+    try:
+        n = ((json.load(open(D + "/site/prices.json")).get("FPROPS") or {}).get(str(cid)) or {}).get("rounds")
+    except (OSError, ValueError):
+        n = None
+    f = json.loads(json.dumps(f))
+    f.setdefault("regulation", {})["periods"] = n if n in (3, 5) else 3
+    return f
+
+
 def T(x):
     return dt.datetime.fromisoformat(x.replace("Z", "+00:00"))
 
@@ -204,7 +221,7 @@ def main():
         done = any((((c.get("status") or {}).get("type") or {}).get("state") == "post") for c in comps)
         if done:
             finals[eid] = {"events": [{"id": eid, "name": e.get("name"), "date": e["date"],
-                                       "competitions": [{"id": str(c["id"]), "status": c.get("status"), "format": c.get("format") or fmt(eid, c["id"]), "details": [d for d in (c.get("details") or []) if str(((d.get("type") or {}).get("text") or "")).startswith("Unofficial Winner")],
+                                       "competitions": [{"id": str(c["id"]), "status": c.get("status"), "format": sane(c.get("format") or fmt(eid, c["id"]), c["id"]), "details": [d for d in (c.get("details") or []) if str(((d.get("type") or {}).get("text") or "")).startswith("Unofficial Winner")],
                                                          "competitors": [{"id": x.get("id"), "winner": x.get("winner"), "athlete": {"displayName": (x.get("athlete") or {}).get("displayName")}} for x in c.get("competitors") or []]}
                                                         for c in comps]}]}
         for c in comps:

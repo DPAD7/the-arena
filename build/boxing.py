@@ -246,6 +246,11 @@ def face(link, name):
 
 METHOD = {"UD": "Decision", "SD": "Decision", "MD": "Decision", "PTS": "Decision",
           "KO": "KO/TKO", "TKO": "KO/TKO", "RTD": "KO/TKO", "DQ": "DQ"}
+# the method as the result file writes it: in words the page reads. The rail
+# drew no mark and the paid chip paid nothing on PTS, RTD and KNOC, since none
+# of them says KO or DEC (audit, Oct 18, 2026)
+HOW = {"PTS": "DEC", "RTD": "TKO", "KNOC": "KO", "KNOCKOUT": "KO", "POINTS": "DEC",
+       "CORNER RETIREMENT": "TKO", "TECHNICAL KNOCKOUT": "TKO"}
 
 
 def ufc_results(num):
@@ -268,7 +273,7 @@ def ufc_results(num):
                  "Majority Decision": "MD", "Disqualification": "DQ", "Corner Retirement": "RTD"}
         first = how.lower().split()[0] if how else ""
         how = {"unanimous": "UD", "split": "SD", "majority": "MD", "decision": "DEC", "points": "PTS",
-               "technical": "TD", "disqualification": "DQ", "corner": "RTD"}.get(first) or \
+               "technical": "TD", "disqualification": "DQ", "corner": "RTD", "knockout": "KO"}.get(first) or \
               next((v for k, v in short.items() if how.lower().startswith(k.lower())), how.upper()[:4])
         out.append({"w": a, "l": b, "how": how, "rd": m.group(4) or "", "time": m.group(5) or ""})
     for m in re.finditer(r"([A-Z][\w'.\- ]+?) vs\.? ([A-Z][\w'.\- ]+?) (?:ends in a|declared a) (draw|no contest)", tx, re.I):
@@ -471,7 +476,7 @@ def main():
                         {"winner": False, "athlete": {"displayName": bt["b"]}}],
                     "details": [{"type": {"text": "Unofficial Winner " + METHOD.get(bt["method"].upper(), bt["method"])}}]
                                if bt["res"] == "def." else [],
-                    "how": {"type": (bt["method"] or ("DRAW" if "dr" in bt["res"] else "NC")).upper(),
+                    "how": {"type": (lambda t: HOW.get(t, t))((bt["method"] or ("DRAW" if "dr" in bt["res"] else "NC")).upper()),
                             "round": rd.group(1) if rd else "", "time": bt["time"] or ""}})
             start = min(start, when) if start else when
         # the card's own clock is its first bout's, the way a UFC card's is
@@ -481,6 +486,20 @@ def main():
         # prelims first and the main event last, the order a UFC card reads
         fights.extend(reversed(rows))
 
+    # a catchweight has no limit of its own: it reads as the class both men
+    # normally make, from their other bouts on the board (Cato-Cain v Morales
+    # drew no class at all; audit, Oct 18, 2026)
+    usual = {}
+    for r in fights:
+        if "catch" not in r[7].lower():
+            for n in (r[3], r[5]):
+                usual.setdefault(whoname.key(n), {}).setdefault(r[7], 0)
+                usual[whoname.key(n)][r[7]] += 1
+    for r in fights:
+        if "catch" in r[7].lower():
+            seen = [max(u, key=u.get) for u in (usual.get(whoname.key(r[3])), usual.get(whoname.key(r[5]))) if u]
+            if seen and len(set(seen)) == 1:
+                r[7] = seen[0]
     print("boxing: %d cards, %d bouts, %d priced, %d results"
           % (len(cards), len(fights), priced,
              sum(1 for v in results.values() for c in v if c["status"]["type"]["state"] == "post")))

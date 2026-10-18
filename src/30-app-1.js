@@ -480,6 +480,7 @@
     var p = etParts(f[2]);
     return '<div class="gcard" data-bout="' + f[1] + '" data-event="' + f[0] + '" data-sport="mma"' +
       ' data-wt="' + esc(wtMark(f[7], f[4], f[6])) + '"' +
+      (/^\s*(boxing\s+)?(w|women'?s)\b/i.test(String(f[7] || "")) ? ' data-wf="1"' : "") +
       ' data-lf="' + f[3] + '" data-rf="' + f[5] + '"' +
       ' data-lfid="' + (f[4] || "") + '" data-rfid="' + (f[6] || "") + '"' +
       ' data-kick="' + f[2] + '">' +
@@ -1099,7 +1100,9 @@
     /* a women's bout says so, and the panel's own division is what says it --
        there is no flag on the card to read (Jose, Sep 21, 2026) */
     var a = boutRanked(card.dataset.lf), b = boutRanked(card.dataset.rf);
-    var women = (a && a.w) || (b && b.w) || ab === "SW";
+    /* the class itself says so too: an unranked women's flyweight read
+       FLYWEIGHT (audit, Oct 18, 2026) */
+    var women = card.dataset.wf === "1" || (a && a.w) || (b && b.w) || ab === "SW";
     return (women ? "W-" : "") + full;
   }
   /* a price from the fight's own props, with the book's id on it so a tap

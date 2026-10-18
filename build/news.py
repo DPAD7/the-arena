@@ -296,6 +296,15 @@ def main():
         pid = ids[0]
         if (held.get(pid) or {}).get("since", "") >= when:
             continue
+        # the first man tagged is not always the man the headline is about:
+        # "QB options to add with Jalen Hurts ruled out" marked Bhayshul Tuten
+        # out (Oct 15, 2026). Only the line that names him counts, and a
+        # headline that never names him says nothing about him
+        sur = (fold(report[pid][1]) or [""])[-1]
+        parts = [x for x in re.split(r"[\n;]+|(?<=[.!?])\s+", head) if sur and sur in fold(x)]
+        if not parts:
+            continue
+        head = " ".join(parts)
         status = "Active" if ACTIVE.search(head) else None if NOT_OUT.search(head) else \
             "Injured Reserve" if IR.search(head) else "Out" if OUT.search(head) else "Doubtful" if DOUBT.search(head) else None
         if status:
@@ -323,10 +332,12 @@ def main():
         # a post that lists several men is read only where it names him: "QB
         # Kienholz is questionable" sat under "RB Rule is doubtful" and he was
         # marked Doubtful for a week (Oct 9, 2026)
-        sur = (name.split() or [""])[-1]
-        parts = [x for x in re.split(r"[\n]+|(?<=[.!?])\s+", head) if sur and sur.lower() in x.lower()]
-        if parts:
-            head = " ".join(parts)
+        # and a headline that never names him is about someone else
+        sur = (fold(name) or [""])[-1]
+        parts = [x for x in re.split(r"[\n;]+|(?<=[.!?])\s+", head) if sur and sur in fold(x)]
+        if not parts:
+            continue
+        head = " ".join(parts)
         if NOT_OUT.search(head):
             if pid in held and (held[pid].get("since") or "") < when and held[pid].get("src", "").startswith("ESPN news"):
                 del held[pid]

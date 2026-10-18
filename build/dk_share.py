@@ -85,8 +85,15 @@ def fight_row(ev, b, sport):
 def leg_of(o, nested):
     offer, out = o.get("offerLabel") or "", o.get("outcomeLabel") or ""
     m = re.match(r"(.+?) \((\w+)\) (.+)$", offer)
+    # a man's prop with no club tag ("Bryce Young Passing Touchdowns", "1+"):
+    # the man is the words before the market, the outcome is the line -- not
+    # the man (Oct 18, 2026: three NFL PTD legs came in as "1  PTD", no face)
+    p = re.match(r"(.+?) ((?:Passing|Rushing|Receiving|Rush|Pass|Rec|Receptions|Longest|Anytime|Interceptions|"
+                 r"Completions|Field Goals?|Extra Points?|Solo Tackles|Tackles|Sacks|Kicking Points)\b.*)$", offer)
     if m:
         who, team, market, line = m.group(1), m.group(2), m.group(3), out
+    elif p and re.match(r"(\d+\+|over\b|under\b|yes$|no$)", out, re.I):
+        who, team, market, line = p.group(1), "", p.group(2), out
     else:
         who, team, market, line = out, "", re.sub(r"^Live ", "", offer), ""
     return {"who": who, "team": team, "market": market, "line": line,

@@ -146,6 +146,11 @@ def main():
     deepened = set()
     for g in played():
         eid = g[1]
+        # a clip kept from before the title check is held to it too: Maye's
+        # "Sights & Sounds" reel from the Jets game sat on the Bills game's
+        # 23-yarder to Chism (Oct 18, 2026)
+        if eid in have:
+            have[eid] = [r for r in have[eid] if not clipcheck.wrong(r.get("headline"), r.get("text"), [g[3], g[4]])]
         covered = {r["text"] for r in x.get(eid, []) + nfl.get(eid, []) + have.get(eid, [])}
         d = get("https://site.api.espn.com/apis/site/v2/sports/football/nfl/summary?event=%s" % eid).json()
         rows = have.get(eid, [])

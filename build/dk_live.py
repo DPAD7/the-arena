@@ -161,7 +161,10 @@ def main():
                         boxes[gid] = bx
                 if boxes.get(gid):
                     st = dict(st, box=boxes[gid]["players"], wp=boxes[gid]["wp"])
-                if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 60:
+                # (thirty seconds, as said above: at sixty, plus the ten-second
+                # batching below, a quiet game's reading on an open page was
+                # often more than a minute old -- Oct 18, 2026)
+                if sent.get(gid) != st or time.time() - said_at.get(gid, 0) > 30:
                     moved[gid] = st
                     said_at[gid] = time.time()
         # a finished game leaves DraftKings' list instead of saying final: gone

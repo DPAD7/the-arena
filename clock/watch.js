@@ -275,6 +275,14 @@ export function news(slips, idx, games, prev, rows) {
     const open = legs.filter(x => x.st === "open");
     const odds = String(bet.odds || "");
     if (!open.length && legs.length) {
+      /* a win is said once, when it lands: the record of what was sent keeps
+         fourteen days, and a slip won two weeks ago was told "You won" again
+         the day its key aged out (Oct 17, 2026: the Oct 3 UFC parlay). Decided
+         more than two days ago -- by settledAt, else its last event's start,
+         else when it was placed -- it has nothing left to say */
+      const ends = (bet.legs || []).map(l => rows[String(l.g || "")] ? Date.parse(rows[String(l.g)][2]) : Date.parse(l.start || "")).filter(t => t > 0);
+      const decided = +bet.settledAt || Math.max(Date.parse(bet.placed || "") || 0, ...ends);
+      if (decided && Date.now() - decided > 2 * 86400000) continue;
       /* its own alert, never folded into the slip's running one, so the win
          is never just a quiet replacement of "one leg left" (Oct 3, 2026) */
       out.push({ tag: "won:" + bet.id, key: "won@" + bet.id, type: "slip", /* one row: you won, how much, keep stacking (Jose, Oct 17, 2026) */

@@ -477,7 +477,9 @@ def main():
             n = int(((d.get("format") or {}).get("regulation") or {}).get("periods") or 0)
         except Exception:
             n = 0
-        if n:
+        # a UFC bout is three rounds or five; ESPN has written four on a
+        # three-round bout, and the rail drew R1-R4 (audit, Oct 18, 2026)
+        if n in (3, 5):
             one = book["FPROPS"].setdefault(str(f[1]), {})
             one["rounds"] = n
     book.setdefault("KICKS", {}).update(kicks)

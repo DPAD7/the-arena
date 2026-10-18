@@ -298,20 +298,31 @@ def best(slot):
     return [slot[bk], "", bk]
 
 
+def cands(n):
+    """The ways a prop row can start with this man: his whole name or its last
+       one or two words, as the board writes him and as the archive does. The
+       archive's rows use its own spelling, suffix and all, so "III wins by
+       decision" is Kai Kamaka III, "Wook" is Kim Sang Wook and "Johson" its
+       Charles Johson -- one side of each sheet was left empty when only the
+       learned spelling was tried (audit, Oct 18, 2026)."""
+    out = set()
+    for k in (nkey(n), whoname.key(str(n or "").translate(PLAIN)),
+              " ".join(re.findall(r"[a-z]+", str(n or "").translate(PLAIN).lower()))):
+        toks = k.split()
+        if toks:
+            out |= {k, toks[-1]}
+            if len(toks) > 1:
+                out.add(" ".join(toks[-2:]))
+    return {c for c in out if c}
+
+
 def side_of(label, names):
     """Which man a prop row names, by the way the archive writes him: his
        surname, or the whole name. Blank when both could be meant."""
     lk = nkey(label)
     hits = []
     for i, n in enumerate(names):
-        k = nkey(n)
-        toks = k.split()
-        cands = {k}
-        if toks:
-            cands.add(toks[-1])
-            if len(toks) > 1:
-                cands.add(" ".join(toks[-2:]))
-        if any(lk.startswith(c + " ") for c in cands if c):
+        if any(lk.startswith(c + " ") for c in cands(n)):
             hits.append(i)
     return hits[0] if len(hits) == 1 else None
 
@@ -335,12 +346,10 @@ def sheet_from(mu, flip):
         if i is not None:
             rest = lk.split(" ", 1)[1] if " " in lk else ""
             # take the man's whole name off the front, however many words
-            for n in (names[i],):
-                nk = nkey(n)
-                for cand in sorted({nk, nk.split()[-1], " ".join(nk.split()[-2:])}, key=len, reverse=True):
-                    if lk.startswith(cand + " "):
-                        rest = lk[len(cand) + 1:]
-                        break
+            for cand in sorted(cands(names[i]), key=len, reverse=True):
+                if lk.startswith(cand + " "):
+                    rest = lk[len(cand) + 1:]
+                    break
             m = re.match(r"^wins by tko ko in round (\d)$", rest)
             if m: put("kord" + m.group(1), i, slot); continue
             m = re.match(r"^wins by submission in round (\d)$", rest)

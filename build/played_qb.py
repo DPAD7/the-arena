@@ -113,8 +113,12 @@ def first_up(d, had):
         b = [x for x in name.split() if not re.match(r"^(Jr\.?|Sr\.?|II|III|IV|V)$", x)]
         if len(b) < 2:
             continue
-        last = re.escape(" ".join(b[1:]))
-        pat = r"(?:%s|%s\.\s?%s)\s+(?:pass|sacked|scrambles)" % (re.escape(" ".join(b)), re.escape(b[0][0]), last)
+        # "J.Richter" for John Alan Richter: the surname alone after the initial
+        last = "(?:%s|%s)" % (re.escape(" ".join(b[1:])), re.escape(b[-1]))
+        # the play text keeps the suffix the name lost above: "E.Colson Jr.
+        # pass" read as nobody, so UTEP's starter fell to the busiest man
+        pat = (r"(?:%s|%s\.\s?%s)(?:,?\s+(?:Jr\.?|Sr\.?|II|III|IV|V))?\s+(?:pass|sacked|scrambles)"
+               % (re.escape(" ".join(b)), re.escape(b[0][0]), last))
         forms.append((re.compile(pat), (name, pid)))
     drives = ((d.get("drives") or {}).get("previous") or [])
     cur = (d.get("drives") or {}).get("current")
@@ -209,7 +213,7 @@ def main():
                 # stays -- he is who the board priced -- but an unpriced one
                 # who only came in late gives way to the starter: Rutgers kept
                 # AJ Surace, 3 of 7, while Dylan Lonergan started (Sep 25, 2026)
-                first = first_up(d, had)
+                first = opened = first_up(d, had)
                 # no play names a thrower (a settled file keeps no drives): the
                 # busiest passer, never a backup with one throw -- West Virginia
                 # read Jyron Hughley, 1 attempt, for Michael Hawkins Jr.'s game
@@ -221,8 +225,12 @@ def main():
                     # snap: Hughley threw once, first, while Hawkins threw 17
                     first = top
                 there = any(str(g[i + 1]) == pid for _, pid in had)
+                # the priced man stays only if he started: Ball State's row kept
+                # Tyler Mizzell, priced, two throws, while Keldric Luster threw
+                # first and 33 times (Oct 3, 2026)
                 if there and (not first or str(g[i + 1]) == first[1]
-                              or priced(g[1], 0 if i == 5 else 1)):
+                              or (priced(g[1], 0 if i == 5 else 1)
+                                  and (not opened or opened[1] == str(g[i + 1])))):
                     continue
                 name, pid = first or had[0]
                 if str(g[i + 1]) == pid:
