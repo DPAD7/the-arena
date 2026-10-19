@@ -1,11 +1,27 @@
 [
  {
-  "id": "QRP493",
-  "head": "NFL Week 6 Sunday 30% Profit Boost",
+  "id": "QR0ZW3",
+  "head": "WAS Commanders @ SF 49ers 30% SGP Boost",
   "pct": 30,
-  "start": "2026-10-16T21:00:00.0000000Z",
-  "end": "2026-10-19T03:59:00.0000000Z",
-  "sport": "nfl",
+  "start": "2026-10-19T11:30:00.0000000Z",
+  "end": "2026-10-20T03:59:00.0000000Z",
+  "sport": "mma",
+  "game": "WAS Commanders @ SF 49ers",
+  "gid": "",
+  "minOdds": "+300",
+  "minLegs": 3,
+  "maxWager": 25.0,
+  "types": [
+   "sgp"
+  ]
+ },
+ {
+  "id": "8WNGZY",
+  "head": "Player Combos 50% Profit Boost",
+  "pct": 50,
+  "start": "2026-10-19T12:00:00.0000000Z",
+  "end": "2026-10-19T16:00:00.0000000Z",
+  "sport": "",
   "game": "",
   "gid": "",
   "minOdds": "-200",
@@ -16,37 +32,19 @@
   ]
  },
  {
-  "id": "X87RKQ",
-  "head": "DAL Cowboys @ GB Packers 30% SGP Boost",
+  "id": "QR0Z7Z",
+  "head": "Champions League 30% Profit Boost",
   "pct": 30,
-  "start": "2026-10-18T14:00:00.0000000Z",
-  "end": "2026-10-19T03:59:00.0000000Z",
+  "start": "2026-10-19T06:00:00.0000000Z",
+  "end": "2026-10-21T20:45:00.0000000Z",
   "sport": "",
-  "game": "DAL Cowboys @ GB Packers",
-  "gid": "",
-  "minOdds": "+300",
-  "minLegs": 3,
-  "maxWager": 25.0,
-  "types": [
-   "sgp"
-  ]
- },
- {
-  "id": "QRP8PZ",
-  "head": "NFL 30% Parlay Boost",
-  "pct": 30,
-  "start": "2026-10-17T21:00:00.0000000Z",
-  "end": "2026-10-19T03:59:00.0000000Z",
-  "sport": "nfl",
   "game": "",
   "gid": "",
-  "minOdds": "+300",
-  "minLegs": 3,
+  "minOdds": "-150",
+  "minLegs": 1,
   "maxWager": 25.0,
   "types": [
-   "sgp",
-   "sgpx",
-   "parlay"
+   "any"
   ]
  }
 ]
