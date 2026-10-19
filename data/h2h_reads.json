@@ -1,5 +1,5 @@
 {
- "at": "2026-10-19 13:09 UTC",
+ "at": "2026-10-19 19:07 UTC",
  "week": 6,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -292,30 +292,32 @@
   },
   {
    "qbs": [
-    "Brock Purdy",
-    "Jayden Daniels"
+    "Caleb Williams",
+    "Drake Maye"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Drake Maye",
+   "lead": 2,
    "complete": false,
    "missing": [
-    "SF D.Samuel Sr. (11%)",
-    "WAS T.Burks (11%)"
+    "NE E.Raridon (10%)",
+    "NE R.Doubs (13%)"
    ],
    "score": [
-    0,
-    0
+    -1,
+    1
    ],
-   "why": [],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+29 a game)"
+   ],
    "checks": [
     0,
     0,
     0,
     0
    ],
-   "game": "WAS@SF",
-   "eid": 22066,
-   "kick": "2026-10-20 00:15:00Z"
+   "game": "NE@CHI",
+   "eid": 22067,
+   "kick": "2026-10-23 00:15:00Z"
   }
  ]
 }

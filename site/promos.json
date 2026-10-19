@@ -16,11 +16,11 @@
   ]
  },
  {
-  "id": "8WNGZY",
-  "head": "Player Combos 50% Profit Boost",
+  "id": "QRP413",
+  "head": "Player Threes 50% Profit Boost",
   "pct": 50,
-  "start": "2026-10-19T12:00:00.0000000Z",
-  "end": "2026-10-19T16:00:00.0000000Z",
+  "start": "2026-10-19T16:00:00.0000000Z",
+  "end": "2026-10-19T21:00:00.0000000Z",
   "sport": "",
   "game": "",
   "gid": "",
@@ -41,6 +41,22 @@
   "game": "",
   "gid": "",
   "minOdds": "-150",
+  "minLegs": 1,
+  "maxWager": 25.0,
+  "types": [
+   "any"
+  ]
+ },
+ {
+  "id": "JGWGPV",
+  "head": "NHL Goalscorer 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-19T14:30:00.0000000Z",
+  "end": "2026-10-21T03:59:00.0000000Z",
+  "sport": "",
+  "game": "",
+  "gid": "",
+  "minOdds": "+100",
   "minLegs": 1,
   "maxWager": 25.0,
   "types": [
