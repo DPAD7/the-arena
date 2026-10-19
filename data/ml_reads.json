@@ -334,6 +334,28 @@
    "kick": "2026-10-27T00:15Z"
   },
   {
+   "gid": "401873014",
+   "away": "IND",
+   "home": "MIN",
+   "pick": "MIN",
+   "model": 77,
+   "book": 70,
+   "bookpick": "MIN",
+   "agree": true,
+   "won": 84,
+   "n": 25,
+   "call": "take",
+   "rank": 3,
+   "why": [
+    "Points allowed per game: MIN 12.8, IND 27.3",
+    "Last 3 games, win %: MIN 100%, IND 33%",
+    "Win % this season: MIN 100%, IND 33%",
+    "Turnovers per game: MIN 0.8, IND 1.8"
+   ],
+   "week": 7,
+   "kick": "2026-10-25T17:00Z"
+  },
+  {
    "gid": "401873015",
    "away": "MIA",
    "home": "NYJ",
@@ -345,7 +367,7 @@
    "won": 64,
    "n": 64,
    "call": "take",
-   "rank": 3,
+   "rank": 4,
    "why": [
     "Points allowed per game: NYJ 20.3, MIA 26.4",
     "Points per game: NYJ 18.7, MIA 14.0",
@@ -367,7 +389,7 @@
    "won": 64,
    "n": 11,
    "call": "take",
-   "rank": 4,
+   "rank": 5,
    "why": [
     "QB play (EPA per dropback): HOU +0.15, NYG -0.05",
     "Points per game: HOU 24.0, NYG 22.7",
@@ -389,34 +411,12 @@
    "won": 62,
    "n": 26,
    "call": "take",
-   "rank": 5,
+   "rank": 6,
    "why": [
     "Points per game: CAR 29.2, TB 19.8",
     "QB play (EPA per dropback): CAR +0.09, TB -0.19",
     "Last 3 games, win %: CAR 67%, TB 33%",
     "Win % this season: CAR 60%, TB 17%"
-   ],
-   "week": 7,
-   "kick": "2026-10-25T17:00Z"
-  },
-  {
-   "gid": "401873014",
-   "away": "IND",
-   "home": "MIN",
-   "pick": "MIN",
-   "model": 77,
-   "book": 69,
-   "bookpick": "MIN",
-   "agree": true,
-   "won": 62,
-   "n": 26,
-   "call": "take",
-   "rank": 6,
-   "why": [
-    "Points allowed per game: MIN 12.8, IND 27.3",
-    "Last 3 games, win %: MIN 100%, IND 33%",
-    "Win % this season: MIN 100%, IND 33%",
-    "Turnovers per game: MIN 0.8, IND 1.8"
    ],
    "week": 7,
    "kick": "2026-10-25T17:00Z"
@@ -471,7 +471,7 @@
    "home": "ARI",
    "pick": "DEN",
    "model": 54,
-   "book": 66,
+   "book": 67,
    "bookpick": "DEN",
    "agree": true,
    "won": 61,
