@@ -1,5 +1,5 @@
 {
- "at": "2026-10-19T23:19:33Z",
+ "at": "2026-10-19T23:47:04Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,296 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401856722": {
-   "away": "UK",
-   "home": "OU",
-   "kick": "2026-10-17T23:30Z",
-   "ml": {
-    "pick": "OU",
-    "p": 0.606358,
-    "call": null,
-    "why": [
-     "Points allowed per game: OU 17.6, UK 31.0",
-     "Passing yards allowed per game: OU 150, UK 246",
-     "Rushing yards allowed per game: OU 117, UK 151",
-     "Turnovers per game: OU 2.0, UK 1.0"
-    ],
-    "qbs": [
-     "Kenny Minchey",
-     "John Mateer"
-    ]
-   },
-   "h2h": {
-    "pick": "John Mateer",
-    "pick_id": "4915980",
-    "team": "OU",
-    "p": 0.554694,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4918099",
-      "Kenny Minchey"
-     ],
-     [
-      "4915980",
-      "John Mateer"
-     ]
-    ]
-   },
-   "ptd": {
-    "4915980": {
-     "name": "John Mateer",
-     "team": "OU",
-     "p1": 0.754382,
-     "take1": false,
-     "p2": 0.41108,
-     "take2": false,
-     "has_line": true
-    },
-    "4918099": {
-     "name": "Kenny Minchey",
-     "team": "UK",
-     "p1": 0.663608,
-     "take1": false,
-     "p2": 0.306225,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856809": {
-   "away": "ND",
-   "home": "BYU",
-   "kick": "2026-10-17T23:30Z",
-   "ml": {
-    "pick": "ND",
-    "p": 0.708199,
-    "call": null,
-    "why": [
-     "Margin rating: ND +16.2, BYU +9.3",
-     "Points per game: ND 44.0, BYU 27.5",
-     "Points allowed per game: ND 11.0, BYU 15.0",
-     "Last 3 games, average margin: ND +22.3, BYU +13.0"
-    ],
-    "qbs": [
-     "CJ Carr",
-     "Bear Bachmeier"
-    ]
-   },
-   "h2h": {
-    "pick": "CJ Carr",
-    "pick_id": "5079369",
-    "team": "ND",
-    "p": 0.680573,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5079369",
-      "CJ Carr"
-     ],
-     [
-      "5141367",
-      "Bear Bachmeier"
-     ]
-    ]
-   },
-   "ptd": {
-    "5141367": {
-     "name": "Bear Bachmeier",
-     "team": "BYU",
-     "p1": 0.591753,
-     "take1": false,
-     "p2": 0.237593,
-     "take2": false,
-     "has_line": true
-    },
-    "5079369": {
-     "name": "CJ Carr",
-     "team": "ND",
-     "p1": 0.766138,
-     "take1": false,
-     "p2": 0.435025,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856831": {
-   "away": "OKST",
-   "home": "HOU",
-   "kick": "2026-10-17T23:30Z",
-   "ml": {
-    "pick": "HOU",
-    "p": 0.80302,
-    "call": "take",
-    "why": [
-     "Margin rating: HOU +10.3, OKST +1.2",
-     "Rushing yards allowed per game: HOU 90, OKST 167",
-     "Points allowed per game: HOU 21.8, OKST 26.8",
-     "Rushing yards per game: HOU 198, OKST 174"
-    ],
-    "qbs": [
-     "Drew Mestemaker",
-     "Conner Weigman"
-    ]
-   },
-   "h2h": {
-    "pick": "Drew Mestemaker",
-    "pick_id": "5219834",
-    "team": "OKST",
-    "p": 0.658169,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5219834",
-      "Drew Mestemaker"
-     ],
-     [
-      "4685574",
-      "Conner Weigman"
-     ]
-    ]
-   },
-   "ptd": {
-    "5219834": {
-     "name": "Drew Mestemaker",
-     "team": "OKST",
-     "p1": 0.862558,
-     "take1": false,
-     "p2": 0.603343,
-     "take2": false,
-     "has_line": true
-    },
-    "4685574": {
-     "name": "Conner Weigman",
-     "team": "HOU",
-     "p1": 0.889053,
-     "take1": false,
-     "p2": 0.672736,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401858265": {
-   "away": "LOU",
-   "home": "SYR",
-   "kick": "2026-10-17T23:30Z",
-   "ml": {
-    "pick": "LOU",
-    "p": 0.657108,
-    "call": null,
-    "why": [
-     "Margin rating: LOU +5.2, SYR -3.9",
-     "Points per game: LOU 35.6, SYR 24.5",
-     "QB INT rate: LOU 1.3%, SYR 4.3%",
-     "Last 3 games, average margin: LOU +6.0, SYR -5.3"
-    ],
-    "qbs": [
-     "Lincoln Kienholz",
-     "Malachi Nelson"
-    ]
-   },
-   "h2h": {
-    "pick": "Lincoln Kienholz",
-    "pick_id": "5078278",
-    "team": "LOU",
-    "p": 0.579007,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5078278",
-      "Lincoln Kienholz"
-     ],
-     [
-      "4870928",
-      "Malachi Nelson"
-     ]
-    ]
-   },
-   "ptd": {
-    "4870928": {
-     "name": "Malachi Nelson",
-     "team": "SYR",
-     "p1": 0.714141,
-     "take1": false,
-     "p2": 0.36781,
-     "take2": false,
-     "has_line": true
-    },
-    "5078278": {
-     "name": "Lincoln Kienholz",
-     "team": "LOU",
-     "p1": 0.802762,
-     "take1": false,
-     "p2": 0.484658,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401858494": {
-   "away": "WIS",
-   "home": "UCLA",
-   "kick": "2026-10-17T23:30Z",
-   "ml": {
-    "pick": "UCLA",
-    "p": 0.563108,
-    "call": null,
-    "why": [
-     "Margin rating: UCLA +8.8, WIS +4.5",
-     "Points per game: UCLA 39.2, WIS 30.5",
-     "AP rank: UCLA #12, WIS unranked",
-     "Rushing yards per game: UCLA 253, WIS 133"
-    ],
-    "qbs": [
-     "Colton Joseph",
-     "Ty Dieffenbach"
-    ]
-   },
-   "h2h": {
-    "pick": "Colton Joseph",
-    "pick_id": "5125715",
-    "team": "WIS",
-    "p": 0.611018,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5125715",
-      "Colton Joseph"
-     ],
-     [
-      "5092275",
-      "Ty Dieffenbach"
-     ]
-    ]
-   },
-   "ptd": {
-    "5092275": {
-     "name": "Ty Dieffenbach",
-     "team": "UCLA",
-     "p1": 0.604312,
-     "take1": false,
-     "p2": 0.25472,
-     "take2": false,
-     "has_line": true
-    },
-    "5125715": {
-     "name": "Colton Joseph",
-     "team": "WIS",
-     "p1": 0.718344,
-     "take1": false,
-     "p2": 0.380748,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401862804": {
    "away": "NAVY",
    "home": "UTSA",
@@ -3568,7 +3278,7 @@
     "pick": "Kenny Minchey",
     "pick_id": "4918099",
     "team": "UK",
-    "p": 0.598858,
+    "p": 0.590157,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3586,18 +3296,18 @@
     "5158948": {
      "name": "Jared Curtis",
      "team": "VAN",
-     "p1": 0.646613,
+     "p1": 0.654801,
      "take1": false,
-     "p2": 0.303704,
+     "p2": 0.310866,
      "take2": false,
      "has_line": true
     },
     "4918099": {
      "name": "Kenny Minchey",
      "team": "UK",
-     "p1": 0.827903,
+     "p1": 0.822709,
      "take1": false,
-     "p2": 0.529093,
+     "p2": 0.520702,
      "take2": false,
      "has_line": true
     }
