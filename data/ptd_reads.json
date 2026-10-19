@@ -1,87 +1,7 @@
 {
- "at": "2026-10-18",
+ "at": "2026-10-19",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4431611": {
-   "p": 0.82,
-   "name": "Caleb Williams"
-  },
-  "4360423": {
-   "p": 0.766,
-   "name": "Michael Penix Jr."
-  },
-  "4035671": {
-   "p": 0.642,
-   "name": "Tyler Huntley"
-  },
-  "3122840": {
-   "p": 0.707,
-   "name": "Deshaun Watson"
-  },
-  "4688380": {
-   "p": 0.639,
-   "name": "Cam Ward"
-  },
-  "3917792": {
-   "p": 0.726,
-   "name": "Daniel Jones"
-  },
-  "15864": {
-   "p": 0.68,
-   "name": "Geno Smith"
-  },
-  "4431452": {
-   "p": 0.83,
-   "name": "Drake Maye"
-  },
-  "4360689": {
-   "p": 0.728,
-   "name": "Tyler Shough"
-  },
-  "2969939": {
-   "p": 0.819,
-   "name": "Jameis Winston"
-  },
-  "4685720": {
-   "p": 0.797,
-   "name": "Bryce Young"
-  },
-  "4685201": {
-   "p": 0.743,
-   "name": "Tanner McKee"
-  },
-  "8439": {
-   "p": 0.752,
-   "name": "Aaron Rodgers"
-  },
-  "4596472": {
-   "p": 0.699,
-   "name": "Jalon Daniels"
-  },
-  "2578570": {
-   "p": 0.797,
-   "name": "Jacoby Brissett"
-  },
-  "12483": {
-   "p": 0.9,
-   "name": "Matthew Stafford"
-  },
-  "4038941": {
-   "p": 0.733,
-   "name": "Justin Herbert"
-  },
-  "3139477": {
-   "p": 0.838,
-   "name": "Patrick Mahomes"
-  },
-  "3918298": {
-   "p": 0.832,
-   "name": "Josh Allen"
-  },
-  "14880": {
-   "p": 0.803,
-   "name": "Kirk Cousins"
-  },
   "2577417": {
    "p": 0.802,
    "name": "Dak Prescott"
@@ -98,37 +18,117 @@
    "p": 0.86,
    "name": "Brock Purdy"
   },
+  "4431452": {
+   "p": 0.822,
+   "name": "Drake Maye"
+  },
+  "4431611": {
+   "p": 0.861,
+   "name": "Caleb Williams"
+  },
+  "8439": {
+   "p": 0.77,
+   "name": "Aaron Rodgers"
+  },
+  "4360689": {
+   "p": 0.76,
+   "name": "Tyler Shough"
+  },
+  "4360423": {
+   "p": 0.774,
+   "name": "Michael Penix Jr."
+  },
+  "3122840": {
+   "p": 0.635,
+   "name": "Deshaun Watson"
+  },
+  "4688380": {
+   "p": 0.682,
+   "name": "Cam Ward"
+  },
+  "3917792": {
+   "p": 0.765,
+   "name": "Daniel Jones"
+  },
   "3917315": {
-   "p": 0.786,
+   "p": 0.778,
    "name": "Kyler Murray"
   },
   "4242512": {
-   "p": 0.594,
+   "p": 0.59,
    "name": "Malik Willis"
   },
+  "15864": {
+   "p": 0.739,
+   "name": "Geno Smith"
+  },
+  "4596472": {
+   "p": 0.617,
+   "name": "Jalon Daniels"
+  },
+  "4685720": {
+   "p": 0.784,
+   "name": "Bryce Young"
+  },
   "3915511": {
-   "p": 0.835,
+   "p": 0.832,
    "name": "Joe Burrow"
   },
+  "4035671": {
+   "p": 0.687,
+   "name": "Tyler Huntley"
+  },
+  "2969939": {
+   "p": 0.761,
+   "name": "Jameis Winston"
+  },
   "4432577": {
-   "p": 0.806,
+   "p": 0.813,
    "name": "C.J. Stroud"
   },
   "4426338": {
-   "p": 0.744,
+   "p": 0.749,
    "name": "Bo Nix"
+  },
+  "2578570": {
+   "p": 0.817,
+   "name": "Jacoby Brissett"
   },
   "3046779": {
    "p": 0.866,
    "name": "Jared Goff"
   },
+  "12483": {
+   "p": 0.894,
+   "name": "Matthew Stafford"
+  },
+  "14880": {
+   "p": 0.85,
+   "name": "Kirk Cousins"
+  },
+  "3139477": {
+   "p": 0.79,
+   "name": "Patrick Mahomes"
+  },
   "3912547": {
-   "p": 0.809,
+   "p": 0.815,
    "name": "Sam Darnold"
   },
   "4360310": {
    "p": 0.818,
    "name": "Trevor Lawrence"
+  },
+  "4685201": {
+   "p": 0.743,
+   "name": "Tanner McKee"
+  },
+  "4038941": {
+   "p": 0.733,
+   "name": "Justin Herbert"
+  },
+  "3918298": {
+   "p": 0.832,
+   "name": "Josh Allen"
   }
  },
  "by_game": {
@@ -264,101 +264,101 @@
   },
   "401873010": {
    "4431452": {
-    "p": 0.829,
+    "p": 0.822,
     "name": "Drake Maye"
    },
    "4431611": {
-    "p": 0.843,
+    "p": 0.861,
     "name": "Caleb Williams"
    }
   },
   "401873011": {
    "8439": {
-    "p": 0.797,
+    "p": 0.77,
     "name": "Aaron Rodgers"
    },
    "4360689": {
-    "p": 0.768,
+    "p": 0.76,
     "name": "Tyler Shough"
    }
   },
   "401873017": {
    "4361741": {
-    "p": 0.857,
+    "p": 0.859,
     "name": "Brock Purdy"
    },
    "4360423": {
-    "p": 0.764,
+    "p": 0.774,
     "name": "Michael Penix Jr."
    }
   },
   "401873013": {
    "3122840": {
-    "p": 0.669,
+    "p": 0.635,
     "name": "Deshaun Watson"
    },
    "4688380": {
-    "p": 0.704,
+    "p": 0.682,
     "name": "Cam Ward"
    }
   },
   "401873014": {
    "3917792": {
-    "p": 0.75,
+    "p": 0.765,
     "name": "Daniel Jones"
    },
    "3917315": {
-    "p": 0.786,
+    "p": 0.778,
     "name": "Kyler Murray"
    }
   },
   "401873015": {
    "4242512": {
-    "p": 0.594,
+    "p": 0.59,
     "name": "Malik Willis"
    },
    "15864": {
-    "p": 0.719,
+    "p": 0.739,
     "name": "Geno Smith"
    }
   },
   "401873018": {
    "4596472": {
-    "p": 0.643,
+    "p": 0.617,
     "name": "Jalon Daniels"
    },
    "4685720": {
-    "p": 0.77,
+    "p": 0.784,
     "name": "Bryce Young"
    }
   },
   "401873012": {
    "3915511": {
-    "p": 0.835,
+    "p": 0.832,
     "name": "Joe Burrow"
    },
    "4035671": {
-    "p": 0.701,
+    "p": 0.687,
     "name": "Tyler Huntley"
    }
   },
   "401873016": {
    "2969939": {
-    "p": 0.769,
+    "p": 0.761,
     "name": "Jameis Winston"
    },
    "4432577": {
-    "p": 0.806,
+    "p": 0.813,
     "name": "C.J. Stroud"
    }
   },
   "401873019": {
    "4426338": {
-    "p": 0.744,
+    "p": 0.749,
     "name": "Bo Nix"
    },
    "2578570": {
-    "p": 0.833,
+    "p": 0.817,
     "name": "Jacoby Brissett"
    }
   },
@@ -374,21 +374,21 @@
   },
   "401873021": {
    "12483": {
-    "p": 0.906,
+    "p": 0.894,
     "name": "Matthew Stafford"
    },
    "14880": {
-    "p": 0.82,
+    "p": 0.85,
     "name": "Kirk Cousins"
    }
   },
   "401873022": {
    "3139477": {
-    "p": 0.791,
+    "p": 0.79,
     "name": "Patrick Mahomes"
    },
    "3912547": {
-    "p": 0.809,
+    "p": 0.815,
     "name": "Sam Darnold"
    }
   }
