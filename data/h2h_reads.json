@@ -1,5 +1,5 @@
 {
- "at": "2026-10-20 03:32 UTC",
+ "at": "2026-10-20 13:07 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -329,7 +329,6 @@
    "lead": 2,
    "complete": false,
    "missing": [
-    "NE E.Raridon (10%)",
     "NE R.Doubs (13%)"
    ],
    "score": [
@@ -360,7 +359,6 @@
    "missing": [
     "PIT D.Washington (12%)",
     "PIT P.Freiermuth (13%)",
-    "NO A.Kamara (13%)",
     "NO B.Lance (12%)"
    ],
    "score": [
@@ -380,6 +378,61 @@
    "game": "PIT@NO",
    "eid": 21915,
    "kick": "2026-10-25 13:30:00Z"
+  },
+  {
+   "qbs": [
+    "Jordan Love",
+    "Jared Goff"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "GB@DET",
+   "eid": 22077,
+   "kick": "2026-10-25 20:25:00Z"
+  },
+  {
+   "qbs": [
+    "Patrick Mahomes II",
+    "Sam Darnold"
+   ],
+   "pick": "Sam Darnold",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "KC N.Gray (11%)",
+    "KC T.Kelce (14%)",
+    "KC X.Worthy (20%)"
+   ],
+   "score": [
+    0,
+    2
+   ],
+   "why": [
+    "His receivers are set 166.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "KC@SEA",
+   "eid": 22078,
+   "kick": "2026-10-26 00:20:00Z"
   }
  ]
 }
