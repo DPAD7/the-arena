@@ -1,188 +1,8 @@
 {
- "at": "2026-10-20 13:07 UTC",
+ "at": "2026-10-20 19:05 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Trevor Lawrence",
-    "C.J. Stroud"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "HOU@JAC",
-   "eid": 21914,
-   "kick": "2026-10-18 13:30:00Z"
-  },
-  {
-   "qbs": [
-    "Daniel Jones",
-    "Cam Ward"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "game": "TEN@IND",
-   "eid": 22001,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
-    "Aaron Rodgers",
-    "Jalon Daniels"
-   ],
-   "pick": "Aaron Rodgers",
-   "lead": 4,
-   "complete": false,
-   "missing": [
-    "PIT R.Wilson (13%)"
-   ],
-   "score": [
-    3,
-    -1
-   ],
-   "why": [
-    "His receivers are set 63.0 yards higher in total on their lines",
-    "1 of 4 combined boxes checked",
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "game": "PIT@TB",
-   "eid": 22003,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
-    "Deshaun Watson",
-    "Tyler Huntley"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "BAL@CLE",
-   "eid": 22004,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
-    "Tyler Shough",
-    "Jameis Winston"
-   ],
-   "pick": "Jameis Winston",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NO@NYG",
-   "eid": 22005,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
-    "Caleb Williams",
-    "Michael Penix Jr."
-   ],
-   "pick": "Michael Penix Jr.",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "CHI@ATL",
-   "eid": 22006,
-   "kick": "2026-10-18 17:00:00Z"
-  },
-  {
-   "qbs": [
-    "Drake Maye",
-    "Geno Smith"
-   ],
-   "pick": "Geno Smith",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NYJ@NE",
-   "eid": 22007,
-   "kick": "2026-10-18 17:00:00Z"
-  },
   {
    "qbs": [
     "Jacoby Brissett",
@@ -421,7 +241,7 @@
     2
    ],
    "why": [
-    "His receivers are set 166.0 yards higher in total on their lines",
+    "His receivers are set 164.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -433,6 +253,39 @@
    "game": "KC@SEA",
    "eid": 22078,
    "kick": "2026-10-26 00:20:00Z"
+  },
+  {
+   "qbs": [
+    "Tanner McKee",
+    "Dak Prescott"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 6,
+   "complete": false,
+   "missing": [
+    "PHI D.Cooper (11%)",
+    "PHI D.Smith (13%)",
+    "PHI D.Wicks (16%)",
+    "PHI M.Lemon (18%)"
+   ],
+   "score": [
+    -1,
+    5
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 168.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "DAL@PHI",
+   "eid": 22079,
+   "kick": "2026-10-27 00:15:00Z"
   }
  ]
 }
