@@ -1,5 +1,5 @@
 {
- "at": "2026-10-19",
+ "at": "2026-10-20",
  "card": "2026-10-24",
  "event": "600061267",
  "name": "UFC 333: Volkanovski vs. Evloev",
@@ -256,8 +256,44 @@
     "price": "+410"
    }
   },
-  "401911633": {
+  "401930916": {
    "rank": 8,
+   "pick": "Noah Gugnon",
+   "vs": "Kody Steele",
+   "box": [
+    54,
+    46
+   ],
+   "p": 54,
+   "won": null,
+   "why": [
+    "5 years younger (26 vs 32)",
+    "Absorbs 4.4 strikes a minute, Steele 6.7",
+    "Strike margin -0.7 a minute vs -3.5",
+    "Knocked down 0.00 times per 15 min, Steele 0.79"
+   ],
+   "id": "5145777",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "No",
+    "side": "Fight does not go the distance",
+    "why": [
+     "Submission tries per 15 min: Steele 0.8, Gugnon 11.1",
+     "Pro wins by finish: Steele 75%, Gugnon 100%",
+     "Strikes absorbed a minute: Steele 6.7, Gugnon 4.4"
+    ],
+    "p": 66,
+    "won": 68,
+    "won_n": 122,
+    "p_ml": 54,
+    "p_dist": 34
+   }
+  },
+  "401911633": {
+   "rank": 9,
    "pick": "Petr Yan",
    "vs": "Merab Dvalishvili",
    "box": [
@@ -292,8 +328,44 @@
     "p_dist": 75
    }
   },
+  "401930915": {
+   "rank": 10,
+   "pick": "Bolaji Oki",
+   "vs": "Daniel Santos",
+   "box": [
+    53,
+    47
+   ],
+   "p": 53,
+   "won": null,
+   "why": [
+    "3\" taller",
+    "6\" more reach (73 vs 67)",
+    "Younger (30.9 vs 31.6)",
+    "Round 1 margin +14 strikes, Santos -6"
+   ],
+   "id": "5145682",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro fights won on the cards: Oki 29%, Santos 25%",
+     "Average UFC fight: Oki 11.2 min, Santos 11.5 min",
+     "Pro losses on the cards: Oki 1, Santos 2"
+    ],
+    "p": 60,
+    "won": 59,
+    "won_n": 99,
+    "p_ml": 53,
+    "p_dist": 60
+   }
+  },
   "401911632": {
-   "rank": 9,
+   "rank": 11,
    "pick": "Alexander Volkanovski",
    "vs": "Movsar Evloev",
    "box": [
@@ -329,7 +401,7 @@
    }
   },
   "401930357": {
-   "rank": 10,
+   "rank": 12,
    "pick": "Jacob Malkoun",
    "vs": "Abubakar Vagaev",
    "box": [
@@ -365,7 +437,7 @@
    }
   },
   "401929495": {
-   "rank": 11,
+   "rank": 13,
    "pick": "Losene Keita",
    "vs": "Aaron Pico",
    "box": [
@@ -409,6 +481,12 @@
    "p": 69,
    "women": false
   },
+  "401930917": {
+   "pick": "Iasmin Lucindo",
+   "vs": "Nicolle Caliari",
+   "p": 68,
+   "women": true
+  },
   "401911637": {
    "pick": "Azamat Murzakanov",
    "vs": "Dominick Reyes",
@@ -445,9 +523,21 @@
    "p": 56,
    "women": false
   },
+  "401930916": {
+   "pick": "Noah Gugnon",
+   "vs": "Kody Steele",
+   "p": 54,
+   "women": false
+  },
   "401911633": {
    "pick": "Petr Yan",
    "vs": "Merab Dvalishvili",
+   "p": 53,
+   "women": false
+  },
+  "401930915": {
+   "pick": "Bolaji Oki",
+   "vs": "Daniel Santos",
    "p": 53,
    "women": false
   },

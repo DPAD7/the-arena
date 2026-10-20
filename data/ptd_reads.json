@@ -1,15 +1,7 @@
 {
- "at": "2026-10-19",
+ "at": "2026-10-20",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4426348": {
-   "p": 0.776,
-   "name": "Jayden Daniels"
-  },
-  "4361741": {
-   "p": 0.86,
-   "name": "Brock Purdy"
-  },
   "4431452": {
    "p": 0.822,
    "name": "Drake Maye"
@@ -25,6 +17,10 @@
   "4360689": {
    "p": 0.76,
    "name": "Tyler Shough"
+  },
+  "4361741": {
+   "p": 0.859,
+   "name": "Brock Purdy"
   },
   "4360423": {
    "p": 0.774,
@@ -129,6 +125,10 @@
   "3918298": {
    "p": 0.832,
    "name": "Josh Allen"
+  },
+  "4426348": {
+   "p": 0.776,
+   "name": "Jayden Daniels"
   }
  },
  "by_game": {

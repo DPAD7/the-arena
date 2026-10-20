@@ -1,5 +1,5 @@
 {
- "at": "2026-10-19T23:47:04Z",
+ "at": "2026-10-20T01:05:51Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,180 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401862804": {
-   "away": "NAVY",
-   "home": "UTSA",
-   "kick": "2026-10-18T00:00Z",
-   "ml": {
-    "pick": "UTSA",
-    "p": 0.518958,
-    "call": null,
-    "why": [
-     "Points per game: UTSA 28.6, NAVY 23.2",
-     "Last 3 games, average margin: UTSA +7.7, NAVY -0.3",
-     "Margin rating: UTSA +0.6, NAVY -1.0",
-     "Passing yards per game: UTSA 198, NAVY 122"
-    ],
-    "qbs": [
-     "Jackson Gutierrez",
-     "Owen McCown"
-    ]
-   },
-   "h2h": {
-    "pick": "Owen McCown",
-    "pick_id": "4775136",
-    "team": "UTSA",
-    "p": 0.865474,
-    "call": "take",
-    "has_line": true,
-    "qbs": [
-     [
-      "5220473",
-      "Jackson Gutierrez"
-     ],
-     [
-      "4775136",
-      "Owen McCown"
-     ]
-    ]
-   },
-   "ptd": {
-    "5220473": {
-     "name": "Jackson Gutierrez",
-     "team": "NAVY",
-     "p1": 0.570323,
-     "take1": false,
-     "p2": 0.244288,
-     "take2": false,
-     "has_line": true
-    },
-    "4775136": {
-     "name": "Owen McCown",
-     "team": "UTSA",
-     "p1": 0.832673,
-     "take1": false,
-     "p2": 0.536311,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401871091": {
-   "away": "LT",
-   "home": "ULM",
-   "kick": "2026-10-18T00:00Z",
-   "ml": {
-    "pick": "LT",
-    "p": 0.782261,
-    "call": "take",
-    "why": [
-     "Margin rating: LT -3.5, ULM -14.1",
-     "Points allowed per game: LT 35.2, ULM 46.2",
-     "Rushing yards allowed per game: LT 186, ULM 274",
-     "Last 3 games, average margin: LT -4.7, ULM -17.0"
-    ],
-    "qbs": [
-     "Blake Baker",
-     "Aidan Armenta"
-    ]
-   },
-   "h2h": {
-    "pick": "Blake Baker",
-    "pick_id": "5150998",
-    "team": "LT",
-    "p": 0.634943,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5150998",
-      "Blake Baker"
-     ],
-     [
-      "5122054",
-      "Aidan Armenta"
-     ]
-    ]
-   },
-   "ptd": {
-    "5150998": {
-     "name": "Blake Baker",
-     "team": "LT",
-     "p1": 0.789159,
-     "take1": false,
-     "p2": 0.464348,
-     "take2": false,
-     "has_line": true
-    },
-    "5122054": {
-     "name": "Aidan Armenta",
-     "team": "ULM",
-     "p1": 0.698834,
-     "take1": false,
-     "p2": 0.366536,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864523": {
-   "away": "SJSU",
-   "home": "UTEP",
-   "kick": "2026-10-18T01:00Z",
-   "ml": {
-    "pick": "SJSU",
-    "p": 0.701167,
-    "call": null,
-    "why": [
-     "Margin rating: SJSU -6.2, UTEP -14.7",
-     "Points allowed per game: SJSU 24.2, UTEP 45.4",
-     "Points per game: SJSU 19.2, UTEP 8.8",
-     "Last 3 games, average margin: SJSU -5.0, UTEP -23.7"
-    ],
-    "qbs": [
-     "Luke Weaver",
-     "Raymond Moore III"
-    ]
-   },
-   "h2h": {
-    "pick": "Luke Weaver",
-    "pick_id": "5295238",
-    "team": "SJSU",
-    "p": 0.768553,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5295238",
-      "Luke Weaver"
-     ],
-     [
-      "5232049",
-      "Raymond Moore III"
-     ]
-    ]
-   },
-   "ptd": {
-    "5295238": {
-     "name": "Luke Weaver",
-     "team": "SJSU",
-     "p1": 0.799932,
-     "take1": false,
-     "p2": 0.494921,
-     "take2": false,
-     "has_line": true
-    },
-    "5232049": {
-     "name": "Raymond Moore III",
-     "team": "UTEP",
-     "p1": 0.653992,
-     "take1": false,
-     "p2": 0.325053,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401866445": {
    "away": "OHIO",
    "home": "SAC",
@@ -686,18 +512,18 @@
     "4432691": {
      "name": "Carlos Del Rio-Wilson",
      "team": "MRSH",
-     "p1": 0.791364,
+     "p1": 0.796855,
      "take1": false,
-     "p2": 0.480617,
+     "p2": 0.489337,
      "take2": false,
      "has_line": true
     },
     "5148858": {
      "name": "Jared Hollins",
      "team": "USA",
-     "p1": 0.773675,
+     "p1": 0.779501,
      "take1": false,
-     "p2": 0.456217,
+     "p2": 0.46489,
      "take2": false,
      "has_line": true
     }
@@ -726,7 +552,7 @@
     "pick": "Landyn Locke",
     "pick_id": "5148427",
     "team": "SHSU",
-    "p": 0.561748,
+    "p": 0.561749,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -842,7 +668,7 @@
     "pick": "Rickie Collins",
     "pick_id": "4870645",
     "team": "KENN",
-    "p": 0.535078,
+    "p": 0.535077,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1132,7 +958,7 @@
     "pick": "Tyler Hughes",
     "pick_id": "4838536",
     "team": "WYO",
-    "p": 0.73378,
+    "p": 0.733781,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1422,7 +1248,7 @@
     "pick": "Kevin Jennings",
     "pick_id": "5084084",
     "team": "SMU",
-    "p": 0.694252,
+    "p": 0.694253,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1480,7 +1306,7 @@
     "pick": "Darian Mensah",
     "pick_id": "5121169",
     "team": "MIA",
-    "p": 0.850162,
+    "p": 0.850163,
     "call": "take",
     "has_line": true,
     "qbs": [
@@ -1538,7 +1364,7 @@
     "pick": "Josh Hoover",
     "pick_id": "4685401",
     "team": "IU",
-    "p": 0.693616,
+    "p": 0.693617,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1654,7 +1480,7 @@
     "pick": "Caden Veltkamp",
     "pick_id": "4869991",
     "team": "FAU",
-    "p": 0.912224,
+    "p": 0.912225,
     "call": "take",
     "has_line": true,
     "qbs": [
@@ -1712,7 +1538,7 @@
     "pick": "John Alan Richter",
     "pick_id": "5082330",
     "team": "TOL",
-    "p": 0.656811,
+    "p": 0.656812,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1828,7 +1654,7 @@
     "pick": "Brayden Roggow",
     "pick_id": "5146903",
     "team": "AKR",
-    "p": 0.555436,
+    "p": 0.555437,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1944,7 +1770,7 @@
     "pick": "Katin Houser",
     "pick_id": "4795295",
     "team": "ILL",
-    "p": 0.564633,
+    "p": 0.564634,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2060,7 +1886,7 @@
     "pick": "John Mateer",
     "pick_id": "4915980",
     "team": "OU",
-    "p": 0.617267,
+    "p": 0.617268,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2101,7 +1927,7 @@
    "kick": "2026-10-24T19:30Z",
    "ml": {
     "pick": "TENN",
-    "p": 0.541342,
+    "p": 0.526291,
     "call": null,
     "why": [
      "Margin rating: TENN +10.7, SC +3.1",
@@ -2176,7 +2002,7 @@
     "pick": "Bear Bachmeier",
     "pick_id": "5141367",
     "team": "BYU",
-    "p": 0.53794,
+    "p": 0.537941,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2350,7 +2176,7 @@
     "pick": "Ty Dieffenbach",
     "pick_id": "5092275",
     "team": "UCLA",
-    "p": 0.659723,
+    "p": 0.659724,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2640,7 +2466,7 @@
     "pick": "Avery Johnson",
     "pick_id": "4870857",
     "team": "KSU",
-    "p": 0.54952,
+    "p": 0.549521,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2681,7 +2507,7 @@
    "kick": "2026-10-24T20:00Z",
    "ml": {
     "pick": "OHIO",
-    "p": 0.851894,
+    "p": 0.844099,
     "call": "take",
     "why": [
      "Margin rating: OHIO -0.5, EMU -9.6",
@@ -2930,7 +2756,7 @@
     "pick": "Blake Baker",
     "pick_id": "5150998",
     "team": "LT",
-    "p": 0.765446,
+    "p": 0.765447,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3046,7 +2872,7 @@
     "pick": "K'saan Farrar",
     "pick_id": "5212610",
     "team": "CSU",
-    "p": 0.726672,
+    "p": 0.726673,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3278,7 +3104,7 @@
     "pick": "Kenny Minchey",
     "pick_id": "4918099",
     "team": "UK",
-    "p": 0.590157,
+    "p": 0.590156,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3394,7 +3220,7 @@
     "pick": "Noah Fifita",
     "pick_id": "4801717",
     "team": "ARIZ",
-    "p": 0.767267,
+    "p": 0.767268,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3412,18 +3238,18 @@
     "4801717": {
      "name": "Noah Fifita",
      "team": "ARIZ",
-     "p1": 0.871546,
+     "p1": 0.867739,
      "take1": false,
-     "p2": 0.612105,
+     "p2": 0.603784,
      "take2": false,
      "has_line": true
     },
     "5080403": {
      "name": "Jaylen Raynor",
      "team": "ISU",
-     "p1": 0.714806,
+     "p1": 0.70791,
      "take1": false,
-     "p2": 0.352424,
+     "p2": 0.344498,
      "take2": false,
      "has_line": true
     }
@@ -3568,7 +3394,7 @@
     "pick": "Brad Jackson",
     "pick_id": "5148803",
     "team": "TXST",
-    "p": 0.545705,
+    "p": 0.545706,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3684,7 +3510,7 @@
     "pick": "Nathan Hayes",
     "pick_id": "5087156",
     "team": "NDSU",
-    "p": 0.545747,
+    "p": 0.545748,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3800,7 +3626,7 @@
     "pick": "Tyler Bell",
     "pick_id": "5289314",
     "team": "DEL",
-    "p": 0.611033,
+    "p": 0.611034,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3830,6 +3656,64 @@
      "p1": 0.684372,
      "take1": false,
      "p2": 0.327604,
+     "take2": false,
+     "has_line": false
+    }
+   }
+  },
+  "401871072": {
+   "away": "SHSU",
+   "home": "MOST",
+   "kick": "2026-10-28T00:00Z",
+   "ml": {
+    "pick": "MOST",
+    "p": 0.618404,
+    "call": null,
+    "why": [
+     "Points per game: MOST 17.0, SHSU 11.6",
+     "Last 3 games, average margin: MOST -9.3, SHSU -23.0",
+     "Margin rating: MOST -9.2, SHSU -11.2",
+     "Rushing yards allowed per game: MOST 188, SHSU 216"
+    ],
+    "qbs": [
+     "Landyn Locke",
+     "Henry Belin IV"
+    ]
+   },
+   "h2h": {
+    "pick": "Landyn Locke",
+    "pick_id": "5148427",
+    "team": "SHSU",
+    "p": 0.525118,
+    "call": null,
+    "has_line": false,
+    "qbs": [
+     [
+      "5148427",
+      "Landyn Locke"
+     ],
+     [
+      "4685252",
+      "Henry Belin IV"
+     ]
+    ]
+   },
+   "ptd": {
+    "5148427": {
+     "name": "Landyn Locke",
+     "team": "SHSU",
+     "p1": 0.723629,
+     "take1": false,
+     "p2": 0.369725,
+     "take2": false,
+     "has_line": false
+    },
+    "4685252": {
+     "name": "Henry Belin IV",
+     "team": "MOST",
+     "p1": 0.767433,
+     "take1": false,
+     "p2": 0.45159,
      "take2": false,
      "has_line": false
     }
