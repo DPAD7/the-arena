@@ -1,32 +1,8 @@
 {
- "at": "2026-10-20 23:07 UTC",
+ "at": "2026-10-21 01:04 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Jordan Love",
-    "Dak Prescott"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "DAL@GB",
-   "eid": 22065,
-   "kick": "2026-10-19 00:20:00Z"
-  },
   {
    "qbs": [
     "Brock Purdy",
@@ -115,6 +91,39 @@
    "game": "PIT@NO",
    "eid": 21915,
    "kick": "2026-10-25 13:30:00Z"
+  },
+  {
+   "qbs": [
+    "Daniel Jones",
+    "Kyler Murray"
+   ],
+   "pick": "Kyler Murray",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "IND J.Downs (16%)",
+    "IND K.Allen (18%)",
+    "IND L.Treadwell (17%)",
+    "MIN A.Jones (20%)",
+    "MIN T.Hockenson (21%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 100.5 yards higher in total on their lines"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "IND@MIN",
+   "eid": 22068,
+   "kick": "2026-10-25 17:00:00Z"
   },
   {
    "qbs": [
