@@ -1,5 +1,5 @@
 {
- "at": "2026-10-21 13:06 UTC",
+ "at": "2026-10-21 19:06 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -127,6 +127,33 @@
   },
   {
    "qbs": [
+    "Geno Smith",
+    "Malik Willis"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "NYJ B.Allen (11%)",
+    "MIA K.Coleman Jr. (19%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "MIA@NYJ",
+   "eid": 22069,
+   "kick": "2026-10-25 17:00:00Z"
+  },
+  {
+   "qbs": [
     "Cam Ward",
     "Deshaun Watson"
    ],
@@ -203,7 +230,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 52.0 yards higher in total on their lines",
+    "His receivers are set 53.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -214,6 +241,33 @@
    ],
    "game": "SF@ATL",
    "eid": 22073,
+   "kick": "2026-10-25 17:00:00Z"
+  },
+  {
+   "qbs": [
+    "C.J. Stroud",
+    "J.J. McCarthy"
+   ],
+   "pick": "J.J. McCarthy",
+   "lead": 4,
+   "complete": true,
+   "missing": [],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+43 a game)",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "NYG@HOU",
+   "eid": 22074,
    "kick": "2026-10-25 17:00:00Z"
   },
   {
@@ -346,7 +400,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 164.0 yards higher in total on their lines",
+    "His receivers are set 166.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
