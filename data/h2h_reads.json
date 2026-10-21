@@ -1,5 +1,5 @@
 {
- "at": "2026-10-21 03:09 UTC",
+ "at": "2026-10-21 13:06 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -113,7 +113,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 100.5 yards higher in total on their lines"
+    "His receivers are set 101.5 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -154,6 +154,40 @@
   },
   {
    "qbs": [
+    "Baker Mayfield",
+    "Bryce Young"
+   ],
+   "pick": "Bryce Young",
+   "lead": 12,
+   "complete": false,
+   "missing": [
+    "TB C.Otton (13%)",
+    "TB C.Godwin Jr. (20%)",
+    "TB E.Egbuka (32%)",
+    "CAR J.Metchie III (12%)"
+   ],
+   "score": [
+    -3,
+    9
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 187.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "TB@CAR",
+   "eid": 22072,
+   "kick": "2026-10-25 17:00:00Z"
+  },
+  {
+   "qbs": [
     "Michael Penix Jr.",
     "Brock Purdy"
    ],
@@ -169,7 +203,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 51.0 yards higher in total on their lines",
+    "His receivers are set 52.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -181,6 +215,34 @@
    "game": "SF@ATL",
    "eid": 22073,
    "kick": "2026-10-25 17:00:00Z"
+  },
+  {
+   "qbs": [
+    "Bo Nix",
+    "Jacoby Brissett"
+   ],
+   "pick": "Bo Nix",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "DEN R.Harvey (18%)"
+   ],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "DEN@ARI",
+   "eid": 22075,
+   "kick": "2026-10-25 20:05:00Z"
   },
   {
    "qbs": [
@@ -244,7 +306,6 @@
    "complete": false,
    "missing": [
     "KC N.Gray (11%)",
-    "KC T.Kelce (14%)",
     "KC X.Worthy (20%)"
    ],
    "score": [
@@ -252,7 +313,7 @@
     2
    ],
    "why": [
-    "His receivers are set 165.0 yards higher in total on their lines",
+    "His receivers are set 111.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -285,7 +346,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 167.0 yards higher in total on their lines",
+    "His receivers are set 164.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
