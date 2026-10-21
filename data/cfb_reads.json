@@ -1,5 +1,5 @@
 {
- "at": "2026-10-21T19:06:10Z",
+ "at": "2026-10-21T22:04:00Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -222,18 +222,18 @@
     "5152503": {
      "name": "Adam Damante",
      "team": "NMSU",
-     "p1": 0.745719,
+     "p1": 0.752035,
      "take1": false,
-     "p2": 0.411093,
+     "p2": 0.41957,
      "take2": false,
      "has_line": true
     },
     "5148427": {
      "name": "Landyn Locke",
      "team": "SHSU",
-     "p1": 0.740618,
+     "p1": 0.747017,
      "take1": false,
-     "p2": 0.394849,
+     "p2": 0.403221,
      "take2": false,
      "has_line": true
     }
@@ -320,7 +320,7 @@
     "pick": "Rickie Collins",
     "pick_id": "4870645",
     "team": "KENN",
-    "p": 0.539585,
+    "p": 0.544065,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -338,18 +338,18 @@
     "5138131": {
      "name": "Deshawn Purdie",
      "team": "LIB",
-     "p1": 0.734503,
+     "p1": 0.730976,
      "take1": false,
-     "p2": 0.379157,
+     "p2": 0.375205,
      "take2": false,
      "has_line": true
     },
     "4870645": {
      "name": "Rickie Collins",
      "team": "KENN",
-     "p1": 0.681343,
+     "p1": 0.685241,
      "take1": false,
-     "p2": 0.31676,
+     "p2": 0.320412,
      "take2": false,
      "has_line": true
     }
@@ -378,7 +378,7 @@
     "pick": "Marcus Stokes",
     "pick_id": "5165807",
     "team": "MEM",
-    "p": 0.590094,
+    "p": 0.594453,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -396,18 +396,18 @@
     "5075800": {
      "name": "Emory Williams",
      "team": "ECU",
-     "p1": 0.689445,
+     "p1": 0.685575,
      "take1": false,
-     "p2": 0.349623,
+     "p2": 0.345807,
      "take2": false,
      "has_line": true
     },
     "5165807": {
      "name": "Marcus Stokes",
      "team": "MEM",
-     "p1": 0.84265,
+     "p1": 0.845024,
      "take1": false,
-     "p2": 0.56265,
+     "p2": 0.566785,
      "take2": false,
      "has_line": true
     }
@@ -976,18 +976,18 @@
     "5207640": {
      "name": "Corey Dailey",
      "team": "PITT",
-     "p1": 0.544621,
+     "p1": 0.53628,
      "take1": false,
-     "p2": 0.217324,
+     "p2": 0.211444,
      "take2": false,
      "has_line": true
     },
     "5121169": {
      "name": "Darian Mensah",
      "team": "MIA",
-     "p1": 0.914096,
+     "p1": 0.911422,
      "take1": true,
-     "p2": 0.713457,
+     "p2": 0.706267,
      "take2": true,
      "has_line": true
     }
@@ -999,24 +999,24 @@
    "kick": "2026-10-24T16:00Z",
    "ml": {
     "pick": "IU",
-    "p": 0.85211,
+    "p": 0.885183,
     "call": "take",
     "why": [
      "Margin rating: IU +14.8, MICH +2.6",
      "Points per game: IU 33.5, MICH 22.7",
-     "AP rank: IU #6, MICH unranked",
-     "QB INT rate: IU 2.4%, MICH 4.5%"
+     "MICH's QB has no FBS start yet",
+     "AP rank: IU #6, MICH unranked"
     ],
     "qbs": [
      "Josh Hoover",
-     "Bryce Underwood"
+     "Tommy Carr"
     ]
    },
    "h2h": {
     "pick": "Josh Hoover",
     "pick_id": "4685401",
     "team": "IU",
-    "p": 0.693607,
+    "p": 0.66638,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1025,18 +1025,18 @@
       "Josh Hoover"
      ],
      [
-      "5141741",
-      "Bryce Underwood"
+      "5269403",
+      "Tommy Carr"
      ]
     ]
    },
    "ptd": {
-    "5141741": {
-     "name": "Bryce Underwood",
+    "5269403": {
+     "name": "Tommy Carr",
      "team": "MICH",
-     "p1": 0.547196,
+     "p1": 0.509828,
      "take1": false,
-     "p2": 0.192189,
+     "p2": 0.18092,
      "take2": false,
      "has_line": true
     },
@@ -1347,7 +1347,7 @@
    "kick": "2026-10-24T17:00Z",
    "ml": {
     "pick": "CMU",
-    "p": 0.613896,
+    "p": 0.599464,
     "call": null,
     "why": [
      "Average margin: CMU -7.0, M-OH -2.0",
@@ -1579,7 +1579,7 @@
    "kick": "2026-10-24T19:30Z",
    "ml": {
     "pick": "TENN",
-    "p": 0.520492,
+    "p": 0.535565,
     "call": null,
     "why": [
      "Margin rating: TENN +10.6, SC +3.2",
@@ -2234,7 +2234,7 @@
     "pick": "Goose Crowder",
     "pick_id": "4431633",
     "team": "TROY",
-    "p": 0.515347,
+    "p": 0.510838,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2252,18 +2252,18 @@
     "5122054": {
      "name": "Aidan Armenta",
      "team": "ULM",
-     "p1": 0.647916,
+     "p1": 0.652014,
      "take1": false,
-     "p2": 0.303066,
+     "p2": 0.306631,
      "take2": false,
      "has_line": true
     },
     "4431633": {
      "name": "Goose Crowder",
      "team": "TROY",
-     "p1": 0.851474,
+     "p1": 0.849182,
      "take1": false,
-     "p2": 0.572798,
+     "p2": 0.568676,
      "take2": false,
      "has_line": true
     }
@@ -2832,18 +2832,18 @@
     "4911529": {
      "name": "Trinidad Chambliss",
      "team": "MISS",
-     "p1": 0.790259,
+     "p1": 0.784638,
      "take1": false,
-     "p2": 0.463229,
+     "p2": 0.45456,
      "take2": false,
      "has_line": true
     },
     "4870906": {
      "name": "Arch Manning",
      "team": "TEX",
-     "p1": 0.846718,
+     "p1": 0.842308,
      "take1": false,
-     "p2": 0.557176,
+     "p2": 0.548546,
      "take2": false,
      "has_line": true
     }

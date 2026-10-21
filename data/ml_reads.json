@@ -75,7 +75,7 @@
    "home": "HOU",
    "pick": "HOU",
    "model": 73,
-   "book": 81,
+   "book": 80,
    "bookpick": "HOU",
    "agree": true,
    "won": 77,
@@ -97,7 +97,7 @@
    "home": "NYJ",
    "pick": "NYJ",
    "model": 69,
-   "book": 66,
+   "book": 67,
    "bookpick": "NYJ",
    "agree": true,
    "won": 64,
@@ -119,7 +119,7 @@
    "home": "CAR",
    "pick": "CAR",
    "model": 76,
-   "book": 61,
+   "book": 60,
    "bookpick": "CAR",
    "agree": true,
    "won": 62,
@@ -136,28 +136,6 @@
    "kick": "2026-10-25T17:00Z"
   },
   {
-   "gid": "401873017",
-   "away": "SF",
-   "home": "ATL",
-   "pick": "SF",
-   "model": 73,
-   "book": 61,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "lean",
-   "rank": 6,
-   "why": [
-    "Points allowed per game: SF 18.3, ATL 25.5",
-    "Points per game: SF 29.5, ATL 23.7",
-    "Last 3 games, win %: SF 100%, ATL 33%",
-    "QB play (EPA per dropback): SF +0.27, ATL +0.07"
-   ],
-   "week": 7,
-   "kick": "2026-10-25T17:00Z"
-  },
-  {
    "gid": "401873020",
    "away": "GB",
    "home": "DET",
@@ -169,7 +147,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 6,
    "why": [
     "Points per game: DET 32.8, GB 21.2",
     "Pass defense, EPA allowed: DET +0.28, GB +0.02",
@@ -178,6 +156,28 @@
    ],
    "week": 7,
    "kick": "2026-10-25T20:25Z"
+  },
+  {
+   "gid": "401873017",
+   "away": "SF",
+   "home": "ATL",
+   "pick": "SF",
+   "model": 73,
+   "book": 59,
+   "bookpick": "SF",
+   "agree": true,
+   "won": 47,
+   "n": 15,
+   "call": "lean",
+   "rank": 7,
+   "why": [
+    "Points allowed per game: SF 18.3, ATL 25.5",
+    "Points per game: SF 29.5, ATL 23.7",
+    "Last 3 games, win %: SF 100%, ATL 33%",
+    "QB play (EPA per dropback): SF +0.27, ATL +0.07"
+   ],
+   "week": 7,
+   "kick": "2026-10-25T17:00Z"
   },
   {
    "gid": "401873022",
@@ -207,7 +207,7 @@
    "home": "ARI",
    "pick": "DEN",
    "model": 54,
-   "book": 68,
+   "book": 67,
    "bookpick": "DEN",
    "agree": true,
    "won": 61,
