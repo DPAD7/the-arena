@@ -1,30 +1,8 @@
 {
- "at": "2026-10-21",
+ "at": "2026-10-22",
  "week": 7,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
-  {
-   "gid": "401873008",
-   "away": "WSH",
-   "home": "SF",
-   "pick": "SF",
-   "model": 84,
-   "book": 77,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 83,
-   "n": 81,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points allowed per game: SF 18.6, WSH 29.8",
-    "Points per game: SF 30.8, WSH 23.0",
-    "QB play (EPA per dropback): SF +0.27, WSH +0.00",
-    "Last 3 games, win %: SF 100%, WSH 50%"
-   ],
-   "week": 6,
-   "kick": "2026-10-20T00:15Z"
-  },
   {
    "gid": "401873009",
    "away": "DAL",
@@ -317,7 +295,7 @@
    "home": "BAL",
    "pick": "BAL",
    "model": 54,
-   "book": 52,
+   "book": 53,
    "bookpick": "CIN",
    "agree": false,
    "won": 40,
@@ -332,6 +310,28 @@
    ],
    "week": 7,
    "kick": "2026-10-25T17:00Z"
+  },
+  {
+   "gid": "401873023",
+   "away": "CAR",
+   "home": "GB",
+   "pick": "GB",
+   "model": 56,
+   "book": 58,
+   "bookpick": "GB",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 1,
+   "why": [
+    "Points allowed per game: GB 20.8, CAR 24.6",
+    "Last 3 games, win %: GB 100%, CAR 67%",
+    "QB play (EPA per dropback): GB +0.17, CAR +0.09",
+    "Rushing offense (EPA): GB -0.31, CAR -0.10"
+   ],
+   "week": 8,
+   "kick": "2026-10-30T00:15Z"
   }
  ]
 }
