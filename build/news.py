@@ -148,6 +148,37 @@ def insiders():
     return got
 
 
+FINALS = None
+
+
+def played_since(pid, club, since):
+    """Is there a final game after `since` that he played in, or one his club
+    played more than a week after it? Read off site/final/, once a run."""
+    global FINALS
+    if FINALS is None:
+        FINALS = []
+        fdir = os.path.join(D, "site", "final")
+        for f in os.listdir(fdir) if os.path.isdir(fdir) else []:
+            try:
+                txt = open(os.path.join(fdir, f)).read()
+                c = (json.loads(txt).get("header") or {}).get("competitions", [{}])[0]
+            except (OSError, ValueError, IndexError):
+                continue
+            clubs = {(x.get("team") or {}).get("abbreviation") for x in c.get("competitors") or []}
+            FINALS.append((c.get("date") or "", clubs, txt))
+    week = ""
+    try:
+        week = (dt.datetime.fromisoformat(since.replace("Z", "+00:00")) + dt.timedelta(days=7)).strftime("%Y-%m-%dT%H:%MZ")
+    except ValueError:
+        pass
+    for when, clubs, txt in FINALS:
+        if when <= since:
+            continue
+        if '"%s"' % pid in txt or (club and club in clubs and week and when > week):
+            return True
+    return False
+
+
 def fold(n):
     import unicodedata
     n = unicodedata.normalize("NFD", n or "")
@@ -381,6 +412,13 @@ def main():
     today = NOW.date().isoformat()
     for pid in [p for p, h in held.items() if h.get("returns") and h["returns"] < today]:
         del held[pid]
+    # a game-day designation (questionable, doubtful, probable) is for one game:
+    # it lets go once a game of his played after it is final. Caleb Williams
+    # kept Oct 16's "questionable for Sunday" on his card into Thursday's next
+    # game, with ESPN showing him clear (Jose, Oct 22, 2026: "why is it stale")
+    for pid in [p for p, h in held.items() if (h.get("abbr") or "") in ("Q", "D", "P")]:
+        if played_since(pid, (club_of.get(pid) or ("", ""))[0], held[pid].get("since") or ""):
+            del held[pid]
     # a named start lets go once its game is over
     live = {str(g[1]) for g in sched}
     for key in [k for k in named if k.split("|")[0] not in live]:
