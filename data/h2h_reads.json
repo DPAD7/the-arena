@@ -1,5 +1,5 @@
 {
- "at": "2026-10-23 13:05 UTC",
+ "at": "2026-10-23 19:09 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -64,16 +64,15 @@
     "Kyler Murray"
    ],
    "pick": "Kyler Murray",
-   "lead": 4,
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
-    -2,
-    2
+    -1,
+    1
    ],
    "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 53.5 yards higher in total on their lines"
+    "Faces the softer pass defense (EPA per pass allowed)"
    ],
    "checks": [
     0,
@@ -90,22 +89,25 @@
     "Geno Smith",
     "Malik Willis"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Geno Smith",
+   "lead": 4,
    "complete": false,
    "missing": [
     "NYJ B.Allen (11%)",
     "MIA K.Coleman Jr. (19%)"
    ],
    "score": [
-    0,
+    4,
     0
    ],
-   "why": [],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "2 of 4 combined boxes checked"
+   ],
    "checks": [
     0,
-    0,
-    0,
+    1,
+    1,
     0
    ],
    "game": "MIA@NYJ",
@@ -302,15 +304,17 @@
     "Patrick Mahomes II",
     "Sam Darnold"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Patrick Mahomes II",
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
     1,
-    1
+    -1
    ],
-   "why": [],
+   "why": [
+    "His offense is more efficient (EPA per play)"
+   ],
    "checks": [
     0,
     0,
