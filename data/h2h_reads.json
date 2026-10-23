@@ -1,5 +1,5 @@
 {
- "at": "2026-10-23 03:47 UTC",
+ "at": "2026-10-23 13:05 UTC",
  "week": 7,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -65,17 +65,15 @@
    ],
    "pick": "Kyler Murray",
    "lead": 4,
-   "complete": false,
-   "missing": [
-    "IND L.Treadwell (17%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     -2,
     2
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 69.5 yards higher in total on their lines"
+    "His receivers are set 53.5 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -173,18 +171,17 @@
     "Brock Purdy"
    ],
    "pick": "Michael Penix Jr.",
-   "lead": 4,
+   "lead": 2,
    "complete": false,
    "missing": [
     "SF M.Evans (28%)"
    ],
    "score": [
-    3,
-    -1
+    2,
+    0
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 48.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -305,24 +302,19 @@
     "Patrick Mahomes II",
     "Sam Darnold"
    ],
-   "pick": "Sam Darnold",
-   "lead": 2,
-   "complete": false,
-   "missing": [
-    "KC X.Worthy (20%)"
-   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
    "score": [
-    0,
-    2
+    1,
+    1
    ],
-   "why": [
-    "His receivers are set 95.0 yards higher in total on their lines",
-    "1 of 4 combined boxes checked"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
-    1,
+    0,
     0
    ],
    "game": "KC@SEA",
@@ -348,7 +340,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 105.5 yards higher in total on their lines",
+    "His receivers are set 104.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
