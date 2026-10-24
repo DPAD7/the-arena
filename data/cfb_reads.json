@@ -1,5 +1,5 @@
 {
- "at": "2026-10-24T17:04:34Z",
+ "at": "2026-10-24T17:33:40Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -1347,7 +1347,7 @@
    "kick": "2026-10-24T19:30Z",
    "ml": {
     "pick": "TENN",
-    "p": 0.51371,
+    "p": 0.528803,
     "call": null,
     "why": [
      "Margin rating: TENN +10.4, SC +3.2",
@@ -1712,7 +1712,7 @@
     "pick": "Micah Alejado",
     "pick_id": "5101124",
     "team": "HAW",
-    "p": 0.628597,
+    "p": 0.624374,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1730,18 +1730,18 @@
     "4881032": {
      "name": "Taron Dickens",
      "team": "NIU",
-     "p1": 0.666852,
+     "p1": 0.670842,
      "take1": false,
-     "p2": 0.302759,
+     "p2": 0.306322,
      "take2": false,
      "has_line": true
     },
     "5101124": {
      "name": "Micah Alejado",
      "team": "HAW",
-     "p1": 0.834116,
+     "p1": 0.831609,
      "take1": false,
-     "p2": 0.530372,
+     "p2": 0.52618,
      "take2": false,
      "has_line": true
     }
@@ -2640,7 +2640,7 @@
     "pick": "Noah Fifita",
     "pick_id": "4801717",
     "team": "ARIZ",
-    "p": 0.776886,
+    "p": 0.78308,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2658,18 +2658,18 @@
     "4801717": {
      "name": "Noah Fifita",
      "team": "ARIZ",
-     "p1": 0.87732,
+     "p1": 0.881145,
      "take1": false,
-     "p2": 0.623925,
+     "p2": 0.631786,
      "take2": false,
      "has_line": true
     },
     "5080403": {
      "name": "Jaylen Raynor",
      "team": "ISU",
-     "p1": 0.703362,
+     "p1": 0.695791,
      "take1": false,
-     "p2": 0.340903,
+     "p2": 0.333384,
      "take2": false,
      "has_line": true
     }
@@ -3725,13 +3725,13 @@
    "kick": "2026-10-31T16:00Z",
    "ml": {
     "pick": "NCSU",
-    "p": 0.692553,
+    "p": 0.70528,
     "call": null,
     "why": [
      "Points per game: NCSU 25.5, CAL 19.7",
      "Margin rating: NCSU -4.1, CAL -6.6",
      "Rushing yards allowed per game: NCSU 157, CAL 193",
-     "Rushing yards per game: NCSU 118, CAL 83"
+     "CAL is starting a backup QB"
     ],
     "qbs": [
      "Jaron-Keawe Sagapolutele",
@@ -4305,13 +4305,13 @@
    "kick": "2026-10-31T17:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.638161,
+    "p": 0.62408,
     "call": null,
     "why": [
      "Average margin: ODU -13.5, MRSH -7.8",
      "Rushing yards allowed per game: ODU 139, MRSH 197",
-     "MRSH is starting a backup QB",
-     "Yards per play allowed: ODU 4.9, MRSH 6.2"
+     "Yards per play allowed: ODU 4.9, MRSH 6.2",
+     "Days of rest: ODU 15, MRSH 10"
     ],
     "qbs": [
      "Zion Turner",
