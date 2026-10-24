@@ -1,5 +1,5 @@
 {
- "at": "2026-10-24T21:02:41Z",
+ "at": "2026-10-24T21:35:20Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -2252,18 +2252,18 @@
     "5263246": {
      "name": "Owen Eshelman",
      "team": "WSU",
-     "p1": 0.624594,
+     "p1": 0.632435,
      "take1": false,
-     "p2": 0.279473,
+     "p2": 0.286558,
      "take2": false,
      "has_line": true
     },
     "4870513": {
      "name": "Maddux Madsen",
      "team": "BOIS",
-     "p1": 0.863993,
+     "p1": 0.867891,
      "take1": false,
-     "p2": 0.58341,
+     "p2": 0.59187,
      "take2": false,
      "has_line": true
     }
@@ -2542,18 +2542,18 @@
     "5158948": {
      "name": "Jared Curtis",
      "team": "VAN",
-     "p1": 0.646767,
+     "p1": 0.654401,
      "take1": false,
-     "p2": 0.303634,
+     "p2": 0.311067,
      "take2": false,
      "has_line": true
     },
     "4918099": {
      "name": "Kenny Minchey",
      "team": "UK",
-     "p1": 0.817459,
+     "p1": 0.822417,
      "take1": false,
-     "p2": 0.512111,
+     "p2": 0.520829,
      "take2": false,
      "has_line": true
     }
@@ -4189,8 +4189,8 @@
    "kick": "2026-10-31T16:30Z",
    "ml": {
     "pick": "MICH",
-    "p": 0.744817,
-    "call": null,
+    "p": 0.756142,
+    "call": "take",
     "why": [
      "Margin rating: MICH +2.7, RUTG -7.7",
      "Points allowed per game: MICH 15.7, RUTG 37.7",
@@ -4305,13 +4305,13 @@
    "kick": "2026-10-31T17:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.621641,
+    "p": 0.635759,
     "call": null,
     "why": [
      "Average margin: ODU -13.5, MRSH -7.8",
      "Rushing yards allowed per game: ODU 139, MRSH 197",
-     "Yards per play allowed: ODU 4.9, MRSH 6.2",
-     "Days of rest: ODU 15, MRSH 10"
+     "MRSH is starting a backup QB",
+     "Yards per play allowed: ODU 4.9, MRSH 6.2"
     ],
     "qbs": [
      "Zion Turner",
