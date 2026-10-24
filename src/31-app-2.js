@@ -484,7 +484,9 @@
     if (bar) {
       if (eye && eye.parentNode !== bar) bar.insertBefore(eye, bar.firstChild);
       var wat = card.querySelector(".gwatch");
-      if (wat && wat.parentNode !== bar) bar.appendChild(wat);
+      /* a bout's clock is not drawn, so its play mark stays in the top row
+         beside LIVE (Jose, Oct 24, 2026: "where's the play button for MMA") */
+      if (wat && wat.parentNode !== bar && !card.classList.contains("gcard--bout")) bar.appendChild(wat);
       return;
     }
     seatWatch(card);
@@ -644,6 +646,10 @@
     if (b !== top.lastElementChild) top.appendChild(b);
     /* the play mark first, LIVE in the middle, the trend last
        (Jose, Sep 25, 2026: "play button then live then trend") */
+    var pw = card.querySelector(".gwatch");
+    if (card.classList.contains("gcard--bout") && pw && pw.parentNode !== top) {
+      top.insertBefore(pw, top.querySelector(":scope > .glive") || b);
+    }
     var pbar = top.querySelector(":scope > .glivebar");
     var badge = top.querySelector(":scope > .glive");
     if (pbar && badge && pbar.nextElementSibling !== badge) top.insertBefore(pbar, badge);
