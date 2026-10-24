@@ -1,5 +1,5 @@
 {
- "at": "2026-10-24T13:07:06Z",
+ "at": "2026-10-24T13:35:47Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -918,18 +918,18 @@
     "4869991": {
      "name": "Caden Veltkamp",
      "team": "FAU",
-     "p1": 0.895356,
+     "p1": 0.892167,
      "take1": false,
-     "p2": 0.671865,
+     "p2": 0.664122,
      "take2": false,
      "has_line": true
     },
     "4685291": {
      "name": "Jacurri Brown",
      "team": "RICE",
-     "p1": 0.548355,
+     "p1": 0.540025,
      "take1": false,
-     "p2": 0.226286,
+     "p2": 0.220232,
      "take2": false,
      "has_line": true
     }
@@ -1347,7 +1347,7 @@
    "kick": "2026-10-24T19:30Z",
    "ml": {
     "pick": "TENN",
-    "p": 0.528803,
+    "p": 0.51371,
     "call": null,
     "why": [
      "Margin rating: TENN +10.4, SC +3.2",
@@ -1596,7 +1596,7 @@
     "pick": "Ty Dieffenbach",
     "pick_id": "5092275",
     "team": "UCLA",
-    "p": 0.671793,
+    "p": 0.679702,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1614,18 +1614,18 @@
     "5146670": {
      "name": "Alessio Milivojevic",
      "team": "MSU",
-     "p1": 0.582487,
+     "p1": 0.565468,
      "take1": false,
-     "p2": 0.245164,
+     "p2": 0.232699,
      "take2": false,
      "has_line": true
     },
     "5092275": {
      "name": "Ty Dieffenbach",
      "team": "UCLA",
-     "p1": 0.718964,
+     "p1": 0.719457,
      "take1": false,
-     "p2": 0.346185,
+     "p2": 0.345899,
      "take2": false,
      "has_line": true
     }
@@ -1904,18 +1904,18 @@
     "4870857": {
      "name": "Avery Johnson",
      "team": "KSU",
-     "p1": 0.750034,
+     "p1": 0.743685,
      "take1": false,
-     "p2": 0.406427,
+     "p2": 0.398033,
      "take2": false,
      "has_line": true
     },
     "5141378": {
      "name": "Cutter Boley",
      "team": "ASU",
-     "p1": 0.795959,
+     "p1": 0.790451,
      "take1": false,
-     "p2": 0.470441,
+     "p2": 0.461753,
      "take2": false,
      "has_line": true
     }
@@ -1927,7 +1927,7 @@
    "kick": "2026-10-24T20:00Z",
    "ml": {
     "pick": "OHIO",
-    "p": 0.842594,
+    "p": 0.850451,
     "call": "take",
     "why": [
      "Margin rating: OHIO -0.6, EMU -9.6",
@@ -2716,18 +2716,18 @@
     "4592532": {
      "name": "Billy Edwards Jr.",
      "team": "UNC",
-     "p1": 0.838675,
+     "p1": 0.83408,
      "take1": false,
-     "p2": 0.537994,
+     "p2": 0.529305,
      "take2": false,
      "has_line": true
     },
     "4685694": {
      "name": "Steve Angeli",
      "team": "SYR",
-     "p1": 0.717927,
+     "p1": 0.711077,
      "take1": false,
-     "p2": 0.362972,
+     "p2": 0.354939,
      "take2": false,
      "has_line": true
     }
@@ -4305,13 +4305,13 @@
    "kick": "2026-10-31T17:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.62408,
+    "p": 0.638161,
     "call": null,
     "why": [
      "Average margin: ODU -13.5, MRSH -7.8",
      "Rushing yards allowed per game: ODU 139, MRSH 197",
-     "Yards per play allowed: ODU 4.9, MRSH 6.2",
-     "Days of rest: ODU 15, MRSH 10"
+     "MRSH is starting a backup QB",
+     "Yards per play allowed: ODU 4.9, MRSH 6.2"
     ],
     "qbs": [
      "Zion Turner",
