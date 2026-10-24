@@ -202,6 +202,28 @@
    "kick": "2026-10-25T20:05Z"
   },
   {
+   "gid": "401873012",
+   "away": "CIN",
+   "home": "BAL",
+   "pick": "CIN",
+   "model": 59,
+   "book": 57,
+   "bookpick": "CIN",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 10,
+   "why": [
+    "BAL is starting a backup QB",
+    "QB play (EPA per dropback): CIN +0.15, BAL -0.03",
+    "Last 3 games, point margin: CIN -0.3, BAL +3.3",
+    "Points allowed per game: CIN 21.8, BAL 22.0"
+   ],
+   "week": 7,
+   "kick": "2026-10-25T17:00Z"
+  },
+  {
    "gid": "401873010",
    "away": "NE",
    "home": "CHI",
@@ -213,7 +235,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 10,
+   "rank": 11,
    "why": [
     "Last 3 games, point margin: CHI -1.7, NE +12.7",
     "Points per game: CHI 25.0, NE 22.7",
@@ -235,7 +257,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 11,
+   "rank": 12,
    "why": [
     "Points per game: CLE 17.7, TEN 14.0",
     "Last 3 games, win %: CLE 67%, TEN 33%",
@@ -257,7 +279,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 12,
+   "rank": 13,
    "why": [
     "Points allowed per game: PIT 21.3, NO 29.7",
     "Last 3 games, win %: PIT 67%, NO 33%",
@@ -279,7 +301,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 13,
+   "rank": 14,
    "why": [
     "Points per game: LV 27.0, LAR 22.5",
     "Last 3 games, point margin: LV -11.3, LAR -0.3",
@@ -288,28 +310,6 @@
    ],
    "week": 7,
    "kick": "2026-10-25T20:25Z"
-  },
-  {
-   "gid": "401873012",
-   "away": "CIN",
-   "home": "BAL",
-   "pick": "BAL",
-   "model": 54,
-   "book": 53,
-   "bookpick": "CIN",
-   "agree": false,
-   "won": 40,
-   "n": 149,
-   "call": null,
-   "rank": 14,
-   "why": [
-    "Last 3 games, win %: BAL 67%, CIN 33%",
-    "Points per game: BAL 26.0, CIN 25.6",
-    "Turnovers per game: BAL 0.7, CIN 1.0",
-    "Win % this season: BAL 67%, CIN 60%"
-   ],
-   "week": 7,
-   "kick": "2026-10-25T17:00Z"
   },
   {
    "gid": "401873028",
@@ -382,19 +382,19 @@
    "away": "BAL",
    "home": "BUF",
    "pick": "BUF",
-   "model": 64,
+   "model": 74,
    "book": 62,
    "bookpick": "BUF",
    "agree": true,
-   "won": 67,
-   "n": 78,
+   "won": 87,
+   "n": 31,
    "call": "lean",
    "rank": 4,
    "why": [
     "Points per game: BUF 32.8, BAL 26.0",
-    "Pass defense, EPA allowed: BUF +0.25, BAL -0.00",
-    "Defense, EPA allowed per play: BUF +0.15, BAL -0.03",
-    "QB play (EPA per dropback): BUF +0.19, BAL +0.11"
+    "BAL is starting a backup QB",
+    "QB play (EPA per dropback): BUF +0.19, BAL -0.03",
+    "Pass defense, EPA allowed: BUF +0.25, BAL -0.00"
    ],
    "week": 8,
    "kick": "2026-11-01T18:00Z"
