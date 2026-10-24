@@ -825,6 +825,15 @@
       if (GAP0 === null && !typing()) GAP0 = lost;
       if (!drop && !typing() && GAP0 !== null && lost - GAP0 > 40) drop = lost - GAP0;
       document.documentElement.style.setProperty("--vvdrop", drop + "px");
+      /* never past the glass: the screen-loss guess pushed the nav half off
+         the bottom edge (Jose, Oct 24, 2026: "why is the nav smushed at the
+         bottom") -- whatever hangs below what is visible is taken back */
+      var bar = document.getElementById("sportbar");
+      if (bar && drop > 0) {
+        var seen = vv ? vv.offsetTop + vv.height : window.innerHeight;
+        var over = Math.ceil(bar.getBoundingClientRect().bottom - (seen - 6));
+        if (over > 0) document.documentElement.style.setProperty("--vvdrop", Math.max(0, drop - over) + "px");
+      }
     }
     /* the keyboard going away is when iOS leaves it short: ask it to settle */
     document.addEventListener("focusout", function () {
