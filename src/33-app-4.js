@@ -1434,8 +1434,12 @@
       var h = r.height - px(cs.paddingTop) - px(cs.paddingBottom) - px(cs.borderTopWidth) - px(cs.borderBottomWidth);
       u.el.style.width = w + "px";
       u.el.style.height = h + "px";
-      u.el.style.left = (r.left - t.left + r.width / 2) + "px";
-      u.el.style.top = (r.top - t.top + r.height / 2) + "px";
+      /* in shares of the tab, not pixels: the tabs change width when one is
+         picked, and a pixel seat left the fill beside its icon -- a green
+         block by the CFP shield and a grey keypad off the bar's end (Jose,
+         Oct 24, 2026: "this is a joke right?") */
+      u.el.style.left = t.width ? (100 * (r.left - t.left + r.width / 2) / t.width) + "%" : "50%";
+      u.el.style.top = t.height ? (100 * (r.top - t.top + r.height / 2) / t.height) + "%" : "50%";
       var m = "none";
       if (img.tagName === "IMG") m = "url('" + img.getAttribute("src") + "')";
       else if (img.tagName.toLowerCase() === "svg") {
