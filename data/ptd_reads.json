@@ -1,15 +1,7 @@
 {
- "at": "2026-10-22",
+ "at": "2026-10-24",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4431452": {
-   "p": 0.822,
-   "name": "Drake Maye"
-  },
-  "4431611": {
-   "p": 0.861,
-   "name": "Caleb Williams"
-  },
   "8439": {
    "p": 0.77,
    "name": "Aaron Rodgers"
@@ -113,6 +105,22 @@
   "4685201": {
    "p": 0.696,
    "name": "Tanner McKee"
+  },
+  "3918298": {
+   "p": 0.862,
+   "name": "Josh Allen"
+  },
+  "4360310": {
+   "p": 0.835,
+   "name": "Trevor Lawrence"
+  },
+  "4431452": {
+   "p": 0.822,
+   "name": "Drake Maye"
+  },
+  "4431611": {
+   "p": 0.861,
+   "name": "Caleb Williams"
   }
  },
  "by_game": {
@@ -264,6 +272,86 @@
    "4036378": {
     "p": 0.832,
     "name": "Jordan Love"
+   }
+  },
+  "401873026": {
+   "3916387": {
+    "p": 0.778,
+    "name": "Lamar Jackson"
+   },
+   "3918298": {
+    "p": 0.862,
+    "name": "Josh Allen"
+   }
+  },
+  "401873031": {
+   "4688380": {
+    "p": 0.661,
+    "name": "Cam Ward"
+   },
+   "3915511": {
+    "p": 0.868,
+    "name": "Joe Burrow"
+   }
+  },
+  "401873024": {
+   "2578570": {
+    "p": 0.807,
+    "name": "Jacoby Brissett"
+   },
+   "2577417": {
+    "p": 0.814,
+    "name": "Dak Prescott"
+   }
+  },
+  "401873030": {
+   "3917315": {
+    "p": 0.697,
+    "name": "Kyler Murray"
+   },
+   "3046779": {
+    "p": 0.861,
+    "name": "Jared Goff"
+   }
+  },
+  "401873029": {
+   "14880": {
+    "p": 0.801,
+    "name": "Kirk Cousins"
+   },
+   "15864": {
+    "p": 0.78,
+    "name": "Geno Smith"
+   }
+  },
+  "401873027": {
+   "3122840": {
+    "p": 0.565,
+    "name": "Deshaun Watson"
+   },
+   "8439": {
+    "p": 0.725,
+    "name": "Aaron Rodgers"
+   }
+  },
+  "401873025": {
+   "4360423": {
+    "p": 0.684,
+    "name": "Michael Penix Jr."
+   },
+   "3052587": {
+    "p": 0.763,
+    "name": "Baker Mayfield"
+   }
+  },
+  "401873028": {
+   "3917792": {
+    "p": 0.72,
+    "name": "Daniel Jones"
+   },
+   "4360310": {
+    "p": 0.835,
+    "name": "Trevor Lawrence"
    }
   }
  }
