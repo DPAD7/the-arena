@@ -1,11 +1,11 @@
 [
  {
-  "id": "5XN982",
-  "head": "NBA 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-10-23T06:00:00.0000000Z",
-  "end": "2026-10-24T03:59:00.0000000Z",
-  "sport": "",
+  "id": "O8V3GG",
+  "head": "College Football 30% Profit Boost",
+  "pct": 30,
+  "start": "2026-10-24T06:00:00.0000000Z",
+  "end": "2026-10-25T06:00:00.0000000Z",
+  "sport": "college-football",
   "game": "",
   "gid": "",
   "minOdds": "-200",
@@ -16,37 +16,19 @@
   ]
  },
  {
-  "id": "EPOZN8",
-  "head": "Player Prop Milestones 30% Parlay Boost",
+  "id": "656OY1",
+  "head": "NFL Tight Ends Day 30% Profit Boost",
   "pct": 30,
-  "start": "2026-10-23T06:00:00.0000000Z",
-  "end": "2026-10-24T03:59:00.0000000Z",
-  "sport": "",
+  "start": "2026-10-23T21:00:00.0000000Z",
+  "end": "2026-10-26T03:59:00.0000000Z",
+  "sport": "nfl",
   "game": "",
   "gid": "",
-  "minOdds": "+300",
-  "minLegs": 3,
-  "maxWager": 25.0,
+  "minOdds": "-200",
+  "minLegs": 1,
+  "maxWager": 20.0,
   "types": [
-   "sgp",
-   "sgpx",
-   "parlay"
-  ]
- },
- {
-  "id": "2XN4NE",
-  "head": "CHI Bulls @ MIL Bucks 30% SGP Boost",
-  "pct": 30,
-  "start": "2026-10-23T16:30:00.0000000Z",
-  "end": "2026-10-23T22:00:00.0000000Z",
-  "sport": "",
-  "game": "CHI Bulls @ MIL Bucks",
-  "gid": "",
-  "minOdds": "+300",
-  "minLegs": 3,
-  "maxWager": 25.0,
-  "types": [
-   "sgp"
+   "any"
   ]
  }
 ]
