@@ -390,7 +390,15 @@
     var st = String(b0.status || "").toLowerCase();
     if (st === "won" || st === "lost") return false;
     var tk = window.TRKST || {};
-    return !(b0.legs || []).some(function (lg) { return String(lg.status || "").toLowerCase() === "lost" || tk[lg.sel] === "lost"; });
+    /* the same test the wallet's open list uses: a leg the bank or the
+       tracker already has as lost kills the slip. With only two of the four,
+       the UFC parlay that had lost still warned "already on an open slip"
+       while the wallet said none (Jose, Oct 24, 2026) */
+    var bk = (typeof BANK === "object" && BANK && BANK.legs) || {};
+    var tl = (typeof TRKLOST === "object" && TRKLOST) || {};
+    return !(b0.legs || []).some(function (lg) {
+      return String(lg.status || "").toLowerCase() === "lost" || tk[lg.sel] === "lost" ||
+             (bk[lg.sel] || {}).st === "lost" || tl[lg.sel]; });
   }
   /* legs he has on this game: gold on the board, or on an open DraftKings slip */
   function legsOn(card) {
