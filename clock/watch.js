@@ -114,6 +114,9 @@ export async function readGame(gid, lg, board) {
           }
         }
       }
+      /* the drive the red-zone alert is keyed on: one alert per trip, however
+         many plays, penalties or extra points it takes (Oct 25, 2026) */
+      g.drive = String((((d.drives || {}).current) || {}).id || "");
       const wp = d.winprobability || [];
       if (wp.length && g.wpHome == null) g.wpHome = wp[wp.length - 1].homeWinPercentage;
       /* every man's line and each quarter's points, so a leg the board holds
@@ -379,7 +382,7 @@ export function news(slips, idx, games, prev, rows) {
       /* keyed on the moment, not the score: the touchdown and its extra point
          move the score while the red-zone flag is still up, and the same
          "1st & 5 · 10:01" went out twice, 13-3 then 14-3 (Jose, Oct 25, 2026) */
-      const k = "rz@" + v.gid + "@" + v.team + "@" + (g.clock || "").replace(/\s+/g, "");
+      const k = "rz@" + v.gid + "@" + v.team + "@" + (g.drive || g.sc.join("-"));
       if (!seen["rz@" + v.gid + v.team] && !p["rz" + v.team]) {
         seen["rz@" + v.gid + v.team] = 1;
         out.push({ tag: "slip:" + bet.id, key: k, type: "redzone", title: v.team + " in the red zone", body: (g.down ? g.down + ". " : "") + (v.qbName ? last(v.qbName) + " " + (v.kind === "ptd" ? v.n + "+ PTD" : v.kind === "atd" ? "1+ rushing TD" : "") : v.team + " ML") + " · " + g.clock + ".", url: "/#game=" + v.gid });
