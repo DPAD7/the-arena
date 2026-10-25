@@ -1348,7 +1348,11 @@
       var row = trkRow(gid);
       if (!row || Date.parse(row.g[2]) > Date.now() + 20 * 60000) return;
       gameFeed(gid, row.lg).then(function (d) {
-        TRKD[gid] = trkRead(d);
+        /* DraftKings' live score over ESPN's copy, as the cards do: while its
+           reader is on a game ESPN is not asked again, and the slip sat on the
+           pregame copy -- PRE, 0-0, 68% with the Broncos up 3-0 (Jose, Oct 25,
+           2026: "why are these different") */
+        TRKD[gid] = trkRead(typeof dkPatch === "function" ? dkPatch(gid, d) : d);
         if (typeof bankDraw === "function") bankDraw(); else trkPaint();
       }).catch(function () {});
     });

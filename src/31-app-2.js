@@ -567,10 +567,11 @@
   function seatPick(card) {
     var p = card && card.dataset.bout && BOXPICKS[card.dataset.bout];
     if (!p || card.classList.contains("done") || card.dataset.settledBout === "1") return;
-    /* moneyline only, 80% and up: the one band that hit 88% blind 2022-26
-       (81 fights). Every other bout wears no ticket (Jose, Oct 24, 2026: "ml
-       first, get me 100 percent right on each card") */
-    if (!(p.p >= 80)) return;
+    /* a ticket only where some market the model prices reaches 75%: the
+       winner, or the fight going (or not going) the distance. Jose, Oct 24,
+       2026: "I want to go 75% plus on the card, not the moneyline" */
+    var best = Math.max(p.p || 0, (p.call || {}).p || 0);
+    if (best < 75) return;
     var top = card.querySelector(".gtop");
     if (!top || top.querySelector(".gpick")) return;
     var b = document.createElement("button");
