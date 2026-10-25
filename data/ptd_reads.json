@@ -2,30 +2,6 @@
  "at": "2026-10-25",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4426338": {
-   "p": 0.749,
-   "name": "Bo Nix"
-  },
-  "2578570": {
-   "p": 0.817,
-   "name": "Jacoby Brissett"
-  },
-  "4036378": {
-   "p": 0.777,
-   "name": "Jordan Love"
-  },
-  "3046779": {
-   "p": 0.872,
-   "name": "Jared Goff"
-  },
-  "12483": {
-   "p": 0.894,
-   "name": "Matthew Stafford"
-  },
-  "14880": {
-   "p": 0.85,
-   "name": "Kirk Cousins"
-  },
   "3139477": {
    "p": 0.79,
    "name": "Patrick Mahomes"
@@ -46,6 +22,10 @@
    "p": 0.805,
    "name": "Bryce Young"
   },
+  "4036378": {
+   "p": 0.832,
+   "name": "Jordan Love"
+  },
   "4035671": {
    "p": 0.66,
    "name": "Tyler Huntley"
@@ -62,9 +42,21 @@
    "p": 0.868,
    "name": "Joe Burrow"
   },
+  "2578570": {
+   "p": 0.807,
+   "name": "Jacoby Brissett"
+  },
   "3917315": {
    "p": 0.697,
    "name": "Kyler Murray"
+  },
+  "3046779": {
+   "p": 0.861,
+   "name": "Jared Goff"
+  },
+  "14880": {
+   "p": 0.801,
+   "name": "Kirk Cousins"
   },
   "15864": {
    "p": 0.78,
@@ -97,6 +89,14 @@
   "4038941": {
    "p": 0.754,
    "name": "Justin Herbert"
+  },
+  "12483": {
+   "p": 0.922,
+   "name": "Matthew Stafford"
+  },
+  "4426338": {
+   "p": 0.766,
+   "name": "Bo Nix"
   },
   "4431452": {
    "p": 0.803,
