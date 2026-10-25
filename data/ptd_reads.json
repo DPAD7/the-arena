@@ -2,62 +2,6 @@
  "at": "2026-10-25",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4361741": {
-   "p": 0.851,
-   "name": "Brock Purdy"
-  },
-  "4360423": {
-   "p": 0.78,
-   "name": "Michael Penix Jr."
-  },
-  "3122840": {
-   "p": 0.635,
-   "name": "Deshaun Watson"
-  },
-  "4688380": {
-   "p": 0.682,
-   "name": "Cam Ward"
-  },
-  "3917792": {
-   "p": 0.765,
-   "name": "Daniel Jones"
-  },
-  "3917315": {
-   "p": 0.778,
-   "name": "Kyler Murray"
-  },
-  "4242512": {
-   "p": 0.59,
-   "name": "Malik Willis"
-  },
-  "15864": {
-   "p": 0.739,
-   "name": "Geno Smith"
-  },
-  "3052587": {
-   "p": 0.71,
-   "name": "Baker Mayfield"
-  },
-  "4685720": {
-   "p": 0.784,
-   "name": "Bryce Young"
-  },
-  "3915511": {
-   "p": 0.832,
-   "name": "Joe Burrow"
-  },
-  "4035671": {
-   "p": 0.687,
-   "name": "Tyler Huntley"
-  },
-  "4433970": {
-   "p": 0.686,
-   "name": "J.J. McCarthy"
-  },
-  "4432577": {
-   "p": 0.813,
-   "name": "C.J. Stroud"
-  },
   "4426338": {
    "p": 0.749,
    "name": "Bo Nix"
@@ -98,13 +42,53 @@
    "p": 0.696,
    "name": "Tanner McKee"
   },
+  "4685720": {
+   "p": 0.805,
+   "name": "Bryce Young"
+  },
+  "4035671": {
+   "p": 0.66,
+   "name": "Tyler Huntley"
+  },
   "3918298": {
    "p": 0.862,
    "name": "Josh Allen"
   },
+  "4688380": {
+   "p": 0.661,
+   "name": "Cam Ward"
+  },
+  "3915511": {
+   "p": 0.868,
+   "name": "Joe Burrow"
+  },
+  "3917315": {
+   "p": 0.697,
+   "name": "Kyler Murray"
+  },
+  "15864": {
+   "p": 0.78,
+   "name": "Geno Smith"
+  },
+  "3122840": {
+   "p": 0.565,
+   "name": "Deshaun Watson"
+  },
   "8439": {
    "p": 0.725,
    "name": "Aaron Rodgers"
+  },
+  "4360423": {
+   "p": 0.684,
+   "name": "Michael Penix Jr."
+  },
+  "3052587": {
+   "p": 0.763,
+   "name": "Baker Mayfield"
+  },
+  "3917792": {
+   "p": 0.72,
+   "name": "Daniel Jones"
   },
   "4360310": {
    "p": 0.835,
@@ -118,6 +102,10 @@
    "p": 0.803,
    "name": "Drake Maye"
   },
+  "4242512": {
+   "p": 0.636,
+   "name": "Malik Willis"
+  },
   "4426348": {
    "p": 0.794,
    "name": "Jayden Daniels"
@@ -125,6 +113,18 @@
   "4360689": {
    "p": 0.76,
    "name": "Tyler Shough"
+  },
+  "4361741": {
+   "p": 0.851,
+   "name": "Brock Purdy"
+  },
+  "4433970": {
+   "p": 0.686,
+   "name": "J.J. McCarthy"
+  },
+  "4432577": {
+   "p": 0.813,
+   "name": "C.J. Stroud"
   }
  },
  "by_game": {
