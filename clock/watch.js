@@ -376,7 +376,10 @@ export function news(slips, idx, games, prev, rows) {
     }
     // red zone, for his club on the ball
     if (!done && g.state === "in" && g.rz && g.teamId && g.teamId[g.poss] === v.team && v.kind !== "h2h") {
-      const k = "rz@" + v.gid + "@" + v.team + "@" + g.sc[0] + "-" + g.sc[1] + "@" + (g.clock || "").split(" ").pop().slice(0, 2);
+      /* keyed on the moment, not the score: the touchdown and its extra point
+         move the score while the red-zone flag is still up, and the same
+         "1st & 5 · 10:01" went out twice, 13-3 then 14-3 (Jose, Oct 25, 2026) */
+      const k = "rz@" + v.gid + "@" + v.team + "@" + (g.clock || "").replace(/\s+/g, "");
       if (!seen["rz@" + v.gid + v.team] && !p["rz" + v.team]) {
         seen["rz@" + v.gid + v.team] = 1;
         out.push({ tag: "slip:" + bet.id, key: k, type: "redzone", title: v.team + " in the red zone", body: (g.down ? g.down + ". " : "") + (v.qbName ? last(v.qbName) + " " + (v.kind === "ptd" ? v.n + "+ PTD" : v.kind === "atd" ? "1+ rushing TD" : "") : v.team + " ML") + " · " + g.clock + ".", url: "/#game=" + v.gid });
