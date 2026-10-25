@@ -1,5 +1,5 @@
 {
- "at": "2026-10-24",
+ "at": "2026-10-25",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "8439": {
@@ -121,23 +121,9 @@
   "4431452": {
    "p": 0.803,
    "name": "Drake Maye"
-  },
-  "4431611": {
-   "p": 0.861,
-   "name": "Caleb Williams"
   }
  },
  "by_game": {
-  "401873010": {
-   "4431452": {
-    "p": 0.822,
-    "name": "Drake Maye"
-   },
-   "4431611": {
-    "p": 0.861,
-    "name": "Caleb Williams"
-   }
-  },
   "401873011": {
    "8439": {
     "p": 0.77,
