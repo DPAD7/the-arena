@@ -824,9 +824,20 @@ export class Clock {
     const subs = (await this.ctx.storage.get("subs")) || {};
     const jwk = JSON.parse(this.env.VAPID_JWK);
     let n = 0;
+    /* claimed and stored before a single push goes out: two passes running
+       side by side each read "sent" before either wrote it back, and the same
+       red-zone alert came twice a minute apart (Jose, Oct 25, 2026). With no
+       network wait between this read and this write, the second pass sees
+       the first one's keys */
+    const todo = [];
     for (const m of msgs) {
       if (sent[m.key] || (m.type in prefs && !prefs[m.type])) continue;
       sent[m.key] = Date.now();
+      todo.push(m);
+    }
+    if (!todo.length) return 0;
+    await this.ctx.storage.put("sent", sent);
+    for (const m of todo) {
       for (const [ep, sub] of Object.entries(subs)) {
         try {
           // one alert per slip that replaces itself as its legs move -- the free

@@ -34,8 +34,8 @@ import ufc_reads as U  # noqa: E402
 import ufc_winner_lab as L1  # noqa: E402
 
 UA = "TheArenaBoard/1.0 (https://the-arenasports.pages.dev; research, one page at a time)"
-FROM = "2012-01-01"          # history for the stackers (blind model p from here)
-LOOP = "2015-01-01"          # the learning loop starts here
+FROM = "2010-01-01"          # blind model p, stack history and the learning loop all start at the first card here
+LOOP = "2010-01-01"          # the learning loop starts here (Jose, Oct 25: 2010 to now, every card)
 TEST = "2022-01-01"          # graded from here (round 1 comparable)
 
 
@@ -207,7 +207,7 @@ def fetch_bfo(out, limit=4000):
     def enqueue(s):
         for (ev, day, mu, mn, *_r) in bfo_parse(s):
             ou = _r[4]
-            if ev and "UFC" in ev and day and day >= dt.date(2016, 6, 1):
+            if ev and "UFC" in ev and day and day >= dt.date.fromisoformat(os.environ.get("BFO_FROM", "2016-06-01")):
                 for u in (mu, ou):
                     if u not in seen:
                         seen.add(u)
@@ -298,6 +298,31 @@ def bfo_moves(out, X):
     return pd.DataFrame(R, index=X.index)
 
 
+def walk_min(X, FE, y, base_tr, test, params, per="card", min_n=300):
+    """round 1's blind walk, leaving p empty for cards with under min_n earlier bouts (the first 2010 cards:
+       the records start in 2010, so there is nothing before them to learn from)"""
+    P = np.full(len(X), np.nan)
+    if per == "year":
+        groups = [(pd.Timestamp("%d-01-01" % yr), (X.yr == yr).values & test) for yr in sorted(X.yr[test].unique())]
+        # a year with no history before Jan 1: refit each month instead, so 2010 learns from its own early cards
+        g2 = []
+        for d, te in groups:
+            if (base_tr & (X.date < d).values).sum() < min_n:
+                mo = X.date.dt.to_period("M")
+                for m in sorted(mo[te].unique()):
+                    g2.append((m.to_timestamp(), te & (mo == m).values))
+            else:
+                g2.append((d, te))
+        groups = g2
+    else:
+        groups = [(pd.Timestamp(d), (X.date == d).values & test) for d in sorted(X.date[test].unique())]
+    for d, te in groups:
+        tr = base_tr & (X.date < d).values
+        if tr.sum() >= min_n:
+            P[te] = L1.fit_predict(FE, y, tr, te, params)
+    return P
+
+
 # ================================================================== scoring helpers
 def score(name, X, P, mask, note=""):
     s, g = L1.summary(name, X, P, mask, note)
@@ -345,14 +370,14 @@ def run(a):
     if os.path.exists(fn):
         Pmod = np.load(fn)
     else:
-        Pmod = L1.walk(X, FE2, y, base_tr, hist, SLOW, per=a.per)
+        Pmod = walk_min(X, FE2, y, base_tr, hist, SLOW, per=a.per)
         np.save(fn, Pmod)
     print("model walk ready %.0fs" % (time.time() - t0))
     fn0 = os.path.join(out, "pmod0_%s_%s.npy" % (a.per, FROM[:4]))
     if os.path.exists(fn0):
         Pmod0 = np.load(fn0)
     else:
-        Pmod0 = L1.walk(X, FE0, y, base_tr, hist, dict(U.GBM), per=a.per)
+        Pmod0 = walk_min(X, FE0, y, base_tr, hist, dict(U.GBM), per=a.per)
         np.save(fn0, Pmod0)
 
     W = wiki_side_facts(out, h, X)
@@ -583,6 +608,20 @@ def matchmaking(h, X):
     return pd.DataFrame(out, index=X.index)
 
 
+def newton(Z, y, w=None, it=8):
+    """the stack's logistic fit, no intercept, mirrored sides and L2 as sklearn C=1 (2*sum ll + |w|^2/2)"""
+    w = np.zeros(Z.shape[1]) if w is None else w.copy()
+    for _ in range(it):
+        p = 1 / (1 + np.exp(-Z @ w))
+        g = 2 * Z.T @ (p - y) + w
+        H = 2 * (Z * (p * (1 - p))[:, None]).T @ Z + np.eye(len(w))
+        st = np.linalg.solve(H, g)
+        w -= st
+        if np.abs(st).max() < 1e-6:
+            break
+    return w
+
+
 # ================================================================== the learning loop
 def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B, K=5, MIN_N=40, GAIN=None, NOMINATE=None):
     GAIN = float(os.environ.get("LOOP_GAIN", 0.15)) if GAIN is None else GAIN
@@ -597,14 +636,15 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
     lmod = L1.logit(np.where(np.isfinite(Pmod), Pmod, .5))
     lmod0 = L1.logit(np.where(np.isfinite(Pmod0), Pmod0, .5))
     stackm = md & has & np.isfinite(Pmod) & (X.date >= D0).values
-    evalm = md & (X.date >= pd.Timestamp("2013-01-01")).values
+    evalm = md & (X.date >= D0).values
     pre = md & (X.date >= D0).values & (X.date < DL).values
     pool = {}
 
     def put(name, v):
         v = np.nan_to_num(np.asarray(v, float), nan=0.0, posinf=0.0, neginf=0.0)
-        sd = v[pre].std()
-        if sd > 0 and (v[pre] != 0).mean() > 0.003:
+        nz = v[md] != 0                       # scale only: no outcome enters it
+        sd = v[md][nz].std() if nz.sum() > 30 else 0
+        if sd > 0 and nz.mean() > 0.003:
             pool[name] = v / sd
     put("lmod", lmod)
     put("lm", lm)
@@ -654,15 +694,15 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
         Z = np.column_stack([pool[n] for n in S])
         P = np.full(len(X), np.nan)
         dv = X.date.values
+        w = np.zeros(Z.shape[1])
         for d in days:
             te = evalm & (dv == d)
             tr = stackm & (dv < d)
-            if tr.sum() < 200:
+            if tr.sum() < 100:                  # the first cards: no blind history yet, the favorite
                 P[te] = np.where(has[te], pm[te], 0.5)
                 continue
-            lr = LogisticRegression(C=1.0, fit_intercept=False, max_iter=500).fit(
-                np.vstack([Z[tr], -Z[tr]]), np.concatenate([y[tr], 1 - y[tr]]))
-            P[te] = lr.predict_proba(Z[te])[:, 1]
+            w = newton(Z[tr], y[tr], w)
+            P[te] = 1 / (1 + np.exp(-Z[te] @ w))
         cache[S] = P
         return P
 
@@ -704,20 +744,41 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
                 if v < -0.5:                      # the term stood against the pick
                     stat[n][0] += 1
                     stat[n][1] += int(not right)  # and the pick lost: the term was right
-            if not right:
-                sw = -sgn_pick
-                ori = {n: pool[n][j] * sw for n in names if n not in ("lmod", "lm")}
-                top = sorted([(v, n) for n, v in ori.items() if v > 0.5], reverse=True)[:5]
-                facts = [n.split(":")[1] for n in ("fact:sn", "fact:miss", "fact:remat", "fact:mv") if n in ori and ori[n] > 0]
-                lessons.append(dict(card_date=str(pd.Timestamp(d).date()), card=X.event[j], bout="%s vs %s" % (X.a[j], X.b[j]),
-                                    pick=X.a[j] if ia else X.b[j], pick_p=round(float(max(P[j], 1 - P[j])), 3),
-                                    winner=X.b[j] if ia else X.a[j], method=X.method[j], round=rnd.get(X.fight_url[j], ""),
-                                    market_fav=(X.a[j] if pm[j] > .5 else X.b[j]) if has[j] else "",
-                                    p_mkt_pick=round(float(pm[j] if ia else 1 - pm[j]), 3) if has[j] else np.nan,
-                                    model_pick=(X.a[j] if Pmod[j] > .5 else X.b[j]),
-                                    suspected_cause=top[0][1] if top else ("coin flip" if max(pm[j], 1 - pm[j]) < .6 else "upset, nothing pointed to it"),
-                                    features_involved="; ".join("%s %+.1f" % (n, v) for v, n in top),
-                                    fight_week_or_move_toward_winner=", ".join(facts), graded=bool(test[j])))
+            sw = 1 if won_a else -1                     # toward the winner
+            ori = {n: pool[n][j] * sw for n in names if n not in ("lmod", "lm")}
+
+            def tops(vals, k):
+                out_, seen_ = [], set()
+                for v, n in sorted(vals, reverse=True):
+                    b_ = n.replace(" x pickem", "").replace("style:d_", "f:")
+                    if b_ not in seen_:
+                        seen_.add(b_)
+                        out_.append((v, n))
+                    if len(out_) == k:
+                        break
+                return out_
+            tw_ = tops([(v, n) for n, v in ori.items() if v > 0.5], 5)
+            tl_ = tops([(-v, n) for n, v in ori.items() if v < -0.5], 3)
+            fav_a = pm[j] > .5 if has[j] else Pmod[j] > .5
+            upset = has[j] and (fav_a != won_a)
+            facts = [n.split(":")[1] for n in ("fact:sn", "fact:miss", "fact:remat", "fact:mv", "fact:repl") if n in ori and ori[n] > 0]
+            if right:
+                cause = "pick right" + (" (an upset the pick saw)" if upset else "")
+            elif tw_:
+                cause = tw_[0][1]
+            else:
+                cause = "coin flip" if has[j] and max(pm[j], 1 - pm[j]) < .6 else "upset, nothing pointed to it"
+            lessons.append(dict(card_date=str(pd.Timestamp(d).date()), card=X.event[j], bout="%s vs %s" % (X.a[j], X.b[j]),
+                                result="hit" if right else "miss", upset=bool(upset),
+                                pick=X.a[j] if ia else X.b[j], pick_p=round(float(max(P[j], 1 - P[j])), 3),
+                                winner=X.a[j] if won_a else X.b[j], method=X.method[j], round=rnd.get(X.fight_url[j], ""),
+                                market_fav=(X.a[j] if pm[j] > .5 else X.b[j]) if has[j] else "",
+                                p_mkt_winner=round(float(pm[j] if won_a else 1 - pm[j]), 3) if has[j] else np.nan,
+                                model_pick=(X.a[j] if Pmod[j] > .5 else X.b[j]),
+                                suspected_cause=cause,
+                                pointed_to_winner="; ".join("%s %+.1f" % (n, v) for v, n in tw_),
+                                pointed_to_loser="; ".join("%s %+.1f" % (n, v) for v, n in tl_),
+                                fight_week_or_move_toward_winner=", ".join(facts), graded=bool(test[j])))
         # ---- nominate and test (results of this card are now known)
         seen = lp & (X.date.values <= d) | (evalm & (X.date.values < DL))
         known = evalm & (X.date.values <= d)
@@ -755,6 +816,26 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
         if i % 40 == 0:
             print("card %d/%d %s |S|=%d walks %d %.0fs" % (i, len(ldays), str(pd.Timestamp(d).date()), len(S), len(cache), time.time() - tw), flush=True)
     Lz = pd.DataFrame(lessons)
+    ups = []
+    dm = md & has & (X.date >= D0).values
+    dog_a = pm < .5
+    ydog = np.where(dog_a, y == 1, y == 0).astype(float)
+    pdog = np.where(dog_a, pm, 1 - pm)
+    for n in names:
+        if n in ("lmod", "lm"):
+            continue
+        tdog = pool[n] * np.where(dog_a, 1, -1)       # the term, toward the underdog
+        for lab, m in (("2010-21", dm & ~test), ("2022-26", dm & test)):
+            k = m & (tdog > 0.5)
+            if k.sum() >= 30:
+                ups.append(dict(term=n, window=lab, bouts=int(k.sum()), dog_won=100 * ydog[k].mean(), dog_priced=100 * pdog[k].mean(),
+                                excess=100 * (ydog[k].mean() - pdog[k].mean())))
+    UP = pd.DataFrame(ups)
+    if len(UP):
+        UP = UP.pivot_table(index="term", columns="window", values=["bouts", "dog_won", "dog_priced", "excess"])
+        UP.columns = ["%s_%s" % c for c in UP.columns]
+        UP = UP.sort_values("excess_2010-21", ascending=False)
+        UP.to_csv(os.path.join(out, "upset_signals.csv"))
     Lz.to_csv(os.path.join(out, "lessons.csv"), index=False)
     pd.DataFrame(adopted).to_csv(os.path.join(out, "adoptions.csv"), index=False)
     stt = pd.DataFrame([dict(term=n, against_pick=v[0], term_right=v[1], rate=100 * v[1] / v[0] if v[0] else np.nan,
@@ -764,8 +845,8 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
     Pl = np.where(np.isfinite(Ploop), Ploop, pm)
     P4 = walk_set(["lmod", "lm"])
     rows = []
-    for nm, P in (("loop (learning, 2015 start)", Pl), ("V4 static blend, same stack", P4), ("market favorite", np.where(has, pm, Pmod))):
-        for lab, m in (("graded 2022-26", test), ("loop 2015-26", lp)):
+    for nm, P in (("loop (learning, 2010 start)", Pl), ("V4 static blend, same stack", P4), ("market favorite", np.where(has, pm, Pmod))):
+        for lab, m in (("graded 2022-26", test), ("full 2010-26", lp)):
             s_, g = L1.summary(nm, X, P, m)
             rows.append(dict(version=nm, window=lab, bouts=s_["bouts"], cards=s_["cards"], acc=round(s_["acc"], 1),
                              mean_card=round(s_["mean_card"], 1), ge75=round(s_["ge75"], 1)))
@@ -784,6 +865,7 @@ def loop(out, h, X, y, md, test, has, pm, Pmod, Pmod0, FE2, sty, terms, pk, W, B
             Cv["%s_t%d" % (nm, w)] = Cv[nm].rolling(w).mean()
         Cv["edge_t%d" % w] = Cv["loop_t%d" % w] - Cv["fav_t%d" % w]
     Cv["n_lessons"] = [int((Lz.card_date <= d).sum()) if len(Lz) else 0 for d in Cv.date]
+    Cv["n_adopted"] = [sum(1 for x in adopted if x["date"] <= d and x["action"] == "adopt") - sum(1 for x in adopted if x["date"] <= d and x["action"] == "drop") for d in Cv.date]
     Cv.to_csv(os.path.join(out, "learning_curve.csv"), index=False)
     ok = Cv.dropna(subset=["edge_t25"])
     sl = np.polyfit(np.arange(len(ok)), ok.edge_t25.values, 1)[0] * 100 if len(ok) > 10 else np.nan
