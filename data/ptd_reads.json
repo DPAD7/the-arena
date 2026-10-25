@@ -2,14 +2,6 @@
  "at": "2026-10-25",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "8439": {
-   "p": 0.77,
-   "name": "Aaron Rodgers"
-  },
-  "4360689": {
-   "p": 0.76,
-   "name": "Tyler Shough"
-  },
   "4361741": {
    "p": 0.851,
    "name": "Brock Purdy"
@@ -110,6 +102,10 @@
    "p": 0.862,
    "name": "Josh Allen"
   },
+  "8439": {
+   "p": 0.725,
+   "name": "Aaron Rodgers"
+  },
   "4360310": {
    "p": 0.835,
    "name": "Trevor Lawrence"
@@ -125,6 +121,10 @@
   "4426348": {
    "p": 0.794,
    "name": "Jayden Daniels"
+  },
+  "4360689": {
+   "p": 0.76,
+   "name": "Tyler Shough"
   }
  },
  "by_game": {
