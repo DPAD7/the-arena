@@ -1,21 +1,5 @@
 [
  {
-  "id": "O8V3GG",
-  "head": "College Football 30% Profit Boost",
-  "pct": 30,
-  "start": "2026-10-24T06:00:00.0000000Z",
-  "end": "2026-10-25T06:00:00.0000000Z",
-  "sport": "college-football",
-  "game": "",
-  "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
-  "types": [
-   "any"
-  ]
- },
- {
   "id": "RRQYN8",
   "head": "NFL Touchdown Scorers 30% Profit Boost",
   "pct": 30,
@@ -45,6 +29,22 @@
   "maxWager": 20.0,
   "types": [
    "any"
+  ]
+ },
+ {
+  "id": "PWOVXX",
+  "head": "KC Chiefs @ SEA Seahawks 30% SGP Boost",
+  "pct": 30,
+  "start": "2026-10-25T10:00:00.0000000Z",
+  "end": "2026-10-26T03:59:00.0000000Z",
+  "sport": "",
+  "game": "KC Chiefs @ SEA Seahawks",
+  "gid": "",
+  "minOdds": "+300",
+  "minLegs": 3,
+  "maxWager": 25.0,
+  "types": [
+   "sgp"
   ]
  }
 ]
