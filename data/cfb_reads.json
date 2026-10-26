@@ -1,5 +1,5 @@
 {
- "at": "2026-10-26T22:20:18Z",
+ "at": "2026-10-26T23:21:01Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,238 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401860905": {
-   "away": "SDSU",
-   "home": "CSU",
-   "kick": "2026-10-24T22:30Z",
-   "ml": {
-    "pick": "SDSU",
-    "p": 0.592124,
-    "call": null,
-    "why": [
-     "Margin rating: SDSU -5.0, CSU -9.4",
-     "Rushing yards allowed per game: SDSU 185, CSU 288",
-     "Points allowed per game: SDSU 35.5, CSU 47.0",
-     "Last 3 games, average margin: SDSU -7.7, CSU -23.3"
-    ],
-    "qbs": [
-     "Jayden Denegal",
-     "K'saan Farrar"
-    ]
-   },
-   "h2h": {
-    "pick": "K'saan Farrar",
-    "pick_id": "5212610",
-    "team": "CSU",
-    "p": 0.747623,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4685311",
-      "Jayden Denegal"
-     ],
-     [
-      "5212610",
-      "K'saan Farrar"
-     ]
-    ]
-   },
-   "ptd": {
-    "4685311": {
-     "name": "Jayden Denegal",
-     "team": "SDSU",
-     "p1": 0.676404,
-     "take1": false,
-     "p2": 0.334392,
-     "take2": false,
-     "has_line": true
-    },
-    "5212610": {
-     "name": "K'saan Farrar",
-     "team": "CSU",
-     "p1": 0.805985,
-     "take1": false,
-     "p2": 0.494287,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856836": {
-   "away": "COLO",
-   "home": "OKST",
-   "kick": "2026-10-24T23:00Z",
-   "ml": {
-    "pick": "OKST",
-    "p": 0.740829,
-    "call": null,
-    "why": [
-     "Points per game: OKST 32.8, COLO 13.0",
-     "Margin rating: OKST +3.3, COLO -3.6",
-     "Last 3 games, average margin: OKST +9.3, COLO -11.7",
-     "Passing yards per game: OKST 323, COLO 225"
-    ],
-    "qbs": [
-     "Isaac Wilson",
-     "Drew Mestemaker"
-    ]
-   },
-   "h2h": {
-    "pick": "Drew Mestemaker",
-    "pick_id": "5219834",
-    "team": "OKST",
-    "p": 0.763539,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5079771",
-      "Isaac Wilson"
-     ],
-     [
-      "5219834",
-      "Drew Mestemaker"
-     ]
-    ]
-   },
-   "ptd": {
-    "5219834": {
-     "name": "Drew Mestemaker",
-     "team": "OKST",
-     "p1": 0.9009,
-     "take1": true,
-     "p2": 0.686882,
-     "take2": false,
-     "has_line": true
-    },
-    "5079771": {
-     "name": "Isaac Wilson",
-     "team": "COLO",
-     "p1": 0.74091,
-     "take1": false,
-     "p2": 0.423774,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401858276": {
-   "away": "VT",
-   "home": "CLEM",
-   "kick": "2026-10-24T23:00Z",
-   "ml": {
-    "pick": "CLEM",
-    "p": 0.549202,
-    "call": null,
-    "why": [
-     "Average margin: CLEM -3.8, VT +7.0",
-     "Days of rest: CLEM 20, VT 7",
-     "Passing yards allowed per game: CLEM 217, VT 251",
-     "Turnovers per game: CLEM 1.8, VT 1.3"
-    ],
-    "qbs": [
-     "Ethan Grunkemeyer",
-     "Tait Reynolds"
-    ]
-   },
-   "h2h": {
-    "pick": "Ethan Grunkemeyer",
-    "pick_id": "5144078",
-    "team": "VT",
-    "p": 0.596963,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5144078",
-      "Ethan Grunkemeyer"
-     ],
-     [
-      "5159078",
-      "Tait Reynolds"
-     ]
-    ]
-   },
-   "ptd": {
-    "5159078": {
-     "name": "Tait Reynolds",
-     "team": "CLEM",
-     "p1": 0.659001,
-     "take1": false,
-     "p2": 0.28597,
-     "take2": false,
-     "has_line": true
-    },
-    "5144078": {
-     "name": "Ethan Grunkemeyer",
-     "team": "VT",
-     "p1": 0.759855,
-     "take1": false,
-     "p2": 0.426083,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401869935": {
-   "away": "GAST",
-   "home": "ARST",
-   "kick": "2026-10-24T23:00Z",
-   "ml": {
-    "pick": "GAST",
-    "p": 0.595015,
-    "call": null,
-    "why": [
-     "Margin rating: GAST -1.3, ARST -5.9",
-     "Points per game: GAST 32.0, ARST 23.3",
-     "Rushing yards allowed per game: GAST 160, ARST 215",
-     "Rushing yards per game: GAST 190, ARST 112"
-    ],
-    "qbs": [
-     "Cameran Brown",
-     "Trey Owens"
-    ]
-   },
-   "h2h": {
-    "pick": "Trey Owens",
-    "pick_id": "5123665",
-    "team": "ARST",
-    "p": 0.56149,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5193926",
-      "Cameran Brown"
-     ],
-     [
-      "5123665",
-      "Trey Owens"
-     ]
-    ]
-   },
-   "ptd": {
-    "5123665": {
-     "name": "Trey Owens",
-     "team": "ARST",
-     "p1": 0.762573,
-     "take1": false,
-     "p2": 0.43377,
-     "take2": false,
-     "has_line": true
-    },
-    "5193926": {
-     "name": "Cameran Brown",
-     "team": "GAST",
-     "p1": 0.843636,
-     "take1": false,
-     "p2": 0.565451,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401856729": {
    "away": "VAN",
    "home": "UK",
@@ -1306,7 +1074,7 @@
     "pick": "Noah Fifita",
     "pick_id": "4801717",
     "team": "ARIZ",
-    "p": 0.67958,
+    "p": 0.675637,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1324,18 +1092,18 @@
     "4801717": {
      "name": "Noah Fifita",
      "team": "ARIZ",
-     "p1": 0.829589,
+     "p1": 0.827028,
      "take1": false,
-     "p2": 0.529402,
+     "p2": 0.525209,
      "take2": false,
      "has_line": true
     },
     "5126468": {
      "name": "Will Hammond",
      "team": "TTU",
-     "p1": 0.734475,
+     "p1": 0.737973,
      "take1": false,
-     "p2": 0.362553,
+     "p2": 0.36645,
      "take2": false,
      "has_line": true
     }
@@ -1927,7 +1695,7 @@
    "kick": "2026-10-31T17:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.562589,
+    "p": 0.547652,
     "call": null,
     "why": [
      "Average margin: ODU -15.3, MRSH -7.8",
