@@ -1,5 +1,5 @@
 {
- "at": "2026-10-27T01:10:42Z",
+ "at": "2026-10-27T03:32:27Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,122 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401864527": {
-   "away": "NDSU",
-   "home": "UNM",
-   "kick": "2026-10-25T02:00Z",
-   "ml": {
-    "pick": "UNM",
-    "p": 0.605359,
-    "call": null,
-    "why": [
-     "Points per game: UNM 33.6, NDSU 28.0",
-     "Last 3 games, average margin: UNM +21.0, NDSU +12.0",
-     "Rushing yards allowed per game: UNM 107, NDSU 128",
-     "Points allowed per game: UNM 11.2, NDSU 13.2"
-    ],
-    "qbs": [
-     "Nathan Hayes",
-     "Toa Fa'avae"
-    ]
-   },
-   "h2h": {
-    "pick": "Nathan Hayes",
-    "pick_id": "5087156",
-    "team": "NDSU",
-    "p": 0.545791,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5087156",
-      "Nathan Hayes"
-     ],
-     [
-      "5261479",
-      "Toa Fa'avae"
-     ]
-    ]
-   },
-   "ptd": {
-    "5261479": {
-     "name": "Toa Fa'avae",
-     "team": "UNM",
-     "p1": 0.560024,
-     "take1": false,
-     "p2": 0.206603,
-     "take2": false,
-     "has_line": true
-    },
-    "5087156": {
-     "name": "Nathan Hayes",
-     "team": "NDSU",
-     "p1": 0.587345,
-     "take1": false,
-     "p2": 0.236241,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856837": {
-   "away": "HOU",
-   "home": "UTAH",
-   "kick": "2026-10-25T02:15Z",
-   "ml": {
-    "pick": "UTAH",
-    "p": 0.678446,
-    "call": null,
-    "why": [
-     "Points allowed per game: UTAH 15.0, HOU 23.5",
-     "Margin rating: UTAH +12.5, HOU +9.5",
-     "Passing yards allowed per game: UTAH 234, HOU 288",
-     "Points per game: UTAH 35.0, HOU 33.0"
-    ],
-    "qbs": [
-     "Conner Weigman",
-     "Devon Dampier"
-    ]
-   },
-   "h2h": {
-    "pick": "Devon Dampier",
-    "pick_id": "5105849",
-    "team": "UTAH",
-    "p": 0.610475,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4685574",
-      "Conner Weigman"
-     ],
-     [
-      "5105849",
-      "Devon Dampier"
-     ]
-    ]
-   },
-   "ptd": {
-    "4685574": {
-     "name": "Conner Weigman",
-     "team": "HOU",
-     "p1": 0.8434,
-     "take1": false,
-     "p2": 0.565962,
-     "take2": false,
-     "has_line": true
-    },
-    "5105849": {
-     "name": "Devon Dampier",
-     "team": "UTAH",
-     "p1": 0.834581,
-     "take1": false,
-     "p2": 0.539447,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401871071": {
    "away": "DEL",
    "home": "WKU",
@@ -146,7 +30,7 @@
     "pick": "Nick Minicucci",
     "pick_id": "5153846",
     "team": "DEL",
-    "p": 0.564778,
+    "p": 0.591185,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -164,18 +48,18 @@
     "5153846": {
      "name": "Nick Minicucci",
      "team": "DEL",
-     "p1": 0.8538,
+     "p1": 0.866782,
      "take1": false,
-     "p2": 0.577852,
+     "p2": 0.602263,
      "take2": false,
      "has_line": true
     },
     "4920158": {
      "name": "Brock Glenn",
      "team": "WKU",
-     "p1": 0.726329,
+     "p1": 0.70433,
      "take1": false,
-     "p2": 0.379653,
+     "p2": 0.356184,
      "take2": false,
      "has_line": true
     }
@@ -396,18 +280,18 @@
     "4869991": {
      "name": "Caden Veltkamp",
      "team": "FAU",
-     "p1": 0.890311,
+     "p1": 0.893548,
      "take1": false,
-     "p2": 0.66452,
+     "p2": 0.672258,
      "take2": false,
      "has_line": true
     },
     "4801307": {
      "name": "Tayven Jackson",
      "team": "UNT",
-     "p1": 0.924749,
+     "p1": 0.927053,
      "take1": true,
-     "p2": 0.744757,
+     "p2": 0.751337,
      "take2": true,
      "has_line": true
     }
@@ -784,7 +668,7 @@
     "pick": "Kevin Jennings",
     "pick_id": "5084084",
     "team": "SMU",
-    "p": 0.668302,
+    "p": 0.67229,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -802,18 +686,18 @@
     "4685694": {
      "name": "Steve Angeli",
      "team": "SYR",
-     "p1": 0.797515,
+     "p1": 0.794591,
      "take1": false,
-     "p2": 0.475022,
+     "p2": 0.470828,
      "take2": false,
      "has_line": true
     },
     "5084084": {
      "name": "Kevin Jennings",
      "team": "SMU",
-     "p1": 0.870856,
+     "p1": 0.872869,
      "take1": false,
-     "p2": 0.609667,
+     "p2": 0.613664,
      "take2": false,
      "has_line": true
     }
@@ -1289,7 +1173,7 @@
    "kick": "2026-10-31T17:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.547652,
+    "p": 0.562589,
     "call": null,
     "why": [
      "Average margin: ODU -15.3, MRSH -7.8",
