@@ -1,5 +1,5 @@
 {
- "at": "2026-10-27 03:32 UTC",
+ "at": "2026-10-27 13:10 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -356,13 +356,11 @@
     "Bryce Young"
    ],
    "pick": "Bryce Young",
-   "lead": 2,
-   "complete": false,
-   "missing": [
-    "CAR J.Metchie III (12%)"
-   ],
+   "lead": 4,
+   "complete": true,
+   "missing": [],
    "score": [
-    0,
+    -2,
     2
    ],
    "why": [
@@ -378,6 +376,38 @@
    "game": "CAR@GB",
    "eid": 22127,
    "kick": "2026-10-30 00:15:00Z"
+  },
+  {
+   "qbs": [
+    "Kyler Murray",
+    "Jared Goff"
+   ],
+   "pick": "Jared Goff",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "MIN A.Jones (14%)",
+    "DET I.TeSlaa (11%)"
+   ],
+   "score": [
+    -1,
+    7
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 66.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "MIN@DET",
+   "eid": 22131,
+   "kick": "2026-11-01 18:00:00Z"
   }
  ]
 }
