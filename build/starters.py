@@ -413,6 +413,16 @@ def main():
                     swaps.append("%-4s %-20s -> %-20s (DraftKings)" % (club, g[i], book[0][1]))
                     g[i], g[i + 1] = book[0][1], book[0][0]
                 continue
+            # a man the wire has out comes off even with no one named to take
+            # his place: the side stays blank until the club names a starter or
+            # DraftKings prices one. Sayin sat on Ohio State's card at USC for
+            # ten days after Ryan Day ruled him out (Jose, Oct 28, 2026)
+            if g[i + 1] and (wire.get(str(g[i + 1])) or {}).get("status", "").lower() in STOP + ("doubtful",):
+                swaps.append("%-4s %-20s -> %-20s (wire: %s)"
+                             % (club, g[i], "(none named)", wire[str(g[i + 1])]["status"]))
+                g[i], g[i + 1] = "", ""
+                unprice(espn_id, side)
+                continue
             if club not in last or last[club][1] == str(g[i + 1]):
                 continue
             # never back to a man the wire has out: the last start is only a

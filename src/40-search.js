@@ -570,9 +570,19 @@
     function seasonOf(id, qs) {
       var q = qs[id];
       if (!q) return "";
-      var games = (q.g || []).slice().sort(function (a, b) { return a.d < b.d ? -1 : 1; });
-      var tot = { yd: 0, p: 0, ru: 0, w: 0, l: 0 };
-      var rows = games.map(function (g) {
+      /* the club's whole season: a game another passer started is on his
+         card too, with that man's face and name, so a lost job or a missed
+         start shows (Jose, Oct 28, 2026: "we need to see the entire season") */
+      var mine = {}, games = (q.g || []).map(function (g) { mine[g.d] = 1; return { g: g, by: id, bn: q.n }; });
+      Object.keys(qs).forEach(function (k) {
+        var x = qs[k];
+        if (k === id || x.t !== q.t || x.lg !== q.lg) return;
+        (x.g || []).forEach(function (g) { if (!mine[g.d]) { mine[g.d] = 1; games.push({ g: g, by: k, bn: x.n }); } });
+      });
+      games.sort(function (a, b) { return a.g.d < b.g.d ? -1 : 1; });
+      var tot = { yd: 0, p: 0, ru: 0, w: 0, l: 0 }, own = 0;
+      var rows = games.map(function (G) {
+        var g = G.g, me = G.by === id;
         var oy = null, on = "";
         Object.keys(qs).forEach(function (k) {
           var x = qs[k];
@@ -580,22 +590,23 @@
           (x.g || []).forEach(function (y) { if (y.d === g.d && y.o === q.t) { oy = y.yd; on = x.n; } });
         });
         var w = /^W/.test(g.r || ""), m = oy === null ? null : (g.yd || 0) - oy;
-        tot.yd += g.yd || 0; tot.p += g.p || 0; tot.ru += g.ru || 0; if (w) tot.w++; else if (/^L/.test(g.r || "")) tot.l++;
+        if (me) { own++; tot.yd += g.yd || 0; tot.p += g.p || 0; tot.ru += g.ru || 0; if (w) tot.w++; else if (/^L/.test(g.r || "")) tot.l++; }
         var lastOn = on ? (typeof famName === "function" ? famName(on) : on.split(" ").pop()) : "";
-        return '<tr><td class="ql-d">' + etDay(g.d) + '</td>' +
+        return '<tr' + (me ? "" : ' class="ql-other"') + '><td class="ql-d">' + etDay(g.d) + '</td>' +
           '<td><span class="ql-wl ' + (w ? "w" : "l") + '">' + esc((g.r || " ").charAt(0)) + '</span> <span class="ql-sc">' + esc(String(g.r || "").slice(2)) + '</span></td>' +
           '<td class="ql-o">' + (g.h ? "vs " : "@ ") + esc(g.o) + '</td>' +
+          '<td class="ql-q">' + face(G.by, q.lg) + '</td>' +
           '<td class="ql-n">' + (g.yd || 0) + '</td>' +
           '<td class="ql-n ' + (m > 0 ? "up" : m < 0 ? "dn" : "") + '">' + (m === null ? "—" : (m > 0 ? "+" : m < 0 ? "−" : "") + Math.abs(m)) + (lastOn ? "<i>" + esc(lastOn) + "</i>" : "") + '</td>' +
           '<td class="ql-n"><b' + ((g.p || 0) > 0 ? ' class="hit"' : "") + '>' + (g.p || 0) + '</b></td>' +
           '<td class="ql-n"><b' + ((g.ru || 0) > 0 ? ' class="hit"' : "") + '>' + (g.ru || 0) + '</b></td></tr>';
       }).join("");
-      var n = games.length || 1, nx = q.nx;
+      var n = own || 1, nx = q.nx;
       var next = nx ? "next: " + (nx.h ? "vs " : "@ ") + esc(nx.o) + ", " + new Date(nx.d).toLocaleString("en-US", { weekday: "short", hour: "numeric", minute: "2-digit", timeZone: "America/New_York" }) : "";
       return '<div class="ql-card"><div class="ql-hd">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><i>' + esc(q.t || "") + (next ? " · " + next : "") + '</i></div></div>' +
         '<div class="ql-sum"><div><b>' + tot.w + "-" + tot.l + '</b><span>Record</span></div><div><b>' + Math.round(tot.yd / n) + '</b><span>Yds / game</span></div>' +
         '<div><b>' + tot.p + '</b><span>Pass TD</span></div><div><b>' + tot.ru + '</b><span>Rush TD</span></div></div>' +
-        (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>Pass yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
+        (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>QB</th><th>Yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
                       : '<div class="ql-none">No games played yet</div>') + '</div>';
     }
     function popOpen(id, at, lg) {
