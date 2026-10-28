@@ -79,6 +79,30 @@ def box_of(gid):
     return men, score
 
 
+LINES = os.path.join(D, "data", "closing_lines.json")
+
+
+def line_of(gid, lg, cache):
+    """DraftKings' last line on a finished game, off ESPN's summary, asked once
+       and kept: [away ML, home ML, home spread] (Jose, Oct 28, 2026: the
+       moneyline and spread on each game of the season card)."""
+    if gid in cache:
+        return cache[gid]
+    from curl_cffi import requests as rq
+    try:
+        j = rq.get("https://site.api.espn.com/apis/site/v2/sports/football/%s/summary?event=%s"
+                   % ("nfl" if lg == "nfl" else "college-football", gid), impersonate="chrome", timeout=30).json()
+    except Exception:
+        return None
+    pc = j.get("pickcenter") or []
+    p = next((x for x in pc if "draft" in ((x.get("provider") or {}).get("name") or "").lower()), pc[0] if pc else None)
+    if not p:
+        cache[gid] = None
+        return None
+    cache[gid] = [(p.get("awayTeamOdds") or {}).get("moneyLine"), (p.get("homeTeamOdds") or {}).get("moneyLine"), p.get("spread")]
+    return cache[gid]
+
+
 def slot(iso):
     t = dt.datetime.fromisoformat(iso.replace("Z", "+00:00")).astimezone(ET)
     if t.weekday() != 6:
@@ -97,6 +121,7 @@ def main():
     # the NFL only, for now (Jose, Sep 28, 2026: "just for NFL now"); college
     # goes to its own file below, for the hold on a college face (Oct 8, 2026)
     cfb, cfb_allowed = {}, {}
+    lines = load(LINES, {})
     for lg, var in (("nfl", "SCHED"), ("cfb", "CFB")):
         qbs, allowed = (cfb, cfb_allowed) if lg == "cfb" else (qbs, allowed)
         for r in rows(s, var):
@@ -127,8 +152,15 @@ def main():
                     if mine not in (None, "") and theirs not in (None, ""):
                         a_, b_ = int(mine), int(theirs)
                         res = ("W " if a_ > b_ else "L " if a_ < b_ else "T ") + "%d-%d" % (a_, b_)
-                    q["g"].append({"d": iso, "o": them, "h": side == 1, "r": res, "yd": line[0],
-                                   "p": line[1], "ru": line[2], "px": px, "sl": slot(iso), "att": line[3]})
+                    gm = {"d": iso, "o": them, "h": side == 1, "r": res, "yd": line[0],
+                          "p": line[1], "ru": line[2], "px": px, "sl": slot(iso), "att": line[3]}
+                    cl = line_of(gid, lg, lines)
+                    if cl:
+                        if cl[side] is not None:
+                            gm["ml"] = cl[side]
+                        if cl[2] is not None:
+                            gm["sp"] = cl[2] if side == 1 else -cl[2]
+                    q["g"].append(gm)
                 elif kick > now - dt.timedelta(hours=4):
                     if q["nx"] and q["nx"]["d"] <= iso:
                         continue
@@ -137,6 +169,7 @@ def main():
                     q["nx"] = {"d": iso, "gid": gid, "o": them, "h": side == 1, "px": px, "sl": slot(iso),
                                "wx": wx, "inj": (w.get("status") or "") if w else ""}
     qbs, allowed = nfl, nfl_allowed
+    json.dump(lines, open(LINES, "w"), separators=(",", ":"))
     for q in cfb.values():
         q["g"].sort(key=lambda g: g["d"], reverse=True)
         for g in q["g"]:

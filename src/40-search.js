@@ -567,6 +567,20 @@
         .then(function (j) { return (j && j.qbs) || {}; }).catch(function () { CF = null; return {}; });
       return CF;
     }
+    /* the moneyline the club closed at, the spread under it: the line green
+       when the club won, the spread green when it covered. A moneyline past
+       three digits says nothing and is left out (Jose, Oct 28, 2026) */
+    function mlCell(g) {
+      var ml = g.ml, sp = g.sp, sc = /(\d+)-(\d+)/.exec(g.r || ""), w = /^W/.test(g.r || ""), l = /^L/.test(g.r || "");
+      var mt = ml === undefined || ml === null || Math.abs(ml) >= 1000 ? '<span class="ql-dash">—</span>'
+        : '<span class="' + (w ? "up" : l ? "dn" : "") + '">' + (ml > 0 ? "+" : "−") + Math.abs(ml) + '</span>';
+      var st = "";
+      if (sp !== undefined && sp !== null) {
+        var cv = sc ? (+sc[1] - +sc[2]) + sp : 0;
+        st = '<small class="ql-sp ' + (cv > 0 ? "up" : cv < 0 ? "dn" : "") + '">' + (sp > 0 ? "+" : sp < 0 ? "−" : "") + (sp ? Math.abs(sp) : "PK") + '</small>';
+      }
+      return '<td class="ql-n ql-ml">' + mt + st + '</td>';
+    }
     function seasonOf(id, qs) {
       var q = qs[id];
       if (!q) return "";
@@ -595,6 +609,7 @@
         return '<tr' + (me ? "" : ' class="ql-other"') + '><td class="ql-d">' + etDay(g.d) + '</td>' +
           '<td><span class="ql-wl ' + (w ? "w" : "l") + '">' + esc((g.r || " ").charAt(0)) + '</span> <span class="ql-sc">' + esc(String(g.r || "").slice(2)) + '</span></td>' +
           '<td class="ql-o">' + (g.h ? "vs " : "@ ") + esc(g.o) + '</td>' +
+          mlCell(g) +
           '<td class="ql-q">' + face(G.by, q.lg) + '</td>' +
           '<td class="ql-n">' + (g.yd || 0) + '</td>' +
           '<td class="ql-n ' + (m > 0 ? "up" : m < 0 ? "dn" : "") + '">' + (m === null ? "—" : (m > 0 ? "+" : m < 0 ? "−" : "") + Math.abs(m)) + (lastOn ? "<i>" + esc(lastOn) + "</i>" : "") + '</td>' +
@@ -606,7 +621,7 @@
       return '<div class="ql-card"><div class="ql-hd">' + face(id, q.lg) + '<div><b>' + esc(q.n) + '</b><i>' + esc(q.t || "") + (next ? " · " + next : "") + '</i></div></div>' +
         '<div class="ql-sum"><div><b>' + tot.w + "-" + tot.l + '</b><span>Record</span></div><div><b>' + Math.round(tot.yd / n) + '</b><span>Yds / game</span></div>' +
         '<div><b>' + tot.p + '</b><span>Pass TD</span></div><div><b>' + tot.ru + '</b><span>Rush TD</span></div></div>' +
-        (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>QB</th><th>Yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
+        (games.length ? '<table class="ql-t"><tr><th>Date</th><th>Result</th><th>Opp</th><th>ML<br>Sprd</th><th>QB</th><th>Yds</th><th>H2H</th><th>PTD</th><th>RTD</th></tr>' + rows + '</table>'
                       : '<div class="ql-none">No games played yet</div>') + '</div>';
     }
     function popOpen(id, at, lg) {
