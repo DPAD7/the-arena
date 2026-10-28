@@ -1,5 +1,5 @@
 {
- "at": "2026-10-28 03:39 UTC",
+ "at": "2026-10-28 13:10 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -35,11 +35,11 @@
     "Bryce Young"
    ],
    "pick": "Bryce Young",
-   "lead": 2,
+   "lead": 4,
    "complete": true,
    "missing": [],
    "score": [
-    0,
+    -2,
     2
    ],
    "why": [
@@ -55,6 +55,38 @@
    "game": "CAR@GB",
    "eid": 22127,
    "kick": "2026-10-30 00:15:00Z"
+  },
+  {
+   "qbs": [
+    "Trevor Lawrence",
+    "Daniel Jones"
+   ],
+   "pick": "Trevor Lawrence",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "IND J.Downs (18%)",
+    "IND K.Allen (23%)",
+    "IND L.Treadwell (15%)"
+   ],
+   "score": [
+    6,
+    -2
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 106.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "IND@JAC",
+   "eid": 22128,
+   "kick": "2026-11-01 18:00:00Z"
   },
   {
    "qbs": [
@@ -75,7 +107,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 53.5 yards higher in total on their lines",
+    "His receivers are set 54.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -97,8 +129,7 @@
    "lead": 2,
    "complete": false,
    "missing": [
-    "BAL J.Cuevas (10%)",
-    "BUF T.Johnson (10%)"
+    "BAL J.Cuevas (10%)"
    ],
    "score": [
     1,
