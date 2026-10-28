@@ -1,5 +1,5 @@
 {
- "at": "2026-10-28 21:06 UTC",
+ "at": "2026-10-28 22:06 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -75,7 +75,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 107.0 yards higher in total on their lines",
+    "His receivers are set 105.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -122,34 +122,66 @@
   },
   {
    "qbs": [
-    "Kyler Murray",
-    "Jared Goff"
+    "Baker Mayfield",
+    "Michael Penix Jr."
    ],
-   "pick": "Jared Goff",
-   "lead": 8,
-   "complete": false,
-   "missing": [
-    "MIN A.Jones (14%)",
-    "DET I.TeSlaa (11%)"
-   ],
+   "pick": "Michael Penix Jr.",
+   "lead": 6,
+   "complete": true,
+   "missing": [],
    "score": [
-    -1,
-    7
+    -2,
+    4
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
+    "His receivers are set 54.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "ATL@TB",
+   "eid": 22132,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "Dak Prescott"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "ARI J.Brooks (13%)",
+    "ARI K.Bourne (18%)",
+    "ARI M.Wilson (18%)",
+    "ARI T.McBride (26%)",
+    "DAL G.Pickens (24%)",
+    "DAL R.Flournoy (15%)"
+   ],
+   "score": [
+    -3,
+    7
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+33 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 52.5 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
+    "His receivers are set 81.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
     1,
     1,
-    1,
+    0,
     0
    ],
-   "game": "MIN@DET",
-   "eid": 22131,
+   "game": "ARI@DAL",
+   "eid": 22133,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
@@ -157,21 +189,17 @@
     "Kirk Cousins",
     "Geno Smith"
    ],
-   "pick": "Kirk Cousins",
-   "lead": 2,
+   "pick": null,
+   "lead": 0,
    "complete": false,
    "missing": [
-    "NYJ B.Allen (15%)",
-    "NYJ O.Cooper Jr. (14%)"
+    "NYJ B.Allen (15%)"
    ],
    "score": [
-    1,
-    -1
+    0,
+    0
    ],
-   "why": [
-    "His receivers are set 58.0 yards higher in total on their lines",
-    "New coach for his side"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
@@ -322,7 +350,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 145.0 yards higher in total on their lines",
+    "His receivers are set 150.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
