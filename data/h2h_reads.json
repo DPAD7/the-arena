@@ -1,5 +1,5 @@
 {
- "at": "2026-10-28 23:06 UTC",
+ "at": "2026-10-28 23:36 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -75,7 +75,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 103.0 yards higher in total on their lines",
+    "His receivers are set 107.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -93,25 +93,20 @@
     "Joe Burrow",
     "Cam Ward"
    ],
-   "pick": "Joe Burrow",
-   "lead": 4,
+   "pick": null,
+   "lead": 0,
    "complete": false,
    "missing": [
     "CIN C.Brown (18%)",
-    "CIN D.Meyers (12%)",
-    "TEN E.Ayomanor (13%)"
+    "CIN D.Meyers (12%)"
    ],
    "score": [
-    4,
-    0
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 59.0 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
     1,
+    1
+   ],
+   "why": [],
+   "checks": [
+    0,
     1,
     0,
     0
@@ -139,7 +134,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 57.5 yards higher in total on their lines",
+    "His receivers are set 56.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -182,51 +177,25 @@
   },
   {
    "qbs": [
-    "Jacoby Brissett",
-    "Dak Prescott"
-   ],
-   "pick": "Dak Prescott",
-   "lead": 10,
-   "complete": false,
-   "missing": [
-    "ARI J.Brooks (13%)"
-   ],
-   "score": [
-    -3,
-    7
-   ],
-   "why": [
-    "Opponent gives up more yards to the top receiver (+33 a game)",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 65.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "ARI@DAL",
-   "eid": 22133,
-   "kick": "2026-11-01 18:00:00Z"
-  },
-  {
-   "qbs": [
     "Kirk Cousins",
     "Geno Smith"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Geno Smith",
+   "lead": 2,
    "complete": false,
    "missing": [
+    "LV B.Bowers (23%)",
+    "LV M.Mayer (11%)",
     "NYJ B.Allen (15%)"
    ],
    "score": [
-    0,
-    0
+    -1,
+    1
    ],
-   "why": [],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His receivers are set 78.5 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
