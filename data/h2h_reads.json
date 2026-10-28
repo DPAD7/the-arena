@@ -1,5 +1,5 @@
 {
- "at": "2026-10-28 13:10 UTC",
+ "at": "2026-10-28 19:09 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -75,7 +75,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 106.0 yards higher in total on their lines",
+    "His receivers are set 105.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -107,7 +107,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 54.5 yards higher in total on their lines",
+    "His receivers are set 55.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -150,6 +150,43 @@
   },
   {
    "qbs": [
+    "Justin Herbert",
+    "Matthew Stafford"
+   ],
+   "pick": "Matthew Stafford",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "LAC C.Kolar (11%)",
+    "LAC K.Lambert-Smith (10%)",
+    "LAC K.Mitchell (12%)",
+    "LAC K.Vidal (10%)",
+    "LAC O.Gadsden II (16%)",
+    "LA C.Parkinson (12%)",
+    "LA K.Williams (14%)",
+    "LA T.Higbee (11%)"
+   ],
+   "score": [
+    -1,
+    7
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 46.0 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "LAC@LAR",
+   "eid": 22136,
+   "kick": "2026-11-01 21:05:00Z"
+  },
+  {
+   "qbs": [
     "Drake Maye",
     "Malik Willis"
    ],
@@ -184,9 +221,7 @@
    "lead": 2,
    "complete": false,
    "missing": [
-    "KC K.Walker III (11%)",
     "KC N.Gray (10%)",
-    "KC T.Kelce (19%)",
     "KC X.Worthy (22%)",
     "DEN C.Sutton (15%)",
     "DEN E.Engram (13%)",
