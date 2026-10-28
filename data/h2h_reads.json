@@ -1,5 +1,5 @@
 {
- "at": "2026-10-28 19:09 UTC",
+ "at": "2026-10-28 21:06 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -75,7 +75,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 105.0 yards higher in total on their lines",
+    "His receivers are set 107.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -86,6 +86,38 @@
    ],
    "game": "IND@JAC",
    "eid": 22128,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Joe Burrow",
+    "Cam Ward"
+   ],
+   "pick": "Joe Burrow",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "CIN C.Brown (18%)",
+    "CIN D.Meyers (12%)",
+    "TEN E.Ayomanor (13%)"
+   ],
+   "score": [
+    4,
+    0
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 59.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "TEN@CIN",
+   "eid": 22129,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
@@ -107,7 +139,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 55.5 yards higher in total on their lines",
+    "His receivers are set 52.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -122,15 +154,43 @@
   },
   {
    "qbs": [
+    "Kirk Cousins",
+    "Geno Smith"
+   ],
+   "pick": "Kirk Cousins",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "NYJ B.Allen (15%)",
+    "NYJ O.Cooper Jr. (14%)"
+   ],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "His receivers are set 58.0 yards higher in total on their lines",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "LV@NYJ",
+   "eid": 22134,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
     "Lamar Jackson",
     "Josh Allen"
    ],
    "pick": "Lamar Jackson",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "BAL J.Cuevas (10%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     1,
     -1
@@ -172,7 +232,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 46.0 yards higher in total on their lines",
+    "His receivers are set 47.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -244,6 +304,36 @@
    "game": "KC@DEN",
    "eid": 22138,
    "kick": "2026-11-01 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Jayden Daniels",
+    "Tanner McKee"
+   ],
+   "pick": "Jayden Daniels",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "PHI D.Goedert (21%)",
+    "PHI M.Lemon (18%)"
+   ],
+   "score": [
+    3,
+    -1
+   ],
+   "why": [
+    "His receivers are set 145.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "game": "PHI@WAS",
+   "eid": 22139,
+   "kick": "2026-11-02 01:20:00Z"
   }
  ]
 }
