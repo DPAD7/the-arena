@@ -4542,9 +4542,9 @@
     padding: 6px 4px; border-bottom: 1px solid rgba(255,255,255,.13); }
   .ql-t th:nth-child(-n+4) { text-align: left; }
   .ql-t td:nth-child(2) { white-space: nowrap; }
-  .ql-t td, .ql-t th { padding-left: 2px !important; padding-right: 2px !important; } .ql-t td { font-size: 15px; } .ql-sc { font-size: 12px; } .ql-t td.ql-d { font-size: 12px; } .ql-q .qsface { width: 26px !important; height: 26px !important; margin-right: 0 !important; } .ql-other .ql-q .qsface { box-shadow: 0 0 0 2px #e3b341; } .ql-t td i { font-size: 10px; } .ql-wl { width: 17px; height: 17px; font-size: 11px; }
+  .ql-t td, .ql-t th { padding-left: 2px !important; padding-right: 2px !important; } .ql-t td { font-size: 15px; } .ql-sc { font-size: 12px; } .ql-t td.ql-d { font-size: 12px; } .ql-q .qsface { width: 26px !important; height: 26px !important; margin-right: 0 !important; } .ql-t td i { font-size: 10px; } .ql-wl { width: 17px; height: 17px; font-size: 11px; }
   .ql-q { white-space: nowrap; } .ql-q .qsface { width: 22px; height: 22px; border-radius: 6px; object-fit: cover; object-position: top; background: #26272b; vertical-align: middle; margin-right: 4px; }
-  .ql-q span { font: 700 12px Barlow, sans-serif; vertical-align: middle; } .ql-other td { background: #211d12; } .ql-other .ql-q span { color: #e3b341; }
+  .ql-q span { font: 700 12px Barlow, sans-serif; vertical-align: middle; }
   .ql-t td { padding: 8px 4px; border-bottom: 1px solid rgba(255,255,255,.07); font: 700 17px "Barlow Condensed", sans-serif; }
   .ql-t td.ql-n { text-align: right; } .ql-t td.ql-d { color: #8e8e93; font-size: 14px; } .ql-t td.ql-o { white-space: nowrap; }
   .ql-wl { display: inline-grid; place-items: center; width: 20px; height: 20px; border-radius: 6px; font: 800 13px "Barlow Condensed", sans-serif; }
