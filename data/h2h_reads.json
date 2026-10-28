@@ -1,34 +1,8 @@
 {
- "at": "2026-10-27 23:36 UTC",
+ "at": "2026-10-28 01:11 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Patrick Mahomes II",
-    "Sam Darnold"
-   ],
-   "pick": "Patrick Mahomes II",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    -1
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "KC@SEA",
-   "eid": 22078,
-   "kick": "2026-10-26 00:20:00Z"
-  },
   {
    "qbs": [
     "Tanner McKee",
@@ -101,7 +75,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 56.5 yards higher in total on their lines",
+    "His receivers are set 58.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -112,6 +86,35 @@
    ],
    "game": "MIN@DET",
    "eid": 22131,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Lamar Jackson",
+    "Josh Allen"
+   ],
+   "pick": "Lamar Jackson",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "BAL J.Cuevas (10%)",
+    "BUF T.Johnson (10%)"
+   ],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "BAL@BUF",
+   "eid": 22135,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
