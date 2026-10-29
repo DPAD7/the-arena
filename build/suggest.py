@@ -629,7 +629,9 @@ def main():
         # (Jose, Oct 7, 2026: "the h2h needs to be highlighted in the ticket
         # within the system we have"). No read, no lean.
         rd = h2h_read(men["away"][0], men["home"][0])
-        if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4:
+        if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4 and sum(rd.get("checks") or []) >= 1:
+            # a read that passes none of its four checks gets no gold
+            # (Jose, Oct 29, 2026: Young over Love at 0 of 4)
             lean["h2h"] = "away" if fam(rd["pick"]) == fam(men["away"][0]) else "home"
             gap["h2h"] = rd["lead"]
             game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"], "checks": rd.get("checks") or [0, 0, 0, 0]}
