@@ -141,7 +141,7 @@
    "home": "GB",
    "pick": "GB",
    "model": 60,
-   "book": 64,
+   "book": 63,
    "bookpick": "GB",
    "agree": true,
    "won": 67,
@@ -310,6 +310,28 @@
    ],
    "week": 8,
    "kick": "2026-11-01T18:00Z"
+  },
+  {
+   "gid": "401873037",
+   "away": "JAX",
+   "home": "BAL",
+   "pick": "JAX",
+   "model": 63,
+   "book": 59,
+   "bookpick": "BAL",
+   "agree": false,
+   "won": 30,
+   "n": 23,
+   "call": "lean",
+   "rank": 1,
+   "why": [
+    "Points allowed per game: JAX 17.3, BAL 23.9",
+    "BAL is starting a backup QB",
+    "Last 3 games, win %: JAX 67%, BAL 33%",
+    "QB play (EPA per dropback): JAX +0.20, BAL +0.11"
+   ],
+   "week": 9,
+   "kick": "2026-11-06T01:15Z"
   }
  ]
 }
