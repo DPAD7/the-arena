@@ -1,5 +1,5 @@
 {
- "at": "2026-10-29 22:20 UTC",
+ "at": "2026-10-29 22:38 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -8,22 +8,21 @@
     "Jordan Love",
     "Bryce Young"
    ],
-   "pick": "Bryce Young",
-   "lead": 4,
-   "complete": true,
-   "missing": [],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "CAR T.McMillan (30%)"
+   ],
    "score": [
-    -2,
-    2
+    1,
+    1
    ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "Opponent gives up more yards to the top receiver (+29 a game)"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
-    0,
+    1,
     0
    ],
    "game": "CAR@GB",
@@ -40,7 +39,6 @@
    "complete": false,
    "missing": [
     "IND J.Downs (18%)",
-    "IND K.Allen (23%)",
     "IND L.Treadwell (15%)"
    ],
    "score": [
@@ -49,7 +47,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 141.5 yards higher in total on their lines",
+    "His receivers are set 55.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -132,7 +130,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 64.5 yards higher in total on their lines",
+    "His receivers are set 61.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -151,22 +149,20 @@
     "Michael Penix Jr."
    ],
    "pick": "Michael Penix Jr.",
-   "lead": 6,
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
-    -2,
-    4
+    -1,
+    1
    ],
    "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 67.5 yards higher in total on their lines",
-    "1 of 4 combined boxes checked"
+    "Faces a defense that gives up more yards after the catch"
    ],
    "checks": [
     0,
     0,
-    1,
+    0,
     0
    ],
    "game": "ATL@TB",
@@ -369,7 +365,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 156.0 yards higher in total on their lines",
+    "His receivers are set 157.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
