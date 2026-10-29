@@ -629,14 +629,17 @@ def main():
         # (Jose, Oct 7, 2026: "the h2h needs to be highlighted in the ticket
         # within the system we have"). No read, no lean.
         rd = h2h_read(men["away"][0], men["home"][0])
-        if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4 and sum(rd.get("checks") or []) >= 1:
-            # a read that passes none of its four checks gets no gold
-            # (Jose, Oct 29, 2026: Young over Love at 0 of 4)
-            lean["h2h"] = "away" if fam(rd["pick"]) == fam(men["away"][0]) else "home"
-            gap["h2h"] = rd["lead"]
-            game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"], "checks": rd.get("checks") or [0, 0, 0, 0]}
+        if rd and rd.get("complete") and not rd.get("skip") and rd.get("pick") and (rd.get("lead") or 0) >= 4:
+            # the gold only at 4 of 4 checks; anything less is a PASS
+            # (Jose, Oct 29, 2026: Young over Love at 0 of 4 -- "it needs to
+            # be 100 percent or just pass on it")
+            pk = "away" if fam(rd["pick"]) == fam(men["away"][0]) else "home"
+            chk = rd.get("checks") or [0, 0, 0, 0]
+            game["h2hread"] = {"lead": rd["lead"], "pick": rd["pick"], "side": pk, "checks": chk}
+            if sum(chk) == 4:
+                lean["h2h"] = pk
+                gap["h2h"] = rd["lead"]
             # the box under the faces says why, in the read's own terms
-            pk = lean["h2h"]
             rate = "won 78-84% of blind games at a lead of 6+" if rd["lead"] >= 6 else "won about 73% of blind games at a lead of 4-5"
             game["h2h"][pk] = "Our read: %s out-passes %s, a %d-point lead with every receiver line posted (%s). %s" % (
                 fam(rd["pick"]), fam(men["home" if pk == "away" else "away"][0]), rd["lead"], rate,

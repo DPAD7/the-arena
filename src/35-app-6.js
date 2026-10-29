@@ -1766,8 +1766,8 @@
         return h5 + '</div><div class="l5ft"><span>' + avg(a) + "</span><span>" + avg(b) + "</span></div></div>";
       };
       var withL5 = function (html) { var x = l5(); return x && html.slice(-6) === "</div>" ? html.slice(0, -6) + x + "</div>" : html; };
-      if (st.h2h && hHas && rdx && lean.h2h === st.h2h) {
-        var cw = (call.h2h || {})[st.h2h] === "take" ? "TAKE" : "LEAN", nOk = (rdx.checks || []).filter(Boolean).length;
+      if (st.h2h && hHas && rdx && (rdx.side || lean.h2h) === st.h2h) {
+        var cw = lean.h2h !== st.h2h ? "PASS" : (call.h2h || {})[st.h2h] === "take" ? "TAKE" : "LEAN", nOk = (rdx.checks || []).filter(Boolean).length;
         h += withL5('<div class="gpbox gpchecks"><div class="gpchd"><b class="gpc gpc--' + cw.toLowerCase() + '">' + cw + '</b><span>' + nOk + ' of 4 checks</span></div>' +
           CHK.map(function (t, i) {
             var ok = (rdx.checks || [])[i];
