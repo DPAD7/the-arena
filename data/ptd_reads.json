@@ -1,18 +1,10 @@
 {
- "at": "2026-10-29",
+ "at": "2026-10-30",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4685720": {
-   "p": 0.795,
-   "name": "Bryce Young"
-  },
-  "4036378": {
-   "p": 0.848,
-   "name": "Jordan Love"
-  },
-  "3916387": {
-   "p": 0.764,
-   "name": "Lamar Jackson"
+  "4035671": {
+   "p": 0.653,
+   "name": "Tyler Huntley"
   },
   "3918298": {
    "p": 0.858,
@@ -113,6 +105,14 @@
   "3912547": {
    "p": 0.803,
    "name": "Sam Darnold"
+  },
+  "4685720": {
+   "p": 0.795,
+   "name": "Bryce Young"
+  },
+  "4036378": {
+   "p": 0.848,
+   "name": "Jordan Love"
   }
  },
  "by_game": {
@@ -127,9 +127,9 @@
    }
   },
   "401873026": {
-   "3916387": {
-    "p": 0.764,
-    "name": "Lamar Jackson"
+   "4035671": {
+    "p": 0.653,
+    "name": "Tyler Huntley"
    },
    "3918298": {
     "p": 0.858,
@@ -261,9 +261,9 @@
     "p": 0.837,
     "name": "Trevor Lawrence"
    },
-   "3916387": {
-    "p": 0.813,
-    "name": "Lamar Jackson"
+   "4035671": {
+    "p": 0.717,
+    "name": "Tyler Huntley"
    }
   }
  }

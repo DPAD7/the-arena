@@ -136,6 +136,28 @@
    "kick": "2026-11-01T21:25Z"
   },
   {
+   "gid": "401873026",
+   "away": "BAL",
+   "home": "BUF",
+   "pick": "BUF",
+   "model": 76,
+   "book": 61,
+   "bookpick": "BUF",
+   "agree": true,
+   "won": 62,
+   "n": 26,
+   "call": "take",
+   "rank": 7,
+   "why": [
+    "Points per game: BUF 32.8, BAL 24.1",
+    "BAL is starting a backup QB",
+    "QB play (EPA per dropback): BUF +0.19, BAL -0.02",
+    "Last 3 games, win %: BUF 67%, BAL 33%"
+   ],
+   "week": 8,
+   "kick": "2026-11-01T18:00Z"
+  },
+  {
    "gid": "401873023",
    "away": "CAR",
    "home": "GB",
@@ -147,7 +169,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points allowed per game: GB 20.7, CAR 27.7",
     "QB play (EPA per dropback): GB +0.17, CAR +0.05",
@@ -169,34 +191,12 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "Points per game: PIT 21.9, CLE 19.0",
     "Last 3 games, win %: PIT 100%, CLE 67%",
     "Points allowed per game: PIT 19.7, CLE 20.9",
     "QB play (EPA per dropback): PIT -0.04, CLE -0.11"
-   ],
-   "week": 8,
-   "kick": "2026-11-01T18:00Z"
-  },
-  {
-   "gid": "401873026",
-   "away": "BAL",
-   "home": "BUF",
-   "pick": "BUF",
-   "model": 67,
-   "book": 61,
-   "bookpick": "BUF",
-   "agree": true,
-   "won": 64,
-   "n": 64,
-   "call": "lean",
-   "rank": 9,
-   "why": [
-    "Points per game: BUF 32.8, BAL 24.1",
-    "Last 3 games, win %: BUF 67%, BAL 33%",
-    "QB play (EPA per dropback): BUF +0.19, BAL +0.11",
-    "Pass defense, EPA allowed: BUF +0.25, BAL +0.08"
    ],
    "week": 8,
    "kick": "2026-11-01T18:00Z"
@@ -316,19 +316,19 @@
    "away": "JAX",
    "home": "BAL",
    "pick": "JAX",
-   "model": 63,
+   "model": 67,
    "book": 58,
    "bookpick": "BAL",
    "agree": false,
-   "won": 30,
-   "n": 23,
+   "won": 33,
+   "n": 12,
    "call": "lean",
    "rank": 1,
    "why": [
     "Points allowed per game: JAX 17.3, BAL 23.9",
     "BAL is starting a backup QB",
-    "Last 3 games, win %: JAX 67%, BAL 33%",
-    "QB play (EPA per dropback): JAX +0.20, BAL +0.11"
+    "QB play (EPA per dropback): JAX +0.20, BAL -0.02",
+    "Last 3 games, win %: JAX 67%, BAL 33%"
    ],
    "week": 9,
    "kick": "2026-11-06T01:15Z"
