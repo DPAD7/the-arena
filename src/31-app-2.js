@@ -567,11 +567,8 @@
   function seatPick(card) {
     var p = card && card.dataset.bout && BOXPICKS[card.dataset.bout];
     if (!p || card.classList.contains("done") || card.dataset.settledBout === "1") return;
-    /* a ticket only where some market the model prices reaches 75%: the
-       winner, or the fight going (or not going) the distance. Jose, Oct 24,
-       2026: "I want to go 75% plus on the card, not the moneyline" */
-    var best = Math.max(p.p || 0, (p.call || {}).p || 0);
-    if (best < 75) return;
+    /* every fight wears its ticket, whatever the model's number (Jose, Oct 30,
+       2026: "Every fight gets a ticket"); the sheet says how sure it is */
     var top = card.querySelector(".gtop");
     if (!top || top.querySelector(".gpick")) return;
     var b = document.createElement("button");
