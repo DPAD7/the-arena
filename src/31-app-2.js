@@ -1235,6 +1235,9 @@
         nameUnder(card);
         cfbOnce(card);
         slotRow.appendChild(card);
+        /* a card built as it scrolls in wears his marks too: only the first
+           ten were marked, so Missouri's placed ML came back plain (Oct 31, 2026) */
+        if (window.markSaved) markSaved(card);
         /* a card built late used to wait for the next 30-second tick before it
            read its result; it reads it the moment it is on the page */
         if (card.dataset.espn && typeof refresh === "function") refresh(card);
@@ -1404,6 +1407,9 @@
   }
   function cfbOff(it) {
     if (it[0] !== "college-football") return false;
+    /* a game with a leg on an open slip is on the board, starred or not
+       (Jose, Oct 31, 2026: "I see only like 5 gold the rest are hidden") */
+    if (window.slipGames && window.slipGames()[String(it[1])]) return false;
     var st = cfbStarred();
     if (!st) return false;
     for (var i = 0; i < CFB.length; i++) {

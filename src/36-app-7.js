@@ -524,6 +524,15 @@
       if (typeof pushState === "function") pushState();
     }
   }
+  /* the games an open slip rides on, by ESPN id, each leg still marked placed */
+  window.slipGames = function () {
+    var out = {};
+    ((DKB && DKB.bets) || []).forEach(function (bet) {
+      if (bet.status !== "open") return;
+      (bet.legs || []).forEach(function (lg) { if (lg.g && placed[lg.sel] !== false) out[String(lg.g)] = 1; });
+    });
+    return out;
+  };
   var bankFix = false;
   function dkApply() {
     /* the balance: the one he set, or else nothing -- and every slip tracked
@@ -893,9 +902,12 @@
       .then(function (r) { return r.ok ? r.json() : null; })
       .then(function (j) {
         if (j && ((j.sent && j.sent.length) || j.wallet)) {
+          var sg0 = JSON.stringify(window.slipGames());
           DKB = withSent(j);
           try { localStorage.setItem("arena.bets", JSON.stringify(DKB)); } catch (e) {}
           bankDraw();
+          /* a slip's games come out of the shelf the moment the slip is read */
+          if (JSON.stringify(window.slipGames()) !== sg0 && window._render) window._render();
         }
       })
       .catch(function () {});
