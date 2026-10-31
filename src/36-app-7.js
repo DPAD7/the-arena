@@ -1396,7 +1396,7 @@
           var mine = two[0].split(" ").pop().toUpperCase() === me ? 0 : 1, other = two[1 - mine];
           var sl = function (n) { return String(n || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""); };
           var row = ["leg-" + lg.sel, "leg-" + lg.sel, lg.start || "", "", "", "", "", "", "", "", "", "", "", ""];
-          row[3 + 2 * mine] = two[mine]; row[4 + 2 * mine] = lg.img ? "box:" + sl(two[mine]) : "";
+          row[3 + 2 * mine] = two[mine]; row[4 + 2 * mine] = "box:" + sl(two[mine]);
           row[5 - 2 * mine] = other; row[6 - 2 * mine] = "box:" + sl(other);
           row[8 + 2 * mine] = String(lg.odds || "").replace("\u2212", "-"); row[9 + 2 * mine] = lg.sel;
           lg.frow = row;
