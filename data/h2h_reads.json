@@ -1,5 +1,5 @@
 {
- "at": "2026-10-31 20:39 UTC",
+ "at": "2026-10-31 21:09 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -115,21 +115,20 @@
     "Jared Goff"
    ],
    "pick": "Jared Goff",
-   "lead": 8,
+   "lead": 4,
    "complete": true,
    "missing": [],
    "score": [
-    -1,
-    7
+    0,
+    4
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 47.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    1,
+    0,
     1,
     1,
     0
@@ -160,6 +159,35 @@
    ],
    "game": "ATL@TB",
    "eid": 22132,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "Dak Prescott"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "ARI J.Brooks (13%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+33 a game)",
+    "His offense is more efficient (EPA per play)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "ARI@DAL",
+   "eid": 22133,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
@@ -219,27 +247,27 @@
     "Justin Herbert",
     "Matthew Stafford"
    ],
-   "pick": "Matthew Stafford",
-   "lead": 8,
+   "pick": null,
+   "lead": 0,
    "complete": false,
    "missing": [
+    "LAC C.Kolar (11%)",
     "LAC K.Lambert-Smith (10%)",
+    "LAC K.Mitchell (12%)",
     "LAC O.Gadsden II (16%)",
-    "LA C.Parkinson (12%)"
+    "LA C.Parkinson (12%)",
+    "LA P.Nacua (36%)",
+    "LA T.Higbee (11%)"
    ],
    "score": [
-    -1,
-    7
+    0,
+    0
    ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 87.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
-   ],
+   "why": [],
    "checks": [
-    1,
-    1,
-    1,
+    0,
+    0,
+    0,
     0
    ],
    "game": "LAC@LAR",
@@ -294,7 +322,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 58.5 yards higher in total on their lines",
+    "His receivers are set 59.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
