@@ -239,7 +239,7 @@
   var NETWORKS = {};
   var RECORDS = {};
   var NET_APP = [
-    [/prime video|amazon/i, "Prime Video", "https://app.primevideo.com/"],
+    [/prime video|amazon/i, "Prime Video", "https://www.amazon.com/tnf"],   /* the TNF page, the game on top (Oct 31, 2026) */
     [/netflix/i, "Netflix", "https://www.netflix.com/browse"],
     /* only a stream no channel carries gets its own app: a game on NBC and
        Peacock, or on NFL Network, is on YouTube TV like everything else
@@ -248,8 +248,28 @@
     [/^nfl\+$/i, "NFL+", "https://www.nfl.com/plus/"],
     [/espn\+/i, "ESPN", "https://www.espn.com/watch/"]
   ];
+  /* the play mark opens the channel the game is on, inside YouTube TV; a
+     game whose channel has no page here opens YouTube TV itself (Jose, Oct 31,
+     2026: "loads the game when I press the play buttons and the one without a
+     game just open YouTube TV"). Ids read off tv.youtube.com's own links. */
+  var YTV_CH = [
+    [/^abc\b|abc\/espn/i, "abc-UCR_vKwOOcqnoe7hmGmWydNw"],
+    [/^espn$|^espn networks$/i, "espn-UCakwQ1jKQnYJcUMghvnp-Yw"],
+    [/^fox$/i, "fox-UCmqqmrOV_gdhq737btJQNdQ"],
+    [/^cbs sports network$/i, "cbs-sports-network-UCa8SSoG_wftLYLWW0JkF3fA"],
+    [/^cbs\b/i, "cbs-UC3iq21tjzMRvx75UItgtCSg"],
+    [/^nbc\b/i, "nbc-UCSozVV_DLRuU3z4c88Fwa3g"],
+    [/^the cw$/i, "the-cw-UCbqpFncwfi15vHbgqeK0tFQ"],
+    [/^usa\b/i, "usa-UCQh_DofTXY-r9Uburw5CC0g"],
+    [/^tnt\b/i, "tnt-UCJQVCJfy8T5BUKr1bnB7UhA"],
+    [/^tbs\b/i, "tbs-UCGnXBk1h27lUxOyTG1TaUjw"],
+    [/^trutv\b/i, "trutv-UCGJCbPiaofLGUbkTTjfKcbg"]
+  ];
   function watchMark(eid) {
-    var net = NETWORKS[eid] || "", where = "YouTube TV", url = "https://tv.youtube.com/live/";
+    var net = NETWORKS[eid] || "", where = "YouTube TV", url = "https://tv.youtube.com/";
+    for (var j = 0; j < YTV_CH.length; j++) {
+      if (YTV_CH[j][0].test(net)) { url = "https://tv.youtube.com/browse/" + YTV_CH[j][1]; break; }
+    }
     for (var i = 0; i < NET_APP.length; i++) {
       if (NET_APP[i][0].test(net)) { where = NET_APP[i][1]; url = NET_APP[i][2]; break; }
     }
