@@ -1601,7 +1601,7 @@
       [[f[3], f[4], f[12]], [f[5], f[6], f[13]]].forEach(function (m) {
         if (!m[0] || (!m[1] && !m[2])) return;
         var score = m[2] ? scorePic(m[2]) : "";
-        var espn = m[1] ? facePic(m[1]) : score;
+        var espn = /^box:/.test(String(m[1])) ? "faces/box/" + String(m[1]).slice(4) + ".jpg" : m[1] ? facePic(m[1]) : score;  // a boxer is a plain file in faces/box (Oct 31, 2026)
         /* the card writes a fighter by lastName, so the slip is keyed the same way */
         var back = [score, m[1] ? faceAway(m[1]) : "", m[2] ? scoreAway(m[2]) : ""]
           .filter(function (x) { return x && x !== espn; })[0] || "";
@@ -1706,7 +1706,7 @@
       [[f[3], f[4], f[12]], [f[5], f[6], f[13]]].forEach(function (m) {
         if (!m[0] || (!m[1] && !m[2])) return;
         var score = m[2] ? scorePic(m[2]) : "";
-        var espn = m[1] ? facePic(m[1]) : score;
+        var espn = /^box:/.test(String(m[1])) ? "faces/box/" + String(m[1]).slice(4) + ".jpg" : m[1] ? facePic(m[1]) : score;  // a boxer is a plain file in faces/box (Oct 31, 2026)
         var back = [score, m[1] ? faceAway(m[1]) : "", m[2] ? scoreAway(m[2]) : ""]
           .filter(function (x) { return x && x !== espn; })[0] || "";
         add(f[1], [lastName(m[0]), famName(m[0]), m[0]], espn, true, back);
