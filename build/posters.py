@@ -167,6 +167,26 @@ def main():
     stamp = datetime.datetime.now(datetime.timezone.utc).isoformat(timespec="minutes")
     got, missing = [], []
     zp = zuffa_posters() if any(str(c[1]).startswith("zb-") for c in cards) else {}
+    # a night off the Zuffa page wears The Ring's art, its middle kept the
+    # way the UFC.com art is (data/box_extra.json; Oct 31, 2026)
+    try:
+        extra = json.load(open(os.path.join(D, "data", "box_extra.json")))
+    except (OSError, ValueError):
+        extra = {}
+    for eid, e in extra.items():
+        if eid in have or not e.get("art") or DRY:
+            continue
+        try:
+            img = Image.open(io.BytesIO(rq.get(e["art"], impersonate="chrome124", timeout=45).content)).convert("RGB")
+            w, h = img.size
+            cw = int(h * 263 / 380)
+            img = img.crop(((w - cw) // 2, 0, (w - cw) // 2 + cw, h)).resize((263, 380), Image.LANCZOS)
+            rel = "img/posters/%s.jpg" % eid
+            img.save(os.path.join(D, "site", rel), "JPEG", quality=86)
+            have[eid] = rel
+            got.append(e["name"] + " (The Ring)")
+        except Exception:
+            pass
     for c in cards:
         eid, name = str(c[1]), c[3]
         if eid.startswith("zb-") and eid not in have and zp.get(eid):

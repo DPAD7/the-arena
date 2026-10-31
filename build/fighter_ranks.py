@@ -45,6 +45,12 @@ def main():
         for m in (d.get("men") or []):
             put(m.get("name"), m.get("rank"), div)
 
+    # the boxers The Ring ranks, kept by build/boxing.py
+    try:
+        for k, v in json.load(open(os.path.join(D, "data", "box_ranks.json"))).items():
+            out.setdefault(k, v)
+    except (OSError, ValueError):
+        pass
     path = os.path.join(D, "site", "fighter_ranks.json")
     with open(path, "w") as fh:
         json.dump(out, fh, separators=(",", ":"), sort_keys=True)

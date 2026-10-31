@@ -1803,6 +1803,8 @@
     margin: 0; white-space: nowrap; overflow: hidden;
     text-overflow: clip; line-height: 1.3; }
   .gcard.gcard--bout .gweight[data-long="1"] { font-size: 8.5px; letter-spacing: .06em; }
+  .gcard.gcard--bout .gbelt { text-align: center; font-size: 9px; font-weight: 800;
+    letter-spacing: .12em; color: #e3b341; margin: 0; white-space: nowrap; line-height: 1.3; }
   /* the fight's own rail: a stretch a round, every round it was scheduled for */
   /* room under the rail for the round chips, so the card's arrow clears them */
   /* room above the rail for the clock over the finish, and below it for the

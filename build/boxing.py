@@ -397,8 +397,119 @@ def same_bout(bt, r):
     return {sa, sb} == {sw, sl}
 
 
+EXTRA = os.path.join(D, "data", "box_extra.json")
+
+
+def extras():
+    """The few boxing nights off the Zuffa page he bets on, kept in
+       data/box_extra.json with The Ring's ids: one bout, drawn like a Zuffa
+       card and settled from The Ring's own record of the fight
+       (Jose, Oct 31, 2026: "add that one ... just do that one fight")."""
+    try:
+        held = json.load(open(EXTRA))
+    except (OSError, ValueError):
+        return []
+    out = []
+    for eid, e in held.items():
+        rows = [{"w": b["w"], "a": b["a"], "b": b["b"], "alink": "", "blink": "", "res": "vs.",
+                 "method": "", "round": b.get("round", ""), "time": "", "part": "main",
+                 "ra": b.get("ra", ""), "rb": b.get("rb", "")} for b in e["bouts"]]
+        try:
+            import ring
+            f = next((x for x in (ring.profile(e["ring_fighter"]) or {}).get("fights") or []
+                      if x.get("id") == e["ring_fight"]), None)
+        except Exception:
+            f = None
+        # what the two men are fighting for: the belts on the line, WBC TITLE
+        orgs = [o for t in (f or {}).get("titlesOnTheLine") or [] for o in t.get("organisation") or []]
+        if orgs:
+            rows[0]["title"] = "/".join(dict.fromkeys(orgs)) + " TITLE"
+        rt = (f or {}).get("resultType") or {}
+        if f and rt:
+            w = None if rt.get("isDraw") else (f.get("winner") or {}).get("name")
+            settle(rows[0], {"w": w, "l": (f.get("loser") or {}).get("name"),
+                             "how": "DRAW" if rt.get("isDraw") else (rt.get("abbreviation") or "").upper()})
+        out.append({"id": eid, "name": e["name"], "date": dt.date.fromisoformat(e["date"]), "bouts": rows})
+    return out
+
+
+RING = "https://www.ringmagazine.com"
+RING_ORG = "33bP8E0RHEReDkupQW8qEY"
+BOXRANKS = os.path.join(D, "data", "box_ranks.json")
+
+
+def ring_ranks():
+    """The Ring's own men's rankings, every division: {ring id: (rank, class)}.
+       The first place on a list is the champion's, "C", and is often Vacant;
+       the rest are numbered from 1 (Jose, Oct 31, 2026: "do you not see ...
+       their rankings on The Ring")."""
+    out = {}
+    try:
+        divs = rq.get(RING + "/api/fighter/division?orgId=" + RING_ORG, impersonate="chrome124", timeout=30).json()
+    except Exception:
+        return out
+    for dv in divs:
+        if dv.get("gender") != "male":
+            continue
+        try:
+            r = rq.get(RING + "/api/fighter/ranking?division=" + dv["id"], impersonate="chrome124", timeout=30).json()
+        except Exception:
+            continue
+        cls = ((dv.get("weightClass") or {}).get("weightClassName") or "")
+        if not isinstance(r, dict):
+            continue
+        for i, x in enumerate(r.get("rankFighters") or []):
+            fid = (x.get("fighter") or {}).get("id") or x.get("id")
+            if not fid or (x.get("fighter") or {}).get("name") == "Vacant":
+                continue
+            out.setdefault(fid, ("C" if i == 0 else i, cls))
+    return out
+
+
+def write_ranks(evs):
+    """Every boxer on the board with his Ring number, keyed the way the page
+       keys a fighter (his name as the board writes it, lower case), and tied
+       to The Ring by id: the bout's own id where it carries one, else the
+       one name The Ring writes him by in data/ring_index.json."""
+    rk = ring_ranks()
+    if not rk:
+        return
+    try:
+        import ring
+        index = json.load(open(ring.INDEX))
+    except Exception:
+        index = {}
+    byname = {}
+    for fid, n in index.items():
+        byname.setdefault(ring.fold(n), []).append(fid)
+    out = {}
+    for e in evs:
+        for bt in e["bouts"]:
+            for side, rid in ((bt["a"], bt.get("ra")), (bt["b"], bt.get("rb"))):
+                ids = [rid] if rid else byname.get(ring.fold(side), [])
+                hit = [rk[i] for i in ids if i in rk]
+                # one written name, two men at The Ring: neither takes it
+                if len(ids) == 1 and hit:
+                    out[side.strip().lower()] = {"r": hit[0][0], "w": 0, "d": hit[0][1], "src": "ring"}
+    if DRY:
+        print("boxing ranks:", out)
+        return
+    json.dump(out, open(BOXRANKS, "w"), indent=0, sort_keys=True, ensure_ascii=False)
+    path = os.path.join(D, "site", "fighter_ranks.json")
+    try:
+        held = json.load(open(path))
+    except (OSError, ValueError):
+        held = {}
+    held = {k: v for k, v in held.items() if v.get("src") != "ring"}
+    for k, v in out.items():
+        held.setdefault(k, v)
+    json.dump(held, open(path, "w"), separators=(",", ":"), sort_keys=True)
+
+
 def main():
     evs = events(wiki(PAGE))
+    have = {e["id"] for e in evs}
+    evs += [e for e in extras() if e["id"] not in have]
     # the promoter's own results laid over Wikipedia's for any card it has
     # written: a bout it has settled takes its word
     for e in evs:
@@ -422,6 +533,7 @@ def main():
                 for bt in e["bouts"]:
                     if bt["res"] in ("vs.", "vs") and same_bout(bt, r):
                         settle(bt, r)
+    write_ranks(evs)
     dk, dkraw = dk_bouts()
     s = pagefile.read()
     cards, fights, results, book, fprops = [], [], {}, {}, {}
@@ -467,6 +579,8 @@ def main():
             fprops[bid] = {"rounds": sched}
             if hit and bt["res"] in ("vs.", "vs"):
                 fprops[bid] = dk_props(hit[0], bt["a"], bt["b"], sched)
+            if bt.get("title"):
+                fprops[bid]["title"] = bt["title"]
             if bt["res"] in ("vs.", "vs"):
                 # not fought yet: the page still draws its rounds from here
                 results.setdefault(e["id"], []).append({

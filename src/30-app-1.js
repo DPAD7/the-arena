@@ -1238,6 +1238,15 @@
     wt.textContent = boutDiv(card);
     if (wt.textContent.length > 12) wt.dataset.long = "1";
     strip.appendChild(wt);
+    /* what the bout is for, under the division: WBC TITLE (Jose, Oct 31,
+       2026: "do you not see anything that says what they're fighting for") */
+    var belt = ((typeof FPROPS === "object" && FPROPS[card.dataset.bout]) || {}).title;
+    if (belt) {
+      var bl = document.createElement("div");
+      bl.className = "gbelt";
+      bl.textContent = belt;
+      strip.appendChild(bl);
+    }
 
     var stack = document.createElement("div");
     stack.className = "gstack";
