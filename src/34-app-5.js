@@ -153,13 +153,16 @@
      are closed and the ghost slot is the truth. */
   function seatMoneyline(card, ml) {
     if (!card || !ml) return;
-    var slots = card.querySelectorAll(":scope > .ghead .gml");
+    /* the two slots wherever the layout moved them: a bout card carries them
+       in its middle row, not its head, and a card drawn before prices.json
+       sat on dashes (Smith v Brown, Oct 31, 2026) */
+    var slots = card.querySelectorAll(".gml");
     if (slots.length !== 2) return;
     /* a settled card keeps what it closed at -- but one drawn before any
        price reached it has nothing to keep, and its closing line is written
        once (Jose, Oct 13, 2026: Asher v Foster final on two empty slots) */
     if ((card.classList.contains("done") || card.dataset.settled === "1") &&
-        card.querySelector(":scope > .ghead .gml button.price")) return;
+        card.querySelector(".gml button.price")) return;
     /* a bout the page flips (the champion moved to the left) has its two
        slots the other way round from the data, so the prices follow the
        men, not the slots -- every flipped bout wore the other man's
@@ -549,7 +552,7 @@
       inPlace.forEach(function (one) {
         var card = document.querySelector('.gcard[data-espn="' + one[0] + '"], .gcard[data-bout="' + one[0] + '"]');
         if (!card) return;
-        var slots = card.querySelectorAll(":scope > .ghead .gml");
+        var slots = card.querySelectorAll(".gml");
         var slot = slots[one[1]];
         var b = slot ? slot.querySelector("button.price") : null;
         /* a card drawn before its prices came has no button to write on: it
@@ -589,7 +592,7 @@
       FIGHTS.forEach(function (row) {
         if (!row[8] && !row[10] && !FPROPS[String(row[1])]) return;
         var c = document.querySelector('.gcard[data-bout="' + row[1] + '"]');
-        if (c && !c.querySelector(":scope > .ghead .gml button.price")) seatMoneyline(c, row.slice(8, 12));
+        if (c && !c.querySelector(".gml button.price")) seatMoneyline(c, row.slice(8, 12));
         if (c && FPROPS[String(row[1])]) seatBout(c, FPROPS[String(row[1])]);
       });
       if (nowPlease && busy()) {
