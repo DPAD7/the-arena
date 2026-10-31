@@ -1103,6 +1103,14 @@
   /* a placed price does not grey out when its game locks: it is the one thing
      on a locked card still worth seeing */
   .gcard.locked .price.placed { opacity: 1; filter: none; }
+  /* a leg of the second open slip wears blue where the first wears gold */
+  .price.placed.slip2:not(.won):not(.lost):not(.paid),
+  .gcard.gcard--v3 .price.placed.slip2:not(.won):not(.lost):not(.paid) { border-color: #0A7CFF;
+    box-shadow: 0 0 0 1px rgba(10, 124, 255, 0.35), 0 0 12px rgba(10, 124, 255, 0.40); }
+  .gcell:has(> .mk.ok) .price.placed.slip2, .gteam:has(> .mk.ok) .price.placed.slip2 { border-color: var(--green);
+    box-shadow: 0 0 0 1px rgba(23, 194, 87, 0.40), 0 0 12px rgba(23, 194, 87, 0.45); }
+  .gcell:has(> .mk.no) .price.placed.slip2, .gteam:has(> .mk.no) .price.placed.slip2 { border-color: #e2564d;
+    box-shadow: 0 0 0 1px rgba(226, 86, 77, 0.40), 0 0 12px rgba(226, 86, 77, 0.45); }
   @media (prefers-reduced-motion: reduce) { .price { transition: none; } }
   .na { color: var(--muted); font-style: italic; font-size: 13.5px; padding: 8px 0; }
   .tbl { width: 100%; border-collapse: collapse; }

@@ -498,6 +498,16 @@
   function dkGold() {
     if (!DKB || !DKB.bets) return;
     var added = false;
+    /* two slips open: the first one's legs are gold, the second one's blue,
+       so the board tells them apart (Jose, Oct 31, 2026: "one should be gold
+       the second should be blue") */
+    var open = DKB.bets.filter(function (bet) { return bet.status === "open"; })
+      .sort(function (x, y) { return (Date.parse(x.placed) || 0) - (Date.parse(y.placed) || 0); });
+    var first = {}, two = {};
+    (open[0] && open[0].legs || []).forEach(function (lg) { if (lg.sel) first[lg.sel] = 1; });
+    (open[1] && open[1].legs || []).forEach(function (lg) { if (lg.sel && !first[lg.sel]) two[lg.sel] = 1; });
+    window.SLIP2 = two;
+    document.querySelectorAll("button.price[data-oid]").forEach(function (b) { b.classList.toggle("slip2", !!two[b.dataset.oid]); });
     DKB.bets.forEach(function (bet) {
       (bet.legs || []).forEach(function (lg) {
         if (!lg.sel) return;
