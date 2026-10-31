@@ -1529,6 +1529,9 @@
     var pic = function (who) {
       var h = gamePic(bid, who); if (h) return h.src;
       var id = String(who === L ? f[4] : who === Rn ? f[6] : "");
+      /* a bet saved before his picture was kept carries no id: his name finds
+         it (Jose, Oct 31, 2026: Canelo's side stayed blank on the slip) */
+      if (!id && who && /^Boxing/.test(f[7] || "")) id = "box:" + String(who).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
       return /^box:/.test(id) ? "faces/box/" + id.slice(4) + ".jpg" : "";
     };
     var sur = function (n) { return esc(lastName(n) || n); };
