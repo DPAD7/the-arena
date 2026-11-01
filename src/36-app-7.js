@@ -1465,6 +1465,7 @@
     var box = FNIGHT[k];
     if (box && Date.now() - box.at < 5000) return;
     FNIGHT[k] = { at: Date.now() };
+    if (/^Boxing/.test(f[7] || "") && !/^zb-/.test(String(f[0]))) boxFinal(f);
     /* the night's file first: it carries theScore's method (Knockout, Split
        Decision), where the scoreboard only ever says "Unofficial Winner" */
     var saved = fetch("final/mma-" + f[0] + ".json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).catch(function () { return {}; });
@@ -1500,10 +1501,42 @@
       if (typeof bankDraw === "function") bankDraw();
     }).catch(function () {});
   }
+  /* a boxing bout off a DraftKings slip carries DraftKings' number, not the
+     board's: its result is the board's own card that night, the same day and
+     both surnames (Jose, Oct 31, 2026: Alvarez sat open on the slip an hour
+     after the board had Canelo by decision) */
+  function boxFinal(f) {
+    var day = function (t) { return new Date(Date.parse(t)).toLocaleDateString("en-CA", { timeZone: "America/New_York" }); };
+    var sn = function (n) { return famName(n).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, ""); };
+    var two = [sn(f[3]), sn(f[5])].sort().join("|");
+    var b = (typeof BOXFIGHTS === "object" ? BOXFIGHTS : []).filter(function (x) {
+      return day(x[2]) === day(f[2]) && [sn(x[3]), sn(x[5])].sort().join("|") === two;
+    });
+    if (b.length !== 1) return;
+    b = b[0];
+    fetch("final/mma-" + b[0] + ".json", { cache: "no-cache" }).then(function (r) { return r.ok ? r.json() : {}; }).then(function (d) {
+      (d.events || []).forEach(function (e) {
+        (e.competitions || []).forEach(function (c) {
+          var ty = (c.status || {}).type || {};
+          if (String(c.id) !== String(b[1]) || ty.state !== "post") return;
+          var w = (c.competitors || []).filter(function (m) { return m.winner; })[0];
+          var wn = w ? sn((w.athlete || {}).displayName) : "";
+          var said = "";
+          (c.details || []).forEach(function (dd) { var t = (dd.type || {}).text || ""; if (t.indexOf("Unofficial Winner") === 0) said = t.slice(17); });
+          var per = (c.status || {}).period || 0;
+          TRKD["f" + f[1]] = { state: "post", period: per, clock: "", gone: per * 180,
+            result: String(said || (c.how && c.how.type) || "").toLowerCase(),
+            winner: !wn ? null : wn === sn(f[3]) ? String(f[4] || "@0") : wn === sn(f[5]) ? String(f[6] || "@1") : null, cards: "" };
+        });
+      });
+      if (typeof bankDraw === "function") bankDraw();
+    }).catch(function () {});
+  }
   /* did it land: the winner, the way, the round and the second */
   function fightSettle(key, s, f, r, R) {
     if (!r || r.state !== "post") return "";
-    var side = s === 0 ? String(f[4]) : s === 1 ? String(f[6]) : null;
+    /* a side with no picture id still has a side */
+    var side = s === 0 ? String(f[4] || "@0") : s === 1 ? String(f[6] || "@1") : null;
     var mine = side === null ? !!r.winner : r.winner === side;
     var how = /sub/.test(r.result) ? "sub" : /dec/.test(r.result) ? "dec" : /ko|knock/.test(r.result) ? "ko" : "";
     var dec = how === "dec", fin = how === "ko" || how === "sub", rd = r.period;
@@ -1564,7 +1597,7 @@
       if (x.v.k === "fml") {
         var imp = function (p) { return trkImplied(p); }, pa = imp(f[8]), pb = imp(f[10]);
         var wa = pa != null && pb != null ? Math.round(pa / (pa + pb) * 100) : 50;
-        var won = st0 || (r && r.state === "post" && r.winner ? (r.winner === String(x.v.s === 0 ? f[4] : f[6]) ? "won" : "lost") : "");
+        var won = st0 || (r && r.state === "post" && r.winner ? (r.winner === String(x.v.s === 0 ? f[4] || "@0" : f[6] || "@1") ? "won" : "lost") : "");
         TRKST[x.lg.sel] = won || "";
         if (won === "lost") TRKLOST[x.lg.sel] = 1;
         out += '<div class="trkr trkr--two' + (won ? " trkr--" + won : "") + '"><span class="trkc' + (x.v.s === 0 ? " trkc--mine" : "") + '">' + faceL +
@@ -1934,7 +1967,7 @@
           var c2 = b2 && b2.closest(".gcard");
           var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LMAP[lg.sel] || {}).g || "";
           var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
-          var pic0 = "", fw = "", fmk = "";
+          var pic0 = "", fw = "", fmk = "", fimg = "";
           if (!LMAP[lg.sel]) {
             var pg0 = trkGameOf(lg);
             if (pg0) {
@@ -1963,6 +1996,12 @@
           if (fr0) {
             gid = String(fv.g);
             fw = fv.s === 0 ? fr0.g[3] : fv.s === 1 ? fr0.g[5] : fr0.g[3] + " vs " + fr0.g[5];
+            /* a boxer's face on the slip's row of faces, by his name when the
+               bet carries no picture for him (Jose, Oct 31, 2026: "Can") */
+            if (!lg.img && (fv.s === 0 || fv.s === 1) && /^Boxing/.test(fr0.g[7] || "")) {
+              var bx0 = String(fr0.g[fv.s ? 6 : 4] || "") || "box:" + String(fw).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+              if (/^box:/.test(bx0)) fimg = "faces/box/" + bx0.slice(4) + ".jpg";
+            }
             fmk = fv.k === "fml" ? markFor("ML") : (fightMarket(fv.key, parseInt(((typeof FPROPS === "object" && FPROPS[fv.g]) || {}).rounds, 10) || 3)[1] || []).slice(0, 1).map(function (k0) {
               return '<i class="slmk slmk--m"><svg aria-hidden="true"><use href="#' + k0 + '"/></svg></i>'; }).join("");
           }
@@ -1973,7 +2012,7 @@
                    g: gid, st: v.st === "won" || v.st === "lost" ? v.st : (TRKST[lg.sel] || ""), pic: pic0, fw: fw,
                    /* a fighter the board carries no card for: his face from the
                       board's own boxing faces (Wardley, Oct 17, 2026) */
-                   img: lg.img || "",
+                   img: lg.img || fimg,
                    /* and its market's mark, as every fight leg wears */
                    fmk: fmk || (lg.img && / \u2016 ML$/.test(String(lg.label || "")) ? markFor("ML") : "") };
         });
