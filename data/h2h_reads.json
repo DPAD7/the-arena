@@ -1,33 +1,58 @@
 {
- "at": "2026-11-01 16:11 UTC",
+ "at": "2026-11-01 17:07 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
   {
    "qbs": [
-    "Joe Burrow",
-    "Cam Ward"
+    "Trevor Lawrence",
+    "Daniel Jones"
    ],
-   "pick": "Cam Ward",
-   "lead": 2,
+   "pick": "Trevor Lawrence",
+   "lead": 8,
    "complete": true,
    "missing": [],
    "score": [
-    -1,
-    1
+    6,
+    -2
    ],
    "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "New coach for his side"
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 50.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "IND@JAC",
+   "eid": 22128,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Aaron Rodgers",
+    "Deshaun Watson"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
    "checks": [
     0,
     0,
     0,
     0
    ],
-   "game": "TEN@CIN",
-   "eid": 22129,
+   "game": "CLE@PIT",
+   "eid": 22130,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
@@ -36,21 +61,20 @@
     "Jared Goff"
    ],
    "pick": "Jared Goff",
-   "lead": 8,
+   "lead": 4,
    "complete": true,
    "missing": [],
    "score": [
-    -1,
-    7
+    0,
+    4
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 46.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    1,
+    0,
     1,
     1,
     0
@@ -83,6 +107,35 @@
    ],
    "game": "ATL@TB",
    "eid": 22132,
+   "kick": "2026-11-01 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "Dak Prescott"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "ARI J.Brooks (13%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+33 a game)",
+    "His offense is more efficient (EPA per play)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "ARI@DAL",
+   "eid": 22133,
    "kick": "2026-11-01 18:00:00Z"
   },
   {
@@ -180,7 +233,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 100.0 yards higher in total on their lines",
+    "His receivers are set 101.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
