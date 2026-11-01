@@ -1,105 +1,258 @@
 {
- "at": "2026-10-31",
- "card": "2026-10-31",
- "event": "600061420",
- "name": "UFC Fight Night: Moicano vs. Nolan",
- "model": "2026-10-24",
+ "at": "2026-11-01",
+ "card": "2026-11-07",
+ "event": "600061268",
+ "name": "UFC Fight Night: Cortes Acosta vs. Walker",
+ "model": "2026-10-31",
  "picks": {
-  "401931617": {
+  "401932011": {
    "rank": 1,
-   "pick": "Zach Reese",
-   "vs": "Mickey Gall",
+   "pick": "Mantas Kondratavičius",
+   "vs": "Andre Petroski",
    "box": [
-    76,
-    24
+    78,
+    22
    ],
-   "p": 76,
+   "p": 78,
    "won": 82,
    "why": [
-    "2\" taller",
-    "2 years younger (33 vs 35)",
-    "Fought 4 months ago, Gall 23",
-    "Pro record 10-3 vs 7-7"
+    "8 years younger (27 vs 35)",
+    "Pro record 9-1 vs 14-7",
+    "Finishes 89% of wins; Petroski finished 5 times",
+    "UFC streak W2 vs L3",
+    "Petroski took the fight on 13 days' notice"
    ],
-   "id": "5143223",
+   "id": "5264925",
+   "own_facts": "",
+   "opp_facts": "Petroski took the fight on 13 days' notice",
+   "opp_flag": true,
+   "call": {
+    "market": "Moneyline",
+    "sel": "Mantas Kondratavičius",
+    "side": "Kondratavičius wins",
+    "why": [
+     "8 years younger (27 vs 35)",
+     "Pro record 9-1 vs 14-7",
+     "Finishes 89% of wins; Petroski finished 5 times",
+     "UFC streak W2 vs L3",
+     "Petroski took the fight on 13 days' notice"
+    ],
+    "p": 78,
+    "won": 80,
+    "won_n": 164,
+    "p_ml": 78,
+    "p_dist": 40,
+    "price": "-298"
+   }
+  },
+  "401911642": {
+   "rank": 2,
+   "pick": "Keiichiro Nakamura",
+   "vs": "Ollie Schmid",
+   "box": [
+    74,
+    26
+   ],
+   "p": 74,
+   "won": null,
+   "why": [
+    "Higher UFC rating (1568 vs 1478)",
+    "Pro record 8-1 vs 4-3",
+    "Controls 100% of grappling time, Schmid 0%",
+    "KO power (1.09 knockdowns per 15 min) vs Schmid, KO'd once in the UFC"
+   ],
+   "id": "5327937",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Zach Reese",
-    "side": "Reese wins",
+    "sel": "Keiichiro Nakamura",
+    "side": "Nakamura wins",
     "why": [
-     "2\" taller",
-     "2 years younger (33 vs 35)",
-     "Fought 4 months ago, Gall 23",
-     "Pro record 10-3 vs 7-7"
+     "Higher UFC rating (1568 vs 1478)",
+     "Pro record 8-1 vs 4-3",
+     "Controls 100% of grappling time, Schmid 0%",
+     "KO power (1.09 knockdowns per 15 min) vs Schmid, KO'd once in the UFC"
     ],
-    "p": 76,
-    "won": 80,
-    "won_n": 164,
-    "p_ml": 76,
-    "p_dist": 28,
-    "price": "-440"
+    "p": 74,
+    "won": 74,
+    "won_n": 201,
+    "p_ml": 74,
+    "p_dist": 29,
+    "price": "-360"
    }
   },
-  "401931616": {
-   "rank": 2,
-   "pick": "Jacobe Smith",
-   "vs": "Randy Brown",
+  "401928117": {
+   "rank": 3,
+   "pick": "Seokhyeon Ko",
+   "vs": "Wellington Turman",
    "box": [
-    75,
-    25
+    72,
+    28
    ],
-   "p": 75,
+   "p": 72,
    "won": null,
    "why": [
-    "6 years younger (31 vs 36)",
-    "Pro record 12-0 vs 20-8",
-    "Strike margin +3.4 a minute vs +1.0",
-    "Pro streak W12 vs L2",
-    "Smith took the fight on 28 days' notice"
+    "Higher UFC rating (1543 vs 1450)",
+    "Pro record 13-3 vs 18-8",
+    "Late-round margin +6 strikes, Turman -3",
+    "Absorbs 1.5 strikes a minute, Turman 4.2"
    ],
-   "id": "5149961",
-   "own_facts": "Smith took the fight on 28 days' notice",
+   "id": "4701954",
+   "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Jacobe Smith",
-    "side": "Smith wins",
+    "sel": "Seokhyeon Ko",
+    "side": "Ko wins",
     "why": [
-     "6 years younger (31 vs 36)",
-     "Pro record 12-0 vs 20-8",
-     "Strike margin +3.4 a minute vs +1.0",
-     "Pro streak W12 vs L2",
-     "Smith took the fight on 28 days' notice"
+     "Higher UFC rating (1543 vs 1450)",
+     "Pro record 13-3 vs 18-8",
+     "Late-round margin +6 strikes, Turman -3",
+     "Absorbs 1.5 strikes a minute, Turman 4.2"
     ],
-    "p": 75,
+    "p": 72,
     "won": 74,
     "won_n": 201,
-    "p_ml": 75,
-    "p_dist": 38,
-    "price": "-270"
+    "p_ml": 72,
+    "p_dist": 58,
+    "price": "-625"
    }
   },
-  "401921310": {
-   "rank": 3,
-   "pick": "Tom Nolan",
-   "vs": "Renato Moicano",
+  "401928119": {
+   "rank": 4,
+   "pick": "Elijah Smith",
+   "vs": "Davey Grant",
    "box": [
-    66,
-    34
+    72,
+    28
    ],
-   "p": 66,
+   "p": 72,
    "won": null,
    "why": [
-    "11 years younger (27 vs 37)",
-    "Round 1 margin +5 strikes, Moicano +2",
-    "UFC streak W5 vs W1",
-    "Pro record 11-1 vs 21-7"
+    "17 years younger (24 vs 41)",
+    "Round 1 margin +13 strikes, Grant +8",
+    "Pro record 10-1 vs 18-8",
+    "Higher UFC rating (1585 vs 1561)"
    ],
-   "id": "5144007",
+   "id": "5144797",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Moneyline",
+    "sel": "Elijah Smith",
+    "side": "Smith wins",
+    "why": [
+     "17 years younger (24 vs 41)",
+     "Round 1 margin +13 strikes, Grant +8",
+     "Pro record 10-1 vs 18-8",
+     "Higher UFC rating (1585 vs 1561)"
+    ],
+    "p": 72,
+    "won": 74,
+    "won_n": 201,
+    "p_ml": 72,
+    "p_dist": 51,
+    "price": "-225"
+   }
+  },
+  "401932716": {
+   "rank": 5,
+   "pick": "Gabriel Lorenço",
+   "vs": "Thomas Petersen",
+   "box": [
+    72,
+    28
+   ],
+   "p": 72,
+   "won": null,
+   "why": [
+    "5 years younger (27 vs 32)",
+    "1\" taller",
+    "Pro record 8-1 vs 11-4",
+    "Finishes 75% of wins; Petersen finished 2 times",
+    "Petersen took the fight on 30 days' notice"
+   ],
+   "id": "5215710",
+   "own_facts": "",
+   "opp_facts": "Petersen took the fight on 30 days' notice",
+   "opp_flag": false,
+   "call": {
+    "market": "Moneyline",
+    "sel": "Gabriel Lorenço",
+    "side": "Lorenço wins",
+    "why": [
+     "5 years younger (27 vs 32)",
+     "1\" taller",
+     "Pro record 8-1 vs 11-4",
+     "Finishes 75% of wins; Petersen finished 2 times",
+     "Petersen took the fight on 30 days' notice"
+    ],
+    "p": 72,
+    "won": 74,
+    "won_n": 201,
+    "p_ml": 72,
+    "p_dist": 41,
+    "price": "+142"
+   }
+  },
+  "401928114": {
+   "rank": 6,
+   "pick": "Austin Bashi",
+   "vs": "Lucas Brennan",
+   "box": [
+    69,
+    31
+   ],
+   "p": 69,
+   "won": null,
+   "why": [
+    "Younger (25.1 vs 26.4)",
+    "Pro record 14-2 vs 11-3",
+    "Controls 69% of grappling time, Brennan 11%",
+    "Stops 57% of takedowns, Brennan 33%"
+   ],
+   "id": "5120304",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Moneyline",
+    "sel": "Austin Bashi",
+    "side": "Bashi wins",
+    "why": [
+     "Younger (25.1 vs 26.4)",
+     "Pro record 14-2 vs 11-3",
+     "Controls 69% of grappling time, Brennan 11%",
+     "Stops 57% of takedowns, Brennan 33%"
+    ],
+    "p": 69,
+    "won": 67,
+    "won_n": 289,
+    "p_ml": 69,
+    "p_dist": 61
+   }
+  },
+  "401932715": {
+   "rank": 7,
+   "pick": "Waldo Cortes Acosta",
+   "vs": "Johnny Walker",
+   "box": [
+    64,
+    36
+   ],
+   "p": 64,
+   "won": null,
+   "why": [
+    "Pro record 17-3 vs 22-10",
+    "Higher UFC rating (1640 vs 1597)",
+    "Finishes 53% of wins; Walker finished 7 times",
+    "KO power (0.56 knockdowns per 15 min) vs Walker, KO'd 4 times in the UFC"
+   ],
+   "id": "4903365",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
@@ -109,222 +262,33 @@
     "side": "Fight does not go the distance",
     "why": [
      "Five-round fight",
-     "KO'd as a pro: Moicano 3 times, Nolan once",
-     "Submission tries per 15 min: Moicano 0.6, Nolan 1.4"
+     "KO wins vs KO losses: Acosta 8 KO wins, Walker KO'd 6 times; Walker 13 KO wins, Acosta KO'd never",
+     "KO'd as a pro: Acosta never, Walker 6 times"
     ],
-    "p": 72,
+    "p": 70,
     "won": 67,
     "won_n": 82,
-    "p_ml": 66,
-    "p_dist": 28,
-    "price": "-400"
+    "p_ml": 64,
+    "p_dist": 30
    }
   },
-  "401931555": {
-   "rank": 4,
-   "pick": "Ode' Osbourne",
-   "vs": "Cody Durden",
-   "box": [
-    61,
-    39
-   ],
-   "p": 61,
-   "won": null,
-   "why": [
-    "Younger (34.8 vs 35.6)",
-    "6\" more reach (73 vs 67)",
-    "9 pro losses vs 11",
-    "Finishes 77% of wins; Durden finished 8 times"
-   ],
-   "id": "4424224",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "Ode' Osbourne",
-    "side": "Osbourne wins",
-    "why": [
-     "Younger (34.8 vs 35.6)",
-     "6\" more reach (73 vs 67)",
-     "9 pro losses vs 11",
-     "Finishes 77% of wins; Durden finished 8 times"
-    ],
-    "p": 61,
-    "won": 62,
-    "won_n": 255,
-    "p_ml": 61,
-    "p_dist": 42,
-    "price": "-102"
-   }
-  },
-  "401928106": {
-   "rank": 5,
-   "pick": "Rodrigo Sezinando",
-   "vs": "Theodor Berggren",
-   "box": [
-    58,
-    42
-   ],
-   "p": 58,
-   "won": null,
-   "why": [
-    "Pro record 10-2 vs 8-4",
-    "3.4 takedowns per 15 min, Berggren 0.0",
-    "Absorbs 8.8 strikes a minute, Berggren 10.8",
-    "Knocked down 3.37 times per 15 min, Berggren 4.56"
-   ],
-   "id": "5289853",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "Rodrigo Sezinando",
-    "side": "Sezinando wins",
-    "why": [
-     "Pro record 10-2 vs 8-4",
-     "3.4 takedowns per 15 min, Berggren 0.0",
-     "Absorbs 8.8 strikes a minute, Berggren 10.8",
-     "Knocked down 3.37 times per 15 min, Berggren 4.56"
-    ],
-    "p": 58,
-    "won": 60,
-    "won_n": 242,
-    "p_ml": 58,
-    "p_dist": 45,
-    "price": "-192"
-   }
-  },
-  "401931615": {
-   "rank": 6,
-   "pick": "Francis Marshall",
-   "vs": "Dakota Hope",
-   "box": [
-    57,
-    43
-   ],
-   "p": 57,
-   "won": null,
-   "why": [
-    "3\" taller",
-    "Absorbs 3.1 strikes a minute, Hope 7.0",
-    "Higher UFC rating (1536 vs 1479)",
-    "4\" more reach (72 vs 68)",
-    "Marshall missed weight by 2 lb",
-    "Hope took the fight on 23 days' notice"
-   ],
-   "id": "5060394",
-   "own_facts": "Marshall missed weight by 2 lb",
-   "opp_facts": "Hope took the fight on 23 days' notice",
-   "opp_flag": false,
-   "call": {
-    "market": "Fight to Go the Distance",
-    "sel": "Yes",
-    "side": "Fight goes the distance",
-    "why": [
-     "Pro fights won on the cards: Marshall 25%, Hope 40%",
-     "Average UFC fight: Marshall 10.5 min, Hope 15.0 min",
-     "Pro losses on the cards: Marshall 2, Hope 1"
-    ],
-    "p": 64,
-    "won": 59,
-    "won_n": 99,
-    "p_ml": 57,
-    "p_dist": 64,
-    "price": "-135"
-   }
-  },
-  "401928109": {
-   "rank": 7,
-   "pick": "JeongYeong Lee",
-   "vs": "Julian Erosa",
-   "box": [
-    55,
-    45
-   ],
-   "p": 55,
-   "won": null,
-   "why": [
-    "6 years younger (31 vs 37)",
-    "Pro record 11-3 vs 34-14",
-    "Absorbs 3.8 strikes a minute, Erosa 6.2",
-    "3 pro losses vs 14"
-   ],
-   "id": "5068724",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "JeongYeong Lee",
-    "side": "Lee wins",
-    "why": [
-     "6 years younger (31 vs 37)",
-     "Pro record 11-3 vs 34-14",
-     "Absorbs 3.8 strikes a minute, Erosa 6.2",
-     "3 pro losses vs 14"
-    ],
-    "p": 55,
-    "won": 60,
-    "won_n": 242,
-    "p_ml": 55,
-    "p_dist": 46,
-    "price": "-148"
-   }
-  },
-  "401928107": {
+  "401928120": {
    "rank": 8,
-   "pick": "Farman Hasanov",
-   "vs": "Jean-Paul Lebosnoyani",
+   "pick": "Murtazali Magomedov",
+   "vs": "Jose Delano",
    "box": [
-    55,
-    45
+    56,
+    44
    ],
-   "p": 55,
+   "p": 56,
    "won": null,
    "why": [
-    "Absorbs 1.0 strikes a minute, Lebosnoyani 4.0",
-    "Pro record 6-0 vs 11-2",
-    "17.0 takedowns per 15 min, Lebosnoyani 3.0",
-    "Controls 100% of grappling time, Lebosnoyani 79%"
+    "Absorbs 2.3 strikes a minute, Delano 4.5",
+    "Higher UFC rating (1550 vs 1538)",
+    "Controls 100% of grappling time, Delano 36%",
+    "Pro record 11-0 vs 17-3"
    ],
-   "id": "5350562",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Fight to Go the Distance",
-    "sel": "Yes",
-    "side": "Fight goes the distance",
-    "why": [
-     "Average UFC fight: Lebosnoyani 15.0 min, Hasanov 15.0 min",
-     "Pro fights won on the cards: Lebosnoyani 23%, Hasanov 33%",
-     "UFC fights to the cards: Lebosnoyani 2 of 3, Hasanov 1 of 1"
-    ],
-    "p": 57,
-    "won": 55,
-    "won_n": 119,
-    "p_ml": 55,
-    "p_dist": 57,
-    "price": "+165"
-   }
-  },
-  "401914106": {
-   "rank": 9,
-   "pick": "Nick Klein",
-   "vs": "Joe Kropschot",
-   "box": [
-    55,
-    45
-   ],
-   "p": 55,
-   "won": null,
-   "why": [
-    "Younger (31.1 vs 31.4)",
-    "Finishes 83% of wins; Kropschot finished 3 times"
-   ],
-   "id": "5134399",
+   "id": "5308768",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
@@ -333,100 +297,173 @@
     "sel": "No",
     "side": "Fight does not go the distance",
     "why": [
-     "Pro wins by finish: Klein 83%, Kropschot 89%",
-     "KO'd as a pro: Klein 2 times, Kropschot 2 times",
-     "Submitted as a pro: Klein never, Kropschot once"
+     "Submission tries per 15 min: Delano 0.0, Magomedov 11.7",
+     "Pro wins by finish: Delano 47%, Magomedov 100%",
+     "Strikes absorbed a minute: Delano 4.5, Magomedov 2.3"
     ],
-    "p": 68,
-    "won": 68,
-    "won_n": 122,
-    "p_ml": 55,
-    "p_dist": 32,
-    "price": "-350"
+    "p": 61,
+    "won": 64,
+    "won_n": 102,
+    "p_ml": 56,
+    "p_dist": 39
+   }
+  },
+  "401932012": {
+   "rank": 9,
+   "pick": "Marcos Degli",
+   "vs": "Mitch Raposo",
+   "box": [
+    52,
+    48
+   ],
+   "p": 52,
+   "won": null,
+   "why": [
+    "Higher UFC rating (1525 vs 1487)",
+    "Pro streak W13 vs W2",
+    "Finishes 87% of pro wins, Raposo 64%",
+    "Pro record 15-3 vs 11-4"
+   ],
+   "id": "5143890",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro losses on the cards: Raposo 3, Degli 2",
+     "Average UFC fight: Raposo 15.0 min, Degli nan min"
+    ],
+    "p": 59,
+    "won": 55,
+    "won_n": 119,
+    "p_ml": 52,
+    "p_dist": 59
+   }
+  },
+  "401928113": {
+   "rank": 10,
+   "pick": "Billy Elekana",
+   "vs": "Lucas Fernando",
+   "box": [
+    52,
+    48
+   ],
+   "p": 52,
+   "won": null,
+   "why": [
+    "0.8 submission tries per 15 min, Fernando 0.0",
+    "Controls 79% of grappling time, Fernando 14%"
+   ],
+   "id": "5078114",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro fights won on the cards: Elekana 33%, Fernando 24%",
+     "Pro losses on the cards: Elekana 1, Fernando 3"
+    ],
+    "p": 54,
+    "won": 55,
+    "won_n": 119,
+    "p_ml": 52,
+    "p_dist": 54
    }
   }
  },
  "all": {
-  "401931617": {
-   "pick": "Zach Reese",
-   "vs": "Mickey Gall",
-   "p": 76,
+  "401928116": {
+   "pick": "Nina Milošević",
+   "vs": "Priscila Cachoeira",
+   "p": 79,
+   "women": true
+  },
+  "401932011": {
+   "pick": "Mantas Kondratavičius",
+   "vs": "Andre Petroski",
+   "p": 78,
    "women": false
   },
-  "401931616": {
-   "pick": "Jacobe Smith",
-   "vs": "Randy Brown",
-   "p": 75,
-   "women": false
-  },
-  "401928104": {
-   "pick": "Luana Santos",
-   "vs": "Luana Santos",
+  "401911642": {
+   "pick": "Keiichiro Nakamura",
+   "vs": "Ollie Schmid",
    "p": 74,
+   "women": false
+  },
+  "401928117": {
+   "pick": "Seokhyeon Ko",
+   "vs": "Wellington Turman",
+   "p": 72,
+   "women": false
+  },
+  "401928119": {
+   "pick": "Elijah Smith",
+   "vs": "Davey Grant",
+   "p": 72,
+   "women": false
+  },
+  "401932716": {
+   "pick": "Gabriel Lorenço",
+   "vs": "Thomas Petersen",
+   "p": 72,
+   "women": false
+  },
+  "401928111": {
+   "pick": "Tatiana Suarez",
+   "vs": "Virna Jandiroba",
+   "p": 72,
    "women": true
   },
-  "401914105": {
-   "pick": "Lucia Szabová",
-   "vs": "Tainara Lisboa",
-   "p": 70,
+  "401928115": {
+   "pick": "Karine Silva",
+   "vs": "Gabriella Fernandes",
+   "p": 69,
    "women": true
   },
-  "401921310": {
-   "pick": "Tom Nolan",
-   "vs": "Renato Moicano",
-   "p": 66,
+  "401928114": {
+   "pick": "Austin Bashi",
+   "vs": "Lucas Brennan",
+   "p": 69,
    "women": false
   },
-  "401931555": {
-   "pick": "Ode' Osbourne",
-   "vs": "Cody Durden",
-   "p": 61,
+  "401932715": {
+   "pick": "Waldo Cortes Acosta",
+   "vs": "Johnny Walker",
+   "p": 64,
    "women": false
   },
-  "401928106": {
-   "pick": "Rodrigo Sezinando",
-   "vs": "Theodor Berggren",
-   "p": 58,
+  "401928120": {
+   "pick": "Murtazali Magomedov",
+   "vs": "Jose Delano",
+   "p": 56,
    "women": false
   },
-  "401931615": {
-   "pick": "Francis Marshall",
-   "vs": "Dakota Hope",
-   "p": 57,
+  "401932012": {
+   "pick": "Marcos Degli",
+   "vs": "Mitch Raposo",
+   "p": 52,
    "women": false
   },
-  "401928109": {
-   "pick": "JeongYeong Lee",
-   "vs": "Julian Erosa",
-   "p": 55,
+  "401928113": {
+   "pick": "Billy Elekana",
+   "vs": "Lucas Fernando",
+   "p": 52,
    "women": false
-  },
-  "401928107": {
-   "pick": "Farman Hasanov",
-   "vs": "Jean-Paul Lebosnoyani",
-   "p": 55,
-   "women": false
-  },
-  "401914106": {
-   "pick": "Nick Klein",
-   "vs": "Joe Kropschot",
-   "p": 55,
-   "women": false
-  },
-  "401928105": {
-   "pick": "Talita Alencar",
-   "vs": "Piera Rodriguez",
-   "p": 50,
-   "women": true
   }
  },
- "dist_model": "2026-10-24",
+ "dist_model": "2026-10-31",
  "cards": [
   {
-   "card": "2026-10-31",
-   "event": "600061420",
-   "name": "UFC Fight Night: Moicano vs. Nolan",
-   "start": "2026-10-31T21:00:00+00:00",
+   "card": "2026-11-07",
+   "event": "600061268",
+   "name": "UFC Fight Night: Cortes Acosta vs. Walker",
+   "start": "2026-11-07T22:00:00+00:00",
    "model": "ufc"
   }
  ]
