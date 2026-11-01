@@ -1107,9 +1107,15 @@
   .price.placed.slip2:not(.won):not(.lost):not(.paid),
   .gcard.gcard--v3 .price.placed.slip2:not(.won):not(.lost):not(.paid) { border-color: #0A7CFF;
     box-shadow: 0 0 0 1px rgba(10, 124, 255, 0.35), 0 0 12px rgba(10, 124, 255, 0.40); }
-  .gcell:has(> .mk.ok) .price.placed.slip2, .gteam:has(> .mk.ok) .price.placed.slip2 { border-color: var(--green);
+  /* and a leg of the third open slip wears orange */
+  .price.placed.slip3:not(.won):not(.lost):not(.paid),
+  .gcard.gcard--v3 .price.placed.slip3:not(.won):not(.lost):not(.paid) { border-color: #FF8A1F;
+    box-shadow: 0 0 0 1px rgba(255, 138, 31, 0.35), 0 0 12px rgba(255, 138, 31, 0.40); }
+  .gcell:has(> .mk.ok) .price.placed.slip2, .gteam:has(> .mk.ok) .price.placed.slip2,
+  .gcell:has(> .mk.ok) .price.placed.slip3, .gteam:has(> .mk.ok) .price.placed.slip3 { border-color: var(--green);
     box-shadow: 0 0 0 1px rgba(23, 194, 87, 0.40), 0 0 12px rgba(23, 194, 87, 0.45); }
-  .gcell:has(> .mk.no) .price.placed.slip2, .gteam:has(> .mk.no) .price.placed.slip2 { border-color: #e2564d;
+  .gcell:has(> .mk.no) .price.placed.slip2, .gteam:has(> .mk.no) .price.placed.slip2,
+  .gcell:has(> .mk.no) .price.placed.slip3, .gteam:has(> .mk.no) .price.placed.slip3 { border-color: #e2564d;
     box-shadow: 0 0 0 1px rgba(226, 86, 77, 0.40), 0 0 12px rgba(226, 86, 77, 0.45); }
   @media (prefers-reduced-motion: reduce) { .price { transition: none; } }
   .na { color: var(--muted); font-style: italic; font-size: 13.5px; padding: 8px 0; }

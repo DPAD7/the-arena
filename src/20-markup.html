@@ -669,6 +669,7 @@
       if (saved[b.dataset.oid]) b.classList.add("on");
       if (placed[b.dataset.oid]) b.classList.add("placed");
       b.classList.toggle("slip2", !!(window.SLIP2 || {})[b.dataset.oid]);
+      b.classList.toggle("slip3", !!(window.SLIP3 || {})[b.dataset.oid]);
     });
   }
   /* On or off, and written to every copy of that leg on the page at once:
