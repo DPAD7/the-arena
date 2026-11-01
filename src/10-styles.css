@@ -1946,6 +1946,8 @@
   /* the gold box he put on the price carries over to what he did, and settles */
   .gcard.gcard--v3 .pnum.placed { border-color: #e3b341; border-width: 2px;
     background: rgba(227,179,65,.10); color: var(--ink); }
+  .gcard.gcard--v3 .pnum.placed.slip2 { border-color: #0A7CFF; background: rgba(10,124,255,.10); }
+  .gcard.gcard--v3 .pnum.placed.slip3 { border-color: #FF8A1F; background: rgba(255,138,31,.10); }
   .gcard.gcard--v3 .pnum.won { border-color: var(--green); color: var(--green);
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
   .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;
