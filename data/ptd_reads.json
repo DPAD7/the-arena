@@ -2,30 +2,6 @@
  "at": "2026-11-01",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4038941": {
-   "p": 0.759,
-   "name": "Justin Herbert"
-  },
-  "12483": {
-   "p": 0.916,
-   "name": "Matthew Stafford"
-  },
-  "3139477": {
-   "p": 0.759,
-   "name": "Patrick Mahomes"
-  },
-  "4426338": {
-   "p": 0.757,
-   "name": "Bo Nix"
-  },
-  "4431452": {
-   "p": 0.801,
-   "name": "Drake Maye"
-  },
-  "4242512": {
-   "p": 0.658,
-   "name": "Malik Willis"
-  },
   "4685201": {
    "p": 0.603,
    "name": "Tanner McKee"
@@ -46,9 +22,9 @@
    "p": 0.837,
    "name": "Trevor Lawrence"
   },
-  "4036419": {
-   "p": 0.579,
-   "name": "Skylar Thompson"
+  "4035671": {
+   "p": 0.717,
+   "name": "Tyler Huntley"
   },
   "3915511": {
    "p": 0.856,
@@ -70,9 +46,17 @@
    "p": 0.741,
    "name": "Geno Smith"
   },
+  "3139477": {
+   "p": 0.816,
+   "name": "Patrick Mahomes"
+  },
   "3046779": {
    "p": 0.858,
    "name": "Jared Goff"
+  },
+  "4242512": {
+   "p": 0.687,
+   "name": "Malik Willis"
   },
   "3122840": {
    "p": 0.711,
@@ -86,6 +70,14 @@
    "p": 0.644,
    "name": "J.J. McCarthy"
   },
+  "12483": {
+   "p": 0.86,
+   "name": "Matthew Stafford"
+  },
+  "4426338": {
+   "p": 0.742,
+   "name": "Bo Nix"
+  },
   "4685720": {
    "p": 0.823,
    "name": "Bryce Young"
@@ -93,6 +85,10 @@
   "4432577": {
    "p": 0.816,
    "name": "C.J. Stroud"
+  },
+  "4038941": {
+   "p": 0.773,
+   "name": "Justin Herbert"
   },
   "14880": {
    "p": 0.829,
@@ -106,6 +102,10 @@
    "p": 0.81,
    "name": "Jordan Love"
   },
+  "4431452": {
+   "p": 0.86,
+   "name": "Drake Maye"
+  },
   "2578570": {
    "p": 0.74,
    "name": "Jacoby Brissett"
@@ -113,10 +113,6 @@
   "3052587": {
    "p": 0.747,
    "name": "Baker Mayfield"
-  },
-  "4035671": {
-   "p": 0.653,
-   "name": "Tyler Huntley"
   },
   "3918298": {
    "p": 0.858,
@@ -271,9 +267,9 @@
     "p": 0.837,
     "name": "Trevor Lawrence"
    },
-   "4036419": {
-    "p": 0.579,
-    "name": "Skylar Thompson"
+   "4035671": {
+    "p": 0.717,
+    "name": "Tyler Huntley"
    }
   },
   "401873038": {
