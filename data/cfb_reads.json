@@ -1,5 +1,5 @@
 {
- "at": "2026-11-01T00:42:34Z",
+ "at": "2026-11-01T01:12:37Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -3104,9 +3104,9 @@
     "pick": "John Alan Richter",
     "pick_id": "5082330",
     "team": "TOL",
-    "p": 0.647384,
+    "p": 0.826944,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5082330",
@@ -3122,20 +3122,20 @@
     "5158748": {
      "name": "Jackson Sharman",
      "team": "SAC",
-     "p1": 0.642878,
+     "p1": 0.526412,
      "take1": false,
-     "p2": 0.269344,
+     "p2": 0.198075,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5082330": {
      "name": "John Alan Richter",
      "team": "TOL",
-     "p1": 0.832324,
+     "p1": 0.898406,
      "take1": false,
-     "p2": 0.545489,
+     "p2": 0.664177,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3219,9 +3219,9 @@
     "pick": "Caden Veltkamp",
     "pick_id": "4869991",
     "team": "FAU",
-    "p": 0.688391,
+    "p": 0.635985,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "4775136",
@@ -3237,20 +3237,20 @@
     "4869991": {
      "name": "Caden Veltkamp",
      "team": "FAU",
-     "p1": 0.893254,
-     "take1": false,
-     "p2": 0.657626,
-     "take2": false,
-     "has_line": false
+     "p1": 0.911206,
+     "take1": true,
+     "p2": 0.708799,
+     "take2": true,
+     "has_line": true
     },
     "4775136": {
      "name": "Owen McCown",
      "team": "UTSA",
-     "p1": 0.838074,
+     "p1": 0.873386,
      "take1": false,
-     "p2": 0.553333,
+     "p2": 0.619648,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3274,12 +3274,12 @@
     ]
    },
    "h2h": {
-    "pick": "Landry Lyddy",
-    "pick_id": "4833635",
-    "team": "USM",
-    "p": 0.536418,
+    "pick": "Camden Coleman",
+    "pick_id": "5153978",
+    "team": "JMU",
+    "p": 0.601943,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5153978",
@@ -3295,20 +3295,20 @@
     "5153978": {
      "name": "Camden Coleman",
      "team": "JMU",
-     "p1": 0.844267,
+     "p1": 0.877201,
      "take1": false,
-     "p2": 0.579781,
+     "p2": 0.634066,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "4833635": {
      "name": "Landry Lyddy",
      "team": "USM",
-     "p1": 0.749922,
+     "p1": 0.707222,
      "take1": false,
-     "p2": 0.391776,
+     "p2": 0.353036,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
