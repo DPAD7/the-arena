@@ -1,36 +1,8 @@
 {
- "at": "2026-11-01 14:12 UTC",
+ "at": "2026-11-01 16:11 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Trevor Lawrence",
-    "Daniel Jones"
-   ],
-   "pick": "Trevor Lawrence",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    6,
-    -2
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 53.0 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "IND@JAC",
-   "eid": 22128,
-   "kick": "2026-11-01 18:00:00Z"
-  },
   {
    "qbs": [
     "Joe Burrow",
@@ -60,48 +32,25 @@
   },
   {
    "qbs": [
-    "Aaron Rodgers",
-    "Deshaun Watson"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "CLE@PIT",
-   "eid": 22130,
-   "kick": "2026-11-01 18:00:00Z"
-  },
-  {
-   "qbs": [
     "Kyler Murray",
     "Jared Goff"
    ],
    "pick": "Jared Goff",
-   "lead": 4,
+   "lead": 8,
    "complete": true,
    "missing": [],
    "score": [
-    0,
-    4
+    -1,
+    7
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "2 of 4 combined boxes checked"
+    "His receivers are set 46.0 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
+    1,
     1,
     1,
     0
@@ -138,44 +87,13 @@
   },
   {
    "qbs": [
-    "Jacoby Brissett",
-    "Dak Prescott"
-   ],
-   "pick": "Dak Prescott",
-   "lead": 4,
-   "complete": false,
-   "missing": [
-    "ARI J.Brooks (13%)"
-   ],
-   "score": [
-    -2,
-    2
-   ],
-   "why": [
-    "Opponent gives up more yards to the top receiver (+33 a game)",
-    "His offense is more efficient (EPA per play)"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "ARI@DAL",
-   "eid": 22133,
-   "kick": "2026-11-01 18:00:00Z"
-  },
-  {
-   "qbs": [
     "Kirk Cousins",
     "Geno Smith"
    ],
    "pick": null,
    "lead": 0,
-   "complete": false,
-   "missing": [
-    "NYJ B.Allen (15%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     0,
     0
@@ -262,7 +180,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 103.0 yards higher in total on their lines",
+    "His receivers are set 100.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
