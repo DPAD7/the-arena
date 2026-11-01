@@ -53,7 +53,7 @@
     if (!had) return;
     var b = host.querySelector("button.price");
     if (!b) return;
-    ["on", "placed", "won", "lost", "slip2", "slip3"].forEach(function (c) {
+    ["on", "placed", "won", "lost", "slip2", "slip3", "sa1", "sa2", "sa3", "sb1", "sb2", "sb3"].forEach(function (c) {
       if (had.classList.contains(c)) b.classList.add(c);
     });
     if (had.dataset && had.dataset.oid && !b.dataset.oid) b.dataset.oid = had.dataset.oid;

@@ -36,16 +36,17 @@
     });
     return got;
   }
-  /* which open slip a marked leg rides: 1 gold, 2 blue, 3 orange (Jose,
-     Nov 1, 2026: "gold for 1st, blue for second, orange for 3rd") */
+  /* which open slip a marked leg rides: 1 gold, 2 blue, 3 orange, and a
+     leg on two of them first (Jose, Nov 1, 2026: "gold for 1st, blue for
+     second, orange for 3rd") */
   function slipTier(oid) {
-    return (window.SLIP2 || {})[oid] ? 2 : (window.SLIP3 || {})[oid] ? 3 : 1;
+    return (window.SLIPMIX || {})[oid] ? 0 : (window.SLIP2 || {})[oid] ? 2 : (window.SLIP3 || {})[oid] ? 3 : 1;
   }
-  function numChip(v, on, placed, won, tier) {
+  function numChip(v, on, placed, won, oid) {
     var b = document.createElement("b");
     b.className = "pnum" + (on ? " on" : "") + (placed ? " placed" : "") +
-      (placed && tier > 1 ? " slip" + tier : "") +
       (won === true ? " won" : won === false ? " lost" : "");
+    if (placed && oid && window.slipPaint) window.slipPaint(b, oid);
     b.appendChild(document.createTextNode(v === "" || v === null ? "\u2013" : String(v)));
     return b;
   }
@@ -121,7 +122,7 @@
           var mlo = (ml && ml.dataset.oid) || mo[e[3]];
           var mk = legMine(ml, mlo);
           e[0].appendChild(numChip(e[1], e[1] > e[2], mk,
-            mk && done ? e[1] > e[2] : null, slipTier(mlo)));
+            mk && done ? e[1] > e[2] : null, mlo));
         });
       }
     }
@@ -156,7 +157,7 @@
            by its own id: marked on the board, or on a slip from the book */
         var oid = (hb && hb.dataset.oid) || (hpr[e[3]] && hpr[e[3]][1]) || "";
         var mine = legMine(hb, oid);
-        e[0].appendChild(numChip(e[1], e[1] > e[2], mine, mine && done ? e[1] > e[2] : null, slipTier(oid)));
+        e[0].appendChild(numChip(e[1], e[1] > e[2], mine, mine && done ? e[1] > e[2] : null, oid));
       });
       /* the margin under the VS, in the room below the rows, leaning to the
          side that leads (Jose, Sep 26, 2026: "put the difference under the
@@ -202,10 +203,11 @@
         /* he may have marked the 2+ rung rather than the 1+, and that rung's
            chip is not drawn once the game is on -- so the count answers for
            any rung of his he had marked */
-        var placed = false, wonAt = 0, tier = 9;
+        var placed = false, wonAt = 0, tier = 9, toid = "";
         side.querySelectorAll(".ptdbtn button.price").forEach(function (b0, i0) {
           if (legMine(b0)) {
-            placed = true; tier = Math.min(tier, slipTier(b0.dataset.oid));
+            placed = true;
+            if (slipTier(b0.dataset.oid) < tier) { tier = slipTier(b0.dataset.oid); toid = b0.dataset.oid; }
             var ln0 = b0.closest(".ptdbtn").querySelector(".ptdline");
             var n0 = ln0 ? parseInt(ln0.textContent, 10) : i0 + 1;
             if (!isNaN(n0)) wonAt = Math.max(wonAt, n0);
@@ -214,13 +216,13 @@
         /* and every rung the card does not draw -- 3+, 4+ and up -- by its id */
         var lad0 = ((((typeof PROPS === "object" && PROPS[card.dataset.espn]) || {})[sec.dataset.kind === "ATD" ? "atd" : "ptd"]) || [])[sd[1]] || [];
         lad0.forEach(function (slot, k) {
-          if (slot && slot[1] && legMine(null, slot[1])) { placed = true; tier = Math.min(tier, slipTier(slot[1])); wonAt = Math.max(wonAt, k + 1); }
+          if (slot && slot[1] && legMine(null, slot[1])) { placed = true; if (slipTier(slot[1]) < tier) { tier = slipTier(slot[1]); toid = slot[1]; } wonAt = Math.max(wonAt, k + 1); }
         });
         var oth = counts[sd[1] ? 0 : 1];
         var ov = oth ? parseInt(oth.textContent, 10) : 0;
         if (isNaN(ov)) ov = 0;
         var chip = numChip(v, v > ov, placed,
-          placed && done ? v >= (wonAt || 1) : null, tier);
+          placed && done ? v >= (wonAt || 1) : null, toid);
         chip.classList.add("pnum--" + sd[0]);
         /* each count opens its own kind: the passing count every touchdown he
            threw, the rushing count every one he ran in

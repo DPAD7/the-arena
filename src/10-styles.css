@@ -1948,6 +1948,32 @@
     background: rgba(227,179,65,.10); color: var(--ink); }
   .gcard.gcard--v3 .pnum.placed.slip2 { border-color: #0A7CFF; background: rgba(10,124,255,.10); }
   .gcard.gcard--v3 .pnum.placed.slip3 { border-color: #FF8A1F; background: rgba(255,138,31,.10); }
+  /* a leg on two open slips: the left half of its edge in the first one's color,
+     the right half in the second's (Jose, Nov 1, 2026) */
+  .price.placed.sa1:not(.won):not(.lost):not(.paid), .gcard.gcard--v3 .price.placed.sa1:not(.won):not(.lost):not(.paid),
+  .gcard.gcard--v3 .pnum.placed.sa1:not(.won):not(.lost) { border-color: #e3b341; position: relative; }
+  .price.placed.sa2:not(.won):not(.lost):not(.paid), .gcard.gcard--v3 .price.placed.sa2:not(.won):not(.lost):not(.paid),
+  .gcard.gcard--v3 .pnum.placed.sa2:not(.won):not(.lost) { border-color: #0A7CFF; position: relative; }
+  .price.placed.sa3:not(.won):not(.lost):not(.paid), .gcard.gcard--v3 .price.placed.sa3:not(.won):not(.lost):not(.paid),
+  .gcard.gcard--v3 .pnum.placed.sa3:not(.won):not(.lost) { border-color: #FF8A1F; position: relative; }
+  .price.placed.sb1:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb1:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb1:not(.won):not(.lost)::after { border-color: #e3b341; }
+  .price.placed.sb2:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb2:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb2:not(.won):not(.lost)::after { border-color: #0A7CFF; }
+  .price.placed.sb3:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb3:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb3:not(.won):not(.lost)::after { border-color: #FF8A1F; }
+  .price.placed.sb1:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb1:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb1:not(.won):not(.lost)::after,
+  .price.placed.sb2:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb2:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb2:not(.won):not(.lost)::after,
+  .price.placed.sb3:not(.won):not(.lost):not(.paid)::after, .gcard.gcard--v3 .price.placed.sb3:not(.won):not(.lost):not(.paid)::after,
+  .gcard.gcard--v3 .pnum.placed.sb3:not(.won):not(.lost)::after {
+    content: ""; position: absolute; top: -2px; right: -2px; bottom: -2px; left: 50%;
+    border-style: solid; border-width: 2px 2px 2px 0; border-radius: 0 inherit inherit 0;
+    border-top-right-radius: inherit; border-bottom-right-radius: inherit; pointer-events: none; }
+  .gcell:has(> .mk.ok) .price.placed.price.placed:is(.sa1, .sa2, .sa3), .gteam:has(> .mk.ok) .price.placed.price.placed:is(.sa1, .sa2, .sa3) { border-color: var(--green); }
+  .gcell:has(> .mk.no) .price.placed.price.placed:is(.sa1, .sa2, .sa3), .gteam:has(> .mk.no) .price.placed.price.placed:is(.sa1, .sa2, .sa3) { border-color: #e2564d; }
+  .gcell:has(> .mk) .price.placed:is(.sb1, .sb2, .sb3)::after, .gteam:has(> .mk) .price.placed:is(.sb1, .sb2, .sb3)::after { display: none; }
   .gcard.gcard--v3 .pnum.won { border-color: var(--green); color: var(--green);
     box-shadow: 0 0 0 1px rgba(23,194,87,.35), 0 0 10px rgba(23,194,87,.30); }
   .gcard.gcard--v3 .pnum.lost { border-color: #e2564d; color: #e2564d;

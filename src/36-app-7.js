@@ -504,15 +504,24 @@
        "gold for 1st, blue for second, orange for 3rd") */
     var open = DKB.bets.filter(function (bet) { return bet.status === "open"; })
       .sort(function (x, y) { return (Date.parse(x.placed) || 0) - (Date.parse(y.placed) || 0); });
-    var first = {}, two = {}, three = {};
-    (open[0] && open[0].legs || []).forEach(function (lg) { if (lg.sel) first[lg.sel] = 1; });
-    (open[1] && open[1].legs || []).forEach(function (lg) { if (lg.sel && !first[lg.sel]) two[lg.sel] = 1; });
-    (open[2] && open[2].legs || []).forEach(function (lg) { if (lg.sel && !first[lg.sel] && !two[lg.sel]) three[lg.sel] = 1; });
-    window.SLIP2 = two; window.SLIP3 = three;
-    document.querySelectorAll("button.price[data-oid]").forEach(function (b) {
-      b.classList.toggle("slip2", !!two[b.dataset.oid]);
-      b.classList.toggle("slip3", !!three[b.dataset.oid]);
+    var two = {}, three = {}, mix = {}, on = {};
+    open.slice(0, 3).forEach(function (bet, i) {
+      (bet.legs || []).forEach(function (lg) {
+        if (!lg.sel) return;
+        var t = on[lg.sel] || (on[lg.sel] = []);
+        if (t.indexOf(i + 1) < 0) t.push(i + 1);
+      });
     });
+    /* a leg on two of them wears half of each (Jose, Nov 1, 2026: "if two
+       are the same half one and half the other color") */
+    Object.keys(on).forEach(function (sel) {
+      var t = on[sel];
+      if (t.length > 1) mix[sel] = [t[0], t[1]];
+      else if (t[0] === 2) two[sel] = 1;
+      else if (t[0] === 3) three[sel] = 1;
+    });
+    window.SLIP2 = two; window.SLIP3 = three; window.SLIPMIX = mix;
+    document.querySelectorAll("button.price[data-oid]").forEach(function (b) { window.slipPaint(b, b.dataset.oid); });
     DKB.bets.forEach(function (bet) {
       (bet.legs || []).forEach(function (lg) {
         if (!lg.sel) return;

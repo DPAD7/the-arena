@@ -668,10 +668,20 @@
     (root || document).querySelectorAll("button.price[data-oid]").forEach(function (b) {
       if (saved[b.dataset.oid]) b.classList.add("on");
       if (placed[b.dataset.oid]) b.classList.add("placed");
-      b.classList.toggle("slip2", !!(window.SLIP2 || {})[b.dataset.oid]);
-      b.classList.toggle("slip3", !!(window.SLIP3 || {})[b.dataset.oid]);
+      window.slipPaint(b, b.dataset.oid);
     });
   }
+  /* the open slip a marked leg rides, as its edge: gold, blue, orange, or
+     half of each when it rides two */
+  window.slipPaint = function (el, oid) {
+    var m = (window.SLIPMIX || {})[oid];
+    el.classList.toggle("slip2", !m && !!(window.SLIP2 || {})[oid]);
+    el.classList.toggle("slip3", !m && !!(window.SLIP3 || {})[oid]);
+    [1, 2, 3].forEach(function (n) {
+      el.classList.toggle("sa" + n, !!m && m[0] === n);
+      el.classList.toggle("sb" + n, !!m && m[1] === n);
+    });
+  };
   /* On or off, and written to every copy of that leg on the page at once:
      the same price is drawn on the card's own face and again inside the
      market sheet, and marking one and not the other would read as two
