@@ -271,9 +271,12 @@
     var qbName = sideR ? card.dataset.rqb : sideL ? card.dataset.lqb : "";
     /* 1. weather, outdoors only */
     var w = a.wx || {};
-    if (!w.in && ((w.g || 0) >= 20 || (w.p || 0) >= 60)) {
+    /* rain from 50%, the line the wire and the phone alert use (Jose, Nov 1,
+       2026: ATL @ TB read 66% and the slips went on anyway) */
+    var windy = w.src === "hourly" ? (w.g || 0) >= 15 : (w.g || 0) >= 20;
+    if (!w.in && (windy || (w.p || 0) >= 50)) {
       var bits = [];
-      if ((w.p || 0) >= 60) bits.push("rain likely (" + w.p + "%)");
+      if ((w.p || 0) >= 50) bits.push("rain " + w.p + "%");
       /* the stadium's steady wind through the game when the hourly forecast
          gave it (15 mph is where passing suffers); ESPN's gust otherwise */
       if (w.src === "hourly" ? (w.g || 0) >= 15 : (w.g || 0) >= 20) bits.push((w.src === "hourly" ? "wind " : "gusts to ") + w.g + " mph");

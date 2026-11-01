@@ -650,6 +650,37 @@ export class Clock {
         was[x.l.sel] = now1;
       }
       await this.ctx.storage.put("risk", was);
+      // rain or wind on a slip's game, said the first time it is read and
+      // again whenever it gets worse -- not only remembered, as the risks
+      // above are: ATL @ TB read 66% rain when three slips went on it and
+      // nothing reached the phone (Jose, Nov 1, 2026: "I need a better alert")
+      const wxSaid = (await this.ctx.storage.get("wxsaid")) || {};
+      const wxNow = {};
+      for (const x of future) {
+        const w = (alerts[x.v.gid] || {}).wx || {};
+        if (w.in) continue;
+        const rain = +w.p || 0, wind = +w.g || 0;
+        const windy = w.src === "hourly" ? wind >= 15 : wind >= 20;
+        if (rain < 50 && !windy) continue;
+        const k = x.bet.id + "@" + x.v.gid;
+        const g = wxNow[k] || (wxNow[k] = { bet: x.bet, r: rows[x.v.gid], rain, wind, windy, src: w.src, legs: [] });
+        const nm = (x.l.label || x.l.pick || "").split(" · ")[0];
+        if (nm && !g.legs.includes(nm)) g.legs.push(nm);
+      }
+      for (const [k, g] of Object.entries(wxNow)) {
+        const prev = wxSaid[k];
+        if (prev && g.rain < prev.p + 10 && (!g.windy || prev.w)) continue;
+        const bits = [];
+        if (g.rain >= 50) bits.push(g.rain + "% rain");
+        bits.push((g.src === "hourly" ? "wind " : "gusts to ") + g.wind + " mph");
+        out.push({ key: "wx@" + k + "@" + g.rain + "@" + (g.windy ? 1 : 0), type: "change",
+                   title: (g.rain >= 50 ? "Rain" : "Wind") + " on your slip: " + g.r[4] + " @ " + g.r[5],
+                   body: bits.join(", ") + " at kickoff. On this slip: " + g.legs.join(", ") + ". Rain and wind cut passing and scoring.",
+                   url: "/#slip=" + g.bet.id });
+        wxSaid[k] = { p: Math.max(g.rain, prev ? prev.p : 0), w: g.windy || !!(prev && prev.w), at: now };
+      }
+      for (const k of Object.keys(wxSaid)) if (now - wxSaid[k].at > 3 * 86400000) delete wxSaid[k];
+      await this.ctx.storage.put("wxsaid", wxSaid);
     }
     // each slip's end, kept for the week's recap
     const hist = (await this.ctx.storage.get("hist")) || {};
