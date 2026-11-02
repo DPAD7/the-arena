@@ -361,6 +361,8 @@ def _norm_fights(df):
         df[c] = pd.to_numeric(df[c], errors="coerce")
     for c in ("red_ctrl", "blue_ctrl", "time", "method", "method_detail", "title_bout"):
         df[c] = df[c].astype(object).where(df[c].notna(), None)
+    # the stored column is bool and a crawled row writes "true"/"false": a mix will not save
+    df["title_bout"] = df["title_bout"].map(lambda v: v if v is None or isinstance(v, bool) else str(v).lower() == "true")
     return df
 
 
