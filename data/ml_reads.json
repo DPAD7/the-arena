@@ -290,6 +290,28 @@
    "kick": "2026-11-01T18:00Z"
   },
   {
+   "gid": "401873050",
+   "away": "TB",
+   "home": "CHI",
+   "pick": "CHI",
+   "model": 72,
+   "book": 68,
+   "bookpick": "CHI",
+   "agree": true,
+   "won": 87,
+   "n": 31,
+   "call": "take",
+   "rank": 1,
+   "why": [
+    "QB play (EPA per dropback): CHI +0.13, TB -0.11",
+    "Last 3 games, point margin: CHI -3.3, TB +10.3",
+    "Points per game: CHI 25.7, TB 23.1",
+    "Win % this season: CHI 71%, TB 29%"
+   ],
+   "week": 9,
+   "kick": "2026-11-09T01:20Z"
+  },
+  {
    "gid": "401873047",
    "away": "LV",
    "home": "SF",
@@ -301,7 +323,7 @@
    "won": 84,
    "n": 50,
    "call": "take",
-   "rank": 1,
+   "rank": 2,
    "why": [
     "Points allowed per game: SF 19.9, LV 28.1",
     "Last 3 games, win %: SF 67%, LV 0%",
@@ -323,7 +345,7 @@
    "won": 77,
    "n": 47,
    "call": "take",
-   "rank": 2,
+   "rank": 3,
    "why": [
     "Points allowed per game: KC 17.2, NYJ 21.4",
     "Points per game: KC 23.8, NYJ 19.6",
@@ -334,34 +356,12 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
-   "gid": "401873050",
-   "away": "TB",
-   "home": "CHI",
-   "pick": "CHI",
-   "model": 72,
-   "book": 70,
-   "bookpick": "CHI",
-   "agree": true,
-   "won": 75,
-   "n": 28,
-   "call": "take",
-   "rank": 3,
-   "why": [
-    "QB play (EPA per dropback): CHI +0.13, TB -0.11",
-    "Last 3 games, point margin: CHI -3.3, TB +10.3",
-    "Points per game: CHI 25.7, TB 23.1",
-    "Win % this season: CHI 71%, TB 29%"
-   ],
-   "week": 9,
-   "kick": "2026-11-09T01:20Z"
-  },
-  {
    "gid": "401873042",
    "away": "DET",
    "home": "MIA",
    "pick": "DET",
    "model": 68,
-   "book": 73,
+   "book": 74,
    "bookpick": "DET",
    "agree": true,
    "won": 75,
@@ -493,7 +493,7 @@
    "home": "ATL",
    "pick": "CIN",
    "model": 58,
-   "book": 60,
+   "book": 62,
    "bookpick": "CIN",
    "agree": true,
    "won": 61,
