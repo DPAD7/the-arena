@@ -326,7 +326,8 @@ def the_page():
         import look
         return [(None, w) for w in look.main()]
     except Exception as e:
-        return [(None, "the page could not be rendered (%s)" % type(e).__name__)]
+        # the error's own first line, so a failure on GitHub says what it was
+        return [(None, "the page could not be rendered (%s: %s)" % (type(e).__name__, str(e).strip().splitlines()[0][:160] if str(e).strip() else ""))]
 
 
 CHECKS = (passers, lineups, benches, formats, rewinds, prices, faces, alerts, jerseys, clips, wire, fights, settled, files, usage, reads)
