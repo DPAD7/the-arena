@@ -8,13 +8,23 @@
 /* ESPN's edge is Akamai and turns away a bare machine call, so every read
    here is made the way a browser makes it -- the site's /espn relay does the
    same (Jose, Sep 17, 2026). Without this the clock's reads failed quietly. */
-export function espnGet(u) {
-  /* through the site's own relay (/espn), the path the phone uses: ESPN's
-     edge turned the Worker's own calls away even dressed as a browser */
-  return fetch("https://the-arenasports.pages.dev/espn?u=" + encodeURIComponent(u), { headers: {
-    accept: "application/json, text/plain, */*", "accept-language": "en-US,en;q=0.9",
-    "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
-    referer: "https://www.espn.com/", origin: "https://www.espn.com" } });
+const ESPN_HEADS = {
+  accept: "application/json, text/plain, */*", "accept-language": "en-US,en;q=0.9",
+  "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+  referer: "https://www.espn.com/", origin: "https://www.espn.com" };
+export async function espnGet(u) {
+  /* straight to site.api.espn.com, the host the relay itself falls back to
+     since site.web.api began refusing Cloudflare (Oct 13, 2026). Every read
+     through the site's /espn relay was a Pages request: the clock's reads on
+     each DraftKings beat ran the board to 47,000 a day (Nov 1, 2026). The
+     relay stays only for a read ESPN refuses here. */
+  try {
+    const d = new URL(u);
+    if (d.hostname === "site.web.api.espn.com") d.hostname = "site.api.espn.com";
+    const r = await fetch(d.toString(), { headers: ESPN_HEADS, cf: { cacheTtl: 5, cacheEverything: true } });
+    if (r.ok) return r;
+  } catch (e) {}
+  return fetch("https://the-arenasports.pages.dev/espn?u=" + encodeURIComponent(u), { headers: ESPN_HEADS });
 }
 const SITE = "https://the-arenasports.pages.dev";
 const MIN = 60000;
