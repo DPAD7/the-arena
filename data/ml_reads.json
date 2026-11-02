@@ -1,5 +1,5 @@
 {
- "at": "2026-11-01",
+ "at": "2026-11-02",
  "week": 8,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
@@ -317,7 +317,7 @@
    "home": "KC",
    "pick": "KC",
    "model": 71,
-   "book": 81,
+   "book": 80,
    "bookpick": "KC",
    "agree": true,
    "won": 77,
@@ -361,7 +361,7 @@
    "home": "MIA",
    "pick": "DET",
    "model": 68,
-   "book": 74,
+   "book": 73,
    "bookpick": "DET",
    "agree": true,
    "won": 75,
@@ -378,28 +378,6 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
-   "gid": "401873037",
-   "away": "JAX",
-   "home": "BAL",
-   "pick": "JAX",
-   "model": 67,
-   "book": 76,
-   "bookpick": "JAX",
-   "agree": true,
-   "won": 72,
-   "n": 29,
-   "call": "take",
-   "rank": 5,
-   "why": [
-    "Points allowed per game: JAX 17.3, BAL 23.9",
-    "BAL is starting a backup QB",
-    "QB play (EPA per dropback): JAX +0.20, BAL -0.02",
-    "Last 3 games, win %: JAX 67%, BAL 33%"
-   ],
-   "week": 9,
-   "kick": "2026-11-06T01:15Z"
-  },
-  {
    "gid": "401873040",
    "away": "DAL",
    "home": "IND",
@@ -411,7 +389,7 @@
    "won": 67,
    "n": 78,
    "call": "take",
-   "rank": 6,
+   "rank": 5,
    "why": [
     "Points per game: DAL 27.0, IND 22.0",
     "QB play (EPA per dropback): DAL +0.16, IND -0.02",
@@ -433,7 +411,7 @@
    "won": 64,
    "n": 11,
    "call": "take",
-   "rank": 7,
+   "rank": 6,
    "why": [
     "Points allowed per game: SEA 17.9, ARI 29.7",
     "Points per game: SEA 24.0, ARI 20.3",
@@ -455,7 +433,7 @@
    "won": 87,
    "n": 31,
    "call": "lean",
-   "rank": 8,
+   "rank": 7,
    "why": [
     "Points per game: HOU 23.6, LAC 15.0",
     "Last 3 games, win %: HOU 67%, LAC 0%",
@@ -477,7 +455,7 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 9,
+   "rank": 8,
    "why": [
     "Points per game: NYG 23.3, PHI 18.1",
     "Last 3 games, win %: NYG 50%, PHI 0%",
@@ -486,6 +464,28 @@
    ],
    "week": 9,
    "kick": "2026-11-08T18:00Z"
+  },
+  {
+   "gid": "401873037",
+   "away": "JAX",
+   "home": "BAL",
+   "pick": "JAX",
+   "model": 56,
+   "book": 76,
+   "bookpick": "JAX",
+   "agree": true,
+   "won": 75,
+   "n": 12,
+   "call": null,
+   "rank": 9,
+   "why": [
+    "Points allowed per game: JAX 17.3, BAL 23.9",
+    "Last 3 games, win %: JAX 67%, BAL 33%",
+    "QB play (EPA per dropback): JAX +0.20, BAL +0.11",
+    "Points per game: JAX 25.7, BAL 24.1"
+   ],
+   "week": 9,
+   "kick": "2026-11-06T01:15Z"
   },
   {
    "gid": "401873038",
@@ -515,7 +515,7 @@
    "home": "WSH",
    "pick": "LAR",
    "model": 58,
-   "book": 67,
+   "book": 66,
    "bookpick": "LAR",
    "agree": true,
    "won": 61,
