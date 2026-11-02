@@ -378,6 +378,28 @@
    "kick": "2026-11-08T21:25Z"
   },
   {
+   "gid": "401873037",
+   "away": "JAX",
+   "home": "BAL",
+   "pick": "JAX",
+   "model": 73,
+   "book": 78,
+   "bookpick": "JAX",
+   "agree": true,
+   "won": 77,
+   "n": 47,
+   "call": "take",
+   "rank": 5,
+   "why": [
+    "Points allowed per game: JAX 15.9, BAL 25.4",
+    "BAL is starting a backup QB",
+    "Points per game: JAX 28.0, BAL 22.4",
+    "Last 3 games, win %: JAX 67%, BAL 0%"
+   ],
+   "week": 9,
+   "kick": "2026-11-06T01:15Z"
+  },
+  {
    "gid": "401873045",
    "away": "NYJ",
    "home": "KC",
@@ -389,7 +411,7 @@
    "won": 72,
    "n": 29,
    "call": "take",
-   "rank": 5,
+   "rank": 6,
    "why": [
     "Points allowed per game: KC 18.7, NYJ 23.5",
     "Points per game: KC 23.9, NYJ 21.2",
@@ -411,7 +433,7 @@
    "won": 72,
    "n": 29,
    "call": "take",
-   "rank": 6,
+   "rank": 7,
    "why": [
     "Points per game: DET 29.0, MIA 16.7",
     "Last 3 games, win %: DET 100%, MIA 33%",
@@ -422,38 +444,16 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
-   "gid": "401873037",
-   "away": "JAX",
-   "home": "BAL",
-   "pick": "JAX",
-   "model": 64,
-   "book": 77,
-   "bookpick": "JAX",
-   "agree": true,
-   "won": 64,
-   "n": 11,
-   "call": "take",
-   "rank": 7,
-   "why": [
-    "Points allowed per game: JAX 15.9, BAL 25.4",
-    "Points per game: JAX 28.0, BAL 22.4",
-    "Last 3 games, win %: JAX 67%, BAL 0%",
-    "QB play (EPA per dropback): JAX +0.22, BAL +0.10"
-   ],
-   "week": 9,
-   "kick": "2026-11-06T01:15Z"
-  },
-  {
    "gid": "401873038",
    "away": "CIN",
    "home": "ATL",
    "pick": "CIN",
    "model": 63,
-   "book": 59,
+   "book": 60,
    "bookpick": "CIN",
    "agree": true,
-   "won": 66,
-   "n": 61,
+   "won": 67,
+   "n": 78,
    "call": "lean",
    "rank": 8,
    "why": [
@@ -471,11 +471,11 @@
    "home": "PHI",
    "pick": "NYG",
    "model": 63,
-   "book": 58,
+   "book": 60,
    "bookpick": "NYG",
    "agree": true,
-   "won": 66,
-   "n": 61,
+   "won": 67,
+   "n": 78,
    "call": "lean",
    "rank": 9,
    "why": [
@@ -493,7 +493,7 @@
    "home": "NE",
    "pick": "NE",
    "model": 61,
-   "book": 57,
+   "book": 58,
    "bookpick": "NE",
    "agree": true,
    "won": 66,
@@ -537,7 +537,7 @@
    "home": "WSH",
    "pick": "LAR",
    "model": 56,
-   "book": 67,
+   "book": 66,
    "bookpick": "LAR",
    "agree": true,
    "won": 61,
@@ -554,6 +554,28 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
+   "gid": "401873051",
+   "away": "BUF",
+   "home": "MIN",
+   "pick": "BUF",
+   "model": 51,
+   "book": 61,
+   "bookpick": "BUF",
+   "agree": true,
+   "won": 61,
+   "n": 119,
+   "call": null,
+   "rank": 13,
+   "why": [
+    "Points per game: BUF 33.3, MIN 20.0",
+    "Pass defense, EPA allowed: BUF +0.13, MIN -0.25",
+    "QB play (EPA per dropback): BUF +0.18, MIN +0.03",
+    "Last 3 games, win %: BUF 100%, MIN 67%"
+   ],
+   "week": 9,
+   "kick": "2026-11-10T01:15Z"
+  },
+  {
    "gid": "401873039",
    "away": "CLE",
    "home": "NO",
@@ -565,7 +587,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 13,
+   "rank": 14,
    "why": [
     "Points per game: NO 23.1, CLE 17.4",
     "QB play (EPA per dropback): NO +0.04, CLE -0.12",
@@ -581,13 +603,13 @@
    "home": "CAR",
    "pick": "DEN",
    "model": 52,
-   "book": 58,
+   "book": 57,
    "bookpick": "DEN",
    "agree": true,
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 14,
+   "rank": 15,
    "why": [
     "Points allowed per game: DEN 20.6, CAR 27.6",
     "Last 3 games, win %: DEN 100%, CAR 33%",
@@ -596,28 +618,6 @@
    ],
    "week": 9,
    "kick": "2026-11-08T18:00Z"
-  },
-  {
-   "gid": "401873051",
-   "away": "BUF",
-   "home": "MIN",
-   "pick": "BUF",
-   "model": 51,
-   "book": 58,
-   "bookpick": "BUF",
-   "agree": true,
-   "won": 58,
-   "n": 153,
-   "call": null,
-   "rank": 15,
-   "why": [
-    "Points per game: BUF 33.3, MIN 20.0",
-    "Pass defense, EPA allowed: BUF +0.13, MIN -0.25",
-    "QB play (EPA per dropback): BUF +0.18, MIN +0.03",
-    "Last 3 games, win %: BUF 100%, MIN 67%"
-   ],
-   "week": 9,
-   "kick": "2026-11-10T01:15Z"
   }
  ]
 }

@@ -1,5 +1,5 @@
 {
- "at": "2026-11-02 14:14 UTC",
+ "at": "2026-11-02 20:11 UTC",
  "week": 8,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -330,18 +330,51 @@
     "Joe Fagnano"
    ],
    "pick": "Trevor Lawrence",
-   "lead": 4,
+   "lead": 8,
    "complete": false,
    "missing": [
     "BAL J.Cuevas (11%)"
+   ],
+   "score": [
+    6,
+    -2
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+67 a game)",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 83.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    0,
+    1,
+    0
+   ],
+   "game": "JAC@BAL",
+   "eid": 22141,
+   "kick": "2026-11-06 01:15:00Z"
+  },
+  {
+   "qbs": [
+    "Jordan Love",
+    "Drake Maye"
+   ],
+   "pick": "Jordan Love",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "NE D.Douglas (19%)",
+    "NE E.Raridon (14%)",
+    "NE H.Henry (19%)",
+    "NE R.Stevenson (10%)"
    ],
    "score": [
     3,
     -1
    ],
    "why": [
-    "Opponent gives up more yards to the top receiver (+67 a game)",
-    "His offense is more efficient (EPA per play)",
+    "His receivers are set 208.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -350,9 +383,9 @@
     1,
     0
    ],
-   "game": "JAC@BAL",
-   "eid": 22141,
-   "kick": "2026-11-06 01:15:00Z"
+   "game": "GB@NE",
+   "eid": 22173,
+   "kick": "2026-11-08 21:25:00Z"
   }
  ]
 }
