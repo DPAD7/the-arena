@@ -63309,7 +63309,7 @@
   "right": "Jos\u00e9 Souza",
   "rounds": 3,
   "start": "2026-11-07T22:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Jonny Parsons": [
@@ -63339,7 +63339,7 @@
   "right": "Nina Milo\u0161evi\u0107",
   "rounds": 3,
   "start": "2026-11-07T22:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Priscila Cachoeira": [
@@ -63369,15 +63369,15 @@
   "right": "Ollie Schmid",
   "rounds": 3,
   "start": "2026-11-07T23:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Keiichiro Nakamura": [
-     "-355",
+     "-345",
      "0ML87016461_1"
     ],
     "Ollie Schmid": [
-     "+280",
+     "+275",
      "0ML87016461_3"
     ]
    },
@@ -63399,7 +63399,7 @@
   "right": "Murtazali Magomedov",
   "rounds": 3,
   "start": "2026-11-07T23:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Jose Delano": [
@@ -63429,15 +63429,15 @@
   "right": "Marcos Degli",
   "rounds": 3,
   "start": "2026-11-08T00:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Mitch Raposo": [
-     "+185",
+     "+190",
      "0ML87003814_1"
     ],
     "Marcos Degli": [
-     "-225",
+     "-230",
      "0ML87003814_3"
     ]
    },
@@ -63459,7 +63459,7 @@
   "right": "Gabriella Fernandes",
   "rounds": 3,
   "start": "2026-11-08T00:30Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Karine Silva": [
@@ -63489,7 +63489,7 @@
   "right": "Lucas Fernando",
   "rounds": 3,
   "start": "2026-11-08T01:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Billy Elekana": [
@@ -63519,8 +63519,48 @@
   "right": "Seokhyeon Ko",
   "rounds": 3,
   "start": "2026-11-08T02:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Seokhyeon Ko": [
+     "-1200",
+     "0QA385593811#2349056713_13L9034Q11Q21"
+    ],
+    "Wellington Turman": [
+     "+550",
+     "0QA385593811#2349056758_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Seokhyeon Ko": [
+     "-700",
+     "0QA385593812#2349056715_13L9034Q11Q21"
+    ],
+    "Wellington Turman": [
+     "+400",
+     "0QA385593812#2349056756_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Seokhyeon Ko": [
+     "-2000",
+     "0QA385593835#2349056737_13L9034Q10Q21"
+    ],
+    "Wellington Turman": [
+     "+800",
+     "0QA385593835#2349056749_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Seokhyeon Ko": [
+     "-340",
+     "0QA385593834#2349056736_13L9034Q10Q21"
+    ],
+    "Wellington Turman": [
+     "+240",
+     "0QA385593834#2349056750_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Seokhyeon Ko": [
      "-700",
@@ -63529,6 +63569,36 @@
     "Wellington Turman": [
      "+500",
      "0ML87003806_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Seokhyeon Ko": [
+     "-3500",
+     "0QA385593833#2349056731_13L9034Q10Q21"
+    ],
+    "Wellington Turman": [
+     "+950",
+     "0QA385593833#2349056755_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Seokhyeon Ko": [
+     "-145",
+     "0HC87078813N750_1"
+    ],
+    "Wellington Turman": [
+     "+110",
+     "0HC87078813P750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Seokhyeon Ko": [
+     "-2500",
+     "0HC87078814P750_1"
+    ],
+    "Wellington Turman": [
+     "+850",
+     "0HC87078814N750_3"
     ]
    },
    "Total Rounds": {
@@ -63540,6 +63610,442 @@
      "+165",
      "0OU87054154U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-120",
+     "0OU87078812O250_1"
+    ],
+    "Under": [
+     "-110",
+     "0OU87078812U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA385593814#2349056732_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA385593814#2349056754_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA385593800#2349056701_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3500",
+     "0QA385593836#2349056738_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+130",
+     "0QA385593805#2349056707_13L9034Q11Q22"
+    ],
+    "No": [
+     "-170",
+     "0QA385593805#2349056764_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+750",
+     "0QA385593806#2349056708_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1800",
+     "0QA385593806#2349056763_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+100",
+     "0QA385593793#2349056695_13L9034Q10Q20"
+    ],
+    "No": [
+     "-130",
+     "0QA385593793#2349056773_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+275",
+     "0QA385593813#2349056714_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+900",
+     "0QA385593813#2349056744_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+500",
+     "0QA385593813#2349056783_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1600",
+     "0QA385593813#2349056788_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+850",
+     "0QA385593813#2349056804_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2500",
+     "0QA385593813#2349056810_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+100",
+     "0QA385593813#2349056882_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Seokhyeon Ko to Win in Rounds 1-2": [
+     "+120",
+     "0QA385593796#2349056699_13L9034Q11Q21"
+    ],
+    "Seokhyeon Ko to Win in Round 3 or on Decision": [
+     "-115",
+     "0QA385593796#2349056778_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593796#2349056860_13L9034Q19Q29"
+    ],
+    "Wellington Turman to Win in Rounds 1-2": [
+     "+1400",
+     "0QA385593796#2349056799_15L9034Q15Q25"
+    ],
+    "Wellington Turman to Win in Round 3 or on Decision": [
+     "+700",
+     "0QA385593796#2349056830_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Seokhyeon Ko to Win by KO/TKO/DQ in Round 1": [
+     "+285",
+     "0QA385593798#2349056698_13L9034Q11Q21"
+    ],
+    "Seokhyeon Ko to Win by KO/TKO/DQ in Round 2": [
+     "+550",
+     "0QA385593798#2349056771_13L9034Q12Q22"
+    ],
+    "Seokhyeon Ko to Win by KO/TKO/DQ in Round 3": [
+     "+900",
+     "0QA385593798#2349056777_13L9034Q13Q23"
+    ],
+    "Seokhyeon Ko to Win by Submission in Round 1": [
+     "+1000",
+     "0QA385593798#2349056822_13L9034Q16Q26"
+    ],
+    "Seokhyeon Ko to Win by Submission in Round 2": [
+     "+2000",
+     "0QA385593798#2349056828_13L9034Q17Q27"
+    ],
+    "Seokhyeon Ko to Win by Submission in Round 3": [
+     "+3000",
+     "0QA385593798#2349056852_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+100",
+     "0QA385593798#2349056906_13L9034Q121Q221"
+    ],
+    "Wellington Turman to Win by KO/TKO/DQ in Round 1": [
+     "+4500",
+     "0QA385593798#2349056880_15L9034Q111Q211"
+    ],
+    "Wellington Turman to Win by KO/TKO/DQ in Round 2": [
+     "+5000",
+     "0QA385593798#2349056884_15L9034Q112Q212"
+    ],
+    "Wellington Turman to Win by KO/TKO/DQ in Round 3": [
+     "+6500",
+     "0QA385593798#2349056890_15L9034Q113Q213"
+    ],
+    "Wellington Turman to Win by Submission in Round 1": [
+     "+4000",
+     "0QA385593798#2349056896_15L9034Q116Q216"
+    ],
+    "Wellington Turman to Win by Submission in Round 2": [
+     "+4500",
+     "0QA385593798#2349056898_15L9034Q117Q217"
+    ],
+    "Wellington Turman to Win by Submission in Round 3": [
+     "+5500",
+     "0QA385593798#2349056900_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Seokhyeon Ko To Win And Under 0.5": [
+     "+600",
+     "0QA385593801#2349056702_13L9034Q11Q21"
+    ],
+    "Seokhyeon Ko To Win And Under 1.5": [
+     "+170",
+     "0QA385593801#2349056781_13L9034Q11Q23"
+    ],
+    "Wellington Turman To Win And Under 0.5": [
+     "+5500",
+     "0QA385593801#2349056767_14L9034Q12Q22"
+    ],
+    "Wellington Turman To Win And Under 1.5": [
+     "+1800",
+     "0QA385593801#2349056790_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Seokhyeon Ko To Win And Over 1.5": [
+     "-190",
+     "0QA385593802#2349056782_13L9034Q11Q23"
+    ],
+    "Seokhyeon Ko To Win And Over 2.5": [
+     "-115",
+     "0QA385593802#2349056802_13L9034Q11Q25"
+    ],
+    "Wellington Turman To Win And Over 1.5": [
+     "+550",
+     "0QA385593802#2349056789_14L9034Q12Q24"
+    ],
+    "Wellington Turman To Win And Over 2.5": [
+     "+750",
+     "0QA385593802#2349056812_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-350",
+     "0QA385593803#2349056705_13L9034Q11Q22"
+    ],
+    "No": [
+     "+250",
+     "0QA385593803#2349056766_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-160",
+     "0QA385593804#2349056706_13L9034Q11Q22"
+    ],
+    "No": [
+     "+120",
+     "0QA385593804#2349056765_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Seokhyeon Ko Round 1": [
+     "+255",
+     "0QA385593794#2349056696_13L9034Q11Q20"
+    ],
+    "Seokhyeon Ko Round 2": [
+     "+450",
+     "0QA385593794#2349056775_13L9034Q11Q22"
+    ],
+    "Seokhyeon Ko Round 3": [
+     "+800",
+     "0QA385593794#2349056797_13L9034Q11Q24"
+    ],
+    "Seokhyeon Ko By Decision": [
+     "+130",
+     "0QA385593794#2349056878_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593794#2349056888_15L9034Q10Q212"
+    ],
+    "Wellington Turman Round 1": [
+     "+2500",
+     "0QA385593794#2349056774_14L9034Q12Q21"
+    ],
+    "Wellington Turman Round 2": [
+     "+2800",
+     "0QA385593794#2349056796_14L9034Q12Q23"
+    ],
+    "Wellington Turman Round 3": [
+     "+3500",
+     "0QA385593794#2349056824_14L9034Q12Q25"
+    ],
+    "Wellington Turman By Decision": [
+     "+900",
+     "0QA385593794#2349056886_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+250",
+     "0QA385593799#2349056700_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+500",
+     "0QA385593799#2349056769_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+650",
+     "0QA385593799#2349056779_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593799#2349056818_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+100",
+     "0QA385593799#2349056832_13L9034Q11Q25"
+    ]
+   },
+   "Wellington Turman to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+1100",
+     "0QA385593815#2349056733_13L9034Q11Q22"
+    ],
+    "No": [
+     "-5000",
+     "0QA385593815#2349056753_13L9034Q13Q24"
+    ]
+   },
+   "Seokhyeon Ko to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-105",
+     "0QA385593816#2349056735_13L9034Q11Q22"
+    ],
+    "No": [
+     "-125",
+     "0QA385593816#2349056751_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Seokhyeon Ko to Win by KO/TKO/DQ or Decision": [
+     "-600",
+     "0QA385593797#2349056703_13L9034Q11Q21"
+    ],
+    "Seokhyeon Ko to Win by KO/TKO/DQ or Submission": [
+     "-105",
+     "0QA385593797#2349056768_13L9034Q12Q22"
+    ],
+    "Seokhyeon Ko to Win by Submission or Decision": [
+     "-130",
+     "0QA385593797#2349056780_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593797#2349056836_13L9034Q17Q27"
+    ],
+    "Wellington Turman to Win by KO/TKO/DQ or Decision": [
+     "+600",
+     "0QA385593797#2349056791_15L9034Q14Q24"
+    ],
+    "Wellington Turman to Win by KO/TKO/DQ or Submission": [
+     "+1100",
+     "0QA385593797#2349056801_15L9034Q15Q25"
+    ],
+    "Wellington Turman to Win by Submission or Decision": [
+     "+550",
+     "0QA385593797#2349056816_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Seokhyeon Ko to Win By KO/TKO/DQ or Wellington Turman to Win by Submission": [
+     "+105",
+     "0QA385593817#2349056734_13L9034Q10Q21"
+    ],
+    "Seokhyeon Ko to Win By KO/TKO/DQ or Wellington Turman to Win by Decision": [
+     "-115",
+     "0QA385593817#2349056752_13L9034Q10Q22"
+    ],
+    "Seokhyeon Ko to Win By Submission or Wellington Turman to Win by KO/TKO/DQ": [
+     "+450",
+     "0QA385593817#2349056784_13L9034Q10Q23"
+    ],
+    "Seokhyeon Ko to Win By Submission or Wellington Turman to Win by Decision": [
+     "+330",
+     "0QA385593817#2349056787_13L9034Q10Q24"
+    ],
+    "Seokhyeon Ko to Win By Decision or Wellington Turman to Win by KO/TKO/DQ": [
+     "+105",
+     "0QA385593817#2349056806_13L9034Q10Q25"
+    ],
+    "Seokhyeon Ko to Win By Decision or Wellington Turman to Win by Submission": [
+     "+105",
+     "0QA385593817#2349056808_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593817#2349056842_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+115",
+     "0QA385593795#2349056697_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+450",
+     "0QA385593795#2349056772_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+100",
+     "0QA385593795#2349056776_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593795#2349056795_15L9034Q14Q24"
+    ]
+   },
+   "Seokhyeon Ko to Win by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA385593807#2349056709_13L9034Q11Q22"
+    ]
+   },
+   "Wellington Turman to Win by Unanimous Decision": {
+    "Yes": [
+     "+1200",
+     "0QA385593808#2349056710_13L9034Q11Q22"
+    ]
+   },
+   "Seokhyeon Ko to Win by Split or Majority Decision": {
+    "Yes": [
+     "+900",
+     "0QA385593809#2349056711_13L9034Q11Q22"
+    ]
+   },
+   "Wellington Turman to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA385593810#2349056712_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Seokhyeon Ko": [
+     "+130",
+     "0QA385593843#2349056740_13L9034Q11Q22"
+    ],
+    "Wellington Turman": [
+     "+2200",
+     "0QA385593843#2349056746_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Seokhyeon Ko": [
+     "+650",
+     "0QA385593844#2349056741_13L9034Q11Q22"
+    ],
+    "Wellington Turman": [
+     "+1800",
+     "0QA385593844#2349056745_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Seokhyeon Ko": [
+     "+130",
+     "0QA385593845#2349056742_13L9034Q11Q22"
+    ],
+    "Wellington Turman": [
+     "+900",
+     "0QA385593845#2349056743_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -63549,8 +64055,48 @@
   "right": "Virna Jandiroba",
   "rounds": 3,
   "start": "2026-11-08T03:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Tatiana Suarez": [
+     "-180",
+     "0QA385594341#2349057989_13L9034Q11Q21"
+    ],
+    "Virna Jandiroba": [
+     "+130",
+     "0QA385594341#2349058400_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Tatiana Suarez": [
+     "-265",
+     "0QA385594342#2349058009_13L9034Q11Q21"
+    ],
+    "Virna Jandiroba": [
+     "+185",
+     "0QA385594342#2349058390_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Tatiana Suarez": [
+     "-170",
+     "0QA385594365#2349058232_13L9034Q10Q21"
+    ],
+    "Virna Jandiroba": [
+     "+130",
+     "0QA385594365#2349058348_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Tatiana Suarez": [
+     "-145",
+     "0QA385594364#2349058222_13L9034Q10Q21"
+    ],
+    "Virna Jandiroba": [
+     "+110",
+     "0QA385594364#2349058355_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Tatiana Suarez": [
      "-205",
@@ -63559,6 +64105,36 @@
     "Virna Jandiroba": [
      "+170",
      "0ML87033753_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Tatiana Suarez": [
+     "-255",
+     "0QA385594363#2349058167_13L9034Q10Q21"
+    ],
+    "Virna Jandiroba": [
+     "+190",
+     "0QA385594363#2349058385_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Tatiana Suarez": [
+     "+110",
+     "0HC87078851N350_1"
+    ],
+    "Virna Jandiroba": [
+     "-145",
+     "0HC87078851P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Tatiana Suarez": [
+     "-700",
+     "0HC87078854P750_1"
+    ],
+    "Virna Jandiroba": [
+     "+425",
+     "0HC87078854N750_3"
     ]
    },
    "Total Rounds": {
@@ -63570,6 +64146,438 @@
      "+260",
      "0OU87046276U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-750",
+     "0OU87078848O150_1"
+    ],
+    "Under": [
+     "+400",
+     "0OU87078848U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2200",
+     "0QA385594344#2349058177_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA385594330#2349057868_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+6500",
+     "0QA385594366#2349058242_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-175",
+     "0QA385594335#2349057930_13L9034Q11Q22"
+    ],
+    "No": [
+     "+135",
+     "0QA385594335#2349058437_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+450",
+     "0QA385594336#2349057939_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA385594336#2349058425_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-310",
+     "0QA385594323#2349057822_13L9034Q10Q20"
+    ],
+    "No": [
+     "+220",
+     "0QA385594323#2349058482_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+1600",
+     "0QA385594343#2349057999_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+750",
+     "0QA385594343#2349058308_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+2200",
+     "0QA385594343#2349058533_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1000",
+     "0QA385594343#2349058553_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+3000",
+     "0QA385594343#2349058615_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1500",
+     "0QA385594343#2349058627_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-310",
+     "0QA385594343#2349058741_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Tatiana Suarez to Win in Rounds 1-2": [
+     "+500",
+     "0QA385594326#2349057856_13L9034Q11Q21"
+    ],
+    "Tatiana Suarez to Win in Round 3 or on Decision": [
+     "-145",
+     "0QA385594326#2349058509_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594326#2349058708_13L9034Q19Q29"
+    ],
+    "Virna Jandiroba to Win in Rounds 1-2": [
+     "+800",
+     "0QA385594326#2349058597_15L9034Q15Q25"
+    ],
+    "Virna Jandiroba to Win in Round 3 or on Decision": [
+     "+230",
+     "0QA385594326#2349058663_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Tatiana Suarez to Win by KO/TKO/DQ in Round 1": [
+     "+2000",
+     "0QA385594328#2349057847_13L9034Q11Q21"
+    ],
+    "Tatiana Suarez to Win by KO/TKO/DQ in Round 2": [
+     "+2800",
+     "0QA385594328#2349058472_13L9034Q12Q22"
+    ],
+    "Tatiana Suarez to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA385594328#2349058504_13L9034Q13Q23"
+    ],
+    "Tatiana Suarez to Win by Submission in Round 1": [
+     "+1200",
+     "0QA385594328#2349058651_13L9034Q16Q26"
+    ],
+    "Tatiana Suarez to Win by Submission in Round 2": [
+     "+1600",
+     "0QA385594328#2349058660_13L9034Q17Q27"
+    ],
+    "Tatiana Suarez to Win by Submission in Round 3": [
+     "+2500",
+     "0QA385594328#2349058696_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-310",
+     "0QA385594328#2349058775_13L9034Q121Q221"
+    ],
+    "Virna Jandiroba to Win by KO/TKO/DQ in Round 1": [
+     "+4500",
+     "0QA385594328#2349058738_15L9034Q111Q211"
+    ],
+    "Virna Jandiroba to Win by KO/TKO/DQ in Round 2": [
+     "+6000",
+     "0QA385594328#2349058744_15L9034Q112Q212"
+    ],
+    "Virna Jandiroba to Win by KO/TKO/DQ in Round 3": [
+     "+8000",
+     "0QA385594328#2349058753_15L9034Q113Q213"
+    ],
+    "Virna Jandiroba to Win by Submission in Round 1": [
+     "+1500",
+     "0QA385594328#2349058762_15L9034Q116Q216"
+    ],
+    "Virna Jandiroba to Win by Submission in Round 2": [
+     "+2000",
+     "0QA385594328#2349058765_15L9034Q117Q217"
+    ],
+    "Virna Jandiroba to Win by Submission in Round 3": [
+     "+3000",
+     "0QA385594328#2349058768_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Tatiana Suarez To Win And Under 0.5": [
+     "+1900",
+     "0QA385594331#2349057875_13L9034Q11Q21"
+    ],
+    "Tatiana Suarez To Win And Under 1.5": [
+     "+650",
+     "0QA385594331#2349058524_13L9034Q11Q23"
+    ],
+    "Virna Jandiroba To Win And Under 0.5": [
+     "+2800",
+     "0QA385594331#2349058452_14L9034Q12Q22"
+    ],
+    "Virna Jandiroba To Win And Under 1.5": [
+     "+950",
+     "0QA385594331#2349058561_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Tatiana Suarez To Win And Over 1.5": [
+     "-200",
+     "0QA385594332#2349058529_13L9034Q11Q23"
+    ],
+    "Tatiana Suarez To Win And Over 2.5": [
+     "-155",
+     "0QA385594332#2349058608_13L9034Q11Q25"
+    ],
+    "Virna Jandiroba To Win And Over 1.5": [
+     "+190",
+     "0QA385594332#2349058557_14L9034Q12Q24"
+    ],
+    "Virna Jandiroba To Win And Over 2.5": [
+     "+230",
+     "0QA385594332#2349058631_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-1200",
+     "0QA385594333#2349057912_13L9034Q11Q22"
+    ],
+    "No": [
+     "+600",
+     "0QA385594333#2349058447_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-475",
+     "0QA385594334#2349057921_13L9034Q11Q22"
+    ],
+    "No": [
+     "+320",
+     "0QA385594334#2349058442_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Tatiana Suarez Round 1": [
+     "+850",
+     "0QA385594324#2349057830_13L9034Q11Q20"
+    ],
+    "Tatiana Suarez Round 2": [
+     "+1100",
+     "0QA385594324#2349058494_13L9034Q11Q22"
+    ],
+    "Tatiana Suarez Round 3": [
+     "+1800",
+     "0QA385594324#2349058589_13L9034Q11Q24"
+    ],
+    "Tatiana Suarez By Decision": [
+     "-125",
+     "0QA385594324#2349058735_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594324#2349058750_15L9034Q10Q212"
+    ],
+    "Virna Jandiroba Round 1": [
+     "+1200",
+     "0QA385594324#2349058489_14L9034Q12Q21"
+    ],
+    "Virna Jandiroba Round 2": [
+     "+1800",
+     "0QA385594324#2349058585_14L9034Q12Q23"
+    ],
+    "Virna Jandiroba Round 3": [
+     "+2500",
+     "0QA385594324#2349058654_14L9034Q12Q25"
+    ],
+    "Virna Jandiroba By Decision": [
+     "+275",
+     "0QA385594324#2349058747_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+600",
+     "0QA385594329#2349057865_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+700",
+     "0QA385594329#2349058462_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+1100",
+     "0QA385594329#2349058514_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594329#2349058643_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-310",
+     "0QA385594329#2349058666_13L9034Q11Q25"
+    ]
+   },
+   "Virna Jandiroba to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+650",
+     "0QA385594345#2349058192_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA385594345#2349058374_13L9034Q13Q24"
+    ]
+   },
+   "Tatiana Suarez to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+400",
+     "0QA385594346#2349058212_13L9034Q11Q22"
+    ],
+    "No": [
+     "-650",
+     "0QA385594346#2349058362_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Tatiana Suarez to Win by KO/TKO/DQ or Decision": [
+     "-170",
+     "0QA385594327#2349057894_13L9034Q11Q21"
+    ],
+    "Tatiana Suarez to Win by KO/TKO/DQ or Submission": [
+     "+400",
+     "0QA385594327#2349058457_13L9034Q12Q22"
+    ],
+    "Tatiana Suarez to Win by Submission or Decision": [
+     "-195",
+     "0QA385594327#2349058519_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594327#2349058672_13L9034Q17Q27"
+    ],
+    "Virna Jandiroba to Win by KO/TKO/DQ or Decision": [
+     "+225",
+     "0QA385594327#2349058565_15L9034Q14Q24"
+    ],
+    "Virna Jandiroba to Win by KO/TKO/DQ or Submission": [
+     "+650",
+     "0QA385594327#2349058605_15L9034Q15Q25"
+    ],
+    "Virna Jandiroba to Win by Submission or Decision": [
+     "+175",
+     "0QA385594327#2349058639_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Tatiana Suarez to Win By KO/TKO/DQ or Virna Jandiroba to Win by Submission": [
+     "+390",
+     "0QA385594347#2349058202_13L9034Q10Q21"
+    ],
+    "Tatiana Suarez to Win By KO/TKO/DQ or Virna Jandiroba to Win by Decision": [
+     "+185",
+     "0QA385594347#2349058369_13L9034Q10Q22"
+    ],
+    "Tatiana Suarez to Win By Submission or Virna Jandiroba to Win by KO/TKO/DQ": [
+     "+450",
+     "0QA385594347#2349058537_13L9034Q10Q23"
+    ],
+    "Tatiana Suarez to Win By Submission or Virna Jandiroba to Win by Decision": [
+     "+140",
+     "0QA385594347#2349058549_13L9034Q10Q24"
+    ],
+    "Tatiana Suarez to Win By Decision or Virna Jandiroba to Win by KO/TKO/DQ": [
+     "-145",
+     "0QA385594347#2349058619_13L9034Q10Q25"
+    ],
+    "Tatiana Suarez to Win By Decision or Virna Jandiroba to Win by Submission": [
+     "-200",
+     "0QA385594347#2349058623_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594347#2349058681_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+750",
+     "0QA385594325#2349057838_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+320",
+     "0QA385594325#2349058477_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-310",
+     "0QA385594325#2349058499_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594325#2349058581_15L9034Q14Q24"
+    ]
+   },
+   "Tatiana Suarez to Win by Unanimous Decision": {
+    "Yes": [
+     "+100",
+     "0QA385594337#2349057948_13L9034Q11Q22"
+    ]
+   },
+   "Virna Jandiroba to Win by Unanimous Decision": {
+    "Yes": [
+     "+330",
+     "0QA385594338#2349057958_13L9034Q11Q22"
+    ]
+   },
+   "Tatiana Suarez to Win by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA385594339#2349057968_13L9034Q11Q22"
+    ]
+   },
+   "Virna Jandiroba to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA385594340#2349057979_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Tatiana Suarez": [
+     "+1100",
+     "0QA385594373#2349058262_13L9034Q11Q22"
+    ],
+    "Virna Jandiroba": [
+     "+2500",
+     "0QA385594373#2349058326_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Tatiana Suarez": [
+     "+600",
+     "0QA385594374#2349058272_13L9034Q11Q22"
+    ],
+    "Virna Jandiroba": [
+     "+750",
+     "0QA385594374#2349058317_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Tatiana Suarez": [
+     "-125",
+     "0QA385594375#2349058283_13L9034Q11Q22"
+    ],
+    "Virna Jandiroba": [
+     "+275",
+     "0QA385594375#2349058298_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -63579,15 +64587,15 @@
   "right": "Gabriel Loren\u00e7o",
   "rounds": 3,
   "start": "2026-11-08T00:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Gabriel Lorenco": [
-     "+136",
+     "+142",
      "0ML87028217_1"
     ],
     "Thomas Petersen": [
-     "-162",
+     "-170",
      "0ML87028217_3"
     ]
    },
@@ -63609,7 +64617,7 @@
   "right": "Mantas Kondratavi\u010dius",
   "rounds": 3,
   "start": "2026-11-08T01:15Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
    "Moneyline": {
     "Mantas Kondratavicius": [
@@ -63639,8 +64647,48 @@
   "right": "Elijah Smith",
   "rounds": 3,
   "start": "2026-11-08T02:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Davey Grant": [
+     "+340",
+     "0QA385594447#2349058132_13L9034Q11Q21"
+    ],
+    "Elijah Smith": [
+     "-575",
+     "0QA385594447#2349058453_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Davey Grant": [
+     "+165",
+     "0QA385594448#2349058152_13L9034Q11Q21"
+    ],
+    "Elijah Smith": [
+     "-235",
+     "0QA385594448#2349058443_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Davey Grant": [
+     "+370",
+     "0QA385594471#2349058346_13L9034Q10Q21"
+    ],
+    "Elijah Smith": [
+     "-575",
+     "0QA385594471#2349058412_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Davey Grant": [
+     "+310",
+     "0QA385594470#2349058339_13L9034Q10Q21"
+    ],
+    "Elijah Smith": [
+     "-450",
+     "0QA385594470#2349058417_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Davey Grant": [
      "+250",
@@ -63651,14 +64699,480 @@
      "0ML87003805_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Davey Grant": [
+     "+360",
+     "0QA385594469#2349058295_13L9034Q10Q21"
+    ],
+    "Elijah Smith": [
+     "-550",
+     "0QA385594469#2349058438_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Davey Grant": [
+     "-110",
+     "0HC87078867P750_1"
+    ],
+    "Elijah Smith": [
+     "-120",
+     "0HC87078867N750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Davey Grant": [
+     "+110",
+     "0HC87078868P550_1"
+    ],
+    "Elijah Smith": [
+     "-145",
+     "0HC87078868N550_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "-120",
+     "-125",
      "0OU87070929O250_1"
     ],
     "Under": [
-     "-110",
+     "-105",
      "0OU87070929U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-250",
+     "0OU87078866O50_1"
+    ],
+    "Under": [
+     "+170",
+     "0OU87078866U50_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1200",
+     "0QA385594450#2349058305_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA385594450#2349058433_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA385594436#2349058015_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA385594472#2349058353_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA385594441#2349058076_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA385594441#2349058483_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+750",
+     "0QA385594442#2349058082_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1800",
+     "0QA385594442#2349058478_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+110",
+     "0QA385594429#2349057952_13L9034Q10Q20"
+    ],
+    "No": [
+     "-145",
+     "0QA385594429#2349058528_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+340",
+     "0QA385594449#2349058142_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+800",
+     "0QA385594449#2349058387_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+500",
+     "0QA385594449#2349058568_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1100",
+     "0QA385594449#2349058588_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+750",
+     "0QA385594449#2349058656_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1600",
+     "0QA385594449#2349058665_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+110",
+     "0QA385594449#2349058774_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Davey Grant to Win in Rounds 1-2": [
+     "+850",
+     "0QA385594432#2349057995_13L9034Q11Q21"
+    ],
+    "Davey Grant to Win in Round 3 or on Decision": [
+     "+360",
+     "0QA385594432#2349058548_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594432#2349058740_13L9034Q19Q29"
+    ],
+    "Elijah Smith to Win in Rounds 1-2": [
+     "+150",
+     "0QA385594432#2349058638_15L9034Q15Q25"
+    ],
+    "Elijah Smith to Win in Round 3 or on Decision": [
+     "+120",
+     "0QA385594432#2349058695_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Davey Grant to Win by KO/TKO/DQ in Round 1": [
+     "+1900",
+     "0QA385594434#2349057985_13L9034Q11Q21"
+    ],
+    "Davey Grant to Win by KO/TKO/DQ in Round 2": [
+     "+2500",
+     "0QA385594434#2349058518_13L9034Q12Q22"
+    ],
+    "Davey Grant to Win by KO/TKO/DQ in Round 3": [
+     "+3000",
+     "0QA385594434#2349058544_13L9034Q13Q23"
+    ],
+    "Davey Grant to Win by Submission in Round 1": [
+     "+3500",
+     "0QA385594434#2349058683_13L9034Q16Q26"
+    ],
+    "Davey Grant to Win by Submission in Round 2": [
+     "+4500",
+     "0QA385594434#2349058692_13L9034Q17Q27"
+    ],
+    "Davey Grant to Win by Submission in Round 3": [
+     "+6000",
+     "0QA385594434#2349058728_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+110",
+     "0QA385594434#2349058787_13L9034Q121Q221"
+    ],
+    "Elijah Smith to Win by KO/TKO/DQ in Round 1": [
+     "+380",
+     "0QA385594434#2349058771_15L9034Q111Q211"
+    ],
+    "Elijah Smith to Win by KO/TKO/DQ in Round 2": [
+     "+600",
+     "0QA385594434#2349058776_15L9034Q112Q212"
+    ],
+    "Elijah Smith to Win by KO/TKO/DQ in Round 3": [
+     "+850",
+     "0QA385594434#2349058779_15L9034Q113Q213"
+    ],
+    "Elijah Smith to Win by Submission in Round 1": [
+     "+900",
+     "0QA385594434#2349058782_15L9034Q116Q216"
+    ],
+    "Elijah Smith to Win by Submission in Round 2": [
+     "+1300",
+     "0QA385594434#2349058783_15L9034Q117Q217"
+    ],
+    "Elijah Smith to Win by Submission in Round 3": [
+     "+1900",
+     "0QA385594434#2349058784_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Davey Grant To Win And Under 0.5": [
+     "+3000",
+     "0QA385594437#2349058025_13L9034Q11Q21"
+    ],
+    "Davey Grant To Win And Under 1.5": [
+     "+1000",
+     "0QA385594437#2349058560_13L9034Q11Q23"
+    ],
+    "Elijah Smith To Win And Under 0.5": [
+     "+700",
+     "0QA385594437#2349058498_14L9034Q12Q22"
+    ],
+    "Elijah Smith To Win And Under 1.5": [
+     "+195",
+     "0QA385594437#2349058596_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Davey Grant To Win And Over 1.5": [
+     "+295",
+     "0QA385594438#2349058564_13L9034Q11Q23"
+    ],
+    "Davey Grant To Win And Over 2.5": [
+     "+370",
+     "0QA385594438#2349058650_13L9034Q11Q25"
+    ],
+    "Elijah Smith To Win And Over 1.5": [
+     "-130",
+     "0QA385594438#2349058592_14L9034Q12Q24"
+    ],
+    "Elijah Smith To Win And Over 2.5": [
+     "+140",
+     "0QA385594438#2349058668_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-400",
+     "0QA385594439#2349058055_13L9034Q11Q22"
+    ],
+    "No": [
+     "+280",
+     "0QA385594439#2349058493_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-160",
+     "0QA385594440#2349058065_13L9034Q11Q22"
+    ],
+    "No": [
+     "+120",
+     "0QA385594440#2349058488_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Davey Grant Round 1": [
+     "+1400",
+     "0QA385594430#2349057962_13L9034Q11Q20"
+    ],
+    "Davey Grant Round 2": [
+     "+1800",
+     "0QA385594430#2349058536_13L9034Q11Q22"
+    ],
+    "Davey Grant Round 3": [
+     "+2500",
+     "0QA385594430#2349058630_13L9034Q11Q24"
+    ],
+    "Davey Grant By Decision": [
+     "+450",
+     "0QA385594430#2349058767_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594430#2349058778_15L9034Q10Q212"
+    ],
+    "Elijah Smith Round 1": [
+     "+285",
+     "0QA385594430#2349058532_14L9034Q12Q21"
+    ],
+    "Elijah Smith Round 2": [
+     "+450",
+     "0QA385594430#2349058626_14L9034Q12Q23"
+    ],
+    "Elijah Smith Round 3": [
+     "+650",
+     "0QA385594430#2349058686_14L9034Q12Q25"
+    ],
+    "Elijah Smith By Decision": [
+     "+200",
+     "0QA385594430#2349058777_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+280",
+     "0QA385594435#2349058005_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+350",
+     "0QA385594435#2349058508_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA385594435#2349058552_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594435#2349058677_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+110",
+     "0QA385594435#2349058698_13L9034Q11Q25"
+    ]
+   },
+   "Elijah Smith to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+100",
+     "0QA385594451#2349058315_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA385594451#2349058430_13L9034Q13Q24"
+    ]
+   },
+   "Davey Grant to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+650",
+     "0QA385594452#2349058332_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA385594452#2349058422_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Davey Grant to Win by KO/TKO/DQ or Decision": [
+     "+270",
+     "0QA385594433#2349058035_13L9034Q11Q21"
+    ],
+    "Davey Grant to Win by KO/TKO/DQ or Submission": [
+     "+650",
+     "0QA385594433#2349058503_13L9034Q12Q22"
+    ],
+    "Davey Grant to Win by Submission or Decision": [
+     "+330",
+     "0QA385594433#2349058556_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594433#2349058704_13L9034Q17Q27"
+    ],
+    "Elijah Smith to Win by KO/TKO/DQ or Decision": [
+     "-210",
+     "0QA385594433#2349058600_15L9034Q14Q24"
+    ],
+    "Elijah Smith to Win by KO/TKO/DQ or Submission": [
+     "+100",
+     "0QA385594433#2349058646_15L9034Q15Q25"
+    ],
+    "Elijah Smith to Win by Submission or Decision": [
+     "+100",
+     "0QA385594433#2349058674_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Davey Grant to Win By KO/TKO/DQ or Elijah Smith to Win by Submission": [
+     "+255",
+     "0QA385594453#2349058324_13L9034Q10Q21"
+    ],
+    "Davey Grant to Win By KO/TKO/DQ or Elijah Smith to Win by Decision": [
+     "+130",
+     "0QA385594453#2349058427_13L9034Q10Q22"
+    ],
+    "Davey Grant to Win By Submission or Elijah Smith to Win by KO/TKO/DQ": [
+     "+140",
+     "0QA385594453#2349058572_13L9034Q10Q23"
+    ],
+    "Davey Grant to Win By Submission or Elijah Smith to Win by Decision": [
+     "+160",
+     "0QA385594453#2349058584_13L9034Q10Q24"
+    ],
+    "Davey Grant to Win By Decision or Elijah Smith to Win by KO/TKO/DQ": [
+     "-120",
+     "0QA385594453#2349058659_13L9034Q10Q25"
+    ],
+    "Davey Grant to Win By Decision or Elijah Smith to Win by Submission": [
+     "+175",
+     "0QA385594453#2349058662_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594453#2349058713_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+125",
+     "0QA385594431#2349057975_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+360",
+     "0QA385594431#2349058523_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+110",
+     "0QA385594431#2349058540_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594431#2349058622_15L9034Q14Q24"
+    ]
+   },
+   "Davey Grant to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA385594443#2349058092_13L9034Q11Q22"
+    ]
+   },
+   "Elijah Smith to Win by Unanimous Decision": {
+    "Yes": [
+     "+225",
+     "0QA385594444#2349058102_13L9034Q11Q22"
+    ]
+   },
+   "Davey Grant to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA385594445#2349058112_13L9034Q11Q22"
+    ]
+   },
+   "Elijah Smith to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA385594446#2349058122_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Davey Grant": [
+     "+900",
+     "0QA385594479#2349058367_13L9034Q11Q22"
+    ],
+    "Elijah Smith": [
+     "+180",
+     "0QA385594479#2349058397_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Davey Grant": [
+     "+1800",
+     "0QA385594480#2349058373_13L9034Q11Q22"
+    ],
+    "Elijah Smith": [
+     "+450",
+     "0QA385594480#2349058392_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Davey Grant": [
+     "+450",
+     "0QA385594481#2349058378_13L9034Q11Q22"
+    ],
+    "Elijah Smith": [
+     "+200",
+     "0QA385594481#2349058382_13L9034Q13Q24"
     ]
    }
   }
@@ -63667,10 +65181,50 @@
   "dk": "34937750",
   "left": "Johnny Walker",
   "right": "Waldo Cortes Acosta",
-  "rounds": 3,
+  "rounds": 5,
   "start": "2026-11-08T03:45Z",
-  "read": "2026-11-03T14:02Z",
+  "read": "2026-11-03T20:04Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Waldo Cortes-Acosta": [
+     "-260",
+     "0QA385594235#2349057441_13L9034Q11Q21"
+    ],
+    "Johnny Walker": [
+     "+180",
+     "0QA385594235#2349057773_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Waldo Cortes-Acosta": [
+     "-310",
+     "0QA385594236#2349057455_13L9034Q11Q21"
+    ],
+    "Johnny Walker": [
+     "+210",
+     "0QA385594236#2349057758_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Waldo Cortes-Acosta": [
+     "-295",
+     "0QA385594259#2349057603_13L9034Q10Q21"
+    ],
+    "Johnny Walker": [
+     "+215",
+     "0QA385594259#2349057709_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Waldo Cortes-Acosta": [
+     "+130",
+     "0QA385594258#2349057596_13L9034Q10Q21"
+    ],
+    "Johnny Walker": [
+     "-170",
+     "0QA385594258#2349057716_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Waldo Cortes-Acosta": [
      "-230",
@@ -63681,6 +65235,36 @@
      "0ML87029976_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Waldo Cortes-Acosta": [
+     "-295",
+     "0QA385594257#2349057561_13L9034Q10Q21"
+    ],
+    "Johnny Walker": [
+     "+215",
+     "0QA385594257#2349057751_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Waldo Cortes-Acosta": [
+     "-145",
+     "0HC87078837N1350_1"
+    ],
+    "Johnny Walker": [
+     "+110",
+     "0HC87078837P1350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Waldo Cortes-Acosta": [
+     "-340",
+     "0HC87078838P1350_1"
+    ],
+    "Johnny Walker": [
+     "+240",
+     "0HC87078838N1350_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
      "-195",
@@ -63689,6 +65273,570 @@
     "Under": [
      "+150",
      "0OU87046273U150_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+250",
+     "0OU87078836O450_1"
+    ],
+    "Under": [
+     "-360",
+     "0OU87078836U450_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA385594238#2349057568_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA385594238#2349057744_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA385594224#2349057354_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2200",
+     "0QA385594260#2349057610_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+380",
+     "0QA385594229#2349057396_13L9034Q11Q22"
+    ],
+    "No": [
+     "-600",
+     "0QA385594229#2349057815_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1600",
+     "0QA385594230#2349057403_13L9034Q11Q22"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+300",
+     "0QA385594217#2349057313_13L9034Q10Q20"
+    ],
+    "No": [
+     "-450",
+     "0QA385594217#2349057898_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+245",
+     "0QA385594237#2349057448_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1800",
+     "0QA385594237#2349057652_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+340",
+     "0QA385594237#2349057993_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+2500",
+     "0QA385594237#2349058043_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+550",
+     "0QA385594237#2349058204_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+4000",
+     "0QA385594237#2349058234_14L9034Q12Q23"
+    ],
+    "Round 4 - KO/TKO/DQ": [
+     "+800",
+     "0QA385594237#2349058363_13L9034Q11Q24"
+    ],
+    "Round 4 \u2013 Submission": [
+     "+5500",
+     "0QA385594237#2349058375_14L9034Q12Q24"
+    ],
+    "Round 5 - KO/TKO/DQ": [
+     "+1100",
+     "0QA385594237#2349058431_13L9034Q11Q25"
+    ],
+    "Round 5 \u2013 Submission": [
+     "+8000",
+     "0QA385594237#2349058434_14L9034Q12Q25"
+    ],
+    "Fight to go the Distance": [
+     "+300",
+     "0QA385594237#2349058469_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Waldo Cortes-Acosta to Win in Rounds 1-2": [
+     "+155",
+     "0QA385594220#2349057340_13L9034Q11Q21"
+    ],
+    "Waldo Cortes-Acosta to Win in Rounds 3-4": [
+     "+500",
+     "0QA385594220#2349057867_13L9034Q12Q22"
+    ],
+    "Waldo Cortes-Acosta to Win in Round 5 or on Decision": [
+     "+340",
+     "0QA385594220#2349058094_13L9034Q14Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594220#2349058418_13L9034Q19Q29"
+    ],
+    "Johnny Walker to Win in Rounds 1-2": [
+     "+475",
+     "0QA385594220#2349058154_15L9034Q15Q25"
+    ],
+    "Johnny Walker to Win in Rounds 3-4": [
+     "+850",
+     "0QA385594220#2349058285_15L9034Q16Q26"
+    ],
+    "Johnny Walker to Win in Round 5 or on Decision": [
+     "+750",
+     "0QA385594220#2349058393_15L9034Q18Q28"
+    ]
+   },
+   "Round and Method Betting": {
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ in Round 1": [
+     "+280",
+     "0QA385594222#2349057333_13L9034Q11Q21"
+    ],
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ in Round 2": [
+     "+475",
+     "0QA385594222#2349057882_13L9034Q12Q22"
+    ],
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ in Round 3": [
+     "+850",
+     "0QA385594222#2349057934_13L9034Q13Q23"
+    ],
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ in Round 4": [
+     "+1300",
+     "0QA385594222#2349058104_13L9034Q14Q24"
+    ],
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ in Round 5": [
+     "+1900",
+     "0QA385594222#2349058144_13L9034Q15Q25"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission in Round 1": [
+     "+3500",
+     "0QA385594222#2349058290_13L9034Q16Q26"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission in Round 2": [
+     "+5500",
+     "0QA385594222#2349058319_13L9034Q17Q27"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission in Round 3": [
+     "+8000",
+     "0QA385594222#2349058398_13L9034Q18Q28"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission in Round 4": [
+     "+9000",
+     "0QA385594222#2349058413_13L9034Q19Q29"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission in Round 5": [
+     "+10000",
+     "0QA385594222#2349058449_13L9034Q110Q210"
+    ],
+    "To Go the Distance": [
+     "+300",
+     "0QA385594222#2349058526_13L9034Q121Q221"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ in Round 1": [
+     "+900",
+     "0QA385594222#2349058464_15L9034Q111Q211"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ in Round 2": [
+     "+1300",
+     "0QA385594222#2349058474_15L9034Q112Q212"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA385594222#2349058486_15L9034Q113Q213"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ in Round 4": [
+     "+2000",
+     "0QA385594222#2349058491_15L9034Q114Q214"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ in Round 5": [
+     "+2800",
+     "0QA385594222#2349058496_15L9034Q115Q215"
+    ],
+    "Johnny Walker to Win by Submission in Round 1": [
+     "+3000",
+     "0QA385594222#2349058501_15L9034Q116Q216"
+    ],
+    "Johnny Walker to Win by Submission in Round 2": [
+     "+4000",
+     "0QA385594222#2349058506_15L9034Q117Q217"
+    ],
+    "Johnny Walker to Win by Submission in Round 3": [
+     "+5500",
+     "0QA385594222#2349058511_15L9034Q118Q218"
+    ],
+    "Johnny Walker to Win by Submission in Round 4": [
+     "+7000",
+     "0QA385594222#2349058516_15L9034Q119Q219"
+    ],
+    "Johnny Walker to Win by Submission in Round 5": [
+     "+9000",
+     "0QA385594222#2349058521_15L9034Q120Q220"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Waldo Cortes-Acosta To Win And Under 0.5": [
+     "+700",
+     "0QA385594225#2349057361_13L9034Q11Q21"
+    ],
+    "Waldo Cortes-Acosta To Win And Under 1.5": [
+     "+200",
+     "0QA385594225#2349057973_13L9034Q11Q23"
+    ],
+    "Waldo Cortes-Acosta To Win And Under 2.5": [
+     "+110",
+     "0QA385594225#2349058194_13L9034Q11Q25"
+    ],
+    "Waldo Cortes-Acosta To Win And Under 3.5": [
+     "-125",
+     "0QA385594225#2349058356_13L9034Q11Q27"
+    ],
+    "Johnny Walker To Win And Under 0.5": [
+     "+1800",
+     "0QA385594225#2349057840_14L9034Q12Q22"
+    ],
+    "Johnny Walker To Win And Under 1.5": [
+     "+600",
+     "0QA385594225#2349058063_14L9034Q12Q24"
+    ],
+    "Johnny Walker To Win And Under 2.5": [
+     "+370",
+     "0QA385594225#2349058254_14L9034Q12Q26"
+    ],
+    "Johnny Walker To Win And Under 3.5": [
+     "+280",
+     "0QA385594225#2349058383_14L9034Q12Q28"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Waldo Cortes-Acosta To Win And Over 1.5": [
+     "+100",
+     "0QA385594226#2349057983_13L9034Q11Q23"
+    ],
+    "Waldo Cortes-Acosta To Win And Over 2.5": [
+     "+175",
+     "0QA385594226#2349058184_13L9034Q11Q25"
+    ],
+    "Waldo Cortes-Acosta To Win And Over 3.5": [
+     "+260",
+     "0QA385594226#2349058342_13L9034Q11Q27"
+    ],
+    "Waldo Cortes-Acosta To Win And Over 4.5": [
+     "+360",
+     "0QA385594226#2349058423_13L9034Q11Q29"
+    ],
+    "Johnny Walker To Win And Over 1.5": [
+     "+275",
+     "0QA385594226#2349058053_14L9034Q12Q24"
+    ],
+    "Johnny Walker To Win And Over 2.5": [
+     "+400",
+     "0QA385594226#2349058244_14L9034Q12Q26"
+    ],
+    "Johnny Walker To Win And Over 3.5": [
+     "+550",
+     "0QA385594226#2349058388_14L9034Q12Q28"
+    ],
+    "Johnny Walker To Win And Over 4.5": [
+     "+850",
+     "0QA385594226#2349058444_14L9034Q12Q210"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-340",
+     "0QA385594227#2349057382_13L9034Q11Q22"
+    ],
+    "No": [
+     "+240",
+     "0QA385594227#2349057831_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-130",
+     "0QA385594228#2349057389_13L9034Q11Q22"
+    ],
+    "No": [
+     "+100",
+     "0QA385594228#2349057823_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 4": {
+    "Yes": [
+     "+140",
+     "0QA385594749#2349059758_13L9034Q11Q22"
+    ],
+    "No": [
+     "-185",
+     "0QA385594749#2349059761_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 5": {
+    "Yes": [
+     "+210",
+     "0QA385594750#2349059759_13L9034Q11Q22"
+    ],
+    "No": [
+     "-285",
+     "0QA385594750#2349059760_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Waldo Cortes-Acosta Round 1": [
+     "+275",
+     "0QA385594218#2349057319_13L9034Q11Q20"
+    ],
+    "Waldo Cortes-Acosta Round 2": [
+     "+450",
+     "0QA385594218#2349057916_13L9034Q11Q22"
+    ],
+    "Waldo Cortes-Acosta Round 3": [
+     "+800",
+     "0QA385594218#2349058134_13L9034Q11Q24"
+    ],
+    "Waldo Cortes-Acosta Round 4": [
+     "+1200",
+     "0QA385594218#2349058310_13L9034Q11Q26"
+    ],
+    "Waldo Cortes-Acosta Round 5": [
+     "+1800",
+     "0QA385594218#2349058408_13L9034Q11Q28"
+    ],
+    "Waldo Cortes-Acosta By Decision": [
+     "+450",
+     "0QA385594218#2349058459_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594218#2349058484_15L9034Q10Q212"
+    ],
+    "Johnny Walker Round 1": [
+     "+800",
+     "0QA385594218#2349057907_14L9034Q12Q21"
+    ],
+    "Johnny Walker Round 2": [
+     "+1100",
+     "0QA385594218#2349058124_14L9034Q12Q23"
+    ],
+    "Johnny Walker Round 3": [
+     "+1400",
+     "0QA385594218#2349058300_14L9034Q12Q25"
+    ],
+    "Johnny Walker Round 4": [
+     "+1800",
+     "0QA385594218#2349058403_14L9034Q12Q27"
+    ],
+    "Johnny Walker Round 5": [
+     "+2500",
+     "0QA385594218#2349058454_14L9034Q12Q29"
+    ],
+    "Johnny Walker By Decision": [
+     "+1100",
+     "0QA385594218#2349058479_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+240",
+     "0QA385594223#2349057347_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+300",
+     "0QA385594223#2349057858_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA385594223#2349057953_13L9034Q11Q22"
+    ],
+    "Round 4": [
+     "+750",
+     "0QA385594223#2349058084_13L9034Q11Q23"
+    ],
+    "Round 5": [
+     "+1000",
+     "0QA385594223#2349058164_13L9034Q11Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594223#2349058274_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+300",
+     "0QA385594223#2349058335_13L9034Q11Q25"
+    ]
+   },
+   "Johnny Walker to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+250",
+     "0QA385594239#2349057575_13L9034Q11Q22"
+    ],
+    "No": [
+     "-350",
+     "0QA385594239#2349057737_13L9034Q13Q24"
+    ]
+   },
+   "Waldo Cortes-Acosta to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-135",
+     "0QA385594240#2349057589_13L9034Q11Q22"
+    ],
+    "No": [
+     "+105",
+     "0QA385594240#2349057723_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ or Decision": [
+     "-220",
+     "0QA385594221#2349057368_13L9034Q11Q21"
+    ],
+    "Waldo Cortes-Acosta to Win by KO/TKO/DQ or Submission": [
+     "-135",
+     "0QA385594221#2349057849_13L9034Q12Q22"
+    ],
+    "Waldo Cortes-Acosta to Win by Submission or Decision": [
+     "+330",
+     "0QA385594221#2349057963_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594221#2349058349_13L9034Q17Q27"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ or Decision": [
+     "+220",
+     "0QA385594221#2349058074_15L9034Q14Q24"
+    ],
+    "Johnny Walker to Win by KO/TKO/DQ or Submission": [
+     "+250",
+     "0QA385594221#2349058174_15L9034Q15Q25"
+    ],
+    "Johnny Walker to Win by Submission or Decision": [
+     "+550",
+     "0QA385594221#2349058264_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Waldo Cortes-Acosta to Win By KO/TKO/DQ or Johnny Walker to Win by Submission": [
+     "-175",
+     "0QA385594241#2349057582_13L9034Q10Q21"
+    ],
+    "Waldo Cortes-Acosta to Win By KO/TKO/DQ or Johnny Walker to Win by Decision": [
+     "-175",
+     "0QA385594241#2349057730_13L9034Q10Q22"
+    ],
+    "Waldo Cortes-Acosta to Win By Submission or Johnny Walker to Win by KO/TKO/DQ": [
+     "+230",
+     "0QA385594241#2349058003_13L9034Q10Q23"
+    ],
+    "Waldo Cortes-Acosta to Win By Submission or Johnny Walker to Win by Decision": [
+     "+650",
+     "0QA385594241#2349058033_13L9034Q10Q24"
+    ],
+    "Waldo Cortes-Acosta to Win By Decision or Johnny Walker to Win by KO/TKO/DQ": [
+     "+130",
+     "0QA385594241#2349058214_13L9034Q10Q25"
+    ],
+    "Waldo Cortes-Acosta to Win By Decision or Johnny Walker to Win by Submission": [
+     "+285",
+     "0QA385594241#2349058224_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594241#2349058370_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-360",
+     "0QA385594219#2349057326_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+700",
+     "0QA385594219#2349057889_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+300",
+     "0QA385594219#2349057925_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385594219#2349058114_15L9034Q14Q24"
+    ]
+   },
+   "Waldo Cortes-Acosta to Win by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA385594231#2349057410_13L9034Q11Q22"
+    ]
+   },
+   "Johnny Walker to Win by Unanimous Decision": {
+    "Yes": [
+     "+1400",
+     "0QA385594232#2349057418_13L9034Q11Q22"
+    ]
+   },
+   "Waldo Cortes-Acosta to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1800",
+     "0QA385594233#2349057427_13L9034Q11Q22"
+    ]
+   },
+   "Johnny Walker to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA385594234#2349057434_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Waldo Cortes-Acosta": [
+     "-125",
+     "0QA385594267#2349057624_13L9034Q11Q22"
+    ],
+    "Johnny Walker": [
+     "+300",
+     "0QA385594267#2349057666_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Waldo Cortes-Acosta": [
+     "+1800",
+     "0QA385594268#2349057631_13L9034Q11Q22"
+    ],
+    "Johnny Walker": [
+     "+1200",
+     "0QA385594268#2349057659_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Waldo Cortes-Acosta": [
+     "+450",
+     "0QA385594269#2349057638_13L9034Q11Q22"
+    ],
+    "Johnny Walker": [
+     "+1100",
+     "0QA385594269#2349057645_13L9034Q13Q24"
     ]
    }
   }
