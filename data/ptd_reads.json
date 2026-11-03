@@ -2,14 +2,6 @@
  "at": "2026-11-03",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4431611": {
-   "p": 0.796,
-   "name": "Caleb Williams"
-  },
-  "3912547": {
-   "p": 0.803,
-   "name": "Sam Darnold"
-  },
   "4360310": {
    "p": 0.841,
    "name": "Trevor Lawrence"
@@ -110,9 +102,17 @@
    "p": 0.652,
    "name": "Gardner Minshew II"
   },
+  "3912547": {
+   "p": 0.787,
+   "name": "Sam Darnold"
+  },
   "3052587": {
    "p": 0.733,
    "name": "Baker Mayfield"
+  },
+  "4431611": {
+   "p": 0.842,
+   "name": "Caleb Williams"
   },
   "3918298": {
    "p": 0.846,
