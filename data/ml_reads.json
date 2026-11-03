@@ -295,7 +295,7 @@
    "home": "IND",
    "pick": "DAL",
    "model": 64,
-   "book": 70,
+   "book": 71,
    "bookpick": "DAL",
    "agree": true,
    "won": 88,
@@ -312,28 +312,6 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
-   "gid": "401873050",
-   "away": "TB",
-   "home": "CHI",
-   "pick": "CHI",
-   "model": 70,
-   "book": 66,
-   "bookpick": "CHI",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "take",
-   "rank": 2,
-   "why": [
-    "QB play (EPA per dropback): CHI +0.13, TB -0.14",
-    "Points per game: CHI 25.7, TB 22.2",
-    "Last 3 games, point margin: CHI -3.3, TB +13.0",
-    "Win % this season: CHI 71%, TB 38%"
-   ],
-   "week": 9,
-   "kick": "2026-11-09T01:20Z"
-  },
-  {
    "gid": "401873047",
    "away": "LV",
    "home": "SF",
@@ -345,7 +323,7 @@
    "won": 84,
    "n": 50,
    "call": "take",
-   "rank": 3,
+   "rank": 2,
    "why": [
     "Points allowed per game: SF 19.9, LV 28.8",
     "QB play (EPA per dropback): SF +0.25, LV +0.12",
@@ -361,13 +339,13 @@
    "home": "BAL",
    "pick": "JAX",
    "model": 73,
-   "book": 79,
+   "book": 80,
    "bookpick": "JAX",
    "agree": true,
    "won": 77,
    "n": 47,
    "call": "take",
-   "rank": 4,
+   "rank": 3,
    "why": [
     "Points allowed per game: JAX 15.9, BAL 25.4",
     "BAL is starting a backup QB",
@@ -376,6 +354,28 @@
    ],
    "week": 9,
    "kick": "2026-11-06T01:15Z"
+  },
+  {
+   "gid": "401873050",
+   "away": "TB",
+   "home": "CHI",
+   "pick": "CHI",
+   "model": 73,
+   "book": 70,
+   "bookpick": "CHI",
+   "agree": true,
+   "won": 75,
+   "n": 28,
+   "call": "take",
+   "rank": 4,
+   "why": [
+    "QB play (EPA per dropback): CHI +0.14, TB -0.14",
+    "Points per game: CHI 26.8, TB 22.2",
+    "Last 3 games, win %: CHI 100%, TB 67%",
+    "Win % this season: CHI 75%, TB 38%"
+   ],
+   "week": 9,
+   "kick": "2026-11-09T01:20Z"
   },
   {
    "gid": "401873045",
@@ -426,19 +426,19 @@
    "away": "ARI",
    "home": "SEA",
    "pick": "SEA",
-   "model": 66,
+   "model": 64,
    "book": 84,
    "bookpick": "SEA",
    "agree": true,
-   "won": 72,
-   "n": 29,
+   "won": 64,
+   "n": 11,
    "call": "take",
    "rank": 7,
    "why": [
-    "Points allowed per game: SEA 17.9, ARI 29.8",
-    "Points per game: SEA 24.0, ARI 21.9",
-    "QB play (EPA per dropback): SEA +0.03, ARI -0.07",
-    "Win % this season: SEA 57%, ARI 38%"
+    "Points allowed per game: SEA 19.9, ARI 29.8",
+    "Points per game: SEA 23.1, ARI 21.9",
+    "QB play (EPA per dropback): SEA -0.03, ARI -0.07",
+    "Win % this season: SEA 50%, ARI 38%"
    ],
    "week": 9,
    "kick": "2026-11-08T21:25Z"
