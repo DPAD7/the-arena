@@ -63309,7 +63309,7 @@
   "right": "Jos\u00e9 Souza",
   "rounds": 3,
   "start": "2026-11-07T22:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Jonny Parsons": [
@@ -63339,7 +63339,7 @@
   "right": "Nina Milo\u0161evi\u0107",
   "rounds": 3,
   "start": "2026-11-07T22:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Priscila Cachoeira": [
@@ -63369,15 +63369,15 @@
   "right": "Ollie Schmid",
   "rounds": 3,
   "start": "2026-11-07T23:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Keiichiro Nakamura": [
-     "-345",
+     "-360",
      "0ML87016461_1"
     ],
     "Ollie Schmid": [
-     "+275",
+     "+285",
      "0ML87016461_3"
     ]
    },
@@ -63399,7 +63399,7 @@
   "right": "Murtazali Magomedov",
   "rounds": 3,
   "start": "2026-11-07T23:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Jose Delano": [
@@ -63429,7 +63429,7 @@
   "right": "Marcos Degli",
   "rounds": 3,
   "start": "2026-11-08T00:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Mitch Raposo": [
@@ -63459,7 +63459,7 @@
   "right": "Gabriella Fernandes",
   "rounds": 3,
   "start": "2026-11-08T00:30Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Karine Silva": [
@@ -63489,8 +63489,48 @@
   "right": "Lucas Fernando",
   "rounds": 3,
   "start": "2026-11-08T01:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Billy Elekana": [
+     "+270",
+     "0QA385593966#2349057204_13L9034Q11Q21"
+    ],
+    "Lucas Fernando": [
+     "-425",
+     "0QA385593966#2349057510_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Billy Elekana": [
+     "+225",
+     "0QA385593968#2349057216_13L9034Q11Q21"
+    ],
+    "Lucas Fernando": [
+     "-340",
+     "0QA385593968#2349057496_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Billy Elekana": [
+     "+310",
+     "0QA385593994#2349057360_13L9034Q10Q21"
+    ],
+    "Lucas Fernando": [
+     "-450",
+     "0QA385593994#2349057447_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Billy Elekana": [
+     "+115",
+     "0QA385593993#2349057353_13L9034Q10Q21"
+    ],
+    "Lucas Fernando": [
+     "-150",
+     "0QA385593993#2349057454_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Billy Elekana": [
      "+260",
@@ -63499,6 +63539,36 @@
     "Lucas Fernando": [
      "-325",
      "0ML87003807_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Billy Elekana": [
+     "+450",
+     "0QA385593992#2349057318_13L9034Q10Q21"
+    ],
+    "Lucas Fernando": [
+     "-800",
+     "0QA385593992#2349057489_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Billy Elekana": [
+     "-105",
+     "0HC87078831P750_1"
+    ],
+    "Lucas Fernando": [
+     "-125",
+     "0HC87078831N750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Billy Elekana": [
+     "+115",
+     "0HC87078832P550_1"
+    ],
+    "Lucas Fernando": [
+     "-150",
+     "0HC87078832N550_3"
     ]
    },
    "Total Rounds": {
@@ -63510,6 +63580,442 @@
      "+145",
      "0OU87046274U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+100",
+     "0OU87078830O250_1"
+    ],
+    "Under": [
+     "-135",
+     "0OU87078830U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA385593972#2349057325_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA385593972#2349057482_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA385593945#2349057132_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA385593995#2349057367_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+175",
+     "0QA385593954#2349057168_13L9034Q11Q22"
+    ],
+    "No": [
+     "-235",
+     "0QA385593954#2349057546_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA385593956#2349057174_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA385593956#2349057540_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+130",
+     "0QA385593931#2349057112_13L9034Q10Q20"
+    ],
+    "No": [
+     "-170",
+     "0QA385593931#2349057608_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+270",
+     "0QA385593970#2349057210_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+700",
+     "0QA385593970#2349057409_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+450",
+     "0QA385593970#2349057678_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1200",
+     "0QA385593970#2349057711_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+800",
+     "0QA385593970#2349057817_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1900",
+     "0QA385593970#2349057842_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+130",
+     "0QA385593970#2349058187_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Billy Elekana to Win in Rounds 1-2": [
+     "+600",
+     "0QA385593937#2349057122_13L9034Q11Q21"
+    ],
+    "Billy Elekana to Win in Round 3 or on Decision": [
+     "+475",
+     "0QA385593937#2349057643_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593937#2349058079_13L9034Q19Q29"
+    ],
+    "Lucas Fernando to Win in Rounds 1-2": [
+     "+135",
+     "0QA385593937#2349057782_15L9034Q15Q25"
+    ],
+    "Lucas Fernando to Win in Round 3 or on Decision": [
+     "+130",
+     "0QA385593937#2349057929_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Billy Elekana to Win by KO/TKO/DQ in Round 1": [
+     "+2000",
+     "0QA385593941#2349057119_13L9034Q11Q21"
+    ],
+    "Billy Elekana to Win by KO/TKO/DQ in Round 2": [
+     "+2800",
+     "0QA385593941#2349057594_13L9034Q12Q22"
+    ],
+    "Billy Elekana to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA385593941#2349057636_13L9034Q13Q23"
+    ],
+    "Billy Elekana to Win by Submission in Round 1": [
+     "+1600",
+     "0QA385593941#2349057893_13L9034Q16Q26"
+    ],
+    "Billy Elekana to Win by Submission in Round 2": [
+     "+2200",
+     "0QA385593941#2349057920_13L9034Q17Q27"
+    ],
+    "Billy Elekana to Win by Submission in Round 3": [
+     "+3000",
+     "0QA385593941#2349058038_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+130",
+     "0QA385593941#2349058306_13L9034Q121Q221"
+    ],
+    "Lucas Fernando to Win by KO/TKO/DQ in Round 1": [
+     "+275",
+     "0QA385593941#2349058179_15L9034Q111Q211"
+    ],
+    "Lucas Fernando to Win by KO/TKO/DQ in Round 2": [
+     "+500",
+     "0QA385593941#2349058197_15L9034Q112Q212"
+    ],
+    "Lucas Fernando to Win by KO/TKO/DQ in Round 3": [
+     "+900",
+     "0QA385593941#2349058227_15L9034Q113Q213"
+    ],
+    "Lucas Fernando to Win by Submission in Round 1": [
+     "+1100",
+     "0QA385593941#2349058257_15L9034Q116Q216"
+    ],
+    "Lucas Fernando to Win by Submission in Round 2": [
+     "+1900",
+     "0QA385593941#2349058267_15L9034Q117Q217"
+    ],
+    "Lucas Fernando to Win by Submission in Round 3": [
+     "+3000",
+     "0QA385593941#2349058278_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Billy Elekana To Win And Under 0.5": [
+     "+2200",
+     "0QA385593948#2349057138_13L9034Q11Q21"
+    ],
+    "Billy Elekana To Win And Under 1.5": [
+     "+750",
+     "0QA385593948#2349057664_13L9034Q11Q23"
+    ],
+    "Lucas Fernando To Win And Under 0.5": [
+     "+600",
+     "0QA385593948#2349057566_14L9034Q12Q22"
+    ],
+    "Lucas Fernando To Win And Under 1.5": [
+     "+170",
+     "0QA385593948#2349057725_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Billy Elekana To Win And Over 1.5": [
+     "+360",
+     "0QA385593949#2349057672_13L9034Q11Q23"
+    ],
+    "Billy Elekana To Win And Over 2.5": [
+     "+500",
+     "0QA385593949#2349057803_13L9034Q11Q25"
+    ],
+    "Lucas Fernando To Win And Over 1.5": [
+     "-120",
+     "0QA385593949#2349057718_14L9034Q12Q24"
+    ],
+    "Lucas Fernando To Win And Over 2.5": [
+     "+145",
+     "0QA385593949#2349057851_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-310",
+     "0QA385593950#2349057156_13L9034Q11Q22"
+    ],
+    "No": [
+     "+220",
+     "0QA385593950#2349057559_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-130",
+     "0QA385593952#2349057162_13L9034Q11Q22"
+    ],
+    "No": [
+     "+100",
+     "0QA385593952#2349057552_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Billy Elekana Round 1": [
+     "+1000",
+     "0QA385593933#2349057115_13L9034Q11Q20"
+    ],
+    "Billy Elekana Round 2": [
+     "+1400",
+     "0QA385593933#2349057622_13L9034Q11Q22"
+    ],
+    "Billy Elekana Round 3": [
+     "+2000",
+     "0QA385593933#2349057768_13L9034Q11Q24"
+    ],
+    "Billy Elekana By Decision": [
+     "+650",
+     "0QA385593933#2349058169_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593933#2349058217_15L9034Q10Q212"
+    ],
+    "Lucas Fernando Round 1": [
+     "+230",
+     "0QA385593933#2349057615_14L9034Q12Q21"
+    ],
+    "Lucas Fernando Round 2": [
+     "+450",
+     "0QA385593933#2349057766_14L9034Q12Q23"
+    ],
+    "Lucas Fernando Round 3": [
+     "+800",
+     "0QA385593933#2349057902_14L9034Q12Q25"
+    ],
+    "Lucas Fernando By Decision": [
+     "+200",
+     "0QA385593933#2349058207_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+220",
+     "0QA385593943#2349057126_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+330",
+     "0QA385593943#2349057580_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA385593943#2349057650_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593943#2349057877_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+130",
+     "0QA385593943#2349057938_13L9034Q11Q25"
+    ]
+   },
+   "Lucas Fernando to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+100",
+     "0QA385593974#2349057332_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA385593974#2349057475_13L9034Q13Q24"
+    ]
+   },
+   "Billy Elekana to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+500",
+     "0QA385593975#2349057346_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA385593975#2349057461_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Billy Elekana to Win by KO/TKO/DQ or Decision": [
+     "+360",
+     "0QA385593939#2349057144_13L9034Q11Q21"
+    ],
+    "Billy Elekana to Win by KO/TKO/DQ or Submission": [
+     "+500",
+     "0QA385593939#2349057573_13L9034Q12Q22"
+    ],
+    "Billy Elekana to Win by Submission or Decision": [
+     "+330",
+     "0QA385593939#2349057657_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593939#2349057957_13L9034Q17Q27"
+    ],
+    "Lucas Fernando to Win by KO/TKO/DQ or Decision": [
+     "-275",
+     "0QA385593939#2349057732_15L9034Q14Q24"
+    ],
+    "Lucas Fernando to Win by KO/TKO/DQ or Submission": [
+     "+100",
+     "0QA385593939#2349057796_15L9034Q15Q25"
+    ],
+    "Lucas Fernando to Win by Submission or Decision": [
+     "+120",
+     "0QA385593939#2349057870_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Billy Elekana to Win By KO/TKO/DQ or Lucas Fernando to Win by Submission": [
+     "+340",
+     "0QA385593976#2349057339_13L9034Q10Q21"
+    ],
+    "Billy Elekana to Win By KO/TKO/DQ or Lucas Fernando to Win by Decision": [
+     "+135",
+     "0QA385593976#2349057468_13L9034Q10Q22"
+    ],
+    "Billy Elekana to Win By Submission or Lucas Fernando to Win by KO/TKO/DQ": [
+     "-115",
+     "0QA385593976#2349057684_13L9034Q10Q23"
+    ],
+    "Billy Elekana to Win By Submission or Lucas Fernando to Win by Decision": [
+     "+125",
+     "0QA385593976#2349057704_13L9034Q10Q24"
+    ],
+    "Billy Elekana to Win By Decision or Lucas Fernando to Win by KO/TKO/DQ": [
+     "-125",
+     "0QA385593976#2349057825_13L9034Q10Q25"
+    ],
+    "Billy Elekana to Win By Decision or Lucas Fernando to Win by Submission": [
+     "+275",
+     "0QA385593976#2349057833_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593976#2349057988_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+105",
+     "0QA385593935#2349057117_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+350",
+     "0QA385593935#2349057601_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+130",
+     "0QA385593935#2349057629_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA385593935#2349057760_15L9034Q14Q24"
+    ]
+   },
+   "Billy Elekana to Win by Unanimous Decision": {
+    "Yes": [
+     "+750",
+     "0QA385593958#2349057180_13L9034Q11Q22"
+    ]
+   },
+   "Lucas Fernando to Win by Unanimous Decision": {
+    "Yes": [
+     "+225",
+     "0QA385593960#2349057186_13L9034Q11Q22"
+    ]
+   },
+   "Billy Elekana to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2200",
+     "0QA385593962#2349057192_13L9034Q11Q22"
+    ]
+   },
+   "Lucas Fernando to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA385593964#2349057198_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Billy Elekana": [
+     "+1000",
+     "0QA385594002#2349057381_13L9034Q11Q22"
+    ],
+    "Lucas Fernando": [
+     "+140",
+     "0QA385594002#2349057426_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Billy Elekana": [
+     "+800",
+     "0QA385594003#2349057388_13L9034Q11Q22"
+    ],
+    "Lucas Fernando": [
+     "+650",
+     "0QA385594003#2349057417_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Billy Elekana": [
+     "+650",
+     "0QA385594004#2349057395_13L9034Q11Q22"
+    ],
+    "Lucas Fernando": [
+     "+200",
+     "0QA385594004#2349057402_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -63519,7 +64025,7 @@
   "right": "Seokhyeon Ko",
   "rounds": 3,
   "start": "2026-11-08T02:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Seokhyeon Ko": [
@@ -63563,11 +64069,11 @@
    },
    "Moneyline": {
     "Seokhyeon Ko": [
-     "-700",
+     "-750",
      "0ML87003806_1"
     ],
     "Wellington Turman": [
-     "+500",
+     "+525",
      "0ML87003806_3"
     ]
    },
@@ -64055,7 +64561,7 @@
   "right": "Virna Jandiroba",
   "rounds": 3,
   "start": "2026-11-08T03:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Tatiana Suarez": [
@@ -64587,7 +65093,7 @@
   "right": "Gabriel Loren\u00e7o",
   "rounds": 3,
   "start": "2026-11-08T00:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Gabriel Lorenco": [
@@ -64617,7 +65123,7 @@
   "right": "Mantas Kondratavi\u010dius",
   "rounds": 3,
   "start": "2026-11-08T01:15Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Moneyline": {
     "Mantas Kondratavicius": [
@@ -64647,7 +65153,7 @@
   "right": "Elijah Smith",
   "rounds": 3,
   "start": "2026-11-08T02:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Davey Grant": [
@@ -65183,7 +65689,7 @@
   "right": "Waldo Cortes Acosta",
   "rounds": 5,
   "start": "2026-11-08T03:45Z",
-  "read": "2026-11-03T20:04Z",
+  "read": "2026-11-03T22:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Waldo Cortes-Acosta": [

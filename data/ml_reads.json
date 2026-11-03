@@ -4,28 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873032",
-   "away": "LAC",
-   "home": "LAR",
-   "pick": "LAR",
-   "model": 76,
-   "book": 71,
-   "bookpick": "LAR",
-   "agree": true,
-   "won": 84,
-   "n": 25,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points per game: LAR 24.3, LAC 15.0",
-    "QB play (EPA per dropback): LAR +0.19, LAC -0.07",
-    "Points allowed per game: LAR 22.7, LAC 25.2",
-    "Last 3 games, win %: LAR 33%, LAC 0%"
-   ],
-   "week": 8,
-   "kick": "2026-11-01T21:05Z"
-  },
-  {
    "gid": "401873035",
    "away": "PHI",
    "home": "WSH",
@@ -37,7 +15,7 @@
    "won": 75,
    "n": 28,
    "call": "take",
-   "rank": 2,
+   "rank": 1,
    "why": [
     "PHI is starting a backup QB",
     "Points per game: WSH 22.0, PHI 18.1",
@@ -46,28 +24,6 @@
    ],
    "week": 8,
    "kick": "2026-11-02T01:20Z"
-  },
-  {
-   "gid": "401873034",
-   "away": "NE",
-   "home": "MIA",
-   "pick": "NE",
-   "model": 70,
-   "book": 74,
-   "bookpick": "NE",
-   "agree": true,
-   "won": 75,
-   "n": 28,
-   "call": "take",
-   "rank": 3,
-   "why": [
-    "Points allowed per game: NE 20.4, MIA 26.2",
-    "Points per game: NE 22.9, MIA 16.3",
-    "QB play (EPA per dropback): NE +0.26, MIA +0.07",
-    "Last 3 games, win %: NE 67%, MIA 33%"
-   ],
-   "week": 8,
-   "kick": "2026-11-01T21:25Z"
   },
   {
    "gid": "401873036",
@@ -81,7 +37,7 @@
    "won": 30,
    "n": 23,
    "call": "lean",
-   "rank": 4,
+   "rank": 2,
    "why": [
     "SEA is starting a backup QB",
     "Last 3 games, win %: CHI 67%, SEA 33%",
@@ -90,28 +46,6 @@
    ],
    "week": 8,
    "kick": "2026-11-03T01:15Z"
-  },
-  {
-   "gid": "401873033",
-   "away": "KC",
-   "home": "DEN",
-   "pick": "KC",
-   "model": 55,
-   "book": 50,
-   "bookpick": "DEN",
-   "agree": false,
-   "won": 58,
-   "n": 153,
-   "call": null,
-   "rank": 5,
-   "why": [
-    "Points allowed per game: KC 17.2, DEN 20.1",
-    "Points per game: KC 23.8, DEN 20.6",
-    "QB play (EPA per dropback): KC +0.12, DEN +0.03",
-    "Last 3 games, point margin: KC +0.7, DEN +7.7"
-   ],
-   "week": 8,
-   "kick": "2026-11-01T21:25Z"
   },
   {
    "gid": "401873040",
