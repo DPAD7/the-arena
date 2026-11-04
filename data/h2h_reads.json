@@ -1,32 +1,8 @@
 {
- "at": "2026-11-04 00:38 UTC",
+ "at": "2026-11-04 02:06 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Jayden Daniels",
-    "Tanner McKee"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "PHI@WAS",
-   "eid": 22139,
-   "kick": "2026-11-02 01:20:00Z"
-  },
   {
    "qbs": [
     "Trevor Lawrence",
@@ -43,7 +19,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+67 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 60.5 yards higher in total on their lines",
+    "His receivers are set 57.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -71,7 +47,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 55.0 yards higher in total on their lines",
+    "His receivers are set 54.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -102,7 +78,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "Opponent gives up more yards to the top receiver (+34 a game)",
-    "His receivers are set 47.0 yards higher in total on their lines"
+    "His receivers are set 48.0 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -135,7 +111,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 65.0 yards higher in total on their lines",
+    "His receivers are set 67.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -232,7 +208,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 117.0 yards higher in total on their lines",
+    "His receivers are set 127.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -244,6 +220,32 @@
    "game": "TB@CHI",
    "eid": 22175,
    "kick": "2026-11-09 01:20:00Z"
+  },
+  {
+   "qbs": [
+    "Kyler Murray",
+    "Josh Allen"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "BUF T.Johnson (11%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "BUF@MIN",
+   "eid": 22176,
+   "kick": "2026-11-10 01:15:00Z"
   }
  ]
 }
