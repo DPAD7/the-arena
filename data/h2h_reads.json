@@ -1,5 +1,5 @@
 {
- "at": "2026-11-04 20:12 UTC",
+ "at": "2026-11-04 22:07 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -19,7 +19,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+67 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 64.5 yards higher in total on their lines",
+    "His receivers are set 63.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -47,7 +47,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 52.0 yards higher in total on their lines",
+    "His receivers are set 53.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -82,7 +82,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 144.5 yards higher in total on their lines",
+    "His receivers are set 145.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -126,6 +126,37 @@
   },
   {
    "qbs": [
+    "Geno Smith",
+    "Patrick Mahomes II"
+   ],
+   "pick": "Patrick Mahomes II",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "NYJ A.Mitchell (13%)",
+    "NYJ B.Allen (12%)",
+    "NYJ G.Wilson (23%)",
+    "NYJ M.Taylor (20%)"
+   ],
+   "score": [
+    -1,
+    1
+   ],
+   "why": [
+    "His receivers are set 198.5 yards higher in total on their lines"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "NYJ@KC",
+   "eid": 22145,
+   "kick": "2026-11-08 18:00:00Z"
+  },
+  {
+   "qbs": [
     "Malik Willis",
     "Jared Goff"
    ],
@@ -142,7 +173,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 55.0 yards higher in total on their lines",
+    "His receivers are set 63.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -161,19 +192,18 @@
     "Bryce Young"
    ],
    "pick": "Bryce Young",
-   "lead": 6,
+   "lead": 4,
    "complete": false,
    "missing": [
     "CAR J.Metchie III (11%)"
    ],
    "score": [
-    -3,
-    3
+    -2,
+    2
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "Opponent gives up more yards to the top receiver (+34 a game)",
-    "His receivers are set 46.0 yards higher in total on their lines"
+    "Opponent gives up more yards to the top receiver (+34 a game)"
    ],
    "checks": [
     0,
@@ -239,7 +269,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 65.0 yards higher in total on their lines",
+    "His receivers are set 62.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -304,7 +334,7 @@
     -1
    ],
    "why": [
-    "His receivers are set 207.0 yards higher in total on their lines",
+    "His receivers are set 229.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -315,6 +345,38 @@
    ],
    "game": "GB@NE",
    "eid": 22173,
+   "kick": "2026-11-08 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Gardner Minshew II",
+    "Drew Lock"
+   ],
+   "pick": "Drew Lock",
+   "lead": 6,
+   "complete": false,
+   "missing": [
+    "ARI K.Bourne (13%)",
+    "SEA C.Kupp (14%)",
+    "SEA T.Horton (12%)"
+   ],
+   "score": [
+    -3,
+    3
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Faces a defense that gives up more yards after the catch",
+    "Opponent gives up more yards to the top receiver (+32 a game)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "ARI@SEA",
+   "eid": 22174,
    "kick": "2026-11-08 21:25:00Z"
   },
   {
@@ -336,7 +398,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 118.0 yards higher in total on their lines",
+    "His receivers are set 119.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
