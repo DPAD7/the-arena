@@ -1,5 +1,5 @@
 {
- "at": "2026-11-04 05:06 UTC",
+ "at": "2026-11-04 14:10 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -19,7 +19,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+67 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 62.5 yards higher in total on their lines",
+    "His receivers are set 64.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -34,20 +34,27 @@
   },
   {
    "qbs": [
-    "Joe Burrow",
-    "Michael Penix Jr."
+    "Dak Prescott",
+    "Daniel Jones"
    ],
-   "pick": "Joe Burrow",
-   "lead": 4,
-   "complete": true,
-   "missing": [],
+   "pick": "Dak Prescott",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "DAL B.Spann-Ford (11%)",
+    "IND J.Taylor (13%)",
+    "IND J.Downs (19%)",
+    "IND K.Allen (24%)",
+    "IND L.Treadwell (10%)"
+   ],
    "score": [
-    4,
-    0
+    6,
+    -2
    ],
    "why": [
+    "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 51.0 yards higher in total on their lines",
+    "His receivers are set 143.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -56,9 +63,35 @@
     0,
     0
    ],
-   "game": "CIN@ATL",
-   "eid": 21911,
-   "kick": "2026-11-08 14:30:00Z"
+   "game": "DAL@IND",
+   "eid": 22142,
+   "kick": "2026-11-08 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jayden Daniels",
+    "Matthew Stafford"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "LA T.Higbee (10%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "LAR@WAS",
+   "eid": 22143,
+   "kick": "2026-11-08 18:00:00Z"
   },
   {
    "qbs": [
@@ -78,7 +111,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 62.0 yards higher in total on their lines",
+    "His receivers are set 56.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -89,6 +122,35 @@
    ],
    "game": "DET@MIA",
    "eid": 22146,
+   "kick": "2026-11-08 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Bo Nix",
+    "Bryce Young"
+   ],
+   "pick": "Bryce Young",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "CAR J.Metchie III (11%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "Opponent gives up more yards to the top receiver (+34 a game)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "DEN@CAR",
+   "eid": 22147,
    "kick": "2026-11-08 18:00:00Z"
   },
   {
@@ -192,6 +254,38 @@
   },
   {
    "qbs": [
+    "Gardner Minshew II",
+    "Sam Darnold"
+   ],
+   "pick": "Sam Darnold",
+   "lead": 6,
+   "complete": false,
+   "missing": [
+    "ARI K.Bourne (13%)",
+    "SEA C.Kupp (14%)",
+    "SEA T.Horton (12%)"
+   ],
+   "score": [
+    -3,
+    3
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Faces a defense that gives up more yards after the catch",
+    "Opponent gives up more yards to the top receiver (+32 a game)"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "ARI@SEA",
+   "eid": 22174,
+   "kick": "2026-11-08 21:25:00Z"
+  },
+  {
+   "qbs": [
     "Caleb Williams",
     "Baker Mayfield"
    ],
@@ -209,7 +303,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 126.0 yards higher in total on their lines",
+    "His receivers are set 117.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
