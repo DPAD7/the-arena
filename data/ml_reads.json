@@ -1,30 +1,8 @@
 {
- "at": "2026-11-04",
+ "at": "2026-11-05",
  "week": 9,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
-  {
-   "gid": "401873036",
-   "away": "CHI",
-   "home": "SEA",
-   "pick": "CHI",
-   "model": 60,
-   "book": 60,
-   "bookpick": "SEA",
-   "agree": false,
-   "won": 30,
-   "n": 23,
-   "call": "lean",
-   "rank": 1,
-   "why": [
-    "SEA is starting a backup QB",
-    "Last 3 games, win %: CHI 67%, SEA 33%",
-    "Points per game: CHI 25.7, SEA 24.0",
-    "QB play (EPA per dropback): CHI +0.13, SEA +0.03"
-   ],
-   "week": 8,
-   "kick": "2026-11-03T01:15Z"
-  },
   {
    "gid": "401873046",
    "away": "HOU",
@@ -75,7 +53,7 @@
    "home": "BAL",
    "pick": "JAX",
    "model": 84,
-   "book": 81,
+   "book": 80,
    "bookpick": "JAX",
    "agree": true,
    "won": 83,
@@ -273,7 +251,7 @@
    "home": "WSH",
    "pick": "LAR",
    "model": 56,
-   "book": 68,
+   "book": 66,
    "bookpick": "LAR",
    "agree": true,
    "won": 61,
@@ -354,6 +332,28 @@
    ],
    "week": 9,
    "kick": "2026-11-08T18:00Z"
+  },
+  {
+   "gid": "401873052",
+   "away": "WSH",
+   "home": "NYG",
+   "pick": "WSH",
+   "model": 51,
+   "book": 52,
+   "bookpick": "NYG",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 1,
+   "why": [
+    "NYG is starting a backup QB",
+    "QB play (EPA per dropback): WSH +0.00, NYG -0.13",
+    "Turnovers per game: WSH 0.4, NYG 1.4",
+    "Defense success rate allowed: WSH 46%, NYG 44%"
+   ],
+   "week": 10,
+   "kick": "2026-11-13T01:15Z"
   }
  ]
 }

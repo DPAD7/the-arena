@@ -1,5 +1,5 @@
 {
- "at": "2026-11-04",
+ "at": "2026-11-05",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "4360310": {
@@ -121,23 +121,9 @@
   "3917315": {
    "p": 0.766,
    "name": "Kyler Murray"
-  },
-  "3912547": {
-   "p": 0.803,
-   "name": "Sam Darnold"
   }
  },
  "by_game": {
-  "401873036": {
-   "4431611": {
-    "p": 0.796,
-    "name": "Caleb Williams"
-   },
-   "3912547": {
-    "p": 0.803,
-    "name": "Sam Darnold"
-   }
-  },
   "401873037": {
    "4360310": {
     "p": 0.841,
@@ -286,6 +272,16 @@
    "3917315": {
     "p": 0.766,
     "name": "Kyler Murray"
+   }
+  },
+  "401873052": {
+   "4426348": {
+    "p": 0.7,
+    "name": "Jayden Daniels"
+   },
+   "4433970": {
+    "p": 0.647,
+    "name": "J.J. McCarthy"
    }
   }
  }
