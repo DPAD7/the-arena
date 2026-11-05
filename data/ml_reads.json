@@ -9,7 +9,7 @@
    "home": "LAC",
    "pick": "HOU",
    "model": 71,
-   "book": 66,
+   "book": 67,
    "bookpick": "HOU",
    "agree": true,
    "won": 87,
@@ -53,7 +53,7 @@
    "home": "BAL",
    "pick": "JAX",
    "model": 84,
-   "book": 80,
+   "book": 81,
    "bookpick": "JAX",
    "agree": true,
    "won": 83,
@@ -202,28 +202,6 @@
    "kick": "2026-11-08T21:25Z"
   },
   {
-   "gid": "401873044",
-   "away": "NYG",
-   "home": "PHI",
-   "pick": "NYG",
-   "model": 60,
-   "book": 60,
-   "bookpick": "NYG",
-   "agree": true,
-   "won": 67,
-   "n": 78,
-   "call": "lean",
-   "rank": 10,
-   "why": [
-    "Points per game: NYG 23.3, PHI 17.1",
-    "Last 3 games, win %: NYG 50%, PHI 0%",
-    "Points allowed per game: NYG 23.0, PHI 25.2",
-    "Win % this season: NYG 64%, PHI 25%"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T18:00Z"
-  },
-  {
    "gid": "401873038",
    "away": "CIN",
    "home": "ATL",
@@ -235,7 +213,7 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 11,
+   "rank": 10,
    "why": [
     "Points per game: CIN 29.4, ATL 21.4",
     "Last 3 games, win %: CIN 100%, ATL 33%",
@@ -244,6 +222,28 @@
    ],
    "week": 9,
    "kick": "2026-11-08T14:30Z"
+  },
+  {
+   "gid": "401873044",
+   "away": "NYG",
+   "home": "PHI",
+   "pick": "NYG",
+   "model": 60,
+   "book": 59,
+   "bookpick": "NYG",
+   "agree": true,
+   "won": 66,
+   "n": 61,
+   "call": "lean",
+   "rank": 11,
+   "why": [
+    "Points per game: NYG 23.3, PHI 17.1",
+    "Last 3 games, win %: NYG 50%, PHI 0%",
+    "Points allowed per game: NYG 23.0, PHI 25.2",
+    "Win % this season: NYG 64%, PHI 25%"
+   ],
+   "week": 9,
+   "kick": "2026-11-08T18:00Z"
   },
   {
    "gid": "401873043",
