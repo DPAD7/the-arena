@@ -1,15 +1,7 @@
 {
- "at": "2026-11-05",
+ "at": "2026-11-06",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4360310": {
-   "p": 0.841,
-   "name": "Trevor Lawrence"
-  },
-  "4429582": {
-   "p": 0.541,
-   "name": "Joe Fagnano"
-  },
   "3915511": {
    "p": 0.869,
    "name": "Joe Burrow"
@@ -45,6 +37,10 @@
   "3122840": {
    "p": 0.722,
    "name": "Deshaun Watson"
+  },
+  "4432762": {
+   "p": 0.681,
+   "name": "Shedeur Sanders"
   },
   "4360689": {
    "p": 0.8,
@@ -121,6 +117,14 @@
   "3917315": {
    "p": 0.766,
    "name": "Kyler Murray"
+  },
+  "4360310": {
+   "p": 0.841,
+   "name": "Trevor Lawrence"
+  },
+  "4429582": {
+   "p": 0.541,
+   "name": "Joe Fagnano"
   }
  },
  "by_game": {
@@ -178,6 +182,10 @@
    "3122840": {
     "p": 0.722,
     "name": "Deshaun Watson"
+   },
+   "4432762": {
+    "p": 0.681,
+    "name": "Shedeur Sanders"
    },
    "4360689": {
     "p": 0.8,
