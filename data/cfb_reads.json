@@ -1,5 +1,5 @@
 {
- "at": "2026-11-05T23:37:26Z",
+ "at": "2026-11-06T00:06:44Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,64 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401866453": {
-   "away": "OHIO",
-   "home": "AKR",
-   "kick": "2026-11-04T00:00Z",
-   "ml": {
-    "pick": "OHIO",
-    "p": 0.813443,
-    "call": "take",
-    "why": [
-     "Margin rating: OHIO -1.5, AKR -15.8",
-     "Points per game: OHIO 28.9, AKR 15.3",
-     "Points allowed per game: OHIO 24.0, AKR 36.0",
-     "Last 3 games, average margin: OHIO +16.3, AKR -12.3"
-    ],
-    "qbs": [
-     "Nick Poulos",
-     "Brayden Roggow"
-    ]
-   },
-   "h2h": {
-    "pick": "Nick Poulos",
-    "pick_id": "5228762",
-    "team": "OHIO",
-    "p": 0.574643,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5228762",
-      "Nick Poulos"
-     ],
-     [
-      "5146903",
-      "Brayden Roggow"
-     ]
-    ]
-   },
-   "ptd": {
-    "5228762": {
-     "name": "Nick Poulos",
-     "team": "OHIO",
-     "p1": 0.761411,
-     "take1": false,
-     "p2": 0.426077,
-     "take2": false,
-     "has_line": true
-    },
-    "5146903": {
-     "name": "Brayden Roggow",
-     "team": "AKR",
-     "p1": 0.65086,
-     "take1": false,
-     "p2": 0.293927,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401866454": {
    "away": "BUFF",
    "home": "M-OH",
@@ -319,7 +261,7 @@
     "pick": "Caden Veltkamp",
     "pick_id": "4869991",
     "team": "FAU",
-    "p": 0.631741,
+    "p": 0.631708,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -377,7 +319,7 @@
     "pick": "Camden Coleman",
     "pick_id": "5153978",
     "team": "JMU",
-    "p": 0.588909,
+    "p": 0.588914,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -395,18 +337,18 @@
     "5153978": {
      "name": "Camden Coleman",
      "team": "JMU",
-     "p1": 0.874945,
+     "p1": 0.878574,
      "take1": false,
-     "p2": 0.630505,
+     "p2": 0.6386,
      "take2": false,
      "has_line": true
     },
     "4833635": {
      "name": "Landry Lyddy",
      "team": "USM",
-     "p1": 0.724944,
+     "p1": 0.73159,
      "take1": false,
-     "p2": 0.372787,
+     "p2": 0.380986,
      "take2": false,
      "has_line": true
     }
@@ -435,7 +377,7 @@
     "pick": "Kevin Jennings",
     "pick_id": "5084084",
     "team": "SMU",
-    "p": 0.604135,
+    "p": 0.604103,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -493,7 +435,7 @@
     "pick": "Michael Van Buren Jr.",
     "pick_id": "5079620",
     "team": "USF",
-    "p": 0.562519,
+    "p": 0.562508,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -551,7 +493,7 @@
     "pick": "Anthony Colandrea",
     "pick_id": "5044387",
     "team": "NEB",
-    "p": 0.60782,
+    "p": 0.60779,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -609,7 +551,7 @@
     "pick": "Luke Duncan",
     "pick_id": "5077500",
     "team": "NEV",
-    "p": 0.583862,
+    "p": 0.583848,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -667,7 +609,7 @@
     "pick": "Noah Fifita",
     "pick_id": "4801717",
     "team": "ARIZ",
-    "p": 0.680293,
+    "p": 0.680282,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -725,7 +667,7 @@
     "pick": "Arch Manning",
     "pick_id": "4870906",
     "team": "TEX",
-    "p": 0.54781,
+    "p": 0.547792,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -783,7 +725,7 @@
     "pick": "Devon Dampier",
     "pick_id": "5105849",
     "team": "UTAH",
-    "p": 0.548649,
+    "p": 0.548658,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -841,7 +783,7 @@
     "pick": "DJ Lagway",
     "pick_id": "5079555",
     "team": "BAY",
-    "p": 0.716066,
+    "p": 0.716029,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -899,7 +841,7 @@
     "pick": "Tait Reynolds",
     "pick_id": "5159078",
     "team": "CLEM",
-    "p": 0.521756,
+    "p": 0.521761,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -957,7 +899,7 @@
     "pick": "Ashton Daniels",
     "pick_id": "4838679",
     "team": "FSU",
-    "p": 0.639234,
+    "p": 0.639243,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1015,7 +957,7 @@
     "pick": "Billy Edwards Jr.",
     "pick_id": "4592532",
     "team": "UNC",
-    "p": 0.65224,
+    "p": 0.652237,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1073,7 +1015,7 @@
     "pick": "Drake Lindsey",
     "pick_id": "5144959",
     "team": "MINN",
-    "p": 0.527779,
+    "p": 0.527793,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1131,7 +1073,7 @@
     "pick": "Baylor Hayes",
     "pick_id": "5224011",
     "team": "TLSA",
-    "p": 0.573201,
+    "p": 0.573204,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1189,7 +1131,7 @@
     "pick": "Walker Eget",
     "pick_id": "4694149",
     "team": "DUKE",
-    "p": 0.523917,
+    "p": 0.523896,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1247,7 +1189,7 @@
     "pick": "Ryan Browne",
     "pick_id": "5104738",
     "team": "PUR",
-    "p": 0.525728,
+    "p": 0.525727,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1305,7 +1247,7 @@
     "pick": "Byrum Brown",
     "pick_id": "4880272",
     "team": "AUB",
-    "p": 0.55402,
+    "p": 0.554032,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1363,7 +1305,7 @@
     "pick": "Drew Mestemaker",
     "pick_id": "5219834",
     "team": "OKST",
-    "p": 0.6725,
+    "p": 0.672503,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1421,7 +1363,7 @@
     "pick": "Deuce Bailey",
     "pick_id": "5296439",
     "team": "CCU",
-    "p": 0.576428,
+    "p": 0.576424,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1479,7 +1421,7 @@
     "pick": "Malachi Singleton",
     "pick_id": "4870999",
     "team": "APP",
-    "p": 0.615428,
+    "p": 0.615416,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1537,7 +1479,7 @@
     "pick": "LaNorris Sellers",
     "pick_id": "4875127",
     "team": "SC",
-    "p": 0.626085,
+    "p": 0.626067,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1595,7 +1537,7 @@
     "pick": "Trey Owens",
     "pick_id": "5123665",
     "team": "ARST",
-    "p": 0.73093,
+    "p": 0.730906,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1653,7 +1595,7 @@
     "pick": "Nick Minicucci",
     "pick_id": "5153846",
     "team": "DEL",
-    "p": 0.601995,
+    "p": 0.601972,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1711,7 +1653,7 @@
     "pick": "Sam Leavitt",
     "pick_id": "5078810",
     "team": "LSU",
-    "p": 0.632417,
+    "p": 0.63239,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1769,7 +1711,7 @@
     "pick": "Conner Weigman",
     "pick_id": "4685574",
     "team": "HOU",
-    "p": 0.649316,
+    "p": 0.649281,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1827,7 +1769,7 @@
     "pick": "Luke Fahey",
     "pick_id": "5214646",
     "team": "OSU",
-    "p": 0.595764,
+    "p": 0.595732,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1885,7 +1827,7 @@
     "pick": "Demond Williams",
     "pick_id": "5079653",
     "team": "WASH",
-    "p": 0.51042,
+    "p": 0.510453,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1943,7 +1885,7 @@
     "pick": "Ryder Burton",
     "pick_id": "5057381",
     "team": "UAB",
-    "p": 0.527101,
+    "p": 0.527069,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2001,7 +1943,7 @@
     "pick": "Ajani Sheppard",
     "pick_id": "5078166",
     "team": "TEM",
-    "p": 0.740155,
+    "p": 0.740125,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2059,7 +2001,7 @@
     "pick": "Max Johnson",
     "pick_id": "4685740",
     "team": "GASO",
-    "p": 0.787907,
+    "p": 0.787869,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2117,7 +2059,7 @@
     "pick": "Roman Gagliano",
     "pick_id": "5194626",
     "team": "MTSU",
-    "p": 0.538884,
+    "p": 0.538866,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2175,7 +2117,7 @@
     "pick": "Cole Ballard",
     "pick_id": "5151060",
     "team": "KU",
-    "p": 0.558724,
+    "p": 0.558655,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2233,7 +2175,7 @@
     "pick": "Tayven Jackson",
     "pick_id": "4801307",
     "team": "UNT",
-    "p": 0.97059,
+    "p": 0.970581,
     "call": "take",
     "has_line": true,
     "qbs": [
@@ -2291,7 +2233,7 @@
     "pick": "Luke Weaver",
     "pick_id": "5295238",
     "team": "SJSU",
-    "p": 0.593327,
+    "p": 0.593312,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2349,7 +2291,7 @@
     "pick": "JJ Kohl",
     "pick_id": "4870883",
     "team": "FIU",
-    "p": 0.536892,
+    "p": 0.536869,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2407,7 +2349,7 @@
     "pick": "Blake Baker",
     "pick_id": "5150998",
     "team": "LT",
-    "p": 0.682241,
+    "p": 0.682234,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2465,7 +2407,7 @@
     "pick": "Jared Curtis",
     "pick_id": "5158948",
     "team": "VAN",
-    "p": 0.587772,
+    "p": 0.587743,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2523,7 +2465,7 @@
     "pick": "Colton Joseph",
     "pick_id": "5125715",
     "team": "WIS",
-    "p": 0.663965,
+    "p": 0.663941,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2581,7 +2523,7 @@
     "pick": "Lunch Winfield",
     "pick_id": "4871091",
     "team": "UL",
-    "p": 0.63266,
+    "p": 0.632649,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2639,7 +2581,7 @@
     "pick": "Maddux Madsen",
     "pick_id": "4870513",
     "team": "BOIS",
-    "p": 0.512673,
+    "p": 0.512683,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2697,7 +2639,7 @@
     "pick": "Kenny Minchey",
     "pick_id": "4918099",
     "team": "UK",
-    "p": 0.545453,
+    "p": 0.545457,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2755,7 +2697,7 @@
     "pick": "Caden Creel",
     "pick_id": "5122157",
     "team": "JVST",
-    "p": 0.546627,
+    "p": 0.54665,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2813,7 +2755,7 @@
     "pick": "Trinidad Chambliss",
     "pick_id": "4911529",
     "team": "MISS",
-    "p": 0.575091,
+    "p": 0.575088,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2871,7 +2813,7 @@
     "pick": "Jake Fette",
     "pick_id": "5209295",
     "team": "ASU",
-    "p": 0.570247,
+    "p": 0.570269,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2929,7 +2871,7 @@
     "pick": "Lincoln Kienholz",
     "pick_id": "5078278",
     "team": "LOU",
-    "p": 0.53623,
+    "p": 0.536245,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2987,7 +2929,7 @@
     "pick": "CJ Carr",
     "pick_id": "5079369",
     "team": "ND",
-    "p": 0.520451,
+    "p": 0.520423,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3045,7 +2987,7 @@
     "pick": "Tommy Carr",
     "pick_id": "5269403",
     "team": "MICH",
-    "p": 0.64346,
+    "p": 0.643454,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3103,7 +3045,7 @@
     "pick": "Aidan Chiles",
     "pick_id": "5075805",
     "team": "NU",
-    "p": 0.517278,
+    "p": 0.517265,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3161,7 +3103,7 @@
     "pick": "Cale Hellums",
     "pick_id": "5150297",
     "team": "ARMY",
-    "p": 0.670104,
+    "p": 0.670094,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3219,7 +3161,7 @@
     "pick": "John Mateer",
     "pick_id": "4915980",
     "team": "OU",
-    "p": 0.533122,
+    "p": 0.53307,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3277,7 +3219,7 @@
     "pick": "Deshawn Purdie",
     "pick_id": "5138131",
     "team": "LIB",
-    "p": 0.648211,
+    "p": 0.648172,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3335,7 +3277,7 @@
     "pick": "Thomas Castellanos",
     "pick_id": "4773919",
     "team": "TTU",
-    "p": 0.774586,
+    "p": 0.774569,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3393,7 +3335,7 @@
     "pick": "Jayden Mandal",
     "pick_id": "5010409",
     "team": "FRES",
-    "p": 0.591698,
+    "p": 0.591689,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3451,7 +3393,7 @@
     "pick": "Micah Alejado",
     "pick_id": "5101124",
     "team": "HAW",
-    "p": 0.862804,
+    "p": 0.862768,
     "call": "take",
     "has_line": true,
     "qbs": [
@@ -3509,7 +3451,7 @@
     "pick": "Braden Atkinson",
     "pick_id": "5212654",
     "team": "ORST",
-    "p": 0.858062,
+    "p": 0.858018,
     "call": "take",
     "has_line": true,
     "qbs": [
@@ -3567,7 +3509,7 @@
     "pick": "Jackson Arnold",
     "pick_id": "4870607",
     "team": "UNLV",
-    "p": 0.613795,
+    "p": 0.61378,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3625,7 +3567,7 @@
     "pick": "Cibastian Broughton",
     "pick_id": "5198324",
     "team": "AKR",
-    "p": 0.606384,
+    "p": 0.606381,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3683,7 +3625,7 @@
     "pick": "Dru DeShields",
     "pick_id": "5119841",
     "team": "KENT",
-    "p": 0.503211,
+    "p": 0.503217,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3741,7 +3683,7 @@
     "pick": "Nick Poulos",
     "pick_id": "5228762",
     "team": "OHIO",
-    "p": 0.55953,
+    "p": 0.559488,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3799,7 +3741,7 @@
     "pick": "William Watson III",
     "pick_id": "4920153",
     "team": "MASS",
-    "p": 0.50133,
+    "p": 0.501343,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3857,7 +3799,7 @@
     "pick": "Keldric Luster",
     "pick_id": "5075392",
     "team": "BALL",
-    "p": 0.50388,
+    "p": 0.503887,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3898,7 +3840,7 @@
    "kick": "2026-11-12T00:30Z",
    "ml": {
     "pick": "CMU",
-    "p": 0.838522,
+    "p": 0.846545,
     "call": "take",
     "why": [
      "Margin rating: CMU -3.4, SAC -16.9",
@@ -3915,7 +3857,7 @@
     "pick": "Jackson Sharman",
     "pick_id": "5158748",
     "team": "SAC",
-    "p": 0.589063,
+    "p": 0.589058,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3973,7 +3915,7 @@
     "pick": "Marcus Stokes",
     "pick_id": "5165807",
     "team": "MEM",
-    "p": 0.58655,
+    "p": 0.586522,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4031,7 +3973,7 @@
     "pick": "Aidan Armenta",
     "pick_id": "5122054",
     "team": "ULM",
-    "p": 0.519868,
+    "p": 0.519873,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4061,6 +4003,64 @@
      "p1": 0.681491,
      "take1": false,
      "p2": 0.320354,
+     "take2": false,
+     "has_line": false
+    }
+   }
+  },
+  "401858293": {
+   "away": "FSU",
+   "home": "PITT",
+   "kick": "2026-11-14T00:00Z",
+   "ml": {
+    "pick": "PITT",
+    "p": 0.671213,
+    "call": null,
+    "why": [
+     "Rushing yards allowed per game: PITT 73, FSU 186",
+     "Points allowed per game: PITT 22.2, FSU 32.0",
+     "Last 3 games, average margin: PITT -3.7, FSU -14.7",
+     "QB INT rate: PITT 2.1%, FSU 3.7%"
+    ],
+    "qbs": [
+     "Ashton Daniels",
+     "Holden Geriner"
+    ]
+   },
+   "h2h": {
+    "pick": "Ashton Daniels",
+    "pick_id": "4838679",
+    "team": "FSU",
+    "p": 0.526937,
+    "call": null,
+    "has_line": false,
+    "qbs": [
+     [
+      "4838679",
+      "Ashton Daniels"
+     ],
+     [
+      "4714300",
+      "Holden Geriner"
+     ]
+    ]
+   },
+   "ptd": {
+    "4714300": {
+     "name": "Holden Geriner",
+     "team": "PITT",
+     "p1": 0.734334,
+     "take1": false,
+     "p2": 0.383759,
+     "take2": false,
+     "has_line": false
+    },
+    "4838679": {
+     "name": "Ashton Daniels",
+     "team": "FSU",
+     "p1": 0.750386,
+     "take1": false,
+     "p2": 0.405687,
      "take2": false,
      "has_line": false
     }
