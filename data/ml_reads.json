@@ -1,5 +1,5 @@
 {
- "at": "2026-11-06",
+ "at": "2026-11-07",
  "week": 9,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
@@ -180,6 +180,28 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
+   "gid": "401873038",
+   "away": "CIN",
+   "home": "ATL",
+   "pick": "CIN",
+   "model": 63,
+   "book": 62,
+   "bookpick": "CIN",
+   "agree": true,
+   "won": 67,
+   "n": 78,
+   "call": "lean",
+   "rank": 9,
+   "why": [
+    "Points per game: CIN 29.4, ATL 21.4",
+    "Last 3 games, win %: CIN 100%, ATL 33%",
+    "QB play (EPA per dropback): CIN +0.17, ATL +0.03",
+    "Win % this season: CIN 71%, ATL 38%"
+   ],
+   "week": 9,
+   "kick": "2026-11-08T14:30Z"
+  },
+  {
    "gid": "401873049",
    "away": "GB",
    "home": "NE",
@@ -191,7 +213,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 9,
+   "rank": 10,
    "why": [
     "QB play (EPA per dropback): NE +0.28, GB +0.15",
     "Points per game: NE 23.0, GB 21.4",
@@ -200,28 +222,6 @@
    ],
    "week": 9,
    "kick": "2026-11-08T21:25Z"
-  },
-  {
-   "gid": "401873038",
-   "away": "CIN",
-   "home": "ATL",
-   "pick": "CIN",
-   "model": 63,
-   "book": 59,
-   "bookpick": "CIN",
-   "agree": true,
-   "won": 66,
-   "n": 61,
-   "call": "lean",
-   "rank": 10,
-   "why": [
-    "Points per game: CIN 29.4, ATL 21.4",
-    "Last 3 games, win %: CIN 100%, ATL 33%",
-    "QB play (EPA per dropback): CIN +0.17, ATL +0.03",
-    "Win % this season: CIN 71%, ATL 38%"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T14:30Z"
   },
   {
    "gid": "401873044",
@@ -251,7 +251,7 @@
    "home": "NO",
    "pick": "NO",
    "model": 56,
-   "book": 60,
+   "book": 61,
    "bookpick": "NO",
    "agree": true,
    "won": 61,
@@ -334,6 +334,28 @@
    "kick": "2026-11-08T18:00Z"
   },
   {
+   "gid": "401873053",
+   "away": "NE",
+   "home": "DET",
+   "pick": "DET",
+   "model": 56,
+   "book": 52,
+   "bookpick": "NE",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 1,
+   "why": [
+    "Points per game: DET 29.0, NE 23.0",
+    "Last 3 games, win %: DET 100%, NE 67%",
+    "Turnovers per game: DET 0.6, NE 1.9",
+    "Pass defense, EPA allowed: DET +0.22, NE +0.10"
+   ],
+   "week": 10,
+   "kick": "2026-11-15T14:30Z"
+  },
+  {
    "gid": "401873052",
    "away": "WSH",
    "home": "NYG",
@@ -345,7 +367,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 1,
+   "rank": 2,
    "why": [
     "NYG is starting a backup QB",
     "QB play (EPA per dropback): WSH +0.00, NYG -0.13",
