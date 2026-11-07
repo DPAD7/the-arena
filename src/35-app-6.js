@@ -174,39 +174,11 @@
          during the fight") */
       GROW = [];
       var prevT = 0;
-      /* a stretch known only as one total (a fight rebuilt from a single
-         sample) is laid where it happened: from each takedown in the stretch
-         until the next takedown, round end or stretch end, at the clock's own
-         scale, so the bar marks the time instead of growing from nowhere
-         (Jose, Nov 7, 2026: "why is the orange growing versus saying when it
-         happens") */
-      var TDS = (d.moments || []).filter(function (m) { return m.what === "Takedown"; })
-        .map(function (m) { return m.t; });
-      function pinned(lo, hi, secs) {
-        var at = TDS.filter(function (t) { return t >= lo && t < hi; }), out = [];
-        for (var k = 0; k < at.length && secs > 0; k++) {
-          var stop = Math.min(hi, (Math.floor(at[k] / 300) + 1) * 300, k + 1 < at.length ? at[k + 1] : hi);
-          var len = Math.min(secs, stop - at[k]);
-          if (len > 0) { out.push([at[k], at[k] + len]); secs -= len; }
-        }
-        return out;
-      }
       d.ev.forEach(function (e) {
         if (!e.state) return;
-        var lump = e.t - prevT > 300;
-        var top = Math.max(e.ac || 0, e.bc || 0);
-        if (lump) [["a", 189, e.ac], ["b", 205, e.bc]].forEach(function (q) {
-          if (!(q[2] > 0) || q[2] < top) return;
-          pinned(prevT, e.t, q[2]).forEach(function (s) {
-            var r = el("rect", {x: q[1], y: y(s[0]), width: 6, height: 0, rx: 3, fill: "#f0913c", "fill-opacity": 0.9});
-            ctrl.appendChild(r);
-            GROW.push({r: r, t0: s[0], t1: s[1], full: y(s[1]) - y(s[0]), pin: 1});
-          });
-        });
         var from = Math.max(prevT, Math.floor(Math.max(0, e.t - 1) / 300) * 300);
         [["a", 189, e.ac], ["b", 205, e.bc]].forEach(function (q) {
           if (!(q[2] > 0)) return;
-          if (lump && q[2] >= top && pinned(prevT, e.t, q[2]).length) return;
           var full = Math.max(3, (q[2] / TOTAL) * FH * 1.6);
           var r = el("rect", {x: q[1], y: y(from), width: 6, height: 0, rx: 3, fill: "#f0913c", "fill-opacity": 0.9});
           ctrl.appendChild(r);
@@ -358,7 +330,7 @@
         var f = t <= b.t0 ? 0 : Math.min(1, (t - b.t0) / (b.t1 - b.t0));
         var h = b.full * f, end = y(Math.min(t, b.t1));
         b.r.setAttribute("height", h.toFixed(1));
-        b.r.setAttribute("y", (b.pin ? y(b.t0) : Math.max(0, end - h)).toFixed(1));
+        b.r.setAttribute("y", Math.max(0, end - h).toFixed(1));
       }
     }
     function sayClock(t) {

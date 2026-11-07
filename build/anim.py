@@ -179,6 +179,20 @@ def cut(bout, samples, plays, card, won_name):
     how = HOW.get(str(fin.get("result") or "").lower().strip(), str(fin.get("result") or "").upper()[:4])
     fr = int(fin.get("round") or 0) or None
     fc = fin.get("clock") if fin.get("state") == "post" else None
+    # the result clock is time into the round -- except when ESPN writes it
+    # as time left: Parsons v Souza ended 4:16 into R1, the live clock read
+    # 0:41 left, and the result came as "0:44", so the playback stopped at
+    # 0:44 with every strike after it (Jose, Nov 7, 2026: "the times don't
+    # match"). A stop before the live clock already reached is time left.
+    live = [t_of(r) for r in samples if r.get("state") == "in" and int(r.get("round") or 0) == fr]
+    live = [t for t in live if t is not None]
+    reached = live[-1] if live else 0
+    flip = (fr - 1) * 300 + (300 - (stop - (fr - 1) * 300)) if fr else stop
+    if fin.get("state") == "post" and fr and stop < reached - 2 and \
+            (fr - 1) * 300 <= reached <= fr * 300 and abs(flip - reached) < abs(stop - reached):
+        into = flip - (fr - 1) * 300
+        stop = flip
+        fc = "%d:%02d" % (int(into) // 60, int(into) % 60)
 
     moments = []
     for p in sorted(plays, key=lambda p: (int(p.get("round") or 0), -(clock_secs(p.get("clock")) or 0))):
@@ -239,6 +253,17 @@ def main(only=None):
             skipped.append((bout, "never saw it end"))
             continue
         d = cut(bout, samples, plays.get(bout, []), card[bout], won.get(bout))
+        # a recut keeps the winner the file already named when this copy of
+        # the winners list has none for the bout (Parsons v Souza, Nov 7, 2026)
+        if d["won"] is None:
+            try:
+                had = json.load(open(os.path.join(OUT, bout + ".json")))
+                d["won"], d["winner"] = had.get("won"), had.get("winner")
+                if d["won"] is not None and d["how"] in ("TKO", "KO"):
+                    ws = [e for e in d["ev"] if e.get("w") == ("a" if d["won"] == 0 else "b") and e.get("sig") and e.get("k")]
+                    d["fb"] = ws[-1]["k"] if ws else d["fb"]
+            except (OSError, ValueError):
+                pass
         if len([e for e in d["ev"] if not e.get("state")]) < 5:
             skipped.append((bout, "too few strikes logged"))
             continue

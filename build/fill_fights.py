@@ -441,6 +441,19 @@ def main():
             elif fold(lab) == fold(right) or same(lab, right) or (two and surname(lab) == surname(right)):
                 f[10], f[11] = got
                 dkr = lab
+        # the two men in the bout are the only men a two-way moneyline can
+        # name: with one tied, the other label is the other man. DraftKings
+        # wrote José Souza as "Jose Henrique" from Nov 3, 2026 and his side of
+        # every price went blank on fight night (Jose: "where are the odds")
+        ml = dig(mkts, "Moneyline") or {}
+        if len(ml) == 2:
+            rest = [l for l in ml if l not in (dkl, dkr)]
+            if f[8] and not f[10] and len(rest) == 1:
+                f[10], f[11] = ml[rest[0]]
+                dkr = rest[0]
+            elif f[10] and not f[8] and len(rest) == 1:
+                f[8], f[9] = ml[rest[0]]
+                dkl = rest[0]
         if when and when != f[2]:
             # logged, never quietly swapped: the row keeps ESPN's time and the
             # board reads the book's out of prices.json (Jose, Sep 18, 2026)
