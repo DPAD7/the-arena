@@ -1,5 +1,5 @@
 {
- "at": "2026-11-07 17:36 UTC",
+ "at": "2026-11-07 18:11 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -36,7 +36,8 @@
    "lead": 2,
    "complete": false,
    "missing": [
-    "DAL B.Spann-Ford (11%)"
+    "DAL B.Spann-Ford (11%)",
+    "DAL G.Pickens (19%)"
    ],
    "score": [
     1,
@@ -88,18 +89,21 @@
     "Geno Smith",
     "Patrick Mahomes II"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Patrick Mahomes II",
+   "lead": 2,
    "complete": false,
    "missing": [
     "NYJ B.Allen (12%)",
-    "NYJ G.Wilson (23%)"
+    "NYJ G.Wilson (23%)",
+    "KC X.Worthy (19%)"
    ],
    "score": [
-    0,
-    0
+    -1,
+    1
    ],
-   "why": [],
+   "why": [
+    "His receivers are set 78.5 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
@@ -221,6 +225,35 @@
    ],
    "game": "LV@SF",
    "eid": 22149,
+   "kick": "2026-11-08 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Jordan Love",
+    "Drake Maye"
+   ],
+   "pick": "Jordan Love",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "NE E.Raridon (14%)"
+   ],
+   "score": [
+    3,
+    -1
+   ],
+   "why": [
+    "His receivers are set 78.0 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "GB@NE",
+   "eid": 22173,
    "kick": "2026-11-08 21:25:00Z"
   },
   {
