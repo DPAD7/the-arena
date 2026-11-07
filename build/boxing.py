@@ -215,6 +215,28 @@ def dk_props(eid, a, b, nr):
     return e
 
 
+def pair_faces(a, b):
+    """Both men of a bout off The Ring, each reached through the other: an
+       undercard man is missing from The Ring's index and its sitemap, but
+       sits in the fights of the man he meets. Asked one at a time, Zach
+       Parker came back "not on The Ring" and his card drew the silhouette
+       on fight night (Jose, Nov 7, 2026: "we are supposed to have them
+       before")."""
+    if DRY or all(os.path.exists(os.path.join(FACES, slug(n) + ".jpg")) for n in (a, b)):
+        return
+    try:
+        import ring
+        pa = ring.find(a, scan=False)
+        pb = ring.find(b, near=pa, scan=False) if pa else ring.find(b, scan=False)
+        if pb and not pa:
+            pa = ring.find(a, near=pb, scan=False)
+        for p, n in ((pa, a), (pb, b)):
+            if p and not os.path.exists(os.path.join(FACES, slug(n) + ".jpg")):
+                ring.face(p, n)
+    except Exception as e:
+        print("   ring %s v %s: %s" % (a, b, e))
+
+
 def face(link, name):
     """A man's picture: the one already kept, else The Ring's cut-out, else
        his Wikipedia article's. A kept picture was skipped when his row had no
@@ -558,6 +580,7 @@ def main():
                 # no clock from the book: the evening of the date, one clock
                 # for the card -- never a made-up time a bout
                 when = dt.datetime.combine(e["date"], dt.time(23, 0), dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+            pair_faces(bt["a"], bt["b"])
             ida, idb = face(bt["alink"], bt["a"]), face(bt["blink"], bt["b"])
             rows.append([e["id"], bid, when, bt["a"], ida, bt["b"], idb, "Boxing " + bt["w"],
                          "", "", "", "", "", ""])

@@ -3164,11 +3164,18 @@
       var groups = Object.keys(bp).filter(function (k) { return /^rg\d+-\d+$/.test(k); })
         .sort(function (x, y) { return parseInt(x.slice(2), 10) - parseInt(y.slice(2), 10); })
         .map(function (k) { return [k, "RD" + k.slice(2), ["mko"], 2]; });
+      /* a bout DraftKings sells only in round pairs (Clarke v Billam-Smith:
+         RD1-2, RD3-4 ... and no single round) had ten empty rows under KO
+         and its real prices out of sight on FINISH; the pairs take the KO
+         tab then (Jose, Nov 7, 2026: "why are these empty") */
+      var singles = false;
+      for (var n = 1; n <= nr; n++) if (((bp["rd" + n] || [])[0] || [])[0] || ((bp["rd" + n] || [])[1] || [])[0]) singles = true;
+      var koRows = singles || !groups.length ? byRound("rd", ["mko"]) : groups;
       return {
-        "KO": [["ko", "BY KO", ["mko"], 2]].concat(byRound("rd", ["mko"])),
+        "KO": [["ko", "BY KO", ["mko"], 2]].concat(koRows),
         "DEC": [["dec", "BY DEC", ["mdec"], 2],
                 [null, "", ["mdec"], 5, [["GTD", "dist"], ["DRAW", "draw"]]]],
-        "FINISH": groups.concat([[null, "", ["mko"], 5, [["INSIDE", "nodist"]]]])
+        "FINISH": (koRows === groups ? [] : groups).concat([[null, "", ["mko"], 5, [["INSIDE", "nodist"]]]])
       };
     }
     var R = {
