@@ -1,5 +1,5 @@
 {
- "at": "2026-11-07 21:01 UTC",
+ "at": "2026-11-07 21:24 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -231,14 +231,15 @@
    "lead": 4,
    "complete": false,
    "missing": [
-    "NE E.Raridon (14%)"
+    "NE E.Raridon (14%)",
+    "NE H.Henry (19%)"
    ],
    "score": [
     3,
     -1
    ],
    "why": [
-    "His receivers are set 76.0 yards higher in total on their lines",
+    "His receivers are set 77.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -286,25 +287,21 @@
     "Caleb Williams",
     "Baker Mayfield"
    ],
-   "pick": "Caleb Williams",
-   "lead": 4,
-   "complete": false,
-   "missing": [
-    "TB C.Godwin Jr. (25%)",
-    "TB T.Hurst III (15%)"
-   ],
+   "pick": "Baker Mayfield",
+   "lead": 2,
+   "complete": true,
+   "missing": [],
    "score": [
-    4,
-    0
+    -1,
+    1
    ],
    "why": [
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 132.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Opponent gives up more yards to the top receiver (+38 a game)"
    ],
    "checks": [
-    1,
-    1,
+    0,
+    0,
     0,
     0
    ],
