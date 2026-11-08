@@ -2,38 +2,6 @@
  "at": "2026-11-08",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4432577": {
-   "p": 0.82,
-   "name": "C.J. Stroud"
-  },
-  "4038941": {
-   "p": 0.729,
-   "name": "Justin Herbert"
-  },
-  "14880": {
-   "p": 0.84,
-   "name": "Kirk Cousins"
-  },
-  "4361741": {
-   "p": 0.858,
-   "name": "Brock Purdy"
-  },
-  "4036378": {
-   "p": 0.807,
-   "name": "Jordan Love"
-  },
-  "4431452": {
-   "p": 0.853,
-   "name": "Drake Maye"
-  },
-  "4038524": {
-   "p": 0.661,
-   "name": "Gardner Minshew II"
-  },
-  "3924327": {
-   "p": 0.762,
-   "name": "Drew Lock"
-  },
   "3052587": {
    "p": 0.733,
    "name": "Baker Mayfield"
@@ -58,6 +26,10 @@
    "p": 0.647,
    "name": "J.J. McCarthy"
   },
+  "4431452": {
+   "p": 0.819,
+   "name": "Drake Maye"
+  },
   "3046779": {
    "p": 0.893,
    "name": "Jared Goff"
@@ -70,9 +42,17 @@
    "p": 0.762,
    "name": "Michael Penix Jr."
   },
+  "4432577": {
+   "p": 0.776,
+   "name": "C.J. Stroud"
+  },
   "4432762": {
    "p": 0.672,
    "name": "Shedeur Sanders"
+  },
+  "4036378": {
+   "p": 0.817,
+   "name": "Jordan Love"
   },
   "4360310": {
    "p": 0.831,
@@ -102,9 +82,25 @@
    "p": 0.783,
    "name": "Geno Smith"
   },
+  "3924327": {
+   "p": 0.776,
+   "name": "Drew Lock"
+  },
+  "14880": {
+   "p": 0.856,
+   "name": "Kirk Cousins"
+  },
   "12483": {
    "p": 0.839,
    "name": "Matthew Stafford"
+  },
+  "4038524": {
+   "p": 0.745,
+   "name": "Gardner Minshew II"
+  },
+  "4361741": {
+   "p": 0.831,
+   "name": "Brock Purdy"
   },
   "2577417": {
    "p": 0.854,
@@ -125,6 +121,10 @@
   "4426338": {
    "p": 0.715,
    "name": "Bo Nix"
+  },
+  "4038941": {
+   "p": 0.729,
+   "name": "Justin Herbert"
   }
  },
  "by_game": {
