@@ -2,14 +2,6 @@
  "at": "2026-11-08",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "3915511": {
-   "p": 0.869,
-   "name": "Joe Burrow"
-  },
-  "4360423": {
-   "p": 0.775,
-   "name": "Michael Penix Jr."
-  },
   "2577417": {
    "p": 0.818,
    "name": "Dak Prescott"
@@ -114,6 +106,10 @@
    "p": 0.48,
    "name": "Max Brosmer"
   },
+  "4360423": {
+   "p": 0.762,
+   "name": "Michael Penix Jr."
+  },
   "4360310": {
    "p": 0.831,
    "name": "Trevor Lawrence"
@@ -125,6 +121,10 @@
   "8439": {
    "p": 0.708,
    "name": "Aaron Rodgers"
+  },
+  "3915511": {
+   "p": 0.861,
+   "name": "Joe Burrow"
   }
  },
  "by_game": {
