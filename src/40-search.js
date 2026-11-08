@@ -732,9 +732,15 @@
           });
         }
         var when = kick ? kick.toLocaleDateString("en-US", { month: "short", day: "numeric", timeZone: "America/New_York" }) + " '" + String(kick.getFullYear()).slice(2) : "";
-        var next = '<div class="rh-r rh-nx"><b class="rh-nxb"><svg width="8" height="9" viewBox="0 0 8 9"><path d="M1 .5 7.5 4.5 1 8.5Z" fill="#fff"/></svg></b>' +
+        /* a bout already over reads like every other fight on his list */
+        var fw = card.dataset.fwin || "", wl = "";
+        if (fw === "l" || fw === "r") wl = fw === side ? '<b class="rh-w">W</b>' : '<b class="rh-l">L</b>';
+        else if (fw === "d") wl = '<b class="rh-d">D</b>';
+        else if (fw === "nc") wl = '<b class="rh-nc">NC</b>';
+        var res = wl && card.dataset.fres ? esc(card.dataset.fres) + " · " : "";
+        var next = (wl ? '<div class="rh-r">' + wl : '<div class="rh-r rh-nx"><b class="rh-nxb"><svg width="8" height="9" viewBox="0 0 8 9"><path d="M1 .5 7.5 4.5 1 8.5Z" fill="#fff"/></svg></b>') +
           '<div class="rh-o"><div>' + (oid ? '<img class="rh-fc" src="face/mma/' + oid + '.png" alt="" onerror="var s=document.createElement(\'span\');s.className=this.className;this.replaceWith(s)">' : '<span class="rh-fc"></span>') +
-          esc(opp) + tags + "</div><small>" + (lb && RHLB[lb] ? RHLB[lb] + " · " : "") + when + "</small></div>" +
+          esc(opp) + tags + "</div><small>" + (res || (lb && RHLB[lb] ? RHLB[lb] + " · " : "")) + when + "</small></div>" +
           '<div class="rh-od">' + esc(price) + "</div></div>";
         var path = x.path, chips = x.chips;
         if (tue) {

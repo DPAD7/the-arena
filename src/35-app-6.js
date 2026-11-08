@@ -918,6 +918,8 @@
                         "Submission": "SUB", "KO/TKO": "TKO", "TKO": "TKO", "KO": "KO", "Knockout": "KO", "Technical Knockout": "TKO", "Technical Decision": "TD",
                         "Disqualification": "DQ", "DQ": "DQ", "Draw": "DRAW", "No Contest": "NC" };
           var lab = SHORT[c.how.type] || c.how.type;
+          card.dataset.fres = (/^(UD|SD|MD|DEC|TD)$/.test(lab) ? "Dec" : lab === "SUB" ? "Sub" : /^(TKO|KO)$/.test(lab) ? "KO" : lab) +
+            (c.how.round ? " R" + c.how.round : "") + (c.how.time && !/^(UD|SD|MD|DEC)$/.test(lab) ? " " + c.how.time : "");
           drawTimeline(card, c, c.status || {}, (c.how.round || rd),
                        lab + (c.how.round ? " \u00b7 R" + c.how.round : "") +
                        (c.how.time ? " " + c.how.time : ""));

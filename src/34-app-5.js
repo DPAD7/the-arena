@@ -1625,6 +1625,10 @@
     var w = surname(winner);
     var leftWon = w && w === lf, rightWon = w && w === rf;
     var drawn = !w && /draw/i.test(how || ""), nc = !w && /no contest/i.test(how || "");
+    /* who won, kept on the card so the record hold can draw tonight's row
+       as a W or an L the moment it is over (Jose, Nov 7, 2026: "why aren't
+       these updated as they are done?") */
+    card.dataset.fwin = leftWon ? "l" : rightWon ? "r" : drawn ? "d" : nc ? "nc" : "";
 
     var clubs = card.querySelectorAll(".ghead .gteam");
     if (clubs.length === 2) {
