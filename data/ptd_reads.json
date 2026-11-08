@@ -2,62 +2,6 @@
  "at": "2026-11-08",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "2577417": {
-   "p": 0.818,
-   "name": "Dak Prescott"
-  },
-  "3917792": {
-   "p": 0.76,
-   "name": "Daniel Jones"
-  },
-  "15864": {
-   "p": 0.786,
-   "name": "Geno Smith"
-  },
-  "3139477": {
-   "p": 0.834,
-   "name": "Patrick Mahomes"
-  },
-  "3046779": {
-   "p": 0.868,
-   "name": "Jared Goff"
-  },
-  "4242512": {
-   "p": 0.692,
-   "name": "Malik Willis"
-  },
-  "4432762": {
-   "p": 0.681,
-   "name": "Shedeur Sanders"
-  },
-  "4360689": {
-   "p": 0.8,
-   "name": "Tyler Shough"
-  },
-  "4433970": {
-   "p": 0.641,
-   "name": "J.J. McCarthy"
-  },
-  "4360698": {
-   "p": 0.547,
-   "name": "Joe Milton"
-  },
-  "12483": {
-   "p": 0.846,
-   "name": "Matthew Stafford"
-  },
-  "4426348": {
-   "p": 0.798,
-   "name": "Jayden Daniels"
-  },
-  "4426338": {
-   "p": 0.715,
-   "name": "Bo Nix"
-  },
-  "4685720": {
-   "p": 0.821,
-   "name": "Bryce Young"
-  },
   "4432577": {
    "p": 0.82,
    "name": "C.J. Stroud"
@@ -106,9 +50,29 @@
    "p": 0.48,
    "name": "Max Brosmer"
   },
+  "4426348": {
+   "p": 0.7,
+   "name": "Jayden Daniels"
+  },
+  "4433970": {
+   "p": 0.647,
+   "name": "J.J. McCarthy"
+  },
+  "3046779": {
+   "p": 0.893,
+   "name": "Jared Goff"
+  },
+  "3139477": {
+   "p": 0.812,
+   "name": "Patrick Mahomes"
+  },
   "4360423": {
    "p": 0.762,
    "name": "Michael Penix Jr."
+  },
+  "4432762": {
+   "p": 0.672,
+   "name": "Shedeur Sanders"
   },
   "4360310": {
    "p": 0.831,
@@ -118,6 +82,34 @@
    "p": 0.707,
    "name": "Cam Ward"
   },
+  "4242512": {
+   "p": 0.657,
+   "name": "Malik Willis"
+  },
+  "3917792": {
+   "p": 0.755,
+   "name": "Daniel Jones"
+  },
+  "4685720": {
+   "p": 0.788,
+   "name": "Bryce Young"
+  },
+  "4360689": {
+   "p": 0.763,
+   "name": "Tyler Shough"
+  },
+  "15864": {
+   "p": 0.783,
+   "name": "Geno Smith"
+  },
+  "12483": {
+   "p": 0.839,
+   "name": "Matthew Stafford"
+  },
+  "2577417": {
+   "p": 0.854,
+   "name": "Dak Prescott"
+  },
   "8439": {
    "p": 0.708,
    "name": "Aaron Rodgers"
@@ -125,6 +117,14 @@
   "3915511": {
    "p": 0.861,
    "name": "Joe Burrow"
+  },
+  "4360698": {
+   "p": 0.547,
+   "name": "Joe Milton"
+  },
+  "4426338": {
+   "p": 0.715,
+   "name": "Bo Nix"
   }
  },
  "by_game": {
