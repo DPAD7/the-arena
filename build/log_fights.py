@@ -242,14 +242,19 @@ def main():
     if not bouts:
         return
     os.makedirs(os.path.dirname(OUT), exist_ok=True)
-    fh = open(OUT, "a")
-    ph = open(PLAYS, "a")
     have = seen_plays()
     print("plays already on file: %d" % len(have))
     started = time.time()
     done = set()
     played = set()
     while True:
+        # both files are opened afresh every pass: the job commits and pulls
+        # beside the recorder, git replaces the file it pulls, and a handle
+        # held open kept writing into the copy git had thrown away -- every
+        # bout after the first on Nov 7, 2026 was read live and lost, and its
+        # rewind rebuilt from round totals (Jose: "it needs to be built live")
+        fh = open(OUT, "a")
+        ph = open(PLAYS, "a")
         live, ahead, read = one_pass(bouts, fh, done)
         # the moments of the bouts read this pass only: every finished bout's
         # list again on every pass is what made a pass take minutes
@@ -258,6 +263,8 @@ def main():
                 log_plays(b, ph, have)
                 if b["bout"] in done:
                     played.add(b["bout"])
+        fh.close()
+        ph.close()
         if "--once" in sys.argv:
             break
         # The card is over the moment its last bout is: nothing on, nothing
@@ -272,8 +279,6 @@ def main():
             break
         # nothing on yet: no need to look every few seconds for the walkouts
         time.sleep(every if live else max(every, 60))
-    fh.close()
-    ph.close()
 
 
 if __name__ == "__main__":
