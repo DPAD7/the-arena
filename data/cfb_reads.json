@@ -1,5 +1,5 @@
 {
- "at": "2026-11-08T07:26:39Z",
+ "at": "2026-11-08T12:39:48Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -3435,7 +3435,7 @@
    "kick": "2026-11-12T00:30Z",
    "ml": {
     "pick": "CMU",
-    "p": 0.84502,
+    "p": 0.852777,
     "call": "take",
     "why": [
      "Margin rating: CMU -3.2, SAC -17.1",
@@ -4148,9 +4148,9 @@
     "pick": "Drew Mestemaker",
     "pick_id": "5219834",
     "team": "OKST",
-    "p": 0.737154,
+    "p": 0.754262,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "4773919",
@@ -4166,20 +4166,20 @@
     "5219834": {
      "name": "Drew Mestemaker",
      "team": "OKST",
-     "p1": 0.866727,
-     "take1": false,
-     "p2": 0.608147,
-     "take2": false,
-     "has_line": false
+     "p1": 0.923324,
+     "take1": true,
+     "p2": 0.744687,
+     "take2": true,
+     "has_line": true
     },
     "4773919": {
      "name": "Thomas Castellanos",
      "team": "TTU",
-     "p1": 0.79052,
+     "p1": 0.812141,
      "take1": false,
-     "p2": 0.467924,
+     "p2": 0.505583,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -4746,18 +4746,18 @@
     "4694149": {
      "name": "Walker Eget",
      "team": "DUKE",
-     "p1": 0.648607,
+     "p1": 0.63315,
      "take1": false,
-     "p2": 0.283281,
+     "p2": 0.269321,
      "take2": false,
      "has_line": true
     },
     "5121169": {
      "name": "Darian Mensah",
      "team": "MIA",
-     "p1": 0.924926,
+     "p1": 0.920126,
      "take1": true,
-     "p2": 0.736131,
+     "p2": 0.722346,
      "take2": true,
      "has_line": true
     }
@@ -4862,18 +4862,18 @@
     "5141634": {
      "name": "Steele Pizzella",
      "team": "WAKE",
-     "p1": 0.758133,
+     "p1": 0.776125,
      "take1": false,
-     "p2": 0.423612,
+     "p2": 0.449368,
      "take2": false,
      "has_line": true
     },
     "5084084": {
      "name": "Kevin Jennings",
      "team": "SMU",
-     "p1": 0.849293,
+     "p1": 0.86174,
      "take1": false,
-     "p2": 0.565367,
+     "p2": 0.590906,
      "take2": false,
      "has_line": true
     }
@@ -5233,7 +5233,7 @@
    "kick": "2026-11-14T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.695825,
+    "p": 0.708473,
     "call": null,
     "why": [
      "Margin rating: ECU -2.4, CLT -13.6",
@@ -5523,13 +5523,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.536113,
+    "p": 0.551119,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "Passing yards per game: MOST 222, NMSU 189"
+     "NMSU is starting a backup QB"
     ],
     "qbs": [
      "Trey Hedden",
@@ -5656,9 +5656,9 @@
     "pick": "CJ Carr",
     "pick_id": "5079369",
     "team": "ND",
-    "p": 0.667209,
-    "call": null,
-    "has_line": false,
+    "p": 0.862075,
+    "call": "take",
+    "has_line": true,
     "qbs": [
      [
       "5307005",
@@ -5674,20 +5674,20 @@
     "5307005": {
      "name": "Mason McKenzie",
      "team": "BC",
-     "p1": 0.634156,
+     "p1": 0.463226,
      "take1": false,
-     "p2": 0.277279,
+     "p2": 0.173183,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5079369": {
      "name": "CJ Carr",
      "team": "ND",
-     "p1": 0.826936,
-     "take1": false,
-     "p2": 0.544677,
+     "p1": 0.900682,
+     "take1": true,
+     "p2": 0.673814,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6393,7 +6393,7 @@
    "kick": "2026-11-14T23:00Z",
    "ml": {
     "pick": "MRSH",
-    "p": 0.564513,
+    "p": 0.579321,
     "call": null,
     "why": [
      "Average margin: MRSH -7.8, APP -4.4",
@@ -6973,7 +6973,7 @@
    "kick": "2026-11-15T03:30Z",
    "ml": {
     "pick": "WSU",
-    "p": 0.722335,
+    "p": 0.734302,
     "call": null,
     "why": [
      "Points allowed per game: WSU 30.0, CSU 47.4",
