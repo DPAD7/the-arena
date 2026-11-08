@@ -1,5 +1,5 @@
 {
- "at": "2026-11-08 16:08 UTC",
+ "at": "2026-11-08 17:09 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -33,22 +33,21 @@
     "Daniel Jones"
    ],
    "pick": "Dak Prescott",
-   "lead": 4,
-   "complete": false,
-   "missing": [
-    "DAL B.Spann-Ford (11%)"
-   ],
+   "lead": 8,
+   "complete": true,
+   "missing": [],
    "score": [
-    3,
-    -1
+    6,
+    -2
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "1 of 4 combined boxes checked"
+    "His receivers are set 95.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
+    1,
     1,
     0,
     0
@@ -62,51 +61,28 @@
     "Jayden Daniels",
     "Matthew Stafford"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Matthew Stafford",
+   "lead": 2,
    "complete": false,
    "missing": [
     "WAS T.Burks (19%)"
    ],
    "score": [
     0,
-    0
+    2
    ],
-   "why": [],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+43 a game)",
+    "1 of 4 combined boxes checked"
+   ],
    "checks": [
     0,
     0,
-    0,
+    1,
     0
    ],
    "game": "LAR@WAS",
    "eid": 22143,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Tyler Shough",
-    "Shedeur Sanders"
-   ],
-   "pick": "Shedeur Sanders",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "CLE@NO",
-   "eid": 22144,
    "kick": "2026-11-08 18:00:00Z"
   },
   {
@@ -153,7 +129,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 76.0 yards higher in total on their lines",
+    "His receivers are set 74.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
