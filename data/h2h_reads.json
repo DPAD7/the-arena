@@ -1,5 +1,5 @@
 {
- "at": "2026-11-09 04:53 UTC",
+ "at": "2026-11-09 14:13 UTC",
  "week": 9,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -330,27 +330,64 @@
   },
   {
    "qbs": [
-    "Carson Wentz",
-    "Josh Allen"
+    "Jayden Daniels",
+    "J.J. McCarthy"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "J.J. McCarthy",
+   "lead": 4,
    "complete": true,
    "missing": [],
    "score": [
-    0,
-    0
+    -2,
+    2
    ],
-   "why": [],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+51 a game)",
+    "New coach for his side"
+   ],
    "checks": [
     0,
     0,
     0,
     0
    ],
-   "game": "BUF@MIN",
-   "eid": 22176,
-   "kick": "2026-11-10 01:15:00Z"
+   "game": "WAS@NYG",
+   "eid": 21946,
+   "kick": "2026-11-13 01:15:00Z"
+  },
+  {
+   "qbs": [
+    "Jared Goff",
+    "Drake Maye"
+   ],
+   "pick": "Jared Goff",
+   "lead": 6,
+   "complete": false,
+   "missing": [
+    "NE D.Douglas (19%)",
+    "NE E.Chism III (13%)",
+    "NE E.Raridon (16%)",
+    "NE H.Henry (15%)",
+    "NE R.Stevenson (14%)"
+   ],
+   "score": [
+    4,
+    -2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His receivers are set 229.5 yards higher in total on their lines",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "NE@DET",
+   "eid": 21916,
+   "kick": "2026-11-15 14:30:00Z"
   }
  ]
 }
