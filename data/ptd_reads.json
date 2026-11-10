@@ -1,15 +1,7 @@
 {
- "at": "2026-11-09",
+ "at": "2026-11-10",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "3918298": {
-   "p": 0.846,
-   "name": "Josh Allen"
-  },
-  "4573398": {
-   "p": 0.48,
-   "name": "Max Brosmer"
-  },
   "4426348": {
    "p": 0.67,
    "name": "Jayden Daniels"
@@ -42,6 +34,10 @@
    "p": 0.692,
    "name": "Shedeur Sanders"
   },
+  "4573398": {
+   "p": 0.377,
+   "name": "Max Brosmer"
+  },
   "4036378": {
    "p": 0.832,
    "name": "Jordan Love"
@@ -69,6 +65,10 @@
   "4360689": {
    "p": 0.771,
    "name": "Tyler Shough"
+  },
+  "3918298": {
+   "p": 0.813,
+   "name": "Josh Allen"
   },
   "15864": {
    "p": 0.74,
