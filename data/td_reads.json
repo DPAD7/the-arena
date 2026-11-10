@@ -4,8 +4,8 @@
  "reads": {
   "4426348": {
    "p1": 0.67,
-   "proj": 20.0,
-   "total": 42.5,
+   "proj": 19.5,
+   "total": 41.5,
    "fav": -2.5,
    "two_now": "2 of 6",
    "why1": [
@@ -15,14 +15,14 @@
     "Giants let teams into the red zone 3.2 times a game"
    ],
    "why3": [
-    "Commanders projected for 20.0 points",
-    "Game total 42.5"
+    "Commanders projected for 19.5 points",
+    "Game total 41.5"
    ]
   },
   "4433970": {
    "p1": 0.616,
-   "proj": 22.5,
-   "total": 42.5,
+   "proj": 22.0,
+   "total": 41.5,
    "fav": 2.5,
    "two_now": "0 of 3",
    "why1": [
@@ -32,8 +32,8 @@
     "Commanders let teams into the red zone 3.8 times a game"
    ],
    "why3": [
-    "Giants projected for 22.5 points",
-    "Game total 42.5"
+    "Giants projected for 22.0 points",
+    "Game total 41.5"
    ]
   },
   "4431452": {
@@ -148,38 +148,44 @@
    ]
   },
   "4573398": {
-   "p1": 0.377,
-   "proj": null,
-   "total": null,
-   "fav": null,
+   "p1": 0.352,
+   "proj": 18.5,
+   "total": 41.5,
+   "fav": -4.5,
    "two_now": null,
    "why1": [
     "TD passes per game: 0.00 (last 4 games)",
     "His efficiency: -0.68 EPA per dropback",
-    "Vikings reach the red zone 2.9 times a game",
+    "Vikings reach the red zone 2.5 times a game",
     "Packers let teams into the red zone 3.8 times a game"
    ],
-   "why3": []
+   "why3": [
+    "Vikings projected for 18.5 points",
+    "Game total 41.5"
+   ]
   },
   "4036378": {
-   "p1": 0.832,
-   "proj": null,
-   "total": null,
-   "fav": null,
+   "p1": 0.837,
+   "proj": 23.0,
+   "total": 41.5,
+   "fav": 4.5,
    "two_now": "8 of 9",
    "why1": [
     "TD passes per game: 1.81 (last 16 games)",
     "His efficiency: +0.18 EPA per dropback",
     "Packers reach the red zone 4.5 times a game",
-    "Vikings let teams into the red zone 2.9 times a game"
+    "Vikings let teams into the red zone 3.2 times a game"
    ],
-   "why3": []
+   "why3": [
+    "Packers projected for 23.0 points",
+    "Game total 41.5"
+   ]
   },
   "4360310": {
    "p1": 0.831,
-   "proj": 28.2,
+   "proj": 28.5,
    "total": 46.5,
-   "fav": 10.0,
+   "fav": 10.5,
    "two_now": "5 of 8",
    "why1": [
     "TD passes per game: 2.31 (last 16 games)",
@@ -188,15 +194,15 @@
     "Titans let teams into the red zone 4.1 times a game"
    ],
    "why3": [
-    "Jaguars projected for 28.2 points",
+    "Jaguars projected for 28.5 points",
     "Game total 46.5"
    ]
   },
   "4688380": {
    "p1": 0.707,
-   "proj": 18.2,
+   "proj": 18.0,
    "total": 46.5,
-   "fav": -10.0,
+   "fav": -10.5,
    "two_now": "1 of 8",
    "why1": [
     "TD passes per game: 1.07 (last 15 games)",
@@ -205,7 +211,7 @@
     "Jaguars let teams into the red zone 3.4 times a game"
    ],
    "why3": [
-    "Titans projected for 18.2 points",
+    "Titans projected for 18.0 points",
     "Game total 46.5"
    ]
   },
@@ -278,24 +284,36 @@
    ]
   },
   "3918298": {
-   "p1": 0.813,
-   "proj": null,
-   "total": null,
-   "fav": null,
-   "two_now": "4 of 7",
+   "p1": 0.817,
+   "proj": 29.5,
+   "total": 50.5,
+   "fav": 8.5,
+   "two_now": "4 of 8",
    "why1": [
     "TD passes per game: 1.50 (last 16 games)",
-    "His efficiency: +0.18 EPA per dropback",
-    "Bills reach the red zone 5.5 times a game",
+    "His efficiency: +0.16 EPA per dropback",
+    "Bills reach the red zone 5.2 times a game",
     "Jets let teams into the red zone 4.6 times a game"
    ],
-   "why3": []
+   "two": {
+    "take": true,
+    "why": [
+     "Team projected for 29.5 points",
+     "2+ TD passes in 4 of 8 games this season",
+     "Jets let teams into the red zone 4.6 times a game"
+    ],
+    "won": "teams projected 30+ threw 2+ 80% of the time"
+   },
+   "why3": [
+    "Bills projected for 29.5 points",
+    "Game total 50.5"
+   ]
   },
   "15864": {
-   "p1": 0.74,
-   "proj": null,
-   "total": null,
-   "fav": null,
+   "p1": 0.743,
+   "proj": 21.0,
+   "total": 50.5,
+   "fav": -8.5,
    "two_now": "3 of 9",
    "why1": [
     "TD passes per game: 1.25 (last 16 games)",
@@ -303,7 +321,10 @@
     "Jets reach the red zone 3.9 times a game",
     "Bills let teams into the red zone 4.1 times a game"
    ],
-   "why3": []
+   "why3": [
+    "Jets projected for 21.0 points",
+    "Game total 50.5"
+   ]
   },
   "3924327": {
    "p1": 0.772,
@@ -373,9 +394,9 @@
   },
   "4361741": {
    "p1": 0.847,
-   "proj": 29.5,
+   "proj": 30.0,
    "total": 55.5,
-   "fav": 3.5,
+   "fav": 4.5,
    "two_now": "6 of 8",
    "why1": [
     "TD passes per game: 2.19 (last 16 games)",
@@ -386,22 +407,22 @@
    "two": {
     "take": true,
     "why": [
-     "Team projected for 29.5 points",
+     "Team projected for 30.0 points",
      "2+ TD passes in 6 of 8 games this season",
      "Cowboys let teams into the red zone 4.4 times a game"
     ],
     "won": "teams projected 30+ threw 2+ 80% of the time"
    },
    "why3": [
-    "49ers projected for 29.5 points",
+    "49ers projected for 30.0 points",
     "Game total 55.5"
    ]
   },
   "2577417": {
    "p1": 0.847,
-   "proj": 26.0,
+   "proj": 25.5,
    "total": 55.5,
-   "fav": -3.5,
+   "fav": -4.5,
    "two_now": "4 of 9",
    "why1": [
     "TD passes per game: 1.56 (last 16 games)",
@@ -410,7 +431,7 @@
     "49ers let teams into the red zone 3.5 times a game"
    ],
    "why3": [
-    "Cowboys projected for 26.0 points",
+    "Cowboys projected for 25.5 points",
     "Game total 55.5"
    ]
   },
@@ -1121,8 +1142,8 @@
   "401873052": {
    "4426348": {
     "p1": 0.67,
-    "proj": 20.0,
-    "total": 42.5,
+    "proj": 19.5,
+    "total": 41.5,
     "fav": -2.5,
     "two_now": "2 of 6",
     "why1": [
@@ -1132,14 +1153,14 @@
      "Giants let teams into the red zone 3.2 times a game"
     ],
     "why3": [
-     "Commanders projected for 20.0 points",
-     "Game total 42.5"
+     "Commanders projected for 19.5 points",
+     "Game total 41.5"
     ]
    },
    "4433970": {
     "p1": 0.616,
-    "proj": 22.5,
-    "total": 42.5,
+    "proj": 22.0,
+    "total": 41.5,
     "fav": 2.5,
     "two_now": "0 of 3",
     "why1": [
@@ -1149,8 +1170,8 @@
      "Commanders let teams into the red zone 3.8 times a game"
     ],
     "why3": [
-     "Giants projected for 22.5 points",
-     "Game total 42.5"
+     "Giants projected for 22.0 points",
+     "Game total 41.5"
     ]
    }
   },
@@ -1273,40 +1294,46 @@
   },
   "401873060": {
    "4573398": {
-    "p1": 0.377,
-    "proj": null,
-    "total": null,
-    "fav": null,
+    "p1": 0.352,
+    "proj": 18.5,
+    "total": 41.5,
+    "fav": -4.5,
     "two_now": null,
     "why1": [
      "TD passes per game: 0.00 (last 4 games)",
      "His efficiency: -0.68 EPA per dropback",
-     "Vikings reach the red zone 2.9 times a game",
+     "Vikings reach the red zone 2.5 times a game",
      "Packers let teams into the red zone 3.8 times a game"
     ],
-    "why3": []
+    "why3": [
+     "Vikings projected for 18.5 points",
+     "Game total 41.5"
+    ]
    },
    "4036378": {
-    "p1": 0.832,
-    "proj": null,
-    "total": null,
-    "fav": null,
+    "p1": 0.837,
+    "proj": 23.0,
+    "total": 41.5,
+    "fav": 4.5,
     "two_now": "8 of 9",
     "why1": [
      "TD passes per game: 1.81 (last 16 games)",
      "His efficiency: +0.18 EPA per dropback",
      "Packers reach the red zone 4.5 times a game",
-     "Vikings let teams into the red zone 2.9 times a game"
+     "Vikings let teams into the red zone 3.2 times a game"
     ],
-    "why3": []
+    "why3": [
+     "Packers projected for 23.0 points",
+     "Game total 41.5"
+    ]
    }
   },
   "401873057": {
    "4360310": {
     "p1": 0.831,
-    "proj": 28.2,
+    "proj": 28.5,
     "total": 46.5,
-    "fav": 10.0,
+    "fav": 10.5,
     "two_now": "5 of 8",
     "why1": [
      "TD passes per game: 2.31 (last 16 games)",
@@ -1315,15 +1342,15 @@
      "Titans let teams into the red zone 4.1 times a game"
     ],
     "why3": [
-     "Jaguars projected for 28.2 points",
+     "Jaguars projected for 28.5 points",
      "Game total 46.5"
     ]
    },
    "4688380": {
     "p1": 0.707,
-    "proj": 18.2,
+    "proj": 18.0,
     "total": 46.5,
-    "fav": -10.0,
+    "fav": -10.5,
     "two_now": "1 of 8",
     "why1": [
      "TD passes per game: 1.07 (last 15 games)",
@@ -1332,7 +1359,7 @@
      "Jaguars let teams into the red zone 3.4 times a game"
     ],
     "why3": [
-     "Titans projected for 18.2 points",
+     "Titans projected for 18.0 points",
      "Game total 46.5"
     ]
    }
@@ -1411,24 +1438,36 @@
   },
   "401873054": {
    "3918298": {
-    "p1": 0.813,
-    "proj": null,
-    "total": null,
-    "fav": null,
-    "two_now": "4 of 7",
+    "p1": 0.817,
+    "proj": 29.5,
+    "total": 50.5,
+    "fav": 8.5,
+    "two_now": "4 of 8",
     "why1": [
      "TD passes per game: 1.50 (last 16 games)",
-     "His efficiency: +0.18 EPA per dropback",
-     "Bills reach the red zone 5.5 times a game",
+     "His efficiency: +0.16 EPA per dropback",
+     "Bills reach the red zone 5.2 times a game",
      "Jets let teams into the red zone 4.6 times a game"
     ],
-    "why3": []
+    "two": {
+     "take": true,
+     "why": [
+      "Team projected for 29.5 points",
+      "2+ TD passes in 4 of 8 games this season",
+      "Jets let teams into the red zone 4.6 times a game"
+     ],
+     "won": "teams projected 30+ threw 2+ 80% of the time"
+    },
+    "why3": [
+     "Bills projected for 29.5 points",
+     "Game total 50.5"
+    ]
    },
    "15864": {
-    "p1": 0.74,
-    "proj": null,
-    "total": null,
-    "fav": null,
+    "p1": 0.743,
+    "proj": 21.0,
+    "total": 50.5,
+    "fav": -8.5,
     "two_now": "3 of 9",
     "why1": [
      "TD passes per game: 1.25 (last 16 games)",
@@ -1436,7 +1475,10 @@
      "Jets reach the red zone 3.9 times a game",
      "Bills let teams into the red zone 4.1 times a game"
     ],
-    "why3": []
+    "why3": [
+     "Jets projected for 21.0 points",
+     "Game total 50.5"
+    ]
    }
   },
   "401873062": {
@@ -1512,9 +1554,9 @@
   "401873063": {
    "4361741": {
     "p1": 0.847,
-    "proj": 29.5,
+    "proj": 30.0,
     "total": 55.5,
-    "fav": 3.5,
+    "fav": 4.5,
     "two_now": "6 of 8",
     "why1": [
      "TD passes per game: 2.19 (last 16 games)",
@@ -1525,22 +1567,22 @@
     "two": {
      "take": true,
      "why": [
-      "Team projected for 29.5 points",
+      "Team projected for 30.0 points",
       "2+ TD passes in 6 of 8 games this season",
       "Cowboys let teams into the red zone 4.4 times a game"
      ],
      "won": "teams projected 30+ threw 2+ 80% of the time"
     },
     "why3": [
-     "49ers projected for 29.5 points",
+     "49ers projected for 30.0 points",
      "Game total 55.5"
     ]
    },
    "2577417": {
     "p1": 0.847,
-    "proj": 26.0,
+    "proj": 25.5,
     "total": 55.5,
-    "fav": -3.5,
+    "fav": -4.5,
     "two_now": "4 of 9",
     "why1": [
      "TD passes per game: 1.56 (last 16 games)",
@@ -1549,7 +1591,7 @@
      "49ers let teams into the red zone 3.5 times a game"
     ],
     "why3": [
-     "Cowboys projected for 26.0 points",
+     "Cowboys projected for 25.5 points",
      "Game total 55.5"
     ]
    }
