@@ -1,200 +1,8 @@
 {
- "at": "2026-11-10 14:13 UTC",
+ "at": "2026-11-10 20:10 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Joe Burrow",
-    "Michael Penix Jr."
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    1,
-    0,
-    0
-   ],
-   "game": "CIN@ATL",
-   "eid": 21911,
-   "kick": "2026-11-08 14:30:00Z"
-  },
-  {
-   "qbs": [
-    "Dak Prescott",
-    "Daniel Jones"
-   ],
-   "pick": "Dak Prescott",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    6,
-    -2
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 95.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "DAL@IND",
-   "eid": 22142,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Jayden Daniels",
-    "Matthew Stafford"
-   ],
-   "pick": "Matthew Stafford",
-   "lead": 2,
-   "complete": false,
-   "missing": [
-    "WAS T.Burks (19%)"
-   ],
-   "score": [
-    0,
-    2
-   ],
-   "why": [
-    "Opponent gives up more yards to the top receiver (+43 a game)",
-    "1 of 4 combined boxes checked"
-   ],
-   "checks": [
-    0,
-    0,
-    1,
-    0
-   ],
-   "game": "LAR@WAS",
-   "eid": 22143,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Tyler Shough",
-    "Shedeur Sanders"
-   ],
-   "pick": "Shedeur Sanders",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "CLE@NO",
-   "eid": 22144,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Geno Smith",
-    "Patrick Mahomes II"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": false,
-   "missing": [
-    "NYJ G.Wilson (23%)"
-   ],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NYJ@KC",
-   "eid": 22145,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Malik Willis",
-    "Jared Goff"
-   ],
-   "pick": "Jared Goff",
-   "lead": 8,
-   "complete": false,
-   "missing": [
-    "MIA K.Coleman Jr. (14%)"
-   ],
-   "score": [
-    -1,
-    7
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 71.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "game": "DET@MIA",
-   "eid": 22146,
-   "kick": "2026-11-08 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Bo Nix",
-    "Bryce Young"
-   ],
-   "pick": "Bryce Young",
-   "lead": 4,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -2,
-    2
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "Opponent gives up more yards to the top receiver (+34 a game)"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "DEN@CAR",
-   "eid": 22147,
-   "kick": "2026-11-08 18:00:00Z"
-  },
   {
    "qbs": [
     "Justin Herbert",
@@ -376,7 +184,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 227.5 yards higher in total on their lines",
+    "His receivers are set 226.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -388,6 +196,62 @@
    "game": "NE@DET",
    "eid": 21916,
    "kick": "2026-11-15 14:30:00Z"
+  },
+  {
+   "qbs": [
+    "Brock Purdy",
+    "Dak Prescott"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "SF J.Watkins (12%)",
+    "DAL B.Spann-Ford (11%)",
+    "DAL R.Flournoy (12%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "SF@DAL",
+   "eid": 21956,
+   "kick": "2026-11-15 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Aaron Rodgers",
+    "Joe Burrow"
+   ],
+   "pick": "Joe Burrow",
+   "lead": 6,
+   "complete": true,
+   "missing": [],
+   "score": [
+    -1,
+    5
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 70.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "PIT@CIN",
+   "eid": 21957,
+   "kick": "2026-11-16 01:20:00Z"
   }
  ]
 }
