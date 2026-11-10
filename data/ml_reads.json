@@ -4,50 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873046",
-   "away": "HOU",
-   "home": "LAC",
-   "pick": "HOU",
-   "model": 71,
-   "book": 67,
-   "bookpick": "HOU",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points per game: HOU 23.6, LAC 14.1",
-    "Last 3 games, win %: HOU 67%, LAC 0%",
-    "QB play (EPA per dropback): HOU +0.12, LAC -0.12",
-    "Turnovers per game: HOU 0.4, LAC 2.3"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T21:05Z"
-  },
-  {
-   "gid": "401873047",
-   "away": "LV",
-   "home": "SF",
-   "pick": "SF",
-   "model": 75,
-   "book": 77,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 84,
-   "n": 50,
-   "call": "take",
-   "rank": 2,
-   "why": [
-    "Points allowed per game: SF 19.9, LV 28.8",
-    "QB play (EPA per dropback): SF +0.25, LV +0.12",
-    "Last 3 games, win %: SF 67%, LV 33%",
-    "Win % this season: SF 86%, LV 50%"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T21:25Z"
-  },
-  {
    "gid": "401873050",
    "away": "TB",
    "home": "CHI",
@@ -59,7 +15,7 @@
    "won": 75,
    "n": 28,
    "call": "take",
-   "rank": 3,
+   "rank": 1,
    "why": [
     "QB play (EPA per dropback): CHI +0.14, TB -0.14",
     "Points per game: CHI 26.8, TB 22.2",
@@ -68,28 +24,6 @@
    ],
    "week": 9,
    "kick": "2026-11-09T01:20Z"
-  },
-  {
-   "gid": "401873048",
-   "away": "ARI",
-   "home": "SEA",
-   "pick": "SEA",
-   "model": 69,
-   "book": 79,
-   "bookpick": "SEA",
-   "agree": true,
-   "won": 72,
-   "n": 29,
-   "call": "take",
-   "rank": 4,
-   "why": [
-    "Points allowed per game: SEA 19.9, ARI 29.8",
-    "ARI is starting a backup QB",
-    "Points per game: SEA 23.1, ARI 21.9",
-    "QB play (EPA per dropback): SEA -0.01, ARI -0.07"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T21:25Z"
   },
   {
    "gid": "401873051",
@@ -103,7 +37,7 @@
    "won": 62,
    "n": 26,
    "call": "take",
-   "rank": 5,
+   "rank": 2,
    "why": [
     "QB play (EPA per dropback): BUF +0.18, MIN -0.68",
     "Points per game: BUF 33.3, MIN 20.0",
@@ -112,28 +46,6 @@
    ],
    "week": 9,
    "kick": "2026-11-10T01:15Z"
-  },
-  {
-   "gid": "401873049",
-   "away": "GB",
-   "home": "NE",
-   "pick": "NE",
-   "model": 61,
-   "book": 62,
-   "bookpick": "NE",
-   "agree": true,
-   "won": 67,
-   "n": 78,
-   "call": "lean",
-   "rank": 6,
-   "why": [
-    "QB play (EPA per dropback): NE +0.28, GB +0.15",
-    "Points per game: NE 23.0, GB 21.4",
-    "Last 3 games, point margin: NE +2.0, GB +5.0",
-    "Offense success rate: NE 45%, GB 40%"
-   ],
-   "week": 9,
-   "kick": "2026-11-08T21:25Z"
   },
   {
    "gid": "401873057",
@@ -163,7 +75,7 @@
    "home": "ARI",
    "pick": "LAR",
    "model": 75,
-   "book": 79,
+   "book": 78,
    "bookpick": "LAR",
    "agree": true,
    "won": 84,
@@ -246,6 +158,28 @@
    "kick": "2026-11-17T01:15Z"
   },
   {
+   "gid": "401873059",
+   "away": "MIA",
+   "home": "IND",
+   "pick": "IND",
+   "model": 71,
+   "book": 63,
+   "bookpick": "IND",
+   "agree": true,
+   "won": 87,
+   "n": 31,
+   "call": "lean",
+   "rank": 6,
+   "why": [
+    "MIA is starting a backup QB",
+    "Points per game: IND 20.4, MIA 15.8",
+    "Last 3 games, point margin: IND -15.0, MIA -4.0",
+    "Win % this season: IND 22%, MIA 12%"
+   ],
+   "week": 10,
+   "kick": "2026-11-15T18:00Z"
+  },
+  {
    "gid": "401873058",
    "away": "KC",
    "home": "ATL",
@@ -257,7 +191,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 6,
+   "rank": 7,
    "why": [
     "Points allowed per game: KC 17.9, ATL 24.8",
     "Points per game: KC 25.2, ATL 20.9",
@@ -279,7 +213,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points per game: CIN 30.0, PIT 22.5",
     "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
@@ -301,7 +235,7 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "Last 3 games, win %: DET 100%, NE 33%",
     "Points per game: DET 27.8, NE 23.4",
@@ -323,7 +257,7 @@
    "won": 64,
    "n": 64,
    "call": "lean",
-   "rank": 9,
+   "rank": 10,
    "why": [
     "MIN is starting a backup QB",
     "Points per game: GB 24.0, MIN 18.2",
@@ -345,7 +279,7 @@
    "won": 61,
    "n": 119,
    "call": null,
-   "rank": 10,
+   "rank": 11,
    "why": [
     "Points per game: HOU 26.1, CLE 17.9",
     "QB play (EPA per dropback): HOU +0.18, CLE -0.12",
@@ -367,7 +301,7 @@
    "won": 61,
    "n": 119,
    "call": null,
-   "rank": 11,
+   "rank": 12,
    "why": [
     "Points allowed per game: SF 19.5, DAL 26.2",
     "Points per game: SF 29.4, DAL 27.3",
@@ -378,34 +312,12 @@
    "kick": "2026-11-15T21:25Z"
   },
   {
-   "gid": "401873059",
-   "away": "MIA",
-   "home": "IND",
-   "pick": "IND",
-   "model": 56,
-   "book": 56,
-   "bookpick": "IND",
-   "agree": true,
-   "won": 58,
-   "n": 153,
-   "call": null,
-   "rank": 12,
-   "why": [
-    "Points per game: IND 20.4, MIA 15.8",
-    "Last 3 games, point margin: IND -15.0, MIA -4.0",
-    "Win % this season: IND 22%, MIA 12%",
-    "Offense success rate: IND 42%, MIA 39%"
-   ],
-   "week": 10,
-   "kick": "2026-11-15T18:00Z"
-  },
-  {
    "gid": "401873055",
    "away": "CAR",
    "home": "NO",
    "pick": "NO",
    "model": 54,
-   "book": 53,
+   "book": 54,
    "bookpick": "NO",
    "agree": true,
    "won": 58,
