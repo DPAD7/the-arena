@@ -1,5 +1,5 @@
 {
- "at": "2026-11-10T02:14:48Z",
+ "at": "2026-11-10T04:45:50Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,296 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401856856": {
-   "away": "WVU",
-   "home": "TTU",
-   "kick": "2026-11-08T02:30Z",
-   "ml": {
-    "pick": "TTU",
-    "p": 0.875846,
-    "call": "take",
-    "why": [
-     "Margin rating: TTU +11.0, WVU -1.5",
-     "Points allowed per game: TTU 22.7, WVU 35.9",
-     "Rushing yards allowed per game: TTU 98, WVU 169",
-     "AP rank: TTU #15, WVU unranked"
-    ],
-    "qbs": [
-     "Michael Hawkins Jr.",
-     "Thomas Castellanos"
-    ]
-   },
-   "h2h": {
-    "pick": "Thomas Castellanos",
-    "pick_id": "4773919",
-    "team": "TTU",
-    "p": 0.768178,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5079465",
-      "Michael Hawkins Jr."
-     ],
-     [
-      "4773919",
-      "Thomas Castellanos"
-     ]
-    ]
-   },
-   "ptd": {
-    "4773919": {
-     "name": "Thomas Castellanos",
-     "team": "TTU",
-     "p1": 0.876124,
-     "take1": false,
-     "p2": 0.620935,
-     "take2": false,
-     "has_line": true
-    },
-    "5079465": {
-     "name": "Michael Hawkins Jr.",
-     "team": "WVU",
-     "p1": 0.700743,
-     "take1": false,
-     "p2": 0.347314,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401860913": {
-   "away": "FRES",
-   "home": "USU",
-   "kick": "2026-11-08T02:30Z",
-   "ml": {
-    "pick": "USU",
-    "p": 0.516652,
-    "call": null,
-    "why": [
-     "Average margin: USU -3.3, FRES +7.0",
-     "Rushing yards allowed per game: USU 131, FRES 159",
-     "Turnovers per game: USU 1.1, FRES 0.6",
-     "Last 3 games, average margin: USU +5.0, FRES +2.0"
-    ],
-    "qbs": [
-     "Jayden Mandal",
-     "McCae Hillstead"
-    ]
-   },
-   "h2h": {
-    "pick": "Jayden Mandal",
-    "pick_id": "5010409",
-    "team": "FRES",
-    "p": 0.582926,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5010409",
-      "Jayden Mandal"
-     ],
-     [
-      "4923285",
-      "McCae Hillstead"
-     ]
-    ]
-   },
-   "ptd": {
-    "5010409": {
-     "name": "Jayden Mandal",
-     "team": "FRES",
-     "p1": 0.671787,
-     "take1": false,
-     "p2": 0.303586,
-     "take2": false,
-     "has_line": true
-    },
-    "4923285": {
-     "name": "McCae Hillstead",
-     "team": "USU",
-     "p1": 0.72877,
-     "take1": false,
-     "p2": 0.377637,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864532": {
-   "away": "HAW",
-   "home": "UTEP",
-   "kick": "2026-11-08T02:30Z",
-   "ml": {
-    "pick": "HAW",
-    "p": 0.743668,
-    "call": null,
-    "why": [
-     "Margin rating: HAW -6.6, UTEP -15.6",
-     "Points allowed per game: HAW 24.5, UTEP 40.3",
-     "Points per game: HAW 20.8, UTEP 8.9",
-     "Last 3 games, average margin: HAW -0.3, UTEP -18.0"
-    ],
-    "qbs": [
-     "Micah Alejado",
-     "EJ Colson Jr."
-    ]
-   },
-   "h2h": {
-    "pick": "Micah Alejado",
-    "pick_id": "5101124",
-    "team": "HAW",
-    "p": 0.856174,
-    "call": "take",
-    "has_line": true,
-    "qbs": [
-     [
-      "5101124",
-      "Micah Alejado"
-     ],
-     [
-      "5141395",
-      "EJ Colson Jr."
-     ]
-    ]
-   },
-   "ptd": {
-    "5141395": {
-     "name": "EJ Colson Jr.",
-     "team": "UTEP",
-     "p1": 0.60245,
-     "take1": false,
-     "p2": 0.260747,
-     "take2": false,
-     "has_line": true
-    },
-    "5101124": {
-     "name": "Micah Alejado",
-     "team": "HAW",
-     "p1": 0.833427,
-     "take1": false,
-     "p2": 0.543631,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401860912": {
-   "away": "TXST",
-   "home": "ORST",
-   "kick": "2026-11-08T03:30Z",
-   "ml": {
-    "pick": "ORST",
-    "p": 0.634363,
-    "call": null,
-    "why": [
-     "Points allowed per game: ORST 26.1, TXST 35.1",
-     "Passing yards allowed per game: ORST 199, TXST 297",
-     "Passing yards per game: ORST 386, TXST 247",
-     "Points per game: ORST 38.4, TXST 34.6"
-    ],
-    "qbs": [
-     "Brad Jackson",
-     "Braden Atkinson"
-    ]
-   },
-   "h2h": {
-    "pick": "Braden Atkinson",
-    "pick_id": "5212654",
-    "team": "ORST",
-    "p": 0.848969,
-    "call": "take",
-    "has_line": true,
-    "qbs": [
-     [
-      "5148803",
-      "Brad Jackson"
-     ],
-     [
-      "5212654",
-      "Braden Atkinson"
-     ]
-    ]
-   },
-   "ptd": {
-    "5212654": {
-     "name": "Braden Atkinson",
-     "team": "ORST",
-     "p1": 0.940243,
-     "take1": true,
-     "p2": 0.797157,
-     "take2": true,
-     "has_line": true
-    },
-    "5148803": {
-     "name": "Brad Jackson",
-     "team": "TXST",
-     "p1": 0.84331,
-     "take1": false,
-     "p2": 0.560446,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864535": {
-   "away": "WYO",
-   "home": "UNLV",
-   "kick": "2026-11-08T03:30Z",
-   "ml": {
-    "pick": "UNLV",
-    "p": 0.703166,
-    "call": null,
-    "why": [
-     "Margin rating: UNLV -0.0, WYO -5.2",
-     "Points per game: UNLV 25.0, WYO 19.3",
-     "QB INT rate: UNLV 2.4%, WYO 4.1%",
-     "Passing yards per game: UNLV 208, WYO 141"
-    ],
-    "qbs": [
-     "Tyler Hughes",
-     "Jackson Arnold"
-    ]
-   },
-   "h2h": {
-    "pick": "Jackson Arnold",
-    "pick_id": "4870607",
-    "team": "UNLV",
-    "p": 0.592172,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4838536",
-      "Tyler Hughes"
-     ],
-     [
-      "4870607",
-      "Jackson Arnold"
-     ]
-    ]
-   },
-   "ptd": {
-    "4870607": {
-     "name": "Jackson Arnold",
-     "team": "UNLV",
-     "p1": 0.758296,
-     "take1": false,
-     "p2": 0.396252,
-     "take2": false,
-     "has_line": true
-    },
-    "4838536": {
-     "name": "Tyler Hughes",
-     "team": "WYO",
-     "p1": 0.625264,
-     "take1": false,
-     "p2": 0.261907,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401866458": {
    "away": "WMU",
    "home": "AKR",
@@ -338,18 +48,18 @@
     "5198324": {
      "name": "Cibastian Broughton",
      "team": "AKR",
-     "p1": 0.562862,
+     "p1": 0.571107,
      "take1": false,
-     "p2": 0.218215,
+     "p2": 0.224229,
      "take2": false,
      "has_line": true
     },
     "5074245": {
      "name": "Broc Lowry",
      "team": "WMU",
-     "p1": 0.702029,
+     "p1": 0.709006,
      "take1": false,
-     "p2": 0.338715,
+     "p2": 0.346578,
      "take2": false,
      "has_line": true
     }
@@ -535,7 +245,7 @@
    "kick": "2026-11-12T00:30Z",
    "ml": {
     "pick": "CMU",
-    "p": 0.852777,
+    "p": 0.84502,
     "call": "take",
     "why": [
      "Margin rating: CMU -3.2, SAC -17.1",
@@ -1173,7 +883,7 @@
    "kick": "2026-11-14T17:00Z",
    "ml": {
     "pick": "WAKE",
-    "p": 0.516559,
+    "p": 0.671245,
     "call": null,
     "why": [
      "Margin rating: WAKE +10.0, SMU +5.7",
@@ -1182,7 +892,7 @@
      "Points per game: WAKE 39.1, SMU 34.6"
     ],
     "qbs": [
-     "Steele Pizzella",
+     "Gio Lopez",
      "Kevin Jennings"
     ]
    },
@@ -1190,13 +900,13 @@
     "pick": "Kevin Jennings",
     "pick_id": "5084084",
     "team": "SMU",
-    "p": 0.536777,
+    "p": 0.553822,
     "call": null,
     "has_line": true,
     "qbs": [
      [
-      "5141634",
-      "Steele Pizzella"
+      "4920227",
+      "Gio Lopez"
      ],
      [
       "5084084",
@@ -1205,12 +915,12 @@
     ]
    },
    "ptd": {
-    "5141634": {
-     "name": "Steele Pizzella",
+    "4920227": {
+     "name": "Gio Lopez",
      "team": "WAKE",
-     "p1": 0.769974,
+     "p1": 0.819518,
      "take1": false,
-     "p2": 0.441794,
+     "p2": 0.510159,
      "take2": false,
      "has_line": true
     },
@@ -1614,18 +1324,18 @@
     "4433829": {
      "name": "Mitch Griffis",
      "team": "ECU",
-     "p1": 0.743944,
+     "p1": 0.737495,
      "take1": false,
-     "p2": 0.397599,
+     "p2": 0.389267,
      "take2": false,
      "has_line": true
     },
     "4801306": {
      "name": "Conner Harrell",
      "team": "CLT",
-     "p1": 0.628711,
+     "p1": 0.620838,
      "take1": false,
-     "p2": 0.286178,
+     "p2": 0.2791,
      "take2": false,
      "has_line": true
     }
@@ -1985,13 +1695,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.551119,
+    "p": 0.536113,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "NMSU is starting a backup QB"
+     "Passing yards per game: MOST 222, NMSU 189"
     ],
     "qbs": [
      "Trey Hedden",
@@ -2832,18 +2542,18 @@
     "5010409": {
      "name": "Jayden Mandal",
      "team": "FRES",
-     "p1": 0.706017,
+     "p1": 0.698998,
      "take1": false,
-     "p2": 0.357131,
+     "p2": 0.349156,
      "take2": false,
      "has_line": true
     },
     "5148803": {
      "name": "Brad Jackson",
      "team": "TXST",
-     "p1": 0.853382,
+     "p1": 0.84913,
      "take1": false,
-     "p2": 0.554643,
+     "p2": 0.546003,
      "take2": false,
      "has_line": true
     }
@@ -3145,7 +2855,7 @@
    "kick": "2026-11-14T23:00Z",
    "ml": {
     "pick": "MRSH",
-    "p": 0.579321,
+    "p": 0.564513,
     "call": null,
     "why": [
      "Average margin: MRSH -7.8, APP -4.4",
@@ -4073,7 +3783,7 @@
    "kick": "2026-11-15T03:30Z",
    "ml": {
     "pick": "WSU",
-    "p": 0.734302,
+    "p": 0.722335,
     "call": null,
     "why": [
      "Points allowed per game: WSU 30.0, CSU 47.4",
