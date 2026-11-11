@@ -4,28 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873050",
-   "away": "TB",
-   "home": "CHI",
-   "pick": "CHI",
-   "model": 73,
-   "book": 70,
-   "bookpick": "CHI",
-   "agree": true,
-   "won": 75,
-   "n": 28,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "QB play (EPA per dropback): CHI +0.14, TB -0.14",
-    "Points per game: CHI 26.8, TB 22.2",
-    "Last 3 games, win %: CHI 100%, TB 67%",
-    "Win % this season: CHI 75%, TB 38%"
-   ],
-   "week": 9,
-   "kick": "2026-11-09T01:20Z"
-  },
-  {
    "gid": "401873051",
    "away": "BUF",
    "home": "MIN",
@@ -37,7 +15,7 @@
    "won": 62,
    "n": 26,
    "call": "take",
-   "rank": 2,
+   "rank": 1,
    "why": [
     "QB play (EPA per dropback): BUF +0.18, MIN -0.68",
     "Points per game: BUF 33.3, MIN 20.0",
@@ -119,7 +97,7 @@
    "home": "NYJ",
    "pick": "BUF",
    "model": 65,
-   "book": 79,
+   "book": 77,
    "bookpick": "BUF",
    "agree": true,
    "won": 72,
@@ -251,7 +229,7 @@
    "home": "GB",
    "pick": "GB",
    "model": 65,
-   "book": 60,
+   "book": 61,
    "bookpick": "GB",
    "agree": true,
    "won": 64,
