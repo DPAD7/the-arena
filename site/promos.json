@@ -1,18 +1,20 @@
 [
  {
-  "id": "N5W23N",
-  "head": "Clash on the Court 50% Profit Boost",
-  "pct": 50,
-  "start": "2026-11-10T07:00:00.0000000Z",
-  "end": "2026-11-11T04:59:00.0000000Z",
+  "id": "8WYO48",
+  "head": "NBA 30% Parlay Boost",
+  "pct": 30,
+  "start": "2026-11-11T07:00:00.0000000Z",
+  "end": "2026-11-12T04:00:00.0000000Z",
   "sport": "",
   "game": "",
   "gid": "",
-  "minOdds": "-200",
-  "minLegs": 1,
-  "maxWager": 25.0,
+  "minOdds": "+300",
+  "minLegs": 3,
+  "maxWager": 20.0,
   "types": [
-   "any"
+   "sgp",
+   "sgpx",
+   "parlay"
   ]
  }
 ]
