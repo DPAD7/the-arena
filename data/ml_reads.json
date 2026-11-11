@@ -1,5 +1,5 @@
 {
- "at": "2026-11-10",
+ "at": "2026-11-11",
  "week": 10,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
@@ -119,7 +119,7 @@
    "home": "NYJ",
    "pick": "BUF",
    "model": 65,
-   "book": 80,
+   "book": 79,
    "bookpick": "BUF",
    "agree": true,
    "won": 72,
@@ -136,6 +136,28 @@
    "kick": "2026-11-15T18:00Z"
   },
   {
+   "gid": "401873065",
+   "away": "LAC",
+   "home": "BAL",
+   "pick": "BAL",
+   "model": 69,
+   "book": 66,
+   "bookpick": "BAL",
+   "agree": true,
+   "won": 64,
+   "n": 64,
+   "call": "take",
+   "rank": 5,
+   "why": [
+    "Points per game: BAL 21.0, LAC 15.1",
+    "Win % this season: BAL 44%, LAC 0%",
+    "QB play (EPA per dropback): BAL -0.04, LAC -0.15",
+    "Points allowed per game: BAL 26.2, LAC 27.4"
+   ],
+   "week": 10,
+   "kick": "2026-11-17T01:15Z"
+  },
+  {
    "gid": "401873059",
    "away": "MIA",
    "home": "IND",
@@ -147,7 +169,7 @@
    "won": 87,
    "n": 31,
    "call": "lean",
-   "rank": 5,
+   "rank": 6,
    "why": [
     "MIA is starting a backup QB",
     "Points per game: IND 20.4, MIA 15.8",
@@ -169,7 +191,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 6,
+   "rank": 7,
    "why": [
     "Points allowed per game: KC 17.9, ATL 24.8",
     "Points per game: KC 25.2, ATL 20.9",
@@ -191,7 +213,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points per game: CIN 30.0, PIT 22.5",
     "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
@@ -207,13 +229,13 @@
    "home": "DET",
    "pick": "DET",
    "model": 62,
-   "book": 57,
+   "book": 58,
    "bookpick": "DET",
    "agree": true,
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "Last 3 games, win %: DET 100%, NE 33%",
     "Points per game: DET 27.8, NE 23.4",
@@ -222,28 +244,6 @@
    ],
    "week": 10,
    "kick": "2026-11-15T14:30Z"
-  },
-  {
-   "gid": "401873065",
-   "away": "LAC",
-   "home": "BAL",
-   "pick": "BAL",
-   "model": 69,
-   "book": 64,
-   "bookpick": "BAL",
-   "agree": true,
-   "won": 64,
-   "n": 64,
-   "call": "lean",
-   "rank": 9,
-   "why": [
-    "Points per game: BAL 21.0, LAC 15.1",
-    "Win % this season: BAL 44%, LAC 0%",
-    "QB play (EPA per dropback): BAL -0.04, LAC -0.15",
-    "Points allowed per game: BAL 26.2, LAC 27.4"
-   ],
-   "week": 10,
-   "kick": "2026-11-17T01:15Z"
   },
   {
    "gid": "401873060",
@@ -317,7 +317,7 @@
    "home": "NO",
    "pick": "NO",
    "model": 54,
-   "book": 55,
+   "book": 54,
    "bookpick": "NO",
    "agree": true,
    "won": 58,

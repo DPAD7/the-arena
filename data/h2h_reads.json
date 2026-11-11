@@ -1,5 +1,5 @@
 {
- "at": "2026-11-11 00:06 UTC",
+ "at": "2026-11-11 00:38 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -75,7 +75,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 226.5 yards higher in total on their lines",
+    "His receivers are set 225.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -93,24 +93,57 @@
     "Jordan Love",
     "Kirk Cousins"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Jordan Love",
+   "lead": 4,
    "complete": true,
    "missing": [],
    "score": [
-    0,
+    4,
     0
    ],
-   "why": [],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "2 of 4 combined boxes checked"
+   ],
    "checks": [
     0,
-    0,
-    0,
+    1,
+    1,
     0
    ],
    "game": "MIN@GB",
    "eid": 21947,
    "kick": "2026-11-15 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Fernando Mendoza",
+    "Drew Lock"
+   ],
+   "pick": "Drew Lock",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "SEA T.Horton (12%)"
+   ],
+   "score": [
+    -1,
+    3
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Faces a defense that gives up more yards after the catch",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    1
+   ],
+   "game": "SEA@LV",
+   "eid": 21954,
+   "kick": "2026-11-15 21:05:00Z"
   },
   {
    "qbs": [
@@ -155,7 +188,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 72.0 yards higher in total on their lines",
+    "His receivers are set 73.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
