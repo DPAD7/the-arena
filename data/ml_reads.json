@@ -97,7 +97,7 @@
    "home": "NYJ",
    "pick": "BUF",
    "model": 65,
-   "book": 77,
+   "book": 78,
    "bookpick": "BUF",
    "agree": true,
    "won": 72,
@@ -136,6 +136,28 @@
    "kick": "2026-11-17T01:15Z"
   },
   {
+   "gid": "401873056",
+   "away": "HOU",
+   "home": "CLE",
+   "pick": "HOU",
+   "model": 68,
+   "book": 67,
+   "bookpick": "HOU",
+   "agree": true,
+   "won": 64,
+   "n": 64,
+   "call": "take",
+   "rank": 6,
+   "why": [
+    "Points per game: HOU 26.1, CLE 17.9",
+    "QB play (EPA per dropback): HOU +0.18, CLE -0.21",
+    "CLE is starting a backup QB",
+    "Last 3 games, win %: HOU 67%, CLE 33%"
+   ],
+   "week": 10,
+   "kick": "2026-11-15T18:00Z"
+  },
+  {
    "gid": "401873059",
    "away": "MIA",
    "home": "IND",
@@ -147,7 +169,7 @@
    "won": 87,
    "n": 31,
    "call": "lean",
-   "rank": 6,
+   "rank": 7,
    "why": [
     "MIA is starting a backup QB",
     "Points per game: IND 20.4, MIA 15.8",
@@ -169,7 +191,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points allowed per game: KC 17.9, ATL 24.8",
     "Points per game: KC 25.2, ATL 20.9",
@@ -191,7 +213,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "Points per game: CIN 30.0, PIT 22.5",
     "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
@@ -213,7 +235,7 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 9,
+   "rank": 10,
    "why": [
     "Last 3 games, win %: DET 100%, NE 33%",
     "Points per game: DET 27.8, NE 23.4",
@@ -235,34 +257,12 @@
    "won": 64,
    "n": 64,
    "call": "lean",
-   "rank": 10,
+   "rank": 11,
    "why": [
     "MIN is starting a backup QB",
     "Points per game: GB 24.0, MIN 18.2",
     "Last 3 games, win %: GB 67%, MIN 33%",
     "Pass defense, EPA allowed: GB +0.01, MIN -0.22"
-   ],
-   "week": 10,
-   "kick": "2026-11-15T18:00Z"
-  },
-  {
-   "gid": "401873056",
-   "away": "HOU",
-   "home": "CLE",
-   "pick": "HOU",
-   "model": 55,
-   "book": 67,
-   "bookpick": "HOU",
-   "agree": true,
-   "won": 61,
-   "n": 119,
-   "call": null,
-   "rank": 11,
-   "why": [
-    "Points per game: HOU 26.1, CLE 17.9",
-    "QB play (EPA per dropback): HOU +0.18, CLE -0.12",
-    "Last 3 games, win %: HOU 67%, CLE 33%",
-    "Turnovers per game: HOU 0.5, CLE 1.1"
    ],
    "week": 10,
    "kick": "2026-11-15T18:00Z"

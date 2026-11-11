@@ -71459,7 +71459,7 @@
   "right": "Bilal Hasan",
   "rounds": 3,
   "start": "2026-11-15T02:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Bilal Hasan": [
@@ -71543,11 +71543,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "+145",
+     "+130",
      "0OU87157420O150_1"
     ],
     "Under": [
-     "-188",
+     "-166",
      "0OU87157420U150_3"
     ]
    },
@@ -72017,7 +72017,7 @@
   "right": "Uro\u0161 Medi\u0107",
   "rounds": 3,
   "start": "2026-11-15T02:45Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Uros Medic": [
@@ -72061,11 +72061,11 @@
    },
    "Moneyline": {
     "Uros Medic": [
-     "-148",
+     "-155",
      "0ML87016468_1"
     ],
     "Kevin Holland": [
-     "+124",
+     "+130",
      "0ML87016468_3"
     ]
    },
@@ -72101,11 +72101,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "+135",
+     "+130",
      "0OU87157418O150_1"
     ],
     "Under": [
-     "-175",
+     "-166",
      "0OU87157418U150_3"
     ]
    },
@@ -72579,7 +72579,7 @@
   "right": "Yousri Belgaroui",
   "rounds": 3,
   "start": "2026-11-15T03:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Caio Borralho": [
@@ -72623,11 +72623,11 @@
    },
    "Moneyline": {
     "Caio Borralho": [
-     "-155",
+     "-162",
      "0ML87016466_1"
     ],
     "Yousri Belgaroui": [
-     "+130",
+     "+136",
      "0ML87016466_3"
     ]
    },
@@ -73141,7 +73141,7 @@
   "right": "Kayla Harrison",
   "rounds": 5,
   "start": "2026-11-15T03:45Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Kayla Harrison": [
@@ -73859,7 +73859,7 @@
   "right": "Ciryl Gane",
   "rounds": 5,
   "start": "2026-11-15T04:30Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Ciryl Gane": [
@@ -73943,11 +73943,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "+124",
+     "+130",
      "0OU87012984O350_1"
     ],
     "Under": [
-     "-160",
+     "-166",
      "0OU87012984U350_3"
     ]
    },
@@ -73973,7 +73973,7 @@
    },
    "Point to Be Deducted": {
     "Yes": [
-     "+1400",
+     "+1200",
      "0QA387849791#2359118991_13L9034Q10Q20"
     ]
    },
@@ -74577,8 +74577,48 @@
   "right": "Samuel Sanches",
   "rounds": 3,
   "start": "2026-11-14T22:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Evan Elder": [
+     "+145",
+     "0QA387850187#2359120061_13L9034Q11Q21"
+    ],
+    "Samuel Sanches": [
+     "-200",
+     "0QA387850187#2359120148_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Evan Elder": [
+     "-185",
+     "0QA387850188#2359120064_13L9034Q11Q21"
+    ],
+    "Samuel Sanches": [
+     "+135",
+     "0QA387850188#2359120147_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Evan Elder": [
+     "+140",
+     "0QA387850211#2359120133_13L9034Q10Q21"
+    ],
+    "Samuel Sanches": [
+     "-185",
+     "0QA387850211#2359120135_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Evan Elder": [
+     "-285",
+     "0QA387850210#2359120129_13L9034Q10Q21"
+    ],
+    "Samuel Sanches": [
+     "+210",
+     "0QA387850210#2359120139_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Evan Elder": [
      "+100",
@@ -74587,6 +74627,36 @@
     "Samuel Sanches": [
      "-120",
      "0ML87157421_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Evan Elder": [
+     "+235",
+     "0QA387850209#2359120115_13L9034Q10Q21"
+    ],
+    "Samuel Sanches": [
+     "-330",
+     "0QA387850209#2359120145_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Evan Elder": [
+     "-140",
+     "0HC87182525P350_1"
+    ],
+    "Samuel Sanches": [
+     "+105",
+     "0HC87182525N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Evan Elder": [
+     "-180",
+     "0HC87182530P750_1"
+    ],
+    "Samuel Sanches": [
+     "+135",
+     "0HC87182530N750_3"
     ]
    },
    "Total Rounds": {
@@ -74598,6 +74668,442 @@
      "-115",
      "0OU87158869U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-235",
+     "0OU87182520O150_1"
+    ],
+    "Under": [
+     "+170",
+     "0OU87182520U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA387849756#2359118826_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA387849756#2359118846_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA387849742#2359118810_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA387849766#2359118828_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+130",
+     "0QA387850181#2359120042_13L9034Q11Q22"
+    ],
+    "No": [
+     "-170",
+     "0QA387850181#2359120154_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA387850182#2359120045_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA387850182#2359120153_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+115",
+     "0QA387849732#2359118814_13L9034Q10Q20"
+    ],
+    "No": [
+     "-150",
+     "0QA387849732#2359118856_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+265",
+     "0QA387850189#2359120067_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1000",
+     "0QA387850189#2359120146_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+450",
+     "0QA387850189#2359120159_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1600",
+     "0QA387850189#2359120165_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+750",
+     "0QA387850189#2359120173_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2500",
+     "0QA387850189#2359120179_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+115",
+     "0QA387850189#2359120194_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Evan Elder to Win in Rounds 1-2": [
+     "+390",
+     "0QA387849736#2359118804_13L9034Q11Q21"
+    ],
+    "Evan Elder to Win in Round 3 or on Decision": [
+     "+180",
+     "0QA387849736#2359118870_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849736#2359118944_13L9034Q19Q29"
+    ],
+    "Samuel Sanches to Win in Rounds 1-2": [
+     "+205",
+     "0QA387849736#2359118898_15L9034Q15Q25"
+    ],
+    "Samuel Sanches to Win in Round 3 or on Decision": [
+     "+250",
+     "0QA387849736#2359118922_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Evan Elder to Win by KO/TKO/DQ in Round 1": [
+     "+1000",
+     "0QA387849740#2359118806_13L9034Q11Q21"
+    ],
+    "Evan Elder to Win by KO/TKO/DQ in Round 2": [
+     "+1600",
+     "0QA387849740#2359118862_13L9034Q12Q22"
+    ],
+    "Evan Elder to Win by KO/TKO/DQ in Round 3": [
+     "+2500",
+     "0QA387849740#2359118872_13L9034Q13Q23"
+    ],
+    "Evan Elder to Win by Submission in Round 1": [
+     "+1200",
+     "0QA387849740#2359118914_13L9034Q16Q26"
+    ],
+    "Evan Elder to Win by Submission in Round 2": [
+     "+2000",
+     "0QA387849740#2359118924_13L9034Q17Q27"
+    ],
+    "Evan Elder to Win by Submission in Round 3": [
+     "+3000",
+     "0QA387849740#2359118936_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+115",
+     "0QA387849740#2359118986_13L9034Q121Q221"
+    ],
+    "Samuel Sanches to Win by KO/TKO/DQ in Round 1": [
+     "+370",
+     "0QA387849740#2359118962_15L9034Q111Q211"
+    ],
+    "Samuel Sanches to Win by KO/TKO/DQ in Round 2": [
+     "+600",
+     "0QA387849740#2359118964_15L9034Q112Q212"
+    ],
+    "Samuel Sanches to Win by KO/TKO/DQ in Round 3": [
+     "+1000",
+     "0QA387849740#2359118970_15L9034Q113Q213"
+    ],
+    "Samuel Sanches to Win by Submission in Round 1": [
+     "+3000",
+     "0QA387849740#2359118976_15L9034Q116Q216"
+    ],
+    "Samuel Sanches to Win by Submission in Round 2": [
+     "+4500",
+     "0QA387849740#2359118978_15L9034Q117Q217"
+    ],
+    "Samuel Sanches to Win by Submission in Round 3": [
+     "+7000",
+     "0QA387849740#2359118980_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Evan Elder To Win And Under 0.5": [
+     "+1600",
+     "0QA387849748#2359118818_13L9034Q11Q21"
+    ],
+    "Evan Elder To Win And Under 1.5": [
+     "+475",
+     "0QA387849748#2359118880_13L9034Q11Q23"
+    ],
+    "Samuel Sanches To Win And Under 0.5": [
+     "+1000",
+     "0QA387849748#2359118852_14L9034Q12Q22"
+    ],
+    "Samuel Sanches To Win And Under 1.5": [
+     "+270",
+     "0QA387849748#2359118884_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Evan Elder To Win And Over 1.5": [
+     "+130",
+     "0QA387849750#2359118882_13L9034Q11Q23"
+    ],
+    "Evan Elder To Win And Over 2.5": [
+     "+180",
+     "0QA387849750#2359118906_13L9034Q11Q25"
+    ],
+    "Samuel Sanches To Win And Over 1.5": [
+     "+160",
+     "0QA387849750#2359118886_14L9034Q12Q24"
+    ],
+    "Samuel Sanches To Win And Over 2.5": [
+     "+280",
+     "0QA387849750#2359118910_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-350",
+     "0QA387849752#2359118822_13L9034Q11Q22"
+    ],
+    "No": [
+     "+245",
+     "0QA387849752#2359118850_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-145",
+     "0QA387849754#2359118824_13L9034Q11Q22"
+    ],
+    "No": [
+     "+110",
+     "0QA387849754#2359118848_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Evan Elder Round 1": [
+     "+600",
+     "0QA387849734#2359118802_13L9034Q11Q20"
+    ],
+    "Evan Elder Round 2": [
+     "+1000",
+     "0QA387849734#2359118868_13L9034Q11Q22"
+    ],
+    "Evan Elder Round 3": [
+     "+1500",
+     "0QA387849734#2359118896_13L9034Q11Q24"
+    ],
+    "Evan Elder By Decision": [
+     "+230",
+     "0QA387849734#2359118960_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849734#2359118968_15L9034Q10Q212"
+    ],
+    "Samuel Sanches Round 1": [
+     "+350",
+     "0QA387849734#2359118866_14L9034Q12Q21"
+    ],
+    "Samuel Sanches Round 2": [
+     "+550",
+     "0QA387849734#2359118894_14L9034Q12Q23"
+    ],
+    "Samuel Sanches Round 3": [
+     "+950",
+     "0QA387849734#2359118918_14L9034Q12Q25"
+    ],
+    "Samuel Sanches By Decision": [
+     "+400",
+     "0QA387849734#2359118966_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+245",
+     "0QA387850180#2359120039_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+350",
+     "0QA387850180#2359120155_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA387850180#2359120158_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850180#2359120181_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+115",
+     "0QA387850180#2359120182_13L9034Q11Q25"
+    ]
+   },
+   "Samuel Sanches to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+150",
+     "0QA387850191#2359120121_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA387850191#2359120143_13L9034Q13Q24"
+    ]
+   },
+   "Evan Elder to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+300",
+     "0QA387850192#2359120127_13L9034Q11Q22"
+    ],
+    "No": [
+     "-450",
+     "0QA387850192#2359120141_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Evan Elder to Win by KO/TKO/DQ or Decision": [
+     "+125",
+     "0QA387849738#2359118808_13L9034Q11Q21"
+    ],
+    "Evan Elder to Win by KO/TKO/DQ or Submission": [
+     "+300",
+     "0QA387849738#2359118860_13L9034Q12Q22"
+    ],
+    "Evan Elder to Win by Submission or Decision": [
+     "+135",
+     "0QA387849738#2359118874_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849738#2359118926_13L9034Q17Q27"
+    ],
+    "Samuel Sanches to Win by KO/TKO/DQ or Decision": [
+     "-110",
+     "0QA387849738#2359118888_15L9034Q14Q24"
+    ],
+    "Samuel Sanches to Win by KO/TKO/DQ or Submission": [
+     "+150",
+     "0QA387849738#2359118902_15L9034Q15Q25"
+    ],
+    "Samuel Sanches to Win by Submission or Decision": [
+     "+300",
+     "0QA387849738#2359118912_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Evan Elder to Win By KO/TKO/DQ or Samuel Sanches to Win by Submission": [
+     "+380",
+     "0QA387850193#2359120124_13L9034Q10Q21"
+    ],
+    "Evan Elder to Win By KO/TKO/DQ or Samuel Sanches to Win by Decision": [
+     "+180",
+     "0QA387850193#2359120142_13L9034Q10Q22"
+    ],
+    "Evan Elder to Win By Submission or Samuel Sanches to Win by KO/TKO/DQ": [
+     "-105",
+     "0QA387850193#2359120160_13L9034Q10Q23"
+    ],
+    "Evan Elder to Win By Submission or Samuel Sanches to Win by Decision": [
+     "+205",
+     "0QA387850193#2359120163_13L9034Q10Q24"
+    ],
+    "Evan Elder to Win By Decision or Samuel Sanches to Win by KO/TKO/DQ": [
+     "-215",
+     "0QA387850193#2359120175_13L9034Q10Q25"
+    ],
+    "Evan Elder to Win By Decision or Samuel Sanches to Win by Submission": [
+     "+180",
+     "0QA387850193#2359120177_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850193#2359120186_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-105",
+     "0QA387850179#2359120036_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+500",
+     "0QA387850179#2359120156_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+115",
+     "0QA387850179#2359120157_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850179#2359120169_15L9034Q14Q24"
+    ]
+   },
+   "Evan Elder to Win by Unanimous Decision": {
+    "Yes": [
+     "+285",
+     "0QA387850183#2359120048_13L9034Q11Q22"
+    ]
+   },
+   "Samuel Sanches to Win by Unanimous Decision": {
+    "Yes": [
+     "+450",
+     "0QA387850184#2359120051_13L9034Q11Q22"
+    ]
+   },
+   "Evan Elder to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1700",
+     "0QA387850185#2359120054_13L9034Q11Q22"
+    ]
+   },
+   "Samuel Sanches to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2500",
+     "0QA387850186#2359120057_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Evan Elder": [
+     "+550",
+     "0QA387849778#2359118830_13L9034Q11Q22"
+    ],
+    "Samuel Sanches": [
+     "+165",
+     "0QA387849778#2359118842_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Evan Elder": [
+     "+700",
+     "0QA387849780#2359118832_13L9034Q11Q22"
+    ],
+    "Samuel Sanches": [
+     "+1800",
+     "0QA387849780#2359118838_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Evan Elder": [
+     "+230",
+     "0QA387849782#2359118834_13L9034Q11Q22"
+    ],
+    "Samuel Sanches": [
+     "+400",
+     "0QA387849782#2359118836_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -74607,15 +75113,15 @@
   "right": "Bia Mesquita",
   "rounds": 3,
   "start": "2026-11-14T23:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Moneyline": {
     "Macy Chiasson": [
-     "+215",
+     "+210",
      "0ML87057417_1"
     ],
     "Beatriz Mesquita": [
-     "-265",
+     "-258",
      "0ML87057417_3"
     ]
    },
@@ -74637,8 +75143,48 @@
   "right": "Melquizael Costa",
   "rounds": 3,
   "start": "2026-11-14T23:45Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Jared Gordon": [
+     "+425",
+     "0QA387850085#2359119884_13L9034Q11Q21"
+    ],
+    "Melquizael Costa": [
+     "-800",
+     "0QA387850085#2359119920_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Jared Gordon": [
+     "+165",
+     "0QA387850086#2359119885_13L9034Q11Q21"
+    ],
+    "Melquizael Costa": [
+     "-235",
+     "0QA387850086#2359119919_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Jared Gordon": [
+     "+500",
+     "0QA387850134#2359119909_13L9034Q10Q21"
+    ],
+    "Melquizael Costa": [
+     "-900",
+     "0QA387850134#2359119910_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Jared Gordon": [
+     "+380",
+     "0QA387850131#2359119907_13L9034Q10Q21"
+    ],
+    "Melquizael Costa": [
+     "-600",
+     "0QA387850131#2359119912_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Jared Gordon": [
      "+295",
@@ -74647,6 +75193,36 @@
     "Melquizael Costa": [
      "-375",
      "0ML87157417_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Jared Gordon": [
+     "+450",
+     "0QA387850128#2359119902_13L9034Q10Q21"
+    ],
+    "Melquizael Costa": [
+     "-750",
+     "0QA387850128#2359119917_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Jared Gordon": [
+     "+200",
+     "0HC87182500P350_1"
+    ],
+    "Melquizael Costa": [
+     "-280",
+     "0HC87182500N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Jared Gordon": [
+     "+130",
+     "0HC87182503P750_1"
+    ],
+    "Melquizael Costa": [
+     "-170",
+     "0HC87182503N750_3"
     ]
    },
    "Total Rounds": {
@@ -74658,6 +75234,472 @@
      "-140",
      "0OU87158870U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-190",
+     "0OU87182497O150_1"
+    ],
+    "Under": [
+     "+140",
+     "0OU87182497U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+900",
+     "0QA387849630#2359118441_13L9034Q11Q22"
+    ],
+    "No": [
+     "-3000",
+     "0QA387849630#2359118451_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA387849623#2359118433_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2500",
+     "0QA387849635#2359118442_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+165",
+     "0QA387850079#2359119878_13L9034Q11Q22"
+    ],
+    "No": [
+     "-220",
+     "0QA387850079#2359119926_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1200",
+     "0QA387850080#2359119879_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA387850080#2359119925_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+150",
+     "0QA387849618#2359118435_13L9034Q10Q20"
+    ],
+    "No": [
+     "-200",
+     "0QA387849618#2359118456_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+250",
+     "0QA387850087#2359119886_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+700",
+     "0QA387850087#2359119918_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+425",
+     "0QA387850087#2359119931_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1100",
+     "0QA387850087#2359119936_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+750",
+     "0QA387850087#2359119940_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1800",
+     "0QA387850087#2359119943_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+150",
+     "0QA387850087#2359119951_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Jared Gordon to Win in Rounds 1-2": [
+     "+900",
+     "0QA387849620#2359118430_13L9034Q11Q21"
+    ],
+    "Jared Gordon to Win in Round 3 or on Decision": [
+     "+425",
+     "0QA387849620#2359118463_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849620#2359118500_13L9034Q19Q29"
+    ],
+    "Melquizael Costa to Win in Rounds 1-2": [
+     "+100",
+     "0QA387849620#2359118477_15L9034Q15Q25"
+    ],
+    "Melquizael Costa to Win in Round 3 or on Decision": [
+     "+150",
+     "0QA387849620#2359118489_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Jared Gordon to Win by KO/TKO/DQ in Round 1": [
+     "+2000",
+     "0QA387849622#2359118431_13L9034Q11Q21"
+    ],
+    "Jared Gordon to Win by KO/TKO/DQ in Round 2": [
+     "+2800",
+     "0QA387849622#2359118459_13L9034Q12Q22"
+    ],
+    "Jared Gordon to Win by KO/TKO/DQ in Round 3": [
+     "+3500",
+     "0QA387849622#2359118464_13L9034Q13Q23"
+    ],
+    "Jared Gordon to Win by Submission in Round 1": [
+     "+4000",
+     "0QA387849622#2359118485_13L9034Q16Q26"
+    ],
+    "Jared Gordon to Win by Submission in Round 2": [
+     "+5500",
+     "0QA387849622#2359118490_13L9034Q17Q27"
+    ],
+    "Jared Gordon to Win by Submission in Round 3": [
+     "+6500",
+     "0QA387849622#2359118496_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+150",
+     "0QA387849622#2359118521_13L9034Q121Q221"
+    ],
+    "Melquizael Costa to Win by KO/TKO/DQ in Round 1": [
+     "+275",
+     "0QA387849622#2359118509_15L9034Q111Q211"
+    ],
+    "Melquizael Costa to Win by KO/TKO/DQ in Round 2": [
+     "+450",
+     "0QA387849622#2359118510_15L9034Q112Q212"
+    ],
+    "Melquizael Costa to Win by KO/TKO/DQ in Round 3": [
+     "+900",
+     "0QA387849622#2359118513_15L9034Q113Q213"
+    ],
+    "Melquizael Costa to Win by Submission in Round 1": [
+     "+750",
+     "0QA387849622#2359118516_15L9034Q116Q216"
+    ],
+    "Melquizael Costa to Win by Submission in Round 2": [
+     "+1200",
+     "0QA387849622#2359118517_15L9034Q117Q217"
+    ],
+    "Melquizael Costa to Win by Submission in Round 3": [
+     "+2200",
+     "0QA387849622#2359118518_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Jared Gordon To Win And Under 0.5": [
+     "+3500",
+     "0QA387849626#2359118437_13L9034Q11Q21"
+    ],
+    "Jared Gordon To Win And Under 1.5": [
+     "+1100",
+     "0QA387849626#2359118468_13L9034Q11Q23"
+    ],
+    "Melquizael Costa To Win And Under 0.5": [
+     "+650",
+     "0QA387849626#2359118454_14L9034Q12Q22"
+    ],
+    "Melquizael Costa To Win And Under 1.5": [
+     "+150",
+     "0QA387849626#2359118470_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Jared Gordon To Win And Over 1.5": [
+     "+350",
+     "0QA387849627#2359118469_13L9034Q11Q23"
+    ],
+    "Jared Gordon To Win And Over 2.5": [
+     "+450",
+     "0QA387849627#2359118481_13L9034Q11Q25"
+    ],
+    "Melquizael Costa To Win And Over 1.5": [
+     "-115",
+     "0QA387849627#2359118471_14L9034Q12Q24"
+    ],
+    "Melquizael Costa To Win And Over 2.5": [
+     "+175",
+     "0QA387849627#2359118483_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Jared Gordon": [
+     "+180",
+     "0HC87182506P150_1"
+    ],
+    "Melquizael Costa": [
+     "-245",
+     "0HC87182506N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Jared Gordon": [
+     "+175",
+     "0HC87182510P150_1"
+    ],
+    "Melquizael Costa": [
+     "-235",
+     "0HC87182510N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Jared Gordon": [
+     "+160",
+     "0HC87182514P150_1"
+    ],
+    "Melquizael Costa": [
+     "-215",
+     "0HC87182514N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-295",
+     "0QA387849628#2359118439_13L9034Q11Q22"
+    ],
+    "No": [
+     "+215",
+     "0QA387849628#2359118453_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-115",
+     "0QA387849629#2359118440_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA387849629#2359118452_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Jared Gordon Round 1": [
+     "+1400",
+     "0QA387849619#2359118429_13L9034Q11Q20"
+    ],
+    "Jared Gordon Round 2": [
+     "+2000",
+     "0QA387849619#2359118462_13L9034Q11Q22"
+    ],
+    "Jared Gordon Round 3": [
+     "+2500",
+     "0QA387849619#2359118476_13L9034Q11Q24"
+    ],
+    "Jared Gordon By Decision": [
+     "+550",
+     "0QA387849619#2359118508_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849619#2359118512_15L9034Q10Q212"
+    ],
+    "Melquizael Costa Round 1": [
+     "+240",
+     "0QA387849619#2359118461_14L9034Q12Q21"
+    ],
+    "Melquizael Costa Round 2": [
+     "+350",
+     "0QA387849619#2359118475_14L9034Q12Q23"
+    ],
+    "Melquizael Costa Round 3": [
+     "+700",
+     "0QA387849619#2359118487_14L9034Q12Q25"
+    ],
+    "Melquizael Costa By Decision": [
+     "+250",
+     "0QA387849619#2359118511_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+215",
+     "0QA387850078#2359119877_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+300",
+     "0QA387850078#2359119927_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+550",
+     "0QA387850078#2359119930_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850078#2359119944_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+150",
+     "0QA387850078#2359119945_13L9034Q11Q25"
+    ]
+   },
+   "Melquizael Costa to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-130",
+     "0QA387850089#2359119904_13L9034Q11Q22"
+    ],
+    "No": [
+     "+100",
+     "0QA387850089#2359119915_13L9034Q13Q24"
+    ]
+   },
+   "Jared Gordon to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+700",
+     "0QA387850091#2359119906_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1600",
+     "0QA387850091#2359119913_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Jared Gordon to Win by KO/TKO/DQ or Decision": [
+     "+320",
+     "0QA387849621#2359118432_13L9034Q11Q21"
+    ],
+    "Jared Gordon to Win by KO/TKO/DQ or Submission": [
+     "+700",
+     "0QA387849621#2359118458_13L9034Q12Q22"
+    ],
+    "Jared Gordon to Win by Submission or Decision": [
+     "+400",
+     "0QA387849621#2359118465_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849621#2359118491_13L9034Q17Q27"
+    ],
+    "Melquizael Costa to Win by KO/TKO/DQ or Decision": [
+     "-240",
+     "0QA387849621#2359118472_15L9034Q14Q24"
+    ],
+    "Melquizael Costa to Win by KO/TKO/DQ or Submission": [
+     "-130",
+     "0QA387849621#2359118479_15L9034Q15Q25"
+    ],
+    "Melquizael Costa to Win by Submission or Decision": [
+     "+115",
+     "0QA387849621#2359118484_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Jared Gordon to Win By KO/TKO/DQ or Melquizael Costa to Win by Submission": [
+     "+230",
+     "0QA387850092#2359119905_13L9034Q10Q21"
+    ],
+    "Jared Gordon to Win By KO/TKO/DQ or Melquizael Costa to Win by Decision": [
+     "+165",
+     "0QA387850092#2359119914_13L9034Q10Q22"
+    ],
+    "Jared Gordon to Win By Submission or Melquizael Costa to Win by KO/TKO/DQ": [
+     "+105",
+     "0QA387850092#2359119932_13L9034Q10Q23"
+    ],
+    "Jared Gordon to Win By Submission or Melquizael Costa to Win by Decision": [
+     "+205",
+     "0QA387850092#2359119935_13L9034Q10Q24"
+    ],
+    "Jared Gordon to Win By Decision or Melquizael Costa to Win by KO/TKO/DQ": [
+     "-140",
+     "0QA387850092#2359119941_13L9034Q10Q25"
+    ],
+    "Jared Gordon to Win By Decision or Melquizael Costa to Win by Submission": [
+     "+180",
+     "0QA387850092#2359119942_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850092#2359119947_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-105",
+     "0QA387850077#2359119876_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+330",
+     "0QA387850077#2359119928_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+150",
+     "0QA387850077#2359119929_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850077#2359119938_15L9034Q14Q24"
+    ]
+   },
+   "Jared Gordon to Win by Unanimous Decision": {
+    "Yes": [
+     "+650",
+     "0QA387850081#2359119880_13L9034Q11Q22"
+    ]
+   },
+   "Melquizael Costa to Win by Unanimous Decision": {
+    "Yes": [
+     "+275",
+     "0QA387850082#2359119881_13L9034Q11Q22"
+    ]
+   },
+   "Jared Gordon to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA387850083#2359119882_13L9034Q11Q22"
+    ]
+   },
+   "Melquizael Costa to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA387850084#2359119883_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Jared Gordon": [
+     "+900",
+     "0QA387849641#2359118443_13L9034Q11Q22"
+    ],
+    "Melquizael Costa": [
+     "+130",
+     "0QA387849641#2359118449_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Jared Gordon": [
+     "+2000",
+     "0QA387849642#2359118444_13L9034Q11Q22"
+    ],
+    "Melquizael Costa": [
+     "+400",
+     "0QA387849642#2359118447_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Jared Gordon": [
+     "+550",
+     "0QA387849643#2359118445_13L9034Q11Q22"
+    ],
+    "Melquizael Costa": [
+     "+250",
+     "0QA387849643#2359118446_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -74667,8 +75709,48 @@
   "right": "Donte Johnson",
   "rounds": 3,
   "start": "2026-11-15T00:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Donte Johnson": [
+     "-175",
+     "0QA387850051#2359119808_13L9034Q11Q21"
+    ],
+    "Cesar Almeida": [
+     "+125",
+     "0QA387850051#2359119844_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Donte Johnson": [
+     "-235",
+     "0QA387850052#2359119809_13L9034Q11Q21"
+    ],
+    "Cesar Almeida": [
+     "+165",
+     "0QA387850052#2359119843_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Donte Johnson": [
+     "-170",
+     "0QA387850075#2359119833_13L9034Q10Q21"
+    ],
+    "Cesar Almeida": [
+     "+130",
+     "0QA387850075#2359119834_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Donte Johnson": [
+     "-220",
+     "0QA387850074#2359119831_13L9034Q10Q21"
+    ],
+    "Cesar Almeida": [
+     "+165",
+     "0QA387850074#2359119836_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Donte Johnson": [
      "-170",
@@ -74677,6 +75759,36 @@
     "Cesar Almeida": [
      "+142",
      "0ML87057420_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Donte Johnson": [
+     "-160",
+     "0QA387850073#2359119826_13L9034Q10Q21"
+    ],
+    "Cesar Almeida": [
+     "+120",
+     "0QA387850073#2359119841_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Donte Johnson": [
+     "-115",
+     "0HC87182502N550_1"
+    ],
+    "Cesar Almeida": [
+     "-115",
+     "0HC87182502P550_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Donte Johnson": [
+     "-265",
+     "0HC87182505P750_1"
+    ],
+    "Cesar Almeida": [
+     "+195",
+     "0HC87182505N750_3"
     ]
    },
    "Total Rounds": {
@@ -74688,6 +75800,472 @@
      "+105",
      "0OU87158873U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+150",
+     "0OU87182499O250_1"
+    ],
+    "Under": [
+     "-205",
+     "0OU87182499U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+700",
+     "0QA387849686#2359118627_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1600",
+     "0QA387849686#2359118637_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA387849679#2359118619_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2200",
+     "0QA387849691#2359118628_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+250",
+     "0QA387850045#2359119802_13L9034Q11Q22"
+    ],
+    "No": [
+     "-350",
+     "0QA387850045#2359119850_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1200",
+     "0QA387850046#2359119803_13L9034Q11Q22"
+    ],
+    "No": [
+     "-8000",
+     "0QA387850046#2359119849_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+215",
+     "0QA387849674#2359118621_13L9034Q10Q20"
+    ],
+    "No": [
+     "-295",
+     "0QA387849674#2359118642_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+165",
+     "0QA387850053#2359119810_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1200",
+     "0QA387850053#2359119842_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+350",
+     "0QA387850053#2359119855_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+2200",
+     "0QA387850053#2359119860_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+550",
+     "0QA387850053#2359119864_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+3500",
+     "0QA387850053#2359119867_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+215",
+     "0QA387850053#2359119875_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Donte Johnson to Win in Rounds 1-2": [
+     "+150",
+     "0QA387849676#2359118616_13L9034Q11Q21"
+    ],
+    "Donte Johnson to Win in Round 3 or on Decision": [
+     "+215",
+     "0QA387849676#2359118649_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849676#2359118686_13L9034Q19Q29"
+    ],
+    "Cesar Almeida to Win in Rounds 1-2": [
+     "+265",
+     "0QA387849676#2359118663_15L9034Q15Q25"
+    ],
+    "Cesar Almeida to Win in Round 3 or on Decision": [
+     "+450",
+     "0QA387849676#2359118675_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Donte Johnson to Win by KO/TKO/DQ in Round 1": [
+     "+275",
+     "0QA387849678#2359118617_13L9034Q11Q21"
+    ],
+    "Donte Johnson to Win by KO/TKO/DQ in Round 2": [
+     "+600",
+     "0QA387849678#2359118645_13L9034Q12Q22"
+    ],
+    "Donte Johnson to Win by KO/TKO/DQ in Round 3": [
+     "+900",
+     "0QA387849678#2359118650_13L9034Q13Q23"
+    ],
+    "Donte Johnson to Win by Submission in Round 1": [
+     "+1600",
+     "0QA387849678#2359118671_13L9034Q16Q26"
+    ],
+    "Donte Johnson to Win by Submission in Round 2": [
+     "+3000",
+     "0QA387849678#2359118676_13L9034Q17Q27"
+    ],
+    "Donte Johnson to Win by Submission in Round 3": [
+     "+4500",
+     "0QA387849678#2359118682_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+215",
+     "0QA387849678#2359118707_13L9034Q121Q221"
+    ],
+    "Cesar Almeida to Win by KO/TKO/DQ in Round 1": [
+     "+450",
+     "0QA387849678#2359118695_15L9034Q111Q211"
+    ],
+    "Cesar Almeida to Win by KO/TKO/DQ in Round 2": [
+     "+850",
+     "0QA387849678#2359118696_15L9034Q112Q212"
+    ],
+    "Cesar Almeida to Win by KO/TKO/DQ in Round 3": [
+     "+1400",
+     "0QA387849678#2359118699_15L9034Q113Q213"
+    ],
+    "Cesar Almeida to Win by Submission in Round 1": [
+     "+3000",
+     "0QA387849678#2359118702_15L9034Q116Q216"
+    ],
+    "Cesar Almeida to Win by Submission in Round 2": [
+     "+5500",
+     "0QA387849678#2359118703_15L9034Q117Q217"
+    ],
+    "Cesar Almeida to Win by Submission in Round 3": [
+     "+8000",
+     "0QA387849678#2359118704_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Donte Johnson To Win And Under 0.5": [
+     "+700",
+     "0QA387849682#2359118623_13L9034Q11Q21"
+    ],
+    "Donte Johnson To Win And Under 1.5": [
+     "+195",
+     "0QA387849682#2359118654_13L9034Q11Q23"
+    ],
+    "Cesar Almeida To Win And Under 0.5": [
+     "+1100",
+     "0QA387849682#2359118640_14L9034Q12Q22"
+    ],
+    "Cesar Almeida To Win And Under 1.5": [
+     "+330",
+     "0QA387849682#2359118656_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Donte Johnson To Win And Over 1.5": [
+     "+140",
+     "0QA387849683#2359118655_13L9034Q11Q23"
+    ],
+    "Donte Johnson To Win And Over 2.5": [
+     "+240",
+     "0QA387849683#2359118667_13L9034Q11Q25"
+    ],
+    "Cesar Almeida To Win And Over 1.5": [
+     "+300",
+     "0QA387849683#2359118657_14L9034Q12Q24"
+    ],
+    "Cesar Almeida To Win And Over 2.5": [
+     "+500",
+     "0QA387849683#2359118669_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Donte Johnson": [
+     "-255",
+     "0HC87182509P150_1"
+    ],
+    "Cesar Almeida": [
+     "+190",
+     "0HC87182509N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Donte Johnson": [
+     "-255",
+     "0HC87182513P150_1"
+    ],
+    "Cesar Almeida": [
+     "+190",
+     "0HC87182513N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Donte Johnson": [
+     "-265",
+     "0HC87182517P150_1"
+    ],
+    "Cesar Almeida": [
+     "+195",
+     "0HC87182517N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-200",
+     "0QA387849684#2359118625_13L9034Q11Q22"
+    ],
+    "No": [
+     "+150",
+     "0QA387849684#2359118639_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+115",
+     "0QA387849685#2359118626_13L9034Q11Q22"
+    ],
+    "No": [
+     "-150",
+     "0QA387849685#2359118638_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Donte Johnson Round 1": [
+     "+240",
+     "0QA387849675#2359118615_13L9034Q11Q20"
+    ],
+    "Donte Johnson Round 2": [
+     "+550",
+     "0QA387849675#2359118648_13L9034Q11Q22"
+    ],
+    "Donte Johnson Round 3": [
+     "+850",
+     "0QA387849675#2359118662_13L9034Q11Q24"
+    ],
+    "Donte Johnson By Decision": [
+     "+350",
+     "0QA387849675#2359118694_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849675#2359118698_15L9034Q10Q212"
+    ],
+    "Cesar Almeida Round 1": [
+     "+400",
+     "0QA387849675#2359118647_14L9034Q12Q21"
+    ],
+    "Cesar Almeida Round 2": [
+     "+800",
+     "0QA387849675#2359118661_14L9034Q12Q23"
+    ],
+    "Cesar Almeida Round 3": [
+     "+1200",
+     "0QA387849675#2359118673_14L9034Q12Q25"
+    ],
+    "Cesar Almeida By Decision": [
+     "+750",
+     "0QA387849675#2359118697_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+150",
+     "0QA387850044#2359119801_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+300",
+     "0QA387850044#2359119851_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA387850044#2359119854_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850044#2359119868_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+215",
+     "0QA387850044#2359119869_13L9034Q11Q25"
+    ]
+   },
+   "Cesar Almeida to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+215",
+     "0QA387850055#2359119828_13L9034Q11Q22"
+    ],
+    "No": [
+     "-295",
+     "0QA387850055#2359119839_13L9034Q13Q24"
+    ]
+   },
+   "Donte Johnson to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+120",
+     "0QA387850056#2359119830_13L9034Q11Q22"
+    ],
+    "No": [
+     "-160",
+     "0QA387850056#2359119837_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Donte Johnson to Win by KO/TKO/DQ or Decision": [
+     "-165",
+     "0QA387849677#2359118618_13L9034Q11Q21"
+    ],
+    "Donte Johnson to Win by KO/TKO/DQ or Submission": [
+     "+120",
+     "0QA387849677#2359118644_13L9034Q12Q22"
+    ],
+    "Donte Johnson to Win by Submission or Decision": [
+     "+225",
+     "0QA387849677#2359118651_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387849677#2359118677_13L9034Q17Q27"
+    ],
+    "Cesar Almeida to Win by KO/TKO/DQ or Decision": [
+     "+145",
+     "0QA387849677#2359118658_15L9034Q14Q24"
+    ],
+    "Cesar Almeida to Win by KO/TKO/DQ or Submission": [
+     "+215",
+     "0QA387849677#2359118665_15L9034Q15Q25"
+    ],
+    "Cesar Almeida to Win by Submission or Decision": [
+     "+500",
+     "0QA387849677#2359118670_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Donte Johnson to Win By KO/TKO/DQ or Cesar Almeida to Win by Submission": [
+     "+115",
+     "0QA387850057#2359119829_13L9034Q10Q21"
+    ],
+    "Donte Johnson to Win By KO/TKO/DQ or Cesar Almeida to Win by Decision": [
+     "-115",
+     "0QA387850057#2359119838_13L9034Q10Q22"
+    ],
+    "Donte Johnson to Win By Submission or Cesar Almeida to Win by KO/TKO/DQ": [
+     "+150",
+     "0QA387850057#2359119856_13L9034Q10Q23"
+    ],
+    "Donte Johnson to Win By Submission or Cesar Almeida to Win by Decision": [
+     "+380",
+     "0QA387850057#2359119859_13L9034Q10Q24"
+    ],
+    "Donte Johnson to Win By Decision or Cesar Almeida to Win by KO/TKO/DQ": [
+     "-110",
+     "0QA387850057#2359119865_13L9034Q10Q25"
+    ],
+    "Donte Johnson to Win By Decision or Cesar Almeida to Win by Submission": [
+     "+270",
+     "0QA387850057#2359119866_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850057#2359119871_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-225",
+     "0QA387850043#2359119800_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+650",
+     "0QA387850043#2359119852_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+215",
+     "0QA387850043#2359119853_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA387850043#2359119862_15L9034Q14Q24"
+    ]
+   },
+   "Donte Johnson to Win by Unanimous Decision": {
+    "Yes": [
+     "+380",
+     "0QA387850047#2359119804_13L9034Q11Q22"
+    ]
+   },
+   "Cesar Almeida to Win by Unanimous Decision": {
+    "Yes": [
+     "+900",
+     "0QA387850048#2359119805_13L9034Q11Q22"
+    ]
+   },
+   "Donte Johnson to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA387850049#2359119806_13L9034Q11Q22"
+    ]
+   },
+   "Cesar Almeida to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA387850050#2359119807_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Donte Johnson": [
+     "+140",
+     "0QA387849697#2359118629_13L9034Q11Q22"
+    ],
+    "Cesar Almeida": [
+     "+225",
+     "0QA387849697#2359118635_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Donte Johnson": [
+     "+1000",
+     "0QA387849698#2359118630_13L9034Q11Q22"
+    ],
+    "Cesar Almeida": [
+     "+2000",
+     "0QA387849698#2359118633_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Donte Johnson": [
+     "+350",
+     "0QA387849699#2359118631_13L9034Q11Q22"
+    ],
+    "Cesar Almeida": [
+     "+750",
+     "0QA387849699#2359118632_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -74697,7 +76275,7 @@
   "right": "Terrance McKinney",
   "rounds": 3,
   "start": "2026-11-15T00:45Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Jim Miller": [
@@ -75259,7 +76837,7 @@
   "right": "Chris Duncan",
   "rounds": 3,
   "start": "2026-11-15T01:15Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Drew Dober": [
@@ -75303,11 +76881,11 @@
    },
    "Moneyline": {
     "Drew Dober": [
-     "+130",
+     "+142",
      "0ML87160503_1"
     ],
     "Chris Duncan": [
-     "-155",
+     "-170",
      "0ML87160503_3"
     ]
    },
@@ -75825,7 +77403,7 @@
   "right": "Charles Radtke",
   "rounds": 3,
   "start": "2026-11-15T01:45Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Stephen Thompson": [
@@ -76391,15 +77969,15 @@
   "right": "Juan Diaz",
   "rounds": 3,
   "start": "2026-11-14T22:00Z",
-  "read": "2026-11-11T14:03Z",
+  "read": "2026-11-11T20:02Z",
   "markets": {
    "Moneyline": {
     "Heili Alateng": [
-     "+270",
+     "+280",
      "0ML87191847_1"
     ],
     "Juan Diaz": [
-     "-340",
+     "-355",
      "0ML87191847_3"
     ]
    }

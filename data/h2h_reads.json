@@ -1,5 +1,5 @@
 {
- "at": "2026-11-11 14:11 UTC",
+ "at": "2026-11-11 20:11 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -51,7 +51,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 224.5 yards higher in total on their lines",
+    "His receivers are set 225.5 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -69,26 +69,86 @@
     "Jordan Love",
     "Kirk Cousins"
    ],
-   "pick": "Jordan Love",
-   "lead": 4,
+   "pick": null,
+   "lead": 0,
    "complete": true,
    "missing": [],
    "score": [
-    4,
+    0,
     0
    ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "2 of 4 combined boxes checked"
-   ],
+   "why": [],
    "checks": [
     0,
-    1,
-    1,
+    0,
+    0,
     0
    ],
    "game": "MIN@GB",
    "eid": 21947,
+   "kick": "2026-11-15 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Bryce Young",
+    "Tyler Shough"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "CAR T.Tremble (11%)",
+    "NO A.Kamara (15%)"
+   ],
+   "score": [
+    1,
+    1
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "CAR@NO",
+   "eid": 21948,
+   "kick": "2026-11-15 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Geno Smith",
+    "Josh Allen"
+   ],
+   "pick": "Josh Allen",
+   "lead": 12,
+   "complete": false,
+   "missing": [
+    "NYJ A.Mitchell (21%)",
+    "NYJ B.Allen (12%)",
+    "NYJ M.Taylor (15%)",
+    "NYJ O.Cooper Jr. (18%)"
+   ],
+   "score": [
+    -5,
+    7
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 85.5 yards higher in total on their lines",
+    "1 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
+   "checks": [
+    1,
+    0,
+    0,
+    0
+   ],
+   "game": "BUF@NYJ",
+   "eid": 21950,
    "kick": "2026-11-15 18:00:00Z"
   },
   {
@@ -191,7 +251,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 74.0 yards higher in total on their lines",
+    "His receivers are set 73.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -203,6 +263,42 @@
    "game": "PIT@CIN",
    "eid": 21957,
    "kick": "2026-11-16 01:20:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "Justin Herbert"
+   ],
+   "pick": "Jacoby Brissett",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "LAC C.Kolar (13%)",
+    "LAC K.Lambert-Smith (13%)",
+    "LAC O.Gadsden II (14%)",
+    "LAC Q.Johnston (11%)",
+    "LAC T.Harris (10%)"
+   ],
+   "score": [
+    7,
+    -3
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 129.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "LAC@BAL",
+   "eid": 21958,
+   "kick": "2026-11-17 01:15:00Z"
   }
  ]
 }
