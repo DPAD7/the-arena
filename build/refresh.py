@@ -271,10 +271,9 @@ def count_misses():
        names the starter, and a missing price there is only the book being
        late), a game with neither side priced (the book has not posted it or
        skips it), a favorite of BLOWOUT or heavier, and any game he has
-       hidden. On the fifth empty pass the sides that reached it go to his
-       phone in one alert: the passer DraftKings lists instead, or no passing
-       props listed (Jose, Sep 30, 2026: "not ... 1000 notifications about all
-       the quarterbacks that are on Saturday").
+       hidden. On the fifth empty pass the sides that reached it are logged:
+       the passer DraftKings lists instead, or no passing props listed. They
+       no longer go to his phone (Nov 11, 2026).
     """
     f = D + "/data/price_misses.json"
     try:
@@ -325,10 +324,10 @@ def count_misses():
             lines.append("%s %s: DraftKings lists %s" % (club, man, ", ".join(book)) if book
                          else "%s %s: no passing props listed" % (club, man))
             now_open[key]["told"] = True
+    # No phone alert (Jose, Nov 11, 2026: "you should just update them on
+    # the site"). The card already follows the passer DraftKings prices
+    # (starters.book_of) and shows no price when none is listed; this only logs.
     if lines:
-        tell("props@" + NOW.strftime("%Y-%m-%d %H"),
-             "No passing odds: %d college passer%s" % (len(lines), "" if len(lines) == 1 else "s"),
-             "; ".join(lines))
         for l in lines:
             log("   price misses told: " + l)
     if not DRY:
