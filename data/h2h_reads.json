@@ -1,5 +1,5 @@
 {
- "at": "2026-11-12 04:19 UTC",
+ "at": "2026-11-12 14:14 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -42,7 +42,6 @@
     "NE D.Douglas (19%)",
     "NE E.Chism III (13%)",
     "NE E.Raridon (16%)",
-    "NE H.Henry (15%)",
     "NE R.Stevenson (14%)"
    ],
    "score": [
@@ -51,7 +50,7 @@
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 227.5 yards higher in total on their lines",
+    "His receivers are set 192.0 yards higher in total on their lines",
     "1 of 4 combined boxes checked"
    ],
    "checks": [
@@ -69,22 +68,19 @@
     "Jordan Love",
     "Kirk Cousins"
    ],
-   "pick": "Jordan Love",
-   "lead": 4,
+   "pick": null,
+   "lead": 0,
    "complete": true,
    "missing": [],
    "score": [
-    4,
+    0,
     0
    ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "2 of 4 combined boxes checked"
-   ],
+   "why": [],
    "checks": [
     0,
-    1,
-    1,
+    0,
+    0,
     0
    ],
    "game": "MIN@GB",
@@ -124,19 +120,18 @@
     "Kyle McCord"
    ],
    "pick": "Kyle McCord",
-   "lead": 4,
+   "lead": 2,
    "complete": false,
    "missing": [
     "IND J.Downs (18%)",
     "IND K.Allen (22%)"
    ],
    "score": [
-    -2,
-    2
+    -1,
+    1
    ],
    "why": [
     "Faces a defense that gives up more yards after the catch",
-    "His receivers are set 50.0 yards higher in total on their lines",
     "New coach for his side"
    ],
    "checks": [
@@ -155,28 +150,23 @@
     "Josh Allen"
    ],
    "pick": "Josh Allen",
-   "lead": 12,
+   "lead": 8,
    "complete": false,
    "missing": [
-    "NYJ A.Mitchell (21%)",
-    "NYJ B.Allen (12%)",
-    "NYJ M.Taylor (15%)",
-    "NYJ O.Cooper Jr. (18%)"
+    "NYJ B.Allen (12%)"
    ],
    "score": [
-    -5,
-    7
+    -4,
+    4
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 88.5 yards higher in total on their lines",
-    "1 of 4 combined boxes checked",
     "New coach for his side"
    ],
    "checks": [
-    1,
+    0,
     0,
     0,
     0
@@ -296,11 +286,42 @@
   },
   {
    "qbs": [
+    "Carson Beck",
+    "Matthew Stafford"
+   ],
+   "pick": "Matthew Stafford",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "ARI M.Wilson (26%)",
+    "LA P.Nacua (43%)"
+   ],
+   "score": [
+    -2,
+    2
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "Opponent gives up more yards to the top receiver (+37 a game)",
+    "His receivers are set 54.5 yards higher in total on their lines"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "LAR@ARI",
+   "eid": 21955,
+   "kick": "2026-11-15 21:05:00Z"
+  },
+  {
+   "qbs": [
     "Brock Purdy",
     "Dak Prescott"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Brock Purdy",
+   "lead": 2,
    "complete": false,
    "missing": [
     "SF J.Watkins (12%)",
@@ -308,10 +329,13 @@
     "DAL R.Flournoy (12%)"
    ],
    "score": [
-    0,
-    0
+    1,
+    -1
    ],
-   "why": [],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 60.0 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
@@ -372,7 +396,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 135.0 yards higher in total on their lines",
+    "His receivers are set 136.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked",
     "New coach for his side"
    ],
