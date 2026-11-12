@@ -4,28 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873051",
-   "away": "BUF",
-   "home": "MIN",
-   "pick": "BUF",
-   "model": 76,
-   "book": 62,
-   "bookpick": "BUF",
-   "agree": true,
-   "won": 62,
-   "n": 26,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "QB play (EPA per dropback): BUF +0.18, MIN -0.68",
-    "Points per game: BUF 33.3, MIN 20.0",
-    "MIN is starting a backup QB",
-    "Pass defense, EPA allowed: BUF +0.13, MIN -0.25"
-   ],
-   "week": 9,
-   "kick": "2026-11-10T01:15Z"
-  },
-  {
    "gid": "401873057",
    "away": "JAX",
    "home": "TEN",
@@ -53,7 +31,7 @@
    "home": "ARI",
    "pick": "LAR",
    "model": 75,
-   "book": 79,
+   "book": 80,
    "bookpick": "LAR",
    "agree": true,
    "won": 84,
@@ -141,7 +119,7 @@
    "home": "CLE",
    "pick": "HOU",
    "model": 68,
-   "book": 66,
+   "book": 67,
    "bookpick": "HOU",
    "agree": true,
    "won": 64,
@@ -317,7 +295,7 @@
    "home": "NYG",
    "pick": "NYG",
    "model": 53,
-   "book": 53,
+   "book": 55,
    "bookpick": "NYG",
    "agree": true,
    "won": 58,
@@ -332,6 +310,28 @@
    ],
    "week": 10,
    "kick": "2026-11-13T01:15Z"
+  },
+  {
+   "gid": "401873066",
+   "away": "IND",
+   "home": "HOU",
+   "pick": "HOU",
+   "model": 73,
+   "book": 79,
+   "bookpick": "HOU",
+   "agree": true,
+   "won": 77,
+   "n": 47,
+   "call": "take",
+   "rank": 1,
+   "why": [
+    "Points per game: HOU 26.1, IND 20.4",
+    "Points allowed per game: HOU 24.0, IND 27.7",
+    "QB play (EPA per dropback): HOU +0.18, IND -0.09",
+    "Last 3 games, win %: HOU 67%, IND 0%"
+   ],
+   "week": 11,
+   "kick": "2026-11-20T01:15Z"
   }
  ]
 }
