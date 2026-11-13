@@ -1,5 +1,5 @@
 {
- "at": "2026-11-13T00:36:55Z",
+ "at": "2026-11-13T00:51:35Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -262,7 +262,7 @@
     "pick": "Marcus Stokes",
     "pick_id": "5165807",
     "team": "MEM",
-    "p": 0.657013,
+    "p": 0.6651,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -280,18 +280,18 @@
     "5165807": {
      "name": "Marcus Stokes",
      "team": "MEM",
-     "p1": 0.843965,
+     "p1": 0.848651,
      "take1": false,
-     "p2": 0.554827,
+     "p2": 0.563122,
      "take2": false,
      "has_line": true
     },
     "5079542": {
      "name": "Luke Kromenhoek",
      "team": "USF",
-     "p1": 0.618386,
+     "p1": 0.609849,
      "take1": false,
-     "p2": 0.268047,
+     "p2": 0.261497,
      "take2": false,
      "has_line": true
     }
@@ -320,7 +320,7 @@
     "pick": "Lunch Winfield",
     "pick_id": "4871091",
     "team": "UL",
-    "p": 0.566482,
+    "p": 0.562044,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -338,18 +338,18 @@
     "5122054": {
      "name": "Aidan Armenta",
      "team": "ULM",
-     "p1": 0.642952,
+     "p1": 0.647076,
      "take1": false,
-     "p2": 0.292668,
+     "p2": 0.296163,
      "take2": false,
      "has_line": true
     },
     "4871091": {
      "name": "Lunch Winfield",
      "team": "UL",
-     "p1": 0.698887,
+     "p1": 0.695083,
      "take1": false,
-     "p2": 0.333281,
+     "p2": 0.329553,
      "take2": false,
      "has_line": true
     }
@@ -1173,7 +1173,7 @@
    "kick": "2026-11-14T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.696199,
+    "p": 0.708838,
     "call": null,
     "why": [
      "Margin rating: ECU -2.4, CLT -13.6",
@@ -1579,13 +1579,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.536673,
+    "p": 0.551676,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "Passing yards per game: MOST 222, NMSU 189"
+     "NMSU is starting a backup QB"
     ],
     "qbs": [
      "Trey Hedden",
@@ -3667,7 +3667,7 @@
    "kick": "2026-11-15T03:30Z",
    "ml": {
     "pick": "WSU",
-    "p": 0.73432,
+    "p": 0.722353,
     "call": null,
     "why": [
      "Points allowed per game: WSU 30.0, CSU 47.4",
