@@ -1074,7 +1074,7 @@
     }
 
     function sync() { btn.hidden = !onDay() || !sheet.hidden; }
-    btn.addEventListener("click", function () { sheet.hidden = false; document.documentElement.style.overflow = "hidden"; sync(); draw(); });
+    btn.addEventListener("click", function () { if (window._buildRest) try { window._buildRest(); } catch (e) {} sheet.hidden = false; document.documentElement.style.overflow = "hidden"; sync(); draw(); });
     sheet.addEventListener("click", function (e) {
       if (e.target.closest(".pb-x")) { sheet.hidden = true; document.documentElement.style.overflow = ""; sync(); return; }
       var x = e.target.closest("[data-x]");

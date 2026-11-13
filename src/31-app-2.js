@@ -1279,6 +1279,13 @@
       };
       idle(step);
     }());
+    /* the parlay builder needs every card of the day, not just the first ten
+       on screen: NDSU at 11 PM was never built until he scrolled to it
+       (Jose, Nov 12, 2026: "why isn't NDSU on there") */
+    window._buildRest = function () {
+      later.forEach(function (pair) { if (!pair[2] && pair[0] && pair[0].isConnected) { pair[2] = 1; pair[1](); } });
+      later = later.filter(function (pair) { return !pair[2]; });
+    };
     /* the results land a moment after the cards, so the first sink waits for
        them rather than running on a board that is still all unsettled */
     sinkDone(true);
