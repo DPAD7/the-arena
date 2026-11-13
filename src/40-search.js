@@ -1000,6 +1000,12 @@
     var sheet = document.createElement("div");
     sheet.id = "pbsheet"; sheet.hidden = true; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-label", "Parlays");
     document.body.appendChild(btn); document.body.appendChild(sheet);
+    /* the board swipes days and pulls down to search off touches on the whole
+       page; a finger in the builder is the builder's (Jose, Nov 12, 2026: "why
+       is it swiping") */
+    ["touchstart", "touchmove", "touchend"].forEach(function (k) {
+      sheet.addEventListener(k, function (e) { e.stopPropagation(); }, { passive: true });
+    });
 
     function onDay() {
       var t = document.querySelector("#sportbar .sptab[aria-selected='true']");
