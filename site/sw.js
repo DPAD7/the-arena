@@ -72,7 +72,9 @@ self.addEventListener("fetch", function (e) {
     }));
     return;
   }
-  if (/^\/(ico|font|logos|img|launch)\//.test(url.pathname) || /\/(icon-\d+|apple-touch-icon)\.png$/.test(url.pathname)) {
+  /* faces are kept too: on one bar of signal they came down half-drawn every
+     time the board opened (Jose, Nov 12, 2026: "what's going on with this") */
+  if (/^\/(ico|font|logos|img|launch|face|faces)\//.test(url.pathname) || /\/(icon-\d+|apple-touch-icon)\.png$/.test(url.pathname)) {
     e.respondWith(caches.open(STATIC).then(function (c) {
       return c.match(req).then(function (hit) {
         return hit || fetch(req).then(function (r) { if (r.ok) c.put(req, r.clone()); return r; });
