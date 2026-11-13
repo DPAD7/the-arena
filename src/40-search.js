@@ -939,3 +939,197 @@
 </script>
 
 <!-- a push from a phone lands on the board by itself (tested Sep 19, 2026) -->
+
+<!-- the parlay builder: the day's cards up top, two parlays below; double tap a
+     side, drag the game down, x sends it back (Jose, Nov 12, 2026, from his own
+     sketch). It reads the day page itself, so a hidden game leaves it the
+     moment it goes into the hidden box, and comes back when it comes out. -->
+<style id="pbcss">
+#pbbtn { position: absolute; z-index: 60; left: 50%; transform: translateX(-50%); top: calc(env(safe-area-inset-top) + 6px);
+  width: 46px; height: 40px; display: grid; place-items: center; background: #1c1c1e; border: 2px solid #e3b341; border-radius: 12px; padding: 0; cursor: pointer; }
+#pbbtn[hidden] { display: none; }
+#pbsheet { position: fixed; inset: 0; z-index: 9000; background: #000; color: #fff; overflow-y: auto; -webkit-overflow-scrolling: touch;
+  padding: calc(env(safe-area-inset-top) + 10px) 12px calc(env(safe-area-inset-bottom) + 24px); font: 600 13px Barlow, "Helvetica Neue", Arial, sans-serif; }
+#pbsheet[hidden] { display: none; }
+.pb-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.pb-top b { font: 800 19px Barlow, sans-serif; letter-spacing: .02em; }
+.pb-x { width: 36px; height: 36px; border-radius: 10px; background: #1c1c1e; border: 1px solid #2c2c2e; display: grid; place-items: center; padding: 0; cursor: pointer; }
+.pb-games { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 5px; }
+.pb-g { background: #141416; border: 1px solid #2c2c2e; border-radius: 8px; display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
+.pb-sd { padding: 5px 2px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; border: 2px solid transparent; border-radius: 7px; }
+.pb-sd + .pb-sd { border-left: 1px solid #2c2c2e; }
+.pb-sd img { width: 28px; height: 28px; object-fit: contain; pointer-events: none; }
+.pb-sd img.pb-fc { width: 32px; height: 32px; border-radius: 6px; background: #2c2c2e; }
+.pb-sd em { font: 800 13px "Barlow Condensed", sans-serif; font-style: normal; }
+.pb-sd.on { border-color: #e3b341; background: #211d12; }
+.pb-g.drag { opacity: .3; }
+.pb-ghost { position: fixed; z-index: 9100; pointer-events: none; transform: rotate(-4deg); box-shadow: 0 12px 26px rgba(0,0,0,.85); border: 2px solid #e3b341; }
+.pb-hr { border: 0; border-top: 1px solid #2c2c2e; margin: 12px 0; }
+.pb-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: start; }
+.pb-col { border-radius: 12px; padding: 8px; background: #141416; border: 1.5px solid #2c2c2e; min-height: 110px; }
+.pb-col.over { border-color: #e3b341; }
+.pb-ch { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; }
+.pb-ch b { font: 800 13px Barlow, sans-serif; }
+.pb-amt { width: 58px; font: 800 14px "Barlow Condensed", sans-serif; color: #fff; background: #1c1c1e; border: 1px solid #3a3a3f; border-radius: 6px; padding: 2px 6px; text-align: center; }
+.pb-pks { display: grid; grid-template-columns: 1fr 1fr; gap: 5px; }
+.pb-pk { position: relative; background: #211d12; border: 2px solid #e3b341; border-radius: 7px; padding: 5px 2px 4px; display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.pb-pk img { width: 28px; height: 28px; object-fit: contain; }
+.pb-pk img.pb-fc { width: 32px; height: 32px; border-radius: 6px; background: #2c2c2e; }
+.pb-pk em { font: 800 13px "Barlow Condensed", sans-serif; font-style: normal; }
+.pb-pk button { position: absolute; top: 0; right: 0; width: 22px; height: 22px; background: none; border: 0; padding: 0; display: grid; place-items: center; cursor: pointer; }
+.pb-bot { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; border-top: 1px solid #2c2c2e; padding-top: 10px; }
+.pb-bot div { background: #141416; border-radius: 10px; padding: 8px; text-align: center; }
+.pb-bot b { display: block; font: 800 22px "Barlow Condensed", sans-serif; }
+.pb-bot small { display: block; font: 700 10px Barlow, sans-serif; color: #8e8e93; letter-spacing: .06em; text-transform: uppercase; }
+.pb-bot i { display: block; font: 800 16px "Barlow Condensed", sans-serif; font-style: normal; color: #17c257; }
+</style><!-- pb -->
+<script id="pbjs">
+  (function () {
+    var ICON = '<svg width="22" height="22" viewBox="0 0 22 22" aria-hidden="true"><rect x="1.5" y="1.5" width="8" height="19" rx="2.5" fill="none" stroke="#e3b341" stroke-width="2"/><rect x="12.5" y="1.5" width="8" height="19" rx="2.5" fill="none" stroke="#e3b341" stroke-width="2"/><rect x="3.5" y="4" width="4" height="4" rx="1" fill="#e3b341"/><rect x="3.5" y="10" width="4" height="4" rx="1" fill="#e3b341"/><rect x="14.5" y="4" width="4" height="4" rx="1" fill="#e3b341"/></svg>';
+    var XS = '<svg width="10" height="10" viewBox="0 0 10 10" aria-hidden="true"><path d="M1.5 1.5l7 7M8.5 1.5l-7 7" stroke="#8e8e93" stroke-width="1.8" stroke-linecap="round"/></svg>';
+    var XB = '<svg width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2 2l10 10M12 2L2 12" stroke="#fff" stroke-width="2" stroke-linecap="round"/></svg>';
+    var KEY = "arena.parlays";
+    /* picks: id -> {p: 1|2, s: "l"|"r"}; stakes per parlay */
+    var S = { picks: {}, amt: [50, 50] };
+    try { var got = JSON.parse(localStorage.getItem(KEY) || "null"); if (got && got.picks) S = got; } catch (e) {}
+    function save() { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} }
+    var chosen = {};          /* id -> "l"|"r", the double-tapped side not yet dropped */
+
+    var btn = document.createElement("button");
+    btn.id = "pbbtn"; btn.type = "button"; btn.setAttribute("aria-label", "Parlays"); btn.innerHTML = ICON; btn.hidden = true;
+    var sheet = document.createElement("div");
+    sheet.id = "pbsheet"; sheet.hidden = true; sheet.setAttribute("role", "dialog"); sheet.setAttribute("aria-label", "Parlays");
+    document.body.appendChild(btn); document.body.appendChild(sheet);
+
+    function onDay() {
+      var t = document.querySelector("#sportbar .sptab[aria-selected='true']");
+      return !!t && t.dataset.sp === "all";
+    }
+    function dayName() {
+      var t = document.querySelector("#daybar .dtab[aria-selected='true']");
+      return t ? (t.dataset.day || t.textContent).toUpperCase() : "";
+    }
+    function idOf(c) { return c.dataset.espn || c.dataset.bout || c.dataset.fight || ""; }
+    /* the day's cards as the day page shows them: not in the hidden box, not
+       started, not over, and with a moneyline on both sides */
+    function cards() {
+      var out = [], seen = {};
+      document.querySelectorAll("#board .gcard").forEach(function (c) {
+        var id = idOf(c);
+        if (!id || seen[id] || c.closest(".hidebox")) return;
+        if (c.classList.contains("gdone") || c.classList.contains("done") || c.classList.contains("locked")) return;
+        var ml = c.querySelectorAll(".gstack .gline:first-child .gml button.price");
+        if (ml.length < 2) return;
+        var bout = c.classList.contains("gcard--bout");
+        var li = c.querySelector(".gside--l " + (bout ? "img.ffab" : "img.glogo")), ri = c.querySelector(".gside--r " + (bout ? "img.ffab" : "img.glogo"));
+        if (!li || !ri) return;
+        seen[id] = 1;
+        out.push({ id: id, bout: bout, l: { img: li.getAttribute("src"), o: ml[0].dataset.odds || ml[0].textContent.trim() },
+                   r: { img: ri.getAttribute("src"), o: ml[1].dataset.odds || ml[1].textContent.trim() } });
+      });
+      return out;
+    }
+    function dec(o) { var n = parseInt(String(o).replace("−", "-").replace("+", ""), 10); if (!n) return 1; return n > 0 ? 1 + n / 100 : 1 + 100 / -n; }
+    function amer(d) { if (d <= 1) return "—"; return d >= 2 ? "+" + Math.round((d - 1) * 100) : "−" + Math.round(100 / (d - 1)); }
+    function money(n) { return "$" + n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+    function img(x, bout) { return '<img' + (bout ? ' class="pb-fc"' : '') + ' alt="" src="' + x + '">'; }
+
+    var CUR = [], LASTH = "";
+    function draw() {
+      if (sheet.hidden) { LASTH = ""; return; }
+      CUR = cards();
+      var by = {}; CUR.forEach(function (g) { by[g.id] = g; });
+      var top = CUR.filter(function (g) { return !S.picks[g.id]; });
+      var h = '<div class="pb-top"><b>' + dayName() + '</b><button class="pb-x" type="button" aria-label="Close">' + XB + '</button></div>';
+      if (top.length) h += '<div class="pb-games">' + top.map(function (g) {
+        return '<div class="pb-g" data-id="' + g.id + '">' + ["l", "r"].map(function (s) {
+          return '<div class="pb-sd' + (chosen[g.id] === s ? " on" : "") + '" data-s="' + s + '">' + img(g[s].img, g.bout) + '<em>' + g[s].o + '</em></div>';
+        }).join("") + '</div>';
+      }).join("") + '</div><hr class="pb-hr">';
+      var tot = [];
+      h += '<div class="pb-cols">' + [1, 2].map(function (p) {
+        var d = 1, n = 0, pks = "";
+        Object.keys(S.picks).forEach(function (id) {
+          var k = S.picks[id], g = by[id];
+          if (k.p !== p || !g) return;
+          var side = g[k.s]; d *= dec(side.o); n++;
+          pks += '<div class="pb-pk">' + img(side.img, g.bout) + '<em>' + side.o + '</em><button type="button" data-x="' + id + '" aria-label="Remove">' + XS + '</button></div>';
+        });
+        tot.push(n ? { o: amer(d), pay: (S.amt[p - 1] || 0) * d } : null);
+        return '<div class="pb-col" data-p="' + p + '"><div class="pb-ch"><b>Parlay ' + p + '</b><input class="pb-amt" data-p="' + p + '" inputmode="decimal" value="$' + (S.amt[p - 1] || 0) + '"></div><div class="pb-pks">' + pks + '</div></div>';
+      }).join("") + '</div>';
+      h += '<div class="pb-bot">' + tot.map(function (t) {
+        return '<div><b>' + (t ? t.o : "—") + '</b>' + (t ? '<i>' + money(t.pay) + '</i>' : '') + '</div>';
+      }).join("") + '</div>';
+      /* the board ticks all day; the pictures are only drawn again when
+         something on this sheet actually changed, or they come down half-drawn */
+      if (h === LASTH) return;
+      LASTH = h; sheet.innerHTML = h;
+    }
+
+    function sync() { btn.hidden = !onDay() || !sheet.hidden; }
+    btn.addEventListener("click", function () { sheet.hidden = false; document.documentElement.style.overflow = "hidden"; sync(); draw(); });
+    sheet.addEventListener("click", function (e) {
+      if (e.target.closest(".pb-x")) { sheet.hidden = true; document.documentElement.style.overflow = ""; sync(); return; }
+      var x = e.target.closest("[data-x]");
+      if (x) { delete S.picks[x.dataset.x]; save(); draw(); }
+    });
+    sheet.addEventListener("change", function (e) {
+      var a = e.target.closest(".pb-amt"); if (!a) return;
+      var v = parseFloat(a.value.replace(/[^0-9.]/g, "")); S.amt[+a.dataset.p - 1] = isFinite(v) ? v : 0; save(); draw();
+    });
+
+    /* double tap a side: it goes gold. Then drag the whole game into a parlay. */
+    var lastTap = { id: "", s: "", t: 0 }, drag = null;
+    sheet.addEventListener("pointerdown", function (e) {
+      var g = e.target.closest(".pb-g"); if (!g) return;
+      var sd = e.target.closest(".pb-sd"), id = g.dataset.id, s = sd ? sd.dataset.s : "";
+      var now = Date.now();
+      if (s && lastTap.id === id && lastTap.s === s && now - lastTap.t < 350) { chosen[id] = s; lastTap.t = 0; draw(); return; }
+      lastTap = { id: id, s: s, t: now };
+      drag = { id: id, s: s, x: e.clientX, y: e.clientY, el: g, ghost: null };
+    });
+    window.addEventListener("pointermove", function (e) {
+      if (!drag) return;
+      if (!drag.ghost) {
+        if (Math.abs(e.clientX - drag.x) + Math.abs(e.clientY - drag.y) < 10) return;
+        var r = drag.el.getBoundingClientRect();
+        drag.ghost = drag.el.cloneNode(true); drag.ghost.classList.add("pb-ghost");
+        drag.ghost.style.width = r.width + "px"; drag.dx = drag.x - r.left; drag.dy = drag.y - r.top;
+        document.body.appendChild(drag.ghost); drag.el.classList.add("drag");
+      }
+      drag.ghost.style.left = (e.clientX - drag.dx) + "px"; drag.ghost.style.top = (e.clientY - drag.dy) + "px";
+      sheet.querySelectorAll(".pb-col").forEach(function (c) {
+        var r = c.getBoundingClientRect();
+        c.classList.toggle("over", e.clientX >= r.left && e.clientX <= r.right && e.clientY >= r.top && e.clientY <= r.bottom);
+      });
+      e.preventDefault();
+    }, { passive: false });
+    function endDrag() {
+      if (!drag) return;
+      var d = drag; drag = null;
+      if (!d.ghost) return;
+      var col = sheet.querySelector(".pb-col.over");
+      d.ghost.remove(); d.el.classList.remove("drag");
+      sheet.querySelectorAll(".pb-col.over").forEach(function (c) { c.classList.remove("over"); });
+      if (!col) return;
+      /* the side he double tapped; if he didn't, the side he picked it up by */
+      var s = chosen[d.id] || d.s || "l";
+      S.picks[d.id] = { p: +col.dataset.p, s: s }; delete chosen[d.id]; save(); draw();
+    }
+    window.addEventListener("pointerup", endDrag);
+    window.addEventListener("pointercancel", endDrag);
+
+    /* the tab and the hidden box: the board redraws #board when either moves,
+       so the builder follows it at once */
+    var mt = null;
+    new MutationObserver(function (recs) {
+      /* its own redraws are not news */
+      if (recs.every(function (r) { return sheet.contains(r.target) || r.target === btn || (r.target.classList && r.target.classList.contains("pb-ghost")) || r.target === document.body && [].every.call(r.addedNodes, function (n) { return n.classList && n.classList.contains("pb-ghost"); }) && [].every.call(r.removedNodes, function (n) { return n.classList && n.classList.contains("pb-ghost"); }); })) return;
+      clearTimeout(mt); mt = setTimeout(function () { sync(); if (!drag) draw(); }, 120);
+    })
+      .observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ["aria-selected", "class"] });
+    document.addEventListener("click", function () { setTimeout(sync, 0); }, true);
+    setTimeout(sync, 800);
+  })();
+</script>
