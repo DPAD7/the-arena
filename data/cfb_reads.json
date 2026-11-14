@@ -1,5 +1,5 @@
 {
- "at": "2026-11-14T01:08:32Z",
+ "at": "2026-11-14T01:18:52Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -941,7 +941,7 @@
    "kick": "2026-11-14T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.691987,
+    "p": 0.704727,
     "call": null,
     "why": [
      "Margin rating: ECU -2.4, CLT -13.5",
@@ -1347,13 +1347,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.551622,
+    "p": 0.53662,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "NMSU is starting a backup QB"
+     "Passing yards per game: MOST 222, NMSU 189"
     ],
     "qbs": [
      "Trey Hedden",
@@ -2507,7 +2507,7 @@
    "kick": "2026-11-14T23:00Z",
    "ml": {
     "pick": "MRSH",
-    "p": 0.578574,
+    "p": 0.56376,
     "call": null,
     "why": [
      "Average margin: MRSH -7.8, APP -4.4",
@@ -5581,7 +5581,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "TLSA",
-    "p": 0.883813,
+    "p": 0.889881,
     "call": "take",
     "why": [
      "Margin rating: TLSA +0.4, CLT -13.5",
@@ -5639,7 +5639,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "JVST",
-    "p": 0.856256,
+    "p": 0.863542,
     "call": "take",
     "why": [
      "Margin rating: JVST -0.0, MOST -9.0",
@@ -6509,7 +6509,7 @@
    "kick": "2026-11-21T21:00Z",
    "ml": {
     "pick": "GAST",
-    "p": 0.549967,
+    "p": 0.564888,
     "call": null,
     "why": [
      "Margin rating: GAST -2.8, MRSH -7.1",
