@@ -1591,6 +1591,9 @@
     var day = kick.toLocaleDateString("en-US", { weekday: "short", month: "numeric", day: "numeric", timeZone: "America/New_York" }).replace(",", "");
     var tm = kick.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit", timeZone: "America/New_York" });
     var chip = !r || r.state === "pre" ? '<span class="trkst trkst--pre">PRE</span>' : r.state === "post" ? '<span class="trkst trkst--fin">FINAL</span>'
+      /* ESPN puts the next bout "in" at period 0 while the fighters walk
+         out ("Pre-fight"): it read LIVE R0 - (Jose, Nov 14, 2026) */
+      : !r.period ? '<span class="trkst">UP NEXT</span>'
       : '<span class="trkst">LIVE R' + r.period + " " + esc(r.clock || "") + "</span>";
     var out = '<div class="trkg"><div class="trkh">' + esc(day) + " · " + esc(tm) + " · " + esc(f[7] || "") + " " + chip + "</div>";
     /* a boxer the board has no card for: his picture off BoxRec, kept in
