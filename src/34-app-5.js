@@ -327,9 +327,14 @@
        and was never seated again (Jose, Oct 17, 2026: Utah-Colorado and
        Wake-Cal "missing odds when we already had them") */
     if (!id) return;
-    if (CARDDONE[id] && [].some.call(card.querySelectorAll("button.price"), function (b) { return /\d/.test(b.textContent); })) return;
     var bout = !!card.dataset.bout;
     var ml = (PRICEJ[bout ? "FIGHTS" : card.dataset.lg === "college-football" ? "CFB" : "SCHED"] || {})[id];
+    /* "already seated" means the moneyline too: a bout redrawn mid-session
+       kept its prop prices and the digit test passed on KO +450 alone, so
+       the two ML slots sat on dashes for good (Jose, Nov 14, 2026: "why is
+       Hokit gone?" -- Hokit +190 / Gane -230 in the file, dashes on the card) */
+    var mlSeated = !ml || card.querySelectorAll(".gml button.price").length === 2;
+    if (CARDDONE[id] && mlSeated && [].some.call(card.querySelectorAll("button.price"), function (b) { return /\d/.test(b.textContent); })) return;
     var props = (PRICEJ[bout ? "FPROPS" : "PROPS"] || {})[id];
     if (!ml && !props) return;
     var j = {};

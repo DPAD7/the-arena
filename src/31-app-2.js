@@ -1069,7 +1069,13 @@
       /* a college game that is over stays where it is: the star decides
          what is to come, not what has been played (Jose, Oct 3, 2026: Notre
          Dame "jumps above the Thursday and Friday games") */
-      var put = (hid[it[1]] || (cfbOff(it) && !finished(it))) && !OVER[String(it[1])] && !dayOver;
+      /* Hidden stays hidden through the final too. A hidden card that
+         finished came back out and its mark was deleted, so Alabama (never
+         starred) and a boxing bill he had put away landed back on the board
+         with FINAL on them (Jose, Nov 14, 2026: "I didn't have Alabama up
+         there nor did I have any boxing"). The marks all clear together once
+         the whole day is over -- dayOver -- and not one by one. */
+      var put = (hid[it[1]] || cfbOff(it)) && !dayOver;
       if (hid[it[1]] && !put) { delete hid[it[1]]; saveHidden(); }
       (put ? away : items).push(it);
     });
