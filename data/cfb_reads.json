@@ -1,5 +1,5 @@
 {
- "at": "2026-11-14T19:30:19Z",
+ "at": "2026-11-14T19:34:38Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -1231,13 +1231,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.53662,
+    "p": 0.551622,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "Passing yards per game: MOST 222, NMSU 189"
+     "NMSU is starting a backup QB"
     ],
     "qbs": [
      "Trey Hedden",
@@ -2814,7 +2814,7 @@
     "pick": "Sam Leavitt",
     "pick_id": "5078810",
     "team": "LSU",
-    "p": 0.623279,
+    "p": 0.614766,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2832,18 +2832,18 @@
     "4870906": {
      "name": "Arch Manning",
      "team": "TEX",
-     "p1": 0.730561,
+     "p1": 0.737593,
      "take1": false,
-     "p2": 0.381231,
+     "p2": 0.3892,
      "take2": false,
      "has_line": true
     },
     "5078810": {
      "name": "Sam Leavitt",
      "team": "LSU",
-     "p1": 0.817129,
+     "p1": 0.811684,
      "take1": false,
-     "p2": 0.485494,
+     "p2": 0.477095,
      "take2": false,
      "has_line": true
     }
@@ -5581,7 +5581,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "TLSA",
-    "p": 0.883761,
+    "p": 0.889832,
     "call": "take",
     "why": [
      "Margin rating: TLSA +0.4, CLT -13.5",
@@ -5639,7 +5639,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "JVST",
-    "p": 0.863142,
+    "p": 0.855839,
     "call": "take",
     "why": [
      "Margin rating: JVST -0.0, MOST -9.0",
