@@ -1,5 +1,5 @@
 {
- "at": "2026-11-14T02:06:49Z",
+ "at": "2026-11-14T02:18:00Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -280,18 +280,18 @@
     "4685574": {
      "name": "Conner Weigman",
      "team": "HOU",
-     "p1": 0.862297,
+     "p1": 0.866236,
      "take1": false,
-     "p2": 0.606189,
+     "p2": 0.614492,
      "take2": false,
      "has_line": true
     },
     "5079771": {
      "name": "Isaac Wilson",
      "team": "COLO",
-     "p1": 0.771402,
+     "p1": 0.77727,
      "take1": false,
-     "p2": 0.450178,
+     "p2": 0.458834,
      "take2": false,
      "has_line": true
     }
@@ -1347,13 +1347,13 @@
    "kick": "2026-11-14T20:00Z",
    "ml": {
     "pick": "MOST",
-    "p": 0.551622,
+    "p": 0.53662,
     "call": null,
     "why": [
      "Points per game: MOST 20.9, NMSU 16.9",
      "Last 3 games, average margin: MOST -1.7, NMSU -11.3",
      "QB INT rate: MOST 3.1%, NMSU 3.9%",
-     "NMSU is starting a backup QB"
+     "Passing yards per game: MOST 222, NMSU 189"
     ],
     "qbs": [
      "Trey Hedden",
@@ -1712,7 +1712,7 @@
     "pick": "Jaron-Keawe Sagapolutele",
     "pick_id": "5164313",
     "team": "CAL",
-    "p": 0.550158,
+    "p": 0.541209,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1730,18 +1730,18 @@
     "5164313": {
      "name": "Jaron-Keawe Sagapolutele",
      "team": "CAL",
-     "p1": 0.728144,
+     "p1": 0.720955,
      "take1": false,
-     "p2": 0.36512,
+     "p2": 0.357356,
      "take2": false,
      "has_line": true
     },
     "4685696": {
      "name": "Beau Pribula",
      "team": "UVA",
-     "p1": 0.769576,
+     "p1": 0.775903,
      "take1": false,
-     "p2": 0.432239,
+     "p2": 0.440514,
      "take2": false,
      "has_line": true
     }
@@ -5639,7 +5639,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "JVST",
-    "p": 0.856256,
+    "p": 0.863542,
     "call": "take",
     "why": [
      "Margin rating: JVST -0.0, MOST -9.0",
