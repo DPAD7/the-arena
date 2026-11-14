@@ -1323,6 +1323,10 @@
       /* a leg with no card of its own reads as the book wrote it, whole:
          "Waddle + Adams 40+ Rec", not its first word */
       var who = b.fw ? b.fw.split(" vs ").map(function (x) { return lastName(x) || x; }).join(" vs ") : m ? m[1] : shortLeg(b.l);
+      /* a fighter is written in capitals on the bout card; the slip's line of
+         names reads him like the schools beside him, "Nunes" (Jose, Nov 14, 2026) */
+      var gp0 = /^[A-Z][A-Z'\- ]{2,}$/.test(who) ? gamePic(b.g, who) : null;
+      if (gp0 && gp0.round) who = who.toLowerCase().replace(/(^|[\s'\-])([a-z])/g, function (_, p, c) { return p + c.toUpperCase(); });
       if (!seen[who]) { seen[who] = 1; names.push(who); }
     });
     return names.join(", ");
@@ -1686,8 +1690,18 @@
      ids, and that is what a picture is looked up by (Jose, Sep 19, 2026:
      "on the backend it should say who is the quarterback") */
   var GAMEPIC = null;
+  var GAMEPICN = -1;
   function gamePics() {
-    if (GAMEPIC) return GAMEPIC;
+    /* rebuilt whenever a board grows, as slipPics is: the college names come
+       over the wire after the first build, and a cache made before them only
+       knew "TENN", so Tennessee, Indiana and South Carolina read "Ten", "Ind",
+       "Sou" while BYU, whose name is its letters, wore its logo (Jose, Nov 14, 2026) */
+    var gpn = (typeof SCHED !== "undefined" && SCHED ? SCHED.length : 0) +
+              (typeof CFB !== "undefined" && CFB ? CFB.length : 0) +
+              (typeof FIGHTS !== "undefined" && FIGHTS ? FIGHTS.length : 0) +
+              Object.keys(typeof CFBNAME !== "undefined" && CFBNAME ? CFBNAME : {}).length;
+    if (GAMEPIC && GAMEPICN === gpn) return GAMEPIC;
+    GAMEPICN = gpn;
     var byGame = {};
     var K = function (x) { return String(x || "").toUpperCase(); };
     var add = function (gid, keys, src, round, alt) {
