@@ -358,9 +358,13 @@ def sheet_from(mu, flip):
             if m: put("kord" + m.group(1), i, slot); continue
             m = re.match(r"^wins by submission in round (\d)$", rest)
             if m: put("subrd" + m.group(1), i, slot); continue
-            m = re.match(r"^wins in round (\d)$", rest)
+            m = re.match(r"^wins in round (\d+)$", rest)
             if m: put("rd" + m.group(1), i, slot); continue
-            if rest == "wins by tko ko": put("ko", i, slot); continue
+            # boxing sells rounds in runs, "wins in round 1-3": the sheet's
+            # rgN-M rows (Jose, Nov 15, 2026: DraftKings first, the archive after)
+            m = re.match(r"^wins in round (\d+) (\d+)$", rest)
+            if m and int(m.group(2)) > int(m.group(1)): put("rg%s-%s" % (m.group(1), m.group(2)), i, slot); continue
+            if rest == "wins by tko ko" or rest == "wins by tko ko or dq": put("ko", i, slot); continue
             if rest == "wins by submission": put("sub", i, slot); continue
             if rest == "wins by decision": put("dec", i, slot); continue
             if rest == "wins by unanimous decision": put("ud", i, slot); continue
@@ -564,7 +568,7 @@ def main():
         if not box:
             fp.setdefault("rounds", e["rounds"])     # a boxing bout's rounds are its own, not 3 or 5
         for key, slots in e.items():
-            if key == "rounds" or (box and re.match(r"^(any)?(ko|sub)?rd|^sub|^anysub|^kosub|^subdec|^first60", key)):
+            if key == "rounds" or (box and re.match(r"^(any)?(ko|sub)rd|^sub|^anysub|^kosub|^subdec|^first60", key)):
                 continue
             cur = fp.get(key) or [None] * len(slots)
             cur = list(cur) + [None] * (len(slots) - len(cur))
