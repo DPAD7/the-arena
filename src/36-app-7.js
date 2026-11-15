@@ -1026,6 +1026,9 @@
     });
     var wp = d.winprobability || [];
     if (wp.length) out.wp = wp[wp.length - 1].homeWinPercentage;
+    /* before kickoff there is no curve, only ESPN's projection: the slip's
+       football legs show it till the first snap (Jose, Nov 14, 2026) */
+    else { var hp0 = parseFloat((((d.predictor || {}).homeTeam) || {}).gameProjection); if (!isNaN(hp0)) out.wp = hp0 / 100; }
     out.men = {};
     ((d.boxscore || {}).players || []).forEach(function (t) {
       (t.statistics || []).forEach(function (grp) {
@@ -1374,7 +1377,7 @@
     var map = legMap(), want = {};
     /* every slip on the wallet, open or not: a slip settles in the
        background, not only once its legs are looked at (Oct 3, 2026) */
-    document.querySelectorAll("#cashlegs .slipcard[data-bet]").forEach(function (c) {
+    document.querySelectorAll("#cashlegs .slipcard[data-bet], #cashlegs .sl2col[data-bet]").forEach(function (c) {
       var bet = (DKB && DKB.bets || []).filter(function (b) { return String(b.id) === c.dataset.bet; })[0];
       (bet && bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; var g0 = v ? v.g : trkGameOf(lg); if (g0) want[g0] = 1; });
     });
@@ -1382,7 +1385,9 @@
       var fr = trkFightRow(gid);
       if (fr) { if (Date.parse(fr.g[2]) <= Date.now() + 20 * 60000) fightPull(fr.g); return; }
       var row = trkRow(gid);
-      if (!row || Date.parse(row.g[2]) > Date.now() + 20 * 60000) return;
+      /* a game not yet near kickoff is read once, for ESPN's pregame
+         projection, and again at twenty minutes out */
+      if (!row || (Date.parse(row.g[2]) > Date.now() + 20 * 60000 && TRKD[gid])) return;
       gameFeed(gid, row.lg).then(function (d) {
         /* DraftKings' live score over ESPN's copy, as the cards do: while its
            reader is on a game ESPN is not asked again, and the slip sat on the
@@ -1896,7 +1901,8 @@
         '<div class="sl2pic">' + p.h + '</div>' +
         '<b class="sl2o">' + esc(b.o || "") + '</b>' +
         (b.s2 === "live" ? '<i class="sl2dot"></i>' : '<span class="sl2t">' + (b.s2 === "won" ? "WON" : b.s2 === "lost" ? "LOST" : esc(tm(b.k))) + '</span>') +
-        '<div class="sl2txt"><b>' + esc(nm) + '</b>' + (b.opp ? '<span>' + esc(b.opp) + '</span>' : "") + '</div></div>';
+        '<div class="sl2txt"><b>' + esc(nm) + '</b>' + (b.opp ? '<span>' + esc(b.opp) + '</span>' : "") + '</div>' +
+        (b.wp != null && b.s2 !== "won" && b.s2 !== "lost" ? '<span class="sl2wp">' + Math.round(b.wp * 100) + '%</span>' : "") + '</div>';
     };
     var arrow = '<button type="button" class="slview" aria-label="Show picks" onclick="slipOpen(this)">' +
       '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
@@ -2151,9 +2157,12 @@
           if (!(k2 < 9e15)) { var rw2 = br0 ? br0.g : fr0 ? fr0.g : (trkRow(gid) || trkFightRow(gid) || {}).g; if (rw2 && Date.parse(rw2[2])) k2 = Date.parse(rw2[2]); }
           /* a bout keeps its own walkout time: DraftKings stamps every bout
              with the card's start, so Hokit read 9:00 PM (Jose, Nov 14, 2026) */
+          /* the side's chance to win, live from ESPN or its pregame
+             projection, on every football moneyline leg (Nov 14, 2026) */
+          var wd2 = br0 && bv.k === "ml" && TRKD[gid], wp2 = wd2 && wd2.wp != null ? (bv.s === 0 ? 1 - wd2.wp : wd2.wp) : null;
           var fk2 = fr0 ? fr0.g : (trkFightRow(gid) || {}).g;
           if (fk2 && Date.parse(fk2[2])) k2 = Date.parse(fk2[2]);
-          return { id: lg.sel, nm: nm2, opp: opp2, k: k2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
+          return { id: lg.sel, nm: nm2, opp: opp2, k: k2, wp: wp2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
                       say (Oct 3, 2026: all six won and the card sat open) */
