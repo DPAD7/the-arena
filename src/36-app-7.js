@@ -2159,7 +2159,8 @@
       /* the day's totals stand still under the slips, which scroll between
          the balance and them (Jose, Sep 26, 2026) */
       var dayEl = document.getElementById("cashday");
-      if (dayEl) putHTML(dayEl, (open.length > 1 ? '<div class="slipcard slday"><div class="slgrid">' +
+      /* the day's totals under the slips are gone (Jose, Nov 14, 2026: "I don't need this") */
+      if (dayEl) putHTML(dayEl, (false ? '<div class="slipcard slday"><div class="slgrid">' +
         '<b>' + open.length + '</b>' +
         '<b>' + cm(open.reduce(function (t, b0) { return t + (b0.wager || 0); }, 0)) + '</b>' +
         '<b class="cashpay">' + cm(open.reduce(function (t, b0) { return t + (b0.topay || 0); }, 0)) + '</b>' +
