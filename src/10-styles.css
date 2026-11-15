@@ -4609,7 +4609,9 @@
 
 /* the slip in columns (Jose, Nov 14, 2026; the old card is tagged
    betslip-backup-2026-11-14) */
-.cashsheet:has(.sl2) { width: min(560px, calc(100vw - 16px)); padding-left: 10px; padding-right: 10px; }
+/* the wallet opens at its full size every time, slips or none, open or
+   shut (Jose, Nov 14, 2026: "it needs to be the large on load regardless") */
+.cashsheet:not([hidden]) { width: min(560px, calc(100vw - 16px)); height: min(78vh, 760px); padding-left: 10px; padding-right: 10px; }
 .sl2 { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; align-items: start; text-align: center; }
 .cashsheet #cashlegs .sl2 .slipcard + .slipcard { margin-top: 0; }
 .sl2 .sl2col { padding: 0 !important; margin: 0 !important; overflow: visible !important; background: #141414; border: 1px solid #2a2a2a;
