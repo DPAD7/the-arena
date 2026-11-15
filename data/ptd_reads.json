@@ -2,14 +2,6 @@
  "at": "2026-11-15",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4431452": {
-   "p": 0.832,
-   "name": "Drake Maye"
-  },
-  "3046779": {
-   "p": 0.869,
-   "name": "Jared Goff"
-  },
   "3139477": {
    "p": 0.804,
    "name": "Patrick Mahomes"
@@ -122,6 +114,10 @@
    "p": 0.743,
    "name": "Baker Mayfield"
   },
+  "3046779": {
+   "p": 0.859,
+   "name": "Jared Goff"
+  },
   "4360698": {
    "p": 0.55,
    "name": "Joe Milton"
@@ -133,6 +129,10 @@
   "4426338": {
    "p": 0.759,
    "name": "Bo Nix"
+  },
+  "4431452": {
+   "p": 0.832,
+   "name": "Drake Maye"
   }
  },
  "by_game": {
