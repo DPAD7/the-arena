@@ -893,7 +893,8 @@
   (function () {
     var CLUBS = { FLA: "Florida", DAL: "Cowboys", VT: "Virginia Tech", PSU: "Penn State", MICH: "Michigan", NO: "Saints", LAC: "Chargers",
                   CLEM: "Clemson", "TA&M": "Texas A&M", SMU: "SMU", FSU: "Florida State", GB: "Packers",
-                  KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers" };
+                  KSU: "Kansas State", TLSA: "Tulsa", PHI: "Eagles", PIT: "Steelers",
+                  SC: "South Carolina" };   /* Nov 14, 2026: Woods started for Sellers at -310 */
     /* passers, by ESPN id: his touchdown rungs and head to heads, not his
        club's moneyline (Jose, Oct 18, 2026: "Winston is on the black list") */
     var QBS = { "2969939": "Jameis Winston" };
