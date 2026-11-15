@@ -1,5 +1,5 @@
 {
- "at": "2026-11-15T04:06:28Z",
+ "at": "2026-11-15T07:48:24Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -3394,7 +3394,7 @@
     "pick": "Trinidad Chambliss",
     "pick_id": "4911529",
     "team": "MISS",
-    "p": 0.543379,
+    "p": 0.543403,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3412,18 +3412,18 @@
     "4911529": {
      "name": "Trinidad Chambliss",
      "team": "MISS",
-     "p1": 0.772758,
+     "p1": 0.772718,
      "take1": false,
-     "p2": 0.419288,
+     "p2": 0.419244,
      "take2": false,
      "has_line": true
     },
     "4915980": {
      "name": "John Mateer",
      "team": "OU",
-     "p1": 0.822766,
+     "p1": 0.822733,
      "take1": false,
-     "p2": 0.521044,
+     "p2": 0.520998,
      "take2": false,
      "has_line": true
     }
@@ -3435,10 +3435,10 @@
    "kick": "2026-11-17T23:00Z",
    "ml": {
     "pick": "WMU",
-    "p": 0.902753,
+    "p": 0.902366,
     "call": "take",
     "why": [
-     "Margin rating: WMU +2.0, EMU -11.1",
+     "Margin rating: WMU +1.9, EMU -11.1",
      "Last 3 games, average margin: WMU +11.3, EMU -17.3",
      "Points allowed per game: WMU 19.2, EMU 29.2",
      "Points per game: WMU 25.4, EMU 18.9"
@@ -3452,9 +3452,9 @@
     "pick": "Brogan McCaughey",
     "pick_id": "5094040",
     "team": "EMU",
-    "p": 0.633416,
+    "p": 0.505912,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5094040",
@@ -3470,20 +3470,20 @@
     "5094040": {
      "name": "Brogan McCaughey",
      "team": "EMU",
-     "p1": 0.639394,
+     "p1": 0.568521,
      "take1": false,
-     "p2": 0.277278,
+     "p2": 0.22945,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5074245": {
      "name": "Broc Lowry",
      "team": "WMU",
-     "p1": 0.666904,
+     "p1": 0.732997,
      "take1": false,
-     "p2": 0.309227,
+     "p2": 0.370359,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3493,7 +3493,7 @@
    "kick": "2026-11-18T00:00Z",
    "ml": {
     "pick": "OHIO",
-    "p": 0.808477,
+    "p": 0.808158,
     "call": "take",
     "why": [
      "Margin rating: OHIO -3.3, BALL -12.1",
@@ -3507,12 +3507,12 @@
     ]
    },
    "h2h": {
-    "pick": "Keldric Luster",
-    "pick_id": "5075392",
-    "team": "BALL",
-    "p": 0.522688,
+    "pick": "Nick Poulos",
+    "pick_id": "5228762",
+    "team": "OHIO",
+    "p": 0.562664,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5075392",
@@ -3528,20 +3528,20 @@
     "5228762": {
      "name": "Nick Poulos",
      "team": "OHIO",
-     "p1": 0.746635,
+     "p1": 0.74051,
      "take1": false,
-     "p2": 0.424639,
+     "p2": 0.407764,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5075392": {
      "name": "Keldric Luster",
      "team": "BALL",
-     "p1": 0.683406,
+     "p1": 0.664682,
      "take1": false,
-     "p2": 0.313354,
+     "p2": 0.302189,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3551,10 +3551,10 @@
    "kick": "2026-11-18T00:00Z",
    "ml": {
     "pick": "M-OH",
-    "p": 0.633472,
+    "p": 0.638811,
     "call": null,
     "why": [
-     "Margin rating: M-OH -4.0, KENT -12.4",
+     "Margin rating: M-OH -4.0, KENT -12.6",
      "Points per game: M-OH 26.2, KENT 13.4",
      "Rushing yards allowed per game: M-OH 108, KENT 151",
      "Points allowed per game: M-OH 27.8, KENT 32.6"
@@ -3568,9 +3568,9 @@
     "pick": "Dru DeShields",
     "pick_id": "5119841",
     "team": "KENT",
-    "p": 0.579753,
+    "p": 0.503663,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5388435",
@@ -3586,20 +3586,20 @@
     "5388435": {
      "name": "Caleb Heavner",
      "team": "M-OH",
-     "p1": 0.690004,
+     "p1": 0.679646,
      "take1": false,
-     "p2": 0.345662,
+     "p2": 0.327326,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5119841": {
      "name": "Dru DeShields",
      "team": "KENT",
-     "p1": 0.75608,
+     "p1": 0.693789,
      "take1": false,
-     "p2": 0.416017,
+     "p2": 0.346927,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3609,7 +3609,7 @@
    "kick": "2026-11-19T00:00Z",
    "ml": {
     "pick": "MASS",
-    "p": 0.707525,
+    "p": 0.708337,
     "call": null,
     "why": [
      "Margin rating: MASS -10.1, AKR -17.0",
@@ -3626,9 +3626,9 @@
     "pick": "William Watson III",
     "pick_id": "4920153",
     "team": "MASS",
-    "p": 0.52103,
+    "p": 0.543456,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5198324",
@@ -3644,20 +3644,20 @@
     "4920153": {
      "name": "William Watson III",
      "team": "MASS",
-     "p1": 0.711159,
+     "p1": 0.694926,
      "take1": false,
-     "p2": 0.37882,
+     "p2": 0.357823,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5198324": {
      "name": "Cibastian Broughton",
      "team": "AKR",
-     "p1": 0.693202,
+     "p1": 0.629056,
      "take1": false,
-     "p2": 0.342586,
+     "p2": 0.280807,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3667,13 +3667,13 @@
    "kick": "2026-11-19T00:30Z",
    "ml": {
     "pick": "BUFF",
-    "p": 0.601648,
+    "p": 0.601957,
     "call": null,
     "why": [
      "Points per game: BUFF 22.9, CMU 21.4",
      "QB INT rate: BUFF 2.1%, CMU 2.8%",
      "Passing yards per game: BUFF 170, CMU 132",
-     "Average margin: BUFF +0.3, CMU +0.7"
+     "Margin rating: BUFF -2.1, CMU -3.1"
     ],
     "qbs": [
      "Jadyn Glasser",
@@ -3684,9 +3684,9 @@
     "pick": "Jason Wright",
     "pick_id": "5222591",
     "team": "BUFF",
-    "p": 0.547145,
+    "p": 0.560524,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5149056",
@@ -3702,20 +3702,20 @@
     "5222591": {
      "name": "Jason Wright",
      "team": "BUFF",
-     "p1": 0.716762,
+     "p1": 0.702553,
      "take1": false,
-     "p2": 0.361091,
+     "p2": 0.343437,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5149056": {
      "name": "Jadyn Glasser",
      "team": "CMU",
-     "p1": 0.585679,
+     "p1": 0.550494,
      "take1": false,
-     "p2": 0.230435,
+     "p2": 0.20599,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3725,7 +3725,7 @@
    "kick": "2026-11-20T00:30Z",
    "ml": {
     "pick": "TEM",
-    "p": 0.561454,
+    "p": 0.560943,
     "call": null,
     "why": [
      "Points allowed per game: TEM 30.8, RICE 35.9",
@@ -3742,7 +3742,7 @@
     "pick": "Ajani Sheppard",
     "pick_id": "5078166",
     "team": "TEM",
-    "p": 0.761201,
+    "p": 0.761162,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3760,18 +3760,18 @@
     "5078166": {
      "name": "Ajani Sheppard",
      "team": "TEM",
-     "p1": 0.765618,
+     "p1": 0.765659,
      "take1": false,
-     "p2": 0.467406,
+     "p2": 0.467481,
      "take2": false,
      "has_line": false
     },
     "5145788": {
      "name": "Gael Ochoa",
      "team": "RICE",
-     "p1": 0.600618,
+     "p1": 0.600677,
      "take1": false,
-     "p2": 0.270768,
+     "p2": 0.270836,
      "take2": false,
      "has_line": false
     }
@@ -3783,10 +3783,10 @@
    "kick": "2026-11-20T23:00Z",
    "ml": {
     "pick": "ISU",
-    "p": 0.602068,
+    "p": 0.603023,
     "call": null,
     "why": [
-     "Margin rating: ISU +3.3, UCF -0.9",
+     "Margin rating: ISU +3.1, UCF -1.1",
      "Last 3 games, average margin: ISU +6.3, UCF -13.3",
      "Points per game: ISU 29.6, UCF 23.4",
      "Rushing yards per game: ISU 201, UCF 112"
@@ -3800,9 +3800,9 @@
     "pick": "Alonza Barnett III",
     "pick_id": "4911929",
     "team": "UCF",
-    "p": 0.540966,
+    "p": 0.55438,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5080403",
@@ -3818,20 +3818,20 @@
     "4911929": {
      "name": "Alonza Barnett III",
      "team": "UCF",
-     "p1": 0.795226,
+     "p1": 0.835658,
      "take1": false,
-     "p2": 0.485244,
+     "p2": 0.553661,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5080403": {
      "name": "Jaylen Raynor",
      "team": "ISU",
-     "p1": 0.798606,
+     "p1": 0.77462,
      "take1": false,
-     "p2": 0.476483,
+     "p2": 0.440999,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3841,10 +3841,10 @@
    "kick": "2026-11-21T00:30Z",
    "ml": {
     "pick": "DUKE",
-    "p": 0.817961,
+    "p": 0.827158,
     "call": "take",
     "why": [
-     "Margin rating: DUKE +7.4, CLEM +0.2",
+     "Margin rating: DUKE +7.6, CLEM -0.1",
      "Points per game: DUKE 28.9, CLEM 19.2",
      "Points allowed per game: DUKE 16.2, CLEM 22.9",
      "Last 3 games, average margin: DUKE +15.0, CLEM +1.0"
@@ -3858,9 +3858,9 @@
     "pick": "Walker Eget",
     "pick_id": "4694149",
     "team": "DUKE",
-    "p": 0.542794,
+    "p": 0.617352,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5159078",
@@ -3876,20 +3876,20 @@
     "4694149": {
      "name": "Walker Eget",
      "team": "DUKE",
-     "p1": 0.738194,
+     "p1": 0.742134,
      "take1": false,
-     "p2": 0.369269,
+     "p2": 0.366702,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5159078": {
      "name": "Tait Reynolds",
      "team": "CLEM",
-     "p1": 0.595745,
+     "p1": 0.544549,
      "take1": false,
-     "p2": 0.221231,
+     "p2": 0.190996,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3899,10 +3899,10 @@
    "kick": "2026-11-21T00:30Z",
    "ml": {
     "pick": "TOL",
-    "p": 0.861116,
+    "p": 0.863617,
     "call": "take",
     "why": [
-     "Margin rating: TOL +0.6, BGSU -7.4",
+     "Margin rating: TOL +0.7, BGSU -7.4",
      "Points per game: TOL 31.1, BGSU 19.5",
      "Rushing yards allowed per game: TOL 113, BGSU 184",
      "Points allowed per game: TOL 23.3, BGSU 29.8"
@@ -3916,7 +3916,7 @@
     "pick": "John Alan Richter",
     "pick_id": "5082330",
     "team": "TOL",
-    "p": 0.523343,
+    "p": 0.523335,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -3936,16 +3936,16 @@
      "team": "BGSU",
      "p1": 0.688656,
      "take1": false,
-     "p2": 0.342548,
+     "p2": 0.342547,
      "take2": false,
      "has_line": false
     },
     "5082330": {
      "name": "John Alan Richter",
      "team": "TOL",
-     "p1": 0.800991,
+     "p1": 0.800997,
      "take1": false,
-     "p2": 0.486102,
+     "p2": 0.486112,
      "take2": false,
      "has_line": false
     }
@@ -3957,10 +3957,10 @@
    "kick": "2026-11-21T01:00Z",
    "ml": {
     "pick": "ORE",
-    "p": 0.807054,
+    "p": 0.803359,
     "call": "take",
     "why": [
-     "Margin rating: ORE +11.4, MSU -0.6",
+     "Margin rating: ORE +11.2, MSU -0.6",
      "Points per game: ORE 28.2, MSU 18.8",
      "Last 3 games, average margin: ORE +15.0, MSU -5.3",
      "AP rank: ORE #16, MSU unranked"
@@ -3974,9 +3974,9 @@
     "pick": "Dylan Raiola",
     "pick_id": "5079572",
     "team": "ORE",
-    "p": 0.620237,
+    "p": 0.726656,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5079572",
@@ -3992,20 +3992,20 @@
     "4700135": {
      "name": "Cam Fancher",
      "team": "MSU",
-     "p1": 0.719568,
+     "p1": 0.597388,
      "take1": false,
-     "p2": 0.360471,
+     "p2": 0.251362,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5079572": {
      "name": "Dylan Raiola",
      "team": "ORE",
-     "p1": 0.788518,
+     "p1": 0.822736,
      "take1": false,
-     "p2": 0.45969,
+     "p2": 0.503681,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -4015,13 +4015,13 @@
    "kick": "2026-11-21T01:00Z",
    "ml": {
     "pick": "AFA",
-    "p": 0.928084,
+    "p": 0.928831,
     "call": "take",
     "why": [
-     "Margin rating: AFA +1.8, UTEP -15.8",
-     "Points per game: AFA 27.6, UTEP 9.5",
-     "Points allowed per game: AFA 21.8, UTEP 37.4",
-     "Last 3 games, average margin: AFA +11.0, UTEP -13.3"
+     "Margin rating: AFA +1.7, UTEP -16.0",
+     "Points per game: AFA 27.6, UTEP 10.1",
+     "Points allowed per game: AFA 21.8, UTEP 36.2",
+     "Last 3 games, average margin: AFA +11.0, UTEP -13.0"
     ],
     "qbs": [
      "Raymond Moore III",
@@ -4032,7 +4032,7 @@
     "pick": "Raymond Moore III",
     "pick_id": "5232049",
     "team": "UTEP",
-    "p": 0.821373,
+    "p": 0.814661,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4050,18 +4050,18 @@
     "5306440": {
      "name": "Evan Medders",
      "team": "AFA",
-     "p1": 0.591615,
+     "p1": 0.59087,
      "take1": false,
-     "p2": 0.262483,
+     "p2": 0.262032,
      "take2": false,
      "has_line": false
     },
     "5232049": {
      "name": "Raymond Moore III",
      "team": "UTEP",
-     "p1": 0.652373,
+     "p1": 0.625579,
      "take1": false,
-     "p2": 0.297128,
+     "p2": 0.268095,
      "take2": false,
      "has_line": false
     }
@@ -4073,24 +4073,24 @@
    "kick": "2026-11-21T02:00Z",
    "ml": {
     "pick": "UNM",
-    "p": 0.686555,
+    "p": 0.669666,
     "call": null,
     "why": [
-     "Margin rating: UNM +7.5, WYO -3.9",
-     "Rushing yards allowed per game: UNM 83, WYO 192",
-     "Points allowed per game: UNM 12.4, WYO 22.8",
-     "Points per game: UNM 28.7, WYO 22.0"
+     "Margin rating: UNM +7.5, WYO -3.7",
+     "Rushing yards allowed per game: UNM 83, WYO 195",
+     "Points allowed per game: UNM 12.4, WYO 21.9",
+     "Points per game: UNM 28.7, WYO 22.6"
     ],
     "qbs": [
      "Toa Fa'avae",
-     "Tyler Hughes"
+     "Landon Sims"
     ]
    },
    "h2h": {
-    "pick": "Tyler Hughes",
-    "pick_id": "4838536",
+    "pick": "Landon Sims",
+    "pick_id": "5296625",
     "team": "WYO",
-    "p": 0.557169,
+    "p": 0.644183,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4099,8 +4099,8 @@
       "Toa Fa'avae"
      ],
      [
-      "4838536",
-      "Tyler Hughes"
+      "5296625",
+      "Landon Sims"
      ]
     ]
    },
@@ -4108,18 +4108,18 @@
     "5261479": {
      "name": "Toa Fa'avae",
      "team": "UNM",
-     "p1": 0.583685,
+     "p1": 0.580006,
      "take1": false,
-     "p2": 0.235395,
+     "p2": 0.231498,
      "take2": false,
      "has_line": false
     },
-    "4838536": {
-     "name": "Tyler Hughes",
+    "5296625": {
+     "name": "Landon Sims",
      "team": "WYO",
-     "p1": 0.533211,
+     "p1": 0.563417,
      "take1": false,
-     "p2": 0.185048,
+     "p2": 0.213878,
      "take2": false,
      "has_line": false
     }
@@ -4131,13 +4131,13 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "ARIZ",
-    "p": 0.761025,
-    "call": "take",
+    "p": 0.734392,
+    "call": null,
     "why": [
-     "Margin rating: ARIZ +9.3, KSU -1.8",
-     "Points per game: ARIZ 34.1, KSU 24.6",
-     "Last 3 games, average margin: ARIZ +7.0, KSU -13.7",
-     "Points allowed per game: ARIZ 21.5, KSU 28.7"
+     "Margin rating: ARIZ +9.7, KSU -1.7",
+     "Points per game: ARIZ 34.7, KSU 24.6",
+     "Points allowed per game: ARIZ 23.6, KSU 28.7",
+     "Last 3 games, average margin: ARIZ -2.7, KSU -13.7"
     ],
     "qbs": [
      "Noah Fifita",
@@ -4148,7 +4148,7 @@
     "pick": "Noah Fifita",
     "pick_id": "4801717",
     "team": "ARIZ",
-    "p": 0.65049,
+    "p": 0.667527,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4166,18 +4166,18 @@
     "4801717": {
      "name": "Noah Fifita",
      "team": "ARIZ",
-     "p1": 0.845909,
+     "p1": 0.860319,
      "take1": false,
-     "p2": 0.563514,
+     "p2": 0.593102,
      "take2": false,
      "has_line": false
     },
     "5164321": {
      "name": "Dillon Duff",
      "team": "KSU",
-     "p1": 0.669903,
+     "p1": 0.675587,
      "take1": false,
-     "p2": 0.312608,
+     "p2": 0.320385,
      "take2": false,
      "has_line": false
     }
@@ -4189,10 +4189,10 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "BYU",
-    "p": 0.681008,
+    "p": 0.678951,
     "call": null,
     "why": [
-     "Margin rating: BYU +9.6, KU +1.1",
+     "Margin rating: BYU +9.6, KU +1.2",
      "AP rank: BYU #10, KU unranked",
      "Rushing yards allowed per game: BYU 106, KU 158",
      "Points allowed per game: BYU 19.8, KU 25.7"
@@ -4206,9 +4206,9 @@
     "pick": "Bear Bachmeier",
     "pick_id": "5141367",
     "team": "BYU",
-    "p": 0.576492,
+    "p": 0.640849,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5141367",
@@ -4224,20 +4224,20 @@
     "5079604": {
      "name": "Isaiah Marshall",
      "team": "KU",
-     "p1": 0.699632,
+     "p1": 0.661323,
      "take1": false,
-     "p2": 0.336521,
+     "p2": 0.302875,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5141367": {
      "name": "Bear Bachmeier",
      "team": "BYU",
-     "p1": 0.73087,
+     "p1": 0.765258,
      "take1": false,
-     "p2": 0.376483,
+     "p2": 0.415051,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -4247,10 +4247,10 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "HOU",
-    "p": 0.760523,
+    "p": 0.760728,
     "call": "take",
     "why": [
-     "Margin rating: HOU +6.8, WVU -2.5",
+     "Margin rating: HOU +6.9, WVU -2.4",
      "Points allowed per game: HOU 25.3, WVU 37.9",
      "Rushing yards allowed per game: HOU 136, WVU 195",
      "AP rank: HOU #14, WVU unranked"
@@ -4264,7 +4264,7 @@
     "pick": "Conner Weigman",
     "pick_id": "4685574",
     "team": "HOU",
-    "p": 0.737951,
+    "p": 0.737883,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4282,18 +4282,18 @@
     "4685574": {
      "name": "Conner Weigman",
      "team": "HOU",
-     "p1": 0.876964,
+     "p1": 0.876962,
      "take1": false,
-     "p2": 0.653431,
+     "p2": 0.653426,
      "take2": false,
      "has_line": false
     },
     "5079465": {
      "name": "Michael Hawkins Jr.",
      "team": "WVU",
-     "p1": 0.722838,
+     "p1": 0.722835,
      "take1": false,
-     "p2": 0.370256,
+     "p2": 0.370251,
      "take2": false,
      "has_line": false
     }
@@ -4305,13 +4305,13 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "TTU",
-    "p": 0.534585,
+    "p": 0.615387,
     "call": null,
     "why": [
-     "Margin rating: TTU +9.5, BAY +6.5",
-     "Points per game: TTU 38.1, BAY 27.8",
+     "Margin rating: TTU +11.6, BAY +6.6",
+     "Points per game: TTU 39.7, BAY 27.8",
      "AP rank: TTU #12, BAY unranked",
-     "Rushing yards per game: TTU 219, BAY 140"
+     "Rushing yards per game: TTU 214, BAY 140"
     ],
     "qbs": [
      "Thomas Castellanos",
@@ -4322,7 +4322,7 @@
     "pick": "DJ Lagway",
     "pick_id": "5079555",
     "team": "BAY",
-    "p": 0.630536,
+    "p": 0.634855,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4340,18 +4340,18 @@
     "5079555": {
      "name": "DJ Lagway",
      "team": "BAY",
-     "p1": 0.811203,
+     "p1": 0.81537,
      "take1": false,
-     "p2": 0.495751,
+     "p2": 0.504841,
      "take2": false,
      "has_line": false
     },
     "4773919": {
      "name": "Thomas Castellanos",
      "team": "TTU",
-     "p1": 0.78006,
+     "p1": 0.809469,
      "take1": false,
-     "p2": 0.442846,
+     "p2": 0.495199,
      "take2": false,
      "has_line": false
     }
@@ -4363,13 +4363,13 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "UTAH",
-    "p": 0.794281,
+    "p": 0.799461,
     "call": "take",
     "why": [
-     "Margin rating: UTAH +14.3, TCU +3.8",
-     "Points per game: UTAH 34.1, TCU 19.0",
+     "Margin rating: UTAH +14.4, TCU +3.8",
+     "Points per game: UTAH 34.8, TCU 19.0",
      "AP rank: UTAH #2, TCU unranked",
-     "Rushing yards per game: UTAH 197, TCU 87"
+     "Rushing yards per game: UTAH 208, TCU 87"
     ],
     "qbs": [
      "Devon Dampier",
@@ -4380,7 +4380,7 @@
     "pick": "Jaden Craig",
     "pick_id": "5083569",
     "team": "TCU",
-    "p": 0.542347,
+    "p": 0.564265,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4398,18 +4398,18 @@
     "5105849": {
      "name": "Devon Dampier",
      "team": "UTAH",
-     "p1": 0.789432,
+     "p1": 0.793767,
      "take1": false,
-     "p2": 0.452549,
+     "p2": 0.458861,
      "take2": false,
      "has_line": false
     },
     "5083569": {
      "name": "Jaden Craig",
      "team": "TCU",
-     "p1": 0.739407,
+     "p1": 0.742623,
      "take1": false,
-     "p2": 0.372565,
+     "p2": 0.377772,
      "take2": false,
      "has_line": false
     }
@@ -4421,13 +4421,13 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "MIA",
-    "p": 0.950877,
+    "p": 0.966153,
     "call": "take",
     "why": [
-     "Margin rating: MIA +16.3, VT -1.0",
-     "Points per game: MIA 40.4, VT 29.4",
+     "Margin rating: MIA +16.5, VT -3.3",
+     "Points per game: MIA 40.4, VT 28.6",
      "AP rank: MIA #7, VT unranked",
-     "Rushing yards allowed per game: MIA 75, VT 121"
+     "Points allowed per game: MIA 21.2, VT 28.0"
     ],
     "qbs": [
      "Ethan Grunkemeyer",
@@ -4438,9 +4438,9 @@
     "pick": "Darian Mensah",
     "pick_id": "5121169",
     "team": "MIA",
-    "p": 0.555386,
+    "p": 0.719437,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5144078",
@@ -4456,20 +4456,20 @@
     "5121169": {
      "name": "Darian Mensah",
      "team": "MIA",
-     "p1": 0.884162,
-     "take1": false,
-     "p2": 0.654033,
-     "take2": false,
-     "has_line": false
+     "p1": 0.937429,
+     "take1": true,
+     "p2": 0.780196,
+     "take2": true,
+     "has_line": true
     },
     "5144078": {
      "name": "Ethan Grunkemeyer",
      "team": "VT",
-     "p1": 0.777966,
+     "p1": 0.750253,
      "take1": false,
-     "p2": 0.44956,
+     "p2": 0.426134,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -4479,10 +4479,10 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "LOU",
-    "p": 0.768305,
+    "p": 0.776602,
     "call": "take",
     "why": [
-     "Margin rating: LOU +9.0, PITT +2.4",
+     "Margin rating: LOU +9.2, PITT +2.2",
      "Points per game: LOU 36.0, PITT 26.4",
      "Last 3 games, average margin: LOU +19.0, PITT -3.7",
      "QB INT rate: LOU 1.5%, PITT 3.7%"
@@ -4496,7 +4496,7 @@
     "pick": "Lincoln Kienholz",
     "pick_id": "5078278",
     "team": "LOU",
-    "p": 0.578437,
+    "p": 0.578394,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4514,18 +4514,18 @@
     "5207640": {
      "name": "Corey Dailey",
      "team": "PITT",
-     "p1": 0.708958,
+     "p1": 0.708952,
      "take1": false,
-     "p2": 0.362935,
+     "p2": 0.362927,
      "take2": false,
      "has_line": false
     },
     "5078278": {
      "name": "Lincoln Kienholz",
      "team": "LOU",
-     "p1": 0.747143,
+     "p1": 0.74714,
      "take1": false,
-     "p2": 0.402009,
+     "p2": 0.402003,
      "take2": false,
      "has_line": false
     }
@@ -4537,10 +4537,10 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "WAKE",
-    "p": 0.938112,
+    "p": 0.939834,
     "call": "take",
     "why": [
-     "Margin rating: WAKE +12.0, GT -6.1",
+     "Margin rating: WAKE +12.2, GT -6.2",
      "Points per game: WAKE 40.2, GT 21.2",
      "Last 3 games, average margin: WAKE +28.0, GT -12.0",
      "Points allowed per game: WAKE 16.7, GT 31.7"
@@ -4554,9 +4554,9 @@
     "pick": "Gio Lopez",
     "pick_id": "4920227",
     "team": "WAKE",
-    "p": 0.532926,
+    "p": 0.708849,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "4920227",
@@ -4572,194 +4572,20 @@
     "4920227": {
      "name": "Gio Lopez",
      "team": "WAKE",
-     "p1": 0.821567,
+     "p1": 0.871459,
      "take1": false,
-     "p2": 0.523507,
+     "p2": 0.602633,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5191162": {
      "name": "Alberto Mendoza",
      "team": "GT",
-     "p1": 0.69065,
+     "p1": 0.621625,
      "take1": false,
-     "p2": 0.323667,
+     "p2": 0.273698,
      "take2": false,
-     "has_line": false
-    }
-   }
-  },
-  "401858528": {
-   "away": "UCLA",
-   "home": "MICH",
-   "kick": "2026-11-21T05:00Z",
-   "ml": {
-    "pick": "UCLA",
-    "p": 0.760204,
-    "call": "take",
-    "why": [
-     "Margin rating: UCLA +10.5, MICH +1.2",
-     "Points per game: UCLA 32.4, MICH 18.3",
-     "AP rank: UCLA #4, MICH unranked",
-     "Last 3 games, average margin: UCLA +16.3, MICH -8.7"
-    ],
-    "qbs": [
-     "Ty Dieffenbach",
-     "Tommy Carr"
-    ]
-   },
-   "h2h": {
-    "pick": "Ty Dieffenbach",
-    "pick_id": "5092275",
-    "team": "UCLA",
-    "p": 0.558143,
-    "call": null,
-    "has_line": false,
-    "qbs": [
-     [
-      "5092275",
-      "Ty Dieffenbach"
-     ],
-     [
-      "5269403",
-      "Tommy Carr"
-     ]
-    ]
-   },
-   "ptd": {
-    "5269403": {
-     "name": "Tommy Carr",
-     "team": "MICH",
-     "p1": 0.58146,
-     "take1": false,
-     "p2": 0.220498,
-     "take2": false,
-     "has_line": false
-    },
-    "5092275": {
-     "name": "Ty Dieffenbach",
-     "team": "UCLA",
-     "p1": 0.685168,
-     "take1": false,
-     "p2": 0.322842,
-     "take2": false,
-     "has_line": false
-    }
-   }
-  },
-  "401858531": {
-   "away": "OSU",
-   "home": "NEB",
-   "kick": "2026-11-21T05:00Z",
-   "ml": {
-    "pick": "OSU",
-    "p": 0.621815,
-    "call": null,
-    "why": [
-     "Margin rating: OSU +12.9, NEB +8.7",
-     "Points per game: OSU 34.9, NEB 29.9",
-     "AP rank: OSU #20, NEB unranked",
-     "Passing yards per game: OSU 308, NEB 241"
-    ],
-    "qbs": [
-     "Luke Fahey",
-     "Anthony Colandrea"
-    ]
-   },
-   "h2h": {
-    "pick": "Luke Fahey",
-    "pick_id": "5214646",
-    "team": "OSU",
-    "p": 0.564504,
-    "call": null,
-    "has_line": false,
-    "qbs": [
-     [
-      "5214646",
-      "Luke Fahey"
-     ],
-     [
-      "5044387",
-      "Anthony Colandrea"
-     ]
-    ]
-   },
-   "ptd": {
-    "5044387": {
-     "name": "Anthony Colandrea",
-     "team": "NEB",
-     "p1": 0.772361,
-     "take1": false,
-     "p2": 0.419328,
-     "take2": false,
-     "has_line": false
-    },
-    "5214646": {
-     "name": "Luke Fahey",
-     "team": "OSU",
-     "p1": 0.823159,
-     "take1": false,
-     "p2": 0.520717,
-     "take2": false,
-     "has_line": false
-    }
-   }
-  },
-  "401858535": {
-   "away": "IU",
-   "home": "WASH",
-   "kick": "2026-11-21T05:00Z",
-   "ml": {
-    "pick": "IU",
-    "p": 0.778829,
-    "call": "take",
-    "why": [
-     "Margin rating: IU +13.4, WASH +3.6",
-     "AP rank: IU #9, WASH unranked",
-     "Points allowed per game: IU 13.9, WASH 21.7",
-     "Points per game: IU 29.3, WASH 23.3"
-    ],
-    "qbs": [
-     "Grant Wilson",
-     "Demond Williams Jr."
-    ]
-   },
-   "h2h": {
-    "pick": "Demond Williams Jr.",
-    "pick_id": "5079653",
-    "team": "WASH",
-    "p": 0.593378,
-    "call": null,
-    "has_line": false,
-    "qbs": [
-     [
-      "4695867",
-      "Grant Wilson"
-     ],
-     [
-      "5079653",
-      "Demond Williams Jr."
-     ]
-    ]
-   },
-   "ptd": {
-    "5079653": {
-     "name": "Demond Williams Jr.",
-     "team": "WASH",
-     "p1": 0.779347,
-     "take1": false,
-     "p2": 0.43807,
-     "take2": false,
-     "has_line": false
-    },
-    "4695867": {
-     "name": "Grant Wilson",
-     "team": "IU",
-     "p1": 0.775253,
-     "take1": false,
-     "p2": 0.436323,
-     "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -4769,13 +4595,13 @@
    "kick": "2026-11-21T05:00Z",
    "ml": {
     "pick": "UNT",
-    "p": 0.832041,
+    "p": 0.792122,
     "call": "take",
     "why": [
-     "Margin rating: UNT +5.5, TULN -5.0",
-     "Points per game: UNT 42.4, TULN 21.0",
-     "Last 3 games, average margin: UNT +15.0, TULN -6.0",
-     "Passing yards per game: UNT 337, TULN 193"
+     "Margin rating: UNT +3.9, TULN -4.8",
+     "Points per game: UNT 39.4, TULN 21.0",
+     "Last 3 games, average margin: UNT +5.3, TULN -6.0",
+     "Passing yards per game: UNT 321, TULN 193"
     ],
     "qbs": [
      "Tayven Jackson",
@@ -4786,7 +4612,7 @@
     "pick": "Tayven Jackson",
     "pick_id": "4801307",
     "team": "UNT",
-    "p": 0.672311,
+    "p": 0.632738,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4804,18 +4630,18 @@
     "4801307": {
      "name": "Tayven Jackson",
      "team": "UNT",
-     "p1": 0.870807,
+     "p1": 0.862713,
      "take1": false,
-     "p2": 0.611292,
+     "p2": 0.596253,
      "take2": false,
      "has_line": false
     },
     "5291713": {
      "name": "Trace Johnson",
      "team": "TULN",
-     "p1": 0.701252,
+     "p1": 0.704452,
      "take1": false,
-     "p2": 0.346986,
+     "p2": 0.351206,
      "take2": false,
      "has_line": false
     }
@@ -4826,14 +4652,14 @@
    "home": "UAB",
    "kick": "2026-11-21T05:00Z",
    "ml": {
-    "pick": "UAB",
-    "p": 0.505331,
+    "pick": "UTSA",
+    "p": 0.532981,
     "call": null,
     "why": [
-     "Points allowed per game: UAB 23.3, UTSA 31.5",
-     "Passing yards allowed per game: UAB 116, UTSA 205",
-     "Average margin: UAB -1.2, UTSA +0.4",
-     "Last 3 games, average margin: UAB +5.7, UTSA -0.3"
+     "Margin rating: UTSA +1.4, UAB -4.2",
+     "Points per game: UTSA 31.9, UAB 22.1",
+     "QB INT rate: UTSA 1.8%, UAB 3.3%",
+     "Passing yards per game: UTSA 209, UAB 164"
     ],
     "qbs": [
      "Owen McCown",
@@ -4844,7 +4670,7 @@
     "pick": "Owen McCown",
     "pick_id": "4775136",
     "team": "UTSA",
-    "p": 0.653093,
+    "p": 0.616716,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4862,18 +4688,18 @@
     "4775136": {
      "name": "Owen McCown",
      "team": "UTSA",
-     "p1": 0.822023,
+     "p1": 0.803374,
      "take1": false,
-     "p2": 0.507052,
+     "p2": 0.471032,
      "take2": false,
      "has_line": false
     },
     "5057381": {
      "name": "Ryder Burton",
      "team": "UAB",
-     "p1": 0.688836,
+     "p1": 0.692073,
      "take1": false,
-     "p2": 0.3258,
+     "p2": 0.330609,
      "take2": false,
      "has_line": false
     }
@@ -4885,10 +4711,10 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "FLA",
-    "p": 0.758937,
-    "call": "take",
+    "p": 0.749337,
+    "call": null,
     "why": [
-     "Margin rating: FLA +4.3, VAN -1.9",
+     "Margin rating: FLA +4.0, VAN -1.7",
      "Points per game: FLA 29.0, VAN 20.6",
      "Rushing yards per game: FLA 164, VAN 93",
      "Points allowed per game: FLA 28.8, VAN 30.8"
@@ -4902,7 +4728,7 @@
     "pick": "Jared Curtis",
     "pick_id": "5158948",
     "team": "VAN",
-    "p": 0.583735,
+    "p": 0.58371,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4920,18 +4746,18 @@
     "5158948": {
      "name": "Jared Curtis",
      "team": "VAN",
-     "p1": 0.750351,
+     "p1": 0.750413,
      "take1": false,
-     "p2": 0.400163,
+     "p2": 0.400267,
      "take2": false,
      "has_line": false
     },
     "5132812": {
      "name": "Aaron Philo",
      "team": "FLA",
-     "p1": 0.716412,
+     "p1": 0.716478,
      "take1": false,
-     "p2": 0.366801,
+     "p2": 0.366899,
      "take2": false,
      "has_line": false
     }
@@ -4943,7 +4769,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "OU",
-    "p": 0.674078,
+    "p": 0.667436,
     "call": null,
     "why": [
      "Last 3 games, average margin: OU +2.3, TA&M -11.3",
@@ -4960,7 +4786,7 @@
     "pick": "John Mateer",
     "pick_id": "4915980",
     "team": "OU",
-    "p": 0.576516,
+    "p": 0.576463,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4978,18 +4804,18 @@
     "4915980": {
      "name": "John Mateer",
      "team": "OU",
-     "p1": 0.766623,
+     "p1": 0.766681,
      "take1": false,
-     "p2": 0.428728,
+     "p2": 0.428828,
      "take2": false,
      "has_line": false
     },
     "4870971": {
      "name": "Marcel Reed",
      "team": "TA&M",
-     "p1": 0.681602,
+     "p1": 0.681671,
      "take1": false,
-     "p2": 0.29462,
+     "p2": 0.294705,
      "take2": false,
      "has_line": false
     }
@@ -5001,12 +4827,12 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "CIN",
-    "p": 0.565914,
+    "p": 0.569984,
     "call": null,
     "why": [
      "Points per game: CIN 27.6, COLO 18.7",
+     "Margin rating: CIN -1.2, COLO -3.8",
      "QB INT rate: CIN 1.4%, COLO 4.0%",
-     "Margin rating: CIN -1.4, COLO -3.8",
      "Last 3 games, win %: CIN 0%, COLO 67%"
     ],
     "qbs": [
@@ -5018,7 +4844,7 @@
     "pick": "Isaac Wilson",
     "pick_id": "5079771",
     "team": "COLO",
-    "p": 0.548142,
+    "p": 0.548092,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5036,18 +4862,18 @@
     "4685345": {
      "name": "JC French IV",
      "team": "CIN",
-     "p1": 0.783954,
+     "p1": 0.784008,
      "take1": false,
-     "p2": 0.466479,
+     "p2": 0.466581,
      "take2": false,
      "has_line": false
     },
     "5079771": {
      "name": "Isaac Wilson",
      "team": "COLO",
-     "p1": 0.772394,
+     "p1": 0.77245,
      "take1": false,
-     "p2": 0.452875,
+     "p2": 0.452976,
      "take2": false,
      "has_line": false
     }
@@ -5059,10 +4885,10 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "SYR",
-    "p": 0.577131,
+    "p": 0.581408,
     "call": null,
     "why": [
-     "Margin rating: SYR -2.4, BC -4.7",
+     "Margin rating: SYR -2.4, BC -4.9",
      "Last 3 games, average margin: SYR +0.3, BC -21.0",
      "Points per game: SYR 25.8, BC 20.2",
      "Rushing yards allowed per game: SYR 146, BC 180"
@@ -5076,7 +4902,7 @@
     "pick": "Steve Angeli",
     "pick_id": "4685694",
     "team": "SYR",
-    "p": 0.645258,
+    "p": 0.645242,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5094,18 +4920,18 @@
     "5307005": {
      "name": "Mason McKenzie",
      "team": "BC",
-     "p1": 0.71731,
+     "p1": 0.717377,
      "take1": false,
-     "p2": 0.370837,
+     "p2": 0.370937,
      "take2": false,
      "has_line": false
     },
     "4685694": {
      "name": "Steve Angeli",
      "team": "SYR",
-     "p1": 0.803742,
+     "p1": 0.803794,
      "take1": false,
-     "p2": 0.482344,
+     "p2": 0.48245,
      "take2": false,
      "has_line": false
     }
@@ -5117,7 +4943,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "NU",
-    "p": 0.654288,
+    "p": 0.654403,
     "call": null,
     "why": [
      "Margin rating: NU +8.0, MINN -3.4",
@@ -5134,7 +4960,7 @@
     "pick": "Drake Lindsey",
     "pick_id": "5144959",
     "team": "MINN",
-    "p": 0.552662,
+    "p": 0.552639,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5152,20 +4978,78 @@
     "5144959": {
      "name": "Drake Lindsey",
      "team": "MINN",
-     "p1": 0.774358,
+     "p1": 0.774414,
      "take1": false,
-     "p2": 0.43559,
+     "p2": 0.43569,
      "take2": false,
      "has_line": false
     },
     "4685459": {
      "name": "Nicco Marchiol",
      "team": "NU",
-     "p1": 0.706008,
+     "p1": 0.706076,
      "take1": false,
-     "p2": 0.353357,
+     "p2": 0.353454,
      "take2": false,
      "has_line": false
+    }
+   }
+  },
+  "401858531": {
+   "away": "OSU",
+   "home": "NEB",
+   "kick": "2026-11-21T17:00Z",
+   "ml": {
+    "pick": "OSU",
+    "p": 0.623524,
+    "call": null,
+    "why": [
+     "Margin rating: OSU +12.8, NEB +8.6",
+     "Points per game: OSU 34.9, NEB 29.9",
+     "AP rank: OSU #20, NEB unranked",
+     "Passing yards per game: OSU 308, NEB 241"
+    ],
+    "qbs": [
+     "Luke Fahey",
+     "Anthony Colandrea"
+    ]
+   },
+   "h2h": {
+    "pick": "Luke Fahey",
+    "pick_id": "5214646",
+    "team": "OSU",
+    "p": 0.603926,
+    "call": null,
+    "has_line": true,
+    "qbs": [
+     [
+      "5214646",
+      "Luke Fahey"
+     ],
+     [
+      "5044387",
+      "Anthony Colandrea"
+     ]
+    ]
+   },
+   "ptd": {
+    "5044387": {
+     "name": "Anthony Colandrea",
+     "team": "NEB",
+     "p1": 0.731393,
+     "take1": false,
+     "p2": 0.368744,
+     "take2": false,
+     "has_line": true
+    },
+    "5214646": {
+     "name": "Luke Fahey",
+     "team": "OSU",
+     "p1": 0.805696,
+     "take1": false,
+     "p2": 0.486197,
+     "take2": false,
+     "has_line": true
     }
    }
   },
@@ -5175,7 +5059,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "WIS",
-    "p": 0.652523,
+    "p": 0.651921,
     "call": null,
     "why": [
      "Margin rating: WIS +4.1, PUR -1.6",
@@ -5192,7 +5076,7 @@
     "pick": "Ryan Browne",
     "pick_id": "5104738",
     "team": "PUR",
-    "p": 0.580869,
+    "p": 0.58085,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5210,18 +5094,18 @@
     "5104738": {
      "name": "Ryan Browne",
      "team": "PUR",
-     "p1": 0.690398,
+     "p1": 0.690466,
      "take1": false,
-     "p2": 0.312742,
+     "p2": 0.31283,
      "take2": false,
      "has_line": false
     },
     "5210475": {
      "name": "Ryan Hopkins",
      "team": "WIS",
-     "p1": 0.725033,
+     "p1": 0.725107,
      "take1": false,
-     "p2": 0.398631,
+     "p2": 0.398758,
      "take2": false,
      "has_line": false
     }
@@ -5233,7 +5117,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "ARMY",
-    "p": 0.623658,
+    "p": 0.624936,
     "call": null,
     "why": [
      "Points per game: ARMY 28.9, ECU 20.8",
@@ -5250,7 +5134,7 @@
     "pick": "Emory Williams",
     "pick_id": "5075800",
     "team": "ECU",
-    "p": 0.788285,
+    "p": 0.788234,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5268,18 +5152,18 @@
     "5075800": {
      "name": "Emory Williams",
      "team": "ECU",
-     "p1": 0.741691,
+     "p1": 0.741755,
      "take1": false,
-     "p2": 0.400914,
+     "p2": 0.401023,
      "take2": false,
      "has_line": false
     },
     "5150297": {
      "name": "Cale Hellums",
      "team": "ARMY",
-     "p1": 0.5184,
+     "p1": 0.51848,
      "take1": false,
-     "p2": 0.188038,
+     "p2": 0.1881,
      "take2": false,
      "has_line": false
     }
@@ -5291,7 +5175,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "MEM",
-    "p": 0.542366,
+    "p": 0.543707,
     "call": null,
     "why": [
      "Margin rating: MEM +6.4, NAVY -1.8",
@@ -5308,7 +5192,7 @@
     "pick": "Marcus Stokes",
     "pick_id": "5165807",
     "team": "MEM",
-    "p": 0.888702,
+    "p": 0.888641,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5326,18 +5210,18 @@
     "5165807": {
      "name": "Marcus Stokes",
      "team": "MEM",
-     "p1": 0.857915,
+     "p1": 0.857955,
      "take1": false,
-     "p2": 0.614319,
+     "p2": 0.614419,
      "take2": false,
      "has_line": false
     },
     "5220473": {
      "name": "Jackson Gutierrez",
      "team": "NAVY",
-     "p1": 0.609025,
+     "p1": 0.609104,
      "take1": false,
-     "p2": 0.269,
+     "p2": 0.269085,
      "take2": false,
      "has_line": false
     }
@@ -5349,7 +5233,7 @@
    "kick": "2026-11-21T17:30Z",
    "ml": {
     "pick": "UNC",
-    "p": 0.513994,
+    "p": 0.514335,
     "call": null,
     "why": [
      "Margin rating: UNC +4.0, UVA +1.1",
@@ -5366,7 +5250,7 @@
     "pick": "Billy Edwards Jr.",
     "pick_id": "4592532",
     "team": "UNC",
-    "p": 0.593613,
+    "p": 0.593619,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5384,18 +5268,18 @@
     "4592532": {
      "name": "Billy Edwards Jr.",
      "team": "UNC",
-     "p1": 0.772132,
+     "p1": 0.772223,
      "take1": false,
-     "p2": 0.420995,
+     "p2": 0.421151,
      "take2": false,
      "has_line": false
     },
     "4685696": {
      "name": "Beau Pribula",
      "team": "UVA",
-     "p1": 0.71714,
+     "p1": 0.717245,
      "take1": false,
-     "p2": 0.361973,
+     "p2": 0.36212,
      "take2": false,
      "has_line": false
     }
@@ -5407,10 +5291,10 @@
    "kick": "2026-11-21T18:00Z",
    "ml": {
     "pick": "LIB",
-    "p": 0.910763,
+    "p": 0.910679,
     "call": "take",
     "why": [
-     "Margin rating: LIB +8.0, WKU -7.3",
+     "Margin rating: LIB +8.1, WKU -7.3",
      "Points allowed per game: LIB 13.6, WKU 35.2",
      "Points per game: LIB 33.8, WKU 21.7",
      "Last 3 games, average margin: LIB +16.3, WKU -4.0"
@@ -5424,7 +5308,7 @@
     "pick": "Rodney Tisdale Jr.",
     "pick_id": "5196864",
     "team": "WKU",
-    "p": 0.632884,
+    "p": 0.632901,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5442,18 +5326,18 @@
     "5138131": {
      "name": "Deshawn Purdie",
      "team": "LIB",
-     "p1": 0.740142,
+     "p1": 0.740228,
      "take1": false,
-     "p2": 0.407766,
+     "p2": 0.407897,
      "take2": false,
      "has_line": false
     },
     "5196864": {
      "name": "Rodney Tisdale Jr.",
      "team": "WKU",
-     "p1": 0.662674,
+     "p1": 0.662777,
      "take1": false,
-     "p2": 0.275711,
+     "p2": 0.275822,
      "take2": false,
      "has_line": false
     }
@@ -5465,13 +5349,13 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "TLSA",
-    "p": 0.886787,
+    "p": 0.890982,
     "call": "take",
     "why": [
-     "Margin rating: TLSA +0.4, CLT -12.8",
-     "Points per game: TLSA 32.0, CLT 16.9",
-     "Points allowed per game: TLSA 25.6, CLT 35.4",
-     "Last 3 games, average margin: TLSA +15.3, CLT -6.3"
+     "Margin rating: TLSA +1.2, CLT -12.9",
+     "Points per game: TLSA 32.7, CLT 16.9",
+     "Points allowed per game: TLSA 25.1, CLT 35.4",
+     "Last 3 games, average margin: TLSA +14.0, CLT -6.3"
     ],
     "qbs": [
      "Conner Harrell",
@@ -5482,7 +5366,7 @@
     "pick": "Baylor Hayes",
     "pick_id": "5224011",
     "team": "TLSA",
-    "p": 0.644882,
+    "p": 0.648466,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5500,18 +5384,18 @@
     "5224011": {
      "name": "Baylor Hayes",
      "team": "TLSA",
-     "p1": 0.81296,
+     "p1": 0.817297,
      "take1": false,
-     "p2": 0.509077,
+     "p2": 0.516026,
      "take2": false,
      "has_line": false
     },
     "4801306": {
      "name": "Conner Harrell",
      "team": "CLT",
-     "p1": 0.68571,
+     "p1": 0.678897,
      "take1": false,
-     "p2": 0.334102,
+     "p2": 0.32413,
      "take2": false,
      "has_line": false
     }
@@ -5523,7 +5407,7 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "JVST",
-    "p": 0.842979,
+    "p": 0.843339,
     "call": "take",
     "why": [
      "Margin rating: JVST -1.2, MOST -9.1",
@@ -5540,7 +5424,7 @@
     "pick": "Henry Belin IV",
     "pick_id": "4685252",
     "team": "MOST",
-    "p": 0.556478,
+    "p": 0.556502,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5558,18 +5442,18 @@
     "4685252": {
      "name": "Henry Belin IV",
      "team": "MOST",
-     "p1": 0.764335,
+     "p1": 0.764413,
      "take1": false,
-     "p2": 0.422711,
+     "p2": 0.422839,
      "take2": false,
      "has_line": false
     },
     "5122157": {
      "name": "Caden Creel",
      "team": "JVST",
-     "p1": 0.74838,
+     "p1": 0.748457,
      "take1": false,
-     "p2": 0.420148,
+     "p2": 0.42027,
      "take2": false,
      "has_line": false
     }
@@ -5581,10 +5465,10 @@
    "kick": "2026-11-21T19:00Z",
    "ml": {
     "pick": "MTSU",
-    "p": 0.649497,
+    "p": 0.642549,
     "call": null,
     "why": [
-     "Margin rating: MTSU -5.9, SHSU -15.9",
+     "Margin rating: MTSU -5.9, SHSU -15.6",
      "Points per game: MTSU 25.2, SHSU 11.8",
      "Last 3 games, average margin: MTSU -4.0, SHSU -22.7",
      "Rushing yards per game: MTSU 140, SHSU 59"
@@ -5598,7 +5482,7 @@
     "pick": "Roman Gagliano",
     "pick_id": "5194626",
     "team": "MTSU",
-    "p": 0.596489,
+    "p": 0.59648,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5616,18 +5500,18 @@
     "5194626": {
      "name": "Roman Gagliano",
      "team": "MTSU",
-     "p1": 0.838617,
+     "p1": 0.838673,
      "take1": false,
-     "p2": 0.551571,
+     "p2": 0.551695,
      "take2": false,
      "has_line": false
     },
     "5148427": {
      "name": "Landyn Locke",
      "team": "SHSU",
-     "p1": 0.757088,
+     "p1": 0.757164,
      "take1": false,
-     "p2": 0.422325,
+     "p2": 0.422447,
      "take2": false,
      "has_line": false
     }
@@ -5639,10 +5523,10 @@
    "kick": "2026-11-21T19:30Z",
    "ml": {
     "pick": "IOWA",
-    "p": 0.689556,
+    "p": 0.68945,
     "call": null,
     "why": [
-     "Margin rating: IOWA +9.5, ILL +4.1",
+     "Margin rating: IOWA +9.4, ILL +4.0",
      "Points allowed per game: IOWA 13.0, ILL 24.3",
      "Last 3 games, average margin: IOWA +21.0, ILL +2.0",
      "Rushing yards allowed per game: IOWA 87, ILL 140"
@@ -5653,12 +5537,12 @@
     ]
    },
    "h2h": {
-    "pick": "Katin Houser",
-    "pick_id": "4795295",
-    "team": "ILL",
-    "p": 0.536814,
+    "pick": "Hank Brown",
+    "pick_id": "5089314",
+    "team": "IOWA",
+    "p": 0.521763,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5089314",
@@ -5674,20 +5558,20 @@
     "5089314": {
      "name": "Hank Brown",
      "team": "IOWA",
-     "p1": 0.716637,
+     "p1": 0.716764,
      "take1": false,
-     "p2": 0.361527,
+     "p2": 0.356001,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "4795295": {
      "name": "Katin Houser",
      "team": "ILL",
-     "p1": 0.783631,
+     "p1": 0.758392,
      "take1": false,
-     "p2": 0.446103,
+     "p2": 0.415714,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -5697,12 +5581,12 @@
    "kick": "2026-11-21T19:30Z",
    "ml": {
     "pick": "USF",
-    "p": 0.554958,
+    "p": 0.590838,
     "call": null,
     "why": [
+     "Margin rating: USF +2.0, FAU -3.0",
      "Points allowed per game: USF 19.0, FAU 38.1",
-     "Margin rating: USF +1.9, FAU -2.1",
-     "Rushing yards allowed per game: USF 148, FAU 256",
+     "Rushing yards allowed per game: USF 148, FAU 249",
      "QB INT rate: USF 0.9%, FAU 2.0%"
     ],
     "qbs": [
@@ -5714,7 +5598,7 @@
     "pick": "Caden Veltkamp",
     "pick_id": "4869991",
     "team": "FAU",
-    "p": 0.745256,
+    "p": 0.74518,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5732,18 +5616,18 @@
     "4869991": {
      "name": "Caden Veltkamp",
      "team": "FAU",
-     "p1": 0.877713,
+     "p1": 0.877712,
      "take1": false,
-     "p2": 0.607474,
+     "p2": 0.60343,
      "take2": false,
      "has_line": false
     },
     "5079542": {
      "name": "Luke Kromenhoek",
      "team": "USF",
-     "p1": 0.742599,
+     "p1": 0.748103,
      "take1": false,
-     "p2": 0.413009,
+     "p2": 0.423209,
      "take2": false,
      "has_line": false
     }
@@ -5755,10 +5639,10 @@
    "kick": "2026-11-21T19:30Z",
    "ml": {
     "pick": "APP",
-    "p": 0.814816,
+    "p": 0.81699,
     "call": "take",
     "why": [
-     "Margin rating: APP -6.5, ULM -14.9",
+     "Margin rating: APP -6.5, ULM -15.0",
      "Points allowed per game: APP 25.9, ULM 35.2",
      "Rushing yards allowed per game: APP 160, ULM 228",
      "Points per game: APP 22.4, ULM 18.6"
@@ -5772,7 +5656,7 @@
     "pick": "Malachi Singleton",
     "pick_id": "4870999",
     "team": "APP",
-    "p": 0.648635,
+    "p": 0.648546,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5790,18 +5674,18 @@
     "4870999": {
      "name": "Malachi Singleton",
      "team": "APP",
-     "p1": 0.735445,
+     "p1": 0.735476,
      "take1": false,
-     "p2": 0.385188,
+     "p2": 0.385239,
      "take2": false,
      "has_line": false
     },
     "5207934": {
      "name": "Austin Carlisle",
      "team": "ULM",
-     "p1": 0.62666,
+     "p1": 0.626716,
      "take1": false,
-     "p2": 0.275082,
+     "p2": 0.275155,
      "take2": false,
      "has_line": false
     }
@@ -5813,10 +5697,10 @@
    "kick": "2026-11-21T20:00Z",
    "ml": {
     "pick": "UL",
-    "p": 0.744411,
+    "p": 0.744592,
     "call": null,
     "why": [
-     "Margin rating: UL +0.2, CCU -6.3",
+     "Margin rating: UL +0.2, CCU -6.4",
      "Points per game: UL 30.3, CCU 22.8",
      "Rushing yards per game: UL 207, CCU 104",
      "Rushing yards allowed per game: UL 153, CCU 179"
@@ -5830,7 +5714,7 @@
     "pick": "Deuce Bailey",
     "pick_id": "5296439",
     "team": "CCU",
-    "p": 0.623789,
+    "p": 0.623768,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5848,18 +5732,18 @@
     "4871091": {
      "name": "Lunch Winfield",
      "team": "UL",
-     "p1": 0.680211,
+     "p1": 0.680206,
      "take1": false,
-     "p2": 0.321819,
+     "p2": 0.321815,
      "take2": false,
      "has_line": false
     },
     "5296439": {
      "name": "Deuce Bailey",
      "team": "CCU",
-     "p1": 0.771374,
+     "p1": 0.77137,
      "take1": false,
-     "p2": 0.44272,
+     "p2": 0.442715,
      "take2": false,
      "has_line": false
     }
@@ -5871,7 +5755,7 @@
    "kick": "2026-11-21T20:00Z",
    "ml": {
     "pick": "DEL",
-    "p": 0.60168,
+    "p": 0.600957,
     "call": null,
     "why": [
      "Margin rating: DEL -3.1, NMSU -10.0",
@@ -5888,7 +5772,7 @@
     "pick": "Nick Minicucci",
     "pick_id": "5153846",
     "team": "DEL",
-    "p": 0.684748,
+    "p": 0.684732,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5906,18 +5790,18 @@
     "5224084": {
      "name": "Trey Hedden",
      "team": "NMSU",
-     "p1": 0.77704,
+     "p1": 0.777034,
      "take1": false,
-     "p2": 0.465034,
+     "p2": 0.465029,
      "take2": false,
      "has_line": false
     },
     "5153846": {
      "name": "Nick Minicucci",
      "team": "DEL",
-     "p1": 0.863136,
+     "p1": 0.863134,
      "take1": false,
-     "p2": 0.600184,
+     "p2": 0.600179,
      "take2": false,
      "has_line": false
     }
@@ -5929,7 +5813,7 @@
    "kick": "2026-11-21T20:00Z",
    "ml": {
     "pick": "KENN",
-    "p": 0.58837,
+    "p": 0.590597,
     "call": null,
     "why": [
      "Last 3 games, average margin: KENN +12.3, FIU -11.0",
@@ -5946,7 +5830,7 @@
     "pick": "JJ Kohl",
     "pick_id": "4870883",
     "team": "FIU",
-    "p": 0.500794,
+    "p": 0.500741,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -5964,18 +5848,18 @@
     "4870883": {
      "name": "JJ Kohl",
      "team": "FIU",
-     "p1": 0.789814,
+     "p1": 0.78981,
      "take1": false,
-     "p2": 0.455613,
+     "p2": 0.455608,
      "take2": false,
      "has_line": false
     },
     "5382898": {
      "name": "Landon Varnes",
      "team": "KENN",
-     "p1": 0.702563,
+     "p1": 0.702554,
      "take1": false,
-     "p2": 0.3476,
+     "p2": 0.347595,
      "take2": false,
      "has_line": false
     }
@@ -5987,13 +5871,13 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "TENN",
-    "p": 0.507677,
+    "p": 0.563637,
     "call": null,
     "why": [
      "AP rank: TENN #8, LSU #21",
-     "Points allowed per game: TENN 14.9, LSU 18.1",
-     "Rushing yards per game: TENN 201, LSU 156",
-     "Last 3 games, average margin: TENN +13.3, LSU +10.3"
+     "Last 3 games, average margin: TENN +13.3, LSU +0.7",
+     "Points allowed per game: TENN 14.9, LSU 18.6",
+     "Rushing yards per game: TENN 201, LSU 152"
     ],
     "qbs": [
      "Sam Leavitt",
@@ -6004,9 +5888,9 @@
     "pick": "Sam Leavitt",
     "pick_id": "5078810",
     "team": "LSU",
-    "p": 0.739623,
+    "p": 0.746564,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5078810",
@@ -6022,20 +5906,20 @@
     "5141571": {
      "name": "George MacIntyre",
      "team": "TENN",
-     "p1": 0.564111,
+     "p1": 0.544061,
      "take1": false,
-     "p2": 0.200697,
+     "p2": 0.188691,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5078810": {
      "name": "Sam Leavitt",
      "team": "LSU",
-     "p1": 0.793604,
+     "p1": 0.806408,
      "take1": false,
-     "p2": 0.446556,
+     "p2": 0.466548,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6045,13 +5929,13 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "TEX",
-    "p": 0.93118,
+    "p": 0.909291,
     "call": "take",
     "why": [
-     "Margin rating: TEX +12.2, ARK -1.5",
-     "Points per game: TEX 31.1, ARK 18.6",
-     "Points allowed per game: TEX 17.4, ARK 29.1",
-     "AP rank: TEX #6, ARK unranked"
+     "Margin rating: TEX +12.6, ARK +1.0",
+     "Points per game: TEX 30.2, ARK 20.3",
+     "AP rank: TEX #6, ARK unranked",
+     "Points allowed per game: TEX 17.8, ARK 26.6"
     ],
     "qbs": [
      "KJ Jackson",
@@ -6062,9 +5946,9 @@
     "pick": "Arch Manning",
     "pick_id": "4870906",
     "team": "TEX",
-    "p": 0.532055,
+    "p": 0.715668,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5079516",
@@ -6080,20 +5964,20 @@
     "4870906": {
      "name": "Arch Manning",
      "team": "TEX",
-     "p1": 0.838772,
+     "p1": 0.86947,
      "take1": false,
-     "p2": 0.562963,
+     "p2": 0.598118,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5079516": {
      "name": "KJ Jackson",
      "team": "ARK",
-     "p1": 0.650133,
+     "p1": 0.526151,
      "take1": false,
-     "p2": 0.274782,
+     "p2": 0.194543,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6103,10 +5987,10 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "FSU",
-    "p": 0.748267,
+    "p": 0.742156,
     "call": null,
     "why": [
-     "Margin rating: FSU +3.3, NCSU -4.6",
+     "Margin rating: FSU +3.2, NCSU -4.4",
      "Points per game: FSU 28.7, NCSU 24.2",
      "Points allowed per game: FSU 28.7, NCSU 31.3",
      "Rushing yards per game: FSU 161, NCSU 120"
@@ -6120,7 +6004,7 @@
     "pick": "CJ Bailey",
     "pick_id": "5079301",
     "team": "NCSU",
-    "p": 0.527155,
+    "p": 0.527171,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6138,20 +6022,78 @@
     "5079301": {
      "name": "CJ Bailey",
      "team": "NCSU",
-     "p1": 0.787753,
+     "p1": 0.787704,
      "take1": false,
-     "p2": 0.46621,
+     "p2": 0.466118,
      "take2": false,
      "has_line": false
     },
     "4838679": {
      "name": "Ashton Daniels",
      "team": "FSU",
-     "p1": 0.756058,
+     "p1": 0.756003,
      "take1": false,
-     "p2": 0.408967,
+     "p2": 0.408877,
      "take2": false,
      "has_line": false
+    }
+   }
+  },
+  "401858528": {
+   "away": "UCLA",
+   "home": "MICH",
+   "kick": "2026-11-21T20:30Z",
+   "ml": {
+    "pick": "UCLA",
+    "p": 0.773761,
+    "call": "take",
+    "why": [
+     "Margin rating: UCLA +10.6, MICH +1.1",
+     "Points per game: UCLA 32.4, MICH 18.3",
+     "AP rank: UCLA #4, MICH unranked",
+     "Last 3 games, average margin: UCLA +16.3, MICH -8.7"
+    ],
+    "qbs": [
+     "Ty Dieffenbach",
+     "Tommy Carr"
+    ]
+   },
+   "h2h": {
+    "pick": "Ty Dieffenbach",
+    "pick_id": "5092275",
+    "team": "UCLA",
+    "p": 0.619182,
+    "call": null,
+    "has_line": true,
+    "qbs": [
+     [
+      "5092275",
+      "Ty Dieffenbach"
+     ],
+     [
+      "5269403",
+      "Tommy Carr"
+     ]
+    ]
+   },
+   "ptd": {
+    "5269403": {
+     "name": "Tommy Carr",
+     "team": "MICH",
+     "p1": 0.53605,
+     "take1": false,
+     "p2": 0.193077,
+     "take2": false,
+     "has_line": true
+    },
+    "5092275": {
+     "name": "Ty Dieffenbach",
+     "team": "UCLA",
+     "p1": 0.67888,
+     "take1": false,
+     "p2": 0.310086,
+     "take2": false,
+     "has_line": true
     }
    }
   },
@@ -6161,10 +6103,10 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "PSU",
-    "p": 0.934497,
+    "p": 0.934849,
     "call": "take",
     "why": [
-     "Margin rating: PSU +6.9, RUTG -9.7",
+     "Margin rating: PSU +6.8, RUTG -9.8",
      "Points allowed per game: PSU 18.8, RUTG 35.1",
      "Last 3 games, average margin: PSU +15.0, RUTG -18.7",
      "Points per game: PSU 30.2, RUTG 19.3"
@@ -6178,7 +6120,7 @@
     "pick": "Rocco Becht",
     "pick_id": "4801299",
     "team": "PSU",
-    "p": 0.646461,
+    "p": 0.64636,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6196,20 +6138,78 @@
     "5079717": {
      "name": "AJ Surace",
      "team": "RUTG",
-     "p1": 0.663995,
+     "p1": 0.663919,
      "take1": false,
-     "p2": 0.312205,
+     "p2": 0.312115,
      "take2": false,
      "has_line": false
     },
     "4801299": {
      "name": "Rocco Becht",
      "team": "PSU",
-     "p1": 0.817159,
+     "p1": 0.817115,
      "take1": false,
-     "p2": 0.533032,
+     "p2": 0.53294,
      "take2": false,
      "has_line": false
+    }
+   }
+  },
+  "401858535": {
+   "away": "IU",
+   "home": "WASH",
+   "kick": "2026-11-21T20:30Z",
+   "ml": {
+    "pick": "IU",
+    "p": 0.775358,
+    "call": "take",
+    "why": [
+     "Margin rating: IU +13.2, WASH +3.6",
+     "AP rank: IU #9, WASH unranked",
+     "Points allowed per game: IU 13.9, WASH 21.7",
+     "Points per game: IU 29.3, WASH 23.3"
+    ],
+    "qbs": [
+     "Grant Wilson",
+     "Demond Williams Jr."
+    ]
+   },
+   "h2h": {
+    "pick": "Demond Williams Jr.",
+    "pick_id": "5079653",
+    "team": "WASH",
+    "p": 0.526831,
+    "call": null,
+    "has_line": true,
+    "qbs": [
+     [
+      "4695867",
+      "Grant Wilson"
+     ],
+     [
+      "5079653",
+      "Demond Williams Jr."
+     ]
+    ]
+   },
+   "ptd": {
+    "5079653": {
+     "name": "Demond Williams Jr.",
+     "team": "WASH",
+     "p1": 0.73677,
+     "take1": false,
+     "p2": 0.386072,
+     "take2": false,
+     "has_line": true
+    },
+    "4695867": {
+     "name": "Grant Wilson",
+     "team": "IU",
+     "p1": 0.77072,
+     "take1": false,
+     "p2": 0.422372,
+     "take2": false,
+     "has_line": true
     }
    }
   },
@@ -6219,10 +6219,10 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "CONN",
-    "p": 0.819381,
+    "p": 0.82289,
     "call": "take",
     "why": [
-     "Margin rating: CONN -0.0, ODU -9.3",
+     "Margin rating: CONN -0.0, ODU -9.5",
      "Points per game: CONN 31.8, ODU 15.2",
      "QB INT rate: CONN 1.3%, ODU 4.0%",
      "Rushing yards per game: CONN 175, ODU 84"
@@ -6236,7 +6236,7 @@
     "pick": "Jaxon Potter",
     "pick_id": "5091836",
     "team": "ODU",
-    "p": 0.504472,
+    "p": 0.504461,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6254,18 +6254,18 @@
     "5091836": {
      "name": "Jaxon Potter",
      "team": "ODU",
-     "p1": 0.667575,
+     "p1": 0.667497,
      "take1": false,
-     "p2": 0.310361,
+     "p2": 0.310268,
      "take2": false,
      "has_line": false
     },
     "5079619": {
      "name": "Kalieb Osborne",
      "team": "CONN",
-     "p1": 0.758995,
+     "p1": 0.758939,
      "take1": false,
-     "p2": 0.434415,
+     "p2": 0.434321,
      "take2": false,
      "has_line": false
     }
@@ -6277,10 +6277,10 @@
    "kick": "2026-11-21T21:00Z",
    "ml": {
     "pick": "NDSU",
-    "p": 0.939044,
+    "p": 0.938282,
     "call": "take",
     "why": [
-     "Margin rating: NDSU +7.6, NIU -15.7",
+     "Margin rating: NDSU +7.6, NIU -15.6",
      "Points allowed per game: NDSU 13.4, NIU 36.8",
      "Points per game: NDSU 26.9, NIU 14.7",
      "Rushing yards allowed per game: NDSU 138, NIU 227"
@@ -6294,7 +6294,7 @@
     "pick": "Taron Dickens",
     "pick_id": "4881032",
     "team": "NIU",
-    "p": 0.551484,
+    "p": 0.551522,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6312,18 +6312,18 @@
     "5087156": {
      "name": "Nathan Hayes",
      "team": "NDSU",
-     "p1": 0.7604,
+     "p1": 0.760333,
      "take1": false,
-     "p2": 0.437199,
+     "p2": 0.437089,
      "take2": false,
      "has_line": false
     },
     "4881032": {
      "name": "Taron Dickens",
      "team": "NIU",
-     "p1": 0.674553,
+     "p1": 0.674494,
      "take1": false,
-     "p2": 0.294325,
+     "p2": 0.294255,
      "take2": false,
      "has_line": false
     }
@@ -6335,10 +6335,10 @@
    "kick": "2026-11-21T21:00Z",
    "ml": {
     "pick": "GASO",
-    "p": 0.701275,
+    "p": 0.702962,
     "call": null,
     "why": [
-     "Margin rating: GASO +0.8, TROY -8.1",
+     "Margin rating: GASO +0.8, TROY -8.2",
      "Last 3 games, average margin: GASO +20.3, TROY -11.3",
      "Points per game: GASO 26.9, TROY 20.1",
      "Points allowed per game: GASO 21.6, TROY 27.3"
@@ -6352,7 +6352,7 @@
     "pick": "Max Johnson",
     "pick_id": "4685740",
     "team": "GASO",
-    "p": 0.728999,
+    "p": 0.72895,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6370,18 +6370,18 @@
     "4431633": {
      "name": "Goose Crowder",
      "team": "TROY",
-     "p1": 0.733466,
+     "p1": 0.733417,
      "take1": false,
-     "p2": 0.374663,
+     "p2": 0.37459,
      "take2": false,
      "has_line": false
     },
     "4685740": {
      "name": "Max Johnson",
      "team": "GASO",
-     "p1": 0.78792,
+     "p1": 0.787878,
      "take1": false,
-     "p2": 0.456051,
+     "p2": 0.455973,
      "take2": false,
      "has_line": false
     }
@@ -6393,7 +6393,7 @@
    "kick": "2026-11-21T21:00Z",
    "ml": {
     "pick": "GAST",
-    "p": 0.556169,
+    "p": 0.556308,
     "call": null,
     "why": [
      "Margin rating: GAST -4.7, MRSH -7.7",
@@ -6410,7 +6410,7 @@
     "pick": "Ayden Pereira",
     "pick_id": "5083490",
     "team": "GAST",
-    "p": 0.611733,
+    "p": 0.611691,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6428,18 +6428,18 @@
     "5083490": {
      "name": "Ayden Pereira",
      "team": "GAST",
-     "p1": 0.758157,
+     "p1": 0.7581,
      "take1": false,
-     "p2": 0.435683,
+     "p2": 0.435589,
      "take2": false,
      "has_line": false
     },
     "5158251": {
      "name": "Khalil Wilkins",
      "team": "MRSH",
-     "p1": 0.607311,
+     "p1": 0.607219,
      "take1": false,
-     "p2": 0.260912,
+     "p2": 0.260822,
      "take2": false,
      "has_line": false
     }
@@ -6451,7 +6451,7 @@
    "kick": "2026-11-21T21:00Z",
    "ml": {
     "pick": "USA",
-    "p": 0.668994,
+    "p": 0.66735,
     "call": null,
     "why": [
      "Margin rating: USA -4.6, USM -12.3",
@@ -6468,7 +6468,7 @@
     "pick": "John White",
     "pick_id": "5079628",
     "team": "USM",
-    "p": 0.62744,
+    "p": 0.627414,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6486,18 +6486,18 @@
     "5079628": {
      "name": "John White",
      "team": "USM",
-     "p1": 0.752467,
+     "p1": 0.752405,
      "take1": false,
-     "p2": 0.420855,
+     "p2": 0.420757,
      "take2": false,
      "has_line": false
     },
     "4869553": {
      "name": "Bishop Davenport",
      "team": "USA",
-     "p1": 0.719445,
+     "p1": 0.719395,
      "take1": false,
-     "p2": 0.362719,
+     "p2": 0.362647,
      "take2": false,
      "has_line": false
     }
@@ -6509,13 +6509,13 @@
    "kick": "2026-11-21T23:00Z",
    "ml": {
     "pick": "TXST",
-    "p": 0.87199,
+    "p": 0.811745,
     "call": "take",
     "why": [
-     "Margin rating: TXST +3.6, WSU -7.6",
-     "Points per game: TXST 35.7, WSU 15.4",
-     "Last 3 games, average margin: TXST +7.3, WSU -15.0",
-     "Rushing yards allowed per game: TXST 113, WSU 183"
+     "Margin rating: TXST +3.5, WSU -5.8",
+     "Points per game: TXST 35.7, WSU 21.8",
+     "Rushing yards allowed per game: TXST 113, WSU 169",
+     "Rushing yards per game: TXST 250, WSU 139"
     ],
     "qbs": [
      "Owen Eshelman",
@@ -6526,7 +6526,7 @@
     "pick": "Owen Eshelman",
     "pick_id": "5263246",
     "team": "WSU",
-    "p": 0.662155,
+    "p": 0.60918,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6544,18 +6544,18 @@
     "5263246": {
      "name": "Owen Eshelman",
      "team": "WSU",
-     "p1": 0.70572,
+     "p1": 0.696218,
      "take1": false,
-     "p2": 0.335742,
+     "p2": 0.328433,
      "take2": false,
      "has_line": false
     },
     "5148803": {
      "name": "Brad Jackson",
      "team": "TXST",
-     "p1": 0.810613,
+     "p1": 0.811564,
      "take1": false,
-     "p2": 0.495502,
+     "p2": 0.497559,
      "take2": false,
      "has_line": false
     }
@@ -6567,10 +6567,10 @@
    "kick": "2026-11-21T23:15Z",
    "ml": {
     "pick": "USC",
-    "p": 0.901218,
+    "p": 0.903329,
     "call": "take",
     "why": [
-     "Margin rating: USC +7.5, MD -3.9",
+     "Margin rating: USC +7.4, MD -4.1",
      "Points allowed per game: USC 24.5, MD 33.7",
      "Points per game: USC 30.5, MD 23.4",
      "QB INT rate: USC 2.4%, MD 4.3%"
@@ -6584,7 +6584,7 @@
     "pick": "Jayden Maiava",
     "pick_id": "4685454",
     "team": "USC",
-    "p": 0.558963,
+    "p": 0.558887,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6602,18 +6602,18 @@
     "4872721": {
      "name": "Cardell Williams",
      "team": "MD",
-     "p1": 0.661876,
+     "p1": 0.661889,
      "take1": false,
-     "p2": 0.31141,
+     "p2": 0.311428,
      "take2": false,
      "has_line": false
     },
     "4685454": {
      "name": "Jayden Maiava",
      "team": "USC",
-     "p1": 0.853108,
+     "p1": 0.853116,
      "take1": false,
-     "p2": 0.594718,
+     "p2": 0.594738,
      "take2": false,
      "has_line": false
     }
@@ -6625,10 +6625,10 @@
    "kick": "2026-11-22T00:00Z",
    "ml": {
     "pick": "UNLV",
-    "p": 0.586283,
+    "p": 0.580618,
     "call": null,
     "why": [
-     "Margin rating: UNLV +0.1, SJSU -6.4",
+     "Margin rating: UNLV -0.1, SJSU -6.4",
      "Points per game: UNLV 25.6, SJSU 18.2",
      "Rushing yards per game: UNLV 168, SJSU 99",
      "Last 3 games, average margin: UNLV +1.7, SJSU -5.0"
@@ -6642,7 +6642,7 @@
     "pick": "Daniel Rolovich",
     "pick_id": "5215357",
     "team": "SJSU",
-    "p": 0.515951,
+    "p": 0.515959,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6660,18 +6660,18 @@
     "5215357": {
      "name": "Daniel Rolovich",
      "team": "SJSU",
-     "p1": 0.64446,
+     "p1": 0.644444,
      "take1": false,
-     "p2": 0.296479,
+     "p2": 0.296461,
      "take2": false,
      "has_line": false
     },
     "4870607": {
      "name": "Jackson Arnold",
      "team": "UNLV",
-     "p1": 0.732263,
+     "p1": 0.732257,
      "take1": false,
-     "p2": 0.38009,
+     "p2": 0.380079,
      "take2": false,
      "has_line": false
     }
@@ -6683,10 +6683,10 @@
    "kick": "2026-11-22T00:00Z",
    "ml": {
     "pick": "LT",
-    "p": 0.848401,
+    "p": 0.847214,
     "call": "take",
     "why": [
-     "Margin rating: LT +3.8, ARST -6.9",
+     "Margin rating: LT +3.7, ARST -6.9",
      "Last 3 games, average margin: LT +22.3, ARST -1.0",
      "Points per game: LT 31.7, ARST 24.0",
      "Rushing yards allowed per game: LT 137, ARST 203"
@@ -6700,7 +6700,7 @@
     "pick": "Trey Owens",
     "pick_id": "5123665",
     "team": "ARST",
-    "p": 0.551272,
+    "p": 0.551229,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6718,18 +6718,18 @@
     "5123665": {
      "name": "Trey Owens",
      "team": "ARST",
-     "p1": 0.732363,
+     "p1": 0.732356,
      "take1": false,
-     "p2": 0.368062,
+     "p2": 0.368051,
      "take2": false,
      "has_line": false
     },
     "5150998": {
      "name": "Blake Baker",
      "team": "LT",
-     "p1": 0.774517,
+     "p1": 0.774512,
      "take1": false,
-     "p2": 0.448784,
+     "p2": 0.448773,
      "take2": false,
      "has_line": false
     }
@@ -6741,10 +6741,10 @@
    "kick": "2026-11-22T00:30Z",
    "ml": {
     "pick": "MIZ",
-    "p": 0.59666,
+    "p": 0.61408,
     "call": null,
     "why": [
-     "Margin rating: MIZ +6.2, UK +4.2",
+     "Margin rating: MIZ +6.4, UK +3.8",
      "Rushing yards allowed per game: MIZ 106, UK 144",
      "Points allowed per game: MIZ 23.9, UK 26.7",
      "Passing yards per game: MIZ 237, UK 207"
@@ -6755,12 +6755,12 @@
     ]
    },
    "h2h": {
-    "pick": "Kenny Minchey",
-    "pick_id": "4918099",
-    "team": "UK",
-    "p": 0.519033,
+    "pick": "Austin Simmons",
+    "pick_id": "5141684",
+    "team": "MIZ",
+    "p": 0.530547,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "4918099",
@@ -6776,20 +6776,20 @@
     "5141684": {
      "name": "Austin Simmons",
      "team": "MIZ",
-     "p1": 0.793216,
+     "p1": 0.810775,
      "take1": false,
-     "p2": 0.474462,
+     "p2": 0.497956,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "4918099": {
      "name": "Kenny Minchey",
      "team": "UK",
-     "p1": 0.717905,
+     "p1": 0.686761,
      "take1": false,
-     "p2": 0.357769,
+     "p2": 0.32758,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6799,24 +6799,24 @@
    "kick": "2026-11-22T00:30Z",
    "ml": {
     "pick": "UGA",
-    "p": 0.792553,
+    "p": 0.87568,
     "call": "take",
     "why": [
-     "Margin rating: UGA +19.0, SC +6.0",
-     "Points allowed per game: UGA 16.0, SC 25.2",
-     "AP rank: UGA #1, SC #17",
-     "Points per game: UGA 39.4, SC 33.4"
+     "Margin rating: UGA +19.2, SC +3.4",
+     "Points per game: UGA 39.4, SC 30.3",
+     "Last 3 games, average margin: UGA +24.7, SC -1.0",
+     "Points allowed per game: UGA 16.0, SC 26.2"
     ],
     "qbs": [
      "Gunner Stockton",
-     "LaNorris Sellers"
+     "Cutter Woods"
     ]
    },
    "h2h": {
-    "pick": "LaNorris Sellers",
-    "pick_id": "4875127",
+    "pick": "Cutter Woods",
+    "pick_id": "5164334",
     "team": "SC",
-    "p": 0.544488,
+    "p": 0.574282,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6825,27 +6825,27 @@
       "Gunner Stockton"
      ],
      [
-      "4875127",
-      "LaNorris Sellers"
+      "5164334",
+      "Cutter Woods"
      ]
     ]
    },
    "ptd": {
-    "4875127": {
-     "name": "LaNorris Sellers",
+    "5164334": {
+     "name": "Cutter Woods",
      "team": "SC",
-     "p1": 0.800461,
+     "p1": 0.717572,
      "take1": false,
-     "p2": 0.473447,
+     "p2": 0.348727,
      "take2": false,
      "has_line": false
     },
     "4685578": {
      "name": "Gunner Stockton",
      "team": "UGA",
-     "p1": 0.779888,
+     "p1": 0.781176,
      "take1": false,
-     "p2": 0.457109,
+     "p2": 0.460008,
      "take2": false,
      "has_line": false
     }
@@ -6857,10 +6857,10 @@
    "kick": "2026-11-22T00:30Z",
    "ml": {
     "pick": "ND",
-    "p": 0.936163,
+    "p": 0.938993,
     "call": "take",
     "why": [
-     "Margin rating: ND +16.6, SMU +3.7",
+     "Margin rating: ND +16.8, SMU +3.5",
      "Points allowed per game: ND 13.8, SMU 27.2",
      "AP rank: ND #5, SMU unranked",
      "Points per game: ND 39.5, SMU 31.6"
@@ -6871,12 +6871,12 @@
     ]
    },
    "h2h": {
-    "pick": "Kevin Jennings",
-    "pick_id": "5084084",
-    "team": "SMU",
-    "p": 0.520541,
+    "pick": "CJ Carr",
+    "pick_id": "5079369",
+    "team": "ND",
+    "p": 0.634006,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5084084",
@@ -6892,20 +6892,20 @@
     "5084084": {
      "name": "Kevin Jennings",
      "team": "SMU",
-     "p1": 0.798883,
+     "p1": 0.754055,
      "take1": false,
-     "p2": 0.47451,
+     "p2": 0.424402,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5079369": {
      "name": "CJ Carr",
      "team": "ND",
-     "p1": 0.816901,
+     "p1": 0.86755,
      "take1": false,
-     "p2": 0.523415,
+     "p2": 0.604993,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6914,14 +6914,14 @@
    "home": "CAL",
    "kick": "2026-11-22T00:30Z",
    "ml": {
-    "pick": "CAL",
-    "p": 0.549086,
+    "pick": "STAN",
+    "p": 0.541942,
     "call": null,
     "why": [
-     "Points allowed per game: CAL 34.8, STAN 41.1",
-     "Passing yards allowed per game: CAL 223, STAN 280",
-     "Last 3 games, win %: CAL 0%, STAN 33%",
-     "Average margin: CAL -15.6, STAN -15.0"
+     "Margin rating: STAN -5.4, CAL -10.2",
+     "Last 3 games, average margin: STAN -2.3, CAL -25.7",
+     "Points per game: STAN 21.0, CAL 17.2",
+     "Rushing yards per game: STAN 110, CAL 73"
     ],
     "qbs": [
      "Davis Warren",
@@ -6932,7 +6932,7 @@
     "pick": "Jaron-Keawe Sagapolutele",
     "pick_id": "5164313",
     "team": "CAL",
-    "p": 0.542499,
+    "p": 0.537896,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -6950,18 +6950,18 @@
     "4878681": {
      "name": "Davis Warren",
      "team": "STAN",
-     "p1": 0.788774,
+     "p1": 0.781163,
      "take1": false,
-     "p2": 0.471741,
+     "p2": 0.457508,
      "take2": false,
      "has_line": false
     },
     "5164313": {
      "name": "Jaron-Keawe Sagapolutele",
      "team": "CAL",
-     "p1": 0.822147,
+     "p1": 0.819013,
      "take1": false,
-     "p2": 0.519515,
+     "p2": 0.512032,
      "take2": false,
      "has_line": false
     }
@@ -6973,13 +6973,13 @@
    "kick": "2026-11-22T00:30Z",
    "ml": {
     "pick": "FRES",
-    "p": 0.86288,
+    "p": 0.915097,
     "call": "take",
     "why": [
-     "Margin rating: FRES +2.3, CSU -9.8",
-     "Points allowed per game: FRES 22.2, CSU 47.4",
-     "Rushing yards allowed per game: FRES 162, CSU 279",
-     "Last 3 games, average margin: FRES +2.3, CSU -12.0"
+     "Margin rating: FRES +2.4, CSU -11.4",
+     "Points allowed per game: FRES 22.2, CSU 50.2",
+     "Rushing yards allowed per game: FRES 162, CSU 308",
+     "Last 3 games, average margin: FRES +2.3, CSU -23.7"
     ],
     "qbs": [
      "Hauss Hejny",
@@ -6990,7 +6990,7 @@
     "pick": "Hauss Hejny",
     "pick_id": "5079443",
     "team": "CSU",
-    "p": 0.553672,
+    "p": 0.526819,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -7008,18 +7008,18 @@
     "5010409": {
      "name": "Jayden Mandal",
      "team": "FRES",
-     "p1": 0.795315,
+     "p1": 0.802674,
      "take1": false,
-     "p2": 0.489876,
+     "p2": 0.504618,
      "take2": false,
      "has_line": false
     },
     "5079443": {
      "name": "Hauss Hejny",
      "team": "CSU",
-     "p1": 0.796651,
+     "p1": 0.776601,
      "take1": false,
-     "p2": 0.482742,
+     "p2": 0.44452,
      "take2": false,
      "has_line": false
     }
@@ -7031,13 +7031,13 @@
    "kick": "2026-11-22T02:30Z",
    "ml": {
     "pick": "BOIS",
-    "p": 0.931384,
+    "p": 0.917812,
     "call": "take",
     "why": [
-     "Margin rating: BOIS +10.7, SDSU -6.0",
-     "Points per game: BOIS 39.9, SDSU 23.1",
-     "Points allowed per game: BOIS 27.1, SDSU 36.1",
-     "Rushing yards allowed per game: BOIS 120, SDSU 174"
+     "Margin rating: BOIS +10.6, SDSU -4.5",
+     "Points per game: BOIS 39.9, SDSU 23.9",
+     "Points allowed per game: BOIS 27.1, SDSU 33.6",
+     "QB INT rate: BOIS 1.0%, SDSU 3.4%"
     ],
     "qbs": [
      "Stone Saunders",
@@ -7048,7 +7048,7 @@
     "pick": "Maddux Madsen",
     "pick_id": "4870513",
     "team": "BOIS",
-    "p": 0.590652,
+    "p": 0.56561,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -7066,18 +7066,18 @@
     "5141664": {
      "name": "Stone Saunders",
      "team": "SDSU",
-     "p1": 0.642394,
+     "p1": 0.655103,
      "take1": false,
-     "p2": 0.286436,
+     "p2": 0.292013,
      "take2": false,
      "has_line": false
     },
     "4870513": {
      "name": "Maddux Madsen",
      "team": "BOIS",
-     "p1": 0.84911,
+     "p1": 0.850422,
      "take1": false,
-     "p2": 0.585513,
+     "p2": 0.589227,
      "take2": false,
      "has_line": false
     }
@@ -7089,13 +7089,13 @@
    "kick": "2026-11-22T03:15Z",
    "ml": {
     "pick": "OKST",
-    "p": 0.65801,
+    "p": 0.573859,
     "call": null,
     "why": [
-     "Margin rating: OKST +7.2, ASU -0.7",
-     "Points per game: OKST 42.0, ASU 23.6",
-     "Last 3 games, average margin: OKST +18.0, ASU +5.3",
-     "Passing yards per game: OKST 336, ASU 225"
+     "Margin rating: OKST +5.3, ASU -0.5",
+     "Points per game: OKST 40.3, ASU 23.6",
+     "Passing yards per game: OKST 332, ASU 225",
+     "Rushing yards per game: OKST 180, ASU 127"
     ],
     "qbs": [
      "Drew Mestemaker",
@@ -7106,7 +7106,7 @@
     "pick": "Drew Mestemaker",
     "pick_id": "5219834",
     "team": "OKST",
-    "p": 0.700597,
+    "p": 0.682124,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -7124,18 +7124,18 @@
     "5219834": {
      "name": "Drew Mestemaker",
      "team": "OKST",
-     "p1": 0.877583,
+     "p1": 0.875519,
      "take1": false,
-     "p2": 0.639812,
+     "p2": 0.630907,
      "take2": false,
      "has_line": false
     },
     "5209295": {
      "name": "Jake Fette",
      "team": "ASU",
-     "p1": 0.737997,
+     "p1": 0.742619,
      "take1": false,
-     "p2": 0.395799,
+     "p2": 0.40426,
      "take2": false,
      "has_line": false
     }
@@ -7147,12 +7147,12 @@
    "kick": "2026-11-22T03:30Z",
    "ml": {
     "pick": "ORST",
-    "p": 0.588063,
+    "p": 0.659396,
     "call": null,
     "why": [
-     "Points per game: ORST 36.8, USU 16.9",
-     "Passing yards per game: ORST 374, USU 180",
-     "Margin rating: ORST +1.2, USU -0.9",
+     "Points per game: ORST 36.8, USU 16.4",
+     "Margin rating: ORST +1.5, USU -2.3",
+     "Passing yards per game: ORST 374, USU 175",
      "Last 3 games, win %: ORST 0%, USU 67%"
     ],
     "qbs": [
@@ -7164,7 +7164,7 @@
     "pick": "Maalik Murphy",
     "pick_id": "4685497",
     "team": "ORST",
-    "p": 0.776287,
+    "p": 0.757516,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -7182,18 +7182,18 @@
     "4685497": {
      "name": "Maalik Murphy",
      "team": "ORST",
-     "p1": 0.832244,
+     "p1": 0.832444,
      "take1": false,
-     "p2": 0.520356,
+     "p2": 0.520825,
      "take2": false,
      "has_line": false
     },
     "4923285": {
      "name": "McCae Hillstead",
      "team": "USU",
-     "p1": 0.72832,
+     "p1": 0.734397,
      "take1": false,
-     "p2": 0.388011,
+     "p2": 0.395305,
      "take2": false,
      "has_line": false
     }
@@ -7205,10 +7205,10 @@
    "kick": "2026-11-22T03:30Z",
    "ml": {
     "pick": "NEV",
-    "p": 0.634235,
+    "p": 0.627955,
     "call": null,
     "why": [
-     "Margin rating: NEV -2.5, HAW -6.9",
+     "Margin rating: NEV -2.5, HAW -6.7",
      "Points per game: NEV 23.1, HAW 20.3",
      "Rushing yards per game: NEV 161, HAW 93",
      "Takeaways per game: NEV 0.7, HAW 1.3"
@@ -7222,7 +7222,7 @@
     "pick": "Micah Alejado",
     "pick_id": "5101124",
     "team": "HAW",
-    "p": 0.748441,
+    "p": 0.748395,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -7240,18 +7240,18 @@
     "4819250": {
      "name": "AJ Bianco",
      "team": "NEV",
-     "p1": 0.6267,
+     "p1": 0.626677,
      "take1": false,
-     "p2": 0.263412,
+     "p2": 0.263381,
      "take2": false,
      "has_line": false
     },
     "5101124": {
      "name": "Micah Alejado",
      "team": "HAW",
-     "p1": 0.790345,
+     "p1": 0.79033,
      "take1": false,
-     "p2": 0.44286,
+     "p2": 0.442825,
      "take2": false,
      "has_line": false
     }

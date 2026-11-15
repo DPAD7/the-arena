@@ -1,107 +1,66 @@
 {
- "at": "2026-11-14",
- "card": "2026-11-14",
- "event": "600061400",
- "name": "UFC 334: Gane vs. Hokit",
- "model": "2026-11-07",
+ "at": "2026-11-15",
+ "card": "2026-11-21",
+ "event": "600061665",
+ "name": "UFC Fight Night: Prochazka vs. Stirling",
+ "model": "2026-11-14",
  "picks": {
-  "401931773": {
+  "401927851": {
    "rank": 1,
-   "pick": "Donte Johnson",
-   "vs": "Cesar Almeida",
+   "pick": "Ikram Aliskerov",
+   "vs": "Jared Cannonier",
    "box": [
-    85,
-    15
+    75,
+    25
    ],
-   "p": 85,
+   "p": 75,
    "won": 82,
    "why": [
-    "11 years younger (28 vs 39)",
-    "KO power (0.65 knockdowns per 15 min) vs Almeida, KO'd once in the UFC",
-    "Pro record 9-0 vs 7-3",
-    "Higher UFC rating (1584 vs 1518)",
-    "Almeida took the fight on 46 days' notice"
+    "9 years younger (34 vs 43)",
+    "Pro record 18-2 vs 18-10",
+    "Round 1 margin +10 strikes, Cannonier -3",
+    "Strike margin +1.9 a minute vs -0.1"
    ],
-   "id": "5302831",
-   "own_facts": "",
-   "opp_facts": "Almeida took the fight on 46 days' notice",
-   "opp_flag": false,
-   "call": {
-    "market": "Moneyline",
-    "sel": "Donte Johnson",
-    "side": "Johnson wins",
-    "why": [
-     "11 years younger (28 vs 39)",
-     "KO power (0.65 knockdowns per 15 min) vs Almeida, KO'd once in the UFC",
-     "Pro record 9-0 vs 7-3",
-     "Higher UFC rating (1584 vs 1518)",
-     "Almeida took the fight on 46 days' notice"
-    ],
-    "p": 85,
-    "won": 88,
-    "won_n": 81,
-    "p_ml": 85,
-    "p_dist": 38,
-    "price": "-205"
-   }
-  },
-  "401922641": {
-   "rank": 2,
-   "pick": "Bilal Hasan",
-   "vs": "Luis Gurule",
-   "box": [
-    83,
-    17
-   ],
-   "p": 83,
-   "won": 82,
-   "why": [
-    "8 years younger (25 vs 33)",
-    "Pro record 10-0 vs 11-4",
-    "Higher UFC rating (1548 vs 1458)",
-    "Pro streak W10 vs L1"
-   ],
-   "id": "5264405",
+   "id": "4684776",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Bilal Hasan",
-    "side": "Hasan wins",
+    "sel": "Ikram Aliskerov",
+    "side": "Aliskerov wins",
     "why": [
-     "8 years younger (25 vs 33)",
-     "Pro record 10-0 vs 11-4",
-     "Higher UFC rating (1548 vs 1458)",
-     "Pro streak W10 vs L1"
+     "9 years younger (34 vs 43)",
+     "Pro record 18-2 vs 18-10",
+     "Round 1 margin +10 strikes, Cannonier -3",
+     "Strike margin +1.9 a minute vs -0.1"
     ],
-    "p": 83,
-    "won": 88,
-    "won_n": 81,
-    "p_ml": 83,
-    "p_dist": 45,
-    "price": "-1000"
+    "p": 75,
+    "won": 80,
+    "won_n": 164,
+    "p_ml": 75,
+    "p_dist": 50,
+    "price": "-345"
    }
   },
-  "401922643": {
-   "rank": 3,
-   "pick": "Terrance McKinney",
-   "vs": "Jim Miller",
+  "401927852": {
+   "rank": 2,
+   "pick": "Tallison Teixeira",
+   "vs": "Shamil Gaziev",
    "box": [
-    67,
-    33
+    72,
+    28
    ],
-   "p": 67,
+   "p": 72,
    "won": null,
    "why": [
-    "11 years younger (32 vs 43)",
-    "Strike margin +3.2 a minute vs -0.8",
-    "Controls 81% of grappling time, Miller 33%",
-    "Round 1 margin +9 strikes, Miller -0",
-    "McKinney missed weight by 4.2 lb"
+    "10 years younger (27 vs 37)",
+    "Strike margin +0.2 a minute vs -2.1",
+    "Round 1 margin +3 strikes, Gaziev -1",
+    "Absorbs 3.4 strikes a minute, Gaziev 5.1"
    ],
-   "id": "4425604",
-   "own_facts": "McKinney missed weight by 4.2 lb",
+   "id": "5212856",
+   "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
@@ -109,60 +68,132 @@
     "sel": "No",
     "side": "Fight does not go the distance",
     "why": [
-     "Pro wins by finish: Miller 69%, McKinney 94%",
-     "Submission tries per 15 min: Miller 1.6, McKinney 2.2",
-     "Submitted as a pro: Miller 3 times, McKinney 3 times"
+     "KO wins vs KO losses: Gaziev 10 KO wins, Teixeira KO'd once; Teixeira 6 KO wins, Gaziev KO'd 3 times",
+     "Pro wins by finish: Gaziev 87%, Teixeira 88%",
+     "KO'd as a pro: Gaziev 3 times, Teixeira once"
     ],
-    "p": 70,
-    "won": 68,
-    "won_n": 122,
-    "p_ml": 67,
-    "p_dist": 30,
-    "price": "-2000"
+    "p": 74,
+    "won": 67,
+    "won_n": 82,
+    "p_ml": 72,
+    "p_dist": 26
    }
   },
-  "401922639": {
-   "rank": 4,
-   "pick": "Caio Borralho",
-   "vs": "Yousri Belgaroui",
+  "401922277": {
+   "rank": 3,
+   "pick": "Navajo Stirling",
+   "vs": "Jiří Procházka",
    "box": [
-    66,
-    34
+    72,
+    28
    ],
-   "p": 66,
+   "p": 72,
    "won": null,
    "why": [
-    "Younger (33.8 vs 34.5)",
-    "Higher UFC rating (1671 vs 1584)",
-    "Pro record 18-2 vs 11-3",
-    "2 pro losses vs 3"
+    "5 years younger (29 vs 34)",
+    "Round 1 margin +17 strikes, Prochazka -7",
+    "Pro record 11-0 vs 32-6",
+    "Strike margin +3.9 a minute vs -0.1"
    ],
-   "id": "4835137",
+   "id": "5216713",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Caio Borralho",
-    "side": "Borralho wins",
+    "sel": "Navajo Stirling",
+    "side": "Stirling wins",
     "why": [
-     "Younger (33.8 vs 34.5)",
-     "Higher UFC rating (1671 vs 1584)",
-     "Pro record 18-2 vs 11-3",
-     "2 pro losses vs 3"
+     "5 years younger (29 vs 34)",
+     "Round 1 margin +17 strikes, Prochazka -7",
+     "Pro record 11-0 vs 32-6",
+     "Strike margin +3.9 a minute vs -0.1"
     ],
-    "p": 66,
-    "won": 67,
-    "won_n": 289,
-    "p_ml": 66,
-    "p_dist": 58,
-    "price": "-155"
+    "p": 72,
+    "won": 74,
+    "won_n": 201,
+    "p_ml": 72,
+    "p_dist": 29,
+    "price": "-148"
    }
   },
-  "401913647": {
+  "401934355": {
+   "rank": 4,
+   "pick": "Dom Mar Fan",
+   "vs": "Nikolas Motta",
+   "box": [
+    69,
+    31
+   ],
+   "p": 69,
+   "won": null,
+   "why": [
+    "7 years younger (27 vs 34)",
+    "Round 1 margin +3 strikes, Motta +1",
+    "Fought 7 months ago, Motta 17",
+    "Strike margin +1.6 a minute vs -1.3"
+   ],
+   "id": "5157806",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Moneyline",
+    "sel": "Dom Mar Fan",
+    "side": "Fan wins",
+    "why": [
+     "7 years younger (27 vs 34)",
+     "Round 1 margin +3 strikes, Motta +1",
+     "Fought 7 months ago, Motta 17",
+     "Strike margin +1.6 a minute vs -1.3"
+    ],
+    "p": 69,
+    "won": 67,
+    "won_n": 289,
+    "p_ml": 69,
+    "p_dist": 41
+   }
+  },
+  "401934356": {
    "rank": 5,
-   "pick": "Charles Radtke",
-   "vs": "Stephen Thompson",
+   "pick": "Diyar Nurgozhay",
+   "vs": "Alik Lorenz",
+   "box": [
+    69,
+    31
+   ],
+   "p": 69,
+   "won": null,
+   "why": [
+    "Younger (29.6 vs 29.8)",
+    "Pro record 11-2 vs 7-2",
+    "UFC minutes 29 vs 0",
+    "KO power (1.03 knockdowns per 15 min) vs Lorenz, KO'd once in the UFC"
+   ],
+   "id": "5213352",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "No",
+    "side": "Fight does not go the distance",
+    "why": [
+     "Pro wins by finish: Nurgozhay 73%, Lorenz 100%",
+     "KO wins vs KO losses: Nurgozhay 6 KO wins, Lorenz KO'd 2 times; Lorenz 6 KO wins, Nurgozhay KO'd never",
+     "KO'd as a pro: Nurgozhay never, Lorenz 2 times"
+    ],
+    "p": 73,
+    "won": 67,
+    "won_n": 82,
+    "p_ml": 69,
+    "p_dist": 27
+   }
+  },
+  "401927850": {
+   "rank": 6,
+   "pick": "Kevin Vallejos",
+   "vs": "Aljamain Sterling",
    "box": [
     65,
     35
@@ -170,302 +201,292 @@
    "p": 65,
    "won": null,
    "why": [
-    "7 years younger (36 vs 44)",
-    "Fought 7 months ago, Thompson 16",
-    "Finishes 67% of pro wins, Thompson 35%",
-    "Stops 100% of takedowns, Thompson 63%"
+    "12 years younger (25 vs 37)",
+    "Controls 90% of grappling time, Sterling 66%",
+    "Pro record 18-1 vs 26-5",
+    "Finishes 83% of pro wins, Sterling 42%"
    ],
-   "id": "4416297",
+   "id": "5145681",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Charles Radtke",
-    "side": "Radtke wins",
+    "sel": "Kevin Vallejos",
+    "side": "Vallejos wins",
     "why": [
-     "7 years younger (36 vs 44)",
-     "Fought 7 months ago, Thompson 16",
-     "Finishes 67% of pro wins, Thompson 35%",
-     "Stops 100% of takedowns, Thompson 63%"
+     "12 years younger (25 vs 37)",
+     "Controls 90% of grappling time, Sterling 66%",
+     "Pro record 18-1 vs 26-5",
+     "Finishes 83% of pro wins, Sterling 42%"
     ],
     "p": 65,
-    "won": 67,
-    "won_n": 289,
+    "won": 62,
+    "won_n": 255,
     "p_ml": 65,
-    "p_dist": 52,
-    "price": "+110"
+    "p_dist": 54,
+    "price": "-135"
    }
   },
-  "401922640": {
-   "rank": 6,
-   "pick": "Uroš Medić",
-   "vs": "Kevin Holland",
-   "box": [
-    65,
-    35
-   ],
-   "p": 65,
-   "won": null,
-   "why": [
-    "Pro record 14-3 vs 29-15",
-    "Younger (33.6 vs 34.0)",
-    "3 pro losses vs 15",
-    "KO power (3.20 knockdowns per 15 min) vs Holland, KO'd 2 times in the UFC"
-   ],
-   "id": "4685870",
-   "own_facts": "",
-   "opp_facts": "",
-   "opp_flag": false,
-   "call": {
-    "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
-    "why": [
-     "Pro wins by finish: Medic 100%, Holland 79%",
-     "Submitted as a pro: Medic 2 times, Holland 4 times",
-     "KO wins vs KO losses: Medic 12 KO wins, Holland KO'd 2 times; Holland 12 KO wins, Medic KO'd once"
-    ],
-    "p": 67,
-    "won": 68,
-    "won_n": 122,
-    "p_ml": 65,
-    "p_dist": 33,
-    "price": "-650"
-   }
-  },
-  "401931774": {
+  "401922278": {
    "rank": 7,
-   "pick": "Melquizael Costa",
-   "vs": "Jared Gordon",
+   "pick": "Dan Hooker",
+   "vs": "Brian Ortega",
    "box": [
-    63,
-    37
+    60,
+    40
    ],
-   "p": 63,
+   "p": 60,
    "won": null,
    "why": [
-    "8 years younger (30 vs 38)",
-    "Higher UFC rating (1606 vs 1529)",
-    "Round 1 margin +11 strikes, Gordon +1",
-    "Pro record 26-8 vs 21-9"
+    "6\" more reach (75 vs 69)",
+    "4\" taller",
+    "Fought 3 months ago, Ortega 15",
+    "Stops 77% of takedowns, Ortega 55%"
    ],
-   "id": "4425763",
+   "id": "3109135",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Melquizael Costa",
-    "side": "Costa wins",
+    "sel": "Dan Hooker",
+    "side": "Hooker wins",
     "why": [
-     "8 years younger (30 vs 38)",
-     "Higher UFC rating (1606 vs 1529)",
-     "Round 1 margin +11 strikes, Gordon +1",
-     "Pro record 26-8 vs 21-9"
+     "6\" more reach (75 vs 69)",
+     "4\" taller",
+     "Fought 3 months ago, Ortega 15",
+     "Stops 77% of takedowns, Ortega 55%"
     ],
-    "p": 63,
+    "p": 60,
     "won": 62,
     "won_n": 255,
-    "p_ml": 63,
-    "p_dist": 56,
-    "price": "-380"
+    "p_ml": 60,
+    "p_dist": 49,
+    "price": "-162"
    }
   },
-  "401922642": {
+  "401927854": {
    "rank": 8,
-   "pick": "Chris Duncan",
-   "vs": "Drew Dober",
+   "pick": "Santiago Luna",
+   "vs": "Aleksandre Topuria",
    "box": [
-    61,
-    39
+    58,
+    42
    ],
-   "p": 61,
+   "p": 58,
    "won": null,
    "why": [
-    "Pro record 15-3 vs 29-16",
-    "5 years younger (34 vs 38)",
-    "KO power (0.43 knockdowns per 15 min) vs Dober, KO'd 3 times in the UFC",
-    "3 pro losses vs 16"
+    "9 years younger (22 vs 31)",
+    "Strike margin +2.0 a minute vs +0.4",
+    "Late-round margin +16 strikes, Topuria -1",
+    "0.9 submission tries per 15 min, Topuria 0.0"
    ],
-   "id": "4867356",
+   "id": "5307799",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Moneyline",
-    "sel": "Chris Duncan",
-    "side": "Duncan wins",
+    "sel": "Santiago Luna",
+    "side": "Luna wins",
     "why": [
-     "Pro record 15-3 vs 29-16",
-     "5 years younger (34 vs 38)",
-     "KO power (0.43 knockdowns per 15 min) vs Dober, KO'd 3 times in the UFC",
-     "3 pro losses vs 16"
+     "9 years younger (22 vs 31)",
+     "Strike margin +2.0 a minute vs +0.4",
+     "Late-round margin +16 strikes, Topuria -1",
+     "0.9 submission tries per 15 min, Topuria 0.0"
     ],
-    "p": 61,
-    "won": 62,
-    "won_n": 255,
-    "p_ml": 61,
-    "p_dist": 44,
-    "price": "-185"
+    "p": 58,
+    "won": 60,
+    "won_n": 242,
+    "p_ml": 58,
+    "p_dist": 43
    }
   },
-  "401913646": {
+  "401927853": {
    "rank": 9,
-   "pick": "Josh Hokit",
-   "vs": "Ciryl Gane",
+   "pick": "Jake Matthews",
+   "vs": "Tahir Abdullayev",
    "box": [
-    56,
-    44
+    53,
+    47
    ],
-   "p": 56,
+   "p": 53,
    "won": null,
    "why": [
-    "8 years younger (29 vs 37)",
-    "Round 1 margin +16 strikes, Gane +11",
-    "Pro record 10-0 vs 14-2",
-    "Stops 78% of takedowns, Gane 47%"
+    "3\" taller",
+    "Higher UFC rating (1627 vs 1525)",
+    "0.7 submission tries per 15 min, Abdullayev 0.0",
+    "Lands 44% of strikes, Abdullayev 43%"
    ],
-   "id": "4049391",
+   "id": "3089915",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
     "why": [
-     "Five-round fight",
-     "Pro wins by finish: Gane 71%, Hokit 90%",
-     "Strikes absorbed a minute: Gane 2.3, Hokit 6.1"
+     "Average UFC fight: Matthews 11.5 min, Abdullayev 14.5 min",
+     "UFC minutes: Matthews 276, Abdullayev 14",
+     "Pro losses on the cards: Matthews 4, Abdullayev 2"
     ],
-    "p": 66,
-    "won": 68,
-    "won_n": 122,
-    "p_ml": 56,
-    "p_dist": 34,
-    "price": "-295"
+    "p": 55,
+    "won": 55,
+    "won_n": 119,
+    "p_ml": 53,
+    "p_dist": 55
    }
   },
-  "401932013": {
+  "401927855": {
    "rank": 10,
-   "pick": "Samuel Sanches",
-   "vs": "Evan Elder",
+   "pick": "Kyoji Horiguchi",
+   "vs": "Asu Almabayev",
    "box": [
-    52,
-    48
+    53,
+    47
    ],
-   "p": 52,
+   "p": 53,
    "won": null,
    "why": [
-    "6 years younger (24 vs 30)",
-    "Higher UFC rating (1523 vs 1522)",
-    "Finishes 82% of wins; Elder finished once",
-    "Fought 14 months ago, Elder 19"
+    "Late-round margin +4 strikes, Almabayev -0",
+    "Round 1 margin +7 strikes, Almabayev +4",
+    "Stops 61% of takedowns, Almabayev 44%",
+    "Strike margin +1.6 a minute vs +0.3"
    ],
-   "id": "5293557",
+   "id": "2613374",
    "own_facts": "",
    "opp_facts": "",
    "opp_flag": false,
    "call": {
     "market": "Fight to Go the Distance",
-    "sel": "No",
-    "side": "Fight does not go the distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
     "why": [
-     "KO wins vs KO losses: Elder 4 KO wins, Sanches KO'd never; Sanches 8 KO wins, Elder KO'd once",
-     "Pro wins by finish: Elder 60%, Sanches 82%",
-     "Submitted as a pro: Elder never, Sanches once"
+     "Pro fights won on the cards: Horiguchi 33%, Almabayev 37%",
+     "Average UFC fight: Horiguchi 13.9 min, Almabayev 13.0 min",
+     "UFC minutes: Horiguchi 153, Almabayev 104"
     ],
-    "p": 56,
+    "p": 68,
+    "won": 63,
+    "won_n": 57,
+    "p_ml": 53,
+    "p_dist": 68
+   }
+  },
+  "401927856": {
+   "rank": 11,
+   "pick": "Alessandro Costa",
+   "vs": "Amir Albazi",
+   "box": [
+    53,
+    47
+   ],
+   "p": 53,
+   "won": null,
+   "why": [
+    "2 years younger (31 vs 33)",
+    "Round 1 margin +3 strikes, Albazi -3",
+    "Late-round margin -6 strikes, Albazi -10",
+    "Strike margin +0.1 a minute vs -1.4"
+   ],
+   "id": "5074121",
+   "own_facts": "",
+   "opp_facts": "",
+   "opp_flag": false,
+   "call": {
+    "market": "Fight to Go the Distance",
+    "sel": "Yes",
+    "side": "Fight goes the distance",
+    "why": [
+     "Pro losses on the cards: Albazi 3, Costa 2",
+     "Average UFC fight: Albazi 14.5 min, Costa 8.8 min",
+     "UFC minutes: Albazi 101, Costa 70"
+    ],
+    "p": 57,
     "won": 55,
-    "won_n": 120,
-    "p_ml": 52,
-    "p_dist": 44,
-    "price": "-160"
+    "won_n": 119,
+    "p_ml": 53,
+    "p_dist": 57
    }
   }
  },
  "all": {
-  "401931773": {
-   "pick": "Donte Johnson",
-   "vs": "Cesar Almeida",
-   "p": 85,
-   "women": false
-  },
-  "401922641": {
-   "pick": "Bilal Hasan",
-   "vs": "Luis Gurule",
-   "p": 83,
-   "women": false
-  },
-  "401922638": {
-   "pick": "Kayla Harrison",
-   "vs": "Amanda Nunes",
+  "401927851": {
+   "pick": "Ikram Aliskerov",
+   "vs": "Jared Cannonier",
    "p": 75,
-   "women": true
-  },
-  "401922643": {
-   "pick": "Terrance McKinney",
-   "vs": "Jim Miller",
-   "p": 67,
    "women": false
   },
-  "401922639": {
-   "pick": "Caio Borralho",
-   "vs": "Yousri Belgaroui",
-   "p": 66,
+  "401927852": {
+   "pick": "Tallison Teixeira",
+   "vs": "Shamil Gaziev",
+   "p": 72,
    "women": false
   },
-  "401913647": {
-   "pick": "Charles Radtke",
-   "vs": "Stephen Thompson",
+  "401922277": {
+   "pick": "Navajo Stirling",
+   "vs": "Jiří Procházka",
+   "p": 72,
+   "women": false
+  },
+  "401934355": {
+   "pick": "Dom Mar Fan",
+   "vs": "Nikolas Motta",
+   "p": 69,
+   "women": false
+  },
+  "401934356": {
+   "pick": "Diyar Nurgozhay",
+   "vs": "Alik Lorenz",
+   "p": 69,
+   "women": false
+  },
+  "401927850": {
+   "pick": "Kevin Vallejos",
+   "vs": "Aljamain Sterling",
    "p": 65,
    "women": false
   },
-  "401922640": {
-   "pick": "Uroš Medić",
-   "vs": "Kevin Holland",
-   "p": 65,
+  "401922278": {
+   "pick": "Dan Hooker",
+   "vs": "Brian Ortega",
+   "p": 60,
    "women": false
   },
-  "401931774": {
-   "pick": "Melquizael Costa",
-   "vs": "Jared Gordon",
-   "p": 63,
+  "401927854": {
+   "pick": "Santiago Luna",
+   "vs": "Aleksandre Topuria",
+   "p": 58,
    "women": false
   },
-  "401922645": {
-   "pick": "Bia Mesquita",
-   "vs": "Macy Chiasson",
-   "p": 62,
-   "women": true
-  },
-  "401922642": {
-   "pick": "Chris Duncan",
-   "vs": "Drew Dober",
-   "p": 61,
+  "401927853": {
+   "pick": "Jake Matthews",
+   "vs": "Tahir Abdullayev",
+   "p": 53,
    "women": false
   },
-  "401913646": {
-   "pick": "Josh Hokit",
-   "vs": "Ciryl Gane",
-   "p": 56,
+  "401927855": {
+   "pick": "Kyoji Horiguchi",
+   "vs": "Asu Almabayev",
+   "p": 53,
    "women": false
   },
-  "401932013": {
-   "pick": "Samuel Sanches",
-   "vs": "Evan Elder",
-   "p": 52,
+  "401927856": {
+   "pick": "Alessandro Costa",
+   "vs": "Amir Albazi",
+   "p": 53,
    "women": false
   }
  },
- "dist_model": "2026-11-07",
+ "dist_model": "2026-11-14",
  "cards": [
   {
-   "card": "2026-11-14",
-   "event": "600061400",
-   "name": "UFC 334: Gane vs. Hokit",
-   "start": "2026-11-14T22:00:00+00:00",
+   "card": "2026-11-21",
+   "event": "600061665",
+   "name": "UFC Fight Night: Prochazka vs. Stirling",
+   "start": "2026-11-21T15:00:00+00:00",
    "model": "ufc"
   }
  ]
