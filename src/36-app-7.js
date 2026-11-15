@@ -1849,9 +1849,10 @@
     };
     BUILT.forEach(function (x) { x.ls.forEach(function (b) { b.s2 = stOf(b); }); });
     var done = function (b) { return b.s2 === "won" || b.s2 === "lost"; };
-    var rank = function (b) { return (b.s2 === "live" ? 0 : done(b) ? 2e13 : 1e13) + (b.k < 9e15 ? b.k / 1000 : 9e12); };
     var CNT = {};
     BUILT.forEach(function (x, ci) { if (isOpen[ci]) x.ls.forEach(function (b) { CNT[b.id] = (CNT[b.id] || 0) + 1; }); });
+    /* among the finished, the shared ones lead so they line up with no gaps */
+    var rank = function (b) { return (b.s2 === "live" ? 0 : done(b) ? 2e13 + (CNT[b.id] > 1 ? 0 : 5e12) : 1e13) + (b.k < 9e15 ? b.k / 1000 : 9e12); };
     var first = {};
     BUILT.forEach(function (x, ci) { if (isOpen[ci]) x.ls.forEach(function (b) { if (!first[b.id]) first[b.id] = b; }); });
     var keys = Object.keys(first).sort(function (a, b) { return rank(first[a]) - rank(first[b]); });
@@ -1861,7 +1862,9 @@
       var cs = [];
       BUILT.forEach(function (x, ci) { if (isOpen[ci] && !used[ci][id] && legIn(ci, id)) cs.push(ci); });
       if (!cs.length) return;
-      if (cs.length > 1 && !done(first[id])) {
+      /* finished legs line up too: Jaguars with Jaguars, Chiefs with Chiefs
+         (Jose, Nov 15, 2026: "simple logic") */
+      if (cs.length > 1) {
         var row = Math.max.apply(null, cs.map(function (ci) { return cols[ci].length; }));
         cs.forEach(function (ci) {
           /* a blank holds the row: a later leg pulled up to fill it put NDSU
@@ -1878,7 +1881,7 @@
     for (var r = 0; r < rows; r++) {
       for (var ci = 0; ci < cols.length; ci++) {
         var b0 = cols[ci][r];
-        if (!b0 || !span[ci][r] || done(b0)) continue;
+        if (!b0 || !span[ci][r]) continue;
         var n = 1;
         while (ci + n < cols.length && isOpen[ci + n] && cols[ci + n][r] && cols[ci + n][r].id === b0.id) { span[ci + n][r] = 0; n++; }
         span[ci][r] = n;
