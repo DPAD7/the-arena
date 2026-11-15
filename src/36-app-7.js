@@ -1902,10 +1902,11 @@
       var bet = x.bet, op = isOpen[ci];
       var st = x.ls.some(function (b) { return b.st === "lost"; }) ? "lost" : "";
       return '<div class="slipcard sl2col' + (op ? " slipcard--open" : "") + (st ? " slipcard--" + st : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' +
-        '<div class="sl2head"><span>' + x.ls.length + (x.ls.length > 1 ? " LEGS" : " LEG") + '</span>' + arrow + '</div>' +
+        /* the price on top, then amount, the arrow, payout on one line; no
+           legs count (Jose, Nov 14, 2026) */
+        '<div class="sl2head"><b class="sl2price">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(boostedOdds(bet))) + '</b>' +
+        '<div class="sl2kv"><span>Amount<b>' + cm(bet.wager || 0) + '</b></span>' + arrow + '<span>Payout<b class="cashpay">' + cm(bet.topay || 0) + '</b></span></div></div>' +
         (op ? cols[ci].map(function (b, r) { return legHtml(b, span[ci][r]); }).join("") : "") +
-        '<div class="sl2foot"><b class="sl2price">' + (CASHHIDE ? "••••" : esc(boostedOdds(bet))) + '</b>' +
-        '<div class="sl2kv"><span>Amount<b>' + cm(bet.wager || 0) + '</b></span><span>Payout<b class="cashpay">' + cm(bet.topay || 0) + '</b></span></div></div>' +
         '</div>';
     }).join("") + '</div>';
   }
