@@ -4645,7 +4645,8 @@
 .sl2 .sl2--won .sl2pic, .sl2 .sl2--lost .sl2pic { opacity: .35; filter: grayscale(1); }
 .sl2 .sl2foot { padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
 .sl2 .sl2price { font: 800 24px "Barlow Condensed", "Arial Narrow", sans-serif; line-height: 1; color: #fff; }
-.sl2 .sl2kv { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 4px; border-top: 1px solid #2a2a2a; padding-top: 6px; }
+.sl2 .sl2kv { width: 100%; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 4px; }
+.sl2 .sl2head { cursor: pointer; padding: 12px 6px !important; -webkit-tap-highlight-color: transparent; }
 .sl2 .sl2kv span { display: flex; flex-direction: column; align-items: center; gap: 1px; font: 600 10px Barlow, Arial, sans-serif; color: #8a8a8a; }
 .sl2 .sl2kv b { font: 700 13px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; }
 .sl2 .sl2kv b.cashpay { color: #17c257; }

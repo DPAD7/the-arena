@@ -1833,6 +1833,8 @@
      betslip-backup-2026-11-14. */
   function sl2Html(BUILT, cm) {
     if (!BUILT.length) return "";
+    /* whole dollars, no cents (Jose, Nov 14, 2026) */
+    var cm0 = function (v) { return CASHHIDE ? "\u2022\u2022\u2022\u2022" : "$" + Math.round(v).toLocaleString("en-US"); };
     var isOpen = BUILT.map(function (x) { return !!OPENSLIP[x.bet.id]; });
     var stOf = function (b) {
       if (b.st === "won" || b.st === "lost") return b.st;
@@ -1904,8 +1906,11 @@
       return '<div class="slipcard sl2col' + (op ? " slipcard--open" : "") + (st ? " slipcard--" + st : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' +
         /* the price on top, then amount, the arrow, payout on one line; no
            legs count (Jose, Nov 14, 2026) */
-        '<div class="sl2head"><b class="sl2price">' + esc(boostedOdds(bet)) + '</b>' +
-        '<div class="sl2kv"><span>Amount<b>' + cm(bet.wager || 0) + '</b></span>' + arrow + '<span>Payout<b class="cashpay">' + cm(bet.topay || 0) + '</b></span></div></div>' +
+        /* one line -- amount, odds, payout -- and the line itself opens the
+           legs; no arrow (Jose, Nov 14, 2026) */
+        '<div class="sl2head" onclick="if(!window._sl2held)slipOpen(this)"><div class="sl2kv"><span>Amount<b>' + cm0(bet.wager || 0) + '</b></span>' +
+        '<b class="sl2price">' + esc(boostedOdds(bet)) + '</b>' +
+        '<span>Payout<b class="cashpay">' + cm0(bet.topay || 0) + '</b></span></div></div>' +
         (op ? cols[ci].map(function (b, r) { return legHtml(b, span[ci][r]); }).join("") : "") +
         '</div>';
     }).join("") + '</div>';
@@ -2063,6 +2068,14 @@
       if (!open.length) putHTML(box, '<div class="cashnone">No open slips</div>');
       else { var BUILT = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
+          /* a moneyline leg finds its game by the game id it carries when the
+             board's row has lost the id -- the live line blanks it mid-game,
+             and Texas and Utah lost their logos and names (Jose, Nov 14, 2026) */
+          var LM = LMAP[lg.sel];
+          if (!LM && lg.g && /^0ML/.test(lg.sel || "")) {
+            var rr = trkRow(lg.g), ab = String(lg.label || "").split(" ")[0].toUpperCase();
+            if (rr && (ab === rr.g[3] || ab === rr.g[4])) LM = { g: String(rr.g[1]), k: "ml", s: ab === rr.g[3] ? 0 : 1, lg: rr.lg };
+          }
           var v = BANK.legs[lg.sel] || {};
           /* a result the clock wrote onto the slip settles the leg on every
              device at once (Oct 3, 2026) */
@@ -2073,10 +2086,10 @@
              Jose, Sep 26, 2026) */
           var b2 = document.querySelector('button.price[data-oid="' + (window.CSS && CSS.escape ? CSS.escape(lg.sel) : lg.sel) + '"]');
           var c2 = b2 && b2.closest(".gcard");
-          var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LMAP[lg.sel] || {}).g || "";
+          var gid = v.g || (c2 ? (c2.dataset.espn || c2.dataset.bout || "") : "") || (LM || {}).g || "";
           var lab = v.l || ((lg.label || lg.pick || "") + " \u00b7 ");
           var pic0 = "", fw = "", fmk = "", fimg = "";
-          if (!LMAP[lg.sel]) {
+          if (!LM) {
             var pg0 = trkGameOf(lg);
             if (pg0) {
               gid = gid || pg0;
@@ -2094,8 +2107,8 @@
           }
           /* a fight leg wears its fighter, or both men for a leg on the fight,
              off the bout it was placed on, and the market's own mark */
-          var fv = (LMAP[lg.sel] && LMAP[lg.sel].fight) ? LMAP[lg.sel] : trkFightOf(lg, {});
-          var fr0 = fv && trkFightRow(fv.g), bv = LMAP[lg.sel], br0 = bv && !bv.fight && trkRow(bv.g);
+          var fv = (LM && LM.fight) ? LM : trkFightOf(lg, {});
+          var fr0 = fv && trkFightRow(fv.g), bv = LM, br0 = bv && !bv.fight && trkRow(bv.g);
           if (br0) {
             gid = String(bv.g);
             fw = bv.k === "ml" ? br0.g[bv.s === 0 ? 3 : 4] : br0.g[bv.s === 0 ? 5 : 7];
@@ -2382,6 +2395,8 @@
         clearTimeout(kvT);
         kvT = setTimeout(function () {
           CASHHIDE = !CASHHIDE;
+          /* the hold is not a tap: the line it ends on does not open */
+          window._sl2held = 1; setTimeout(function () { window._sl2held = 0; }, 600);
           try { localStorage.setItem("arena.cashhide", CASHHIDE ? "1" : "0"); } catch (e2) {}
           if (navigator.vibrate) navigator.vibrate(12);
           bankDraw();
