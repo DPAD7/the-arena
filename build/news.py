@@ -58,7 +58,7 @@ DOUBT = re.compile(r"\bdoubtful\b", re.I)
 # hurt and not ruled out: "has shoulder sprain, uncertain", "can't count on
 # him being ready" (Iowa's Hank Brown, Oct 6-8, 2026)
 QUEST = re.compile(r"\buncertain\b|can'?t count on|\bquestionable\b|game-time decision|day-to-day|\bsprain|\bbanged up|\blimited in practice", re.I)
-START = re.compile(r"\b(to start|will start|set to start|slated to start|gets the start|"
+START = re.compile(r"\b(to start|will start|set to start|slated to start|gets the start|in line to start|expected to start|"
                    r"named (the )?starter|start(s|ing)? at QB)\b", re.I)
 
 
@@ -278,6 +278,73 @@ def main():
     print("news: %d college clubs' feeds read" % len(tids))
     held, named = load(HELD), load(NAMED)
     moved = []
+    # theScore's injury mark on each college card's passer. ESPN's college
+    # feeds never carried it: theScore had LaNorris Sellers QUESTIONABLE
+    # (ankle) at 7:40 PM, five minutes before kickoff, and Cutter Woods
+    # started -- the board said nothing and South Carolina went from -310 to
+    # -150 on his slip (Jose, Nov 14, 2026: "get it from the score too").
+    # The game is matched by its clock and either club's letters, and the man
+    # only inside his own club's roster, by his whole name.
+    SCORE_ST = {"QUESTIONABLE": "Questionable", "DOUBTFUL": "Doubtful", "OUT": "Out",
+                "INJURED_RESERVE": "Injured Reserve", "IR": "Injured Reserve", "SUSPENDED": "Suspended"}
+    try:
+        lo, hi = (NOW - dt.timedelta(hours=6)).strftime("%Y-%m-%dT%H:00:00Z"), (NOW + dt.timedelta(days=2)).strftime("%Y-%m-%dT%H:00:00Z")
+        sev = rq.get("https://api.thescore.com/ncaaf/events?game_date.in=%s,%s" % (lo, hi), impersonate="chrome124", timeout=20).json() or []
+    except Exception:
+        sev = []
+    rosters = {}
+    def roster(tid):
+        if tid not in rosters:
+            try:
+                rosters[tid] = rq.get("https://api.thescore.com/ncaaf/teams/%s/players" % tid, impersonate="chrome124", timeout=20).json() or []
+            except Exception:
+                rosters[tid] = []
+        return rosters[tid]
+    n_score = 0
+    for g in json.loads(m2.group(1)) if m2 else []:
+        if str(g[1]) not in cfb_soon:
+            continue
+        try:
+            t = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
+        except ValueError:
+            continue
+        ev0 = None
+        for e in sev:
+            try:
+                te = dt.datetime.strptime(e.get("game_date") or "", "%a, %d %b %Y %H:%M:%S %z")
+            except ValueError:
+                continue
+            if abs((te - t).total_seconds()) <= 45 * 60 and ((e.get("away_team") or {}).get("abbreviation") == g[3] or
+                                                            (e.get("home_team") or {}).get("abbreviation") == g[4]):
+                ev0 = e
+                break
+        if not ev0:
+            continue
+        for i, ci, side in ((5, 3, "away_team"), (7, 4, "home_team")):
+            pid, name = str(g[i + 1] or ""), g[i] or ""
+            if not pid or not name:
+                continue
+            want = " ".join(fold(name))
+            for pl in roster((ev0.get(side) or {}).get("id")):
+                if (pl.get("position_abbreviation") or pl.get("position") or "") != "QB" or " ".join(fold(pl.get("full_name") or "")) != want:
+                    continue
+                inj = pl.get("injury") or {}
+                st = SCORE_ST.get(str(inj.get("status") or "").upper())
+                if not st:
+                    break
+                try:
+                    when = dt.datetime.strptime(inj.get("updated_at") or "", "%a, %d %b %Y %H:%M:%S %z").astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%MZ")
+                except ValueError:
+                    when = NOW.strftime("%Y-%m-%dT%H:%MZ")
+                if (held.get(pid) or {}).get("since", "") >= when:
+                    break
+                note = "%s (%s)" % (st, inj.get("note") or "")
+                held[pid] = {"status": st, "abbr": st[0], "type": inj.get("note"), "side": inj.get("side"), "since": when,
+                             "returns": None, "note": note, "src": "theScore, %s: %s %s" % (when, name, note)}
+                moved.append("%s %s %s (theScore)" % (g[ci], name, note))
+                n_score += 1
+                break
+    print("news: theScore read for %d college games, %d marks" % (len(sev), n_score))
     # everyone else on ESPN's injury report -- linemen, targets, backs, the
     # men QB Wire names -- for a headline that puts him back in the lineup
     # before the report catches up (Jose, Oct 8, 2026: Tyler Smith activated

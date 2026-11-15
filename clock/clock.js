@@ -6,7 +6,9 @@
    the next moment that matters and nothing between:
 
      the three sweeps           9, 15, 21 ET           (refresh.py SWEEP_ET)
-     before each start          120, 60, 30 minutes    (BEFORE: prices, inactives)
+     before each start          120, 60, 30, 10 minutes (BEFORE: prices, inactives;
+                                10 for a starter named at the last minute --
+                                Thamel had Woods for Sellers at 7:35, Nov 14, 2026)
      the injury report          3:30-7 p.m. ET, each half hour, on each
                                 game's three practice-report days (REPORT_DAYS)
      a card or a game running   every ten minutes while it runs (the live passes;
@@ -32,7 +34,7 @@ const SWEEP_ET = [9, 15, 21];
 // the 10 ET hub wake and the DraftKings login touch are gone: the hub readers
 // left refresh.py and the login is read on his double tap (Oct 12, 2026)
 const PICKS_EVERY = 5 * 60000;       // /state and suggest.json, not every 5-15s tick (Oct 12, 2026)
-const BEFORE = [120, 60, 30];
+const BEFORE = [120, 60, 30, 10];
 // the NFL's practice reports, by kickoff weekday (0 = Sunday): the report days
 const REPORT_DAYS = { 0: [3, 4, 5], 1: [4, 5, 6], 4: [1, 2, 3], 5: [2, 3, 4], 6: [2, 3, 4], 3: [0, 1, 2] };
 const MIN = 60000;
