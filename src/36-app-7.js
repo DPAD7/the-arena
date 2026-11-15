@@ -1404,6 +1404,7 @@
     var c = btn.closest(".slipcard"), on = c.classList.toggle("slipcard--open");
     if (c.dataset.bet) { if (on) OPENSLIP[c.dataset.bet] = 1; else delete OPENSLIP[c.dataset.bet]; }
     if (on) trkPull();
+    if (c.classList.contains("sl2col") && typeof bankDraw === "function") bankDraw();
   };
   var walletBeat = function () {
     var sh = document.getElementById("cashsheet");
@@ -1819,6 +1820,95 @@
     }
   }
   if (/^#(slip|game|bout)=/.test(location.hash)) { landOn(location.href); history.replaceState(null, "", location.pathname); }
+
+  /* ---- the slip in columns (Jose, Nov 14, 2026) ----
+     Every open slip is a column, side by side. The top says how many legs
+     and carries the arrow; the arrow opens the legs; the odds, the amount and
+     the payout sit at the foot. Each leg is its picture behind, its price top
+     left, its start (or a gold dot while live) top right, and its name with
+     who it plays in a strip under the picture. Live legs lead, then the rest
+     by start, and finished ones drop to the foot in green or red. A leg on
+     two open slips sits on the same row of both, and as one block across
+     them when the two are side by side. The old card is tagged
+     betslip-backup-2026-11-14. */
+  function sl2Html(BUILT, cm) {
+    if (!BUILT.length) return "";
+    var isOpen = BUILT.map(function (x) { return !!OPENSLIP[x.bet.id]; });
+    var stOf = function (b) {
+      if (b.st === "won" || b.st === "lost") return b.st;
+      var f = TRKD["f" + b.g], g = TRKD[b.g];
+      if ((f && f.state === "in" && f.period) || (g && g.state === "in")) return "live";
+      return "";
+    };
+    BUILT.forEach(function (x) { x.ls.forEach(function (b) { b.s2 = stOf(b); }); });
+    var done = function (b) { return b.s2 === "won" || b.s2 === "lost"; };
+    var rank = function (b) { return (b.s2 === "live" ? 0 : done(b) ? 2e13 : 1e13) + (b.k < 9e15 ? b.k / 1000 : 9e12); };
+    var CNT = {};
+    BUILT.forEach(function (x, ci) { if (isOpen[ci]) x.ls.forEach(function (b) { CNT[b.id] = (CNT[b.id] || 0) + 1; }); });
+    var first = {};
+    BUILT.forEach(function (x, ci) { if (isOpen[ci]) x.ls.forEach(function (b) { if (!first[b.id]) first[b.id] = b; }); });
+    var keys = Object.keys(first).sort(function (a, b) { return rank(first[a]) - rank(first[b]); });
+    var cols = BUILT.map(function () { return []; }), used = BUILT.map(function () { return {}; });
+    var legIn = function (ci, id) { return BUILT[ci].ls.filter(function (b) { return b.id === id; })[0]; };
+    keys.forEach(function (id) {
+      var cs = [];
+      BUILT.forEach(function (x, ci) { if (isOpen[ci] && !used[ci][id] && legIn(ci, id)) cs.push(ci); });
+      if (!cs.length) return;
+      if (cs.length > 1 && !done(first[id])) {
+        var row = Math.max.apply(null, cs.map(function (ci) { return cols[ci].length; }));
+        cs.forEach(function (ci) {
+          while (cols[ci].length < row) {
+            var nx = keys.filter(function (q) { var b = legIn(ci, q); return b && !used[ci][q] && CNT[q] < 2 && !done(b) && rank(b) >= rank(first[id]); })[0];
+            if (nx) { cols[ci].push(legIn(ci, nx)); used[ci][nx] = 1; } else cols[ci].push(null);
+          }
+        });
+      }
+      cs.forEach(function (ci) { cols[ci].push(legIn(ci, id)); used[ci][id] = 1; });
+    });
+    /* a leg on neighbouring open slips at the same row is drawn once, across */
+    var span = cols.map(function (c) { return c.map(function () { return 1; }); });
+    var rows = Math.max.apply(null, cols.map(function (c) { return c.length; }).concat([0]));
+    for (var r = 0; r < rows; r++) {
+      for (var ci = 0; ci < cols.length; ci++) {
+        var b0 = cols[ci][r];
+        if (!b0 || !span[ci][r] || done(b0)) continue;
+        var n = 1;
+        while (ci + n < cols.length && isOpen[ci + n] && cols[ci + n][r] && cols[ci + n][r].id === b0.id) { span[ci + n][r] = 0; n++; }
+        span[ci][r] = n;
+      }
+    }
+    var tm = function (k) { return k < 9e15 ? new Date(k).toLocaleTimeString("en-US", { timeZone: "America/New_York", hour: "numeric", minute: "2-digit" }) : ""; };
+    var picOf = function (b) {
+      var h = slipAvatars([b]), m = /<img[^>]*>/.exec(h);
+      if (!m) return { h: "", f: false };
+      var f = /slpic--face|headshots|\/face\/|faces\//.test(m[0]);
+      return { h: m[0].replace(/class="[^"]*"/, 'class="sl2img"').replace("<img ", '<img class="sl2img" ').replace(/(class="sl2img" )+class="sl2img"/, 'class="sl2img"'), f: f };
+    };
+    var legHtml = function (b, n) {
+      if (b === undefined) return "";
+      if (b === null) return '<div class="sl2leg sl2gap"></div>';
+      if (n === 0) return '<div class="sl2leg sl2ph"></div>';
+      var p = picOf(b), nm = b.nm || slipNames([b]);
+      return '<div class="sl2leg' + (b.s2 ? " sl2--" + b.s2 : "") + (p.f ? " sl2face" : "") + (n > 1 ? " sl2span" : "") + '"' +
+        (n > 1 ? ' style="width:calc(' + n + '00% + ' + (n - 1) * 6 + 'px)"' : "") + '>' +
+        '<div class="sl2pic">' + p.h + '</div>' +
+        '<b class="sl2o">' + esc(b.o || "") + '</b>' +
+        (b.s2 === "live" ? '<i class="sl2dot"></i>' : '<span class="sl2t">' + (b.s2 === "won" ? "WON" : b.s2 === "lost" ? "LOST" : esc(tm(b.k))) + '</span>') +
+        '<div class="sl2txt"><b>' + esc(nm) + '</b>' + (b.opp ? '<span>' + esc(b.opp) + '</span>' : "") + '</div></div>';
+    };
+    var arrow = '<button type="button" class="slview" aria-label="Show picks" onclick="slipOpen(this)">' +
+      '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
+    return '<div class="sl2" style="--n:' + BUILT.length + '">' + BUILT.map(function (x, ci) {
+      var bet = x.bet, op = isOpen[ci];
+      var st = x.ls.some(function (b) { return b.st === "lost"; }) ? "lost" : "";
+      return '<div class="slipcard sl2col' + (op ? " slipcard--open" : "") + (st ? " slipcard--" + st : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' +
+        '<div class="sl2head"><span>' + x.ls.length + (x.ls.length > 1 ? " LEGS" : " LEG") + '</span>' + arrow + '</div>' +
+        (op ? cols[ci].map(function (b, r) { return legHtml(b, span[ci][r]); }).join("") : "") +
+        '<div class="sl2foot"><b class="sl2price">' + (CASHHIDE ? "••••" : esc(boostedOdds(bet))) + '</b>' +
+        '<div class="sl2kv"><span>Amount<b>' + cm(bet.wager || 0) + '</b></span><span>Payout<b class="cashpay">' + cm(bet.topay || 0) + '</b></span></div></div>' +
+        '</div>';
+    }).join("") + '</div>';
+  }
   function bankDraw() {
     var box = document.getElementById("cashlegs"), amt = document.getElementById("cashamt");
     if (!box || !amt || !BANKMET) return;
@@ -1970,7 +2060,7 @@
         .sort(function (a, b) { return slipDay(a, kickOf) - slipDay(b, kickOf); });
       var LMAP = legMap();
       if (!open.length) putHTML(box, '<div class="cashnone">No open slips</div>');
-      else putHTML(box, open.map(function (bet) {
+      else { var BUILT = open.map(function (bet) {
         var ls = (bet.legs || []).map(function (lg) {
           var v = BANK.legs[lg.sel] || {};
           /* a result the clock wrote onto the slip settles the leg on every
@@ -2022,7 +2112,26 @@
             fmk = fv.k === "fml" ? markFor("ML") : (fightMarket(fv.key, parseInt(((typeof FPROPS === "object" && FPROPS[fv.g]) || {}).rounds, 10) || 3)[1] || []).slice(0, 1).map(function (k0) {
               return '<i class="slmk slmk--m"><svg aria-hidden="true"><use href="#' + k0 + '"/></svg></i>'; }).join("");
           }
-          return { id: lg.sel, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
+          /* the new slip's words: the club or the man, and who he plays
+             (Jose, Nov 14, 2026 -- the column slip) */
+          var nm2 = "", opp2 = "";
+          if (br0) {
+            var aw = br0.g[3], hm = br0.g[4], mine2 = bv.s === 0 ? aw : hm;
+            nm2 = bv.k === "ml" ? ((br0.lg === "college-football" && CFBNAME[mine2]) || mine2) : "";
+            opp2 = bv.s === 0 ? "@ " + hm : "vs " + aw;
+          }
+          if (fr0) {
+            var oth = fv.s === 0 ? fr0.g[5] : fv.s === 1 ? fr0.g[3] : "";
+            nm2 = (fv.s === 0 || fv.s === 1) ? (lastName(fw) || fw) : String(fw).split(" vs ").map(function (x) { return lastName(x) || x; }).join(" / ");
+            opp2 = oth ? "vs " + (lastName(oth) || oth) : "";
+            /* the bout card writes men in capitals; the slip reads them like a school */
+            var tc2 = function (t) { return t === t.toUpperCase() ? t.toLowerCase().replace(/(^|[\s'\-\/])(\S)/g, function (_, q, ch) { return q + ch.toUpperCase(); }) : t; };
+            nm2 = tc2(nm2); opp2 = opp2 ? "vs " + tc2(opp2.slice(3)) : "";
+          }
+          var mkt2 = /\u2016\s*([^\u00b7]+)/.exec(lab);
+          mkt2 = mkt2 ? mkt2[1].trim() : "";
+          if (mkt2 && mkt2 !== "ML") opp2 = mkt2 + (opp2 ? " \u00b7 " + opp2 : "");
+          return { id: lg.sel, nm: nm2, opp: opp2, k: kickOf(lg.sel), o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
                       say (Oct 3, 2026: all six won and the card sat open) */
@@ -2033,43 +2142,11 @@
                    /* and its market's mark, as every fight leg wears */
                    fmk: fmk || (lg.img && / \u2016 ML$/.test(String(lg.label || "")) ? markFor("ML") : "") };
         });
-        var st = ls.some(function (b) { return b.st === "lost"; }) ? "lost" : ls.length && ls.every(function (b) { return b.st === "won"; }) ? "won" : "";
-        /* the icons only; the words fold under a "View picks" the way
-           DraftKings' own slip does (Jose, Sep 26, 2026) */
-        /* the names as one line, the way the slip always read; the legs'
-           prices stay behind the page (Jose, Sep 26, 2026) */
-        var rows = (bet.boost ? '<li class="slboostrow"><span class="slboost">' + esc(bet.boost.toUpperCase()) + '</span>' +
-            /* the price before the boost, beside the boost itself */
-            (bet.was && !CASHHIDE ? '<b><s class="slwas">' + esc(String(bet.was).replace("-", "\u2212")) + '</s></b>' : "") + '</li>' : "");
-        /* the arrow rides right after the last icon, however many there are,
-           and opens the legs under them (Jose, Sep 26, 2026) */
-        var arrow = '<button type="button" class="slview" aria-label="Show picks" ' +
-          'onclick="slipOpen(this)">' +
-          '<svg viewBox="0 0 24 24" aria-hidden="true"><polygon points="5,9 12,16 19,9" fill="currentColor"/></svg></button>';
-        /* the arrow is pinned at the row's right end; the faces scroll under it */
-        /* the tracker first, so the faces can fill by what it counted */
-        var trk = slipTrack(bet);
-        var avs = slipAvatars(ls);
-        var at = Date.parse(bet.placed || ""), kind = String(bet.type || (ls.length > 1 ? "Parlay" : "Single")).toUpperCase();
-        var top = '<div class="slktop"><span class="slkind">' + esc(kind) + '</span><span class="slkind slkind--n">' + ls.length +
-          (ls.length > 1 ? " legs" : " leg") + '</span>' +
-          /* the drop-down where the time was: it opens the tracking (Jose, Oct 3, 2026) */
-          arrow + '</div>';
-        return '<div class="slipcard slipcard--nw' + (st ? " slipcard--" + st : "") + (OPENSLIP[bet.id] ? " slipcard--open" : "") +
-          (trk ? " slipcard--trk" : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' + top + avs +
-          '<div class="slnames">' + esc(slipNames(ls)) + '</div>' +
-          /* the top of the card holds what DraftKings' does -- the price,
-             what went in, what it pays -- and the drop-down opens the legs
-             under it (Jose, Oct 3, 2026) */
-          '<div class="slgrid">' +
-          '<b class="slgodds">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(boostedOdds(bet))) + '</b>' +
-          '<b>' + cm(bet.wager || 0) + '</b>' +
-          '<b class="cashpay">' + cm(bet.topay || 0) + '</b>' +
-          '<span>Price</span><span>Amount</span><span>Total payout</span>' +
-          '</div>' +
-          (rows ? '<ul class="slpicks">' + rows + '</ul>' : "") + (trk ? '<div class="sltrk">' + trk + "</div>" : "") +
-          '</div>';
-      }).join(""));
+        /* the old card's tracker still runs: it is what settles each leg */
+        slipTrack(bet);
+        return { bet: bet, ls: ls };
+      });
+      putHTML(box, sl2Html(BUILT, cm)); }
       /* a leg the tracker just saw lose is only known once its slip is drawn:
          draw again at once, and the dead slip is gone */
       if (open.some(function (bet) { return (bet.legs || []).some(function (lg) { return TRKLOST[lg.sel] || TRKST[lg.sel] === "lost"; }); })) setTimeout(bankDraw, 0);

@@ -4606,3 +4606,43 @@
 
 /* Track bet is gone: a bet is tracked by its share link (Jose, Oct 17, 2026) */
 #swsave { display: none !important; }
+
+/* the slip in columns (Jose, Nov 14, 2026; the old card is tagged
+   betslip-backup-2026-11-14) */
+.cashsheet:has(.sl2) { width: min(560px, calc(100vw - 16px)); padding-left: 10px; padding-right: 10px; }
+.sl2 { display: grid; grid-template-columns: repeat(var(--n), minmax(0, 1fr)); gap: 6px; align-items: start; text-align: center; }
+.cashsheet #cashlegs .sl2 .slipcard + .slipcard { margin-top: 0; }
+.sl2 .sl2col { padding: 0 !important; margin: 0 !important; overflow: visible !important; background: #141414; border: 1px solid #2a2a2a;
+  border-radius: 12px; min-width: 0; box-shadow: none; }
+.sl2 .sl2head { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 10px 6px; border-bottom: 1px solid #2a2a2a; }
+.sl2 .sl2head span { font: 700 12px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .08em; color: #8a8a8a; }
+.sl2 .sl2head .slview { position: static; width: 28px; height: 22px; border: 1px solid #2a2a2a; border-radius: 6px; background: none;
+  color: #fff; display: grid; place-items: center; padding: 0; margin: 0; }
+.sl2 .sl2head .slview svg { width: 16px; height: 16px; transition: transform .2s; }
+.sl2 .slipcard--open .sl2head .slview svg { transform: rotate(180deg); }
+.sl2 .sl2leg { position: relative; height: 104px; border-bottom: 1px solid #2a2a2a; background: #141414; overflow: hidden; box-sizing: border-box; }
+.sl2 .sl2span { z-index: 2; border-left: 1px solid #2a2a2a; border-right: 1px solid #2a2a2a; margin-left: -1px; }
+.sl2 .sl2ph { visibility: hidden; }
+.sl2 .sl2gap { background: repeating-linear-gradient(135deg, transparent 0 6px, #1b1b1b 6px 7px); }
+.sl2 .sl2pic { position: absolute; left: 0; right: 0; top: 4px; bottom: 36px; opacity: .55; pointer-events: none; }
+.sl2 .sl2pic .sl2img { width: 100%; height: 100%; object-fit: contain; display: block; }
+.sl2 .sl2face .sl2pic { top: 0; opacity: .8; -webkit-mask-image: linear-gradient(#000 70%, transparent); mask-image: linear-gradient(#000 70%, transparent); }
+.sl2 .sl2face .sl2pic .sl2img { width: auto; height: 118%; margin: 0 auto; object-fit: contain; object-position: center top; }
+.sl2 .sl2o { position: absolute; top: 5px; left: 7px; font: 700 12px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; letter-spacing: .02em; }
+.sl2 .sl2t { position: absolute; top: 5px; right: 7px; font: 700 9px Barlow, Arial, sans-serif; color: #8a8a8a; letter-spacing: .02em; }
+.sl2 .sl2dot { position: absolute; top: 8px; right: 9px; width: 8px; height: 8px; border-radius: 50%; background: #e8b931; box-shadow: 0 0 6px #e8b931; }
+.sl2 .sl2txt { position: absolute; left: 4px; right: 4px; bottom: 6px; display: flex; flex-direction: column; align-items: center; gap: 1px; }
+.sl2 .sl2txt b { font: 700 14px "Barlow Condensed", "Arial Narrow", sans-serif; letter-spacing: .02em; line-height: 1.05; color: #fff; text-shadow: 0 1px 3px #000; }
+.sl2 .sl2txt span { font: 600 11px Barlow, Arial, sans-serif; color: #cfcfcf; line-height: 1.2; }
+.sl2 .sl2--won { box-shadow: inset 0 0 0 2px #17c257; border-radius: 8px; }
+.sl2 .sl2--lost { box-shadow: inset 0 0 0 2px #e5484d; border-radius: 8px; }
+.sl2 .sl2--won .sl2t { color: #17c257; font-weight: 800; letter-spacing: .06em; }
+.sl2 .sl2--lost .sl2t { color: #e5484d; font-weight: 800; letter-spacing: .06em; }
+.sl2 .sl2--won .sl2o { color: #17c257; }
+.sl2 .sl2--won .sl2pic, .sl2 .sl2--lost .sl2pic { opacity: .35; filter: grayscale(1); }
+.sl2 .sl2foot { padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+.sl2 .sl2price { font: 800 24px "Barlow Condensed", "Arial Narrow", sans-serif; line-height: 1; color: #fff; }
+.sl2 .sl2kv { width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 4px; border-top: 1px solid #2a2a2a; padding-top: 4px; }
+.sl2 .sl2kv span { display: flex; flex-direction: column; align-items: center; gap: 1px; font: 600 10px Barlow, Arial, sans-serif; color: #8a8a8a; }
+.sl2 .sl2kv b { font: 700 13px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; }
+.sl2 .sl2kv b.cashpay { color: #17c257; }
