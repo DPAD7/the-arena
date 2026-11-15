@@ -1859,10 +1859,10 @@
       if (cs.length > 1 && !done(first[id])) {
         var row = Math.max.apply(null, cs.map(function (ci) { return cols[ci].length; }));
         cs.forEach(function (ci) {
-          while (cols[ci].length < row) {
-            var nx = keys.filter(function (q) { var b = legIn(ci, q); return b && !used[ci][q] && CNT[q] < 2 && !done(b) && rank(b) >= rank(first[id]); })[0];
-            if (nx) { cols[ci].push(legIn(ci, nx)); used[ci][nx] = 1; } else cols[ci].push(null);
-          }
+          /* a blank holds the row: a later leg pulled up to fill it put NDSU
+             at 11:00 above Utah at 10:30 (Jose, Nov 14, 2026: "why isn't it
+             in order in time") */
+          while (cols[ci].length < row) cols[ci].push(null);
         });
       }
       cs.forEach(function (ci) { cols[ci].push(legIn(ci, id)); used[ci][id] = 1; });
