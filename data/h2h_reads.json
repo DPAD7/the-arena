@@ -1,5 +1,5 @@
 {
- "at": "2026-11-15 07:48 UTC",
+ "at": "2026-11-15 12:39 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -60,15 +60,17 @@
     "Bryce Young",
     "Tyler Shough"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Bryce Young",
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
     1,
-    1
+    -1
    ],
-   "why": [],
+   "why": [
+    "Faces a defense that gives up more yards after the catch"
+   ],
    "checks": [
     0,
     0,
@@ -308,20 +310,19 @@
     "Joe Burrow"
    ],
    "pick": "Joe Burrow",
-   "lead": 6,
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
-    -1,
-    5
+    0,
+    2
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 45.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
+    "1 of 4 combined boxes checked"
    ],
    "checks": [
-    1,
+    0,
     1,
     0,
     0
@@ -352,7 +353,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 137.0 yards higher in total on their lines",
+    "His receivers are set 136.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked",
     "New coach for his side"
    ],
