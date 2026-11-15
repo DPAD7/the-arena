@@ -4649,3 +4649,5 @@
 .sl2 .sl2kv span { display: flex; flex-direction: column; align-items: center; gap: 1px; font: 600 10px Barlow, Arial, sans-serif; color: #8a8a8a; }
 .sl2 .sl2kv b { font: 700 13px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; }
 .sl2 .sl2kv b.cashpay { color: #17c257; }
+
+.sl2 .sl2kv span { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }

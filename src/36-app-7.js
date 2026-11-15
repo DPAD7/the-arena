@@ -1904,7 +1904,7 @@
       return '<div class="slipcard sl2col' + (op ? " slipcard--open" : "") + (st ? " slipcard--" + st : "") + '" data-bet="' + esc(String(bet.id || "")) + '">' +
         /* the price on top, then amount, the arrow, payout on one line; no
            legs count (Jose, Nov 14, 2026) */
-        '<div class="sl2head"><b class="sl2price">' + (CASHHIDE ? "\u2022\u2022\u2022\u2022" : esc(boostedOdds(bet))) + '</b>' +
+        '<div class="sl2head"><b class="sl2price">' + esc(boostedOdds(bet)) + '</b>' +
         '<div class="sl2kv"><span>Amount<b>' + cm(bet.wager || 0) + '</b></span>' + arrow + '<span>Payout<b class="cashpay">' + cm(bet.topay || 0) + '</b></span></div></div>' +
         (op ? cols[ci].map(function (b, r) { return legHtml(b, span[ci][r]); }).join("") : "") +
         '</div>';
@@ -2132,7 +2132,11 @@
           var mkt2 = /\u2016\s*([^\u00b7]+)/.exec(lab);
           mkt2 = mkt2 ? mkt2[1].trim() : "";
           if (mkt2 && mkt2 !== "ML") opp2 = mkt2 + (opp2 ? " \u00b7 " + opp2 : "");
-          return { id: lg.sel, nm: nm2, opp: opp2, k: kickOf(lg.sel), o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
+          /* the start off the game's own row when no card on the board carries
+             it: NDSU at Hawaii had no time (Jose, Nov 14, 2026) */
+          var k2 = kickOf(lg.sel);
+          if (!(k2 < 9e15)) { var rw2 = br0 ? br0.g : fr0 ? fr0.g : (trkRow(gid) || trkFightRow(gid) || {}).g; if (rw2 && Date.parse(rw2[2])) k2 = Date.parse(rw2[2]); }
+          return { id: lg.sel, nm: nm2, opp: opp2, k: k2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
                       say (Oct 3, 2026: all six won and the card sat open) */
@@ -2367,6 +2371,26 @@
       };
       linkEl.addEventListener("input", function () { setTimeout(linkGo, 50); });
       linkEl.addEventListener("paste", function () { setTimeout(linkGo, 50); });
+    }
+    /* press and hold the amount or the payout on a slip: every wager and
+       payout figure hides, held again they come back; this device remembers
+       (Jose, Nov 14, 2026 -- the balance it used to hang on is not shown) */
+    var legsEl = document.getElementById("cashlegs"), kvT = null;
+    if (legsEl) {
+      legsEl.addEventListener("pointerdown", function (e) {
+        if (!e.target.closest || !e.target.closest(".sl2kv span")) return;
+        clearTimeout(kvT);
+        kvT = setTimeout(function () {
+          CASHHIDE = !CASHHIDE;
+          try { localStorage.setItem("arena.cashhide", CASHHIDE ? "1" : "0"); } catch (e2) {}
+          if (navigator.vibrate) navigator.vibrate(12);
+          bankDraw();
+        }, 450);
+      });
+      ["pointerup", "pointerleave", "pointercancel", "pointermove"].forEach(function (ev) {
+        legsEl.addEventListener(ev, function (e) { if (ev !== "pointermove" || Math.abs(e.movementY || 0) > 4) clearTimeout(kvT); });
+      });
+      legsEl.addEventListener("contextmenu", function (e) { if (e.target.closest && e.target.closest(".sl2kv")) e.preventDefault(); });
     }
     var amtEl = document.getElementById("cashamt"), holdT = null;
     if (amtEl) {
