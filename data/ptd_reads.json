@@ -2,30 +2,6 @@
  "at": "2026-11-15",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "3924327": {
-   "p": 0.772,
-   "name": "Drew Lock"
-  },
-  "4837248": {
-   "p": 0.768,
-   "name": "Fernando Mendoza"
-  },
-  "12483": {
-   "p": 0.835,
-   "name": "Matthew Stafford"
-  },
-  "4430841": {
-   "p": 0.802,
-   "name": "Carson Beck"
-  },
-  "4361741": {
-   "p": 0.847,
-   "name": "Brock Purdy"
-  },
-  "2577417": {
-   "p": 0.847,
-   "name": "Dak Prescott"
-  },
   "8439": {
    "p": 0.715,
    "name": "Aaron Rodgers"
@@ -74,6 +50,10 @@
    "p": 0.71,
    "name": "Cam Ward"
   },
+  "2577417": {
+   "p": 0.855,
+   "name": "Dak Prescott"
+  },
   "3052587": {
    "p": 0.743,
    "name": "Baker Mayfield"
@@ -81,6 +61,10 @@
   "3046779": {
    "p": 0.859,
    "name": "Jared Goff"
+  },
+  "4430841": {
+   "p": 0.786,
+   "name": "Carson Beck"
   },
   "3139477": {
    "p": 0.829,
@@ -94,9 +78,9 @@
    "p": 0.55,
    "name": "Joe Milton"
   },
-  "4685413": {
-   "p": 0.82,
-   "name": "Cade Klubnik"
+  "15864": {
+   "p": 0.785,
+   "name": "Geno Smith"
   },
   "4360310": {
    "p": 0.83,
@@ -106,6 +90,10 @@
    "p": 0.702,
    "name": "J.J. McCarthy"
   },
+  "4837248": {
+   "p": 0.698,
+   "name": "Fernando Mendoza"
+  },
   "4426338": {
    "p": 0.759,
    "name": "Bo Nix"
@@ -113,6 +101,10 @@
   "14880": {
    "p": 0.784,
    "name": "Kirk Cousins"
+  },
+  "4361741": {
+   "p": 0.871,
+   "name": "Brock Purdy"
   },
   "4431452": {
    "p": 0.832,
@@ -134,9 +126,13 @@
    "p": 0.837,
    "name": "Jordan Love"
   },
-  "15864": {
-   "p": 0.743,
-   "name": "Geno Smith"
+  "3924327": {
+   "p": 0.772,
+   "name": "Drew Lock"
+  },
+  "12483": {
+   "p": 0.835,
+   "name": "Matthew Stafford"
   }
  },
  "by_game": {
@@ -359,9 +355,9 @@
    }
   },
   "401873074": {
-   "4685413": {
-    "p": 0.82,
-    "name": "Cade Klubnik"
+   "15864": {
+    "p": 0.785,
+    "name": "Geno Smith"
    },
    "4038941": {
     "p": 0.724,
