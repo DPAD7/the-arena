@@ -2149,6 +2149,10 @@
              it: NDSU at Hawaii had no time (Jose, Nov 14, 2026) */
           var k2 = kickOf(lg.sel);
           if (!(k2 < 9e15)) { var rw2 = br0 ? br0.g : fr0 ? fr0.g : (trkRow(gid) || trkFightRow(gid) || {}).g; if (rw2 && Date.parse(rw2[2])) k2 = Date.parse(rw2[2]); }
+          /* a bout keeps its own walkout time: DraftKings stamps every bout
+             with the card's start, so Hokit read 9:00 PM (Jose, Nov 14, 2026) */
+          var fk2 = fr0 ? fr0.g : (trkFightRow(gid) || {}).g;
+          if (fk2 && Date.parse(fk2[2])) k2 = Date.parse(fk2[2]);
           return { id: lg.sel, nm: nm2, opp: opp2, k: k2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
