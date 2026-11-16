@@ -2142,6 +2142,16 @@
             var aw = br0.g[3], hm = br0.g[4], mine2 = bv.s === 0 ? aw : hm;
             nm2 = bv.k === "ml" ? ((br0.lg === "college-football" && CFBNAME[mine2]) || mine2) : "";
             opp2 = bv.s === 0 ? "@ " + hm : "vs " + aw;
+            /* a passer's TD leg says what it is and how many he has: the row
+               read "Burrow vs PIT" with no PTD on it (Jose, Nov 15, 2026) */
+            if (bv.k === "ptd" || bv.k === "atd") {
+              var tk = bv.k === "ptd" ? "PTD" : "ATD", tn = 0, tm = null, td0 = TRKD[gid], fold3 = function (x) { return String(x || "").normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/\b(jr|sr|ii|iii|iv)\b\.?/ig, "").replace(/[^a-z ]/ig, "").trim().toLowerCase(); };
+              if (td0 && td0.men && td0.state && td0.state !== "pre") {
+                var fwn = fold3(fw), hits3 = Object.keys(td0.men).filter(function (n) { return fold3(n) === fwn; });
+                if (hits3.length === 1) { tm = td0.men[hits3[0]].st; tn = tk === "PTD" ? parseInt((tm.passing || {}).TD, 10) || 0 : (parseInt((tm.rushing || {}).TD, 10) || 0) + (parseInt((tm.receiving || {}).TD, 10) || 0); }
+              }
+              opp2 = (bv.n || 1) + "+ " + tk + (tm ? " \u00b7 has " + tn : "") + " \u00b7 " + opp2;
+            }
           }
           if (fr0) {
             var oth = fv.s === 0 ? fr0.g[5] : fv.s === 1 ? fr0.g[3] : "";
