@@ -1,5 +1,5 @@
 {
- "at": "2026-11-16 20:08 UTC",
+ "at": "2026-11-16 23:20 UTC",
  "week": 10,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -295,6 +295,36 @@
    "game": "IND@HOU",
    "eid": 22008,
    "kick": "2026-11-20 01:15:00Z"
+  },
+  {
+   "qbs": [
+    "Brock Purdy",
+    "Kirk Cousins"
+   ],
+   "pick": "Kirk Cousins",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "SF G.Kittle (29%)",
+    "SF J.Watkins (14%)"
+   ],
+   "score": [
+    -1,
+    1
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 49.0 yards higher in total on their lines"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "MIN@SF",
+   "eid": 21917,
+   "kick": "2026-11-23 01:20:00Z"
   }
  ]
 }
