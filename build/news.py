@@ -466,10 +466,14 @@ def main():
                     t = dt.datetime.fromisoformat(g[2].replace("Z", "+00:00"))
                 except ValueError:
                     continue
-                if t > NOW and club in (g[3], g[4]):
+                # the club's first game after the post was written, not after
+                # now: "Fagnano to start Thursday" stayed readable for three
+                # days and was filed under the next Monday's game once
+                # Thursday's was over, over Brissett (Jose, Nov 16, 2026)
+                if t > NOW - age and club in (g[3], g[4]):
                     nxt = g
                     break
-            if nxt:
+            if nxt and dt.datetime.fromisoformat(nxt[2].replace("Z", "+00:00")) > NOW:
                 key = "%s|%s" % (nxt[1], club)
                 if (named.get(key) or {}).get("id") != pid:
                     named[key] = {"id": pid, "name": name, "why": src}
