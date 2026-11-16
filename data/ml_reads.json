@@ -114,6 +114,28 @@
    "kick": "2026-11-15T18:00Z"
   },
   {
+   "gid": "401873064",
+   "away": "PIT",
+   "home": "CIN",
+   "pick": "CIN",
+   "model": 61,
+   "book": 66,
+   "bookpick": "CIN",
+   "agree": true,
+   "won": 67,
+   "n": 78,
+   "call": "take",
+   "rank": 6,
+   "why": [
+    "Points per game: CIN 30.0, PIT 22.5",
+    "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
+    "Passing offense (EPA): CIN +0.28, PIT -0.06",
+    "Offense success rate: CIN 51%, PIT 43%"
+   ],
+   "week": 10,
+   "kick": "2026-11-16T01:20Z"
+  },
+  {
    "gid": "401873065",
    "away": "LAC",
    "home": "BAL",
@@ -125,7 +147,7 @@
    "won": 64,
    "n": 64,
    "call": "take",
-   "rank": 6,
+   "rank": 7,
    "why": [
     "Points per game: BAL 21.0, LAC 15.1",
     "Win % this season: BAL 44%, LAC 0%",
@@ -147,7 +169,7 @@
    "won": 67,
    "n": 78,
    "call": "lean",
-   "rank": 7,
+   "rank": 8,
    "why": [
     "Points allowed per game: KC 17.9, ATL 24.8",
     "Points per game: KC 25.2, ATL 20.9",
@@ -156,28 +178,6 @@
    ],
    "week": 10,
    "kick": "2026-11-15T18:00Z"
-  },
-  {
-   "gid": "401873064",
-   "away": "PIT",
-   "home": "CIN",
-   "pick": "CIN",
-   "model": 61,
-   "book": 63,
-   "bookpick": "CIN",
-   "agree": true,
-   "won": 67,
-   "n": 78,
-   "call": "lean",
-   "rank": 8,
-   "why": [
-    "Points per game: CIN 30.0, PIT 22.5",
-    "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
-    "Passing offense (EPA): CIN +0.28, PIT -0.06",
-    "Offense success rate: CIN 51%, PIT 43%"
-   ],
-   "week": 10,
-   "kick": "2026-11-16T01:20Z"
   },
   {
    "gid": "401873053",
@@ -383,7 +383,7 @@
    "home": "KC",
    "pick": "KC",
    "model": 84,
-   "book": 88,
+   "book": 89,
    "bookpick": "KC",
    "agree": true,
    "won": 83,
