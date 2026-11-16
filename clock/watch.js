@@ -188,7 +188,7 @@ const LOOSE = [
   [/interceptions/i, [["passing", "INT"]]], [/solo tackles/i, [["defensive", "SOLO"]]],
   [/tackles/i, [["defensive", "TOT"]]], [/sacks/i, [["defensive", "SACKS"]]],
   [/field goals?/i, [["kicking", "FG", 0]]], [/extra points?/i, [["kicking", "XP", 0]]],
-  [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]]]
+  [/\b(anytime (touchdown|td)( scorer)?|touchdown scorer)\b/i, [["rushing", "TD"], ["receiving", "TD"]]]
 ];
 export function looseState(l, g) {
   /* a count leg lands the moment the count reaches it, live, not at the
