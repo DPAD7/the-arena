@@ -1093,7 +1093,7 @@
     [/\btackles\b/i, [["defensive", "TOT"]], "TKL+AST"],
     [/field goals? made|field goals?/i, [["kicking", "FG", 0]], "FG"],
     [/sacks/i, [["defensive", "SACKS"]], "SACKS"],
-    [/anytime td|touchdown scorer|anytime touchdown/i, [["rushing", "TD"], ["receiving", "TD"]], "TD"]
+    [/\s*\b(anytime (touchdown|td)( scorer)?|touchdown scorer)\b/i, [["rushing", "TD"], ["receiving", "TD"]], "TD"]
   ];
   /* who and what a prop leg says: "DeVonta Smith to Have 40+ Receiving
      Yards", or a market "Zack Baun Tackles + Assists" picked "Over 7.5" */
@@ -2165,7 +2165,9 @@
           var wd2 = br0 && bv.k === "ml" && TRKD[gid], wp2 = wd2 && wd2.wp != null ? (bv.s === 0 ? 1 - wd2.wp : wd2.wp) : null;
           var fk2 = fr0 ? fr0.g : (trkFightRow(gid) || {}).g;
           if (fk2 && Date.parse(fk2[2])) k2 = Date.parse(fk2[2]);
-          return { id: lg.sel, nm: nm2, opp: opp2, k: k2, wp: wp2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
+          /* a leg with no board selection (a non-QB TD, a count prop) is known by
+             its game and market, so two of them never share one row */
+          return { id: lg.sel || ("p:" + (lg.g || "") + ":" + (lg.market || lg.label || "") + ":" + (lg.pick || "")), nm: nm2, opp: opp2, k: k2, wp: wp2, o: String(lg.odds || "").replace("-", "\u2212"), l: lab,
                    /* what DraftKings said, or else what the tracker settled
                       it as: a slip tracked from the board has nobody else to
                       say (Oct 3, 2026: all six won and the card sat open) */
