@@ -27,6 +27,24 @@
 */
 import { sendPush } from "./push.js";
 import { legIndex, readGame, readBout, news, liveLegs, slipState, risks, espnGet, legState, looseState, qbOff, liveGames } from "./watch.js";
+/* the money line of a game in a sport the board does not draw, read
+   straight from ESPN's summary: won or lost once it is final, open before */
+const XPATH = { nba: "basketball/nba", wnba: "basketball/wnba", ncaab: "basketball/mens-college-basketball",
+  nhl: "hockey/nhl", mlb: "baseball/mlb", mls: "soccer/usa.1" };
+const xSeen = {};
+async function xState(l) {
+  const path = XPATH[String(l.lgx).toLowerCase()]; if (!path) return "open";
+  const gid = String(l.g);
+  if (!xSeen[gid]) {
+    try { xSeen[gid] = await (await espnGet("https://site.api.espn.com/apis/site/v2/sports/" + path + "/summary?event=" + gid)).json(); }
+    catch (e) { return "open"; }
+  }
+  const c = (((xSeen[gid].header || {}).competitions) || [])[0] || {};
+  if ((((c.status || {}).type) || {}).state !== "post") { delete xSeen[gid]; return "open"; }
+  const me = (c.competitors || []).find(x => x.homeAway === (+l.side === 1 ? "home" : "away"));
+  if (!me) return "open";
+  return me.winner ? "won" : "lost";
+}
 const SITE = "https://the-arenasports.pages.dev";
 // every kind of alert, on until he turns it off (the alert settings)
 const PREFS = { td: true, redzone: true, wp: true, final: true, slip: true, leghit: true, pregame: true, change: true, fight: true, recap: true };
@@ -611,6 +629,14 @@ export class Clock {
       let moved = false;
       for (const bet of sent) {
         for (const l of bet.legs || []) {
+          /* a leg from a sport off the board (lgx: "nba" and the like) is
+             settled from ESPN's own feed for that sport: the Celtics lost and
+             his slip kept sending Ravens red-zone alerts (Nov 16, 2026) */
+          if (l.lgx && l.g && !idx[l.sel] && !/^(won|lost)$/i.test(String(l.status || ""))) {
+            const xs = await xState(l);
+            if (xs !== "open") { l.status = xs; moved = true; }
+            continue;
+          }
           const v = idx[l.sel], g = v ? games[v.gid] : games[String(l.g || "")], r = v && rows[v.gid];
           if (!g) continue;
           const st = v ? legState(v, g, v.fight || !r ? null : (v.side ? r[7] : r[9]), r) : looseState(l, g);
