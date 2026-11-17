@@ -79425,7 +79425,7 @@
   "right": "Tahir Abdullayev",
   "rounds": 3,
   "start": "2026-11-21T15:15Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Jake Matthews": [
@@ -79455,7 +79455,7 @@
   "right": "Alessandro Costa",
   "rounds": 3,
   "start": "2026-11-21T15:45Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Amir Albazi": [
@@ -79485,7 +79485,7 @@
   "right": "Tallison Teixeira",
   "rounds": 3,
   "start": "2026-11-21T17:15Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Shamil Gaziev": [
@@ -79515,7 +79515,7 @@
   "right": "Ikram Aliskerov",
   "rounds": 3,
   "start": "2026-11-21T18:15Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Jared Cannonier": [
@@ -79545,7 +79545,7 @@
   "right": "Asu Almabayev",
   "rounds": 3,
   "start": "2026-11-21T18:45Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Kyoji Horiguchi": [
@@ -79559,11 +79559,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "-298",
+     "-280",
      "0OU87276471O250_1"
     ],
     "Under": [
-     "+220",
+     "+210",
      "0OU87276471U250_3"
     ]
    }
@@ -79575,7 +79575,7 @@
   "right": "Dan Hooker",
   "rounds": 3,
   "start": "2026-11-21T19:15Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Dan Hooker": [
@@ -79605,7 +79605,7 @@
   "right": "Kevin Vallejos",
   "rounds": 3,
   "start": "2026-11-21T19:45Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Aljamain Sterling": [
@@ -79619,11 +79619,11 @@
    },
    "Total Rounds": {
     "Over": [
-     "-188",
+     "-180",
      "0OU87269532O250_1"
     ],
     "Under": [
-     "+145",
+     "+140",
      "0OU87269532U250_3"
     ]
    }
@@ -79633,18 +79633,88 @@
   "dk": "34948529",
   "left": "Ji\u0159\u00ed Proch\u00e1zka",
   "right": "Navajo Stirling",
-  "rounds": 3,
+  "rounds": 5,
   "start": "2026-11-21T20:15Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Jiri Prochazka": [
+     "+120",
+     "0QA390153650#2369605737_13L9034Q11Q21"
+    ],
+    "Navajo Stirling": [
+     "-165",
+     "0QA390153650#2369605812_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Jiri Prochazka": [
+     "+115",
+     "0QA390153651#2369605739_13L9034Q11Q21"
+    ],
+    "Navajo Stirling": [
+     "-160",
+     "0QA390153651#2369605811_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Jiri Prochazka": [
+     "+125",
+     "0QA390153675#2369605787_13L9034Q10Q21"
+    ],
+    "Navajo Stirling": [
+     "-165",
+     "0QA390153675#2369605801_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Jiri Prochazka": [
+     "-120",
+     "0QA390153674#2369605785_13L9034Q10Q21"
+    ],
+    "Navajo Stirling": [
+     "-110",
+     "0QA390153674#2369605802_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Jiri Prochazka": [
-     "+130",
+     "+124",
      "0ML87057418_1"
     ],
     "Navajo Stirling": [
-     "-155",
+     "-148",
      "0ML87057418_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Jiri Prochazka": [
+     "+125",
+     "0QA390153673#2369605773_13L9034Q10Q21"
+    ],
+    "Navajo Stirling": [
+     "-165",
+     "0QA390153673#2369605809_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Jiri Prochazka": [
+     "-105",
+     "0HC87298356P1350_1"
+    ],
+    "Navajo Stirling": [
+     "-125",
+     "0HC87298356N1350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Jiri Prochazka": [
+     "+100",
+     "0HC87298357P950_1"
+    ],
+    "Navajo Stirling": [
+     "-130",
+     "0HC87298357N950_3"
     ]
    },
    "Total Rounds": {
@@ -79656,6 +79726,570 @@
      "-166",
      "0OU87269529U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+350",
+     "0OU87298355O450_1"
+    ],
+    "Under": [
+     "-575",
+     "0OU87298355U450_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+900",
+     "0QA390153654#2369605777_13L9034Q11Q22"
+    ],
+    "No": [
+     "-3000",
+     "0QA390153654#2369605806_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153639#2369605708_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2200",
+     "0QA390153676#2369605789_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+500",
+     "0QA390153644#2369605723_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA390153644#2369605818_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+2500",
+     "0QA390153645#2369605726_13L9034Q11Q22"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+450",
+     "0QA390153632#2369605687_13L9034Q10Q20"
+    ],
+    "No": [
+     "-750",
+     "0QA390153632#2369605827_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+195",
+     "0QA390153652#2369605741_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+2200",
+     "0QA390153652#2369605808_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+290",
+     "0QA390153652#2369605837_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+3500",
+     "0QA390153652#2369605842_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+500",
+     "0QA390153652#2369605858_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+5500",
+     "0QA390153652#2369605861_14L9034Q12Q23"
+    ],
+    "Round 4 - KO/TKO/DQ": [
+     "+750",
+     "0QA390153652#2369605876_13L9034Q11Q24"
+    ],
+    "Round 4 \u2013 Submission": [
+     "+8000",
+     "0QA390153652#2369605878_14L9034Q12Q24"
+    ],
+    "Round 5 - KO/TKO/DQ": [
+     "+1200",
+     "0QA390153652#2369605889_13L9034Q11Q25"
+    ],
+    "Round 5 \u2013 Submission": [
+     "+10000",
+     "0QA390153652#2369605890_14L9034Q12Q25"
+    ],
+    "Fight to go the Distance": [
+     "+450",
+     "0QA390153652#2369605897_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Jiri Prochazka to Win in Rounds 1-2": [
+     "+285",
+     "0QA390153635#2369605695_13L9034Q11Q21"
+    ],
+    "Jiri Prochazka to Win in Rounds 3-4": [
+     "+700",
+     "0QA390153635#2369605825_13L9034Q12Q22"
+    ],
+    "Jiri Prochazka to Win in Round 5 or on Decision": [
+     "+750",
+     "0QA390153635#2369605848_13L9034Q14Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153635#2369605884_13L9034Q19Q29"
+    ],
+    "Navajo Stirling to Win in Rounds 1-2": [
+     "+170",
+     "0QA390153635#2369605852_15L9034Q15Q25"
+    ],
+    "Navajo Stirling to Win in Rounds 3-4": [
+     "+550",
+     "0QA390153635#2369605867_15L9034Q16Q26"
+    ],
+    "Navajo Stirling to Win in Round 5 or on Decision": [
+     "+550",
+     "0QA390153635#2369605883_15L9034Q18Q28"
+    ]
+   },
+   "Round and Method Betting": {
+    "Jiri Prochazka to Win by KO/TKO/DQ in Round 1": [
+     "+500",
+     "0QA390153637#2369605702_13L9034Q11Q21"
+    ],
+    "Jiri Prochazka to Win by KO/TKO/DQ in Round 2": [
+     "+800",
+     "0QA390153637#2369605823_13L9034Q12Q22"
+    ],
+    "Jiri Prochazka to Win by KO/TKO/DQ in Round 3": [
+     "+1200",
+     "0QA390153637#2369605833_13L9034Q13Q23"
+    ],
+    "Jiri Prochazka to Win by KO/TKO/DQ in Round 4": [
+     "+1700",
+     "0QA390153637#2369605846_13L9034Q14Q24"
+    ],
+    "Jiri Prochazka to Win by KO/TKO/DQ in Round 5": [
+     "+2800",
+     "0QA390153637#2369605854_13L9034Q15Q25"
+    ],
+    "Jiri Prochazka to Win by Submission in Round 1": [
+     "+4000",
+     "0QA390153637#2369605865_13L9034Q16Q26"
+    ],
+    "Jiri Prochazka to Win by Submission in Round 2": [
+     "+6000",
+     "0QA390153637#2369605872_13L9034Q17Q27"
+    ],
+    "Jiri Prochazka to Win by Submission in Round 3": [
+     "+9000",
+     "0QA390153637#2369605881_13L9034Q18Q28"
+    ],
+    "Jiri Prochazka to Win by Submission in Round 4": [
+     "+10000",
+     "0QA390153637#2369605886_13L9034Q19Q29"
+    ],
+    "Jiri Prochazka to Win by Submission in Round 5": [
+     "+12000",
+     "0QA390153637#2369605893_13L9034Q110Q210"
+    ],
+    "To Go the Distance": [
+     "+450",
+     "0QA390153637#2369605909_13L9034Q121Q221"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ in Round 1": [
+     "+310",
+     "0QA390153637#2369605896_15L9034Q111Q211"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ in Round 2": [
+     "+550",
+     "0QA390153637#2369605898_15L9034Q112Q212"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ in Round 3": [
+     "+1000",
+     "0QA390153637#2369605901_15L9034Q113Q213"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ in Round 4": [
+     "+1300",
+     "0QA390153637#2369605902_15L9034Q114Q214"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ in Round 5": [
+     "+1900",
+     "0QA390153637#2369605903_15L9034Q115Q215"
+    ],
+    "Navajo Stirling to Win by Submission in Round 1": [
+     "+4000",
+     "0QA390153637#2369605904_15L9034Q116Q216"
+    ],
+    "Navajo Stirling to Win by Submission in Round 2": [
+     "+6000",
+     "0QA390153637#2369605905_15L9034Q117Q217"
+    ],
+    "Navajo Stirling to Win by Submission in Round 3": [
+     "+10000",
+     "0QA390153637#2369605906_15L9034Q118Q218"
+    ],
+    "Navajo Stirling to Win by Submission in Round 4": [
+     "+11000",
+     "0QA390153637#2369605907_15L9034Q119Q219"
+    ],
+    "Navajo Stirling to Win by Submission in Round 5": [
+     "+12000",
+     "0QA390153637#2369605908_15L9034Q120Q220"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Jiri Prochazka To Win And Under 0.5": [
+     "+1200",
+     "0QA390153640#2369605711_13L9034Q11Q21"
+    ],
+    "Jiri Prochazka To Win And Under 1.5": [
+     "+360",
+     "0QA390153640#2369605835_13L9034Q11Q23"
+    ],
+    "Jiri Prochazka To Win And Under 2.5": [
+     "+220",
+     "0QA390153640#2369605856_13L9034Q11Q25"
+    ],
+    "Jiri Prochazka To Win And Under 3.5": [
+     "+165",
+     "0QA390153640#2369605874_13L9034Q11Q27"
+    ],
+    "Navajo Stirling To Win And Under 0.5": [
+     "+850",
+     "0QA390153640#2369605821_14L9034Q12Q22"
+    ],
+    "Navajo Stirling To Win And Under 1.5": [
+     "+230",
+     "0QA390153640#2369605844_14L9034Q12Q24"
+    ],
+    "Navajo Stirling To Win And Under 2.5": [
+     "+130",
+     "0QA390153640#2369605863_14L9034Q12Q26"
+    ],
+    "Navajo Stirling To Win And Under 3.5": [
+     "-105",
+     "0QA390153640#2369605880_14L9034Q12Q28"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Jiri Prochazka To Win And Over 1.5": [
+     "+215",
+     "0QA390153641#2369605836_13L9034Q11Q23"
+    ],
+    "Jiri Prochazka To Win And Over 2.5": [
+     "+350",
+     "0QA390153641#2369605857_13L9034Q11Q25"
+    ],
+    "Jiri Prochazka To Win And Over 3.5": [
+     "+550",
+     "0QA390153641#2369605875_13L9034Q11Q27"
+    ],
+    "Jiri Prochazka To Win And Over 4.5": [
+     "+800",
+     "0QA390153641#2369605887_13L9034Q11Q29"
+    ],
+    "Navajo Stirling To Win And Over 1.5": [
+     "+140",
+     "0QA390153641#2369605843_14L9034Q12Q24"
+    ],
+    "Navajo Stirling To Win And Over 2.5": [
+     "+255",
+     "0QA390153641#2369605862_14L9034Q12Q26"
+    ],
+    "Navajo Stirling To Win And Over 3.5": [
+     "+390",
+     "0QA390153641#2369605879_14L9034Q12Q28"
+    ],
+    "Navajo Stirling To Win And Over 4.5": [
+     "+550",
+     "0QA390153641#2369605891_14L9034Q12Q210"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-255",
+     "0QA390153642#2369605717_13L9034Q11Q22"
+    ],
+    "No": [
+     "+190",
+     "0QA390153642#2369605820_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+100",
+     "0QA390153643#2369605720_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA390153643#2369605819_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 4": {
+    "Yes": [
+     "+180",
+     "0QA390153852#2369606496_13L9034Q11Q22"
+    ],
+    "No": [
+     "-245",
+     "0QA390153852#2369606509_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 5": {
+    "Yes": [
+     "+295",
+     "0QA390153853#2369606497_13L9034Q11Q22"
+    ],
+    "No": [
+     "-425",
+     "0QA390153853#2369606508_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Jiri Prochazka Round 1": [
+     "+450",
+     "0QA390153633#2369605683_13L9034Q11Q20"
+    ],
+    "Jiri Prochazka Round 2": [
+     "+750",
+     "0QA390153633#2369605829_13L9034Q11Q22"
+    ],
+    "Jiri Prochazka Round 3": [
+     "+1100",
+     "0QA390153633#2369605851_13L9034Q11Q24"
+    ],
+    "Jiri Prochazka Round 4": [
+     "+1600",
+     "0QA390153633#2369605869_13L9034Q11Q26"
+    ],
+    "Jiri Prochazka Round 5": [
+     "+2500",
+     "0QA390153633#2369605885_13L9034Q11Q28"
+    ],
+    "Jiri Prochazka By Decision": [
+     "+1100",
+     "0QA390153633#2369605895_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153633#2369605900_15L9034Q10Q212"
+    ],
+    "Navajo Stirling Round 1": [
+     "+300",
+     "0QA390153633#2369605828_14L9034Q12Q21"
+    ],
+    "Navajo Stirling Round 2": [
+     "+500",
+     "0QA390153633#2369605850_14L9034Q12Q23"
+    ],
+    "Navajo Stirling Round 3": [
+     "+950",
+     "0QA390153633#2369605868_14L9034Q12Q25"
+    ],
+    "Navajo Stirling Round 4": [
+     "+1200",
+     "0QA390153633#2369605882_14L9034Q12Q27"
+    ],
+    "Navajo Stirling Round 5": [
+     "+1800",
+     "0QA390153633#2369605894_14L9034Q12Q29"
+    ],
+    "Navajo Stirling By Decision": [
+     "+800",
+     "0QA390153633#2369605899_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+190",
+     "0QA390153638#2369605705_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+275",
+     "0QA390153638#2369605822_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+475",
+     "0QA390153638#2369605834_13L9034Q11Q22"
+    ],
+    "Round 4": [
+     "+700",
+     "0QA390153638#2369605845_13L9034Q11Q23"
+    ],
+    "Round 5": [
+     "+1100",
+     "0QA390153638#2369605855_13L9034Q11Q24"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153638#2369605864_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+450",
+     "0QA390153638#2369605873_13L9034Q11Q25"
+    ]
+   },
+   "Navajo Stirling to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-120",
+     "0QA390153655#2369605779_13L9034Q11Q22"
+    ],
+    "No": [
+     "-110",
+     "0QA390153655#2369605805_13L9034Q13Q24"
+    ]
+   },
+   "Jiri Prochazka to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+150",
+     "0QA390153656#2369605783_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA390153656#2369605803_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Jiri Prochazka to Win by KO/TKO/DQ or Decision": [
+     "+130",
+     "0QA390153636#2369605699_13L9034Q11Q21"
+    ],
+    "Jiri Prochazka to Win by KO/TKO/DQ or Submission": [
+     "+150",
+     "0QA390153636#2369605824_13L9034Q12Q22"
+    ],
+    "Jiri Prochazka to Win by Submission or Decision": [
+     "+650",
+     "0QA390153636#2369605832_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153636#2369605871_13L9034Q17Q27"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ or Decision": [
+     "-140",
+     "0QA390153636#2369605847_15L9034Q14Q24"
+    ],
+    "Navajo Stirling to Win by KO/TKO/DQ or Submission": [
+     "-120",
+     "0QA390153636#2369605853_15L9034Q15Q25"
+    ],
+    "Navajo Stirling to Win by Submission or Decision": [
+     "+550",
+     "0QA390153636#2369605866_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Jiri Prochazka to Win By KO/TKO/DQ or Navajo Stirling to Win by Submission": [
+     "+130",
+     "0QA390153657#2369605781_13L9034Q10Q21"
+    ],
+    "Jiri Prochazka to Win By KO/TKO/DQ or Navajo Stirling to Win by Decision": [
+     "+100",
+     "0QA390153657#2369605804_13L9034Q10Q22"
+    ],
+    "Jiri Prochazka to Win By Submission or Navajo Stirling to Win by KO/TKO/DQ": [
+     "-145",
+     "0QA390153657#2369605838_13L9034Q10Q23"
+    ],
+    "Jiri Prochazka to Win By Submission or Navajo Stirling to Win by Decision": [
+     "+500",
+     "0QA390153657#2369605841_13L9034Q10Q24"
+    ],
+    "Jiri Prochazka to Win By Decision or Navajo Stirling to Win by KO/TKO/DQ": [
+     "-165",
+     "0QA390153657#2369605859_13L9034Q10Q25"
+    ],
+    "Jiri Prochazka to Win By Decision or Navajo Stirling to Win by Submission": [
+     "+650",
+     "0QA390153657#2369605860_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153657#2369605877_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-700",
+     "0QA390153634#2369605691_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+950",
+     "0QA390153634#2369605826_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+450",
+     "0QA390153634#2369605830_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153634#2369605849_15L9034Q14Q24"
+    ]
+   },
+   "Jiri Prochazka to Win by Unanimous Decision": {
+    "Yes": [
+     "+1300",
+     "0QA390153646#2369605729_13L9034Q11Q22"
+    ]
+   },
+   "Navajo Stirling to Win by Unanimous Decision": {
+    "Yes": [
+     "+900",
+     "0QA390153647#2369605731_13L9034Q11Q22"
+    ]
+   },
+   "Jiri Prochazka to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA390153648#2369605733_13L9034Q11Q22"
+    ]
+   },
+   "Navajo Stirling to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA390153649#2369605735_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Jiri Prochazka": [
+     "+160",
+     "0QA390153683#2369605793_13L9034Q11Q22"
+    ],
+    "Navajo Stirling": [
+     "-115",
+     "0QA390153683#2369605798_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Jiri Prochazka": [
+     "+1800",
+     "0QA390153684#2369605794_13L9034Q11Q22"
+    ],
+    "Navajo Stirling": [
+     "+1900",
+     "0QA390153684#2369605797_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Jiri Prochazka": [
+     "+1100",
+     "0QA390153685#2369605795_13L9034Q11Q22"
+    ],
+    "Navajo Stirling": [
+     "+800",
+     "0QA390153685#2369605796_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79665,7 +80299,7 @@
   "right": "Alik Lorenz",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Diyar Nurgozhay": [
@@ -79685,7 +80319,7 @@
   "right": "Dom Mar Fan",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Nikolas Motta": [
@@ -79715,7 +80349,7 @@
   "right": "Santiago Luna",
   "rounds": 3,
   "start": "2026-11-21T17:45Z",
-  "read": "2026-11-17T14:04Z",
+  "read": "2026-11-17T20:02Z",
   "markets": {
    "Moneyline": {
     "Aleksandre Topuria": [

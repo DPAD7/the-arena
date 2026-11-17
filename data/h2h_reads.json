@@ -1,193 +1,8 @@
 {
- "at": "2026-11-17 14:07 UTC",
+ "at": "2026-11-17 20:08 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Jared Goff",
-    "Drake Maye"
-   ],
-   "pick": "Jared Goff",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    -1
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NE@DET",
-   "eid": 21916,
-   "kick": "2026-11-15 14:30:00Z"
-  },
-  {
-   "qbs": [
-    "Jordan Love",
-    "Kirk Cousins"
-   ],
-   "pick": "Kirk Cousins",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 69.5 yards higher in total on their lines"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "MIN@GB",
-   "eid": 21947,
-   "kick": "2026-11-15 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Bryce Young",
-    "Tyler Shough"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "CAR@NO",
-   "eid": 21948,
-   "kick": "2026-11-15 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Geno Smith",
-    "Josh Allen"
-   ],
-   "pick": "Josh Allen",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -4,
-    4
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "BUF@NYJ",
-   "eid": 21950,
-   "kick": "2026-11-15 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Cam Ward",
-    "Trevor Lawrence"
-   ],
-   "pick": "Trevor Lawrence",
-   "lead": 4,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -2,
-    2
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "Opponent gives up more yards to the top receiver (+48 a game)",
-    "His offense is more efficient (EPA per play)"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "JAC@TEN",
-   "eid": 21951,
-   "kick": "2026-11-15 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "C.J. Stroud",
-    "Deshaun Watson"
-   ],
-   "pick": "C.J. Stroud",
-   "lead": 4,
-   "complete": true,
-   "missing": [],
-   "score": [
-    4,
-    0
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    0,
-    1,
-    1,
-    0
-   ],
-   "game": "HOU@CLE",
-   "eid": 21952,
-   "kick": "2026-11-15 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Michael Penix Jr.",
-    "Patrick Mahomes II"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    1,
-    1
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "KC@ATL",
-   "eid": 21953,
-   "kick": "2026-11-15 18:00:00Z"
-  },
   {
    "qbs": [
     "Brock Purdy",
@@ -245,22 +60,21 @@
     "C.J. Stroud"
    ],
    "pick": "C.J. Stroud",
-   "lead": 2,
-   "complete": false,
-   "missing": [
-    "HOU T.Dell (14%)",
-    "HOU X.Hutchinson (20%)"
-   ],
+   "lead": 8,
+   "complete": true,
+   "missing": [],
    "score": [
-    -1,
-    1
+    -2,
+    6
    ],
    "why": [
-    "His offense is more efficient (EPA per play)"
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 58.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
-    0,
+    1,
+    1,
     0,
     0
    ],
@@ -270,11 +84,35 @@
   },
   {
    "qbs": [
+    "Tyler Shough",
+    "Caleb Williams"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "NO@CHI",
+   "eid": 22010,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
     "Josh Allen",
     "Kyle McCord"
    ],
    "pick": "Josh Allen",
-   "lead": 2,
+   "lead": 4,
    "complete": false,
    "missing": [
     "BUF D.Knox (12%)",
@@ -283,12 +121,39 @@
     "MIA K.Coleman Jr. (11%)"
    ],
    "score": [
-    1,
+    3,
     -1
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)"
+    "His offense is more efficient (EPA per play)",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    1,
+    0,
+    0
+   ],
+   "game": "MIA@BUF",
+   "eid": 22015,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "J.J. McCarthy",
+    "Trevor Lawrence"
+   ],
+   "pick": "J.J. McCarthy",
+   "lead": 2,
+   "complete": true,
+   "missing": [],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "New coach for his side"
    ],
    "checks": [
     0,
@@ -296,9 +161,9 @@
     0,
     0
    ],
-   "game": "MIA@BUF",
-   "eid": 22015,
-   "kick": "2026-11-22 18:00:00Z"
+   "game": "JAC@NYG",
+   "eid": 22014,
+   "kick": "2026-11-22 21:25:00Z"
   },
   {
    "qbs": [
@@ -325,6 +190,35 @@
    "game": "MIN@SF",
    "eid": 21917,
    "kick": "2026-11-23 01:20:00Z"
+  },
+  {
+   "qbs": [
+    "Joe Burrow",
+    "Jayden Daniels"
+   ],
+   "pick": "Joe Burrow",
+   "lead": 10,
+   "complete": true,
+   "missing": [],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+38 a game)",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 99.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "CIN@WAS",
+   "eid": 22019,
+   "kick": "2026-11-24 01:15:00Z"
   }
  ]
 }

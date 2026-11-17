@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T14:07:46Z",
+ "at": "2026-11-17T20:08:13Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,64 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401856887": {
-   "away": "MISS",
-   "home": "OU",
-   "kick": "2026-11-15T18:00Z",
-   "ml": {
-    "pick": "MISS",
-    "p": 0.535628,
-    "call": null,
-    "why": [
-     "Margin rating: MISS +10.6, OU +4.7",
-     "Points per game: MISS 33.8, OU 22.1",
-     "AP rank: MISS #19, OU unranked",
-     "Last 3 games, win %: MISS 33%, OU 67%"
-    ],
-    "qbs": [
-     "Trinidad Chambliss",
-     "John Mateer"
-    ]
-   },
-   "h2h": {
-    "pick": "Trinidad Chambliss",
-    "pick_id": "4911529",
-    "team": "MISS",
-    "p": 0.543403,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4911529",
-      "Trinidad Chambliss"
-     ],
-     [
-      "4915980",
-      "John Mateer"
-     ]
-    ]
-   },
-   "ptd": {
-    "4911529": {
-     "name": "Trinidad Chambliss",
-     "team": "MISS",
-     "p1": 0.772718,
-     "take1": false,
-     "p2": 0.419244,
-     "take2": false,
-     "has_line": true
-    },
-    "4915980": {
-     "name": "John Mateer",
-     "team": "OU",
-     "p1": 0.822733,
-     "take1": false,
-     "p2": 0.520998,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401866465": {
    "away": "EMU",
    "home": "WMU",
@@ -146,7 +88,7 @@
     "pick": "Nick Poulos",
     "pick_id": "5228762",
     "team": "OHIO",
-    "p": 0.580331,
+    "p": 0.567089,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -164,18 +106,18 @@
     "5228762": {
      "name": "Nick Poulos",
      "team": "OHIO",
-     "p1": 0.747818,
+     "p1": 0.743941,
      "take1": false,
-     "p2": 0.415595,
+     "p2": 0.411821,
      "take2": false,
      "has_line": true
     },
     "5075392": {
      "name": "Keldric Luster",
      "team": "BALL",
-     "p1": 0.640726,
+     "p1": 0.660638,
      "take1": false,
-     "p2": 0.281071,
+     "p2": 0.298643,
      "take2": false,
      "has_line": true
     }
@@ -222,18 +164,18 @@
     "5388435": {
      "name": "Caleb Heavner",
      "team": "M-OH",
-     "p1": 0.680162,
+     "p1": 0.687423,
      "take1": false,
-     "p2": 0.32704,
+     "p2": 0.33477,
      "take2": false,
      "has_line": true
     },
     "5119841": {
      "name": "Dru DeShields",
      "team": "KENT",
-     "p1": 0.678787,
+     "p1": 0.686065,
      "take1": false,
-     "p2": 0.331547,
+     "p2": 0.339329,
      "take2": false,
      "has_line": true
     }
@@ -454,18 +396,18 @@
     "4911929": {
      "name": "Alonza Barnett III",
      "team": "UCF",
-     "p1": 0.831324,
+     "p1": 0.816722,
      "take1": false,
-     "p2": 0.544689,
+     "p2": 0.518615,
      "take2": false,
      "has_line": true
     },
     "5080403": {
      "name": "Jaylen Raynor",
      "team": "ISU",
-     "p1": 0.756081,
+     "p1": 0.737025,
      "take1": false,
-     "p2": 0.415653,
+     "p2": 0.390459,
      "take2": false,
      "has_line": true
     }
@@ -494,7 +436,7 @@
     "pick": "Walker Eget",
     "pick_id": "4694149",
     "team": "DUKE",
-    "p": 0.658985,
+    "p": 0.650828,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -512,18 +454,18 @@
     "4694149": {
      "name": "Walker Eget",
      "team": "DUKE",
-     "p1": 0.750784,
+     "p1": 0.743983,
      "take1": false,
-     "p2": 0.373352,
+     "p2": 0.365514,
      "take2": false,
      "has_line": true
     },
     "5159078": {
      "name": "Tait Reynolds",
      "team": "CLEM",
-     "p1": 0.466085,
+     "p1": 0.47506,
      "take1": false,
-     "p2": 0.147859,
+     "p2": 0.152149,
      "take2": false,
      "has_line": true
     }
@@ -1266,18 +1208,18 @@
     "5075800": {
      "name": "Emory Williams",
      "team": "ECU",
-     "p1": 0.669634,
+     "p1": 0.677021,
      "take1": false,
-     "p2": 0.322572,
+     "p2": 0.330248,
      "take2": false,
      "has_line": true
     },
     "5150297": {
      "name": "Cale Hellums",
      "team": "ARMY",
-     "p1": 0.500694,
+     "p1": 0.509089,
      "take1": false,
-     "p2": 0.174106,
+     "p2": 0.179184,
      "take2": false,
      "has_line": true
     }
@@ -1324,18 +1266,18 @@
     "5165807": {
      "name": "Marcus Stokes",
      "team": "MEM",
-     "p1": 0.889229,
+     "p1": 0.892494,
      "take1": false,
-     "p2": 0.678948,
+     "p2": 0.686511,
      "take2": false,
      "has_line": true
     },
     "5220473": {
      "name": "Jackson Gutierrez",
      "team": "NAVY",
-     "p1": 0.675543,
+     "p1": 0.68286,
      "take1": false,
-     "p2": 0.335358,
+     "p2": 0.343184,
      "take2": false,
      "has_line": true
     }
@@ -1364,7 +1306,7 @@
     "pick": "Tayven Jackson",
     "pick_id": "4801307",
     "team": "UNT",
-    "p": 0.685363,
+    "p": 0.681459,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1382,18 +1324,18 @@
     "4801307": {
      "name": "Tayven Jackson",
      "team": "UNT",
-     "p1": 0.860705,
+     "p1": 0.850175,
      "take1": false,
-     "p2": 0.58605,
+     "p2": 0.564884,
      "take2": false,
      "has_line": true
     },
     "5291713": {
      "name": "Trace Johnson",
      "team": "TULN",
-     "p1": 0.677355,
+     "p1": 0.66652,
      "take1": false,
-     "p2": 0.327184,
+     "p2": 0.315625,
      "take2": false,
      "has_line": true
     }
@@ -1480,7 +1422,7 @@
     "pick": "Conner Weigman",
     "pick_id": "4685574",
     "team": "HOU",
-    "p": 0.786776,
+    "p": 0.792769,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -1498,18 +1440,18 @@
     "4685574": {
      "name": "Conner Weigman",
      "team": "HOU",
-     "p1": 0.922463,
+     "p1": 0.925001,
      "take1": true,
-     "p2": 0.757248,
+     "p2": 0.76338,
      "take2": true,
      "has_line": true
     },
     "5079465": {
      "name": "Michael Hawkins Jr.",
      "team": "WVU",
-     "p1": 0.77664,
+     "p1": 0.770328,
      "take1": false,
-     "p2": 0.449138,
+     "p2": 0.440829,
      "take2": false,
      "has_line": true
     }
@@ -1962,18 +1904,18 @@
     "4871091": {
      "name": "Lunch Winfield",
      "team": "UL",
-     "p1": 0.713117,
+     "p1": 0.706198,
      "take1": false,
-     "p2": 0.349112,
+     "p2": 0.341221,
      "take2": false,
      "has_line": true
     },
     "5296439": {
      "name": "Deuce Bailey",
      "team": "CCU",
-     "p1": 0.741586,
+     "p1": 0.735098,
      "take1": false,
-     "p2": 0.411439,
+     "p2": 0.403012,
      "take2": false,
      "has_line": true
     }
@@ -2020,18 +1962,18 @@
     "5224084": {
      "name": "Trey Hedden",
      "team": "NMSU",
-     "p1": 0.778376,
+     "p1": 0.784115,
      "take1": false,
-     "p2": 0.470509,
+     "p2": 0.479215,
      "take2": false,
      "has_line": true
     },
     "5153846": {
      "name": "Nick Minicucci",
      "team": "DEL",
-     "p1": 0.864969,
+     "p1": 0.868843,
      "take1": false,
-     "p2": 0.600981,
+     "p2": 0.609323,
      "take2": false,
      "has_line": true
     }
@@ -2252,18 +2194,18 @@
     "5079555": {
      "name": "DJ Lagway",
      "team": "BAY",
-     "p1": 0.837281,
+     "p1": 0.827921,
      "take1": false,
-     "p2": 0.54748,
+     "p2": 0.53013,
      "take2": false,
      "has_line": true
     },
     "4773919": {
      "name": "Thomas Castellanos",
      "team": "TTU",
-     "p1": 0.815911,
+     "p1": 0.805607,
      "take1": false,
-     "p2": 0.502598,
+     "p2": 0.485146,
      "take2": false,
      "has_line": true
     }
@@ -2310,18 +2252,18 @@
     "5079301": {
      "name": "CJ Bailey",
      "team": "NCSU",
-     "p1": 0.74033,
+     "p1": 0.746734,
      "take1": false,
-     "p2": 0.407814,
+     "p2": 0.416272,
      "take2": false,
      "has_line": true
     },
     "4838679": {
      "name": "Ashton Daniels",
      "team": "FSU",
-     "p1": 0.825836,
+     "p1": 0.830613,
      "take1": false,
-     "p2": 0.509518,
+     "p2": 0.518239,
      "take2": false,
      "has_line": true
     }
@@ -2333,7 +2275,7 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "UCLA",
-    "p": 0.772277,
+    "p": 0.761465,
     "call": "take",
     "why": [
      "Margin rating: UCLA +10.6, MICH +1.2",
@@ -2658,18 +2600,18 @@
     "5087156": {
      "name": "Nathan Hayes",
      "team": "NDSU",
-     "p1": 0.837426,
+     "p1": 0.828073,
      "take1": false,
-     "p2": 0.538464,
+     "p2": 0.521071,
      "take2": false,
      "has_line": true
     },
     "4881032": {
      "name": "Taron Dickens",
      "team": "NIU",
-     "p1": 0.52548,
+     "p1": 0.508709,
      "take1": false,
-     "p2": 0.193277,
+     "p2": 0.182622,
      "take2": false,
      "has_line": true
     }
@@ -3296,18 +3238,18 @@
     "5164334": {
      "name": "Cutter Woods",
      "team": "SC",
-     "p1": 0.60527,
+     "p1": 0.613264,
      "take1": false,
-     "p2": 0.2523,
+     "p2": 0.258943,
      "take2": false,
      "has_line": true
     },
     "4685578": {
      "name": "Gunner Stockton",
      "team": "UGA",
-     "p1": 0.829197,
+     "p1": 0.833901,
      "take1": false,
-     "p2": 0.524161,
+     "p2": 0.53286,
      "take2": false,
      "has_line": true
     }
@@ -3336,7 +3278,7 @@
     "pick": "Lincoln Kienholz",
     "pick_id": "5078278",
     "team": "LOU",
-    "p": 0.690708,
+    "p": 0.69455,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -3354,18 +3296,18 @@
     "5207640": {
      "name": "Corey Dailey",
      "team": "PITT",
-     "p1": 0.6018,
+     "p1": 0.597475,
      "take1": false,
-     "p2": 0.266705,
+     "p2": 0.263428,
      "take2": false,
      "has_line": true
     },
     "5078278": {
      "name": "Lincoln Kienholz",
      "team": "LOU",
-     "p1": 0.801377,
+     "p1": 0.804228,
      "take1": false,
-     "p2": 0.46831,
+     "p2": 0.472501,
      "take2": false,
      "has_line": true
     }
@@ -3586,18 +3528,18 @@
     "4775136": {
      "name": "Owen McCown",
      "team": "UTSA",
-     "p1": 0.795028,
+     "p1": 0.789501,
      "take1": false,
-     "p2": 0.450859,
+     "p2": 0.442231,
      "take2": false,
      "has_line": true
     },
     "5057381": {
      "name": "Ryder Burton",
      "team": "UAB",
-     "p1": 0.651428,
+     "p1": 0.643764,
      "take1": false,
-     "p2": 0.294232,
+     "p2": 0.287034,
      "take2": false,
      "has_line": true
     }
@@ -3702,19 +3644,19 @@
     "5141664": {
      "name": "Stone Saunders",
      "team": "SDSU",
-     "p1": 0.589946,
+     "p1": 0.598045,
      "take1": false,
-     "p2": 0.247568,
+     "p2": 0.254128,
      "take2": false,
      "has_line": true
     },
     "4870513": {
      "name": "Maddux Madsen",
      "team": "BOIS",
-     "p1": 0.904686,
+     "p1": 0.907542,
      "take1": true,
-     "p2": 0.696526,
-     "take2": false,
+     "p2": 0.703855,
+     "take2": true,
      "has_line": true
     }
    }
@@ -3818,18 +3760,18 @@
     "4685497": {
      "name": "Maalik Murphy",
      "team": "ORST",
-     "p1": 0.872605,
+     "p1": 0.868824,
      "take1": false,
-     "p2": 0.594136,
+     "p2": 0.58569,
      "take2": false,
      "has_line": true
     },
     "4923285": {
      "name": "McCae Hillstead",
      "team": "USU",
-     "p1": 0.685484,
+     "p1": 0.678199,
      "take1": false,
-     "p2": 0.34609,
+     "p2": 0.338232,
      "take2": false,
      "has_line": true
     }
