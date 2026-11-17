@@ -1,15 +1,7 @@
 {
- "at": "2026-11-16",
+ "at": "2026-11-17",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4038941": {
-   "p": 0.67,
-   "name": "Justin Herbert"
-  },
-  "2578570": {
-   "p": 0.812,
-   "name": "Jacoby Brissett"
-  },
   "3917792": {
    "p": 0.636,
    "name": "Daniel Jones"
@@ -58,6 +50,10 @@
    "p": 0.822,
    "name": "Patrick Mahomes"
   },
+  "2578570": {
+   "p": 0.734,
+   "name": "Jacoby Brissett"
+  },
   "4685720": {
    "p": 0.833,
    "name": "Bryce Young"
@@ -73,6 +69,10 @@
   "15864": {
    "p": 0.787,
    "name": "Geno Smith"
+  },
+  "4038941": {
+   "p": 0.728,
+   "name": "Justin Herbert"
   },
   "4360310": {
    "p": 0.855,

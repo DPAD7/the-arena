@@ -1,6 +1,6 @@
 {
  "at": "2026-11-17",
- "week": 10,
+ "week": 11,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
@@ -383,7 +383,7 @@
    "home": "BUF",
    "pick": "BUF",
    "model": 91,
-   "book": 89,
+   "book": 90,
    "bookpick": "BUF",
    "agree": true,
    "won": 83,
@@ -510,28 +510,6 @@
    "kick": "2026-11-20T01:15Z"
   },
   {
-   "gid": "401873077",
-   "away": "MIN",
-   "home": "SF",
-   "pick": "SF",
-   "model": 74,
-   "book": 60,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "lean",
-   "rank": 11,
-   "why": [
-    "Points per game: SF 31.2, MIN 19.6",
-    "MIN is starting a backup QB",
-    "QB play (EPA per dropback): SF +0.29, MIN +0.13",
-    "Last 3 games, win %: SF 67%, MIN 33%"
-   ],
-   "week": 11,
-   "kick": "2026-11-23T01:20Z"
-  },
-  {
    "gid": "401873068",
    "away": "BAL",
    "home": "CAR",
@@ -543,7 +521,7 @@
    "won": 52,
    "n": 25,
    "call": "lean",
-   "rank": 12,
+   "rank": 11,
    "why": [
     "BAL is starting a backup QB",
     "Points per game: CAR 24.3, BAL 21.0",
@@ -552,6 +530,28 @@
    ],
    "week": 11,
    "kick": "2026-11-22T18:00Z"
+  },
+  {
+   "gid": "401873077",
+   "away": "MIN",
+   "home": "SF",
+   "pick": "SF",
+   "model": 74,
+   "book": 59,
+   "bookpick": "SF",
+   "agree": true,
+   "won": 47,
+   "n": 15,
+   "call": "lean",
+   "rank": 12,
+   "why": [
+    "Points per game: SF 31.2, MIN 19.6",
+    "MIN is starting a backup QB",
+    "QB play (EPA per dropback): SF +0.29, MIN +0.13",
+    "Last 3 games, win %: SF 67%, MIN 33%"
+   ],
+   "week": 11,
+   "kick": "2026-11-23T01:20Z"
   },
   {
    "gid": "401873074",
