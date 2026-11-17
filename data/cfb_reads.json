@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T02:08:15Z",
+ "at": "2026-11-17T04:37:35Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,354 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401856863": {
-   "away": "TTU",
-   "home": "OKST",
-   "kick": "2026-11-15T02:30Z",
-   "ml": {
-    "pick": "OKST",
-    "p": 0.581432,
-    "call": null,
-    "why": [
-     "Last 3 games, average margin: OKST +18.0, TTU +0.0",
-     "Points per game: OKST 42.0, TTU 38.1",
-     "Average margin: OKST +9.5, TTU +11.4",
-     "Passing yards per game: OKST 336, TTU 227"
-    ],
-    "qbs": [
-     "Thomas Castellanos",
-     "Drew Mestemaker"
-    ]
-   },
-   "h2h": {
-    "pick": "Drew Mestemaker",
-    "pick_id": "5219834",
-    "team": "OKST",
-    "p": 0.764276,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4773919",
-      "Thomas Castellanos"
-     ],
-     [
-      "5219834",
-      "Drew Mestemaker"
-     ]
-    ]
-   },
-   "ptd": {
-    "5219834": {
-     "name": "Drew Mestemaker",
-     "team": "OKST",
-     "p1": 0.939527,
-     "take1": true,
-     "p2": 0.790813,
-     "take2": true,
-     "has_line": true
-    },
-    "4773919": {
-     "name": "Thomas Castellanos",
-     "team": "TTU",
-     "p1": 0.833509,
-     "take1": false,
-     "p2": 0.545065,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401860915": {
-   "away": "USU",
-   "home": "SDSU",
-   "kick": "2026-11-15T02:30Z",
-   "ml": {
-    "pick": "USU",
-    "p": 0.608012,
-    "call": null,
-    "why": [
-     "Margin rating: USU -0.8, SDSU -6.1",
-     "Points allowed per game: USU 19.5, SDSU 36.1",
-     "Rushing yards allowed per game: USU 116, SDSU 174",
-     "Passing yards allowed per game: USU 222, SDSU 286"
-    ],
-    "qbs": [
-     "McCae Hillstead",
-     "Stone Saunders"
-    ]
-   },
-   "h2h": {
-    "pick": "McCae Hillstead",
-    "pick_id": "4923285",
-    "team": "USU",
-    "p": 0.506014,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4923285",
-      "McCae Hillstead"
-     ],
-     [
-      "5141664",
-      "Stone Saunders"
-     ]
-    ]
-   },
-   "ptd": {
-    "5141664": {
-     "name": "Stone Saunders",
-     "team": "SDSU",
-     "p1": 0.56879,
-     "take1": false,
-     "p2": 0.220326,
-     "take2": false,
-     "has_line": true
-    },
-    "4923285": {
-     "name": "McCae Hillstead",
-     "team": "USU",
-     "p1": 0.709038,
-     "take1": false,
-     "p2": 0.366149,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864540": {
-   "away": "WYO",
-   "home": "UTEP",
-   "kick": "2026-11-15T03:00Z",
-   "ml": {
-    "pick": "WYO",
-    "p": 0.707801,
-    "call": null,
-    "why": [
-     "Margin rating: WYO -4.1, UTEP -15.5",
-     "Points per game: WYO 22.0, UTEP 9.5",
-     "Points allowed per game: WYO 22.8, UTEP 37.4",
-     "Last 3 games, average margin: WYO +12.7, UTEP -13.3"
-    ],
-    "qbs": [
-     "Tyler Hughes",
-     "Raymond Moore III"
-    ]
-   },
-   "h2h": {
-    "pick": "Tyler Hughes",
-    "pick_id": "4838536",
-    "team": "WYO",
-    "p": 0.570972,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4838536",
-      "Tyler Hughes"
-     ],
-     [
-      "5232049",
-      "Raymond Moore III"
-     ]
-    ]
-   },
-   "ptd": {
-    "5232049": {
-     "name": "Raymond Moore III",
-     "team": "UTEP",
-     "p1": 0.599616,
-     "take1": false,
-     "p2": 0.258725,
-     "take2": false,
-     "has_line": true
-    },
-    "4838536": {
-     "name": "Tyler Hughes",
-     "team": "WYO",
-     "p1": 0.594255,
-     "take1": false,
-     "p2": 0.252244,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856864": {
-   "away": "UTAH",
-   "home": "ARIZ",
-   "kick": "2026-11-15T03:30Z",
-   "ml": {
-    "pick": "UTAH",
-    "p": 0.632326,
-    "call": null,
-    "why": [
-     "Margin rating: UTAH +14.2, ARIZ +9.1",
-     "AP rank: UTAH #2, ARIZ #23",
-     "Points allowed per game: UTAH 16.6, ARIZ 21.5",
-     "Rushing yards allowed per game: UTAH 103, ARIZ 142"
-    ],
-    "qbs": [
-     "Devon Dampier",
-     "Noah Fifita"
-    ]
-   },
-   "h2h": {
-    "pick": "Noah Fifita",
-    "pick_id": "4801717",
-    "team": "ARIZ",
-    "p": 0.667824,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5105849",
-      "Devon Dampier"
-     ],
-     [
-      "4801717",
-      "Noah Fifita"
-     ]
-    ]
-   },
-   "ptd": {
-    "4801717": {
-     "name": "Noah Fifita",
-     "team": "ARIZ",
-     "p1": 0.832706,
-     "take1": false,
-     "p2": 0.531751,
-     "take2": false,
-     "has_line": true
-    },
-    "5105849": {
-     "name": "Devon Dampier",
-     "team": "UTAH",
-     "p1": 0.804398,
-     "take1": false,
-     "p2": 0.476981,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401860917": {
-   "away": "CSU",
-   "home": "WSU",
-   "kick": "2026-11-15T03:45Z",
-   "ml": {
-    "pick": "WSU",
-    "p": 0.722956,
-    "call": null,
-    "why": [
-     "Points allowed per game: WSU 30.0, CSU 47.4",
-     "Rushing yards allowed per game: WSU 183, CSU 279",
-     "Margin rating: WSU -7.6, CSU -10.0",
-     "Average margin: WSU -14.6, CSU -12.8"
-    ],
-    "qbs": [
-     "Hauss Hejny",
-     "Owen Eshelman"
-    ]
-   },
-   "h2h": {
-    "pick": "Owen Eshelman",
-    "pick_id": "5263246",
-    "team": "WSU",
-    "p": 0.582037,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5079443",
-      "Hauss Hejny"
-     ],
-     [
-      "5263246",
-      "Owen Eshelman"
-     ]
-    ]
-   },
-   "ptd": {
-    "5263246": {
-     "name": "Owen Eshelman",
-     "team": "WSU",
-     "p1": 0.825361,
-     "take1": false,
-     "p2": 0.520781,
-     "take2": false,
-     "has_line": true
-    },
-    "5079443": {
-     "name": "Hauss Hejny",
-     "team": "CSU",
-     "p1": 0.833201,
-     "take1": false,
-     "p2": 0.562629,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864537": {
-   "away": "NDSU",
-   "home": "HAW",
-   "kick": "2026-11-15T04:00Z",
-   "ml": {
-    "pick": "NDSU",
-    "p": 0.718025,
-    "call": null,
-    "why": [
-     "Margin rating: NDSU +7.5, HAW -6.8",
-     "Points allowed per game: NDSU 13.4, HAW 23.3",
-     "Points per game: NDSU 26.9, HAW 20.3",
-     "Rushing yards allowed per game: NDSU 138, HAW 171"
-    ],
-    "qbs": [
-     "Nathan Hayes",
-     "Micah Alejado"
-    ]
-   },
-   "h2h": {
-    "pick": "Micah Alejado",
-    "pick_id": "5101124",
-    "team": "HAW",
-    "p": 0.566241,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5087156",
-      "Nathan Hayes"
-     ],
-     [
-      "5101124",
-      "Micah Alejado"
-     ]
-    ]
-   },
-   "ptd": {
-    "5087156": {
-     "name": "Nathan Hayes",
-     "team": "NDSU",
-     "p1": 0.69714,
-     "take1": false,
-     "p2": 0.33567,
-     "take2": false,
-     "has_line": true
-    },
-    "5101124": {
-     "name": "Micah Alejado",
-     "team": "HAW",
-     "p1": 0.726061,
-     "take1": false,
-     "p2": 0.352661,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401856887": {
    "away": "MISS",
    "home": "OU",
@@ -668,7 +320,7 @@
     "pick": "Jason Wright",
     "pick_id": "5222591",
     "team": "BUFF",
-    "p": 0.569396,
+    "p": 0.560524,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -686,18 +338,18 @@
     "5222591": {
      "name": "Jason Wright",
      "team": "BUFF",
-     "p1": 0.716876,
+     "p1": 0.71638,
      "take1": false,
-     "p2": 0.359047,
+     "p2": 0.359339,
      "take2": false,
      "has_line": true
     },
     "5149056": {
      "name": "Jadyn Glasser",
      "team": "CMU",
-     "p1": 0.54987,
+     "p1": 0.567033,
      "take1": false,
-     "p2": 0.206188,
+     "p2": 0.217636,
      "take2": false,
      "has_line": true
     }
@@ -802,18 +454,18 @@
     "4911929": {
      "name": "Alonza Barnett III",
      "team": "UCF",
-     "p1": 0.835981,
+     "p1": 0.831324,
      "take1": false,
-     "p2": 0.553333,
+     "p2": 0.544689,
      "take2": false,
      "has_line": true
     },
     "5080403": {
      "name": "Jaylen Raynor",
      "team": "ISU",
-     "p1": 0.762221,
+     "p1": 0.756081,
      "take1": false,
-     "p2": 0.424157,
+     "p2": 0.415653,
      "take2": false,
      "has_line": true
     }
@@ -842,7 +494,7 @@
     "pick": "Walker Eget",
     "pick_id": "4694149",
     "team": "DUKE",
-    "p": 0.642581,
+    "p": 0.650828,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -860,18 +512,18 @@
     "4694149": {
      "name": "Walker Eget",
      "team": "DUKE",
-     "p1": 0.737061,
+     "p1": 0.743983,
      "take1": false,
-     "p2": 0.357746,
+     "p2": 0.365514,
      "take2": false,
      "has_line": true
     },
     "5159078": {
      "name": "Tait Reynolds",
      "team": "CLEM",
-     "p1": 0.484051,
+     "p1": 0.47506,
      "take1": false,
-     "p2": 0.156541,
+     "p2": 0.152149,
      "take2": false,
      "has_line": true
     }
@@ -1695,7 +1347,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "UNT",
-    "p": 0.79245,
+    "p": 0.782326,
     "call": "take",
     "why": [
      "Margin rating: UNT +3.9, TULN -4.8",
@@ -2681,7 +2333,7 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "UCLA",
-    "p": 0.772277,
+    "p": 0.761465,
     "call": "take",
     "why": [
      "Margin rating: UCLA +10.6, MICH +1.2",
