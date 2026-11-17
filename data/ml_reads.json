@@ -328,7 +328,7 @@
     "Points allowed per game: CHI 20.4, NO 26.2",
     "Last 3 games, win %: CHI 100%, NO 33%",
     "Points per game: CHI 26.8, NO 22.4",
-    "QB play (EPA per dropback): CHI +0.12, NO +0.01"
+    "Win % this season: CHI 78%, NO 33%"
    ],
    "week": 11,
    "kick": "2026-11-22T18:00Z"
@@ -338,7 +338,7 @@
    "away": "TEN",
    "home": "DAL",
    "pick": "DAL",
-   "model": 76,
+   "model": 75,
    "book": 78,
    "bookpick": "DAL",
    "agree": true,
@@ -348,31 +348,9 @@
    "rank": 3,
    "why": [
     "Points per game: DAL 28.6, TEN 18.6",
-    "QB play (EPA per dropback): DAL +0.19, TEN -0.10",
+    "QB play (EPA per dropback): DAL +0.17, TEN -0.09",
     "Last 3 games, win %: DAL 33%, TEN 0%",
     "Win % this season: DAL 40%, TEN 11%"
-   ],
-   "week": 11,
-   "kick": "2026-11-22T18:00Z"
-  },
-  {
-   "gid": "401873067",
-   "away": "ARI",
-   "home": "KC",
-   "pick": "KC",
-   "model": 92,
-   "book": 91,
-   "bookpick": "KC",
-   "agree": true,
-   "won": 83,
-   "n": 81,
-   "call": "take",
-   "rank": 4,
-   "why": [
-    "Points allowed per game: KC 17.3, ARI 28.9",
-    "QB play (EPA per dropback): KC +0.11, ARI -0.74",
-    "Points per game: KC 26.3, ARI 18.4",
-    "ARI is starting a backup QB"
    ],
    "week": 11,
    "kick": "2026-11-22T18:00Z"
@@ -383,18 +361,40 @@
    "home": "BUF",
    "pick": "BUF",
    "model": 91,
-   "book": 90,
+   "book": 89,
    "bookpick": "BUF",
+   "agree": true,
+   "won": 83,
+   "n": 81,
+   "call": "take",
+   "rank": 4,
+   "why": [
+    "Points per game: BUF 31.9, MIA 16.4",
+    "QB play (EPA per dropback): BUF +0.14, MIA -0.31",
+    "Last 3 games, win %: BUF 100%, MIA 0%",
+    "MIA is starting a backup QB"
+   ],
+   "week": 11,
+   "kick": "2026-11-22T18:00Z"
+  },
+  {
+   "gid": "401873067",
+   "away": "ARI",
+   "home": "KC",
+   "pick": "KC",
+   "model": 91,
+   "book": 90,
+   "bookpick": "KC",
    "agree": true,
    "won": 83,
    "n": 81,
    "call": "take",
    "rank": 5,
    "why": [
-    "Points per game: BUF 31.9, MIA 16.4",
-    "QB play (EPA per dropback): BUF +0.17, MIA -0.38",
-    "Last 3 games, win %: BUF 100%, MIA 0%",
-    "MIA is starting a backup QB"
+    "Points allowed per game: KC 17.3, ARI 28.9",
+    "QB play (EPA per dropback): KC +0.10, ARI -0.60",
+    "Points per game: KC 26.3, ARI 18.4",
+    "ARI is starting a backup QB"
    ],
    "week": 11,
    "kick": "2026-11-22T18:00Z"
@@ -415,7 +415,7 @@
    "why": [
     "Points allowed per game: DEN 20.7, LV 28.9",
     "LV is starting a backup QB",
-    "QB play (EPA per dropback): DEN +0.07, LV -0.28",
+    "QB play (EPA per dropback): DEN +0.08, LV -0.23",
     "Last 3 games, win %: DEN 100%, LV 33%"
    ],
    "week": 11,
@@ -426,8 +426,8 @@
    "away": "TB",
    "home": "DET",
    "pick": "DET",
-   "model": 73,
-   "book": 71,
+   "model": 72,
+   "book": 70,
    "bookpick": "DET",
    "agree": true,
    "won": 75,
@@ -436,9 +436,9 @@
    "rank": 7,
    "why": [
     "Points per game: DET 28.6, TB 22.4",
-    "QB play (EPA per dropback): DET +0.20, TB -0.12",
+    "QB play (EPA per dropback): DET +0.18, TB -0.10",
     "Last 3 games, win %: DET 100%, TB 67%",
-    "Pass defense, EPA allowed: DET +0.13, TB -0.16"
+    "Win % this season: DET 78%, TB 33%"
    ],
    "week": 11,
    "kick": "2026-11-22T18:00Z"
@@ -459,8 +459,8 @@
    "why": [
     "Points allowed per game: JAX 16.0, NYG 21.8",
     "Points per game: JAX 29.9, NYG 22.6",
-    "QB play (EPA per dropback): JAX +0.29, NYG -0.10",
-    "NYG is starting a backup QB"
+    "NYG is starting a backup QB",
+    "QB play (EPA per dropback): JAX +0.27, NYG -0.11"
    ],
    "week": 11,
    "kick": "2026-11-22T21:25Z"
@@ -470,7 +470,7 @@
    "away": "CIN",
    "home": "WSH",
    "pick": "CIN",
-   "model": 66,
+   "model": 65,
    "book": 72,
    "bookpick": "CIN",
    "agree": true,
@@ -481,7 +481,7 @@
    "why": [
     "Points per game: CIN 30.9, WSH 21.8",
     "Points allowed per game: CIN 21.4, WSH 24.8",
-    "QB play (EPA per dropback): CIN +0.24, WSH -0.01",
+    "QB play (EPA per dropback): CIN +0.22, WSH -0.01",
     "Last 3 games, win %: CIN 100%, WSH 67%"
    ],
    "week": 11,
@@ -492,7 +492,7 @@
    "away": "IND",
    "home": "HOU",
    "pick": "HOU",
-   "model": 68,
+   "model": 67,
    "book": 79,
    "bookpick": "HOU",
    "agree": true,
@@ -502,9 +502,9 @@
    "rank": 10,
    "why": [
     "Points per game: HOU 25.9, IND 20.8",
-    "QB play (EPA per dropback): HOU +0.14, IND -0.15",
+    "QB play (EPA per dropback): HOU +0.14, IND -0.12",
     "Points allowed per game: HOU 24.3, IND 27.1",
-    "Passing offense (EPA): HOU +0.20, IND -0.25"
+    "Turnovers per game: HOU 0.6, IND 1.9"
    ],
    "week": 11,
    "kick": "2026-11-20T01:15Z"
@@ -524,7 +524,7 @@
    "rank": 11,
    "why": [
     "BAL is starting a backup QB",
-    "Points per game: CAR 24.3, BAL 21.0",
+    "Points per game: CAR 24.3, BAL 20.9",
     "Last 3 games, win %: CAR 33%, BAL 0%",
     "QB play (EPA per dropback): CAR +0.05, BAL -0.04"
    ],
@@ -547,7 +547,7 @@
    "why": [
     "Points per game: SF 31.2, MIN 19.6",
     "MIN is starting a backup QB",
-    "QB play (EPA per dropback): SF +0.29, MIN +0.13",
+    "QB play (EPA per dropback): SF +0.26, MIN +0.12",
     "Last 3 games, win %: SF 67%, MIN 33%"
    ],
    "week": 11,
@@ -558,19 +558,19 @@
    "away": "NYJ",
    "home": "LAC",
    "pick": "NYJ",
-   "model": 63,
-   "book": 60,
+   "model": 57,
+   "book": 59,
    "bookpick": "LAC",
    "agree": false,
-   "won": 30,
-   "n": 23,
-   "call": "lean",
+   "won": 40,
+   "n": 149,
+   "call": null,
    "rank": 13,
    "why": [
-    "Points per game: NYJ 19.4, LAC 15.1",
-    "Points allowed per game: NYJ 25.4, LAC 27.4",
-    "QB play (EPA per dropback): NYJ -0.03, LAC -0.15",
-    "Pass defense, EPA allowed: NYJ +0.23, LAC +0.04"
+    "Points per game: NYJ 19.4, LAC 16.0",
+    "QB play (EPA per dropback): NYJ -0.04, LAC -0.14",
+    "Points allowed per game: NYJ 25.4, LAC 26.6",
+    "Pass defense, EPA allowed: NYJ +0.21, LAC +0.04"
    ],
    "week": 11,
    "kick": "2026-11-22T21:05Z"
