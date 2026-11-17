@@ -1,32 +1,8 @@
 {
- "at": "2026-11-17 21:05 UTC",
+ "at": "2026-11-17 22:05 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Brock Purdy",
-    "Dak Prescott"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "SF@DAL",
-   "eid": 21956,
-   "kick": "2026-11-15 21:25:00Z"
-  },
   {
    "qbs": [
     "Aaron Rodgers",
@@ -104,6 +80,39 @@
    ],
    "game": "NO@CHI",
    "eid": 22010,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Dak Prescott",
+    "Cam Ward"
+   ],
+   "pick": "Dak Prescott",
+   "lead": 6,
+   "complete": false,
+   "missing": [
+    "TEN E.Ayomanor (21%)",
+    "TEN G.Helm (17%)",
+    "TEN W.Robinson (16%)"
+   ],
+   "score": [
+    5,
+    -1
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+30 a game)",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 150.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "TEN@DAL",
+   "eid": 22012,
    "kick": "2026-11-22 18:00:00Z"
   },
   {
@@ -207,7 +216,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 100.5 yards higher in total on their lines",
+    "His receivers are set 97.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
