@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T00:21:12Z",
+ "at": "2026-11-17T00:48:27Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -7,296 +7,6 @@
   "ptd2": "model 70%+ with an ESPN line"
  },
  "reads": {
-  "401856885": {
-   "away": "TEX",
-   "home": "LSU",
-   "kick": "2026-11-15T00:30Z",
-   "ml": {
-    "pick": "LSU",
-    "p": 0.571174,
-    "call": null,
-    "why": [
-     "Points per game: LSU 33.9, TEX 31.1",
-     "Passing yards per game: LSU 320, TEX 232",
-     "Rushing yards allowed per game: LSU 83, TEX 100",
-     "Last 3 games, win %: LSU 67%, TEX 100%"
-    ],
-    "qbs": [
-     "Arch Manning",
-     "Sam Leavitt"
-    ]
-   },
-   "h2h": {
-    "pick": "Sam Leavitt",
-    "pick_id": "5078810",
-    "team": "LSU",
-    "p": 0.61481,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4870906",
-      "Arch Manning"
-     ],
-     [
-      "5078810",
-      "Sam Leavitt"
-     ]
-    ]
-   },
-   "ptd": {
-    "4870906": {
-     "name": "Arch Manning",
-     "team": "TEX",
-     "p1": 0.743715,
-     "take1": false,
-     "p2": 0.397378,
-     "take2": false,
-     "has_line": true
-    },
-    "5078810": {
-     "name": "Sam Leavitt",
-     "team": "LSU",
-     "p1": 0.816508,
-     "take1": false,
-     "p2": 0.485652,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401858299": {
-   "away": "STAN",
-   "home": "VT",
-   "kick": "2026-11-15T00:30Z",
-   "ml": {
-    "pick": "VT",
-    "p": 0.816972,
-    "call": "take",
-    "why": [
-     "Margin rating: VT -1.0, STAN -7.6",
-     "Points allowed per game: VT 26.5, STAN 41.1",
-     "Points per game: VT 29.4, STAN 18.6",
-     "Rushing yards allowed per game: VT 121, STAN 197"
-    ],
-    "qbs": [
-     "Davis Warren",
-     "Ethan Grunkemeyer"
-    ]
-   },
-   "h2h": {
-    "pick": "Ethan Grunkemeyer",
-    "pick_id": "5144078",
-    "team": "VT",
-    "p": 0.699489,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4878681",
-      "Davis Warren"
-     ],
-     [
-      "5144078",
-      "Ethan Grunkemeyer"
-     ]
-    ]
-   },
-   "ptd": {
-    "4878681": {
-     "name": "Davis Warren",
-     "team": "STAN",
-     "p1": 0.706358,
-     "take1": false,
-     "p2": 0.368282,
-     "take2": false,
-     "has_line": true
-    },
-    "5144078": {
-     "name": "Ethan Grunkemeyer",
-     "team": "VT",
-     "p1": 0.895322,
-     "take1": false,
-     "p2": 0.681485,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401858519": {
-   "away": "PUR",
-   "home": "IOWA",
-   "kick": "2026-11-15T00:30Z",
-   "ml": {
-    "pick": "IOWA",
-    "p": 0.903942,
-    "call": "take",
-    "why": [
-     "Margin rating: IOWA +8.9, PUR -0.9",
-     "Points allowed per game: IOWA 13.8, PUR 34.0",
-     "Rushing yards allowed per game: IOWA 86, PUR 184",
-     "Last 3 games, average margin: IOWA +13.0, PUR -10.3"
-    ],
-    "qbs": [
-     "Ryan Browne",
-     "Hank Brown"
-    ]
-   },
-   "h2h": {
-    "pick": "Hank Brown",
-    "pick_id": "5089314",
-    "team": "IOWA",
-    "p": 0.590122,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "5104738",
-      "Ryan Browne"
-     ],
-     [
-      "5089314",
-      "Hank Brown"
-     ]
-    ]
-   },
-   "ptd": {
-    "5089314": {
-     "name": "Hank Brown",
-     "team": "IOWA",
-     "p1": 0.815629,
-     "take1": false,
-     "p2": 0.507839,
-     "take2": false,
-     "has_line": true
-    },
-    "5104738": {
-     "name": "Ryan Browne",
-     "team": "PUR",
-     "p1": 0.562992,
-     "take1": false,
-     "p2": 0.215299,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401864539": {
-   "away": "UNLV",
-   "home": "UNM",
-   "kick": "2026-11-15T00:30Z",
-   "ml": {
-    "pick": "UNM",
-    "p": 0.834011,
-    "call": "take",
-    "why": [
-     "Margin rating: UNM +9.0, UNLV -1.3",
-     "Rushing yards allowed per game: UNM 78, UNLV 208",
-     "Points allowed per game: UNM 11.4, UNLV 25.7",
-     "Last 3 games, average margin: UNM +12.7, UNLV -3.0"
-    ],
-    "qbs": [
-     "Jackson Arnold",
-     "Toa Fa'avae"
-    ]
-   },
-   "h2h": {
-    "pick": "Jackson Arnold",
-    "pick_id": "4870607",
-    "team": "UNLV",
-    "p": 0.504708,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4870607",
-      "Jackson Arnold"
-     ],
-     [
-      "5261479",
-      "Toa Fa'avae"
-     ]
-    ]
-   },
-   "ptd": {
-    "5261479": {
-     "name": "Toa Fa'avae",
-     "team": "UNM",
-     "p1": 0.696325,
-     "take1": false,
-     "p2": 0.326336,
-     "take2": false,
-     "has_line": true
-    },
-    "4870607": {
-     "name": "Jackson Arnold",
-     "team": "UNLV",
-     "p1": 0.574863,
-     "take1": false,
-     "p2": 0.224297,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
-  "401856882": {
-   "away": "SC",
-   "home": "ARK",
-   "kick": "2026-11-15T00:45Z",
-   "ml": {
-    "pick": "SC",
-    "p": 0.730479,
-    "call": null,
-    "why": [
-     "Margin rating: SC +6.2, ARK -1.8",
-     "Points per game: SC 33.4, ARK 18.6",
-     "Last 3 games, average margin: SC +9.3, ARK -5.7",
-     "AP rank: SC #17, ARK unranked"
-    ],
-    "qbs": [
-     "LaNorris Sellers",
-     "KJ Jackson"
-    ]
-   },
-   "h2h": {
-    "pick": "LaNorris Sellers",
-    "pick_id": "4875127",
-    "team": "SC",
-    "p": 0.611706,
-    "call": null,
-    "has_line": true,
-    "qbs": [
-     [
-      "4875127",
-      "LaNorris Sellers"
-     ],
-     [
-      "5079516",
-      "KJ Jackson"
-     ]
-    ]
-   },
-   "ptd": {
-    "4875127": {
-     "name": "LaNorris Sellers",
-     "team": "SC",
-     "p1": 0.831491,
-     "take1": false,
-     "p2": 0.542244,
-     "take2": false,
-     "has_line": true
-    },
-    "5079516": {
-     "name": "KJ Jackson",
-     "team": "ARK",
-     "p1": 0.653479,
-     "take1": false,
-     "p2": 0.293317,
-     "take2": false,
-     "has_line": true
-    }
-   }
-  },
   "401862827": {
    "away": "UNT",
    "home": "UTSA",
@@ -1034,18 +744,18 @@
     "5222591": {
      "name": "Jason Wright",
      "team": "BUFF",
-     "p1": 0.716876,
+     "p1": 0.723642,
      "take1": false,
-     "p2": 0.359047,
+     "p2": 0.367121,
      "take2": false,
      "has_line": true
     },
     "5149056": {
      "name": "Jadyn Glasser",
      "team": "CMU",
-     "p1": 0.54987,
+     "p1": 0.558168,
      "take1": false,
-     "p2": 0.206188,
+     "p2": 0.211961,
      "take2": false,
      "has_line": true
     }
@@ -1347,7 +1057,7 @@
    "kick": "2026-11-21T01:00Z",
    "ml": {
     "pick": "AFA",
-    "p": 0.928209,
+    "p": 0.932137,
     "call": "take",
     "why": [
      "Margin rating: AFA +1.8, UTEP -15.9",
@@ -2043,7 +1753,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "UNT",
-    "p": 0.79245,
+    "p": 0.782326,
     "call": "take",
     "why": [
      "Margin rating: UNT +3.9, TULN -4.8",
