@@ -847,10 +847,11 @@
     var dkf = (window.DKLIVE || {})[id], hold = dkf && Date.now() - dkf.at < 90000 && hit ? 9e9 : 5000;
     if (hit && (hit.final || Date.now() - hit.at < hold)) return hit.p;
     var league = lg === "college-football" ? "college-football" : "nfl";
+    var sportPath = lg === "nba" ? "basketball/nba" : "football/" + league;
     var box = { at: Date.now(), final: false, tried: hit ? hit.tried : false };
     var wire = function () {
-      return fetch(espnUrl("https://site.web.api.espn.com/apis/site/v2/sports/football/" +
-                           league + "/summary?event=" + id))
+      return fetch(espnUrl("https://site.web.api.espn.com/apis/site/v2/sports/" +
+                           sportPath + "/summary?event=" + id))
         .then(function (r) { return r.json(); });
     };
     /* the settled file is asked for once, and again only after a game reads
@@ -859,7 +860,7 @@
        each ask was a miss (Oct 12, 2026) */
     var row = (league === "college-football" ? (typeof CFB === "object" ? CFB : []) : SCHED)
       .filter(function (g) { return String(g[1]) === id; })[0];
-    var young = row && row[2] && Date.now() < Date.parse(row[2]) + 2.5 * 3600000;
+    var young = lg === "nba" || (row && row[2] && Date.now() < Date.parse(row[2]) + 2.5 * 3600000);
     box.p = ((box.tried || young) && !(hit && hit.done))
       ? wire()
       : fetch("final/" + id + ".json").then(function (r) {

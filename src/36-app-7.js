@@ -988,7 +988,23 @@
     });
     return m;
   }
+  /* a game in a league the board does not draw (the NBA): the leg itself
+     carries its game, its clubs and its start, and the wallet reads ESPN's
+     own feed for that league (Jose, Nov 16, 2026: "We have all the sources
+     to do NBA") */
+  function xRow(gid) {
+    var hit = null;
+    ((DKB && DKB.sent) || []).some(function (bet) {
+      return (bet.legs || []).some(function (lg) {
+        if (lg.lgx && String(lg.g) === String(gid)) { hit = { g: [0, String(lg.g), lg.kick, lg.away, lg.home], lg: lg.lgx }; return true; }
+        return false;
+      });
+    });
+    return hit;
+  }
   function trkRow(gid) {
+    var x0 = xRow(gid);
+    if (x0) return x0;
     var hit = null;
     [[typeof SCHED === "object" ? SCHED : [], "nfl"], [typeof CFB === "object" ? CFB : [], "college-football"]].some(function (set) {
       return set[0].some(function (g) { if (String(g[1]) === String(gid)) { hit = { g: g, lg: set[1] }; return true; } return false; });
@@ -1240,7 +1256,7 @@
     var map = legMap(), games = {}, order = [], loose = [], byEv = {};
     (bet.legs || []).forEach(function (lg) { var v = map[lg.sel]; if (v && v.fight && lg.ev) byEv[lg.ev] = v.g; });
     (bet.legs || []).forEach(function (lg) {
-      var v = map[lg.sel] || trkFightOf(lg, byEv);
+      var v = map[lg.sel] || (lg.lgx && lg.g ? { g: String(lg.g), k: "ml", s: lg.side } : null) || trkFightOf(lg, byEv);
       if (!v) { var pg = trkGameOf(lg); if (pg) v = { g: pg, k: /half ?time ?\/ ?full ?time/i.test(String(lg.market || "") + " " + String(lg.label || "")) ? "htft" : "prop" }; }
       var row = v && (v.fight ? trkFightRow(v.g) : trkRow(v.g));
       if (!v || !row) { loose.push(lg); return; }
@@ -2085,6 +2101,7 @@
             var rr = trkRow(lg.g), ab = String(lg.label || "").split(" ")[0].toUpperCase();
             if (rr && (ab === rr.g[3] || ab === rr.g[4])) LM = { g: String(rr.g[1]), k: "ml", s: ab === rr.g[3] ? 0 : 1, lg: rr.lg };
           }
+          if (!LM && lg.lgx && lg.g) LM = { g: String(lg.g), k: "ml", s: lg.side, lg: lg.lgx };
           var v = BANK.legs[lg.sel] || {};
           /* a result the clock wrote onto the slip settles the leg on every
              device at once (Oct 3, 2026) */
