@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17T23:04:43Z",
+ "at": "2026-11-17T23:35:38Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -129,7 +129,7 @@
    "kick": "2026-11-18T00:00Z",
    "ml": {
     "pick": "M-OH",
-    "p": 0.638268,
+    "p": 0.636364,
     "call": null,
     "why": [
      "Margin rating: M-OH -4.0, KENT -12.6",
@@ -138,21 +138,21 @@
      "Points allowed per game: M-OH 27.8, KENT 32.6"
     ],
     "qbs": [
-     "Caleb Heavner",
+     "Drew Bellisari",
      "Dru DeShields"
     ]
    },
    "h2h": {
-    "pick": "Caleb Heavner",
-    "pick_id": "5388435",
-    "team": "M-OH",
-    "p": 0.505377,
+    "pick": "Dru DeShields",
+    "pick_id": "5119841",
+    "team": "KENT",
+    "p": 0.546684,
     "call": null,
     "has_line": true,
     "qbs": [
      [
-      "5388435",
-      "Caleb Heavner"
+      "5280838",
+      "Drew Bellisari"
      ],
      [
       "5119841",
@@ -161,21 +161,21 @@
     ]
    },
    "ptd": {
-    "5388435": {
-     "name": "Caleb Heavner",
+    "5280838": {
+     "name": "Drew Bellisari",
      "team": "M-OH",
-     "p1": 0.687422,
+     "p1": 0.654857,
      "take1": false,
-     "p2": 0.334784,
+     "p2": 0.299766,
      "take2": false,
      "has_line": true
     },
     "5119841": {
      "name": "Dru DeShields",
      "team": "KENT",
-     "p1": 0.686057,
+     "p1": 0.693245,
      "take1": false,
-     "p2": 0.339333,
+     "p2": 0.347204,
      "take2": false,
      "has_line": true
     }
@@ -1289,7 +1289,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "UNT",
-    "p": 0.79245,
+    "p": 0.782326,
     "call": "take",
     "why": [
      "Margin rating: UNT +3.9, TULN -4.8",
@@ -2814,7 +2814,7 @@
     "pick": "Owen Eshelman",
     "pick_id": "5263246",
     "team": "WSU",
-    "p": 0.516204,
+    "p": 0.507185,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2832,18 +2832,18 @@
     "5263246": {
      "name": "Owen Eshelman",
      "team": "WSU",
-     "p1": 0.681059,
+     "p1": 0.673183,
      "take1": false,
-     "p2": 0.321163,
+     "p2": 0.313872,
      "take2": false,
      "has_line": true
     },
     "5148803": {
      "name": "Brad Jackson",
      "team": "TXST",
-     "p1": 0.870349,
+     "p1": 0.87436,
      "take1": false,
-     "p2": 0.601562,
+     "p2": 0.609598,
      "take2": false,
      "has_line": true
     }
@@ -3899,7 +3899,7 @@
    "kick": "2026-11-25T00:00Z",
    "ml": {
     "pick": "WMU",
-    "p": 0.768059,
+    "p": 0.769523,
     "call": "take",
     "why": [
      "Margin rating: WMU +2.0, M-OH -4.0",
@@ -3908,21 +3908,21 @@
      "Last 3 games, average margin: WMU +11.3, M-OH +5.0"
     ],
     "qbs": [
-     "Caleb Heavner",
+     "Drew Bellisari",
      "Broc Lowry"
     ]
    },
    "h2h": {
-    "pick": "Caleb Heavner",
-    "pick_id": "5388435",
-    "team": "M-OH",
-    "p": 0.530386,
+    "pick": "Broc Lowry",
+    "pick_id": "5074245",
+    "team": "WMU",
+    "p": 0.521272,
     "call": null,
     "has_line": false,
     "qbs": [
      [
-      "5388435",
-      "Caleb Heavner"
+      "5280838",
+      "Drew Bellisari"
      ],
      [
       "5074245",
@@ -3931,12 +3931,12 @@
     ]
    },
    "ptd": {
-    "5388435": {
-     "name": "Caleb Heavner",
+    "5280838": {
+     "name": "Drew Bellisari",
      "team": "M-OH",
-     "p1": 0.580473,
+     "p1": 0.518256,
      "take1": false,
-     "p2": 0.228921,
+     "p2": 0.184437,
      "take2": false,
      "has_line": false
     },
