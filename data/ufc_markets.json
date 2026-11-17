@@ -79425,7 +79425,7 @@
   "right": "Tahir Abdullayev",
   "rounds": 3,
   "start": "2026-11-21T15:15Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Jake Matthews": [
@@ -79455,7 +79455,7 @@
   "right": "Alessandro Costa",
   "rounds": 3,
   "start": "2026-11-21T15:45Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Amir Albazi": [
@@ -79485,7 +79485,7 @@
   "right": "Tallison Teixeira",
   "rounds": 3,
   "start": "2026-11-21T17:15Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Shamil Gaziev": [
@@ -79515,7 +79515,7 @@
   "right": "Ikram Aliskerov",
   "rounds": 3,
   "start": "2026-11-21T18:15Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Jared Cannonier": [
@@ -79545,7 +79545,7 @@
   "right": "Asu Almabayev",
   "rounds": 3,
   "start": "2026-11-21T18:45Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Kyoji Horiguchi": [
@@ -79575,7 +79575,7 @@
   "right": "Dan Hooker",
   "rounds": 3,
   "start": "2026-11-21T19:15Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Dan Hooker": [
@@ -79605,8 +79605,48 @@
   "right": "Kevin Vallejos",
   "rounds": 3,
   "start": "2026-11-21T19:45Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Aljamain Sterling": [
+     "+220",
+     "0QA390153434#2369605113_13L9034Q11Q21"
+    ],
+    "Kevin Vallejos": [
+     "-320",
+     "0QA390153434#2369605160_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Aljamain Sterling": [
+     "-180",
+     "0QA390153435#2369605114_13L9034Q11Q21"
+    ],
+    "Kevin Vallejos": [
+     "+130",
+     "0QA390153435#2369605159_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Aljamain Sterling": [
+     "+225",
+     "0QA390153481#2369605138_13L9034Q10Q21"
+    ],
+    "Kevin Vallejos": [
+     "-310",
+     "0QA390153481#2369605149_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Aljamain Sterling": [
+     "-330",
+     "0QA390153478#2369605137_13L9034Q10Q21"
+    ],
+    "Kevin Vallejos": [
+     "+235",
+     "0QA390153478#2369605150_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Aljamain Sterling": [
      "+110",
@@ -79615,6 +79655,36 @@
     "Kevin Vallejos": [
      "-130",
      "0ML87157416_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Aljamain Sterling": [
+     "+650",
+     "0QA390153475#2369605131_13L9034Q10Q21"
+    ],
+    "Kevin Vallejos": [
+     "-1400",
+     "0QA390153475#2369605157_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Aljamain Sterling": [
+     "-140",
+     "0HC87298368P350_1"
+    ],
+    "Kevin Vallejos": [
+     "+105",
+     "0HC87298368N350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Aljamain Sterling": [
+     "-190",
+     "0HC87298369P750_1"
+    ],
+    "Kevin Vallejos": [
+     "+145",
+     "0HC87298369N750_3"
     ]
    },
    "Total Rounds": {
@@ -79626,6 +79696,442 @@
      "+140",
      "0OU87269532U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-370",
+     "0OU87298367O150_1"
+    ],
+    "Under": [
+     "+255",
+     "0OU87298367U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1500",
+     "0QA390153439#2369605133_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA390153439#2369605154_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153423#2369605102_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+4000",
+     "0QA390153484#2369605139_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-110",
+     "0QA390153428#2369605107_13L9034Q11Q22"
+    ],
+    "No": [
+     "-120",
+     "0QA390153428#2369605166_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+650",
+     "0QA390153429#2369605108_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA390153429#2369605165_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-135",
+     "0QA390153416#2369605096_13L9034Q10Q20"
+    ],
+    "No": [
+     "+105",
+     "0QA390153416#2369605175_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+400",
+     "0QA390153436#2369605115_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1200",
+     "0QA390153436#2369605156_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+600",
+     "0QA390153436#2369605185_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1700",
+     "0QA390153436#2369605190_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+850",
+     "0QA390153436#2369605206_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2200",
+     "0QA390153436#2369605209_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-135",
+     "0QA390153436#2369605286_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Aljamain Sterling to Win in Rounds 1-2": [
+     "+700",
+     "0QA390153419#2369605098_13L9034Q11Q21"
+    ],
+    "Aljamain Sterling to Win in Round 3 or on Decision": [
+     "+140",
+     "0QA390153419#2369605179_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153419#2369605247_13L9034Q19Q29"
+    ],
+    "Kevin Vallejos to Win in Rounds 1-2": [
+     "+240",
+     "0QA390153419#2369605200_15L9034Q15Q25"
+    ],
+    "Kevin Vallejos to Win in Round 3 or on Decision": [
+     "+190",
+     "0QA390153419#2369605218_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Aljamain Sterling to Win by KO/TKO/DQ in Round 1": [
+     "+3500",
+     "0QA390153421#2369605100_13L9034Q11Q21"
+    ],
+    "Aljamain Sterling to Win by KO/TKO/DQ in Round 2": [
+     "+4500",
+     "0QA390153421#2369605171_13L9034Q12Q22"
+    ],
+    "Aljamain Sterling to Win by KO/TKO/DQ in Round 3": [
+     "+6000",
+     "0QA390153421#2369605181_13L9034Q13Q23"
+    ],
+    "Aljamain Sterling to Win by Submission in Round 1": [
+     "+1500",
+     "0QA390153421#2369605213_13L9034Q16Q26"
+    ],
+    "Aljamain Sterling to Win by Submission in Round 2": [
+     "+2000",
+     "0QA390153421#2369605220_13L9034Q17Q27"
+    ],
+    "Aljamain Sterling to Win by Submission in Round 3": [
+     "+2800",
+     "0QA390153421#2369605238_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-135",
+     "0QA390153421#2369605320_13L9034Q121Q221"
+    ],
+    "Kevin Vallejos to Win by KO/TKO/DQ in Round 1": [
+     "+450",
+     "0QA390153421#2369605283_15L9034Q111Q211"
+    ],
+    "Kevin Vallejos to Win by KO/TKO/DQ in Round 2": [
+     "+700",
+     "0QA390153421#2369605289_15L9034Q112Q212"
+    ],
+    "Kevin Vallejos to Win by KO/TKO/DQ in Round 3": [
+     "+950",
+     "0QA390153421#2369605298_15L9034Q113Q213"
+    ],
+    "Kevin Vallejos to Win by Submission in Round 1": [
+     "+4000",
+     "0QA390153421#2369605307_15L9034Q116Q216"
+    ],
+    "Kevin Vallejos to Win by Submission in Round 2": [
+     "+5500",
+     "0QA390153421#2369605310_15L9034Q117Q217"
+    ],
+    "Kevin Vallejos to Win by Submission in Round 3": [
+     "+7500",
+     "0QA390153421#2369605312_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Aljamain Sterling To Win And Under 0.5": [
+     "+3000",
+     "0QA390153424#2369605103_13L9034Q11Q21"
+    ],
+    "Aljamain Sterling To Win And Under 1.5": [
+     "+950",
+     "0QA390153424#2369605183_13L9034Q11Q23"
+    ],
+    "Kevin Vallejos To Win And Under 0.5": [
+     "+1200",
+     "0QA390153424#2369605169_14L9034Q12Q22"
+    ],
+    "Kevin Vallejos To Win And Under 1.5": [
+     "+320",
+     "0QA390153424#2369605192_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Aljamain Sterling To Win And Over 1.5": [
+     "+110",
+     "0QA390153425#2369605184_13L9034Q11Q23"
+    ],
+    "Aljamain Sterling To Win And Over 2.5": [
+     "+135",
+     "0QA390153425#2369605205_13L9034Q11Q25"
+    ],
+    "Kevin Vallejos To Win And Over 1.5": [
+     "+125",
+     "0QA390153425#2369605191_14L9034Q12Q24"
+    ],
+    "Kevin Vallejos To Win And Over 2.5": [
+     "+210",
+     "0QA390153425#2369605210_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-575",
+     "0QA390153426#2369605105_13L9034Q11Q22"
+    ],
+    "No": [
+     "+360",
+     "0QA390153426#2369605168_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-225",
+     "0QA390153427#2369605106_13L9034Q11Q22"
+    ],
+    "No": [
+     "+170",
+     "0QA390153427#2369605167_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Aljamain Sterling Round 1": [
+     "+1200",
+     "0QA390153417#2369605095_13L9034Q11Q20"
+    ],
+    "Aljamain Sterling Round 2": [
+     "+1600",
+     "0QA390153417#2369605177_13L9034Q11Q22"
+    ],
+    "Aljamain Sterling Round 3": [
+     "+2200",
+     "0QA390153417#2369605199_13L9034Q11Q24"
+    ],
+    "Aljamain Sterling By Decision": [
+     "+165",
+     "0QA390153417#2369605280_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153417#2369605295_15L9034Q10Q212"
+    ],
+    "Kevin Vallejos Round 1": [
+     "+425",
+     "0QA390153417#2369605176_14L9034Q12Q21"
+    ],
+    "Kevin Vallejos Round 2": [
+     "+650",
+     "0QA390153417#2369605198_14L9034Q12Q23"
+    ],
+    "Kevin Vallejos Round 3": [
+     "+900",
+     "0QA390153417#2369605216_14L9034Q12Q25"
+    ],
+    "Kevin Vallejos By Decision": [
+     "+295",
+     "0QA390153417#2369605292_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+360",
+     "0QA390153422#2369605101_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+425",
+     "0QA390153422#2369605170_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+650",
+     "0QA390153422#2369605182_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153422#2369605212_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-135",
+     "0QA390153422#2369605221_13L9034Q11Q25"
+    ]
+   },
+   "Kevin Vallejos to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+170",
+     "0QA390153441#2369605134_13L9034Q11Q22"
+    ],
+    "No": [
+     "-225",
+     "0QA390153441#2369605153_13L9034Q13Q24"
+    ]
+   },
+   "Aljamain Sterling to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+550",
+     "0QA390153442#2369605136_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1000",
+     "0QA390153442#2369605151_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Aljamain Sterling to Win by KO/TKO/DQ or Decision": [
+     "+135",
+     "0QA390153420#2369605099_13L9034Q11Q21"
+    ],
+    "Aljamain Sterling to Win by KO/TKO/DQ or Submission": [
+     "+550",
+     "0QA390153420#2369605172_13L9034Q12Q22"
+    ],
+    "Aljamain Sterling to Win by Submission or Decision": [
+     "+115",
+     "0QA390153420#2369605180_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153420#2369605219_13L9034Q17Q27"
+    ],
+    "Kevin Vallejos to Win by KO/TKO/DQ or Decision": [
+     "-125",
+     "0QA390153420#2369605195_15L9034Q14Q24"
+    ],
+    "Kevin Vallejos to Win by KO/TKO/DQ or Submission": [
+     "+170",
+     "0QA390153420#2369605201_15L9034Q15Q25"
+    ],
+    "Kevin Vallejos to Win by Submission or Decision": [
+     "+235",
+     "0QA390153420#2369605214_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Aljamain Sterling to Win By KO/TKO/DQ or Kevin Vallejos to Win by Submission": [
+     "+850",
+     "0QA390153444#2369605135_13L9034Q10Q21"
+    ],
+    "Aljamain Sterling to Win By KO/TKO/DQ or Kevin Vallejos to Win by Decision": [
+     "+225",
+     "0QA390153444#2369605152_13L9034Q10Q22"
+    ],
+    "Aljamain Sterling to Win By Submission or Kevin Vallejos to Win by KO/TKO/DQ": [
+     "+105",
+     "0QA390153444#2369605186_13L9034Q10Q23"
+    ],
+    "Aljamain Sterling to Win By Submission or Kevin Vallejos to Win by Decision": [
+     "+165",
+     "0QA390153444#2369605189_13L9034Q10Q24"
+    ],
+    "Aljamain Sterling to Win By Decision or Kevin Vallejos to Win by KO/TKO/DQ": [
+     "-275",
+     "0QA390153444#2369605207_13L9034Q10Q25"
+    ],
+    "Aljamain Sterling to Win By Decision or Kevin Vallejos to Win by Submission": [
+     "+135",
+     "0QA390153444#2369605208_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153444#2369605229_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+155",
+     "0QA390153418#2369605097_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+550",
+     "0QA390153418#2369605174_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-135",
+     "0QA390153418#2369605178_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153418#2369605197_15L9034Q14Q24"
+    ]
+   },
+   "Aljamain Sterling to Win by Unanimous Decision": {
+    "Yes": [
+     "+225",
+     "0QA390153430#2369605109_13L9034Q11Q22"
+    ]
+   },
+   "Kevin Vallejos to Win by Unanimous Decision": {
+    "Yes": [
+     "+350",
+     "0QA390153431#2369605110_13L9034Q11Q22"
+    ]
+   },
+   "Aljamain Sterling to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA390153432#2369605111_13L9034Q11Q22"
+    ]
+   },
+   "Kevin Vallejos to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA390153433#2369605112_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Aljamain Sterling": [
+     "+1800",
+     "0QA390153503#2369605141_13L9034Q11Q22"
+    ],
+    "Kevin Vallejos": [
+     "+180",
+     "0QA390153503#2369605146_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Aljamain Sterling": [
+     "+700",
+     "0QA390153504#2369605142_13L9034Q11Q22"
+    ],
+    "Kevin Vallejos": [
+     "+2000",
+     "0QA390153504#2369605145_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Aljamain Sterling": [
+     "+165",
+     "0QA390153507#2369605143_13L9034Q11Q22"
+    ],
+    "Kevin Vallejos": [
+     "+295",
+     "0QA390153507#2369605144_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79635,7 +80141,7 @@
   "right": "Navajo Stirling",
   "rounds": 5,
   "start": "2026-11-21T20:15Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Jiri Prochazka": [
@@ -80299,7 +80805,7 @@
   "right": "Alik Lorenz",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Diyar Nurgozhay": [
@@ -80319,7 +80825,7 @@
   "right": "Dom Mar Fan",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Nikolas Motta": [
@@ -80349,7 +80855,7 @@
   "right": "Santiago Luna",
   "rounds": 3,
   "start": "2026-11-21T17:45Z",
-  "read": "2026-11-17T20:02Z",
+  "read": "2026-11-17T21:01Z",
   "markets": {
    "Moneyline": {
     "Aleksandre Topuria": [
