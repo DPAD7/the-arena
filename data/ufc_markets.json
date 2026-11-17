@@ -79425,7 +79425,7 @@
   "right": "Tahir Abdullayev",
   "rounds": 3,
   "start": "2026-11-21T15:15Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Jake Matthews": [
@@ -79455,7 +79455,7 @@
   "right": "Alessandro Costa",
   "rounds": 3,
   "start": "2026-11-21T15:45Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Amir Albazi": [
@@ -79485,7 +79485,7 @@
   "right": "Tallison Teixeira",
   "rounds": 3,
   "start": "2026-11-21T17:15Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Shamil Gaziev": [
@@ -79515,7 +79515,7 @@
   "right": "Ikram Aliskerov",
   "rounds": 3,
   "start": "2026-11-21T18:15Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Jared Cannonier": [
@@ -79545,8 +79545,48 @@
   "right": "Asu Almabayev",
   "rounds": 3,
   "start": "2026-11-21T18:45Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Kyoji Horiguchi": [
+     "-260",
+     "0QA390153596#2369605387_13L9034Q11Q21"
+    ],
+    "Asu Almabayev": [
+     "+180",
+     "0QA390153596#2369605528_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Kyoji Horiguchi": [
+     "-200",
+     "0QA390153597#2369605390_13L9034Q11Q21"
+    ],
+    "Asu Almabayev": [
+     "+145",
+     "0QA390153597#2369605525_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Kyoji Horiguchi": [
+     "-265",
+     "0QA390153621#2369605462_13L9034Q10Q21"
+    ],
+    "Asu Almabayev": [
+     "+195",
+     "0QA390153621#2369605495_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Kyoji Horiguchi": [
+     "-190",
+     "0QA390153620#2369605459_13L9034Q10Q21"
+    ],
+    "Asu Almabayev": [
+     "+145",
+     "0QA390153620#2369605498_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Kyoji Horiguchi": [
      "-198",
@@ -79555,6 +79595,36 @@
     "Asu Almabayev": [
      "+164",
      "0ML87233557_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Kyoji Horiguchi": [
+     "-310",
+     "0QA390153619#2369605441_13L9034Q10Q21"
+    ],
+    "Asu Almabayev": [
+     "+220",
+     "0QA390153619#2369605519_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Kyoji Horiguchi": [
+     "-105",
+     "0HC87298362N350_1"
+    ],
+    "Asu Almabayev": [
+     "-130",
+     "0HC87298362P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Kyoji Horiguchi": [
+     "-650",
+     "0HC87298363P750_1"
+    ],
+    "Asu Almabayev": [
+     "+400",
+     "0HC87298363N750_3"
     ]
    },
    "Total Rounds": {
@@ -79566,6 +79636,438 @@
      "+210",
      "0OU87276471U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-600",
+     "0OU87298361O150_1"
+    ],
+    "Under": [
+     "+360",
+     "0OU87298361U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+2000",
+     "0QA390153600#2369605447_13L9034Q11Q22"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153585#2369605354_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+5000",
+     "0QA390153622#2369605465_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-165",
+     "0QA390153590#2369605369_13L9034Q11Q22"
+    ],
+    "No": [
+     "+125",
+     "0QA390153590#2369605546_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+500",
+     "0QA390153591#2369605372_13L9034Q11Q22"
+    ],
+    "No": [
+     "-900",
+     "0QA390153591#2369605543_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-225",
+     "0QA390153578#2369605336_13L9034Q10Q20"
+    ],
+    "No": [
+     "+170",
+     "0QA390153578#2369605573_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+750",
+     "0QA390153598#2369605393_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1000",
+     "0QA390153598#2369605516_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+1000",
+     "0QA390153598#2369605603_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1400",
+     "0QA390153598#2369605618_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1400",
+     "0QA390153598#2369605666_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1900",
+     "0QA390153598#2369605675_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-225",
+     "0QA390153598#2369605768_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Kyoji Horiguchi to Win in Rounds 1-2": [
+     "+370",
+     "0QA390153581#2369605342_13L9034Q11Q21"
+    ],
+    "Kyoji Horiguchi to Win in Round 3 or on Decision": [
+     "-115",
+     "0QA390153581#2369605585_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153581#2369605742_13L9034Q19Q29"
+    ],
+    "Asu Almabayev to Win in Rounds 1-2": [
+     "+850",
+     "0QA390153581#2369605648_15L9034Q15Q25"
+    ],
+    "Asu Almabayev to Win in Round 3 or on Decision": [
+     "+210",
+     "0QA390153581#2369605706_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Kyoji Horiguchi to Win by KO/TKO/DQ in Round 1": [
+     "+900",
+     "0QA390153583#2369605348_13L9034Q11Q21"
+    ],
+    "Kyoji Horiguchi to Win by KO/TKO/DQ in Round 2": [
+     "+1300",
+     "0QA390153583#2369605561_13L9034Q12Q22"
+    ],
+    "Kyoji Horiguchi to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA390153583#2369605591_13L9034Q13Q23"
+    ],
+    "Kyoji Horiguchi to Win by Submission in Round 1": [
+     "+1400",
+     "0QA390153583#2369605688_13L9034Q16Q26"
+    ],
+    "Kyoji Horiguchi to Win by Submission in Round 2": [
+     "+2000",
+     "0QA390153583#2369605712_13L9034Q17Q27"
+    ],
+    "Kyoji Horiguchi to Win by Submission in Round 3": [
+     "+2800",
+     "0QA390153583#2369605736_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-225",
+     "0QA390153583#2369605792_13L9034Q121Q221"
+    ],
+    "Asu Almabayev to Win by KO/TKO/DQ in Round 1": [
+     "+2500",
+     "0QA390153583#2369605766_15L9034Q111Q211"
+    ],
+    "Asu Almabayev to Win by KO/TKO/DQ in Round 2": [
+     "+3000",
+     "0QA390153583#2369605770_15L9034Q112Q212"
+    ],
+    "Asu Almabayev to Win by KO/TKO/DQ in Round 3": [
+     "+4000",
+     "0QA390153583#2369605776_15L9034Q113Q213"
+    ],
+    "Asu Almabayev to Win by Submission in Round 1": [
+     "+2500",
+     "0QA390153583#2369605782_15L9034Q116Q216"
+    ],
+    "Asu Almabayev to Win by Submission in Round 2": [
+     "+3000",
+     "0QA390153583#2369605784_15L9034Q117Q217"
+    ],
+    "Asu Almabayev to Win by Submission in Round 3": [
+     "+4000",
+     "0QA390153583#2369605786_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Kyoji Horiguchi To Win And Under 0.5": [
+     "+1600",
+     "0QA390153586#2369605357_13L9034Q11Q21"
+    ],
+    "Kyoji Horiguchi To Win And Under 1.5": [
+     "+475",
+     "0QA390153586#2369605597_13L9034Q11Q23"
+    ],
+    "Asu Almabayev To Win And Under 0.5": [
+     "+3500",
+     "0QA390153586#2369605555_14L9034Q12Q22"
+    ],
+    "Asu Almabayev To Win And Under 1.5": [
+     "+1100",
+     "0QA390153586#2369605624_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Kyoji Horiguchi To Win And Over 1.5": [
+     "-165",
+     "0QA390153587#2369605600_13L9034Q11Q23"
+    ],
+    "Kyoji Horiguchi To Win And Over 2.5": [
+     "-115",
+     "0QA390153587#2369605663_13L9034Q11Q25"
+    ],
+    "Asu Almabayev To Win And Over 1.5": [
+     "+170",
+     "0QA390153587#2369605621_14L9034Q12Q24"
+    ],
+    "Asu Almabayev To Win And Over 2.5": [
+     "+205",
+     "0QA390153587#2369605678_14L9034Q12Q26"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-900",
+     "0QA390153588#2369605363_13L9034Q11Q22"
+    ],
+    "No": [
+     "+500",
+     "0QA390153588#2369605552_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-360",
+     "0QA390153589#2369605366_13L9034Q11Q22"
+    ],
+    "No": [
+     "+255",
+     "0QA390153589#2369605549_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Kyoji Horiguchi Round 1": [
+     "+600",
+     "0QA390153579#2369605333_13L9034Q11Q20"
+    ],
+    "Kyoji Horiguchi Round 2": [
+     "+900",
+     "0QA390153579#2369605579_13L9034Q11Q22"
+    ],
+    "Kyoji Horiguchi Round 3": [
+     "+1200",
+     "0QA390153579#2369605645_13L9034Q11Q24"
+    ],
+    "Kyoji Horiguchi By Decision": [
+     "+115",
+     "0QA390153579#2369605764_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153579#2369605774_15L9034Q10Q212"
+    ],
+    "Asu Almabayev Round 1": [
+     "+1400",
+     "0QA390153579#2369605576_14L9034Q12Q21"
+    ],
+    "Asu Almabayev Round 2": [
+     "+1800",
+     "0QA390153579#2369605642_14L9034Q12Q23"
+    ],
+    "Asu Almabayev Round 3": [
+     "+2200",
+     "0QA390153579#2369605700_14L9034Q12Q25"
+    ],
+    "Asu Almabayev By Decision": [
+     "+250",
+     "0QA390153579#2369605772_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+500",
+     "0QA390153584#2369605351_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+600",
+     "0QA390153584#2369605558_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+800",
+     "0QA390153584#2369605594_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153584#2369605684_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-225",
+     "0QA390153584#2369605715_13L9034Q11Q25"
+    ]
+   },
+   "Asu Almabayev to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+650",
+     "0QA390153601#2369605450_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1400",
+     "0QA390153601#2369605507_13L9034Q13Q24"
+    ]
+   },
+   "Kyoji Horiguchi to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+280",
+     "0QA390153602#2369605456_13L9034Q11Q22"
+    ],
+    "No": [
+     "-400",
+     "0QA390153602#2369605501_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Kyoji Horiguchi to Win by KO/TKO/DQ or Decision": [
+     "-170",
+     "0QA390153582#2369605345_13L9034Q11Q21"
+    ],
+    "Kyoji Horiguchi to Win by KO/TKO/DQ or Submission": [
+     "+280",
+     "0QA390153582#2369605564_13L9034Q12Q22"
+    ],
+    "Kyoji Horiguchi to Win by Submission or Decision": [
+     "-135",
+     "0QA390153582#2369605588_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153582#2369605709_13L9034Q17Q27"
+    ],
+    "Asu Almabayev to Win by KO/TKO/DQ or Decision": [
+     "+180",
+     "0QA390153582#2369605633_15L9034Q14Q24"
+    ],
+    "Asu Almabayev to Win by KO/TKO/DQ or Submission": [
+     "+650",
+     "0QA390153582#2369605651_15L9034Q15Q25"
+    ],
+    "Asu Almabayev to Win by Submission or Decision": [
+     "+180",
+     "0QA390153582#2369605692_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Kyoji Horiguchi to Win By KO/TKO/DQ or Asu Almabayev to Win by Submission": [
+     "+285",
+     "0QA390153603#2369605453_13L9034Q10Q21"
+    ],
+    "Kyoji Horiguchi to Win By KO/TKO/DQ or Asu Almabayev to Win by Decision": [
+     "+110",
+     "0QA390153603#2369605504_13L9034Q10Q22"
+    ],
+    "Kyoji Horiguchi to Win By Submission or Asu Almabayev to Win by KO/TKO/DQ": [
+     "+390",
+     "0QA390153603#2369605606_13L9034Q10Q23"
+    ],
+    "Kyoji Horiguchi to Win By Submission or Asu Almabayev to Win by Decision": [
+     "+140",
+     "0QA390153603#2369605615_13L9034Q10Q24"
+    ],
+    "Kyoji Horiguchi to Win By Decision or Asu Almabayev to Win by KO/TKO/DQ": [
+     "-120",
+     "0QA390153603#2369605669_13L9034Q10Q25"
+    ],
+    "Kyoji Horiguchi to Win By Decision or Asu Almabayev to Win by Submission": [
+     "-120",
+     "0QA390153603#2369605672_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153603#2369605727_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+320",
+     "0QA390153580#2369605339_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+450",
+     "0QA390153580#2369605570_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-225",
+     "0QA390153580#2369605582_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153580#2369605639_15L9034Q14Q24"
+    ]
+   },
+   "Kyoji Horiguchi to Win by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA390153592#2369605375_13L9034Q11Q22"
+    ]
+   },
+   "Asu Almabayev to Win by Unanimous Decision": {
+    "Yes": [
+     "+310",
+     "0QA390153593#2369605378_13L9034Q11Q22"
+    ]
+   },
+   "Kyoji Horiguchi to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA390153594#2369605381_13L9034Q11Q22"
+    ]
+   },
+   "Asu Almabayev to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA390153595#2369605384_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Kyoji Horiguchi": [
+     "+450",
+     "0QA390153629#2369605471_13L9034Q11Q22"
+    ],
+    "Asu Almabayev": [
+     "+1200",
+     "0QA390153629#2369605486_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Kyoji Horiguchi": [
+     "+700",
+     "0QA390153630#2369605474_13L9034Q11Q22"
+    ],
+    "Asu Almabayev": [
+     "+1200",
+     "0QA390153630#2369605483_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Kyoji Horiguchi": [
+     "+115",
+     "0QA390153631#2369605477_13L9034Q11Q22"
+    ],
+    "Asu Almabayev": [
+     "+250",
+     "0QA390153631#2369605480_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79575,7 +80077,7 @@
   "right": "Dan Hooker",
   "rounds": 3,
   "start": "2026-11-21T19:15Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Dan Hooker": [
@@ -80111,7 +80613,7 @@
   "right": "Kevin Vallejos",
   "rounds": 3,
   "start": "2026-11-21T19:45Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Aljamain Sterling": [
@@ -80647,7 +81149,7 @@
   "right": "Navajo Stirling",
   "rounds": 5,
   "start": "2026-11-21T20:15Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Jiri Prochazka": [
@@ -80691,11 +81193,11 @@
    },
    "Moneyline": {
     "Jiri Prochazka": [
-     "+124",
+     "+130",
      "0ML87057418_1"
     ],
     "Navajo Stirling": [
-     "-148",
+     "-155",
      "0ML87057418_3"
     ]
    },
@@ -81311,7 +81813,7 @@
   "right": "Alik Lorenz",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Diyar Nurgozhay": [
@@ -81331,7 +81833,7 @@
   "right": "Dom Mar Fan",
   "rounds": 3,
   "start": "2026-11-21T15:00Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Nikolas Motta": [
@@ -81361,7 +81863,7 @@
   "right": "Santiago Luna",
   "rounds": 3,
   "start": "2026-11-21T17:45Z",
-  "read": "2026-11-17T22:52Z",
+  "read": "2026-11-17T23:02Z",
   "markets": {
    "Moneyline": {
     "Aleksandre Topuria": [
