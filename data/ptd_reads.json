@@ -1,5 +1,5 @@
 {
- "at": "2026-11-17",
+ "at": "2026-11-18",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "3917792": {
@@ -105,19 +105,17 @@
   "4426348": {
    "p": 0.771,
    "name": "Jayden Daniels"
+  },
+  "4036378": {
+   "p": 0.84,
+   "name": "Jordan Love"
+  },
+  "12483": {
+   "p": 0.9,
+   "name": "Matthew Stafford"
   }
  },
  "by_game": {
-  "401873064": {
-   "8439": {
-    "p": 0.715,
-    "name": "Aaron Rodgers"
-   },
-   "3915511": {
-    "p": 0.875,
-    "name": "Joe Burrow"
-   }
-  },
   "401873065": {
    "4038941": {
     "p": 0.67,
@@ -256,6 +254,16 @@
    "4426348": {
     "p": 0.771,
     "name": "Jayden Daniels"
+   }
+  },
+  "401873079": {
+   "4036378": {
+    "p": 0.84,
+    "name": "Jordan Love"
+   },
+   "12483": {
+    "p": 0.9,
+    "name": "Matthew Stafford"
    }
   }
  }

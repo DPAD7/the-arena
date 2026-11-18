@@ -1,30 +1,8 @@
 {
- "at": "2026-11-17",
+ "at": "2026-11-18",
  "week": 11,
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
-  {
-   "gid": "401873064",
-   "away": "PIT",
-   "home": "CIN",
-   "pick": "CIN",
-   "model": 61,
-   "book": 66,
-   "bookpick": "CIN",
-   "agree": true,
-   "won": 67,
-   "n": 78,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points per game: CIN 30.0, PIT 22.5",
-    "QB play (EPA per dropback): CIN +0.20, PIT -0.05",
-    "Passing offense (EPA): CIN +0.28, PIT -0.06",
-    "Offense success rate: CIN 51%, PIT 43%"
-   ],
-   "week": 10,
-   "kick": "2026-11-16T01:20Z"
-  },
   {
    "gid": "401873065",
    "away": "LAC",
@@ -37,7 +15,7 @@
    "won": 64,
    "n": 64,
    "call": "take",
-   "rank": 2,
+   "rank": 1,
    "why": [
     "Points per game: BAL 21.0, LAC 15.1",
     "Win % this season: BAL 44%, LAC 0%",
@@ -75,7 +53,7 @@
    "home": "CHI",
    "pick": "CHI",
    "model": 76,
-   "book": 84,
+   "book": 83,
    "bookpick": "CHI",
    "agree": true,
    "won": 84,
@@ -332,6 +310,28 @@
    ],
    "week": 11,
    "kick": "2026-11-22T21:05Z"
+  },
+  {
+   "gid": "401873079",
+   "away": "GB",
+   "home": "LAR",
+   "pick": "LAR",
+   "model": 62,
+   "book": 64,
+   "bookpick": "LAR",
+   "agree": true,
+   "won": 67,
+   "n": 78,
+   "call": "lean",
+   "rank": 1,
+   "why": [
+    "Points allowed per game: LAR 18.7, GB 22.1",
+    "Points per game: LAR 24.8, GB 22.6",
+    "Last 3 games, win %: LAR 100%, GB 67%",
+    "Offense success rate: LAR 48%, GB 41%"
+   ],
+   "week": 12,
+   "kick": "2026-11-26T01:00Z"
   }
  ]
 }

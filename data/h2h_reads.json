@@ -1,35 +1,8 @@
 {
- "at": "2026-11-17 23:54 UTC",
+ "at": "2026-11-18 02:04 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Aaron Rodgers",
-    "Joe Burrow"
-   ],
-   "pick": "Joe Burrow",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    2
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "1 of 4 combined boxes checked"
-   ],
-   "checks": [
-    0,
-    1,
-    0,
-    0
-   ],
-   "game": "PIT@CIN",
-   "eid": 21957,
-   "kick": "2026-11-16 01:20:00Z"
-  },
   {
    "qbs": [
     "Daniel Jones",
@@ -45,7 +18,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 66.0 yards higher in total on their lines",
+    "His receivers are set 64.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -102,7 +75,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 150.5 yards higher in total on their lines",
+    "His receivers are set 152.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -121,7 +94,7 @@
     "Kyle McCord"
    ],
    "pick": "Josh Allen",
-   "lead": 4,
+   "lead": 2,
    "complete": false,
    "missing": [
     "BUF D.Knox (12%)",
@@ -130,17 +103,16 @@
     "MIA K.Coleman Jr. (11%)"
    ],
    "score": [
-    3,
+    1,
     -1
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)",
-    "1 of 4 combined boxes checked"
+    "His offense is more efficient (EPA per play)"
    ],
    "checks": [
     0,
-    1,
+    0,
     0,
     0
    ],
@@ -179,13 +151,11 @@
     "Bo Nix",
     "Fernando Mendoza"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Bo Nix",
+   "lead": 2,
    "complete": false,
    "missing": [
     "DEN C.Sutton (21%)",
-    "DEN E.Engram (12%)",
-    "DEN J.Waddle (17%)",
     "DEN J.Coleman (12%)",
     "LV A.Jeanty (18%)",
     "LV B.Bowers (24%)",
@@ -195,10 +165,13 @@
     "LV T.Tucker (13%)"
    ],
    "score": [
-    0,
-    0
+    1,
+    -1
    ],
-   "why": [],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 61.0 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
