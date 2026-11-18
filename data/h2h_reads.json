@@ -1,5 +1,5 @@
 {
- "at": "2026-11-18 14:06 UTC",
+ "at": "2026-11-18 20:06 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -18,7 +18,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 65.0 yards higher in total on their lines",
+    "His receivers are set 62.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -49,7 +49,7 @@
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 50.5 yards higher in total on their lines",
+    "His receivers are set 47.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -107,7 +107,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 189.0 yards higher in total on their lines",
+    "His receivers are set 191.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -140,7 +140,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 151.5 yards higher in total on their lines",
+    "His receivers are set 154.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -185,7 +185,7 @@
     "Kyle McCord"
    ],
    "pick": "Josh Allen",
-   "lead": 2,
+   "lead": 4,
    "complete": false,
    "missing": [
     "BUF D.Knox (12%)",
@@ -194,21 +194,56 @@
     "MIA K.Coleman Jr. (11%)"
    ],
    "score": [
-    1,
+    3,
     -1
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)"
+    "His offense is more efficient (EPA per play)",
+    "1 of 4 combined boxes checked"
    ],
    "checks": [
     0,
-    0,
+    1,
     0,
     0
    ],
    "game": "MIA@BUF",
    "eid": 22015,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Joe Milton III",
+    "Aaron Rodgers"
+   ],
+   "pick": "Aaron Rodgers",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "PHI D.Cooper (17%)",
+    "PHI E.Mitchell (14%)",
+    "PHI M.Lemon (27%)",
+    "PIT D.Washington (11%)",
+    "PIT G.Bernard (16%)",
+    "PIT P.Freiermuth (11%)"
+   ],
+   "score": [
+    -1,
+    3
+   ],
+   "why": [
+    "1 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "PIT@PHI",
+   "eid": 22018,
    "kick": "2026-11-22 18:00:00Z"
   },
   {
@@ -312,7 +347,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 98.5 yards higher in total on their lines",
+    "His receivers are set 97.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [

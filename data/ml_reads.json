@@ -119,7 +119,7 @@
    "home": "KC",
    "pick": "KC",
    "model": 91,
-   "book": 90,
+   "book": 89,
    "bookpick": "KC",
    "agree": true,
    "won": 83,
@@ -141,7 +141,7 @@
    "home": "DEN",
    "pick": "DEN",
    "model": 83,
-   "book": 82,
+   "book": 83,
    "bookpick": "DEN",
    "agree": true,
    "won": 83,
@@ -251,7 +251,7 @@
    "home": "CAR",
    "pick": "CAR",
    "model": 67,
-   "book": 56,
+   "book": 55,
    "bookpick": "CAR",
    "agree": true,
    "won": 52,
@@ -295,7 +295,7 @@
    "home": "LAC",
    "pick": "NYJ",
    "model": 57,
-   "book": 62,
+   "book": 59,
    "bookpick": "LAC",
    "agree": false,
    "won": 40,
@@ -317,7 +317,7 @@
    "home": "LAR",
    "pick": "LAR",
    "model": 62,
-   "book": 64,
+   "book": 62,
    "bookpick": "LAR",
    "agree": true,
    "won": 67,
@@ -332,6 +332,28 @@
    ],
    "week": 12,
    "kick": "2026-11-26T01:00Z"
+  },
+  {
+   "gid": "401873081",
+   "away": "CHI",
+   "home": "DET",
+   "pick": "DET",
+   "model": 58,
+   "book": 55,
+   "bookpick": "CHI",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 2,
+   "why": [
+    "Points per game: DET 28.6, CHI 26.8",
+    "QB play (EPA per dropback): DET +0.18, CHI +0.11",
+    "Turnovers per game: DET 0.8, CHI 1.9",
+    "Pass defense, EPA allowed: DET +0.11, CHI -0.01"
+   ],
+   "week": 12,
+   "kick": "2026-11-26T18:00Z"
   }
  ]
 }

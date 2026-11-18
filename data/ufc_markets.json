@@ -79425,16 +79425,86 @@
   "right": "Tahir Abdullayev",
   "rounds": 3,
   "start": "2026-11-21T16:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
-   "Moneyline": {
+   "Finish Only Moneyline (If Decision No Action)": {
     "Jake Matthews": [
      "-250",
+     "0QA390153520#2369605288_13L9034Q11Q21"
+    ],
+    "Tahir Abdullayev": [
+     "+175",
+     "0QA390153520#2369605431_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Jake Matthews": [
+     "-360",
+     "0QA390153522#2369605291_13L9034Q11Q21"
+    ],
+    "Tahir Abdullayev": [
+     "+240",
+     "0QA390153522#2369605428_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Jake Matthews": [
+     "-245",
+     "0QA390153567#2369605365_13L9034Q10Q21"
+    ],
+    "Tahir Abdullayev": [
+     "+180",
+     "0QA390153567#2369605398_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Jake Matthews": [
+     "-275",
+     "0QA390153566#2369605362_13L9034Q10Q21"
+    ],
+    "Tahir Abdullayev": [
+     "+200",
+     "0QA390153566#2369605401_13L9034Q12Q23"
+    ]
+   },
+   "Moneyline": {
+    "Jake Matthews": [
+     "-258",
      "0ML87233558_1"
     ],
     "Tahir Abdullayev": [
-     "+205",
+     "+210",
      "0ML87233558_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Jake Matthews": [
+     "-200",
+     "0QA390153565#2369605344_13L9034Q10Q21"
+    ],
+    "Tahir Abdullayev": [
+     "+150",
+     "0QA390153565#2369605422_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Jake Matthews": [
+     "-140",
+     "0HC87298313N350_1"
+    ],
+    "Tahir Abdullayev": [
+     "+105",
+     "0HC87298313P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Jake Matthews": [
+     "-550",
+     "0HC87298314P750_1"
+    ],
+    "Tahir Abdullayev": [
+     "+350",
+     "0HC87298314N750_3"
     ]
    },
    "Total Rounds": {
@@ -79446,6 +79516,472 @@
      "+124",
      "0OU87276474U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-330",
+     "0OU87298312O150_1"
+    ],
+    "Under": [
+     "+230",
+     "0OU87298312U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1400",
+     "0QA390153529#2369605350_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA390153529#2369605413_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153489#2369605255_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3000",
+     "0QA390153568#2369605368_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+100",
+     "0QA390153506#2369605270_13L9034Q11Q22"
+    ],
+    "No": [
+     "-130",
+     "0QA390153506#2369605449_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA390153509#2369605273_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA390153509#2369605446_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-125",
+     "0QA390153462#2369605237_13L9034Q10Q20"
+    ],
+    "No": [
+     "-105",
+     "0QA390153462#2369605476_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+550",
+     "0QA390153525#2369605294_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+600",
+     "0QA390153525#2369605419_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+800",
+     "0QA390153525#2369605505_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+900",
+     "0QA390153525#2369605520_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1200",
+     "0QA390153525#2369605568_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1200",
+     "0QA390153525#2369605577_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-125",
+     "0QA390153525#2369605689_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Jake Matthews to Win in Rounds 1-2": [
+     "+250",
+     "0QA390153476#2369605243_13L9034Q11Q21"
+    ],
+    "Jake Matthews to Win in Round 3 or on Decision": [
+     "-105",
+     "0QA390153476#2369605487_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153476#2369605647_13L9034Q19Q29"
+    ],
+    "Tahir Abdullayev to Win in Rounds 1-2": [
+     "+550",
+     "0QA390153476#2369605550_15L9034Q15Q25"
+    ],
+    "Tahir Abdullayev to Win in Round 3 or on Decision": [
+     "+380",
+     "0QA390153476#2369605605_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Jake Matthews to Win by KO/TKO/DQ in Round 1": [
+     "+800",
+     "0QA390153483#2369605249_13L9034Q11Q21"
+    ],
+    "Jake Matthews to Win by KO/TKO/DQ in Round 2": [
+     "+1200",
+     "0QA390153483#2369605464_13L9034Q12Q22"
+    ],
+    "Jake Matthews to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA390153483#2369605493_13L9034Q13Q23"
+    ],
+    "Jake Matthews to Win by Submission in Round 1": [
+     "+800",
+     "0QA390153483#2369605590_13L9034Q16Q26"
+    ],
+    "Jake Matthews to Win by Submission in Round 2": [
+     "+1200",
+     "0QA390153483#2369605611_13L9034Q17Q27"
+    ],
+    "Jake Matthews to Win by Submission in Round 3": [
+     "+1600",
+     "0QA390153483#2369605638_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-125",
+     "0QA390153483#2369605728_13L9034Q121Q221"
+    ],
+    "Tahir Abdullayev to Win by KO/TKO/DQ in Round 1": [
+     "+1400",
+     "0QA390153483#2369605685_15L9034Q111Q211"
+    ],
+    "Tahir Abdullayev to Win by KO/TKO/DQ in Round 2": [
+     "+2000",
+     "0QA390153483#2369605693_15L9034Q112Q212"
+    ],
+    "Tahir Abdullayev to Win by KO/TKO/DQ in Round 3": [
+     "+2800",
+     "0QA390153483#2369605704_15L9034Q113Q213"
+    ],
+    "Tahir Abdullayev to Win by Submission in Round 1": [
+     "+2000",
+     "0QA390153483#2369605713_15L9034Q116Q216"
+    ],
+    "Tahir Abdullayev to Win by Submission in Round 2": [
+     "+2800",
+     "0QA390153483#2369605716_15L9034Q117Q217"
+    ],
+    "Tahir Abdullayev to Win by Submission in Round 3": [
+     "+3500",
+     "0QA390153483#2369605719_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Jake Matthews To Win And Under 0.5": [
+     "+1200",
+     "0QA390153492#2369605258_13L9034Q11Q21"
+    ],
+    "Jake Matthews To Win And Under 1.5": [
+     "+330",
+     "0QA390153492#2369605499_13L9034Q11Q23"
+    ],
+    "Tahir Abdullayev To Win And Under 0.5": [
+     "+2500",
+     "0QA390153492#2369605458_14L9034Q12Q22"
+    ],
+    "Tahir Abdullayev To Win And Under 1.5": [
+     "+750",
+     "0QA390153492#2369605526_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Jake Matthews To Win And Over 1.5": [
+     "-160",
+     "0QA390153495#2369605502_13L9034Q11Q23"
+    ],
+    "Jake Matthews To Win And Over 2.5": [
+     "-105",
+     "0QA390153495#2369605565_13L9034Q11Q25"
+    ],
+    "Tahir Abdullayev To Win And Over 1.5": [
+     "+275",
+     "0QA390153495#2369605523_14L9034Q12Q24"
+    ],
+    "Tahir Abdullayev To Win And Over 2.5": [
+     "+400",
+     "0QA390153495#2369605580_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Jake Matthews": [
+     "-425",
+     "0HC87298315P150_1"
+    ],
+    "Tahir Abdullayev": [
+     "+285",
+     "0HC87298315N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Jake Matthews": [
+     "-425",
+     "0HC87298316P150_1"
+    ],
+    "Tahir Abdullayev": [
+     "+285",
+     "0HC87298316N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Jake Matthews": [
+     "-425",
+     "0HC87298317P150_1"
+    ],
+    "Tahir Abdullayev": [
+     "+285",
+     "0HC87298317N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-500",
+     "0QA390153498#2369605264_13L9034Q11Q22"
+    ],
+    "No": [
+     "+330",
+     "0QA390153498#2369605455_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-200",
+     "0QA390153501#2369605267_13L9034Q11Q22"
+    ],
+    "No": [
+     "+150",
+     "0QA390153501#2369605452_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Jake Matthews Round 1": [
+     "+450",
+     "0QA390153467#2369605234_13L9034Q11Q20"
+    ],
+    "Jake Matthews Round 2": [
+     "+650",
+     "0QA390153467#2369605482_13L9034Q11Q22"
+    ],
+    "Jake Matthews Round 3": [
+     "+900",
+     "0QA390153467#2369605547_13L9034Q11Q24"
+    ],
+    "Jake Matthews By Decision": [
+     "+130",
+     "0QA390153467#2369605680_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153467#2369605701_15L9034Q10Q212"
+    ],
+    "Tahir Abdullayev Round 1": [
+     "+900",
+     "0QA390153467#2369605479_14L9034Q12Q21"
+    ],
+    "Tahir Abdullayev Round 2": [
+     "+1200",
+     "0QA390153467#2369605544_14L9034Q12Q23"
+    ],
+    "Tahir Abdullayev Round 3": [
+     "+1800",
+     "0QA390153467#2369605599_14L9034Q12Q25"
+    ],
+    "Tahir Abdullayev By Decision": [
+     "+500",
+     "0QA390153467#2369605697_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+330",
+     "0QA390153486#2369605252_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+400",
+     "0QA390153486#2369605461_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+600",
+     "0QA390153486#2369605496_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153486#2369605586_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-125",
+     "0QA390153486#2369605614_13L9034Q11Q25"
+    ]
+   },
+   "Tahir Abdullayev to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+450",
+     "0QA390153531#2369605353_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA390153531#2369605410_13L9034Q13Q24"
+    ]
+   },
+   "Jake Matthews to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+185",
+     "0QA390153534#2369605359_13L9034Q11Q22"
+    ],
+    "No": [
+     "-250",
+     "0QA390153534#2369605404_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Jake Matthews to Win by KO/TKO/DQ or Decision": [
+     "-160",
+     "0QA390153480#2369605246_13L9034Q11Q21"
+    ],
+    "Jake Matthews to Win by KO/TKO/DQ or Submission": [
+     "+185",
+     "0QA390153480#2369605467_13L9034Q12Q22"
+    ],
+    "Jake Matthews to Win by Submission or Decision": [
+     "-160",
+     "0QA390153480#2369605490_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153480#2369605608_13L9034Q17Q27"
+    ],
+    "Tahir Abdullayev to Win by KO/TKO/DQ or Decision": [
+     "+255",
+     "0QA390153480#2369605535_15L9034Q14Q24"
+    ],
+    "Tahir Abdullayev to Win by KO/TKO/DQ or Submission": [
+     "+450",
+     "0QA390153480#2369605553_15L9034Q15Q25"
+    ],
+    "Tahir Abdullayev to Win by Submission or Decision": [
+     "+300",
+     "0QA390153480#2369605593_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Jake Matthews to Win By KO/TKO/DQ or Tahir Abdullayev to Win by Submission": [
+     "+245",
+     "0QA390153536#2369605356_13L9034Q10Q21"
+    ],
+    "Jake Matthews to Win By KO/TKO/DQ or Tahir Abdullayev to Win by Decision": [
+     "+175",
+     "0QA390153536#2369605407_13L9034Q10Q22"
+    ],
+    "Jake Matthews to Win By Submission or Tahir Abdullayev to Win by KO/TKO/DQ": [
+     "+215",
+     "0QA390153536#2369605508_13L9034Q10Q23"
+    ],
+    "Jake Matthews to Win By Submission or Tahir Abdullayev to Win by Decision": [
+     "+175",
+     "0QA390153536#2369605517_13L9034Q10Q24"
+    ],
+    "Jake Matthews to Win By Decision or Tahir Abdullayev to Win by KO/TKO/DQ": [
+     "-125",
+     "0QA390153536#2369605571_13L9034Q10Q25"
+    ],
+    "Jake Matthews to Win By Decision or Tahir Abdullayev to Win by Submission": [
+     "-110",
+     "0QA390153536#2369605574_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153536#2369605626_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+240",
+     "0QA390153471#2369605240_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+275",
+     "0QA390153471#2369605473_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-125",
+     "0QA390153471#2369605485_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153471#2369605541_15L9034Q14Q24"
+    ]
+   },
+   "Jake Matthews to Win by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA390153511#2369605276_13L9034Q11Q22"
+    ]
+   },
+   "Tahir Abdullayev to Win by Unanimous Decision": {
+    "Yes": [
+     "+550",
+     "0QA390153513#2369605279_13L9034Q11Q22"
+    ]
+   },
+   "Jake Matthews to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA390153517#2369605282_13L9034Q11Q22"
+    ]
+   },
+   "Tahir Abdullayev to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2000",
+     "0QA390153519#2369605285_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Jake Matthews": [
+     "+400",
+     "0QA390153575#2369605374_13L9034Q11Q22"
+    ],
+    "Tahir Abdullayev": [
+     "+750",
+     "0QA390153575#2369605389_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Jake Matthews": [
+     "+400",
+     "0QA390153576#2369605377_13L9034Q11Q22"
+    ],
+    "Tahir Abdullayev": [
+     "+1000",
+     "0QA390153576#2369605386_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Jake Matthews": [
+     "+130",
+     "0QA390153577#2369605380_13L9034Q11Q22"
+    ],
+    "Tahir Abdullayev": [
+     "+500",
+     "0QA390153577#2369605383_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79455,8 +79991,48 @@
   "right": "Alessandro Costa",
   "rounds": 3,
   "start": "2026-11-21T16:45Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Amir Albazi": [
+     "+120",
+     "0QA390153326#2369604787_13L9034Q11Q21"
+    ],
+    "Alessandro Costa": [
+     "-165",
+     "0QA390153326#2369604834_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Amir Albazi": [
+     "-175",
+     "0QA390153327#2369604788_13L9034Q11Q21"
+    ],
+    "Alessandro Costa": [
+     "+125",
+     "0QA390153327#2369604833_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Amir Albazi": [
+     "+135",
+     "0QA390153351#2369604812_13L9034Q10Q21"
+    ],
+    "Alessandro Costa": [
+     "-180",
+     "0QA390153351#2369604823_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Amir Albazi": [
+     "-185",
+     "0QA390153350#2369604811_13L9034Q10Q21"
+    ],
+    "Alessandro Costa": [
+     "+140",
+     "0QA390153350#2369604824_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Amir Albazi": [
      "-115",
@@ -79465,6 +80041,36 @@
     "Alessandro Costa": [
      "-105",
      "0ML87233556_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Amir Albazi": [
+     "+200",
+     "0QA390153349#2369604805_13L9034Q10Q21"
+    ],
+    "Alessandro Costa": [
+     "-275",
+     "0QA390153349#2369604831_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Amir Albazi": [
+     "+140",
+     "0HC87298338N350_1"
+    ],
+    "Alessandro Costa": [
+     "-190",
+     "0HC87298338P350_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Amir Albazi": [
+     "-255",
+     "0HC87298339P750_1"
+    ],
+    "Alessandro Costa": [
+     "+190",
+     "0HC87298339N750_3"
     ]
    },
    "Total Rounds": {
@@ -79476,6 +80082,472 @@
      "+140",
      "0OU87276473U250_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-360",
+     "0OU87298337O150_1"
+    ],
+    "Under": [
+     "+245",
+     "0OU87298337U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1400",
+     "0QA390153330#2369604807_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA390153330#2369604828_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153315#2369604776_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3500",
+     "0QA390153352#2369604813_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-115",
+     "0QA390153320#2369604781_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA390153320#2369604840_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+800",
+     "0QA390153321#2369604782_13L9034Q11Q22"
+    ],
+    "No": [
+     "-2000",
+     "0QA390153321#2369604839_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-150",
+     "0QA390153308#2369604770_13L9034Q10Q20"
+    ],
+    "No": [
+     "+110",
+     "0QA390153308#2369604849_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+450",
+     "0QA390153328#2369604789_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+900",
+     "0QA390153328#2369604830_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+700",
+     "0QA390153328#2369604859_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1400",
+     "0QA390153328#2369604864_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1200",
+     "0QA390153328#2369604880_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2200",
+     "0QA390153328#2369604883_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-150",
+     "0QA390153328#2369604919_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Amir Albazi to Win in Rounds 1-2": [
+     "+475",
+     "0QA390153311#2369604772_13L9034Q11Q21"
+    ],
+    "Amir Albazi to Win in Round 3 or on Decision": [
+     "+135",
+     "0QA390153311#2369604853_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153311#2369604906_13L9034Q19Q29"
+    ],
+    "Alessandro Costa to Win in Rounds 1-2": [
+     "+300",
+     "0QA390153311#2369604874_15L9034Q15Q25"
+    ],
+    "Alessandro Costa to Win in Round 3 or on Decision": [
+     "+205",
+     "0QA390153311#2369604892_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Amir Albazi to Win by KO/TKO/DQ in Round 1": [
+     "+1600",
+     "0QA390153313#2369604774_13L9034Q11Q21"
+    ],
+    "Amir Albazi to Win by KO/TKO/DQ in Round 2": [
+     "+2000",
+     "0QA390153313#2369604845_13L9034Q12Q22"
+    ],
+    "Amir Albazi to Win by KO/TKO/DQ in Round 3": [
+     "+3500",
+     "0QA390153313#2369604855_13L9034Q13Q23"
+    ],
+    "Amir Albazi to Win by Submission in Round 1": [
+     "+1400",
+     "0QA390153313#2369604887_13L9034Q16Q26"
+    ],
+    "Amir Albazi to Win by Submission in Round 2": [
+     "+1800",
+     "0QA390153313#2369604894_13L9034Q17Q27"
+    ],
+    "Amir Albazi to Win by Submission in Round 3": [
+     "+3000",
+     "0QA390153313#2369604903_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-150",
+     "0QA390153313#2369604931_13L9034Q121Q221"
+    ],
+    "Alessandro Costa to Win by KO/TKO/DQ in Round 1": [
+     "+600",
+     "0QA390153313#2369604918_15L9034Q111Q211"
+    ],
+    "Alessandro Costa to Win by KO/TKO/DQ in Round 2": [
+     "+900",
+     "0QA390153313#2369604920_15L9034Q112Q212"
+    ],
+    "Alessandro Costa to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA390153313#2369604923_15L9034Q113Q213"
+    ],
+    "Alessandro Costa to Win by Submission in Round 1": [
+     "+2000",
+     "0QA390153313#2369604926_15L9034Q116Q216"
+    ],
+    "Alessandro Costa to Win by Submission in Round 2": [
+     "+3000",
+     "0QA390153313#2369604927_15L9034Q117Q217"
+    ],
+    "Alessandro Costa to Win by Submission in Round 3": [
+     "+5500",
+     "0QA390153313#2369604928_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Amir Albazi To Win And Under 0.5": [
+     "+2000",
+     "0QA390153316#2369604777_13L9034Q11Q21"
+    ],
+    "Amir Albazi To Win And Under 1.5": [
+     "+600",
+     "0QA390153316#2369604857_13L9034Q11Q23"
+    ],
+    "Alessandro Costa To Win And Under 0.5": [
+     "+1400",
+     "0QA390153316#2369604843_14L9034Q12Q22"
+    ],
+    "Alessandro Costa To Win And Under 1.5": [
+     "+400",
+     "0QA390153316#2369604866_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Amir Albazi To Win And Over 1.5": [
+     "+100",
+     "0QA390153317#2369604858_13L9034Q11Q23"
+    ],
+    "Amir Albazi To Win And Over 2.5": [
+     "+140",
+     "0QA390153317#2369604879_13L9034Q11Q25"
+    ],
+    "Alessandro Costa To Win And Over 1.5": [
+     "+150",
+     "0QA390153317#2369604865_14L9034Q12Q24"
+    ],
+    "Alessandro Costa To Win And Over 2.5": [
+     "+215",
+     "0QA390153317#2369604884_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Amir Albazi": [
+     "-180",
+     "0HC87298340P150_1"
+    ],
+    "Alessandro Costa": [
+     "+135",
+     "0HC87298340N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Amir Albazi": [
+     "-185",
+     "0HC87298341P150_1"
+    ],
+    "Alessandro Costa": [
+     "+140",
+     "0HC87298341N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Amir Albazi": [
+     "-200",
+     "0HC87298342P150_1"
+    ],
+    "Alessandro Costa": [
+     "+150",
+     "0HC87298342N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-550",
+     "0QA390153318#2369604779_13L9034Q11Q22"
+    ],
+    "No": [
+     "+350",
+     "0QA390153318#2369604842_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-225",
+     "0QA390153319#2369604780_13L9034Q11Q22"
+    ],
+    "No": [
+     "+165",
+     "0QA390153319#2369604841_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Amir Albazi Round 1": [
+     "+800",
+     "0QA390153309#2369604769_13L9034Q11Q20"
+    ],
+    "Amir Albazi Round 2": [
+     "+1100",
+     "0QA390153309#2369604851_13L9034Q11Q22"
+    ],
+    "Amir Albazi Round 3": [
+     "+1800",
+     "0QA390153309#2369604873_13L9034Q11Q24"
+    ],
+    "Amir Albazi By Decision": [
+     "+165",
+     "0QA390153309#2369604917_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153309#2369604922_15L9034Q10Q212"
+    ],
+    "Alessandro Costa Round 1": [
+     "+500",
+     "0QA390153309#2369604850_14L9034Q12Q21"
+    ],
+    "Alessandro Costa Round 2": [
+     "+800",
+     "0QA390153309#2369604872_14L9034Q12Q23"
+    ],
+    "Alessandro Costa Round 3": [
+     "+1400",
+     "0QA390153309#2369604890_14L9034Q12Q25"
+    ],
+    "Alessandro Costa By Decision": [
+     "+275",
+     "0QA390153309#2369604921_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+350",
+     "0QA390153314#2369604775_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+450",
+     "0QA390153314#2369604844_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+800",
+     "0QA390153314#2369604856_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153314#2369604886_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-150",
+     "0QA390153314#2369604895_13L9034Q11Q25"
+    ]
+   },
+   "Alessandro Costa to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+250",
+     "0QA390153331#2369604808_13L9034Q11Q22"
+    ],
+    "No": [
+     "-350",
+     "0QA390153331#2369604827_13L9034Q13Q24"
+    ]
+   },
+   "Amir Albazi to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+380",
+     "0QA390153332#2369604810_13L9034Q11Q22"
+    ],
+    "No": [
+     "-600",
+     "0QA390153332#2369604825_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Amir Albazi to Win by KO/TKO/DQ or Decision": [
+     "+110",
+     "0QA390153312#2369604773_13L9034Q11Q21"
+    ],
+    "Amir Albazi to Win by KO/TKO/DQ or Submission": [
+     "+380",
+     "0QA390153312#2369604846_13L9034Q12Q22"
+    ],
+    "Amir Albazi to Win by Submission or Decision": [
+     "+100",
+     "0QA390153312#2369604854_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153312#2369604893_13L9034Q17Q27"
+    ],
+    "Alessandro Costa to Win by KO/TKO/DQ or Decision": [
+     "+100",
+     "0QA390153312#2369604869_15L9034Q14Q24"
+    ],
+    "Alessandro Costa to Win by KO/TKO/DQ or Submission": [
+     "+250",
+     "0QA390153312#2369604875_15L9034Q15Q25"
+    ],
+    "Alessandro Costa to Win by Submission or Decision": [
+     "+195",
+     "0QA390153312#2369604888_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Amir Albazi to Win By KO/TKO/DQ or Alessandro Costa to Win by Submission": [
+     "+425",
+     "0QA390153333#2369604809_13L9034Q10Q21"
+    ],
+    "Amir Albazi to Win By KO/TKO/DQ or Alessandro Costa to Win by Decision": [
+     "+165",
+     "0QA390153333#2369604826_13L9034Q10Q22"
+    ],
+    "Amir Albazi to Win By Submission or Alessandro Costa to Win by KO/TKO/DQ": [
+     "+165",
+     "0QA390153333#2369604860_13L9034Q10Q23"
+    ],
+    "Amir Albazi to Win By Submission or Alessandro Costa to Win by Decision": [
+     "+155",
+     "0QA390153333#2369604863_13L9034Q10Q24"
+    ],
+    "Amir Albazi to Win By Decision or Alessandro Costa to Win by KO/TKO/DQ": [
+     "-170",
+     "0QA390153333#2369604881_13L9034Q10Q25"
+    ],
+    "Amir Albazi to Win By Decision or Alessandro Costa to Win by Submission": [
+     "+120",
+     "0QA390153333#2369604882_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153333#2369604899_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+200",
+     "0QA390153310#2369604771_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+425",
+     "0QA390153310#2369604848_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-150",
+     "0QA390153310#2369604852_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153310#2369604871_15L9034Q14Q24"
+    ]
+   },
+   "Amir Albazi to Win by Unanimous Decision": {
+    "Yes": [
+     "+180",
+     "0QA390153322#2369604783_13L9034Q11Q22"
+    ]
+   },
+   "Alessandro Costa to Win by Unanimous Decision": {
+    "Yes": [
+     "+300",
+     "0QA390153323#2369604784_13L9034Q11Q22"
+    ]
+   },
+   "Amir Albazi to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1100",
+     "0QA390153324#2369604785_13L9034Q11Q22"
+    ]
+   },
+   "Alessandro Costa to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1600",
+     "0QA390153325#2369604786_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Amir Albazi": [
+     "+800",
+     "0QA390153359#2369604815_13L9034Q11Q22"
+    ],
+    "Alessandro Costa": [
+     "+300",
+     "0QA390153359#2369604820_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Amir Albazi": [
+     "+700",
+     "0QA390153360#2369604816_13L9034Q11Q22"
+    ],
+    "Alessandro Costa": [
+     "+1200",
+     "0QA390153360#2369604819_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Amir Albazi": [
+     "+165",
+     "0QA390153361#2369604817_13L9034Q11Q22"
+    ],
+    "Alessandro Costa": [
+     "+275",
+     "0QA390153361#2369604818_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79485,8 +80557,48 @@
   "right": "Tallison Teixeira",
   "rounds": 3,
   "start": "2026-11-21T17:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Shamil Gaziev": [
+     "-250",
+     "0QA390153208#2369604381_13L9034Q11Q21"
+    ],
+    "Tallison Teixeira": [
+     "+175",
+     "0QA390153208#2369604476_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Shamil Gaziev": [
+     "-125",
+     "0QA390153210#2369604383_13L9034Q11Q21"
+    ],
+    "Tallison Teixeira": [
+     "-110",
+     "0QA390153210#2369604474_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Shamil Gaziev": [
+     "-275",
+     "0QA390153243#2369604432_13L9034Q10Q21"
+    ],
+    "Tallison Teixeira": [
+     "+200",
+     "0QA390153243#2369604454_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Shamil Gaziev": [
+     "-200",
+     "0QA390153242#2369604430_13L9034Q10Q21"
+    ],
+    "Tallison Teixeira": [
+     "+150",
+     "0QA390153242#2369604456_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Shamil Gaziev": [
      "-205",
@@ -79495,6 +80607,36 @@
     "Tallison Teixeira": [
      "+170",
      "0ML87233554_3"
+    ]
+   },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Shamil Gaziev": [
+     "-250",
+     "0QA390153241#2369604418_13L9034Q10Q21"
+    ],
+    "Tallison Teixeira": [
+     "+185",
+     "0QA390153241#2369604470_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Shamil Gaziev": [
+     "-175",
+     "0HC87298325N750_1"
+    ],
+    "Tallison Teixeira": [
+     "+130",
+     "0HC87298325P750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Shamil Gaziev": [
+     "-295",
+     "0HC87298326P750_1"
+    ],
+    "Tallison Teixeira": [
+     "+215",
+     "0HC87298326N750_3"
     ]
    },
    "Total Rounds": {
@@ -79506,6 +80648,468 @@
      "-220",
      "0OU87269531U150_3"
     ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "+360",
+     "0OU87298324O250_1"
+    ],
+    "Under": [
+     "-600",
+     "0OU87298324U250_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+450",
+     "0QA390153217#2369604422_13L9034Q11Q22"
+    ],
+    "No": [
+     "-750",
+     "0QA390153217#2369604464_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153183#2369604359_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+1600",
+     "0QA390153244#2369604434_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+600",
+     "0QA390153195#2369604369_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA390153195#2369604488_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA390153197#2369604371_13L9034Q11Q22"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "+500",
+     "0QA390153165#2369604347_13L9034Q10Q20"
+    ],
+    "No": [
+     "-900",
+     "0QA390153165#2369604506_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "-150",
+     "0QA390153213#2369604385_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1200",
+     "0QA390153213#2369604468_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+320",
+     "0QA390153213#2369604526_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+3500",
+     "0QA390153213#2369604536_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1000",
+     "0QA390153213#2369604554_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+9000",
+     "0QA390153213#2369604557_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+500",
+     "0QA390153213#2369604593_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Shamil Gaziev to Win in Rounds 1-2": [
+     "-150",
+     "0QA390153174#2369604351_13L9034Q11Q21"
+    ],
+    "Shamil Gaziev to Win in Round 3 or on Decision": [
+     "+550",
+     "0QA390153174#2369604514_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153174#2369604580_13L9034Q19Q29"
+    ],
+    "Tallison Teixeira to Win in Rounds 1-2": [
+     "+240",
+     "0QA390153174#2369604548_15L9034Q15Q25"
+    ],
+    "Tallison Teixeira to Win in Round 3 or on Decision": [
+     "+700",
+     "0QA390153174#2369604566_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Shamil Gaziev to Win by KO/TKO/DQ in Round 1": [
+     "+140",
+     "0QA390153179#2369604355_13L9034Q11Q21"
+    ],
+    "Shamil Gaziev to Win by KO/TKO/DQ in Round 2": [
+     "+550",
+     "0QA390153179#2369604498_13L9034Q12Q22"
+    ],
+    "Shamil Gaziev to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA390153179#2369604518_13L9034Q13Q23"
+    ],
+    "Shamil Gaziev to Win by Submission in Round 1": [
+     "+1600",
+     "0QA390153179#2369604561_13L9034Q16Q26"
+    ],
+    "Shamil Gaziev to Win by Submission in Round 2": [
+     "+5500",
+     "0QA390153179#2369604568_13L9034Q17Q27"
+    ],
+    "Shamil Gaziev to Win by Submission in Round 3": [
+     "+10000",
+     "0QA390153179#2369604577_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+500",
+     "0QA390153179#2369604605_13L9034Q121Q221"
+    ],
+    "Tallison Teixeira to Win by KO/TKO/DQ in Round 1": [
+     "+350",
+     "0QA390153179#2369604592_15L9034Q111Q211"
+    ],
+    "Tallison Teixeira to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA390153179#2369604594_15L9034Q112Q212"
+    ],
+    "Tallison Teixeira to Win by KO/TKO/DQ in Round 3": [
+     "+2500",
+     "0QA390153179#2369604597_15L9034Q113Q213"
+    ],
+    "Tallison Teixeira to Win by Submission in Round 1": [
+     "+3000",
+     "0QA390153179#2369604600_15L9034Q116Q216"
+    ],
+    "Tallison Teixeira to Win by Submission in Round 2": [
+     "+8000",
+     "0QA390153179#2369604601_15L9034Q117Q217"
+    ],
+    "Tallison Teixeira to Win by Submission in Round 3": [
+     "+15000",
+     "0QA390153179#2369604602_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Shamil Gaziev To Win And Under 0.5": [
+     "+380",
+     "0QA390153186#2369604361_13L9034Q11Q21"
+    ],
+    "Shamil Gaziev To Win And Under 1.5": [
+     "-125",
+     "0QA390153186#2369604522_13L9034Q11Q23"
+    ],
+    "Tallison Teixeira To Win And Under 0.5": [
+     "+900",
+     "0QA390153186#2369604494_14L9034Q12Q22"
+    ],
+    "Tallison Teixeira To Win And Under 1.5": [
+     "+275",
+     "0QA390153186#2369604540_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Shamil Gaziev To Win And Over 1.5": [
+     "+300",
+     "0QA390153188#2369604524_13L9034Q11Q23"
+    ],
+    "Shamil Gaziev To Win And Over 2.5": [
+     "+700",
+     "0QA390153188#2369604553_13L9034Q11Q25"
+    ],
+    "Tallison Teixeira To Win And Over 1.5": [
+     "+450",
+     "0QA390153188#2369604538_14L9034Q12Q24"
+    ],
+    "Tallison Teixeira To Win And Over 2.5": [
+     "+800",
+     "0QA390153188#2369604558_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Shamil Gaziev": [
+     "-235",
+     "0HC87298327P150_1"
+    ],
+    "Tallison Teixeira": [
+     "+175",
+     "0HC87298327N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Shamil Gaziev": [
+     "-200",
+     "0HC87298328P150_1"
+    ],
+    "Tallison Teixeira": [
+     "+150",
+     "0HC87298328N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Shamil Gaziev": [
+     "-185",
+     "0HC87298329P150_1"
+    ],
+    "Tallison Teixeira": [
+     "+140",
+     "0HC87298329N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "+120",
+     "0QA390153190#2369604365_13L9034Q11Q22"
+    ],
+    "No": [
+     "-160",
+     "0QA390153190#2369604492_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "+300",
+     "0QA390153192#2369604367_13L9034Q11Q22"
+    ],
+    "No": [
+     "-450",
+     "0QA390153192#2369604490_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Shamil Gaziev Round 1": [
+     "+125",
+     "0QA390153168#2369604345_13L9034Q11Q20"
+    ],
+    "Shamil Gaziev Round 2": [
+     "+500",
+     "0QA390153168#2369604510_13L9034Q11Q22"
+    ],
+    "Shamil Gaziev Round 3": [
+     "+1400",
+     "0QA390153168#2369604547_13L9034Q11Q24"
+    ],
+    "Shamil Gaziev By Decision": [
+     "+1000",
+     "0QA390153168#2369604591_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153168#2369604596_15L9034Q10Q212"
+    ],
+    "Tallison Teixeira Round 1": [
+     "+330",
+     "0QA390153168#2369604508_14L9034Q12Q21"
+    ],
+    "Tallison Teixeira Round 2": [
+     "+900",
+     "0QA390153168#2369604546_14L9034Q12Q23"
+    ],
+    "Tallison Teixeira Round 3": [
+     "+2200",
+     "0QA390153168#2369604564_14L9034Q12Q25"
+    ],
+    "Tallison Teixeira By Decision": [
+     "+1100",
+     "0QA390153168#2369604595_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "-160",
+     "0QA390153181#2369604357_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+300",
+     "0QA390153181#2369604496_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+900",
+     "0QA390153181#2369604520_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153181#2369604560_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+500",
+     "0QA390153181#2369604569_13L9034Q11Q25"
+    ]
+   },
+   "Tallison Teixeira to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+225",
+     "0QA390153219#2369604424_13L9034Q11Q22"
+    ],
+    "No": [
+     "-310",
+     "0QA390153219#2369604462_13L9034Q13Q24"
+    ]
+   },
+   "Shamil Gaziev to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "-160",
+     "0QA390153222#2369604428_13L9034Q11Q22"
+    ],
+    "No": [
+     "+120",
+     "0QA390153222#2369604458_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Shamil Gaziev to Win by KO/TKO/DQ or Decision": [
+     "-200",
+     "0QA390153177#2369604353_13L9034Q11Q21"
+    ],
+    "Shamil Gaziev to Win by KO/TKO/DQ or Submission": [
+     "-160",
+     "0QA390153177#2369604500_13L9034Q12Q22"
+    ],
+    "Shamil Gaziev to Win by Submission or Decision": [
+     "+550",
+     "0QA390153177#2369604516_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153177#2369604567_13L9034Q17Q27"
+    ],
+    "Tallison Teixeira to Win by KO/TKO/DQ or Decision": [
+     "+175",
+     "0QA390153177#2369604543_15L9034Q14Q24"
+    ],
+    "Tallison Teixeira to Win by KO/TKO/DQ or Submission": [
+     "+225",
+     "0QA390153177#2369604549_15L9034Q15Q25"
+    ],
+    "Tallison Teixeira to Win by Submission or Decision": [
+     "+700",
+     "0QA390153177#2369604562_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Shamil Gaziev to Win By KO/TKO/DQ or Tallison Teixeira to Win by Submission": [
+     "-170",
+     "0QA390153224#2369604426_13L9034Q10Q21"
+    ],
+    "Shamil Gaziev to Win By KO/TKO/DQ or Tallison Teixeira to Win by Decision": [
+     "-210",
+     "0QA390153224#2369604460_13L9034Q10Q22"
+    ],
+    "Shamil Gaziev to Win By Submission or Tallison Teixeira to Win by KO/TKO/DQ": [
+     "+175",
+     "0QA390153224#2369604528_13L9034Q10Q23"
+    ],
+    "Shamil Gaziev to Win By Submission or Tallison Teixeira to Win by Decision": [
+     "+550",
+     "0QA390153224#2369604534_13L9034Q10Q24"
+    ],
+    "Shamil Gaziev to Win By Decision or Tallison Teixeira to Win by KO/TKO/DQ": [
+     "+160",
+     "0QA390153224#2369604555_13L9034Q10Q25"
+    ],
+    "Shamil Gaziev to Win By Decision or Tallison Teixeira to Win by Submission": [
+     "+650",
+     "0QA390153224#2369604556_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153224#2369604573_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-800",
+     "0QA390153171#2369604349_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+900",
+     "0QA390153171#2369604504_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+500",
+     "0QA390153171#2369604512_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153171#2369604545_15L9034Q14Q24"
+    ]
+   },
+   "Shamil Gaziev to Win by Unanimous Decision": {
+    "Yes": [
+     "+1200",
+     "0QA390153199#2369604373_13L9034Q11Q22"
+    ]
+   },
+   "Tallison Teixeira to Win by Unanimous Decision": {
+    "Yes": [
+     "+1400",
+     "0QA390153201#2369604375_13L9034Q11Q22"
+    ]
+   },
+   "Shamil Gaziev to Win by Split or Majority Decision": {
+    "Yes": [
+     "+3000",
+     "0QA390153204#2369604377_13L9034Q11Q22"
+    ]
+   },
+   "Tallison Teixeira to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA390153206#2369604379_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Shamil Gaziev": [
+     "-150",
+     "0QA390153251#2369604438_13L9034Q11Q22"
+    ],
+    "Tallison Teixeira": [
+     "+240",
+     "0QA390153251#2369604448_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Shamil Gaziev": [
+     "+1400",
+     "0QA390153252#2369604440_13L9034Q11Q22"
+    ],
+    "Tallison Teixeira": [
+     "+2500",
+     "0QA390153252#2369604446_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Shamil Gaziev": [
+     "+1000",
+     "0QA390153253#2369604442_13L9034Q11Q22"
+    ],
+    "Tallison Teixeira": [
+     "+1100",
+     "0QA390153253#2369604444_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79515,8 +81119,48 @@
   "right": "Ikram Aliskerov",
   "rounds": 3,
   "start": "2026-11-21T18:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Jared Cannonier": [
+     "+180",
+     "0QA390153704#2369605928_13L9034Q11Q21"
+    ],
+    "Ikram Aliskerov": [
+     "-260",
+     "0QA390153704#2369605975_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Jared Cannonier": [
+     "+300",
+     "0QA390153705#2369605929_13L9034Q11Q21"
+    ],
+    "Ikram Aliskerov": [
+     "-475",
+     "0QA390153705#2369605974_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Jared Cannonier": [
+     "+180",
+     "0QA390153729#2369605953_13L9034Q10Q21"
+    ],
+    "Ikram Aliskerov": [
+     "-245",
+     "0QA390153729#2369605964_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Jared Cannonier": [
+     "+300",
+     "0QA390153728#2369605952_13L9034Q10Q21"
+    ],
+    "Ikram Aliskerov": [
+     "-450",
+     "0QA390153728#2369605965_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Jared Cannonier": [
      "+230",
@@ -79527,20 +81171,92 @@
      "0ML87233555_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Jared Cannonier": [
+     "+155",
+     "0QA390153727#2369605946_13L9034Q10Q21"
+    ],
+    "Ikram Aliskerov": [
+     "-205",
+     "0QA390153727#2369605972_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Jared Cannonier": [
+     "-125",
+     "0HC87298344P750_1"
+    ],
+    "Ikram Aliskerov": [
+     "-105",
+     "0HC87298344N750_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Jared Cannonier": [
+     "+100",
+     "0HC87298345P550_1"
+    ],
+    "Ikram Aliskerov": [
+     "-130",
+     "0HC87298345N550_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
-     "-105",
+     "-110",
      "0OU87276472O250_1"
     ],
     "Under": [
-     "-125",
+     "-120",
      "0OU87276472U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-225",
+     "0OU87298343O150_1"
+    ],
+    "Under": [
+     "+165",
+     "0OU87298343U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1000",
+     "0QA390153708#2369605948_13L9034Q11Q22"
     ]
    },
    "Point to Be Deducted": {
     "Yes": [
      "+2000",
      "0QA390153693#2369605917_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+2500",
+     "0QA390153730#2369605954_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "+150",
+     "0QA390153698#2369605922_13L9034Q11Q22"
+    ],
+    "No": [
+     "-200",
+     "0QA390153698#2369605981_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA390153699#2369605923_13L9034Q11Q22"
+    ],
+    "No": [
+     "-4000",
+     "0QA390153699#2369605980_13L9034Q13Q24"
     ]
    },
    "Fight to Go the Distance": {
@@ -79552,6 +81268,410 @@
      "-170",
      "0QA390153686#2369605990_13L9034Q10Q21"
     ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+275",
+     "0QA390153706#2369605930_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+1000",
+     "0QA390153706#2369605971_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+400",
+     "0QA390153706#2369606000_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1600",
+     "0QA390153706#2369606005_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+650",
+     "0QA390153706#2369606021_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+2200",
+     "0QA390153706#2369606024_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "+130",
+     "0QA390153706#2369606060_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Jared Cannonier to Win in Rounds 1-2": [
+     "+450",
+     "0QA390153689#2369605913_13L9034Q11Q21"
+    ],
+    "Jared Cannonier to Win in Round 3 or on Decision": [
+     "+550",
+     "0QA390153689#2369605994_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153689#2369606047_13L9034Q19Q29"
+    ],
+    "Ikram Aliskerov to Win in Rounds 1-2": [
+     "+175",
+     "0QA390153689#2369606015_15L9034Q15Q25"
+    ],
+    "Ikram Aliskerov to Win in Round 3 or on Decision": [
+     "+115",
+     "0QA390153689#2369606033_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Jared Cannonier to Win by KO/TKO/DQ in Round 1": [
+     "+800",
+     "0QA390153691#2369605915_13L9034Q11Q21"
+    ],
+    "Jared Cannonier to Win by KO/TKO/DQ in Round 2": [
+     "+1100",
+     "0QA390153691#2369605986_13L9034Q12Q22"
+    ],
+    "Jared Cannonier to Win by KO/TKO/DQ in Round 3": [
+     "+1800",
+     "0QA390153691#2369605996_13L9034Q13Q23"
+    ],
+    "Jared Cannonier to Win by Submission in Round 1": [
+     "+4000",
+     "0QA390153691#2369606028_13L9034Q16Q26"
+    ],
+    "Jared Cannonier to Win by Submission in Round 2": [
+     "+6000",
+     "0QA390153691#2369606035_13L9034Q17Q27"
+    ],
+    "Jared Cannonier to Win by Submission in Round 3": [
+     "+9000",
+     "0QA390153691#2369606044_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "+130",
+     "0QA390153691#2369606072_13L9034Q121Q221"
+    ],
+    "Ikram Aliskerov to Win by KO/TKO/DQ in Round 1": [
+     "+380",
+     "0QA390153691#2369606059_15L9034Q111Q211"
+    ],
+    "Ikram Aliskerov to Win by KO/TKO/DQ in Round 2": [
+     "+600",
+     "0QA390153691#2369606061_15L9034Q112Q212"
+    ],
+    "Ikram Aliskerov to Win by KO/TKO/DQ in Round 3": [
+     "+900",
+     "0QA390153691#2369606064_15L9034Q113Q213"
+    ],
+    "Ikram Aliskerov to Win by Submission in Round 1": [
+     "+1200",
+     "0QA390153691#2369606067_15L9034Q116Q216"
+    ],
+    "Ikram Aliskerov to Win by Submission in Round 2": [
+     "+1800",
+     "0QA390153691#2369606068_15L9034Q117Q217"
+    ],
+    "Ikram Aliskerov to Win by Submission in Round 3": [
+     "+2500",
+     "0QA390153691#2369606069_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Jared Cannonier To Win And Under 0.5": [
+     "+1800",
+     "0QA390153694#2369605918_13L9034Q11Q21"
+    ],
+    "Jared Cannonier To Win And Under 1.5": [
+     "+550",
+     "0QA390153694#2369605998_13L9034Q11Q23"
+    ],
+    "Ikram Aliskerov To Win And Under 0.5": [
+     "+900",
+     "0QA390153694#2369605984_14L9034Q12Q22"
+    ],
+    "Ikram Aliskerov To Win And Under 1.5": [
+     "+240",
+     "0QA390153694#2369606007_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Jared Cannonier To Win And Over 1.5": [
+     "+380",
+     "0QA390153695#2369605999_13L9034Q11Q23"
+    ],
+    "Jared Cannonier To Win And Over 2.5": [
+     "+600",
+     "0QA390153695#2369606020_13L9034Q11Q25"
+    ],
+    "Ikram Aliskerov To Win And Over 1.5": [
+     "-140",
+     "0QA390153695#2369606006_14L9034Q12Q24"
+    ],
+    "Ikram Aliskerov To Win And Over 2.5": [
+     "+125",
+     "0QA390153695#2369606025_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Jared Cannonier": [
+     "+165",
+     "0HC87298346P150_1"
+    ],
+    "Ikram Aliskerov": [
+     "-220",
+     "0HC87298346N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Jared Cannonier": [
+     "+165",
+     "0HC87298347P150_1"
+    ],
+    "Ikram Aliskerov": [
+     "-220",
+     "0HC87298347N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Jared Cannonier": [
+     "+165",
+     "0HC87298348P150_1"
+    ],
+    "Ikram Aliskerov": [
+     "-220",
+     "0HC87298348N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-340",
+     "0QA390153696#2369605920_13L9034Q11Q22"
+    ],
+    "No": [
+     "+240",
+     "0QA390153696#2369605983_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-135",
+     "0QA390153697#2369605921_13L9034Q11Q22"
+    ],
+    "No": [
+     "+105",
+     "0QA390153697#2369605982_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Jared Cannonier Round 1": [
+     "+700",
+     "0QA390153687#2369605910_13L9034Q11Q20"
+    ],
+    "Jared Cannonier Round 2": [
+     "+1000",
+     "0QA390153687#2369605992_13L9034Q11Q22"
+    ],
+    "Jared Cannonier Round 3": [
+     "+1600",
+     "0QA390153687#2369606014_13L9034Q11Q24"
+    ],
+    "Jared Cannonier By Decision": [
+     "+800",
+     "0QA390153687#2369606058_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153687#2369606063_15L9034Q10Q212"
+    ],
+    "Ikram Aliskerov Round 1": [
+     "+320",
+     "0QA390153687#2369605991_14L9034Q12Q21"
+    ],
+    "Ikram Aliskerov Round 2": [
+     "+500",
+     "0QA390153687#2369606013_14L9034Q12Q23"
+    ],
+    "Ikram Aliskerov Round 3": [
+     "+750",
+     "0QA390153687#2369606031_14L9034Q12Q25"
+    ],
+    "Ikram Aliskerov By Decision": [
+     "+175",
+     "0QA390153687#2369606062_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+240",
+     "0QA390153692#2369605916_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+320",
+     "0QA390153692#2369605985_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+500",
+     "0QA390153692#2369605997_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153692#2369606027_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "+130",
+     "0QA390153692#2369606036_13L9034Q11Q25"
+    ]
+   },
+   "Ikram Aliskerov to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+130",
+     "0QA390153709#2369605949_13L9034Q11Q22"
+    ],
+    "No": [
+     "-170",
+     "0QA390153709#2369605968_13L9034Q13Q24"
+    ]
+   },
+   "Jared Cannonier to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+350",
+     "0QA390153710#2369605951_13L9034Q11Q22"
+    ],
+    "No": [
+     "-550",
+     "0QA390153710#2369605966_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Jared Cannonier to Win by KO/TKO/DQ or Decision": [
+     "+235",
+     "0QA390153690#2369605914_13L9034Q11Q21"
+    ],
+    "Jared Cannonier to Win by KO/TKO/DQ or Submission": [
+     "+350",
+     "0QA390153690#2369605987_13L9034Q12Q22"
+    ],
+    "Jared Cannonier to Win by Submission or Decision": [
+     "+600",
+     "0QA390153690#2369605995_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153690#2369606034_13L9034Q17Q27"
+    ],
+    "Ikram Aliskerov to Win by KO/TKO/DQ or Decision": [
+     "-225",
+     "0QA390153690#2369606010_15L9034Q14Q24"
+    ],
+    "Ikram Aliskerov to Win by KO/TKO/DQ or Submission": [
+     "+130",
+     "0QA390153690#2369606016_15L9034Q15Q25"
+    ],
+    "Ikram Aliskerov to Win by Submission or Decision": [
+     "+105",
+     "0QA390153690#2369606029_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Jared Cannonier to Win By KO/TKO/DQ or Ikram Aliskerov to Win by Submission": [
+     "+200",
+     "0QA390153711#2369605950_13L9034Q10Q21"
+    ],
+    "Jared Cannonier to Win By KO/TKO/DQ or Ikram Aliskerov to Win by Decision": [
+     "-130",
+     "0QA390153711#2369605967_13L9034Q10Q22"
+    ],
+    "Jared Cannonier to Win By Submission or Ikram Aliskerov to Win by KO/TKO/DQ": [
+     "+150",
+     "0QA390153711#2369606001_13L9034Q10Q23"
+    ],
+    "Jared Cannonier to Win By Submission or Ikram Aliskerov to Win by Decision": [
+     "+150",
+     "0QA390153711#2369606004_13L9034Q10Q24"
+    ],
+    "Jared Cannonier to Win By Decision or Ikram Aliskerov to Win by KO/TKO/DQ": [
+     "+115",
+     "0QA390153711#2369606022_13L9034Q10Q25"
+    ],
+    "Jared Cannonier to Win By Decision or Ikram Aliskerov to Win by Submission": [
+     "+300",
+     "0QA390153711#2369606023_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153711#2369606040_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "-115",
+     "0QA390153688#2369605912_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+500",
+     "0QA390153688#2369605989_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "+130",
+     "0QA390153688#2369605993_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153688#2369606012_15L9034Q14Q24"
+    ]
+   },
+   "Jared Cannonier to Win by Unanimous Decision": {
+    "Yes": [
+     "+1000",
+     "0QA390153700#2369605924_13L9034Q11Q22"
+    ]
+   },
+   "Ikram Aliskerov to Win by Unanimous Decision": {
+    "Yes": [
+     "+185",
+     "0QA390153701#2369605925_13L9034Q11Q22"
+    ]
+   },
+   "Jared Cannonier to Win by Split or Majority Decision": {
+    "Yes": [
+     "+2800",
+     "0QA390153702#2369605926_13L9034Q11Q22"
+    ]
+   },
+   "Ikram Aliskerov to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA390153703#2369605927_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Jared Cannonier": [
+     "+400",
+     "0QA390153737#2369605956_13L9034Q11Q22"
+    ],
+    "Ikram Aliskerov": [
+     "+180",
+     "0QA390153737#2369605961_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Jared Cannonier": [
+     "+2500",
+     "0QA390153738#2369605957_13L9034Q11Q22"
+    ],
+    "Ikram Aliskerov": [
+     "+650",
+     "0QA390153738#2369605960_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Jared Cannonier": [
+     "+800",
+     "0QA390153739#2369605958_13L9034Q11Q22"
+    ],
+    "Ikram Aliskerov": [
+     "+175",
+     "0QA390153739#2369605959_13L9034Q13Q24"
+    ]
    }
   }
  },
@@ -79561,35 +81681,35 @@
   "right": "Asu Almabayev",
   "rounds": 3,
   "start": "2026-11-21T18:45Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Kyoji Horiguchi": [
-     "-260",
+     "-290",
      "0QA390153596#2369605387_13L9034Q11Q21"
     ],
     "Asu Almabayev": [
-     "+180",
+     "+200",
      "0QA390153596#2369605528_13L9034Q12Q23"
     ]
    },
    "Decision Only Moneyline (If Finish No Action)": {
     "Kyoji Horiguchi": [
-     "-200",
+     "-210",
      "0QA390153597#2369605390_13L9034Q11Q21"
     ],
     "Asu Almabayev": [
-     "+145",
+     "+150",
      "0QA390153597#2369605525_13L9034Q12Q23"
     ]
    },
    "Round 1 Only Moneyline (Any Other Result No Action)": {
     "Kyoji Horiguchi": [
-     "-265",
+     "-275",
      "0QA390153621#2369605462_13L9034Q10Q21"
     ],
     "Asu Almabayev": [
-     "+195",
+     "+200",
      "0QA390153621#2369605495_13L9034Q12Q23"
     ]
    },
@@ -79615,31 +81735,31 @@
    },
    "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
     "Kyoji Horiguchi": [
-     "-310",
+     "-360",
      "0QA390153619#2369605441_13L9034Q10Q21"
     ],
     "Asu Almabayev": [
-     "+220",
+     "+255",
      "0QA390153619#2369605519_13L9034Q12Q23"
     ]
    },
    "Point Spread": {
     "Kyoji Horiguchi": [
-     "-105",
+     "-110",
      "0HC87298362N350_1"
     ],
     "Asu Almabayev": [
-     "-130",
+     "-120",
      "0HC87298362P350_3"
     ]
    },
    "Alternate Point Spread": {
     "Kyoji Horiguchi": [
-     "-650",
+     "-750",
      "0HC87298363P750_1"
     ],
     "Asu Almabayev": [
-     "+400",
+     "+450",
      "0HC87298363N750_3"
     ]
    },
@@ -79655,11 +81775,11 @@
    },
    "Alternate Total Rounds": {
     "Over": [
-     "-600",
+     "-575",
      "0OU87298361O150_1"
     ],
     "Under": [
-     "+360",
+     "+350",
      "0OU87298361U150_3"
     ]
    },
@@ -79677,27 +81797,27 @@
    },
    "Fight to End in the Last 10 Seconds of Any Round": {
     "Yes": [
-     "+5000",
+     "+4500",
      "0QA390153622#2369605465_13L9034Q11714Q20"
     ]
    },
    "Fight to Be Won by Unanimous Decision": {
     "Yes": [
-     "-165",
+     "-160",
      "0QA390153590#2369605369_13L9034Q11Q22"
     ],
     "No": [
-     "+125",
+     "+120",
      "0QA390153590#2369605546_13L9034Q13Q24"
     ]
    },
    "Fight to Be Won by Split or Majority Decision": {
     "Yes": [
-     "+500",
+     "+600",
      "0QA390153591#2369605372_13L9034Q11Q22"
     ],
     "No": [
-     "-900",
+     "-1200",
      "0QA390153591#2369605543_13L9034Q13Q24"
     ]
    },
@@ -79707,7 +81827,7 @@
      "0QA390153578#2369605336_13L9034Q10Q20"
     ],
     "No": [
-     "+170",
+     "+165",
      "0QA390153578#2369605573_13L9034Q10Q21"
     ]
    },
@@ -79733,7 +81853,7 @@
      "0QA390153598#2369605666_13L9034Q11Q23"
     ],
     "Round 3 \u2013 Submission": [
-     "+1900",
+     "+1800",
      "0QA390153598#2369605675_14L9034Q12Q23"
     ],
     "Fight to go the Distance": [
@@ -79743,7 +81863,7 @@
    },
    "Alternate Round Betting": {
     "Kyoji Horiguchi to Win in Rounds 1-2": [
-     "+370",
+     "+350",
      "0QA390153581#2369605342_13L9034Q11Q21"
     ],
     "Kyoji Horiguchi to Win in Round 3 or on Decision": [
@@ -79755,11 +81875,11 @@
      "0QA390153581#2369605742_13L9034Q19Q29"
     ],
     "Asu Almabayev to Win in Rounds 1-2": [
-     "+850",
+     "+900",
      "0QA390153581#2369605648_15L9034Q15Q25"
     ],
     "Asu Almabayev to Win in Round 3 or on Decision": [
-     "+210",
+     "+215",
      "0QA390153581#2369605706_15L9034Q17Q27"
     ]
    },
@@ -79769,7 +81889,7 @@
      "0QA390153583#2369605348_13L9034Q11Q21"
     ],
     "Kyoji Horiguchi to Win by KO/TKO/DQ in Round 2": [
-     "+1300",
+     "+1200",
      "0QA390153583#2369605561_13L9034Q12Q22"
     ],
     "Kyoji Horiguchi to Win by KO/TKO/DQ in Round 3": [
@@ -79793,15 +81913,15 @@
      "0QA390153583#2369605792_13L9034Q121Q221"
     ],
     "Asu Almabayev to Win by KO/TKO/DQ in Round 1": [
-     "+2500",
+     "+2800",
      "0QA390153583#2369605766_15L9034Q111Q211"
     ],
     "Asu Almabayev to Win by KO/TKO/DQ in Round 2": [
-     "+3000",
+     "+4000",
      "0QA390153583#2369605770_15L9034Q112Q212"
     ],
     "Asu Almabayev to Win by KO/TKO/DQ in Round 3": [
-     "+4000",
+     "+4500",
      "0QA390153583#2369605776_15L9034Q113Q213"
     ],
     "Asu Almabayev to Win by Submission in Round 1": [
@@ -79809,7 +81929,7 @@
      "0QA390153583#2369605782_15L9034Q116Q216"
     ],
     "Asu Almabayev to Win by Submission in Round 2": [
-     "+3000",
+     "+3500",
      "0QA390153583#2369605784_15L9034Q117Q217"
     ],
     "Asu Almabayev to Win by Submission in Round 3": [
@@ -79837,7 +81957,7 @@
    },
    "To Win Fight and Over Rounds": {
     "Kyoji Horiguchi To Win And Over 1.5": [
-     "-165",
+     "-160",
      "0QA390153587#2369605600_13L9034Q11Q23"
     ],
     "Kyoji Horiguchi To Win And Over 2.5": [
@@ -79845,12 +81965,42 @@
      "0QA390153587#2369605663_13L9034Q11Q25"
     ],
     "Asu Almabayev To Win And Over 1.5": [
-     "+170",
+     "+175",
      "0QA390153587#2369605621_14L9034Q12Q24"
     ],
     "Asu Almabayev To Win And Over 2.5": [
-     "+205",
+     "+215",
      "0QA390153587#2369605678_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Kyoji Horiguchi": [
+     "-295",
+     "0HC87298364P150_1"
+    ],
+    "Asu Almabayev": [
+     "+215",
+     "0HC87298364N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Kyoji Horiguchi": [
+     "-295",
+     "0HC87298365P150_1"
+    ],
+    "Asu Almabayev": [
+     "+215",
+     "0HC87298365N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Kyoji Horiguchi": [
+     "-285",
+     "0HC87298366P150_1"
+    ],
+    "Asu Almabayev": [
+     "+210",
+     "0HC87298366N150_3"
     ]
    },
    "Fight to Start Round 2": {
@@ -79879,7 +82029,7 @@
      "0QA390153579#2369605333_13L9034Q11Q20"
     ],
     "Kyoji Horiguchi Round 2": [
-     "+900",
+     "+850",
      "0QA390153579#2369605579_13L9034Q11Q22"
     ],
     "Kyoji Horiguchi Round 3": [
@@ -79887,7 +82037,7 @@
      "0QA390153579#2369605645_13L9034Q11Q24"
     ],
     "Kyoji Horiguchi By Decision": [
-     "+115",
+     "+110",
      "0QA390153579#2369605764_13L9034Q11Q210"
     ],
     "Draw": [
@@ -79899,11 +82049,11 @@
      "0QA390153579#2369605576_14L9034Q12Q21"
     ],
     "Asu Almabayev Round 2": [
-     "+1800",
+     "+2000",
      "0QA390153579#2369605642_14L9034Q12Q23"
     ],
     "Asu Almabayev Round 3": [
-     "+2200",
+     "+2500",
      "0QA390153579#2369605700_14L9034Q12Q25"
     ],
     "Asu Almabayev By Decision": [
@@ -79921,7 +82071,7 @@
      "0QA390153584#2369605558_13L9034Q11Q21"
     ],
     "Round 3": [
-     "+800",
+     "+850",
      "0QA390153584#2369605594_13L9034Q11Q22"
     ],
     "Draw": [
@@ -79935,17 +82085,17 @@
    },
    "Asu Almabayev to Win by Any Knockout, Submission or DQ": {
     "Yes": [
-     "+650",
+     "+700",
      "0QA390153601#2369605450_13L9034Q11Q22"
     ],
     "No": [
-     "-1400",
+     "-1600",
      "0QA390153601#2369605507_13L9034Q13Q24"
     ]
    },
    "Kyoji Horiguchi to Win by Any Knockout, Submission or DQ": {
     "Yes": [
-     "+280",
+     "+275",
      "0QA390153602#2369605456_13L9034Q11Q22"
     ],
     "No": [
@@ -79955,15 +82105,15 @@
    },
    "Method of Victory Double Chance": {
     "Kyoji Horiguchi to Win by KO/TKO/DQ or Decision": [
-     "-170",
+     "-185",
      "0QA390153582#2369605345_13L9034Q11Q21"
     ],
     "Kyoji Horiguchi to Win by KO/TKO/DQ or Submission": [
-     "+280",
+     "+275",
      "0QA390153582#2369605564_13L9034Q12Q22"
     ],
     "Kyoji Horiguchi to Win by Submission or Decision": [
-     "-135",
+     "-140",
      "0QA390153582#2369605588_13L9034Q13Q23"
     ],
     "Draw": [
@@ -79971,15 +82121,15 @@
      "0QA390153582#2369605709_13L9034Q17Q27"
     ],
     "Asu Almabayev to Win by KO/TKO/DQ or Decision": [
-     "+180",
+     "+190",
      "0QA390153582#2369605633_15L9034Q14Q24"
     ],
     "Asu Almabayev to Win by KO/TKO/DQ or Submission": [
-     "+650",
+     "+700",
      "0QA390153582#2369605651_15L9034Q15Q25"
     ],
     "Asu Almabayev to Win by Submission or Decision": [
-     "+180",
+     "+185",
      "0QA390153582#2369605692_15L9034Q16Q26"
     ]
    },
@@ -79989,23 +82139,23 @@
      "0QA390153603#2369605453_13L9034Q10Q21"
     ],
     "Kyoji Horiguchi to Win By KO/TKO/DQ or Asu Almabayev to Win by Decision": [
-     "+110",
+     "+115",
      "0QA390153603#2369605504_13L9034Q10Q22"
     ],
     "Kyoji Horiguchi to Win By Submission or Asu Almabayev to Win by KO/TKO/DQ": [
-     "+390",
+     "+450",
      "0QA390153603#2369605606_13L9034Q10Q23"
     ],
     "Kyoji Horiguchi to Win By Submission or Asu Almabayev to Win by Decision": [
-     "+140",
+     "+150",
      "0QA390153603#2369605615_13L9034Q10Q24"
     ],
     "Kyoji Horiguchi to Win By Decision or Asu Almabayev to Win by KO/TKO/DQ": [
-     "-120",
+     "-115",
      "0QA390153603#2369605669_13L9034Q10Q25"
     ],
     "Kyoji Horiguchi to Win By Decision or Asu Almabayev to Win by Submission": [
-     "-120",
+     "-125",
      "0QA390153603#2369605672_13L9034Q10Q26"
     ],
     "Draw": [
@@ -80015,7 +82165,7 @@
    },
    "Exact Method of Victory": {
     "KO/TKO/DQ": [
-     "+320",
+     "+330",
      "0QA390153580#2369605339_13L9034Q11Q21"
     ],
     "Submission": [
@@ -80033,19 +82183,19 @@
    },
    "Kyoji Horiguchi to Win by Unanimous Decision": {
     "Yes": [
-     "+150",
+     "+130",
      "0QA390153592#2369605375_13L9034Q11Q22"
     ]
    },
    "Asu Almabayev to Win by Unanimous Decision": {
     "Yes": [
-     "+310",
+     "+275",
      "0QA390153593#2369605378_13L9034Q11Q22"
     ]
    },
    "Kyoji Horiguchi to Win by Split or Majority Decision": {
     "Yes": [
-     "+1000",
+     "+900",
      "0QA390153594#2369605381_13L9034Q11Q22"
     ]
    },
@@ -80061,13 +82211,13 @@
      "0QA390153629#2369605471_13L9034Q11Q22"
     ],
     "Asu Almabayev": [
-     "+1200",
+     "+1400",
      "0QA390153629#2369605486_13L9034Q13Q24"
     ]
    },
    "Submission": {
     "Kyoji Horiguchi": [
-     "+700",
+     "+750",
      "0QA390153630#2369605474_13L9034Q11Q22"
     ],
     "Asu Almabayev": [
@@ -80077,7 +82227,7 @@
    },
    "Decision": {
     "Kyoji Horiguchi": [
-     "+115",
+     "+110",
      "0QA390153631#2369605477_13L9034Q11Q22"
     ],
     "Asu Almabayev": [
@@ -80093,7 +82243,7 @@
   "right": "Dan Hooker",
   "rounds": 3,
   "start": "2026-11-21T19:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Dan Hooker": [
@@ -80659,7 +82809,7 @@
   "right": "Kevin Vallejos",
   "rounds": 3,
   "start": "2026-11-21T19:45Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Aljamain Sterling": [
@@ -81225,7 +83375,7 @@
   "right": "Navajo Stirling",
   "rounds": 5,
   "start": "2026-11-21T20:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Finish Only Moneyline (If Decision No Action)": {
     "Jiri Prochazka": [
@@ -81939,25 +84089,25 @@
   "right": "Alik Lorenz",
   "rounds": 3,
   "start": "2026-11-21T15:15Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Moneyline": {
     "Diyar Nurgozhay": [
-     "-250",
+     "-245",
      "0ML87277789_1"
     ],
     "Alik Lorenz": [
-     "+205",
+     "+200",
      "0ML87277789_3"
     ]
    },
    "Total Rounds": {
     "Over": [
-     "+160",
+     "+145",
      "0OU87298332O150_1"
     ],
     "Under": [
-     "-210",
+     "-188",
      "0OU87298332U150_3"
     ]
    }
@@ -81969,7 +84119,7 @@
   "right": "Dom Mar Fan",
   "rounds": 3,
   "start": "2026-11-21T15:45Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
    "Moneyline": {
     "Nikolas Motta": [
@@ -81999,8 +84149,48 @@
   "right": "Santiago Luna",
   "rounds": 3,
   "start": "2026-11-21T17:45Z",
-  "read": "2026-11-18T14:03Z",
+  "read": "2026-11-18T20:03Z",
   "markets": {
+   "Finish Only Moneyline (If Decision No Action)": {
+    "Aleksandre Topuria": [
+     "-340",
+     "0QA390153485#2369605272_13L9034Q11Q21"
+    ],
+    "Santiago Luna": [
+     "+225",
+     "0QA390153485#2369605403_13L9034Q12Q23"
+    ]
+   },
+   "Decision Only Moneyline (If Finish No Action)": {
+    "Aleksandre Topuria": [
+     "-290",
+     "0QA390153488#2369605275_13L9034Q11Q21"
+    ],
+    "Santiago Luna": [
+     "+200",
+     "0QA390153488#2369605400_13L9034Q12Q23"
+    ]
+   },
+   "Round 1 Only Moneyline (Any Other Result No Action)": {
+    "Aleksandre Topuria": [
+     "-350",
+     "0QA390153541#2369605337_13L9034Q10Q21"
+    ],
+    "Santiago Luna": [
+     "+250",
+     "0QA390153541#2369605370_13L9034Q12Q23"
+    ]
+   },
+   "Submission Only Moneyline (If Decision or KO/TKO/DQ No Action)": {
+    "Aleksandre Topuria": [
+     "-275",
+     "0QA390153539#2369605334_13L9034Q10Q21"
+    ],
+    "Santiago Luna": [
+     "+200",
+     "0QA390153539#2369605373_13L9034Q12Q23"
+    ]
+   },
    "Moneyline": {
     "Aleksandre Topuria": [
      "-278",
@@ -82011,6 +84201,36 @@
      "0ML87277790_3"
     ]
    },
+   "KO/TKO/DQ Only Moneyline (If Decision or Submission No Action)": {
+    "Aleksandre Topuria": [
+     "-400",
+     "0QA390153537#2369605323_13L9034Q10Q21"
+    ],
+    "Santiago Luna": [
+     "+275",
+     "0QA390153537#2369605394_13L9034Q12Q23"
+    ]
+   },
+   "Point Spread": {
+    "Aleksandre Topuria": [
+     "-110",
+     "0HC87298374N550_1"
+    ],
+    "Santiago Luna": [
+     "-120",
+     "0HC87298374P550_3"
+    ]
+   },
+   "Alternate Point Spread": {
+    "Aleksandre Topuria": [
+     "-750",
+     "0HC87298375P750_1"
+    ],
+    "Santiago Luna": [
+     "+450",
+     "0HC87298375N750_3"
+    ]
+   },
    "Total Rounds": {
     "Over": [
      "-188",
@@ -82019,6 +84239,472 @@
     "Under": [
      "+145",
      "0OU87292029U250_3"
+    ]
+   },
+   "Alternate Total Rounds": {
+    "Over": [
+     "-370",
+     "0OU87298373O150_1"
+    ],
+    "Under": [
+     "+255",
+     "0OU87298373U150_3"
+    ]
+   },
+   "Fight to End in the 1st 60 Seconds of Round 1": {
+    "Yes": [
+     "+1400",
+     "0QA390153499#2369605327_13L9034Q11Q22"
+    ],
+    "No": [
+     "-20000",
+     "0QA390153499#2369605385_13L9034Q13Q24"
+    ]
+   },
+   "Point to Be Deducted": {
+    "Yes": [
+     "+2000",
+     "0QA390153455#2369605239_13L9034Q10Q20"
+    ]
+   },
+   "Fight to End in the Last 10 Seconds of Any Round": {
+    "Yes": [
+     "+3500",
+     "0QA390153542#2369605340_13L9034Q11714Q20"
+    ]
+   },
+   "Fight to Be Won by Unanimous Decision": {
+    "Yes": [
+     "-115",
+     "0QA390153469#2369605254_13L9034Q11Q22"
+    ],
+    "No": [
+     "-115",
+     "0QA390153469#2369605421_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Be Won by Split or Majority Decision": {
+    "Yes": [
+     "+700",
+     "0QA390153472#2369605257_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1600",
+     "0QA390153472#2369605418_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Go the Distance": {
+    "Yes": [
+     "-150",
+     "0QA390153437#2369605225_13L9034Q10Q20"
+    ],
+    "No": [
+     "+110",
+     "0QA390153437#2369605448_13L9034Q10Q21"
+    ]
+   },
+   "Winning Round and Method": {
+    "Round 1 - KO/TKO/DQ": [
+     "+550",
+     "0QA390153493#2369605278_13L9034Q11Q21"
+    ],
+    "Round 1 \u2013 Submission": [
+     "+700",
+     "0QA390153493#2369605391_14L9034Q12Q21"
+    ],
+    "Round 2 - KO/TKO/DQ": [
+     "+850",
+     "0QA390153493#2369605478_13L9034Q11Q22"
+    ],
+    "Round 2 \u2013 Submission": [
+     "+1000",
+     "0QA390153493#2369605494_14L9034Q12Q22"
+    ],
+    "Round 3 - KO/TKO/DQ": [
+     "+1200",
+     "0QA390153493#2369605542_13L9034Q11Q23"
+    ],
+    "Round 3 \u2013 Submission": [
+     "+1600",
+     "0QA390153493#2369605551_14L9034Q12Q23"
+    ],
+    "Fight to go the Distance": [
+     "-150",
+     "0QA390153493#2369605658_13L9034Q10Q22"
+    ]
+   },
+   "Alternate Round Betting": {
+    "Aleksandre Topuria to Win in Rounds 1-2": [
+     "+240",
+     "0QA390153446#2369605228_13L9034Q11Q21"
+    ],
+    "Aleksandre Topuria to Win in Round 3 or on Decision": [
+     "-110",
+     "0QA390153446#2369605460_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153446#2369605619_13L9034Q19Q29"
+    ],
+    "Santiago Luna to Win in Rounds 1-2": [
+     "+750",
+     "0QA390153446#2369605524_15L9034Q15Q25"
+    ],
+    "Santiago Luna to Win in Round 3 or on Decision": [
+     "+330",
+     "0QA390153446#2369605578_15L9034Q17Q27"
+    ]
+   },
+   "Round and Method Betting": {
+    "Aleksandre Topuria to Win by KO/TKO/DQ in Round 1": [
+     "+650",
+     "0QA390153451#2369605232_13L9034Q11Q21"
+    ],
+    "Aleksandre Topuria to Win by KO/TKO/DQ in Round 2": [
+     "+1000",
+     "0QA390153451#2369605436_13L9034Q12Q22"
+    ],
+    "Aleksandre Topuria to Win by KO/TKO/DQ in Round 3": [
+     "+1600",
+     "0QA390153451#2369605466_13L9034Q13Q23"
+    ],
+    "Aleksandre Topuria to Win by Submission in Round 1": [
+     "+850",
+     "0QA390153451#2369605563_13L9034Q16Q26"
+    ],
+    "Aleksandre Topuria to Win by Submission in Round 2": [
+     "+1400",
+     "0QA390153451#2369605584_13L9034Q17Q27"
+    ],
+    "Aleksandre Topuria to Win by Submission in Round 3": [
+     "+2000",
+     "0QA390153451#2369605610_13L9034Q18Q28"
+    ],
+    "To Go the Distance": [
+     "-150",
+     "0QA390153451#2369605698_13L9034Q121Q221"
+    ],
+    "Santiago Luna to Win by KO/TKO/DQ in Round 1": [
+     "+2200",
+     "0QA390153451#2369605655_15L9034Q111Q211"
+    ],
+    "Santiago Luna to Win by KO/TKO/DQ in Round 2": [
+     "+3000",
+     "0QA390153451#2369605661_15L9034Q112Q212"
+    ],
+    "Santiago Luna to Win by KO/TKO/DQ in Round 3": [
+     "+4500",
+     "0QA390153451#2369605670_15L9034Q113Q213"
+    ],
+    "Santiago Luna to Win by Submission in Round 1": [
+     "+2200",
+     "0QA390153451#2369605679_15L9034Q116Q216"
+    ],
+    "Santiago Luna to Win by Submission in Round 2": [
+     "+2800",
+     "0QA390153451#2369605682_15L9034Q117Q217"
+    ],
+    "Santiago Luna to Win by Submission in Round 3": [
+     "+4000",
+     "0QA390153451#2369605686_15L9034Q118Q218"
+    ]
+   },
+   "To Win Fight and Under Rounds": {
+    "Aleksandre Topuria To Win And Under 0.5": [
+     "+1100",
+     "0QA390153458#2369605242_13L9034Q11Q21"
+    ],
+    "Aleksandre Topuria To Win And Under 1.5": [
+     "+300",
+     "0QA390153458#2369605472_13L9034Q11Q23"
+    ],
+    "Santiago Luna To Win And Under 0.5": [
+     "+3000",
+     "0QA390153458#2369605430_14L9034Q12Q22"
+    ],
+    "Santiago Luna To Win And Under 1.5": [
+     "+1000",
+     "0QA390153458#2369605500_14L9034Q12Q24"
+    ]
+   },
+   "To Win Fight and Over Rounds": {
+    "Aleksandre Topuria To Win And Over 1.5": [
+     "-170",
+     "0QA390153460#2369605475_13L9034Q11Q23"
+    ],
+    "Aleksandre Topuria To Win And Over 2.5": [
+     "-110",
+     "0QA390153460#2369605539_13L9034Q11Q25"
+    ],
+    "Santiago Luna To Win And Over 1.5": [
+     "+255",
+     "0QA390153460#2369605497_14L9034Q12Q24"
+    ],
+    "Santiago Luna To Win And Over 2.5": [
+     "+330",
+     "0QA390153460#2369605554_14L9034Q12Q26"
+    ]
+   },
+   "Round 1 Point Spread": {
+    "Aleksandre Topuria": [
+     "-400",
+     "0HC87298376P150_1"
+    ],
+    "Santiago Luna": [
+     "+275",
+     "0HC87298376N150_3"
+    ]
+   },
+   "Round 2 Point Spread": {
+    "Aleksandre Topuria": [
+     "-400",
+     "0HC87298377P150_1"
+    ],
+    "Santiago Luna": [
+     "+275",
+     "0HC87298377N150_3"
+    ]
+   },
+   "Round 3 Point Spread": {
+    "Aleksandre Topuria": [
+     "-400",
+     "0HC87298378P150_1"
+    ],
+    "Santiago Luna": [
+     "+275",
+     "0HC87298378N150_3"
+    ]
+   },
+   "Fight to Start Round 2": {
+    "Yes": [
+     "-550",
+     "0QA390153463#2369605248_13L9034Q11Q22"
+    ],
+    "No": [
+     "+350",
+     "0QA390153463#2369605427_13L9034Q13Q24"
+    ]
+   },
+   "Fight to Start Round 3": {
+    "Yes": [
+     "-225",
+     "0QA390153465#2369605251_13L9034Q11Q22"
+    ],
+    "No": [
+     "+165",
+     "0QA390153465#2369605424_13L9034Q13Q24"
+    ]
+   },
+   "Round Betting": {
+    "Aleksandre Topuria Round 1": [
+     "+400",
+     "0QA390153440#2369605222_13L9034Q11Q20"
+    ],
+    "Aleksandre Topuria Round 2": [
+     "+650",
+     "0QA390153440#2369605454_13L9034Q11Q22"
+    ],
+    "Aleksandre Topuria Round 3": [
+     "+900",
+     "0QA390153440#2369605521_13L9034Q11Q24"
+    ],
+    "Aleksandre Topuria By Decision": [
+     "+120",
+     "0QA390153440#2369605652_13L9034Q11Q210"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153440#2369605667_15L9034Q10Q212"
+    ],
+    "Santiago Luna Round 1": [
+     "+1200",
+     "0QA390153440#2369605451_14L9034Q12Q21"
+    ],
+    "Santiago Luna Round 2": [
+     "+1600",
+     "0QA390153440#2369605518_14L9034Q12Q23"
+    ],
+    "Santiago Luna Round 3": [
+     "+2500",
+     "0QA390153440#2369605572_14L9034Q12Q25"
+    ],
+    "Santiago Luna By Decision": [
+     "+400",
+     "0QA390153440#2369605664_14L9034Q12Q211"
+    ]
+   },
+   "Winning Round": {
+    "Round 1": [
+     "+350",
+     "0QA390153453#2369605235_13L9034Q11Q20"
+    ],
+    "Round 2": [
+     "+450",
+     "0QA390153453#2369605433_13L9034Q11Q21"
+    ],
+    "Round 3": [
+     "+700",
+     "0QA390153453#2369605469_13L9034Q11Q22"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153453#2369605560_13L9034Q11Q26"
+    ],
+    "By Decision": [
+     "-150",
+     "0QA390153453#2369605587_13L9034Q11Q25"
+    ]
+   },
+   "Santiago Luna to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+600",
+     "0QA390153502#2369605328_13L9034Q11Q22"
+    ],
+    "No": [
+     "-1200",
+     "0QA390153502#2369605382_13L9034Q13Q24"
+    ]
+   },
+   "Aleksandre Topuria to Win by Any Knockout, Submission or DQ": {
+    "Yes": [
+     "+180",
+     "0QA390153505#2369605331_13L9034Q11Q22"
+    ],
+    "No": [
+     "-245",
+     "0QA390153505#2369605376_13L9034Q13Q24"
+    ]
+   },
+   "Method of Victory Double Chance": {
+    "Aleksandre Topuria to Win by KO/TKO/DQ or Decision": [
+     "-190",
+     "0QA390153449#2369605230_13L9034Q11Q21"
+    ],
+    "Aleksandre Topuria to Win by KO/TKO/DQ or Submission": [
+     "+180",
+     "0QA390153449#2369605439_13L9034Q12Q22"
+    ],
+    "Aleksandre Topuria to Win by Submission or Decision": [
+     "-160",
+     "0QA390153449#2369605463_13L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153449#2369605581_13L9034Q17Q27"
+    ],
+    "Santiago Luna to Win by KO/TKO/DQ or Decision": [
+     "+270",
+     "0QA390153449#2369605509_15L9034Q14Q24"
+    ],
+    "Santiago Luna to Win by KO/TKO/DQ or Submission": [
+     "+600",
+     "0QA390153449#2369605527_15L9034Q15Q25"
+    ],
+    "Santiago Luna to Win by Submission or Decision": [
+     "+265",
+     "0QA390153449#2369605566_15L9034Q16Q26"
+    ]
+   },
+   "Alternate Method of Victory Double Chance": {
+    "Aleksandre Topuria to Win By KO/TKO/DQ or Santiago Luna to Win by Submission": [
+     "+225",
+     "0QA390153508#2369605329_13L9034Q10Q21"
+    ],
+    "Aleksandre Topuria to Win By KO/TKO/DQ or Santiago Luna to Win by Decision": [
+     "+135",
+     "0QA390153508#2369605379_13L9034Q10Q22"
+    ],
+    "Aleksandre Topuria to Win By Submission or Santiago Luna to Win by KO/TKO/DQ": [
+     "+285",
+     "0QA390153508#2369605481_13L9034Q10Q23"
+    ],
+    "Aleksandre Topuria to Win By Submission or Santiago Luna to Win by Decision": [
+     "+165",
+     "0QA390153508#2369605491_13L9034Q10Q24"
+    ],
+    "Aleksandre Topuria to Win By Decision or Santiago Luna to Win by KO/TKO/DQ": [
+     "-110",
+     "0QA390153508#2369605545_13L9034Q10Q25"
+    ],
+    "Aleksandre Topuria to Win By Decision or Santiago Luna to Win by Submission": [
+     "-115",
+     "0QA390153508#2369605548_13L9034Q10Q26"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153508#2369605598_13L9034Q10Q27"
+    ]
+   },
+   "Exact Method of Victory": {
+    "KO/TKO/DQ": [
+     "+255",
+     "0QA390153443#2369605227_13L9034Q11Q21"
+    ],
+    "Submission": [
+     "+300",
+     "0QA390153443#2369605445_13L9034Q12Q22"
+    ],
+    "Decision": [
+     "-150",
+     "0QA390153443#2369605457_15L9034Q13Q23"
+    ],
+    "Draw": [
+     "+5000",
+     "0QA390153443#2369605515_15L9034Q14Q24"
+    ]
+   },
+   "Aleksandre Topuria to Win by Unanimous Decision": {
+    "Yes": [
+     "+140",
+     "0QA390153474#2369605260_13L9034Q11Q22"
+    ]
+   },
+   "Santiago Luna to Win by Unanimous Decision": {
+    "Yes": [
+     "+450",
+     "0QA390153477#2369605263_13L9034Q11Q22"
+    ]
+   },
+   "Aleksandre Topuria to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1000",
+     "0QA390153479#2369605266_13L9034Q11Q22"
+    ]
+   },
+   "Santiago Luna to Win by Split or Majority Decision": {
+    "Yes": [
+     "+1400",
+     "0QA390153482#2369605269_13L9034Q11Q22"
+    ]
+   },
+   "KO/TKO/DQ": {
+    "Aleksandre Topuria": [
+     "+350",
+     "0QA390153557#2369605346_13L9034Q11Q22"
+    ],
+    "Santiago Luna": [
+     "+1200",
+     "0QA390153557#2369605361_13L9034Q13Q24"
+    ]
+   },
+   "Submission": {
+    "Aleksandre Topuria": [
+     "+450",
+     "0QA390153559#2369605349_13L9034Q11Q22"
+    ],
+    "Santiago Luna": [
+     "+1100",
+     "0QA390153559#2369605358_13L9034Q13Q24"
+    ]
+   },
+   "Decision": {
+    "Aleksandre Topuria": [
+     "+120",
+     "0QA390153561#2369605352_13L9034Q11Q22"
+    ],
+    "Santiago Luna": [
+     "+400",
+     "0QA390153561#2369605355_13L9034Q13Q24"
     ]
    }
   }
