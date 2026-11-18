@@ -1,5 +1,5 @@
 {
- "at": "2026-11-18 03:40 UTC",
+ "at": "2026-11-18 14:06 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -18,7 +18,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 64.0 yards higher in total on their lines",
+    "His receivers are set 65.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -30,6 +30,37 @@
    "game": "IND@HOU",
    "eid": 22008,
    "kick": "2026-11-20 01:15:00Z"
+  },
+  {
+   "qbs": [
+    "Carson Beck",
+    "Patrick Mahomes II"
+   ],
+   "pick": "Patrick Mahomes II",
+   "lead": 8,
+   "complete": false,
+   "missing": [
+    "KC E.Johnson (12%)"
+   ],
+   "score": [
+    -2,
+    6
+   ],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 50.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "ARI@KC",
+   "eid": 22009,
+   "kick": "2026-11-22 18:00:00Z"
   },
   {
    "qbs": [
@@ -57,6 +88,40 @@
   },
   {
    "qbs": [
+    "Jared Goff",
+    "Jalon Daniels"
+   ],
+   "pick": "Jared Goff",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "TB C.Otton (20%)",
+    "TB C.Godwin Jr. (20%)",
+    "TB E.Egbuka (11%)",
+    "TB T.Johnson (16%)"
+   ],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 189.0 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "TB@DET",
+   "eid": 22011,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
     "Dak Prescott",
     "Cam Ward"
    ],
@@ -75,7 +140,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 153.5 yards higher in total on their lines",
+    "His receivers are set 151.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -86,6 +151,32 @@
    ],
    "game": "TEN@DAL",
    "eid": 22012,
+   "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "Bryce Young"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "BAL J.Hill (20%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "BAL@CAR",
+   "eid": 22013,
    "kick": "2026-11-22 18:00:00Z"
   },
   {
@@ -167,7 +258,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 101.5 yards higher in total on their lines"
+    "His receivers are set 97.5 yards higher in total on their lines"
    ],
    "checks": [
     0,
