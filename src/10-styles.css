@@ -4696,3 +4696,47 @@
 .gcard.gcard--v3.gcard--bout .gstack > .gline:first-child button.price { font-size: 19px !important; }
 .gcard.gcard--v3.gcard--bout .gstack button.price--long { font-size: 15px !important; }
 .gcard.gcard--v3.gcard--bout .gstack button.price--vlong { font-size: 14px !important; }
+/* the box a marked number wears fits the number: as wide as its digits plus
+   a little air, the same height on every row, the digits on its middle. Cut
+   to the column it was too wide, and at line-height 1 the big score rode up
+   into its top edge (Jose, Nov 18, 2026: "the borders are awkward around the
+   numbers"). Unmarked numbers take the same box, unseen, so rows still line up. */
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .pnum {
+  display: inline-flex !important; align-items: center; justify-content: center;
+  width: auto !important; min-width: 0 !important; box-sizing: border-box;
+  padding: 3px 8px 0 !important; line-height: 1 !important; border-radius: 10px !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack > .gline:first-child .pnum { height: 60px !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .ptdx .pnum,
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gyds .pnum { height: 40px !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gline > .gh2h > .pnum { width: auto !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .pnum.won,
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .pnum.lost { color: #fff !important; }
+/* the strip's columns are 43px, and two digits of the scoreboard face ran
+   past them: the score row gives the clock a narrower middle, the score is
+   set at 48, and every box sizes to its own digits (flex: none), centred on
+   its column, never squeezed to it */
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack > .gline:first-child {
+  grid-template-columns: minmax(0, 1fr) 26px minmax(0, 1fr) !important; column-gap: 2px !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack > .gline:first-child .pnum {
+  font-size: 45px !important; height: 54px !important; padding: 3px 3px 0 !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .pnum { flex: none !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .ptdx .pnum,
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gyds .pnum {
+  min-width: 34px !important; height: 38px !important; padding: 3px 5px 0 !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gh2h,
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .ptdbtn { overflow: visible !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gline { padding-block: 3px !important; }
+/* every page takes the card's face: every price anywhere on the board, the
+   ticket page's and the trend sheet's numbers, in Barlow Condensed ExtraBold
+   with no tracking (Jose, Nov 18, 2026: "all the pages should take the new
+   font"). Sizes stay each page's own. */
+button.price, .price, .ghost { font-family: "Barlow Condensed", "Arial Narrow", sans-serif !important;
+  font-weight: 800 !important; letter-spacing: 0 !important; }
+.gp button.price { font-size: 27px !important; }
+.wpbig { font-family: "Barlow Condensed", "Arial Narrow", sans-serif !important; font-weight: 800 !important;
+  font-size: 26px !important; letter-spacing: 0 !important; }
+/* the trend sheet's leg chip, and the ticket grid kept a size under the
+   big prices so +10000 stays inside its box */
+.hitleg .odds { font-family: "Barlow Condensed", "Arial Narrow", sans-serif !important;
+  font-weight: 800 !important; letter-spacing: 0 !important; font-size: 20px !important; }
+.gp .gptd button.price { font-size: 22px !important; }
