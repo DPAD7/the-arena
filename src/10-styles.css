@@ -4740,3 +4740,6 @@ button.price, .price, .ghost { font-family: "Barlow Condensed", "Arial Narrow", 
 .hitleg .odds { font-family: "Barlow Condensed", "Arial Narrow", sans-serif !important;
   font-weight: 800 !important; letter-spacing: 0 !important; font-size: 20px !important; }
 .gp .gptd button.price { font-size: 22px !important; }
+/* the fight sheet's prices at the ticket page's weight, not 12-13px */
+.mkt .fs5cell .price, .mkt .fs5cell .ghost { font-size: 18px !important; }
+.mkt .mktrow .price, .mkt .mktrow .ghost { font-size: 20px !important; }
