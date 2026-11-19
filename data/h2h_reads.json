@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19 14:07 UTC",
+ "at": "2026-11-19 20:08 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -18,7 +18,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 72.5 yards higher in total on their lines",
+    "His receivers are set 70.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -49,7 +49,7 @@
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 55.5 yards higher in total on their lines",
+    "His receivers are set 62.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -88,40 +88,6 @@
   },
   {
    "qbs": [
-    "Jared Goff",
-    "Jalon Daniels"
-   ],
-   "pick": "Jared Goff",
-   "lead": 10,
-   "complete": false,
-   "missing": [
-    "TB C.Otton (20%)",
-    "TB C.Godwin Jr. (20%)",
-    "TB E.Egbuka (11%)",
-    "TB T.Johnson (16%)"
-   ],
-   "score": [
-    8,
-    -2
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 189.5 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "game": "TB@DET",
-   "eid": 22011,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
     "Dak Prescott",
     "Cam Ward"
    ],
@@ -140,7 +106,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+30 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 157.5 yards higher in total on their lines",
+    "His receivers are set 155.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -160,10 +126,8 @@
    ],
    "pick": null,
    "lead": 0,
-   "complete": false,
-   "missing": [
-    "BAL J.Hill (20%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     0,
     0
@@ -218,27 +182,26 @@
     "Aaron Rodgers"
    ],
    "pick": "Aaron Rodgers",
-   "lead": 2,
+   "lead": 8,
    "complete": false,
    "missing": [
     "PHI D.Cooper (17%)",
     "PHI E.Mitchell (14%)",
-    "PHI M.Lemon (27%)",
-    "PIT D.Washington (11%)",
-    "PIT G.Bernard (16%)",
-    "PIT P.Freiermuth (11%)"
+    "PHI M.Lemon (27%)"
    ],
    "score": [
-    -1,
-    1
+    -2,
+    6
    ],
    "why": [
+    "His receivers are set 56.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked",
     "New coach for his side"
    ],
    "checks": [
+    1,
     0,
-    0,
-    0,
+    1,
     0
    ],
    "game": "PIT@PHI",
@@ -280,6 +243,7 @@
    "lead": 2,
    "complete": false,
    "missing": [
+    "LV A.Jeanty (18%)",
     "LV B.Bowers (24%)",
     "LV J.Bech (11%)",
     "LV J.Nailor (14%)",
@@ -292,7 +256,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 97.5 yards higher in total on their lines"
+    "His receivers are set 128.0 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -346,7 +310,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 95.5 yards higher in total on their lines",
+    "His receivers are set 99.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
