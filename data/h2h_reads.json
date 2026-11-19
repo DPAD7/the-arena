@@ -1,5 +1,5 @@
 {
- "at": "2026-11-19 22:34 UTC",
+ "at": "2026-11-19 23:24 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -18,7 +18,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 74.0 yards higher in total on their lines",
+    "His receivers are set 76.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -194,7 +194,7 @@
     6
    ],
    "why": [
-    "His receivers are set 59.5 yards higher in total on their lines",
+    "His receivers are set 54.5 yards higher in total on their lines",
     "2 of 4 combined boxes checked",
     "New coach for his side"
    ],
@@ -210,23 +210,60 @@
   },
   {
    "qbs": [
+    "Geno Smith",
+    "Justin Herbert"
+   ],
+   "pick": "Geno Smith",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "LAC C.Kolar (13%)",
+    "LAC K.Mitchell (10%)",
+    "LAC O.Gadsden II (13%)",
+    "LAC Q.Johnston (12%)",
+    "LAC T.Harris (19%)"
+   ],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 164.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "NYJ@LAC",
+   "eid": 22016,
+   "kick": "2026-11-22 21:05:00Z"
+  },
+  {
+   "qbs": [
     "J.J. McCarthy",
     "Trevor Lawrence"
    ],
-   "pick": "J.J. McCarthy",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
+   "pick": "Trevor Lawrence",
+   "lead": 4,
+   "complete": false,
+   "missing": [
+    "NYG M.Nabers (27%)"
+   ],
    "score": [
-    1,
-    -1
+    0,
+    4
    ],
    "why": [
-    "New coach for his side"
+    "His receivers are set 77.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
-    0,
+    1,
+    1,
     0,
     0
    ],
