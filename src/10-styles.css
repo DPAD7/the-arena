@@ -1053,6 +1053,7 @@
        the same reason -- a double click on a desktop selects the number. */
     touch-action: manipulation;
     -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;   /* the hold marks it placed, not iOS's menu */
     font-family: Barlow, "Helvetica Neue", Arial, sans-serif;
     font-weight: 600; font-size: 13.5px;
     color: var(--amber);

@@ -625,7 +625,34 @@
     b.setAttribute("aria-disabled", "true");
     b.disabled = false;
   }
-  var TAPAT = 0, TAPON = null;
+  /* Press and hold a price to mark it placed, and hold again to take it
+     off. It was two taps until Nov 18, 2026 (Jose: "can we do that instead
+     of a double tap"), the same hold the QB search jerseys use. A tap is
+     still the slip; a finger that drifts more than 8px is a scroll, not a
+     hold. */
+  var HOLDT = null, HOLDBTN = null, HX = 0, HY = 0;
+  function holdOff() { clearTimeout(HOLDT); HOLDT = null; }
+  document.addEventListener("pointerdown", function (e) {
+    if (e.button) return;
+    var btn = e.target.closest && e.target.closest("button.price");
+    if (!btn || btn.closest(".gamepage")) return;
+    var onCard = cardOf(btn);
+    if (onCard && typeof isOver === "function" && isOver(onCard)) return;
+    HX = e.clientX; HY = e.clientY; HELDBTN = null; holdOff();
+    HOLDT = setTimeout(function () {
+      HOLDT = null; HELDBTN = btn;
+      togglePlaced(btn);
+      try { navigator.vibrate && navigator.vibrate(15); } catch (er) {}
+    }, 450);
+  }, true);
+  document.addEventListener("pointermove", function (e) {
+    if (HOLDT && Math.hypot(e.clientX - HX, e.clientY - HY) > 8) holdOff();
+  }, true);
+  ["pointerup", "pointercancel"].forEach(function (ev) { document.addEventListener(ev, holdOff, true); });
+  addEventListener("scroll", holdOff, true);
+  document.addEventListener("contextmenu", function (e) {
+    if (e.target.closest && e.target.closest("button.price")) e.preventDefault();
+  });
   document.addEventListener("click", function (e) {
     var btn = e.target.closest && e.target.closest("button.price");
     if (!btn) return;
@@ -647,14 +674,8 @@
       setPick(btn, !btn.classList.contains("on"), true);
       return;
     }
-    var now = Date.now();
-    if (TAPON === btn && now - TAPAT < 400) {
-      TAPAT = 0; TAPON = null;
-      togglePlaced(btn);
-      if (shut) { e.preventDefault(); return; }
-    } else {
-      TAPAT = now; TAPON = btn;
-    }
+    /* a hold just marked it placed: the lift is not a tap on the slip */
+    if (HELDBTN === btn) { HELDBTN = null; e.preventDefault(); return; }
     if (shut) { e.preventDefault(); return; }
     setPick(btn, !btn.classList.contains("on"), true);
   });
