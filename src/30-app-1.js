@@ -1727,6 +1727,25 @@
         rail.appendChild(vs);
       }
     }
+    /* before the kick the head to head is the strip's last row, on the name
+       line with the VS mark between the two prices, not beside each name
+       (the Nov 15, 2026 mocks, built Nov 18). The price keeps its own
+       .h2hodds, so everything that finds it on the card still does; once the
+       game is on, the yards row takes this line and this row stands down. */
+    if (!card.classList.contains("gcard--bout") && !stack.querySelector(".gpreh2h")) {
+      var hods = card.querySelectorAll(".gside .h2hodds");
+      if (hods.length === 2) {
+        var hrow = document.createElement("div");
+        hrow.className = "gline gpreh2h";
+        var ha = document.createElement("span"); ha.className = "gh2h"; ha.appendChild(hods[0]);
+        var hm = document.createElement("i"); hm.className = "gmk";
+        hm.innerHTML = '<svg viewBox="0 0 26 22" aria-hidden="true"><use href="#vs"/></svg>';
+        var hb = document.createElement("span"); hb.className = "gh2h"; hb.appendChild(hods[1]);
+        hrow.appendChild(ha); hrow.appendChild(hm); hrow.appendChild(hb);
+        stack.appendChild(hrow);
+        card.querySelectorAll(".gside .h2hnm").forEach(function (n) { requestAnimationFrame(function () { fitName(n); }); });
+      }
+    }
     stateV3(card);
   }
 

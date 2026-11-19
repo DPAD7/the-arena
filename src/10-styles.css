@@ -4654,3 +4654,37 @@
 
 .sl2 .sl2kv span { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .sl2 .sl2wp { position: absolute; right: 7px; bottom: 6px; font: 700 12px "Barlow Condensed", "Arial Narrow", sans-serif; color: #fff; letter-spacing: .02em; font-variant-numeric: tabular-nums; }
+
+/* ---- the card's type, Nov 18, 2026: the Nov 15 mocks, built ----
+   Once a game is on, the score is a scoreboard: big tall condensed digits,
+   both white, the clock between them. The touchdown rows and the yards are
+   the same face a size down, white too, and the green yards gap is gone
+   (Jose, Nov 15-18, 2026: "did we push the new update on the text"). A
+   placed price keeps its gold edge: only the type changes. */
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack > .gline:first-child .pnum {
+  font: 800 53px/1 "Barlow Condensed", "Arial Narrow", sans-serif !important;
+  color: #fff !important; height: auto !important; padding: 2px 4px !important;
+  letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .ptdx .pnum,
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gyds .pnum {
+  font: 800 32px/1 "Barlow Condensed", "Arial Narrow", sans-serif !important;
+  color: #fff !important; height: auto !important; padding: 2px 4px !important;
+  font-variant-numeric: tabular-nums; }
+.gcard.gcard--v3:not(.gcard--bout) .gydsgap { display: none !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gline.gyds.gyds--blend::before { display: none !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gline.gyds.gyds--blend { margin: 0 !important;
+  border-top: 1px dashed rgba(255,255,255,.10) !important; }
+.gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gclk {
+  font: 800 11px/1.05 "Barlow Condensed", "Arial Narrow", sans-serif; }
+/* the pregame head to head on the strip's last row, the name line */
+.gcard.gcard--v3 .gpreh2h .h2hodds { display: flex; width: 100%; justify-content: center; }
+.gcard.gcard--v3.gcard--on .gpreh2h { display: none !important; }
+/* every price in the strip in the card's own condensed face, the club price
+   the biggest (the Nov 15 pregame mock) */
+.gcard.gcard--v3:not(.gcard--bout) .gstack button.price,
+.gcard.gcard--v3:not(.gcard--bout) .gstack .ghost {
+  font: 800 17px/1 "Barlow Condensed", "Arial Narrow", sans-serif !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gstack > .gline:first-child button.price {
+  font-size: 19px !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gstack button.price--long { font-size: 15px !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gstack button.price--vlong { font-size: 14px !important; }
