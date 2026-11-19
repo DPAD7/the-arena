@@ -4,28 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873065",
-   "away": "LAC",
-   "home": "BAL",
-   "pick": "BAL",
-   "model": 69,
-   "book": 66,
-   "bookpick": "BAL",
-   "agree": true,
-   "won": 64,
-   "n": 64,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points per game: BAL 21.0, LAC 15.1",
-    "Win % this season: BAL 44%, LAC 0%",
-    "QB play (EPA per dropback): BAL -0.04, LAC -0.15",
-    "Points allowed per game: BAL 26.2, LAC 27.4"
-   ],
-   "week": 10,
-   "kick": "2026-11-17T01:15Z"
-  },
-  {
    "gid": "401873076",
    "away": "PIT",
    "home": "PHI",
@@ -53,7 +31,7 @@
    "home": "CHI",
    "pick": "CHI",
    "model": 76,
-   "book": 83,
+   "book": 82,
    "bookpick": "CHI",
    "agree": true,
    "won": 84,
@@ -141,7 +119,7 @@
    "home": "DEN",
    "pick": "DEN",
    "model": 83,
-   "book": 83,
+   "book": 82,
    "bookpick": "DEN",
    "agree": true,
    "won": 83,
@@ -229,7 +207,7 @@
    "home": "HOU",
    "pick": "HOU",
    "model": 67,
-   "book": 79,
+   "book": 84,
    "bookpick": "HOU",
    "agree": true,
    "won": 72,
@@ -356,6 +334,28 @@
    "kick": "2026-11-26T01:00Z"
   },
   {
+   "gid": "401873082",
+   "away": "KC",
+   "home": "BUF",
+   "pick": "BUF",
+   "model": 58,
+   "book": 59,
+   "bookpick": "BUF",
+   "agree": true,
+   "won": 58,
+   "n": 153,
+   "call": null,
+   "rank": 3,
+   "why": [
+    "Points per game: BUF 31.9, KC 26.3",
+    "Last 3 games, win %: BUF 100%, KC 67%",
+    "QB play (EPA per dropback): BUF +0.14, KC +0.10",
+    "Win % this season: BUF 89%, KC 78%"
+   ],
+   "week": 12,
+   "kick": "2026-11-27T01:20Z"
+  },
+  {
    "gid": "401873081",
    "away": "CHI",
    "home": "DET",
@@ -367,7 +367,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 3,
+   "rank": 4,
    "why": [
     "Points per game: DET 28.6, CHI 26.8",
     "QB play (EPA per dropback): DET +0.18, CHI +0.11",
