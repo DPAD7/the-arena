@@ -1,36 +1,8 @@
 {
- "at": "2026-11-20 00:24 UTC",
+ "at": "2026-11-20 00:35 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Daniel Jones",
-    "C.J. Stroud"
-   ],
-   "pick": "C.J. Stroud",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -2,
-    6
-   ],
-   "why": [
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 76.0 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "IND@HOU",
-   "eid": 22008,
-   "kick": "2026-11-20 01:15:00Z"
-  },
   {
    "qbs": [
     "Carson Beck",
@@ -229,7 +201,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 163.5 yards higher in total on their lines",
+    "His receivers are set 167.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -273,13 +245,10 @@
     "Bo Nix",
     "Fernando Mendoza"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Bo Nix",
+   "lead": 2,
    "complete": false,
    "missing": [
-    "DEN C.Sutton (21%)",
-    "DEN E.Engram (12%)",
-    "DEN J.Waddle (17%)",
     "LV B.Bowers (24%)",
     "LV J.Bech (11%)",
     "LV J.Nailor (14%)",
@@ -287,10 +256,13 @@
     "LV T.Tucker (13%)"
    ],
    "score": [
-    0,
-    0
+    1,
+    -1
    ],
-   "why": [],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 116.0 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
