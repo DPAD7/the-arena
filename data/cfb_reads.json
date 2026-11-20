@@ -1,5 +1,5 @@
 {
- "at": "2026-11-20T22:19:21Z",
+ "at": "2026-11-20T22:43:06Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -262,7 +262,7 @@
     "pick": "Walker Eget",
     "pick_id": "4694149",
     "team": "DUKE",
-    "p": 0.667162,
+    "p": 0.667166,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -419,7 +419,7 @@
    "kick": "2026-11-21T01:00Z",
    "ml": {
     "pick": "AFA",
-    "p": 0.928199,
+    "p": 0.932127,
     "call": "take",
     "why": [
      "Margin rating: AFA +1.7, UTEP -15.9",
@@ -1115,7 +1115,7 @@
    "kick": "2026-11-21T17:00Z",
    "ml": {
     "pick": "UNT",
-    "p": 0.792702,
+    "p": 0.782586,
     "call": "take",
     "why": [
      "Margin rating: UNT +3.9, TULN -4.8",
@@ -2101,7 +2101,7 @@
    "kick": "2026-11-21T20:30Z",
    "ml": {
     "pick": "UCLA",
-    "p": 0.762787,
+    "p": 0.773557,
     "call": "take",
     "why": [
      "Margin rating: UCLA +10.6, MICH +1.2",
@@ -2333,16 +2333,16 @@
    "kick": "2026-11-21T20:45Z",
    "ml": {
     "pick": "OU",
-    "p": 0.701832,
-    "call": null,
+    "p": 0.771943,
+    "call": "take",
     "why": [
+     "TA&M's QB has no FBS start yet",
      "Last 3 games, average margin: OU +2.0, TA&M -11.3",
-     "QB INT rate: OU 2.3%, TA&M 3.3%",
      "Points allowed per game: OU 19.0, TA&M 21.1",
      "AP rank: OU #22, TA&M unranked"
     ],
     "qbs": [
-     "Marcel Reed",
+     "Brady Hart",
      "John Mateer"
     ]
    },
@@ -2350,13 +2350,13 @@
     "pick": "John Mateer",
     "pick_id": "4915980",
     "team": "OU",
-    "p": 0.604624,
+    "p": 0.600639,
     "call": null,
     "has_line": true,
     "qbs": [
      [
-      "4870971",
-      "Marcel Reed"
+      "5295969",
+      "Brady Hart"
      ],
      [
       "4915980",
@@ -2368,18 +2368,18 @@
     "4915980": {
      "name": "John Mateer",
      "team": "OU",
-     "p1": 0.77807,
+     "p1": 0.774944,
      "take1": false,
-     "p2": 0.434235,
+     "p2": 0.430106,
      "take2": false,
      "has_line": true
     },
-    "4870971": {
-     "name": "Marcel Reed",
+    "5295969": {
+     "name": "Brady Hart",
      "team": "TA&M",
-     "p1": 0.583742,
+     "p1": 0.487838,
      "take1": false,
-     "p2": 0.218327,
+     "p2": 0.175279,
      "take2": false,
      "has_line": true
     }
@@ -3684,7 +3684,7 @@
     "pick": "Jace Stuckey",
     "pick_id": "5144207",
     "team": "EMU",
-    "p": 0.527137,
+    "p": 0.527132,
     "call": null,
     "has_line": false,
     "qbs": [
@@ -4363,7 +4363,7 @@
    "kick": "2026-11-27T21:30Z",
    "ml": {
     "pick": "UNM",
-    "p": 0.673335,
+    "p": 0.659893,
     "call": null,
     "why": [
      "Margin rating: UNM +7.5, AFA +1.7",
@@ -4456,9 +4456,9 @@
     "4870971": {
      "name": "Marcel Reed",
      "team": "TA&M",
-     "p1": 0.588776,
+     "p1": 0.626787,
      "take1": false,
-     "p2": 0.219168,
+     "p2": 0.248679,
      "take2": false,
      "has_line": true
     },
@@ -6625,7 +6625,7 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "UCLA",
-    "p": 0.711112,
+    "p": 0.723378,
     "call": null,
     "why": [
      "Points allowed per game: UCLA 14.1, USC 24.5",
@@ -6683,7 +6683,7 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "USF",
-    "p": 0.817535,
+    "p": 0.808338,
     "call": "take",
     "why": [
      "Margin rating: USF +1.8, TULN -4.8",
