@@ -4726,6 +4726,11 @@
 .gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gh2h,
 .gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .ptdbtn { overflow: visible !important; }
 .gcard.gcard--v3:not(.gcard--bout).gcard--on .gstack .gline { padding-block: 3px !important; }
+/* the marks in the strip's middle column a size up, to stand with the
+   bigger digits (Jose, Nov 19, 2026: "how do I make this bigger the icons") */
+.gcard.gcard--v3:not(.gcard--bout) .gstack .gmk { width: 40px !important; height: 26px !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gstack .gmk svg { width: 23px !important; height: 22px !important; }
+.gcard.gcard--v3:not(.gcard--bout) .gstack .gmk img { width: 31px !important; }
 /* every page takes the card's face: every price anywhere on the board, the
    ticket page's and the trend sheet's numbers, in Barlow Condensed ExtraBold
    with no tracking (Jose, Nov 18, 2026: "all the pages should take the new
