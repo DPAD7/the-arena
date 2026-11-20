@@ -1,5 +1,5 @@
 {
- "at": "2026-11-20 14:14 UTC",
+ "at": "2026-11-20 20:12 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -10,10 +10,8 @@
    ],
    "pick": "Patrick Mahomes II",
    "lead": 8,
-   "complete": false,
-   "missing": [
-    "KC E.Johnson (12%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     -2,
     6
@@ -21,7 +19,7 @@
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 60.5 yards higher in total on their lines",
+    "His receivers are set 91.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -118,25 +116,24 @@
     "Kyle McCord"
    ],
    "pick": "Josh Allen",
-   "lead": 2,
+   "lead": 8,
    "complete": false,
    "missing": [
-    "BUF D.Knox (12%)",
-    "BUF K.Coleman (14%)",
-    "MIA G.Dulcich (15%)",
     "MIA K.Coleman Jr. (11%)"
    ],
    "score": [
-    1,
-    -1
+    6,
+    -2
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)"
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 53.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
-    0,
+    1,
+    1,
     0,
     0
    ],
@@ -150,26 +147,23 @@
     "Aaron Rodgers"
    ],
    "pick": "Aaron Rodgers",
-   "lead": 8,
+   "lead": 2,
    "complete": false,
    "missing": [
     "PHI D.Cooper (17%)",
-    "PHI E.Mitchell (14%)",
-    "PHI M.Lemon (27%)"
+    "PHI E.Mitchell (14%)"
    ],
    "score": [
-    -2,
-    6
+    -1,
+    1
    ],
    "why": [
-    "His receivers are set 50.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked",
     "New coach for his side"
    ],
    "checks": [
-    1,
     0,
-    1,
+    0,
+    0,
     0
    ],
    "game": "PIT@PHI",
@@ -197,7 +191,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 164.5 yards higher in total on their lines",
+    "His receivers are set 169.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -245,7 +239,6 @@
    "lead": 2,
    "complete": false,
    "missing": [
-    "LV B.Bowers (24%)",
     "LV J.Bech (11%)",
     "LV J.Nailor (14%)",
     "LV M.Mayer (14%)",
@@ -257,7 +250,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 129.5 yards higher in total on their lines"
+    "His receivers are set 74.0 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -274,17 +267,20 @@
     "Brock Purdy",
     "Kirk Cousins"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Kirk Cousins",
+   "lead": 2,
    "complete": false,
    "missing": [
     "SF J.Watkins (14%)"
    ],
    "score": [
-    0,
-    0
+    -1,
+    1
    ],
-   "why": [],
+   "why": [
+    "Faces the softer pass defense (EPA per pass allowed)",
+    "His receivers are set 68.0 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
@@ -311,7 +307,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 82.0 yards higher in total on their lines",
+    "His receivers are set 83.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
