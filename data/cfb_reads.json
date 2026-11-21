@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21T23:03:55Z",
+ "at": "2026-11-21T23:13:43Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -2582,7 +2582,7 @@
     "pick": "Jayden Maiava",
     "pick_id": "4685454",
     "team": "USC",
-    "p": 0.712004,
+    "p": 0.719348,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2600,18 +2600,18 @@
     "4872721": {
      "name": "Cardell Williams",
      "team": "MD",
-     "p1": 0.590058,
+     "p1": 0.581317,
      "take1": false,
-     "p2": 0.261259,
+     "p2": 0.254818,
      "take2": false,
      "has_line": true
     },
     "4685454": {
      "name": "Jayden Maiava",
      "team": "USC",
-     "p1": 0.907951,
+     "p1": 0.910918,
      "take1": true,
-     "p2": 0.70398,
+     "p2": 0.710943,
      "take2": true,
      "has_line": true
     }
@@ -3568,9 +3568,9 @@
     "pick": "Jace Stuckey",
     "pick_id": "5144207",
     "team": "EMU",
-    "p": 0.527062,
+    "p": 0.584914,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5119841",
@@ -3586,20 +3586,20 @@
     "5144207": {
      "name": "Jace Stuckey",
      "team": "EMU",
-     "p1": 0.684916,
+     "p1": 0.700763,
      "take1": false,
-     "p2": 0.348156,
+     "p2": 0.36021,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5119841": {
      "name": "Dru DeShields",
      "team": "KENT",
-     "p1": 0.706016,
+     "p1": 0.67054,
      "take1": false,
-     "p2": 0.346747,
+     "p2": 0.314174,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3626,9 +3626,9 @@
     "pick": "Broc Lowry",
     "pick_id": "5074245",
     "team": "WMU",
-    "p": 0.540004,
+    "p": 0.606133,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5280838",
@@ -3644,20 +3644,20 @@
     "5280838": {
      "name": "Drew Bellisari",
      "team": "M-OH",
-     "p1": 0.541807,
+     "p1": 0.503281,
      "take1": false,
-     "p2": 0.197019,
+     "p2": 0.176955,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5074245": {
      "name": "Broc Lowry",
      "team": "WMU",
-     "p1": 0.658998,
+     "p1": 0.679976,
      "take1": false,
-     "p2": 0.299248,
+     "p2": 0.314142,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -3913,12 +3913,12 @@
     ]
    },
    "h2h": {
-    "pick": "Cibastian Broughton",
-    "pick_id": "5198324",
-    "team": "AKR",
-    "p": 0.563858,
+    "pick": "Jason Wright",
+    "pick_id": "5222591",
+    "team": "BUFF",
+    "p": 0.526009,
     "call": null,
-    "has_line": false,
+    "has_line": true,
     "qbs": [
      [
       "5222591",
@@ -3934,20 +3934,20 @@
     "5198324": {
      "name": "Cibastian Broughton",
      "team": "AKR",
-     "p1": 0.664283,
+     "p1": 0.610563,
      "take1": false,
-     "p2": 0.307557,
+     "p2": 0.265904,
      "take2": false,
-     "has_line": false
+     "has_line": true
     },
     "5222591": {
      "name": "Jason Wright",
      "team": "BUFF",
-     "p1": 0.7482,
+     "p1": 0.76584,
      "take1": false,
-     "p2": 0.42181,
+     "p2": 0.436925,
      "take2": false,
-     "has_line": false
+     "has_line": true
     }
    }
   },
@@ -6625,13 +6625,13 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "NIU",
-    "p": 0.707595,
+    "p": 0.694925,
     "call": null,
     "why": [
      "Points per game: NIU 14.7, UTEP 9.4",
      "Passing yards per game: NIU 213, UTEP 120",
-     "UTEP is starting a backup QB",
-     "Passing yards allowed per game: NIU 210, UTEP 233"
+     "Passing yards allowed per game: NIU 210, UTEP 233",
+     "Days of rest: NIU 14, UTEP 7"
     ],
     "qbs": [
      "Raymond Moore III",
