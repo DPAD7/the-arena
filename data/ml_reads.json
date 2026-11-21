@@ -273,7 +273,7 @@
    "home": "LAC",
    "pick": "NYJ",
    "model": 57,
-   "book": 60,
+   "book": 61,
    "bookpick": "LAC",
    "agree": false,
    "won": 40,
@@ -361,7 +361,7 @@
    "home": "HOU",
    "pick": "HOU",
    "model": 76,
-   "book": 71,
+   "book": 70,
    "bookpick": "HOU",
    "agree": true,
    "won": 84,
@@ -530,6 +530,28 @@
    ],
    "week": 12,
    "kick": "2026-11-27T20:00Z"
+  },
+  {
+   "gid": "401873093",
+   "away": "NE",
+   "home": "LAC",
+   "pick": "NE",
+   "model": 52,
+   "book": 67,
+   "bookpick": "LAC",
+   "agree": false,
+   "won": 40,
+   "n": 149,
+   "call": null,
+   "rank": 12,
+   "why": [
+    "Points per game: NE 22.1, LAC 16.0",
+    "Points allowed per game: NE 24.2, LAC 26.6",
+    "Win % this season: NE 50%, LAC 11%",
+    "Offense success rate: NE 44%, LAC 36%"
+   ],
+   "week": 12,
+   "kick": "2026-11-29T21:05Z"
   }
  ]
 }
