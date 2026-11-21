@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21 22:41 UTC",
+ "at": "2026-11-21 22:53 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -169,6 +169,37 @@
   },
   {
    "qbs": [
+    "Geno Smith",
+    "Justin Herbert"
+   ],
+   "pick": "Geno Smith",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "LAC C.Kolar (13%)",
+    "LAC O.Gadsden II (13%)"
+   ],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 64.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "NYJ@LAC",
+   "eid": 22016,
+   "kick": "2026-11-22 21:05:00Z"
+  },
+  {
+   "qbs": [
     "J.J. McCarthy",
     "Trevor Lawrence"
    ],
@@ -213,7 +244,7 @@
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
-    "His receivers are set 74.0 yards higher in total on their lines"
+    "His receivers are set 73.0 yards higher in total on their lines"
    ],
    "checks": [
     0,
@@ -265,7 +296,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 77.5 yards higher in total on their lines",
+    "His receivers are set 80.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
