@@ -9,7 +9,7 @@
    "home": "DET",
    "pick": "DET",
    "model": 72,
-   "book": 66,
+   "book": 67,
    "bookpick": "DET",
    "agree": true,
    "won": 87,
@@ -53,7 +53,7 @@
    "home": "CHI",
    "pick": "CHI",
    "model": 76,
-   "book": 82,
+   "book": 83,
    "bookpick": "CHI",
    "agree": true,
    "won": 84,
@@ -141,7 +141,7 @@
    "home": "DEN",
    "pick": "DEN",
    "model": 83,
-   "book": 83,
+   "book": 82,
    "bookpick": "DEN",
    "agree": true,
    "won": 83,
@@ -444,6 +444,28 @@
    "kick": "2026-11-26T01:00Z"
   },
   {
+   "gid": "401873091",
+   "away": "SEA",
+   "home": "SF",
+   "pick": "SF",
+   "model": 65,
+   "book": 57,
+   "bookpick": "SF",
+   "agree": true,
+   "won": 52,
+   "n": 25,
+   "call": "lean",
+   "rank": 8,
+   "why": [
+    "Points per game: SF 31.2, SEA 22.3",
+    "QB play (EPA per dropback): SF +0.26, SEA -0.00",
+    "Win % this season: SF 89%, SEA 60%",
+    "Offense success rate: SF 52%, SEA 42%"
+   ],
+   "week": 12,
+   "kick": "2026-11-29T21:25Z"
+  },
+  {
    "gid": "401873089",
    "away": "NYJ",
    "home": "MIA",
@@ -455,7 +477,7 @@
    "won": 47,
    "n": 15,
    "call": "lean",
-   "rank": 8,
+   "rank": 9,
    "why": [
     "MIA is starting a backup QB",
     "QB play (EPA per dropback): NYJ -0.04, MIA -0.31",
@@ -464,6 +486,28 @@
    ],
    "week": 12,
    "kick": "2026-11-29T18:00Z"
+  },
+  {
+   "gid": "401873092",
+   "away": "WSH",
+   "home": "ARI",
+   "pick": "WSH",
+   "model": 59,
+   "book": 73,
+   "bookpick": "WSH",
+   "agree": true,
+   "won": 71,
+   "n": 17,
+   "call": null,
+   "rank": 10,
+   "why": [
+    "ARI is starting a backup QB",
+    "Points allowed per game: WSH 24.8, ARI 28.9",
+    "Points per game: WSH 21.8, ARI 18.4",
+    "Last 3 games, win %: WSH 67%, ARI 33%"
+   ],
+   "week": 12,
+   "kick": "2026-11-29T21:25Z"
   },
   {
    "gid": "401873082",
@@ -477,7 +521,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 9,
+   "rank": 11,
    "why": [
     "Points per game: BUF 31.9, KC 26.3",
     "Last 3 games, win %: BUF 100%, KC 67%",
@@ -499,7 +543,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 10,
+   "rank": 12,
    "why": [
     "Points per game: DET 28.6, CHI 26.8",
     "QB play (EPA per dropback): DET +0.18, CHI +0.11",
@@ -521,7 +565,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 11,
+   "rank": 13,
    "why": [
     "Last 3 games, point margin: PIT +2.3, DEN +7.7",
     "Points allowed per game: PIT 20.2, DEN 20.7",
@@ -543,7 +587,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 12,
+   "rank": 14,
    "why": [
     "Points per game: NE 22.1, LAC 16.0",
     "Points allowed per game: NE 24.2, LAC 26.6",
