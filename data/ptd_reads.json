@@ -2,62 +2,6 @@
  "at": "2026-11-22",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4433971": {
-   "p": 0.435,
-   "name": "Kyle McCord"
-  },
-  "3918298": {
-   "p": 0.837,
-   "name": "Josh Allen"
-  },
-  "4360689": {
-   "p": 0.742,
-   "name": "Tyler Shough"
-  },
-  "4431611": {
-   "p": 0.886,
-   "name": "Caleb Williams"
-  },
-  "4688380": {
-   "p": 0.725,
-   "name": "Cam Ward"
-  },
-  "2577417": {
-   "p": 0.865,
-   "name": "Dak Prescott"
-  },
-  "3052587": {
-   "p": 0.741,
-   "name": "Baker Mayfield"
-  },
-  "3046779": {
-   "p": 0.87,
-   "name": "Jared Goff"
-  },
-  "11394": {
-   "p": 0.724,
-   "name": "Josh Johnson"
-  },
-  "3139477": {
-   "p": 0.821,
-   "name": "Patrick Mahomes"
-  },
-  "2578570": {
-   "p": 0.733,
-   "name": "Jacoby Brissett"
-  },
-  "4685720": {
-   "p": 0.841,
-   "name": "Bryce Young"
-  },
-  "8439": {
-   "p": 0.76,
-   "name": "Aaron Rodgers"
-  },
-  "4360698": {
-   "p": 0.564,
-   "name": "Joe Milton"
-  },
   "15864": {
    "p": 0.785,
    "name": "Geno Smith"
@@ -106,21 +50,69 @@
    "p": 0.9,
    "name": "Matthew Stafford"
   },
+  "4431611": {
+   "p": 0.833,
+   "name": "Caleb Williams"
+  },
+  "3046779": {
+   "p": 0.86,
+   "name": "Jared Goff"
+  },
+  "4360698": {
+   "p": 0.486,
+   "name": "Joe Milton"
+  },
+  "2577417": {
+   "p": 0.847,
+   "name": "Dak Prescott"
+  },
+  "3139477": {
+   "p": 0.784,
+   "name": "Patrick Mahomes"
+  },
+  "3918298": {
+   "p": 0.864,
+   "name": "Josh Allen"
+  },
+  "8439": {
+   "p": 0.777,
+   "name": "Aaron Rodgers"
+  },
+  "4360689": {
+   "p": 0.754,
+   "name": "Tyler Shough"
+  },
   "4429084": {
    "p": 0.649,
    "name": "Anthony Richardson Sr."
+  },
+  "4433971": {
+   "p": 0.505,
+   "name": "Kyle McCord"
   },
   "4360423": {
    "p": 0.772,
    "name": "Michael Penix Jr."
   },
+  "2578570": {
+   "p": 0.738,
+   "name": "Jacoby Brissett"
+  },
   "4432577": {
    "p": 0.843,
    "name": "C.J. Stroud"
   },
+  "4688380": {
+   "p": 0.667,
+   "name": "Cam Ward"
+  },
   "4240391": {
    "p": 0.69,
    "name": "Tommy DeVito"
+  },
+  "11394": {
+   "p": 0.742,
+   "name": "Josh Johnson"
   },
   "3924327": {
    "p": 0.708,
@@ -129,6 +121,14 @@
   "3122840": {
    "p": 0.749,
    "name": "Deshaun Watson"
+  },
+  "3052587": {
+   "p": 0.741,
+   "name": "Baker Mayfield"
+  },
+  "4685720": {
+   "p": 0.841,
+   "name": "Bryce Young"
   }
  },
  "by_game": {
