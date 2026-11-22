@@ -1,5 +1,5 @@
 {
- "at": "2026-11-21",
+ "at": "2026-11-22",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "4433971": {
@@ -125,23 +125,9 @@
   "3924327": {
    "p": 0.708,
    "name": "Drew Lock"
-  },
-  "3917792": {
-   "p": 0.639,
-   "name": "Daniel Jones"
   }
  },
  "by_game": {
-  "401873066": {
-   "3917792": {
-    "p": 0.639,
-    "name": "Daniel Jones"
-   },
-   "4432577": {
-    "p": 0.787,
-    "name": "C.J. Stroud"
-   }
-  },
   "401873070": {
    "4433971": {
     "p": 0.435,
