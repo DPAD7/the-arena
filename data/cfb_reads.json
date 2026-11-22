@@ -1,5 +1,5 @@
 {
- "at": "2026-11-22T00:30:08Z",
+ "at": "2026-11-22T00:40:51Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -3435,7 +3435,7 @@
    "kick": "2026-11-22T03:30Z",
    "ml": {
     "pick": "NEV",
-    "p": 0.621586,
+    "p": 0.635705,
     "call": null,
     "why": [
      "Margin rating: NEV -2.7, HAW -6.7",
@@ -3510,7 +3510,7 @@
     "pick": "Jace Stuckey",
     "pick_id": "5144207",
     "team": "EMU",
-    "p": 0.58462,
+    "p": 0.584623,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -5175,7 +5175,7 @@
    "kick": "2026-11-28T17:00Z",
    "ml": {
     "pick": "OSU",
-    "p": 0.909,
+    "p": 0.909469,
     "call": "take",
     "why": [
      "Margin rating: OSU +12.6, MICH +1.9",
@@ -5184,7 +5184,7 @@
      "Passing yards per game: OSU 304, MICH 160"
     ],
     "qbs": [
-     "Tommy Carr",
+     "Bryce Underwood",
      "Luke Fahey"
     ]
    },
@@ -5192,13 +5192,13 @@
     "pick": "Luke Fahey",
     "pick_id": "5214646",
     "team": "OSU",
-    "p": 0.686204,
+    "p": 0.731542,
     "call": null,
     "has_line": false,
     "qbs": [
      [
-      "5269403",
-      "Tommy Carr"
+      "5141741",
+      "Bryce Underwood"
      ],
      [
       "5214646",
@@ -5207,12 +5207,12 @@
     ]
    },
    "ptd": {
-    "5269403": {
-     "name": "Tommy Carr",
+    "5141741": {
+     "name": "Bryce Underwood",
      "team": "MICH",
-     "p1": 0.587353,
+     "p1": 0.630952,
      "take1": false,
-     "p2": 0.22419,
+     "p2": 0.260928,
      "take2": false,
      "has_line": false
     },
@@ -5523,7 +5523,7 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.659558,
+    "p": 0.673006,
     "call": null,
     "why": [
      "Points allowed per game: ECU 22.3, FAU 38.1",
@@ -5639,16 +5639,16 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "MRSH",
-    "p": 0.556371,
+    "p": 0.628409,
     "call": null,
     "why": [
      "Margin rating: MRSH -7.5, ULM -14.3",
      "Rushing yards allowed per game: MRSH 182, ULM 221",
-     "Points allowed per game: MRSH 29.9, ULM 33.4",
-     "Points per game: MRSH 20.9, ULM 18.3"
+     "QB INT rate: MRSH 1.7%, ULM 3.4%",
+     "Points allowed per game: MRSH 29.9, ULM 33.4"
     ],
     "qbs": [
-     "Khalil Wilkins",
+     "Carlos Del Rio-Wilson",
      "Austin Carlisle"
     ]
    },
@@ -5656,13 +5656,13 @@
     "pick": "Austin Carlisle",
     "pick_id": "5207934",
     "team": "ULM",
-    "p": 0.580393,
+    "p": 0.510014,
     "call": null,
     "has_line": false,
     "qbs": [
      [
-      "5158251",
-      "Khalil Wilkins"
+      "4432691",
+      "Carlos Del Rio-Wilson"
      ],
      [
       "5207934",
@@ -5680,12 +5680,12 @@
      "take2": false,
      "has_line": false
     },
-    "5158251": {
-     "name": "Khalil Wilkins",
+    "4432691": {
+     "name": "Carlos Del Rio-Wilson",
      "team": "MRSH",
-     "p1": 0.617524,
+     "p1": 0.713789,
      "take1": false,
-     "p2": 0.271962,
+     "p2": 0.364279,
      "take2": false,
      "has_line": false
     }
@@ -5697,7 +5697,7 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.773685,
+    "p": 0.762919,
     "call": "take",
     "why": [
      "Points allowed per game: ODU 27.7, USM 40.2",
@@ -6161,7 +6161,7 @@
    "kick": "2026-11-28T19:00Z",
    "ml": {
     "pick": "MTSU",
-    "p": 0.634208,
+    "p": 0.648123,
     "call": null,
     "why": [
      "Margin rating: MTSU -6.1, NMSU -10.8",
@@ -6567,13 +6567,13 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "NIU",
-    "p": 0.718746,
+    "p": 0.73081,
     "call": null,
     "why": [
      "Points per game: NIU 15.7, UTEP 9.4",
      "Margin rating: NIU -14.0, UTEP -16.4",
      "Passing yards per game: NIU 218, UTEP 120",
-     "Points allowed per game: NIU 36.2, UTEP 37.8"
+     "UTEP is starting a backup QB"
     ],
     "qbs": [
      "Raymond Moore III",
@@ -7089,7 +7089,7 @@
    "kick": "2026-11-29T02:00Z",
    "ml": {
     "pick": "UNLV",
-    "p": 0.652921,
+    "p": 0.63909,
     "call": null,
     "why": [
      "Margin rating: UNLV -0.1, NEV -2.7",
