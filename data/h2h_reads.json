@@ -1,5 +1,5 @@
 {
- "at": "2026-11-22 16:02 UTC",
+ "at": "2026-11-22 17:02 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -19,7 +19,7 @@
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 93.0 yards higher in total on their lines",
+    "His receivers are set 96.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -72,7 +72,7 @@
    "why": [
     "Faces a defense that gives up more yards after the catch",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 48.0 yards higher in total on their lines",
+    "His receivers are set 52.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -137,35 +137,6 @@
   },
   {
    "qbs": [
-    "Josh Allen",
-    "Kyle McCord"
-   ],
-   "pick": "Josh Allen",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    6,
-    -2
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 54.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "MIA@BUF",
-   "eid": 22015,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
     "Joe Milton III",
     "Aaron Rodgers"
    ],
@@ -191,6 +162,36 @@
    "game": "PIT@PHI",
    "eid": 22018,
    "kick": "2026-11-22 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Geno Smith",
+    "Justin Herbert"
+   ],
+   "pick": "Geno Smith",
+   "lead": 10,
+   "complete": false,
+   "missing": [
+    "LAC O.Gadsden II (13%)"
+   ],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 47.5 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "NYJ@LAC",
+   "eid": 22016,
+   "kick": "2026-11-22 21:05:00Z"
   },
   {
    "qbs": [
@@ -227,7 +228,6 @@
    "lead": 0,
    "complete": false,
    "missing": [
-    "LV M.Mayer (14%)",
     "LV T.Tucker (13%)"
    ],
    "score": [
