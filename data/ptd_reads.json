@@ -2,14 +2,6 @@
  "at": "2026-11-23",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "14880": {
-   "p": 0.785,
-   "name": "Kirk Cousins"
-  },
-  "4361741": {
-   "p": 0.88,
-   "name": "Brock Purdy"
-  },
   "3915511": {
    "p": 0.874,
    "name": "Joe Burrow"
@@ -27,39 +19,39 @@
    "name": "Matthew Stafford"
   },
   "4431611": {
-   "p": 0.833,
+   "p": 0.82,
    "name": "Caleb Williams"
   },
   "3046779": {
-   "p": 0.86,
+   "p": 0.863,
    "name": "Jared Goff"
   },
   "4360698": {
-   "p": 0.486,
+   "p": 0.475,
    "name": "Joe Milton"
   },
   "2577417": {
-   "p": 0.847,
+   "p": 0.845,
    "name": "Dak Prescott"
   },
   "3139477": {
-   "p": 0.784,
+   "p": 0.791,
    "name": "Patrick Mahomes"
   },
   "3918298": {
-   "p": 0.864,
+   "p": 0.851,
    "name": "Josh Allen"
   },
   "4426338": {
-   "p": 0.743,
+   "p": 0.75,
    "name": "Bo Nix"
   },
   "8439": {
-   "p": 0.777,
+   "p": 0.784,
    "name": "Aaron Rodgers"
   },
   "4360689": {
-   "p": 0.754,
+   "p": 0.757,
    "name": "Tyler Shough"
   },
   "4433970": {
@@ -71,16 +63,20 @@
    "name": "Anthony Richardson Sr."
   },
   "15864": {
-   "p": 0.713,
+   "p": 0.746,
    "name": "Geno Smith"
   },
   "4433971": {
-   "p": 0.505,
+   "p": 0.485,
    "name": "Kyle McCord"
   },
   "4360423": {
    "p": 0.772,
    "name": "Michael Penix Jr."
+  },
+  "14880": {
+   "p": 0.834,
+   "name": "Kirk Cousins"
   },
   "2578570": {
    "p": 0.738,
@@ -91,11 +87,11 @@
    "name": "C.J. Stroud"
   },
   "4688380": {
-   "p": 0.667,
+   "p": 0.681,
    "name": "Cam Ward"
   },
   "4360310": {
-   "p": 0.88,
+   "p": 0.881,
    "name": "Trevor Lawrence"
   },
   "4240391": {
@@ -103,31 +99,35 @@
    "name": "Tommy DeVito"
   },
   "4038941": {
-   "p": 0.729,
+   "p": 0.739,
    "name": "Justin Herbert"
   },
   "11394": {
-   "p": 0.742,
+   "p": 0.723,
    "name": "Josh Johnson"
   },
   "3924327": {
    "p": 0.708,
    "name": "Drew Lock"
   },
+  "4361741": {
+   "p": 0.853,
+   "name": "Brock Purdy"
+  },
   "4837248": {
-   "p": 0.557,
+   "p": 0.729,
    "name": "Fernando Mendoza"
   },
   "3122840": {
-   "p": 0.749,
+   "p": 0.76,
    "name": "Deshaun Watson"
   },
   "4685720": {
-   "p": 0.747,
+   "p": 0.74,
    "name": "Bryce Young"
   },
   "3052587": {
-   "p": 0.721,
+   "p": 0.741,
    "name": "Baker Mayfield"
   }
  },
@@ -264,47 +264,47 @@
   },
   "401873081": {
    "4431611": {
-    "p": 0.833,
+    "p": 0.82,
     "name": "Caleb Williams"
    },
    "3046779": {
-    "p": 0.86,
+    "p": 0.863,
     "name": "Jared Goff"
    }
   },
   "401873080": {
    "4360698": {
-    "p": 0.486,
+    "p": 0.475,
     "name": "Joe Milton"
    },
    "2577417": {
-    "p": 0.847,
+    "p": 0.845,
     "name": "Dak Prescott"
    }
   },
   "401873082": {
    "3139477": {
-    "p": 0.784,
+    "p": 0.791,
     "name": "Patrick Mahomes"
    },
    "3918298": {
-    "p": 0.864,
+    "p": 0.851,
     "name": "Josh Allen"
    }
   },
   "401873083": {
    "4426338": {
-    "p": 0.743,
+    "p": 0.75,
     "name": "Bo Nix"
    },
    "8439": {
-    "p": 0.777,
+    "p": 0.784,
     "name": "Aaron Rodgers"
    }
   },
   "401873087": {
    "4360689": {
-    "p": 0.754,
+    "p": 0.757,
     "name": "Tyler Shough"
    },
    "3915511": {
@@ -324,11 +324,11 @@
   },
   "401873089": {
    "15864": {
-    "p": 0.713,
+    "p": 0.746,
     "name": "Geno Smith"
    },
    "4433971": {
-    "p": 0.505,
+    "p": 0.485,
     "name": "Kyle McCord"
    }
   },
@@ -354,11 +354,11 @@
   },
   "401873090": {
    "4688380": {
-    "p": 0.667,
+    "p": 0.681,
     "name": "Cam Ward"
    },
    "4360310": {
-    "p": 0.88,
+    "p": 0.881,
     "name": "Trevor Lawrence"
    }
   },
@@ -368,17 +368,17 @@
     "name": "Tommy DeVito"
    },
    "4038941": {
-    "p": 0.729,
+    "p": 0.739,
     "name": "Justin Herbert"
    }
   },
   "401873092": {
    "4426348": {
-    "p": 0.721,
+    "p": 0.729,
     "name": "Jayden Daniels"
    },
    "11394": {
-    "p": 0.742,
+    "p": 0.723,
     "name": "Josh Johnson"
    }
   },
@@ -394,21 +394,21 @@
   },
   "401873086": {
    "4837248": {
-    "p": 0.557,
+    "p": 0.729,
     "name": "Fernando Mendoza"
    },
    "3122840": {
-    "p": 0.749,
+    "p": 0.76,
     "name": "Deshaun Watson"
    }
   },
   "401873094": {
    "4685720": {
-    "p": 0.747,
+    "p": 0.74,
     "name": "Bryce Young"
    },
    "3052587": {
-    "p": 0.721,
+    "p": 0.741,
     "name": "Baker Mayfield"
    }
   }
