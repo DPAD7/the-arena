@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23 04:36 UTC",
+ "at": "2026-11-23 14:05 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -312,7 +312,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 100.0 yards higher in total on their lines",
+    "His receivers are set 102.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -332,8 +332,10 @@
    ],
    "pick": "Matthew Stafford",
    "lead": 2,
-   "complete": true,
-   "missing": [],
+   "complete": false,
+   "missing": [
+    "LA K.Williams (11%)"
+   ],
    "score": [
     1,
     -1
@@ -380,6 +382,30 @@
   },
   {
    "qbs": [
+    "Joe Milton III",
+    "Dak Prescott"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "PHI@DAL",
+   "eid": 21909,
+   "kick": "2026-11-26 21:30:00Z"
+  },
+  {
+   "qbs": [
     "Patrick Mahomes II",
     "Josh Allen"
    ],
@@ -407,6 +433,35 @@
    "game": "KC@BUF",
    "eid": 22080,
    "kick": "2026-11-27 01:20:00Z"
+  },
+  {
+   "qbs": [
+    "Aaron Rodgers",
+    "Bo Nix"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "PIT D.Metcalf (18%)",
+    "PIT D.Washington (12%)",
+    "PIT G.Bernard (19%)",
+    "PIT P.Freiermuth (11%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "DEN@PIT",
+   "eid": 22081,
+   "kick": "2026-11-27 20:00:00Z"
   }
  ]
 }
