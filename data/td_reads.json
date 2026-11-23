@@ -4,8 +4,8 @@
  "reads": {
   "14880": {
    "p1": 0.785,
-   "proj": 20.5,
-   "total": 45.5,
+   "proj": 20.0,
+   "total": 44.5,
    "fav": -4.5,
    "two_now": "8 of 10",
    "why1": [
@@ -15,14 +15,14 @@
     "49ers let teams into the red zone 3.8 times a game"
    ],
    "why3": [
-    "Vikings projected for 20.5 points",
-    "Game total 45.5"
+    "Vikings projected for 20.0 points",
+    "Game total 44.5"
    ]
   },
   "4361741": {
    "p1": 0.88,
-   "proj": 25.0,
-   "total": 45.5,
+   "proj": 24.5,
+   "total": 44.5,
    "fav": 4.5,
    "two_now": "7 of 9",
    "why1": [
@@ -32,8 +32,8 @@
     "Vikings let teams into the red zone 2.8 times a game"
    ],
    "why3": [
-    "49ers projected for 25.0 points",
-    "Game total 45.5"
+    "49ers projected for 24.5 points",
+    "Game total 44.5"
    ]
   },
   "3915511": {
@@ -531,38 +531,38 @@
     "Game total 40.5"
    ]
   },
-  "3052587": {
-   "p1": 0.741,
-   "proj": 22.5,
-   "total": 48.5,
-   "fav": -3.5,
-   "two_now": "0 of 5",
-   "why1": [
-    "TD passes per game: 1.07 (last 15 games)",
-    "His efficiency: -0.10 EPA per dropback",
-    "Buccaneers reach the red zone 3.8 times a game",
-    "Lions let teams into the red zone 4.0 times a game"
-   ],
-   "why3": [
-    "Buccaneers projected for 22.5 points",
-    "Game total 48.5"
-   ]
-  },
   "4685720": {
-   "p1": 0.841,
-   "proj": 23.5,
-   "total": 44.5,
-   "fav": 2.5,
+   "p1": 0.747,
+   "proj": 20.5,
+   "total": 43.5,
+   "fav": -2.5,
    "two_now": "5 of 9",
    "why1": [
     "TD passes per game: 1.75 (last 16 games)",
     "His efficiency: +0.05 EPA per dropback",
     "Panthers reach the red zone 4.0 times a game",
-    "Ravens let teams into the red zone 4.5 times a game"
+    "Buccaneers let teams into the red zone 3.0 times a game"
    ],
    "why3": [
-    "Panthers projected for 23.5 points",
-    "Game total 44.5"
+    "Panthers projected for 20.5 points",
+    "Game total 43.5"
+   ]
+  },
+  "3052587": {
+   "p1": 0.721,
+   "proj": 23.0,
+   "total": 43.5,
+   "fav": 2.5,
+   "two_now": "0 of 5",
+   "why1": [
+    "TD passes per game: 1.07 (last 15 games)",
+    "His efficiency: -0.10 EPA per dropback",
+    "Buccaneers reach the red zone 3.8 times a game",
+    "Panthers let teams into the red zone 3.2 times a game"
+   ],
+   "why3": [
+    "Buccaneers projected for 23.0 points",
+    "Game total 43.5"
    ]
   }
  },
@@ -960,8 +960,8 @@
   "401873077": {
    "14880": {
     "p1": 0.785,
-    "proj": 20.5,
-    "total": 45.5,
+    "proj": 20.0,
+    "total": 44.5,
     "fav": -4.5,
     "two_now": "8 of 10",
     "why1": [
@@ -971,14 +971,14 @@
      "49ers let teams into the red zone 3.8 times a game"
     ],
     "why3": [
-     "Vikings projected for 20.5 points",
-     "Game total 45.5"
+     "Vikings projected for 20.0 points",
+     "Game total 44.5"
     ]
    },
    "4361741": {
     "p1": 0.88,
-    "proj": 25.0,
-    "total": 45.5,
+    "proj": 24.5,
+    "total": 44.5,
     "fav": 4.5,
     "two_now": "7 of 9",
     "why1": [
@@ -988,8 +988,8 @@
      "Vikings let teams into the red zone 2.8 times a game"
     ],
     "why3": [
-     "49ers projected for 25.0 points",
-     "Game total 45.5"
+     "49ers projected for 24.5 points",
+     "Game total 44.5"
     ]
    }
   },
@@ -1594,6 +1594,42 @@
     "why3": [
      "Browns projected for 22.5 points",
      "Game total 40.5"
+    ]
+   }
+  },
+  "401873094": {
+   "4685720": {
+    "p1": 0.747,
+    "proj": 20.5,
+    "total": 43.5,
+    "fav": -2.5,
+    "two_now": "5 of 9",
+    "why1": [
+     "TD passes per game: 1.75 (last 16 games)",
+     "His efficiency: +0.05 EPA per dropback",
+     "Panthers reach the red zone 4.0 times a game",
+     "Buccaneers let teams into the red zone 3.0 times a game"
+    ],
+    "why3": [
+     "Panthers projected for 20.5 points",
+     "Game total 43.5"
+    ]
+   },
+   "3052587": {
+    "p1": 0.721,
+    "proj": 23.0,
+    "total": 43.5,
+    "fav": 2.5,
+    "two_now": "0 of 5",
+    "why1": [
+     "TD passes per game: 1.07 (last 15 games)",
+     "His efficiency: -0.10 EPA per dropback",
+     "Buccaneers reach the red zone 3.8 times a game",
+     "Panthers let teams into the red zone 3.2 times a game"
+    ],
+    "why3": [
+     "Buccaneers projected for 23.0 points",
+     "Game total 43.5"
     ]
    }
   }

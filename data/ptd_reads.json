@@ -1,5 +1,5 @@
 {
- "at": "2026-11-22",
+ "at": "2026-11-23",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
   "14880": {
@@ -122,13 +122,13 @@
    "p": 0.749,
    "name": "Deshaun Watson"
   },
-  "3052587": {
-   "p": 0.741,
-   "name": "Baker Mayfield"
-  },
   "4685720": {
-   "p": 0.841,
+   "p": 0.747,
    "name": "Bryce Young"
+  },
+  "3052587": {
+   "p": 0.721,
+   "name": "Baker Mayfield"
   }
  },
  "by_game": {
@@ -400,6 +400,16 @@
    "3122840": {
     "p": 0.749,
     "name": "Deshaun Watson"
+   }
+  },
+  "401873094": {
+   "4685720": {
+    "p": 0.747,
+    "name": "Bryce Young"
+   },
+   "3052587": {
+    "p": 0.721,
+    "name": "Baker Mayfield"
    }
   }
  }
