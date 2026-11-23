@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23 20:06 UTC",
+ "at": "2026-11-23 23:17 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -383,19 +383,20 @@
     "Dak Prescott"
    ],
    "pick": "Dak Prescott",
-   "lead": 2,
+   "lead": 6,
    "complete": true,
    "missing": [],
    "score": [
-    0,
-    2
+    -1,
+    5
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "1 of 4 combined boxes checked"
+    "His receivers are set 55.5 yards higher in total on their lines",
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    0,
+    1,
     1,
     0,
     0
@@ -439,20 +440,17 @@
     "Aaron Rodgers",
     "Bo Nix"
    ],
-   "pick": null,
-   "lead": 0,
-   "complete": false,
-   "missing": [
-    "PIT D.Metcalf (18%)",
-    "PIT D.Washington (12%)",
-    "PIT G.Bernard (19%)",
-    "PIT P.Freiermuth (11%)"
-   ],
+   "pick": "Aaron Rodgers",
+   "lead": 2,
+   "complete": true,
+   "missing": [],
    "score": [
-    0,
-    0
+    1,
+    -1
    ],
-   "why": [],
+   "why": [
+    "New coach for his side"
+   ],
    "checks": [
     0,
     0,
