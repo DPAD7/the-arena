@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23 02:09 UTC",
+ "at": "2026-11-23 04:36 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -312,7 +312,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 101.0 yards higher in total on their lines",
+    "His receivers are set 100.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -332,10 +332,8 @@
    ],
    "pick": "Matthew Stafford",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "LA K.Williams (11%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     1,
     -1
@@ -352,6 +350,63 @@
    "game": "GB@LAR",
    "eid": 21918,
    "kick": "2026-11-26 01:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jared Goff",
+    "Caleb Williams"
+   ],
+   "pick": "Jared Goff",
+   "lead": 4,
+   "complete": true,
+   "missing": [],
+   "score": [
+    3,
+    -1
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "1 of 4 combined boxes checked"
+   ],
+   "checks": [
+    0,
+    0,
+    1,
+    0
+   ],
+   "game": "CHI@DET",
+   "eid": 21919,
+   "kick": "2026-11-26 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Patrick Mahomes II",
+    "Josh Allen"
+   ],
+   "pick": "Josh Allen",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "KC E.Johnson (11%)",
+    "BUF D.Knox (12%)"
+   ],
+   "score": [
+    0,
+    2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "KC@BUF",
+   "eid": 22080,
+   "kick": "2026-11-27 01:20:00Z"
   }
  ]
 }
