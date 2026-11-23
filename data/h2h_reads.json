@@ -1,5 +1,5 @@
 {
- "at": "2026-11-23 14:05 UTC",
+ "at": "2026-11-23 20:06 UTC",
  "week": 11,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -312,7 +312,7 @@
    "why": [
     "Opponent gives up more yards to the top receiver (+38 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 102.0 yards higher in total on their lines",
+    "His receivers are set 77.5 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -332,10 +332,8 @@
    ],
    "pick": "Matthew Stafford",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "LA K.Williams (11%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     1,
     -1
@@ -359,21 +357,20 @@
     "Caleb Williams"
    ],
    "pick": "Jared Goff",
-   "lead": 4,
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
-    3,
+    1,
     -1
    ],
    "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "1 of 4 combined boxes checked"
+    "Faces a defense that gives up more yards after the catch"
    ],
    "checks": [
     0,
     0,
-    1,
+    0,
     0
    ],
    "game": "CHI@DET",
@@ -385,18 +382,21 @@
     "Joe Milton III",
     "Dak Prescott"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Dak Prescott",
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
     0,
-    0
+    2
    ],
-   "why": [],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "1 of 4 combined boxes checked"
+   ],
    "checks": [
     0,
-    0,
+    1,
     0,
     0
    ],
