@@ -1,5 +1,5 @@
 {
- "at": "2026-11-24 04:29 UTC",
+ "at": "2026-11-24 14:08 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -301,17 +301,15 @@
     "Matthew Stafford",
     "Jordan Love"
    ],
-   "pick": "Matthew Stafford",
-   "lead": 2,
+   "pick": null,
+   "lead": 0,
    "complete": true,
    "missing": [],
    "score": [
-    1,
-    -1
+    0,
+    0
    ],
-   "why": [
-    "Opponent gives up more yards to the top receiver (+33 a game)"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
@@ -363,7 +361,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 49.0 yards higher in total on their lines",
+    "His receivers are set 51.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -431,6 +429,33 @@
    "game": "DEN@PIT",
    "eid": 22081,
    "kick": "2026-11-27 20:00:00Z"
+  },
+  {
+   "qbs": [
+    "Brock Purdy",
+    "Sam Darnold"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "SF J.Watkins (10%)",
+    "SEA J.Price (11%)"
+   ],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "SEA@SF",
+   "eid": 22089,
+   "kick": "2026-11-29 21:25:00Z"
   }
  ]
 }
