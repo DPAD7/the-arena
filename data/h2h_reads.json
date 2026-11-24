@@ -1,197 +1,8 @@
 {
- "at": "2026-11-24 14:08 UTC",
+ "at": "2026-11-24 20:04 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
-  {
-   "qbs": [
-    "Carson Beck",
-    "Patrick Mahomes II"
-   ],
-   "pick": "Patrick Mahomes II",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    -2,
-    6
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 96.0 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "ARI@KC",
-   "eid": 22009,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Tyler Shough",
-    "Caleb Williams"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "NO@CHI",
-   "eid": 22010,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Jared Goff",
-    "Baker Mayfield"
-   ],
-   "pick": "Jared Goff",
-   "lead": 10,
-   "complete": true,
-   "missing": [],
-   "score": [
-    8,
-    -2
-   ],
-   "why": [
-    "Faces a defense that gives up more yards after the catch",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 50.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    1,
-    0
-   ],
-   "game": "TB@DET",
-   "eid": 22011,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Dak Prescott",
-    "Cam Ward"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": false,
-   "missing": [
-    "TEN W.Robinson (16%)"
-   ],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "TEN@DAL",
-   "eid": 22012,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Jacoby Brissett",
-    "Bryce Young"
-   ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
-   ],
-   "why": [],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "BAL@CAR",
-   "eid": 22013,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Josh Allen",
-    "Kyle McCord"
-   ],
-   "pick": "Josh Allen",
-   "lead": 8,
-   "complete": true,
-   "missing": [],
-   "score": [
-    6,
-    -2
-   ],
-   "why": [
-    "Faces the softer pass defense (EPA per pass allowed)",
-    "His offense is more efficient (EPA per play)",
-    "His receivers are set 48.5 yards higher in total on their lines",
-    "2 of 4 combined boxes checked"
-   ],
-   "checks": [
-    1,
-    1,
-    0,
-    0
-   ],
-   "game": "MIA@BUF",
-   "eid": 22015,
-   "kick": "2026-11-22 18:00:00Z"
-  },
-  {
-   "qbs": [
-    "Joe Milton III",
-    "Aaron Rodgers"
-   ],
-   "pick": "Aaron Rodgers",
-   "lead": 2,
-   "complete": false,
-   "missing": [
-    "PHI E.Mitchell (14%)"
-   ],
-   "score": [
-    -1,
-    1
-   ],
-   "why": [
-    "New coach for his side"
-   ],
-   "checks": [
-    0,
-    0,
-    0,
-    0
-   ],
-   "game": "PIT@PHI",
-   "eid": 22018,
-   "kick": "2026-11-22 18:00:00Z"
-  },
   {
    "qbs": [
     "Geno Smith",
@@ -301,15 +112,17 @@
     "Matthew Stafford",
     "Jordan Love"
    ],
-   "pick": null,
-   "lead": 0,
+   "pick": "Matthew Stafford",
+   "lead": 2,
    "complete": true,
    "missing": [],
    "score": [
-    0,
-    0
+    1,
+    -1
    ],
-   "why": [],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+33 a game)"
+   ],
    "checks": [
     0,
     0,
@@ -437,11 +250,8 @@
    ],
    "pick": null,
    "lead": 0,
-   "complete": false,
-   "missing": [
-    "SF J.Watkins (10%)",
-    "SEA J.Price (11%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     0,
     0
@@ -456,6 +266,30 @@
    "game": "SEA@SF",
    "eid": 22089,
    "kick": "2026-11-29 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Baker Mayfield",
+    "Bryce Young"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "CAR@TB",
+   "eid": 22092,
+   "kick": "2026-12-01 01:15:00Z"
   }
  ]
 }
