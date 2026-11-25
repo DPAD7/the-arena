@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25T20:06:08Z",
+ "at": "2026-11-25T23:03:44Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -338,18 +338,18 @@
     "5224011": {
      "name": "Baylor Hayes",
      "team": "TLSA",
-     "p1": 0.806437,
+     "p1": 0.80114,
      "take1": false,
-     "p2": 0.497437,
+     "p2": 0.488711,
      "take2": false,
      "has_line": true
     },
     "4775136": {
      "name": "Owen McCown",
      "team": "UTSA",
-     "p1": 0.778767,
+     "p1": 0.772927,
      "take1": false,
-     "p2": 0.423384,
+     "p2": 0.414884,
      "take2": false,
      "has_line": true
     }
@@ -686,18 +686,18 @@
     "5295238": {
      "name": "Luke Weaver",
      "team": "SJSU",
-     "p1": 0.657907,
+     "p1": 0.650309,
      "take1": false,
-     "p2": 0.298604,
+     "p2": 0.291344,
      "take2": false,
      "has_line": true
     },
     "5087156": {
      "name": "Nathan Hayes",
      "team": "NDSU",
-     "p1": 0.725898,
+     "p1": 0.719166,
      "take1": false,
-     "p2": 0.385723,
+     "p2": 0.377485,
      "take2": false,
      "has_line": true
     }
@@ -1092,18 +1092,18 @@
     "5079301": {
      "name": "CJ Bailey",
      "team": "NCSU",
-     "p1": 0.76983,
+     "p1": 0.763825,
      "take1": false,
-     "p2": 0.443272,
+     "p2": 0.434674,
      "take2": false,
      "has_line": true
     },
     "5199937": {
      "name": "Travis Burgess",
      "team": "UNC",
-     "p1": 0.803962,
+     "p1": 0.798615,
      "take1": false,
-     "p2": 0.493176,
+     "p2": 0.484453,
      "take2": false,
      "has_line": true
     }
@@ -1579,7 +1579,7 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.602982,
+    "p": 0.588416,
     "call": null,
     "why": [
      "Points allowed per game: ECU 22.3, FAU 35.7",
@@ -1962,18 +1962,18 @@
     "5145788": {
      "name": "Gael Ochoa",
      "team": "RICE",
-     "p1": 0.581628,
+     "p1": 0.573435,
      "take1": false,
-     "p2": 0.258239,
+     "p2": 0.251608,
      "take2": false,
      "has_line": true
     },
     "5150297": {
      "name": "Cale Hellums",
      "team": "ARMY",
-     "p1": 0.523046,
+     "p1": 0.514662,
      "take1": false,
-     "p2": 0.201344,
+     "p2": 0.195788,
      "take2": false,
      "has_line": true
     }
@@ -2042,14 +2042,14 @@
    "home": "GAST",
    "kick": "2026-11-28T19:00Z",
    "ml": {
-    "pick": "GAST",
-    "p": 0.507544,
+    "pick": "UL",
+    "p": 0.507577,
     "call": null,
     "why": [
-     "Average margin: GAST +0.3, UL +7.7",
-     "Last 3 games, win %: GAST 33%, UL 100%",
-     "Turnovers per game: GAST 1.4, UL 1.0",
-     "Passing yards per game: GAST 207, UL 175"
+     "Margin rating: UL +0.4, GAST -4.4",
+     "Points allowed per game: UL 23.4, GAST 28.8",
+     "Last 3 games, average margin: UL +12.3, GAST -0.7",
+     "Points per game: UL 31.1, GAST 29.5"
     ],
     "qbs": [
      "Lunch Winfield",
@@ -2217,7 +2217,7 @@
    "kick": "2026-11-28T19:00Z",
    "ml": {
     "pick": "MTSU",
-    "p": 0.648096,
+    "p": 0.63418,
     "call": null,
     "why": [
      "Margin rating: MTSU -6.1, NMSU -10.8",
@@ -2542,18 +2542,18 @@
     "4685345": {
      "name": "JC French IV",
      "team": "CIN",
-     "p1": 0.697656,
+     "p1": 0.690525,
      "take1": false,
-     "p2": 0.356268,
+     "p2": 0.348302,
      "take2": false,
      "has_line": true
     },
     "5141367": {
      "name": "Bear Bachmeier",
      "team": "BYU",
-     "p1": 0.834694,
+     "p1": 0.830007,
      "take1": false,
-     "p2": 0.527241,
+     "p2": 0.518531,
      "take2": false,
      "has_line": true
     }
@@ -2756,7 +2756,7 @@
     "pick": "Jayden Maiava",
     "pick_id": "4685454",
     "team": "USC",
-    "p": 0.668665,
+    "p": 0.664654,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -2774,18 +2774,18 @@
     "5092275": {
      "name": "Ty Dieffenbach",
      "team": "UCLA",
-     "p1": 0.585307,
+     "p1": 0.589672,
      "take1": false,
-     "p2": 0.237303,
+     "p2": 0.240362,
      "take2": false,
      "has_line": true
     },
     "4685454": {
      "name": "Jayden Maiava",
      "team": "USC",
-     "p1": 0.830757,
+     "p1": 0.828209,
      "take1": false,
-     "p2": 0.513524,
+     "p2": 0.509321,
      "take2": false,
      "has_line": true
     }
@@ -2855,13 +2855,13 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "NIU",
-    "p": 0.729855,
+    "p": 0.717764,
     "call": null,
     "why": [
      "Points per game: NIU 15.7, UTEP 9.4",
      "Margin rating: NIU -14.1, UTEP -16.4",
      "Passing yards per game: NIU 218, UTEP 120",
-     "UTEP is starting a backup QB"
+     "Points allowed per game: NIU 36.2, UTEP 37.8"
     ],
     "qbs": [
      "Raymond Moore III",
@@ -3319,7 +3319,7 @@
    "kick": "2026-11-28T23:30Z",
    "ml": {
     "pick": "WSU",
-    "p": 0.602361,
+    "p": 0.616756,
     "call": null,
     "why": [
      "Average margin: WSU -11.7, TBD -6.1",
@@ -3551,7 +3551,7 @@
    "kick": "2026-11-29T00:30Z",
    "ml": {
     "pick": "PITT",
-    "p": 0.763101,
+    "p": 0.773861,
     "call": "take",
     "why": [
      "Margin rating: PITT +0.9, CAL -10.8",
@@ -3667,7 +3667,7 @@
    "kick": "2026-11-29T02:00Z",
    "ml": {
     "pick": "ARIZ",
-    "p": 0.798172,
+    "p": 0.80774,
     "call": "take",
     "why": [
      "Margin rating: ARIZ +9.5, ASU -0.5",
