@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25 14:05 UTC",
+ "at": "2026-11-25 20:05 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -70,7 +70,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 50.0 yards higher in total on their lines",
+    "His receivers are set 46.0 yards higher in total on their lines",
     "2 of 4 combined boxes checked"
    ],
    "checks": [
@@ -90,11 +90,8 @@
    ],
    "pick": "Josh Allen",
    "lead": 2,
-   "complete": false,
-   "missing": [
-    "KC E.Johnson (11%)",
-    "BUF D.Knox (12%)"
-   ],
+   "complete": true,
+   "missing": [],
    "score": [
     0,
     2
@@ -112,6 +109,35 @@
    "game": "KC@BUF",
    "eid": 22080,
    "kick": "2026-11-27 01:20:00Z"
+  },
+  {
+   "qbs": [
+    "J.J. McCarthy",
+    "Anthony Richardson Sr."
+   ],
+   "pick": "J.J. McCarthy",
+   "lead": 10,
+   "complete": true,
+   "missing": [],
+   "score": [
+    7,
+    -3
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "His receivers are set 72.0 yards higher in total on their lines",
+    "2 of 4 combined boxes checked",
+    "New coach for his side"
+   ],
+   "checks": [
+    1,
+    1,
+    0,
+    0
+   ],
+   "game": "NYG@IND",
+   "eid": 22083,
+   "kick": "2026-11-29 18:00:00Z"
   },
   {
    "qbs": [
@@ -141,6 +167,34 @@
   },
   {
    "qbs": [
+    "Joe Burrow",
+    "Tyler Shough"
+   ],
+   "pick": "Joe Burrow",
+   "lead": 10,
+   "complete": true,
+   "missing": [],
+   "score": [
+    8,
+    -2
+   ],
+   "why": [
+    "His offense is more efficient (EPA per play)",
+    "His receivers are set 49.0 yards higher in total on their lines",
+    "3 of 4 combined boxes checked"
+   ],
+   "checks": [
+    1,
+    1,
+    1,
+    0
+   ],
+   "game": "NO@CIN",
+   "eid": 22086,
+   "kick": "2026-11-29 18:00:00Z"
+  },
+  {
+   "qbs": [
     "Cam Ward",
     "Trevor Lawrence"
    ],
@@ -156,7 +210,7 @@
     "Faces the softer pass defense (EPA per pass allowed)",
     "Opponent gives up more yards to the top receiver (+61 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 51.0 yards higher in total on their lines",
+    "His receivers are set 49.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [

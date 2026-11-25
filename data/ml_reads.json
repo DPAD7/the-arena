@@ -75,7 +75,7 @@
    "home": "CIN",
    "pick": "CIN",
    "model": 76,
-   "book": 83,
+   "book": 81,
    "bookpick": "CIN",
    "agree": true,
    "won": 84,
@@ -163,7 +163,7 @@
    "home": "IND",
    "pick": "NYG",
    "model": 65,
-   "book": 72,
+   "book": 73,
    "bookpick": "NYG",
    "agree": true,
    "won": 75,
@@ -207,7 +207,7 @@
    "home": "CLE",
    "pick": "CLE",
    "model": 76,
-   "book": 66,
+   "book": 67,
    "bookpick": "CLE",
    "agree": true,
    "won": 62,
@@ -224,28 +224,6 @@
    "kick": "2026-11-30T01:20Z"
   },
   {
-   "gid": "401873091",
-   "away": "SEA",
-   "home": "SF",
-   "pick": "SF",
-   "model": 73,
-   "book": 60,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 87,
-   "n": 31,
-   "call": "lean",
-   "rank": 10,
-   "why": [
-    "Points per game: SF 31.6, SEA 22.3",
-    "SEA is starting a backup QB",
-    "QB play (EPA per dropback): SF +0.28, SEA -0.02",
-    "Last 3 games, win %: SF 100%, SEA 67%"
-   ],
-   "week": 12,
-   "kick": "2026-11-29T21:25Z"
-  },
-  {
    "gid": "401873079",
    "away": "GB",
    "home": "LAR",
@@ -257,7 +235,7 @@
    "won": 66,
    "n": 61,
    "call": "lean",
-   "rank": 11,
+   "rank": 10,
    "why": [
     "Points allowed per game: LAR 18.7, GB 22.1",
     "Points per game: LAR 24.8, GB 22.6",
@@ -266,6 +244,28 @@
    ],
    "week": 12,
    "kick": "2026-11-26T01:00Z"
+  },
+  {
+   "gid": "401873091",
+   "away": "SEA",
+   "home": "SF",
+   "pick": "SF",
+   "model": 73,
+   "book": 57,
+   "bookpick": "SF",
+   "agree": true,
+   "won": 47,
+   "n": 15,
+   "call": "lean",
+   "rank": 11,
+   "why": [
+    "Points per game: SF 31.6, SEA 22.3",
+    "SEA is starting a backup QB",
+    "QB play (EPA per dropback): SF +0.28, SEA -0.02",
+    "Last 3 games, win %: SF 100%, SEA 67%"
+   ],
+   "week": 12,
+   "kick": "2026-11-29T21:25Z"
   },
   {
    "gid": "401873083",
@@ -339,7 +339,7 @@
    "home": "DET",
    "pick": "DET",
    "model": 59,
-   "book": 56,
+   "book": 53,
    "bookpick": "CHI",
    "agree": false,
    "won": 40,
