@@ -4,28 +4,6 @@
  "note": "rank by call then won-before within each week; TAKE = model 75+ or model 60+ with the book 65+ on the same team; LEAN = model 60-74; book = sportsbook implied %, shown as information",
  "reads": [
   {
-   "gid": "401873078",
-   "away": "CIN",
-   "home": "WSH",
-   "pick": "CIN",
-   "model": 65,
-   "book": 72,
-   "bookpick": "CIN",
-   "agree": true,
-   "won": 75,
-   "n": 32,
-   "call": "take",
-   "rank": 1,
-   "why": [
-    "Points per game: CIN 30.9, WSH 21.8",
-    "Points allowed per game: CIN 21.4, WSH 24.8",
-    "QB play (EPA per dropback): CIN +0.22, WSH -0.01",
-    "Last 3 games, win %: CIN 100%, WSH 67%"
-   ],
-   "week": 11,
-   "kick": "2026-11-24T01:15Z"
-  },
-  {
    "gid": "401873084",
    "away": "ATL",
    "home": "MIN",
@@ -53,7 +31,7 @@
    "home": "ARI",
    "pick": "WSH",
    "model": 78,
-   "book": 74,
+   "book": 73,
    "bookpick": "WSH",
    "agree": true,
    "won": 84,
@@ -163,7 +141,7 @@
    "home": "IND",
    "pick": "NYG",
    "model": 65,
-   "book": 73,
+   "book": 71,
    "bookpick": "NYG",
    "agree": true,
    "won": 75,
@@ -376,6 +354,28 @@
    ],
    "week": 12,
    "kick": "2026-12-01T01:15Z"
+  },
+  {
+   "gid": "401873096",
+   "away": "KC",
+   "home": "LAR",
+   "pick": "LAR",
+   "model": 51,
+   "book": 64,
+   "bookpick": "LAR",
+   "agree": true,
+   "won": 61,
+   "n": 119,
+   "call": null,
+   "rank": 1,
+   "why": [
+    "Last 3 games, point margin: LAR +16.7, KC +24.0",
+    "QB play (EPA per dropback): LAR +0.17, KC +0.10",
+    "Offense success rate: LAR 50%, KC 49%",
+    "Rushing offense (EPA): LAR +0.01, KC +0.04"
+   ],
+   "week": 13,
+   "kick": "2026-12-04T01:15Z"
   }
  ]
 }
