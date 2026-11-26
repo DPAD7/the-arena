@@ -1,5 +1,5 @@
 {
- "at": "2026-11-25 23:03 UTC",
+ "at": "2026-11-26 00:03 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -8,17 +8,17 @@
     "Matthew Stafford",
     "Jordan Love"
    ],
-   "pick": "Matthew Stafford",
-   "lead": 2,
-   "complete": true,
-   "missing": [],
+   "pick": null,
+   "lead": 0,
+   "complete": false,
+   "missing": [
+    "LA K.Williams (11%)"
+   ],
    "score": [
-    1,
-    -1
+    0,
+    0
    ],
-   "why": [
-    "Opponent gives up more yards to the top receiver (+33 a game)"
-   ],
+   "why": [],
    "checks": [
     0,
     0,
@@ -218,6 +218,33 @@
    ],
    "game": "NO@CIN",
    "eid": 22086,
+   "kick": "2026-11-29 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Kyle McCord",
+    "Geno Smith"
+   ],
+   "pick": "Kyle McCord",
+   "lead": 4,
+   "complete": true,
+   "missing": [],
+   "score": [
+    2,
+    -2
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "NYJ@MIA",
+   "eid": 22087,
    "kick": "2026-11-29 18:00:00Z"
   },
   {
