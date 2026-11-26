@@ -1,5 +1,5 @@
 {
- "at": "2026-11-26T17:04:47Z",
+ "at": "2026-11-26T17:34:04Z",
  "rules": {
   "ml": "model 75%+",
   "h2h": "model 83.2%+ with a line",
@@ -842,7 +842,7 @@
     "pick": "Drake Lindsey",
     "pick_id": "5144959",
     "team": "MINN",
-    "p": 0.604728,
+    "p": 0.613322,
     "call": null,
     "has_line": true,
     "qbs": [
@@ -860,18 +860,18 @@
     "5144959": {
      "name": "Drake Lindsey",
      "team": "MINN",
-     "p1": 0.665336,
+     "p1": 0.673309,
      "take1": false,
-     "p2": 0.300076,
+     "p2": 0.30719,
      "take2": false,
      "has_line": true
     },
     "5125715": {
      "name": "Colton Joseph",
      "team": "WIS",
-     "p1": 0.673476,
+     "p1": 0.665505,
      "take1": false,
-     "p2": 0.306057,
+     "p2": 0.298958,
      "take2": false,
      "has_line": true
     }
@@ -1579,7 +1579,7 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "ECU",
-    "p": 0.588416,
+    "p": 0.602982,
     "call": null,
     "why": [
      "Points allowed per game: ECU 22.3, FAU 35.7",
@@ -1753,7 +1753,7 @@
    "kick": "2026-11-28T18:00Z",
    "ml": {
     "pick": "ODU",
-    "p": 0.764711,
+    "p": 0.775419,
     "call": "take",
     "why": [
      "Points allowed per game: ODU 27.7, USM 40.2",
@@ -2042,14 +2042,14 @@
    "home": "GAST",
    "kick": "2026-11-28T19:00Z",
    "ml": {
-    "pick": "UL",
-    "p": 0.507577,
+    "pick": "GAST",
+    "p": 0.507544,
     "call": null,
     "why": [
-     "Margin rating: UL +0.4, GAST -4.4",
-     "Points allowed per game: UL 23.4, GAST 28.8",
-     "Last 3 games, average margin: UL +12.3, GAST -0.7",
-     "Points per game: UL 31.1, GAST 29.5"
+     "Average margin: GAST +0.3, UL +7.7",
+     "Last 3 games, win %: GAST 33%, UL 100%",
+     "Turnovers per game: GAST 1.4, UL 1.0",
+     "Passing yards per game: GAST 207, UL 175"
     ],
     "qbs": [
      "Lunch Winfield",
@@ -2217,7 +2217,7 @@
    "kick": "2026-11-28T19:00Z",
    "ml": {
     "pick": "MTSU",
-    "p": 0.648096,
+    "p": 0.63418,
     "call": null,
     "why": [
      "Margin rating: MTSU -6.1, NMSU -10.8",
@@ -2855,13 +2855,13 @@
    "kick": "2026-11-28T20:30Z",
    "ml": {
     "pick": "NIU",
-    "p": 0.717764,
+    "p": 0.729855,
     "call": null,
     "why": [
      "Points per game: NIU 15.7, UTEP 9.4",
      "Margin rating: NIU -14.1, UTEP -16.4",
      "Passing yards per game: NIU 218, UTEP 120",
-     "Points allowed per game: NIU 36.2, UTEP 37.8"
+     "UTEP is starting a backup QB"
     ],
     "qbs": [
      "Raymond Moore III",
@@ -3319,7 +3319,7 @@
    "kick": "2026-11-28T23:30Z",
    "ml": {
     "pick": "WSU",
-    "p": 0.616756,
+    "p": 0.587787,
     "call": null,
     "why": [
      "Average margin: WSU -11.7, TBD -6.1",
@@ -3551,7 +3551,7 @@
    "kick": "2026-11-29T00:30Z",
    "ml": {
     "pick": "PITT",
-    "p": 0.763101,
+    "p": 0.773861,
     "call": "take",
     "why": [
      "Margin rating: PITT +0.9, CAL -10.8",
@@ -3667,7 +3667,7 @@
    "kick": "2026-11-29T02:00Z",
    "ml": {
     "pick": "ARIZ",
-    "p": 0.80774,
+    "p": 0.798172,
     "call": "take",
     "why": [
      "Margin rating: ARIZ +9.5, ASU -0.5",
