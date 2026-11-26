@@ -1,5 +1,5 @@
 {
-"at": "2026-11-26T04:40Z",
+"at": "2026-11-26T14:05Z",
 "need": {
 "ARI": [
 [
@@ -198,11 +198,15 @@
 "GB": [
 [
 "Christian Watson",
-24
+20
 ],
 [
 "Matthew Golden",
-34
+28
+],
+[
+"Savion Williams",
+11
 ],
 [
 "Tucker Kraft",
@@ -279,16 +283,20 @@
 ],
 "LA": [
 [
-"Kyren Williams",
-11
+"Blake Corum",
+10
 ],
 [
-"Tutu Atwell",
+"Konata Mumpfield",
 12
+],
+[
+"Kyren Williams",
+16
 ],
 [
 "Tyler Higbee",
-12
+14
 ]
 ],
 "LAC": [
@@ -756,7 +764,7 @@
 "austinmcnamara": "NYJ",
 "austinschlottmann": "TEN",
 "austintrammell": "JAX",
-"averysmith": "SEA",
+"averysmith": "LAC",
 "avieonterrell": "ATL",
 "avontemaddox": "DET",
 "aydengarnes": "TB",
@@ -848,7 +856,7 @@
 "brandoncoleman": "WAS",
 "brandoncrenshawdickson": "TEN",
 "brandondorlus": "ATL",
-"brandonjohnson": "PIT",
+"brandonjohnson": "TB",
 "brandonjones": "DEN",
 "brandonmcmanus": "LA",
 "brandonpili": "SEA",
@@ -1133,7 +1141,7 @@
 "coreybullock": "CAR",
 "coreykiner": "NE",
 "coreylevin": "ATL",
-"coreythornton": "CAR",
+"coreythornton": "TEN",
 "corlisswaitman": "SF",
 "corydurden": "NE",
 "courtlandsutton": "DEN",
@@ -1181,6 +1189,7 @@
 "daniellehunter": "HOU",
 "danielrickert": "LA",
 "danielscott": "IND",
+"danielsobkowicz": "HOU",
 "danielthomas": "CLE",
 "danielwhelan": "GB",
 "danmoore": "TEN",
@@ -2047,6 +2056,7 @@
 "juliuswelschof": "PIT",
 "juliuswood": "MIA",
 "juniorcolson": "LAC",
+"juniortafuna": "HOU",
 "justicehill": "BAL",
 "justinbarron": "DAL",
 "justindedich": "LA",
@@ -2111,7 +2121,7 @@
 "keagentrost": "LA",
 "keandrelambertsmith": "LAC",
 "keatonmitchell": "LAC",
-"kedonslovis": "BAL",
+"kedonslovis": "ARI",
 "keeanubenton": "PIT",
 "keenanallen": "SF",
 "keidronsmith": "CHI",
@@ -2171,6 +2181,7 @@
 "keyshaunelliott": "CHI",
 "keyshawnjamesnewby": "PHI",
 "khadarelhodge": "SF",
+"khalensaunders": "DEN",
 "khalidkareem": "SF",
 "khalildinkins": "SF",
 "khalildorsey": "DET",
@@ -3083,7 +3094,7 @@
 "walternolen": "ARI",
 "walterrouse": "NE",
 "wandalerobinson": "TEN",
-"wanyamorris": "DAL",
+"wanyamorris": "IND",
 "warrenbrinson": "GB",
 "warrenmcclendon": "LA",
 "waynematthews": "CHI",
@@ -3341,17 +3352,17 @@
 },
 "GB": {
 "def": {
-"p_epa": -0.010125861215844764,
-"qb_repa": -0.5285103180780948,
-"wr1": 68.6,
-"yac": 5.269409446787291
+"p_epa": -0.01664593662021192,
+"qb_repa": -0.6118377672199364,
+"wr1": 62.36363636363637,
+"yac": 5.301735860715719
 },
 "new_coach": 0,
 "off": {
-"epa": 0.00695238478967803,
-"p_epa": 0.11961801847011018,
-"qb_repa": -0.8008499294083091,
-"scr": 0.2
+"epa": -0.00908533774052851,
+"p_epa": 0.08742946353122873,
+"qb_repa": -0.6336444781325343,
+"scr": 0.2727272727272727
 }
 },
 "HOU": {
@@ -3416,17 +3427,17 @@
 },
 "LA": {
 "def": {
-"p_epa": -0.12240919241805841,
-"qb_repa": -0.10512214406763117,
-"wr1": 35.6,
-"yac": 6.0663309990662935
+"p_epa": -0.13259527363983362,
+"qb_repa": -0.04676615998894751,
+"wr1": 35.90909090909091,
+"yac": 6.07099609540786
 },
 "new_coach": 0,
 "off": {
-"epa": 0.07628219250406788,
-"p_epa": 0.10228288709695774,
-"qb_repa": -0.0944036218517692,
-"scr": 0.6
+"epa": 0.06963183625491848,
+"p_epa": 0.0855438345732449,
+"qb_repa": -0.29174591160225266,
+"scr": 0.5454545454545454
 }
 },
 "LAC": {
