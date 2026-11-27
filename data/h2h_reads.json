@@ -1,5 +1,5 @@
 {
- "at": "2026-11-27 22:35 UTC",
+ "at": "2026-11-27 23:34 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -181,7 +181,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 74.0 yards higher in total on their lines",
+    "His receivers are set 75.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -256,15 +256,20 @@
     "Brock Purdy",
     "Sam Darnold"
    ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
+   "pick": "Sam Darnold",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "SF K.Allen (14%)"
    ],
-   "why": [],
+   "score": [
+    -1,
+    1
+   ],
+   "why": [
+    "Opponent gives up more yards to the top receiver (+31 a game)",
+    "His receivers are set 99.5 yards higher in total on their lines"
+   ],
    "checks": [
     0,
     0,
