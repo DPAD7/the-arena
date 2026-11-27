@@ -1,31 +1,7 @@
 {
- "at": "2026-11-26",
+ "at": "2026-11-27",
  "note": "1+ passing TD model (research/nfl_ptd): trained 2016-21, no odds; blind: 80+ hit 84-86%, 75-79 hit 75%, under 75 hit 63-72%",
  "reads": {
-  "4431611": {
-   "p": 0.819,
-   "name": "Caleb Williams"
-  },
-  "3046779": {
-   "p": 0.864,
-   "name": "Jared Goff"
-  },
-  "4360698": {
-   "p": 0.475,
-   "name": "Joe Milton"
-  },
-  "2577417": {
-   "p": 0.844,
-   "name": "Dak Prescott"
-  },
-  "3139477": {
-   "p": 0.791,
-   "name": "Patrick Mahomes"
-  },
-  "3918298": {
-   "p": 0.851,
-   "name": "Josh Allen"
-  },
   "4426338": {
    "p": 0.749,
    "name": "Bo Nix"
@@ -126,6 +102,10 @@
    "p": 0.741,
    "name": "Baker Mayfield"
   },
+  "3139477": {
+   "p": 0.806,
+   "name": "Patrick Mahomes"
+  },
   "12483": {
    "p": 0.882,
    "name": "Matthew Stafford"
@@ -133,6 +113,26 @@
   "4036378": {
    "p": 0.839,
    "name": "Jordan Love"
+  },
+  "4431611": {
+   "p": 0.819,
+   "name": "Caleb Williams"
+  },
+  "3046779": {
+   "p": 0.864,
+   "name": "Jared Goff"
+  },
+  "4360698": {
+   "p": 0.475,
+   "name": "Joe Milton"
+  },
+  "2577417": {
+   "p": 0.844,
+   "name": "Dak Prescott"
+  },
+  "3918298": {
+   "p": 0.851,
+   "name": "Josh Allen"
   }
  },
  "by_game": {
