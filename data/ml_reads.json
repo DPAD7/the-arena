@@ -224,23 +224,45 @@
    "kick": "2026-11-26T01:00Z"
   },
   {
+   "gid": "401873093",
+   "away": "NE",
+   "home": "LAC",
+   "pick": "NE",
+   "model": 67,
+   "book": 58,
+   "bookpick": "NE",
+   "agree": true,
+   "won": 52,
+   "n": 25,
+   "call": "lean",
+   "rank": 11,
+   "why": [
+    "Points per game: NE 22.1, LAC 16.8",
+    "Points allowed per game: NE 24.2, LAC 26.6",
+    "Win % this season: NE 50%, LAC 10%",
+    "Last 3 games, point margin: NE -12.7, LAC -7.3"
+   ],
+   "week": 12,
+   "kick": "2026-11-29T21:05Z"
+  },
+  {
    "gid": "401873091",
    "away": "SEA",
    "home": "SF",
    "pick": "SF",
-   "model": 73,
-   "book": 56,
-   "bookpick": "SF",
-   "agree": true,
-   "won": 47,
-   "n": 15,
+   "model": 63,
+   "book": 51,
+   "bookpick": "SEA",
+   "agree": false,
+   "won": 30,
+   "n": 23,
    "call": "lean",
-   "rank": 11,
+   "rank": 12,
    "why": [
     "Points per game: SF 31.6, SEA 22.3",
-    "SEA is starting a backup QB",
-    "QB play (EPA per dropback): SF +0.28, SEA -0.02",
-    "Last 3 games, win %: SF 100%, SEA 67%"
+    "QB play (EPA per dropback): SF +0.11, SEA -0.02",
+    "Last 3 games, win %: SF 100%, SEA 67%",
+    "Win % this season: SF 90%, SEA 60%"
    ],
    "week": 12,
    "kick": "2026-11-29T21:25Z"
@@ -257,7 +279,7 @@
    "won": 61,
    "n": 119,
    "call": null,
-   "rank": 12,
+   "rank": 13,
    "why": [
     "PIT is starting a backup QB",
     "Last 3 games, win %: DEN 100%, PIT 33%",
@@ -279,7 +301,7 @@
    "won": 58,
    "n": 153,
    "call": null,
-   "rank": 13,
+   "rank": 14,
    "why": [
     "Points per game: BUF 31.3, KC 27.1",
     "Last 3 games, point margin: BUF +17.7, KC +24.0",
@@ -301,7 +323,7 @@
    "won": 40,
    "n": 149,
    "call": null,
-   "rank": 14,
+   "rank": 15,
    "why": [
     "Points per game: DET 28.8, CHI 26.2",
     "QB play (EPA per dropback): DET +0.21, CHI +0.08",
@@ -310,28 +332,6 @@
    ],
    "week": 12,
    "kick": "2026-11-26T18:00Z"
-  },
-  {
-   "gid": "401873093",
-   "away": "NE",
-   "home": "LAC",
-   "pick": "LAC",
-   "model": 51,
-   "book": 57,
-   "bookpick": "NE",
-   "agree": false,
-   "won": 40,
-   "n": 149,
-   "call": null,
-   "rank": 15,
-   "why": [
-    "NE is starting a backup QB",
-    "QB play (EPA per dropback): LAC -0.12, NE -0.22",
-    "Turnovers per game: LAC 1.8, NE 2.0",
-    "Offense EPA per play: LAC -0.12, NE +0.02"
-   ],
-   "week": 12,
-   "kick": "2026-11-29T21:05Z"
   },
   {
    "gid": "401873094",
