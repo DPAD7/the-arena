@@ -1,5 +1,5 @@
 {
- "at": "2026-11-27 16:35 UTC",
+ "at": "2026-11-27 16:55 UTC",
  "week": 12,
  "note": "a read only when the H2H and the line of every receiver with 10%+ of his team's targets (last 3 games) are posted on both sides",
  "reads": [
@@ -118,15 +118,19 @@
     "Michael Penix Jr.",
     "Kirk Cousins"
    ],
-   "pick": null,
-   "lead": 0,
-   "complete": true,
-   "missing": [],
-   "score": [
-    0,
-    0
+   "pick": "Michael Penix Jr.",
+   "lead": 2,
+   "complete": false,
+   "missing": [
+    "MIN T.Felton (17%)"
    ],
-   "why": [],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "New coach for his side"
+   ],
    "checks": [
     0,
     0,
@@ -135,6 +139,33 @@
    ],
    "game": "ATL@MIN",
    "eid": 22084,
+   "kick": "2026-11-29 18:00:00Z"
+  },
+  {
+   "qbs": [
+    "Jacoby Brissett",
+    "C.J. Stroud"
+   ],
+   "pick": "Jacoby Brissett",
+   "lead": 2,
+   "complete": true,
+   "missing": [],
+   "score": [
+    1,
+    -1
+   ],
+   "why": [
+    "Faces a defense that gives up more yards after the catch",
+    "New coach for his side"
+   ],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "BAL@HOU",
+   "eid": 22085,
    "kick": "2026-11-29 18:00:00Z"
   },
   {
@@ -152,7 +183,7 @@
    ],
    "why": [
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 70.0 yards higher in total on their lines",
+    "His receivers are set 73.0 yards higher in total on their lines",
     "3 of 4 combined boxes checked"
    ],
    "checks": [
@@ -198,22 +229,21 @@
     "Trevor Lawrence"
    ],
    "pick": "Trevor Lawrence",
-   "lead": 12,
+   "lead": 8,
    "complete": true,
    "missing": [],
    "score": [
-    -3,
-    9
+    -2,
+    6
    ],
    "why": [
     "Faces the softer pass defense (EPA per pass allowed)",
     "Opponent gives up more yards to the top receiver (+61 a game)",
     "His offense is more efficient (EPA per play)",
-    "His receivers are set 51.0 yards higher in total on their lines",
-    "3 of 4 combined boxes checked"
+    "2 of 4 combined boxes checked"
    ],
    "checks": [
-    1,
+    0,
     1,
     1,
     0
@@ -272,6 +302,30 @@
    "game": "WAS@ARI",
    "eid": 22090,
    "kick": "2026-11-29 21:25:00Z"
+  },
+  {
+   "qbs": [
+    "Fernando Mendoza",
+    "Deshaun Watson"
+   ],
+   "pick": null,
+   "lead": 0,
+   "complete": true,
+   "missing": [],
+   "score": [
+    0,
+    0
+   ],
+   "why": [],
+   "checks": [
+    0,
+    0,
+    0,
+    0
+   ],
+   "game": "LV@CLE",
+   "eid": 22082,
+   "kick": "2026-11-30 01:20:00Z"
   },
   {
    "qbs": [
